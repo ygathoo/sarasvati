@@ -71,7 +71,7 @@ public abstract class Engine
       token.markComplete();
     }
 
-    executeNode( process, newNodeToken( process, targetNode,  Arrays.asList( tokens ) ) );
+    executeNode( process, newNodeToken( process, targetNode, Arrays.asList( tokens ) ) );
   }
 
   protected void executeNode (IProcess process, INodeToken token)
