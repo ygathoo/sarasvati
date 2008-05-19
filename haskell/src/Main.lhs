@@ -10,15 +10,17 @@
 > n3 = Node 3 RequireAll defaultGuard (acceptAndCreateTask 2 "Introduce" "Here is where you give your name")
 > n4 = Node 4 RequireAll defaultGuard (acceptAndCreateTask 3 "Shake" "Here is where you shake hands")
 > n5 = Node 5 RequireAll defaultGuard (acceptAndCreateTask 4 "Pleasantry" "Here is where you say something like, 'Nice to meet you'")
-> n6 = Node 6 RequireAll defaultGuard (acceptAndCreateTask 5 "Converse" "Start a conversation")
+> n6 = Node 6 RequireAll (\x y -> SkipNode) passthrough
+> n7 = Node 7 RequireAll defaultGuard (acceptAndCreateTask 5 "Converse" "Start a conversation")
 
 > graph = graphFromArcs
 >   [ (NodeArcs n1 [] [n2, n3]),
->     (NodeArcs n2 [n1] [n6]),
+>     (NodeArcs n2 [n1] [n7]),
 >     (NodeArcs n3 [n1] [n4, n5]),
->     (NodeArcs n4 [] [n6]),
->     (NodeArcs n5 [] [n6]),
->     (NodeArcs n6 [n2,n4,n5] []) ]
+>     (NodeArcs n4 [n3] [n7]),
+>     (NodeArcs n5 [n3] [n6]),
+>     (NodeArcs n6 [n5] [n7]),
+>     (NodeArcs n7 [n2,n4,n6] []) ]
 
 > handleTask :: Task -> WfInstance [Task] -> IO (WfInstance [Task])
 > handleTask task wf =

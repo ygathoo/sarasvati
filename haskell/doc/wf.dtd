@@ -1,0 +1,15 @@
+<!ELEMENT workflow (start,node*)>
+<!ATTLIST workflow
+          id ID #REQUIRED
+          workflow version CDATA #REQUIRED>
+
+<!ELEMENT start (arc*)>
+
+<!ELEMENT node (arc*)>
+<!ATTLIST node
+          id ID #REQUIRED
+          type (requireSingle|requireAll) #REQUIRED>
+
+<!ELEMENT arc (#PCDATA)>
+<!ATTLIST arc to IDREF #REQUIRED>
+
