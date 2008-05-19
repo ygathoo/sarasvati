@@ -21,6 +21,8 @@ public class TaskNodePainter extends BaseNodePainter
   }
   */
 
+
+
   @Override
   public void paintNode (Graphics g, NodeRef node, int x, int y)
   {
@@ -45,4 +47,28 @@ public class TaskNodePainter extends BaseNodePainter
   {
     return NodeDrawConfig.getMaxNodeRadius();
   }
+
+  @Override
+  public void paintLeftIncomingAnchor( Graphics g, NodeRef node, int x, int y )
+  {
+    int size = NodeDrawConfig.getAnchorSize();
+    int base = x - getOffset();
+
+    g.fillPolygon( new int[] { base - size, base, base - size },
+                   new int[] { y    - size, y,    y    + size },
+                   3 );
+  }
+
+  @Override
+  public void paintRightIncomingAnchor( Graphics g, NodeRef node, int x, int y )
+  {
+    int size = NodeDrawConfig.getAnchorSize();
+    int base = x + getOffset();
+
+    g.fillPolygon( new int[] { base + size, base, base + size },
+                   new int[] { y    - size, y,    y    + size },
+                   3 );
+  }
+
+
 }

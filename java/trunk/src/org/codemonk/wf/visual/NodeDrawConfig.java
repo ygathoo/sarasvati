@@ -7,13 +7,14 @@ public class NodeDrawConfig
 {
   private static int maxNodeRadius = 25;
   private static int nodeSpacing   = 50;
+  private static int anchorSize    = 4;
 
   public static int getMaxNodeRadius ()
   {
     return maxNodeRadius;
   }
 
-  public static void setMaxNodeSize (int newMaxNodeRadius)
+  public static void setMaxNodeRadius (int newMaxNodeRadius)
   {
     maxNodeRadius = newMaxNodeRadius;
   }
@@ -27,4 +28,16 @@ public class NodeDrawConfig
   {
     nodeSpacing = newNodeSpacing;
   }
+
+  public static int getAnchorSize()
+  {
+    return anchorSize;
+  }
+
+  public static void setAnchorSize( int anchorSize )
+  {
+    NodeDrawConfig.anchorSize = anchorSize;
+  }
+
+
 }

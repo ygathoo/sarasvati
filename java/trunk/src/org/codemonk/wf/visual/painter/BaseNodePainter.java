@@ -3,6 +3,7 @@
  */
 package org.codemonk.wf.visual.painter;
 
+import org.codemonk.wf.visual.NodeDrawConfig;
 import org.codemonk.wf.visual.Point;
 
 public abstract class BaseNodePainter implements NodePainter
@@ -12,18 +13,18 @@ public abstract class BaseNodePainter implements NodePainter
   @Override
   public Point getLeftAnchor (int originX, int originY)
   {
-    return new Point( originX - getOffset(), originY );
+    return new Point( originX - getOffset() - NodeDrawConfig.getAnchorSize(), originY );
   }
 
   @Override
   public Point getRightAnchor (int originX, int originY)
   {
-    return new Point( originX + getOffset(), originY );
+    return new Point( originX + getOffset() + NodeDrawConfig.getAnchorSize(), originY );
   }
 
   @Override
   public Point getTopAnchor (int originX, int originY)
   {
-    return new Point( originX, originY  + getOffset() );
+    return new Point( originX, originY  + getOffset() + NodeDrawConfig.getAnchorSize());
   }
 }
