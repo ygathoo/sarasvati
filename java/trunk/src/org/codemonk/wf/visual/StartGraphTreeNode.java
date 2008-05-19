@@ -7,11 +7,10 @@ import org.codemonk.wf.db.NodeRef;
 
 public class StartGraphTreeNode extends GraphTreeNode
 {
-  protected Color color = new Color( 102, 152, 102 );
-
   public StartGraphTreeNode( GraphTreeNode parent, NodeRef node )
   {
     super( parent, node );
+    color = new Color( 102, 152, 102 );
   }
 
   @Override
@@ -32,7 +31,8 @@ public class StartGraphTreeNode extends GraphTreeNode
                    3 );
   }
 
-  protected int getOffset ()
+  @Override
+  public int getOffset ()
   {
     return NodeDrawConfig.getMaxNodeRadius() >> 1;
   }

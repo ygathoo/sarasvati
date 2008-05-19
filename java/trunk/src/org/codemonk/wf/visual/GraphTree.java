@@ -39,7 +39,7 @@ public class GraphTree
     for ( INode node : startNodes )
     {
       NodeRef nodeRef = (NodeRef)node;
-      GraphTreeNode treeNode = new GraphTreeNode( root, nodeRef );
+      GraphTreeNode treeNode = GraphTreeNode.newInstance( root, nodeRef );
 
       nodeMap.put( nodeRef, treeNode );
       treeNode.addToLayer( nextLayer );
@@ -65,7 +65,7 @@ public class GraphTree
 
           if (targetTreeNode == null)
           {
-            targetTreeNode = new GraphTreeNode( treeNode, target );
+            targetTreeNode = GraphTreeNode.newInstance( treeNode, target );
             nodeMap.put( target, targetTreeNode );
             targetTreeNode.addToLayer( nextLayer );
           }

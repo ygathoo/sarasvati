@@ -1,11 +1,10 @@
 package org.codemonk.wf.visual;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
 import org.codemonk.wf.db.NodeRef;
-import org.codemonk.wf.visual.painter.NodePainter;
-import org.codemonk.wf.visual.painter.NodePainterFactory;
 
 public class GraphTreeNode
 {
@@ -18,7 +17,24 @@ public class GraphTreeNode
   protected int     originX;
   protected int     originY;
 
-  protected NodePainter painter;
+  protected Color   color = new Color( 102, 152, 102 );
+
+  public static GraphTreeNode newInstance (GraphTreeNode parent, NodeRef nodeRef)
+  {
+    if ( "start".equalsIgnoreCase( nodeRef.getType() ) )
+    {
+      return new StartGraphTreeNode( parent, nodeRef );
+    }
+    else if ( "task".equalsIgnoreCase( nodeRef.getType() ) )
+    {
+      return new TaskGraphTreeNode( parent, nodeRef );
+    }
+    else
+    {
+      return new GraphTreeNode( parent, nodeRef );
+    }
+  }
+
 
   public GraphTreeNode (GraphTreeNode parent, NodeRef node)
   {
@@ -28,7 +44,6 @@ public class GraphTreeNode
     if ( parent != null )
     {
       this.depth = parent.getDepth() + 1;
-      this.painter = NodePainterFactory.getInstance( node.getType() );
     }
     else
     {
@@ -86,21 +101,50 @@ public class GraphTreeNode
 
   public void paintNode (Graphics g)
   {
-    painter.paintNode( g, node, getOriginX(), getOriginY() );
+    g.setColor( color );
+
+    int maxRadius = NodeDrawConfig.getMaxNodeRadius();
+    int offset = getOffset();
+    g.fillOval( originX - offset, originY - offset, maxRadius, maxRadius);
+  }
+
+  public int getOffset ()
+  {
+    return NodeDrawConfig.getMaxNodeRadius() >> 1;
   }
 
   public Point getLeftAnchor ()
   {
-    return painter.getLeftAnchor( getOriginX(), getOriginY() );
+    return new Point( originX - getOffset() - NodeDrawConfig.getAnchorSize(), originY );
   }
 
   public Point getRightAnchor ()
   {
-    return painter.getRightAnchor( getOriginX(), getOriginY() );
+    return new Point( originX + getOffset() + NodeDrawConfig.getAnchorSize(), originY );
   }
 
   public Point getTopAnchor ()
   {
-    return painter.getTopAnchor( getOriginX(), getOriginY() );
+    return new Point( originX, originY  + getOffset() + NodeDrawConfig.getAnchorSize());
+  }
+
+  public void paintLeftIncomingAnchor( Graphics g )
+  {
+    int size = NodeDrawConfig.getAnchorSize();
+    int base = originX - getOffset();
+
+    g.fillPolygon( new int[] { base    - size, base,    base    - size },
+                   new int[] { originY - size, originY, originY + size },
+                   3 );
+  }
+
+  public void paintRightIncomingAnchor( Graphics g )
+  {
+    int size = NodeDrawConfig.getAnchorSize();
+    int base = originX + getOffset();
+
+    g.fillPolygon( new int[] { base    + size, base,   base    + size },
+                   new int[] { originY - size, originY,originY + size },
+                   3 );
   }
 }

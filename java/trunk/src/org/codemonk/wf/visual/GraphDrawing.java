@@ -87,13 +87,13 @@ public class GraphDrawing extends JComponent
     }
   }
 
-  /** 
+  /**
    *   --------------
    *  /              \
    * ***      ***    ***
    * * * ---> * * -> * *
    * *** \    ***    ***
-   *      \   
+   *      \
    *       \  ***
    *        > * *
    *          ***
@@ -119,6 +119,7 @@ public class GraphDrawing extends JComponent
       else
       {
         g.drawLine( startPoint.x, startPoint.y, endPoint.x, endPoint.y );
+        end.paintLeftIncomingAnchor( g );
       }
     }
   }
