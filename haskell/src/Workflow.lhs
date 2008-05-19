@@ -252,12 +252,23 @@ acceptToken
 >                        RequireSingle -> True
 >     targetNode     = getNodeForId (getNextNodeId token) wf
 
+acceptSingle
+  Called when a node requires only a single incoming token to activate.
+  Moves the token into the node and calls the guard function
+
 > acceptSingle :: Token -> WfInstance a -> IO (WfInstance a)
 > acceptSingle token wf@(WfInstance graph tokenList userData) = acceptWithGuard newToken newWf
 >   where
 >     targetNode = getNodeForId (getNextNodeId token) wf
 >     newToken   = Token (getTokenId token) (getPrevNodeId token) (getNextNodeId token) NullNodeId
 >     newWf      = WfInstance graph tokenList userData
+
+acceptJoin
+  Called when a node requires that a token exist at all inputs before activating.
+  If the condition is met, joins all the input tokens into a single token in the
+  node then calls the guard function.
+  If all inputs don't yet have inputs, adds the current token to the workflow
+  instance and returns.
 
 > acceptJoin :: Token -> WfInstance a -> IO (WfInstance a)
 > acceptJoin token wf@(WfInstance graph tokenList userData)

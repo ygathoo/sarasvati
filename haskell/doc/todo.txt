@@ -14,6 +14,7 @@ Create workflow file format
 Next steps:
 ---------------------------------------------------------------------
 Implement nested workflows
+Allow the token to carry state.
 
 
 Future posibilities:
