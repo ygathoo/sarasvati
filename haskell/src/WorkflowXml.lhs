@@ -24,7 +24,7 @@
 
 > data ExternalArc =
 >     ExternalArc {
->       targetNodeId   :: String,
+>       targetNodeRef  :: String,
 >       targetWf       :: String,
 >       targetVersion  :: String,
 >       targetInstance :: String,
@@ -88,7 +88,9 @@ elements of that type and return the appropriate XmlNode.
 >            Left msg  -> return $ Left msg
 >            Right ext -> do let allXmlNodes = importExternals xmlNodes ext
 >                            putStrLn (show allXmlNodes)
->                            return $ Right $ xmlNodesToWfGraph allXmlNodes
+>                            let resolvedXmlNodes = resolveAllExternalArcs allXmlNodes
+>                            putStrLn (show resolvedXmlNodes)
+>                            return $ Right $ xmlNodesToWfGraph resolvedXmlNodes
 >     where
 >         childNodes = getChildren (rootElement doc)
 >         xmlNodes   = findNodeArcs $ processChildNodes childNodes source funcMap Map.empty 1
@@ -130,7 +132,11 @@ elements of that type and return the appropriate XmlNode.
 
 To import an external workflow into loading workflow, we must take the following steps:
   1. Convert the nodes back to XmlNodes
-  2.
+
+     Because the node ids will overlap with those in the top level graph, we must assign new ids.
+     We can just start the numbering where we left off. Because the ids will all increase by the
+     same amount we can fix the incoming/outgoing arcs easily.
+
   3. Convert external arcs to regular arcs
 
 > importExternals current externals = foldr (importExternal) current (Map.elems externals)
@@ -139,7 +145,6 @@ To import an external workflow into loading workflow, we must take the following
 >     where
 >         nextId   = Map.size current
 >         xmlNodes = map (importXmlNode (nextId - 1)) $ zip [nextId..] (Map.elems graph)
-
 
 > importXmlNode baseIncr (nextId, nodeArcs) = XmlNode node (map ((+baseIncr).nodeId) (nodeOutputs nodeArcs)) [] []
 >     where
@@ -152,6 +157,21 @@ To import an external workflow into loading workflow, we must take the following
 >         arcList node            = map (lookupArcRef) (arcRefs node)
 >         lookupArcRef ref        = (wfNodeId.head) $ filter (isRefNode ref) (Map.elems nodeMap)
 >         isRefNode ref xmlNode   = ref == (nodeRefId.wfNode) xmlNode
+
+> resolveAllExternalArcs nodeMap = foldr (resolveNodeExternals) nodeMap (Map.elems nodeMap)
+
+> resolveNodeExternals node nodeMap = foldr (resolveNodeExternal node) nodeMap (externalArcs node)
+
+> resolveNodeExternal node (ExternalArc nodeRef wf version inst arcType ) nodeMap =
+>     Map.insert (wfNodeId newNode) newNode nodeMap
+>     where
+>         newNode = case (arcType) of
+>             OutArc -> node { arcs = (wfNodeId targetNode):(arcs node) }
+>             InArc  -> targetNode { arcs = (wfNodeId node):(arcs targetNode) }
+>         targetNode = head $ filter (isMatch) (Map.elems nodeMap)
+>         isMatch xmlNode = (nodeRefId.wfNode) xmlNode == nodeRef &&
+>                           (wfInstance.source.wfNode) xmlNode== inst &&
+>                           (wfDepth.source.wfNode) xmlNode == 1
 
 Function for processing the start element. There should be exactly one of these
 per workflow definition. It should contain only arc and externalArc elements. It
