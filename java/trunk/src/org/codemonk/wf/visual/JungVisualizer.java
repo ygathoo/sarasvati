@@ -15,6 +15,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.collections15.Transformer;
 import org.codemonk.wf.db.HibArc;
 import org.codemonk.wf.db.HibEngine;
 import org.codemonk.wf.db.HibGraph;
@@ -81,6 +82,11 @@ public class JungVisualizer
     // final KKLayout<HibNodeRef, HibArc> layout = new KKLayout<HibNodeRef, HibArc>(graph);
     final TreeLayout layout = new TreeLayout( graph );
     final BasicVisualizationServer<HibNodeRef, HibArc> vs = new BasicVisualizationServer<HibNodeRef, HibArc>(layout);
+    vs.getRenderContext().setVertexLabelTransformer( new NodeLabeller() );
+    vs.getRenderContext().setEdgeLabelTransformer( new ArcLabeller() );
+    vs.getRenderContext().setVertexShapeTransformer( new NodeShapeTransformer() );
+
+
 
     final JScrollPane scrollPane = new JScrollPane( vs );
     scrollPane.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );

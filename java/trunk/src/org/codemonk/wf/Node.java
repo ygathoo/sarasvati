@@ -11,4 +11,5 @@ public interface Node
   boolean isJoin ();
   GuardResponse guard (Process process, NodeToken token);
   void execute(Engine engine, Process process, NodeToken token);
+  String getLabel ();
 }
