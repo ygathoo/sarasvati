@@ -19,21 +19,22 @@ import org.codemonk.wf.INodeToken;
 import org.codemonk.wf.IProcess;
 
 @Entity
-@Table (name="wf_node")
-public class Node implements INode
+@Table (name="wf_node_ref")
+public class NodeRef implements INode
 {
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
   protected Long   id;
 
   @ManyToOne (fetch=FetchType.EAGER)
-  @JoinColumn( name="graph_id")
+  @JoinColumn(name="node_id")
+  protected Node node;
+
+  @ManyToOne (fetch=FetchType.EAGER)
+  @JoinColumn (name="graph_id")
   protected Graph graph;
 
-  protected String name;
-  protected String type;
-
-  protected boolean join;
+  protected String instance;
 
   public Long getId ()
   {
@@ -45,26 +46,14 @@ public class Node implements INode
     this.id = id;
   }
 
-  @Override
-  public String getName ()
+  public Node getNode ()
   {
-    return name;
+    return node;
   }
 
-  public void setName (String name)
+  public void setNode (Node node)
   {
-    this.name = name;
-  }
-
-  @Override
-  public String getType ()
-  {
-    return type;
-  }
-
-  public void setType (String type)
-  {
-    this.type = type;
+    this.node = node;
   }
 
   public Graph getGraph ()
@@ -77,27 +66,42 @@ public class Node implements INode
     this.graph = graph;
   }
 
+  public String getInstance ()
+  {
+    return instance;
+  }
+
+  public void setInstance (String instance)
+  {
+    this.instance = instance;
+  }
+
+  public String getName ()
+  {
+    return node.getName();
+  }
+
+  public String getType ()
+  {
+    return node.getType();
+  }
+
   @Override
   public boolean isJoin ()
   {
-    return false;
-  }
-
-  public void setJoin (boolean join)
-  {
-    this.join = join;
+    return node.isJoin();
   }
 
   @Override
   public GuardResponse guard (IProcess process, INodeToken token)
   {
-    return GuardResponse.AcceptToken;
+    return node.guard( process, token );
   }
 
   @Override
   public void execute (Engine engine, IProcess process, INodeToken token)
   {
-    engine.completeExecution( process, token, "" );
+    node.execute( engine, process, token );
   }
 
   @Override
@@ -115,8 +119,8 @@ public class Node implements INode
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof Node ) ) return false;
-    final Node other = (Node)obj;
+    if ( !( obj instanceof NodeRef ) ) return false;
+    final NodeRef other = (NodeRef)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;

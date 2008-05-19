@@ -12,28 +12,28 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.codemonk.wf.Engine;
-import org.codemonk.wf.GuardResponse;
-import org.codemonk.wf.INode;
-import org.codemonk.wf.INodeToken;
-import org.codemonk.wf.IProcess;
+import org.codemonk.wf.IArc;
 
 @Entity
-@Table (name="wf_node")
-public class Node implements INode
+@Table (name="wf_arc")
+public class Arc implements IArc
 {
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
-  protected Long   id;
+  protected Long id;
+  protected String name;
 
   @ManyToOne (fetch=FetchType.EAGER)
-  @JoinColumn( name="graph_id")
+  @JoinColumn (name="graph_id")
   protected Graph graph;
 
-  protected String name;
-  protected String type;
+  @ManyToOne (fetch=FetchType.EAGER)
+  @JoinColumn (name="a_ref_node_id")
+  protected Node startNode;
 
-  protected boolean join;
+  @ManyToOne (fetch=FetchType.EAGER)
+  @JoinColumn (name="z_ref_node_id")
+  protected Node endNode;
 
   public Long getId ()
   {
@@ -56,17 +56,6 @@ public class Node implements INode
     this.name = name;
   }
 
-  @Override
-  public String getType ()
-  {
-    return type;
-  }
-
-  public void setType (String type)
-  {
-    this.type = type;
-  }
-
   public Graph getGraph ()
   {
     return graph;
@@ -78,26 +67,25 @@ public class Node implements INode
   }
 
   @Override
-  public boolean isJoin ()
+  public Node getStartNode ()
   {
-    return false;
+    return startNode;
   }
 
-  public void setJoin (boolean join)
+  public void setStartNode (Node startNode)
   {
-    this.join = join;
-  }
-
-  @Override
-  public GuardResponse guard (IProcess process, INodeToken token)
-  {
-    return GuardResponse.AcceptToken;
+    this.startNode = startNode;
   }
 
   @Override
-  public void execute (Engine engine, IProcess process, INodeToken token)
+  public Node getEndNode ()
   {
-    engine.completeExecution( process, token, "" );
+    return endNode;
+  }
+
+  public void setEndNode (Node endNode)
+  {
+    this.endNode = endNode;
   }
 
   @Override
@@ -115,8 +103,8 @@ public class Node implements INode
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof Node ) ) return false;
-    final Node other = (Node)obj;
+    if ( !( obj instanceof Arc ) ) return false;
+    final Arc other = (Arc)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;
