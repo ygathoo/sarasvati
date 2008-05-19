@@ -28,34 +28,38 @@ public class GraphDrawing extends JComponent
   {
     this.graph = graph;
     this.graphTree = graph == null ? null : new GraphTree( graph );
+
+    if ( graphTree != null )
+    {
+      int maxHeight = 0;
+
+      for ( List<?> layer : graphTree.getLayers() )
+      {
+        if ( layer.size() > maxHeight )
+        {
+          maxHeight = layer.size();
+        }
+      }
+
+      int width  = (graphTree.getLayerCount() + 2) * 50;
+      int height = (maxHeight + 2) * 50;
+
+      setSize( width, height );
+    }
   }
 
   @Override
-  public void paint( Graphics g )
+  public void paintComponent( Graphics g )
   {
-    System.out.println( System.currentTimeMillis() + ": repainting" );
+    super.paintComponent( g );
+
     if ( graphTree == null || graphTree.getLayerCount() == 0)
     {
       return;
     }
 
-    int maxHeight = 0;
-
-    for ( List<?> layer : graphTree.getLayers() )
-    {
-      if ( layer.size() > maxHeight )
-      {
-        maxHeight = layer.size();
-      }
-    }
-
-    int width  = (graphTree.getLayerCount() + 2) * 50;
-    int height = (maxHeight + 2) * 50;
-
-    setSize( width, height );
-
     g.setColor( Color.white );
-    g.fillRect( 0, 0, width, height );
+    g.fillRect( 0, 0, getWidth(), getHeight() );
     g.setColor( Color.black );
 
     for ( int x = 0; x < graphTree.getLayerCount(); x++ )

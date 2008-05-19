@@ -12,7 +12,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -68,6 +67,8 @@ public class Visualizer
     splitPane.add( listScrollPane );
 
     final GraphDrawing graphDrawing = new GraphDrawing();
+    graphDrawing.setBackground( Color.white );
+    graphDrawing.setOpaque( true );
 
     JScrollPane scrollPane = new JScrollPane( graphDrawing );
     splitPane.add( scrollPane );
@@ -92,15 +93,8 @@ public class Visualizer
           return;
         }
 
-        SwingUtilities.invokeLater( new Runnable()
-        {
-          @Override
-          public void run()
-          {
-            graphDrawing.setGraph( g );
-            graphDrawing.repaint();
-          }
-        });
+        graphDrawing.setGraph( g );
+        graphDrawing.repaint();
       }
     } );
 
