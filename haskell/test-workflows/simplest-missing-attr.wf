@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="passthrough-test" version="1">
+<workflow version="1">
   <start>
   </start>
 </workflow>
