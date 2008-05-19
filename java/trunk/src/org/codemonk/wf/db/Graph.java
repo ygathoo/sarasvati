@@ -209,6 +209,21 @@ public class Graph implements IGraph
   }
 
   @Override
+  public boolean hasArcInverse( IArc arc )
+  {
+    for (IArc tmpArc : arcs)
+    {
+      if ( arc.getStartNode().equals( tmpArc.getEndNode() ) &&
+           arc.getEndNode().equals( tmpArc.getStartNode() ) )
+      {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  @Override
   public int hashCode ()
   {
     final int prime = 31;

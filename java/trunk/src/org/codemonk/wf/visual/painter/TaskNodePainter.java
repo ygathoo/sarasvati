@@ -4,8 +4,6 @@
 package org.codemonk.wf.visual.painter;
 
 import java.awt.Color;
-import java.awt.Font;
-import java.awt.FontMetrics;
 import java.awt.Graphics;
 
 import org.codemonk.wf.db.NodeRef;
@@ -14,12 +12,14 @@ import org.codemonk.wf.visual.NodeDrawConfig;
 
 public class TaskNodePainter extends BaseNodePainter
 {
+  /*
   public static Font getMaxFont (Graphics g, String str, int maxWidth, int maxSize)
   {
     Font font = g.getFont();
     FontMetrics metrics= g.getFontMetrics( font );
     return font;
   }
+  */
 
   @Override
   public void paintNode (Graphics g, NodeRef node, int x, int y)
