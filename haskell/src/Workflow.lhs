@@ -91,28 +91,23 @@ removeFirst
 >   | predicate x = xs
 >   | otherwise = x : (removeFirst predicate xs)
 
-nextTokenId
-  Generates the token id for the next token for the non-fork case. A token id is a
-  list of integers. For each node which has a single output, the output token will
-  have an id in which the head of the list is greater than one as compared to the
-  input token.
+nextForkId
+  Generates the token id for the next token for in the case where we have multiple outputs.
 
-  Ex: [1] -> [2]
-      [4,2,5] -> [5,2,5]
+  A token id is a list of integers. For each node which has a single output, the output token
+  will have the same id as the input token.
 
-  A Fork node will in addition add a counter to the tail of the id, incremented for
+  A node with multiple outputs will add a counter to the tail of the id, incremented for
   each child. This guarantees that each token will have a unique id
 
   For example, a join with 2 outputs might go
-    [1] -> [2,0]
-        -> [2,1]
+    [1] -> [1,0]
+        -> [1,1]
     or
-    [4,2,5] -> [5,2,5,0]
-            -> [5,2,5,1]
+    [1,2,5] -> [1,2,5,0]
+            -> [1,2,5,1]
 
-> nextTokenId (Token (t:rest) _ _ ) = (t+1):rest
-
-> nextForkId (Token (t:rest) _ _ ) counter = ((t+1):rest) ++ [counter]
+> nextForkId (Token tid _ _ ) counter = tid ++ [counter]
 
 removeInputTokens
   Given a list of input nodes, a target node and a list of tokens,
@@ -123,55 +118,58 @@ removeInputTokens
 > removeInputTokens (x:xs) targetNode tokenList =
 >   removeInputTokens xs targetNode $ removeFirst (\tok->prevNode tok == x && currNode tok == targetNode) tokenList
 
-
 acceptP
   Accept function for a 'passthrough' node. This type of node is assumed to have one input and one output.
   The function just passes through to the next node in line.
 
 > acceptP :: Token -> WFGraph -> [Token] -> IO [Token]
-> acceptP token graph tokenList
->   | null outputNodes = do putStrLn $ show currentNode ++ " No outputs, discarding token"
->                           return tokenList
->   | otherwise        = do putStrLn $ show currentNode ++ " Passing through to " ++ show output
->                           (accept output) newToken graph tokenList
->  where
->    newToken    = Token (nextTokenId token) output currentNode
->    currentNode = currNode token
->    outputNodes = outputs graph currentNode
->    output      = head outputNodes
+> acceptP token graph tokenList =
+>   do putStrLn $ "Passing through node " ++ show (currNode token)
+>      completeExecution token graph tokenList
 
 acceptFork
   Accept function for 'fork' node. This type of node is assumed to have one input and more than one inputs.
   Will generate tokens for each output node.
 
 > acceptFork :: Token -> WFGraph -> [Token] -> IO [Token]
-> acceptFork token graph tokenList
->   | null outputNodes = return tokenList
->   | otherwise        = split outputNodes tokenList 0
+> acceptFork = completeExecution
+
+completeExecution
+  Generates a new token for each output node of the current node of the given token
+
+> completeExecution :: Token -> WFGraph -> [Token] -> IO [Token]
+> completeExecution token graph tokenList
+>   | hasNoOutputs = do putStrLn $ (show currentNode) ++ " has no outputs. Discarding tokens"
+>                       return tokenList
+>   | hasOneOutput = do putStrLn $ "Sending token to " ++ show (head outputNodes) ++ " from " ++ show currentNode
+>                       (accept (head outputNodes)) newToken graph tokenList
+>   | otherwise    = split outputNodes tokenList 0
 >   where
+>     hasNoOutputs                   = null outputNodes
+>     hasOneOutput                   = null $ tail outputNodes
+>
 >     currentNode                    = currNode token
 >     outputNodes                    = outputs graph currentNode
->     newToken nextNode counter      = Token (nextForkId token counter) nextNode currentNode
+>     newToken                       = Token (tokenId token) (head outputNodes) currentNode
+>     newForkToken nextNode counter  = Token (nextForkId token counter) nextNode currentNode
 >     split [] tokenList _           = return tokenList
 >     split (x:xs) tokenList counter = do putStrLn $ "Sending token to " ++ show x ++ " from " ++ show currentNode
->                                         newTokenList <-(accept x) (newToken x counter) graph tokenList
+>                                         newTokenList <-(accept x) (newForkToken x counter) graph tokenList
 >                                         split xs newTokenList (counter + 1)
 
 acceptJoin
   Accept function for a 'join' node. This type of node is assumed to have more than one input and a single output.
-  Behaves as barrier, where all tokens from all inputs collect before moving to the next node.
+  Behaves as barrier, where all tokens from all n inputs collect before moving to the next node.
 
   Requires that a token from every input (counting the currently processed token) exist before
   passing a token to the output node.
 
 > acceptJoin :: Token -> WFGraph -> [Token] -> IO [Token]
 > acceptJoin token graph tokenList
->   | not areAllInputsPresent = do putStrLn $ "Join node " ++ show currentNode ++ " doesn't have all inputs yet"
->                                  return $ token : tokenList
->   | null outputNodes        = do putStrLn $ "All inputs received at " ++ show currentNode ++ " but no outputs"
->                                  return $ outputTokenList
->   | otherwise               = do putStrLn $ "Sending token to " ++ show outputNode ++ " from " ++ show currentNode
->                                  (accept outputNode) newToken graph outputTokenList
+>   | areAllInputsPresent = do putStrLn $ "All inputs received at " ++ show currentNode ++ ". Completing execution"
+>                              completeExecution token graph outputTokenList
+>   | otherwise           = do putStrLn $ "Join node " ++ show currentNode ++ " doesn't have all inputs yet"
+>                              return $ token : tokenList
 >   where
 >     areAllInputsPresent           = all (inputHasToken (token:tokenList)) inputNodes
 >
@@ -181,7 +179,4 @@ acceptJoin
 >
 >     currentNode                   = currNode token
 >     inputNodes                    = inputs graph currentNode
->     outputNodes                   = outputs graph currentNode
->     outputNode                    = head $ outputNodes
->     newToken                      = Token (nextTokenId token) outputNode currentNode
 >     outputTokenList               = removeInputTokens inputNodes currentNode tokenList
