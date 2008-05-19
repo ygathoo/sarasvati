@@ -15,7 +15,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.apache.commons.collections15.Transformer;
 import org.codemonk.wf.db.HibArc;
 import org.codemonk.wf.db.HibEngine;
 import org.codemonk.wf.db.HibGraph;
@@ -59,7 +58,10 @@ public class JungVisualizer
                                                      boolean cellHasFocus )
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-        setText( ((HibGraph)value).getName() );
+
+        HibGraph g = (HibGraph)value;
+
+        setText( g.getName() + "." + g.getVersion() + "  " );
         return this;
       }
     };
@@ -78,14 +80,14 @@ public class JungVisualizer
 
     DirectedSparseMultigraph<HibNodeRef, HibArc> graph = new DirectedSparseMultigraph<HibNodeRef, HibArc>();
 
-    //final SpringLayout2<NodeRef, Arc> layout = new SpringLayout2<NodeRef, Arc>(graph);
-    // final KKLayout<HibNodeRef, HibArc> layout = new KKLayout<HibNodeRef, HibArc>(graph);
+    //final SpringLayout2<HibNodeRef, HibArc> layout = new SpringLayout2<HibNodeRef, HibArc>(graph);
+    //final KKLayout<HibNodeRef, HibArc> layout = new KKLayout<HibNodeRef, HibArc>(graph);
     final TreeLayout layout = new TreeLayout( graph );
     final BasicVisualizationServer<HibNodeRef, HibArc> vs = new BasicVisualizationServer<HibNodeRef, HibArc>(layout);
     vs.getRenderContext().setVertexLabelTransformer( new NodeLabeller() );
     vs.getRenderContext().setEdgeLabelTransformer( new ArcLabeller() );
     vs.getRenderContext().setVertexShapeTransformer( new NodeShapeTransformer() );
-
+    vs.getRenderContext().setVertexFillPaintTransformer( new NodeColorTransformer() );
 
 
     final JScrollPane scrollPane = new JScrollPane( vs );
@@ -130,7 +132,6 @@ public class JungVisualizer
         GraphTree graphTree = new GraphTree( g );
         layout.setGraph( jungGraph );
         layout.setInitializer( new NodeLocationTransformer( graphTree ) );
-        // layout.setGraph( jungGraph );
         scrollPane.repaint();
       }
     } );
