@@ -194,7 +194,7 @@ public class Graph implements IGraph
   {
     for ( NodeRef node : getNodeRefs() )
     {
-      if ( "start".equals( node.getType() ) && "".equals( node.getGraph().equals( this ) ) )
+      if ( "start".equals( node.getType() ) && node.getGraph().equals( this ) )
       {
         return node;
       }
