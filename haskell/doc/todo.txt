@@ -1,0 +1,13 @@
+
+Next steps:
+---------------------------------------------------------------------
+Create notion of task queue.
+Have node generate task in queue
+Have console UI to view task in queue and complete tasks
+
+
+Future posibilities:
+---------------------------------------------------------------------
+DB Persistence
+Web UI
+GTK UI
