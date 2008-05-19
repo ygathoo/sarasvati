@@ -92,7 +92,7 @@ public class GraphDrawing extends JComponent
     boolean isReject = "reject".equals( arc.getName() );
     g.setColor( isReject ? Color.red : Color.black );
 
-    if ( start.getDepth() < end.getDepth() )
+    if ( end.getDepth() - start.getDepth() == 1 )
     {
       Point startPoint = start.getRightAnchor();
       Point endPoint   = end.getLeftAnchor();
