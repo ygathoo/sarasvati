@@ -19,7 +19,7 @@ import org.codemonk.wf.IArc;
 public class Arc implements IArc
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long id;
   protected String name;
 
@@ -28,11 +28,11 @@ public class Arc implements IArc
   protected Graph graph;
 
   @ManyToOne (fetch=FetchType.EAGER)
-  @JoinColumn (name="a_ref_node_id")
+  @JoinColumn (name="a_node_ref_id")
   protected NodeRef startNode;
 
   @ManyToOne (fetch=FetchType.EAGER)
-  @JoinColumn (name="z_ref_node_id")
+  @JoinColumn (name="z_node_ref_id")
   protected NodeRef endNode;
 
   public Long getId ()
@@ -86,6 +86,11 @@ public class Arc implements IArc
   public void setEndNode (NodeRef endNode)
   {
     this.endNode = endNode;
+  }
+
+  public String toString ()
+  {
+    return "[Arc id=" + id + " name=" + name + "]";
   }
 
   @Override

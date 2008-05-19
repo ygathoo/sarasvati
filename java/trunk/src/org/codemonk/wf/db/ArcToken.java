@@ -24,26 +24,27 @@ import org.codemonk.wf.IArcToken;
 public class ArcToken implements IArcToken
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue (strategy=GenerationType.IDENTITY)
   protected Long    id;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "process_id")
+  @ManyToOne (fetch = FetchType.EAGER)
+  @JoinColumn (name = "process_id")
   protected Process process;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "arc_id")
+  @ManyToOne (fetch = FetchType.EAGER)
+  @JoinColumn (name = "arc_id")
   protected Arc     arc;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "parent_token_id", nullable=false)
+  @JoinColumn (name = "parent_token_id", nullable=false)
   protected NodeToken parentToken;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(updatable = false)
+  @Column (name="create_date", updatable = false)
   protected Date    createDate;
 
   @Temporal(TemporalType.TIMESTAMP)
+  @Column (name="complete_date")
   protected Date    completeDate;
 
   public ArcToken () { /* Default constructor for hibernate */ }

@@ -11,4 +11,7 @@ public interface IProcess
   List<? extends IArcToken> getArcTokens ();
   void addArcToken (IArcToken token);
   void removeArcToken (IArcToken token);
+  void addNodeToken (INodeToken token);
+  void removeNodeToken (INodeToken token);
+
 }

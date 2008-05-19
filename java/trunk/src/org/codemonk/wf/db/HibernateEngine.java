@@ -45,17 +45,23 @@ public class HibernateEngine extends Engine
   @Override
   protected NodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents)
   {
-    NodeToken token = new NodeToken( (Process)process, (Node)node, (List<ArcToken>)(List<?>)parents );
+    NodeToken token = new NodeToken( (Process)process, (NodeRef)node, (List<ArcToken>)(List<?>)parents );
     session.save( token );
     return token;
   }
 
   @Override
-  protected IProcess newProcess( IGraph graph )
+  protected Process newProcess( IGraph graph )
   {
     Process process = new Process( (Graph)graph);
     session.save(  process );
 
     return process;
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<Graph> getGraphs ()
+  {
+    return session.createQuery( "from Graph" ).list();
   }
 }

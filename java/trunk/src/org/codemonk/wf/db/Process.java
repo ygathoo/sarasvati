@@ -13,26 +13,33 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.codemonk.wf.IArcToken;
+import org.codemonk.wf.INodeToken;
 import org.codemonk.wf.IProcess;
+import org.hibernate.annotations.Where;
 
 @Entity
 @Table (name="wf_process")
 public class Process implements IProcess
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long id;
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn( name="graph_id")
   protected Graph            graph;
 
-  @Transient
+  @OneToMany (mappedBy="process", targetEntity=ArcToken.class, fetch=FetchType.LAZY)
+  @Where (clause="complete_date is null")
   protected List<IArcToken>  arcTokens;
+
+  @OneToMany (mappedBy="process", targetEntity=NodeToken.class, fetch=FetchType.LAZY)
+  @Where (clause="complete_date is null")
+  protected List<INodeToken>  nodeTokens;
 
   public Process () { /* Default constructor for Hibernate */ }
 
@@ -40,6 +47,7 @@ public class Process implements IProcess
   {
     this.graph = graph;
     this.arcTokens = new LinkedList<IArcToken>();
+    this.nodeTokens = new LinkedList<INodeToken>();
   }
 
   public Long getId ()
@@ -66,12 +74,6 @@ public class Process implements IProcess
   @Override
   public List<IArcToken> getArcTokens ()
   {
-    if ( arcTokens == null )
-    {
-      // TODO: Load arc tokens
-      throw new UnsupportedOperationException( "Not yet implemented: Process.getArcTokens" );
-    }
-
     return arcTokens;
   }
 
@@ -80,16 +82,43 @@ public class Process implements IProcess
     this.arcTokens = arcTokens;
   }
 
+  public List<INodeToken> getNodeTokens()
+  {
+    return nodeTokens;
+  }
+
+  public void setNodeTokens( List<INodeToken> nodeTokens )
+  {
+    this.nodeTokens = nodeTokens;
+  }
+
   @Override
   public void addArcToken (IArcToken token)
   {
-    arcTokens.add( token );
+    getArcTokens().add( token );
   }
 
   @Override
   public void removeArcToken (IArcToken token)
   {
-    arcTokens.remove( token );
+    getArcTokens().remove( token );
+  }
+
+  @Override
+  public void addNodeToken (INodeToken token)
+  {
+    getNodeTokens().add( token );
+  }
+
+  @Override
+  public void removeNodeToken (INodeToken token)
+  {
+    getNodeTokens().remove( token );
+  }
+
+  public boolean isComplete ()
+  {
+    return getArcTokens().isEmpty() && getNodeTokens().isEmpty();
   }
 
   @Override

@@ -23,7 +23,7 @@ import org.codemonk.wf.IProcess;
 public class NodeRef implements INode
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long   id;
 
   @ManyToOne (fetch=FetchType.EAGER)
