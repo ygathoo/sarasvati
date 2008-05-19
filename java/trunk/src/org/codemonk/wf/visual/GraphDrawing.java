@@ -87,6 +87,21 @@ public class GraphDrawing extends JComponent
     }
   }
 
+  /** 
+   *   --------------
+   *  /              \
+   * ***      ***    ***
+   * * * ---> * * -> * *
+   * *** \    ***    ***
+   *      \   
+   *       \  ***
+   *        > * *
+   *          ***
+   * @param g
+   * @param arc
+   * @param start
+   * @param end
+   */
   protected void drawArc (Graphics g, IArc arc, GraphTreeNode start, GraphTreeNode end)
   {
     boolean isReject = "reject".equals( arc.getName() );

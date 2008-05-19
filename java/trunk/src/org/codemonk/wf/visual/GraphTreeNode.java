@@ -1,7 +1,6 @@
 package org.codemonk.wf.visual;
 
 import java.awt.Graphics;
-import java.util.LinkedList;
 import java.util.List;
 
 import org.codemonk.wf.db.NodeRef;
@@ -16,7 +15,9 @@ public class GraphTreeNode
   protected int     depth;
   protected int     index;
 
-  protected List<GraphTreeNode> children = new LinkedList<GraphTreeNode>();
+  protected int     originX;
+  protected int     originY;
+
   protected NodePainter painter;
 
   public GraphTreeNode (GraphTreeNode parent, NodeRef node)
@@ -27,7 +28,6 @@ public class GraphTreeNode
     if ( parent != null )
     {
       this.depth = parent.getDepth() + 1;
-      parent.addChild(  this );
       this.painter = NodePainterFactory.getInstance( node.getType() );
     }
     else
@@ -39,16 +39,6 @@ public class GraphTreeNode
   public NodeRef getNode ()
   {
     return node;
-  }
-
-  public void addChild (GraphTreeNode treeNode)
-  {
-    children.add( treeNode );
-  }
-
-  public Iterable<GraphTreeNode> getChildren ()
-  {
-    return children;
   }
 
   public int getDepth ()
@@ -70,20 +60,28 @@ public class GraphTreeNode
   {
     this.index = layer.size();
     layer.add( this );
+    recalculateOrigin();
+  }
+
+  public void recalculateOrigin ()
+  {
+    originX = ((getDepth() + 1) * NodeDrawConfig.getNodeSpacing()) +
+              (getDepth() * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
+              NodeDrawConfig.getMaxNodeRadius();
+
+    originY = ((getIndex() + 1) * NodeDrawConfig.getNodeSpacing()) +
+              (getIndex() * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
+              NodeDrawConfig.getMaxNodeRadius();
   }
 
   public int getOriginX ()
   {
-    return ((getDepth() + 1) * NodeDrawConfig.getNodeSpacing()) +
-           (getDepth() * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
-           NodeDrawConfig.getMaxNodeRadius();
+    return originX;
   }
 
   public int getOriginY ()
   {
-    return ((getIndex() + 1) * NodeDrawConfig.getNodeSpacing()) +
-           (getIndex() * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
-           NodeDrawConfig.getMaxNodeRadius();
+    return originY;
   }
 
   public void paintNode (Graphics g)

@@ -12,6 +12,10 @@ public interface NodePainter
 {
   void paintNode (Graphics g, NodeRef node, int x, int y);
 
+  void paintLeftIncomingAnchor (Graphics g, NodeRef node, int x, int y);
+
+  void paintRightIncomingAnchor (Graphics g, NodeRef node, int x, int y);
+
   Point getLeftAnchor (int originX, int originY);
 
   Point getRightAnchor (int originX, int originY);
