@@ -14,4 +14,6 @@ public interface IGraph
 
   List<IArc> getInputArcs (INode node, String arcName);
   List<IArc> getOutputArcs (INode node, String arcName);
+
+  INode getStartNode ();
 }

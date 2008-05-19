@@ -12,6 +12,8 @@ public abstract class Engine
 
   protected abstract IArcToken newArcToken (IProcess process, IArc arc, INodeToken parent);
 
+  protected abstract IProcess startWorkflow (IGraph graph);
+
   public void accept (IProcess process, IArcToken token)
   {
     if ( token.getArc().getEndNode().isJoin() )

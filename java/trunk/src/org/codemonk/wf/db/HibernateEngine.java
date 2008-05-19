@@ -3,11 +3,13 @@
  */
 package org.codemonk.wf.db;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.codemonk.wf.Engine;
 import org.codemonk.wf.IArc;
 import org.codemonk.wf.IArcToken;
+import org.codemonk.wf.IGraph;
 import org.codemonk.wf.INode;
 import org.codemonk.wf.INodeToken;
 import org.codemonk.wf.IProcess;
@@ -33,7 +35,7 @@ public class HibernateEngine extends Engine
   }
 
   @Override
-  protected IArcToken newArcToken (IProcess process, IArc arc, INodeToken previousToken)
+  protected ArcToken newArcToken (IProcess process, IArc arc, INodeToken previousToken)
   {
     ArcToken token = new ArcToken( (Process)process, (Arc)arc, (NodeToken)previousToken );
     session.save( token );
@@ -42,10 +44,23 @@ public class HibernateEngine extends Engine
 
   @SuppressWarnings("unchecked")
   @Override
-  protected INodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents)
+  protected NodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents)
   {
     NodeToken token = new NodeToken( (Process)process, (Node)node, (List<ArcToken>)(List<?>)parents );
     session.save( token );
     return token;
+  }
+
+  @Override
+  protected IProcess startWorkflow (IGraph graph)
+  {
+    INode startNode = graph.getStartNode();
+
+    Process process = new Process( (Graph)graph);
+    session.save(  process );
+
+    NodeToken startToken = newNodeToken( process, startNode, new ArrayList<IArcToken>(0) );
+    acceptWithGuard( process, startToken );
+    return process;
   }
 }

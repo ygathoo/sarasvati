@@ -22,6 +22,7 @@ import javax.persistence.Transient;
 import org.codemonk.wf.IArc;
 import org.codemonk.wf.IGraph;
 import org.codemonk.wf.INode;
+import org.codemonk.wf.WorkflowException;
 
 @Entity
 @Table (name="wf_graph")
@@ -187,6 +188,19 @@ public class Graph implements IGraph
         outputMap.put( node, emptyList );
       }
     }
+  }
+
+  public INode getStartNode ()
+  {
+    for ( NodeRef node : getNodeRefs() )
+    {
+      if ( "start".equals( node.getType() ) && "".equals( node.getGraph().equals( this ) ) )
+      {
+        return node;
+      }
+    }
+
+    throw new WorkflowException( "No start node found for: " + this );
   }
 
   @Override
