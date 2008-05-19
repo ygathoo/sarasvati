@@ -5,6 +5,7 @@
 > import IO
 > import Data.Char
 > import System.Directory
+> import WorkflowXml
 
 > n1 = Node StartNodeId RequireAll defaultGuard completeExecution
 > n2 = Node (NodeId 2) RequireAll defaultGuard (acceptAndCreateTask 1 "Hello" "Here is where one would say hello")
@@ -79,19 +80,36 @@
 
 > main =
 >     do hSetBuffering stdout NoBuffering
->        case (startWorkflow graph []) of
+>        wfList <- getWorkflowList
+>        selectWorkflow wfList
+
+> selectWorkflow wfList =
+>     do putStrLn "\n-=Available workflows=-"
+>        showWorkflows wfList 1
+>        putStr "\nSelect workflow: "
+>        wf <- getLine
+>        if ((not $ null wf) && all (isDigit) wf)
+>          then useWorkflow wfList (((read wf)::Int) - 1)
+>          else do putStrLn $ "ERROR: " ++ wf ++ " is not a valid workflow"
+>        selectWorkflow wfList
+
+> useWorkflow wfList idx
+>     | length wfList <= idx = do putStrLn "ERROR: Invalid workflow number"
+>     | otherwise            = do result <- loadWfGraphFromFile (wfList !! idx) defaultElemFunctionMap
+>                                 case (result) of
+>                                     Left msg -> putStrLn $ "ERROR: Could not load workflow: " ++ msg
+>                                     Right wfGraph -> runWorkflow wfGraph
+
+> runWorkflow wfGraph =
+>     case (startWorkflow wfGraph []) of
 >            Left msg -> putStrLn msg
 >            Right wfInstanceIO -> do wf <- wfInstanceIO
 >                                     processTasks wf
 
-> selectWorkflow wfList =
->     do showWorkflows wfList 1
->        putStr "Select workflow: "
->
 
 > showWorkflows [] _ = do return ()
 > showWorkflows (wf:rest) counter =
->  do putStrLn $ show counter ++ ": " ++ wf
+>  do putStrLn $ "  " ++ (show counter) ++ ": " ++ wf
 >     showWorkflows rest (counter + 1)
 
 > getWorkflowList =

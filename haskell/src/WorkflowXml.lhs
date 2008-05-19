@@ -30,7 +30,9 @@
 
 > getAttr name = XmlProc (\(x:xs)-> (getElemAttr x name, (x:xs)))
 
-> getChildren = XmlProc (\(x:xs)-> (map (cElemToElem) (children (CElem x)), (x:xs)))
+> getChildren = XmlProc (\(x:xs)-> (map (cElemToElem) (childElements (CElem x)), (x:xs)))
+>     where
+>         childElements = elm `o` children
 
 > getElemAttr (Elem _ attrList _ ) name
 >    | null attrs = ""
@@ -42,6 +44,12 @@
 > cElemToElem (CElem element) = element
 
 > unwrapXmlProc (XmlProc a) = case (a []) of (result,_) -> result
+
+> loadWfGraphFromFile filename elemFuncMap =
+>   do xmlStr <- readFile filename
+>      case (xmlParse' filename xmlStr) of
+>          Left msg -> return $ Left msg
+>          Right doc -> return $ Right $ loadWfGraphFromDoc doc elemFuncMap
 
 The following functions handle the generation of a WfGraph based on an XML document.
 The loadWfGraphFromDoc function takes a map of tag names to function which take
@@ -64,9 +72,11 @@ elements of that type and return the appropriate XmlNode.
 
 > processStartElement element = unwrapXmlProc $
 >     do useElement element
->        return $ Node StartNodeId RequireAll defaultGuard completeExecution
+>        return $ XmlNode node []
+>     where
+>         node = Node StartNodeId RequireAll defaultGuard completeExecution
 
-> defaultElemFunctionMap = Map.insert "start" (processStartElement)
+> defaultElemFunctionMap = Map.insert "start" (processStartElement) Map.empty
 
 The following function deal with converting a map of XmlNode instances to
 a WfGraph. Since XmlNode instances only track outgoing nodes, we need to
