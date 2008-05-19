@@ -17,12 +17,18 @@
 
 > data XmlArc =
 >     XmlArc {
->       targetNodeId     :: Int,
+>       targetNodeId     :: String,
+>       targetWorkflow   :: String,
+>       targetVersion    :: Int,
 >       targetInstanceId :: Int,
 >       arcType          :: ArcType
 >     }
 
 > getWfNodeId = getNodeId.wfNode
+
+> foldWith :: (a -> b -> a) -> a -> [b] -> a
+> foldWith _ a []     = a
+> foldWith f a (x:xs) = foldWith f (f a x) xs
 
 > data XmlProc a = XmlProc ([Element]->(a, [Element]))
 
@@ -44,7 +50,7 @@
 >     where childElements = elm `o` children
 
 > getElemAttr (Elem _ attrList _ ) name
->      | null attrs = ""
+>      | null attrs = fail "Attribute not found"
 >      | otherwise  = attrVal' (head attrs)
 >     where
 >         attrs = filter (\(attrName, attrValue) -> attrName == name) attrList
@@ -56,6 +62,11 @@
 
 > readArcsFromElem element = map (attrVal) $ attributed "nodeId" ((tag "arc") `o` children) (CElem element)
 >     where attrVal (v,_) = NodeId (read v::Int)
+
+> readArcFromElem element =
+>    do useElement element
+>       nodeId <- readAttr "nodeId"
+>       return $ XmlArc nodeId "" 1 1 OutArc
 
 > readText name = XmlProc (\(x:xs) -> (readTextElements x name, (x:xs)))
 
@@ -77,6 +88,14 @@ loadWfGraphFromFile
 >        case (xmlParse' filename xmlStr) of
 >            Left msg -> return $ Left msg
 >            Right doc -> return $ Right $ loadWfGraphFromDoc doc elemFuncMap
+
+Given a name and a version number, this function will return the corresponding XML document.
+
+> loadXmlForWorkflow name version =
+>     do xmlStr <- readFile filename
+>        return $ xmlParse' filename xmlStr
+>     where
+>         filename = name ++ "." ++ (show version) ++ ".wf.xml"
 
 The following functions handle the generation of a WfGraph based on an XML document.
 The loadWfGraphFromDoc function takes a map of tag names to function which take
