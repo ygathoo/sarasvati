@@ -2,12 +2,12 @@
 > module Main where
 > import Workflow
 
-> n1 = Node 1 acceptFork
-> n2 = Node 2 acceptP
-> n3 = Node 3 acceptFork
-> n4 = Node 4 acceptP
-> n5 = Node 5 acceptP
-> n6 = Node 6 acceptJoin
+> n1 = Node 1 passthrough
+> n2 = Node 2 passthrough
+> n3 = Node 3 passthrough
+> n4 = Node 4 passthrough
+> n5 = Node 5 passthrough
+> n6 = Node 6 passthrough
 
 > graph = graphFromArcs
 >   [ (NodeArcs n1 [] [n2, n3]),
