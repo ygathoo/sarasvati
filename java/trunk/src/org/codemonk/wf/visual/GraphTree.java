@@ -93,4 +93,9 @@ public class GraphTree
   {
     return layers;
   }
+
+  public Iterable<GraphTreeNode> getGraphTreeNodes ()
+  {
+    return nodeMap.values();
+  }
 }
