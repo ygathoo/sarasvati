@@ -28,20 +28,8 @@ GuardResponse
 > data GuardResponse = AcceptToken | DiscardToken | SkipNode
 >  deriving (Show)
 
-> data NodeId = NodeId Integer | NullNodeId
->  deriving (Show)
-
-> instance Eq NodeId where
->   NullNodeId == NullNodeId = True
->   NullNodeId == _          = False
->   _          == NullNodeId = False
->   (NodeId x) == (NodeId y) = x == y
-
-> instance Ord NodeId where
->   NullNodeId <= NullNodeId = True
->   NullNodeId <= _          = True
->   _          <= NullNodeId = True
->   (NodeId x) <= (NodeId y) = x <= y
+> data NodeId = NodeId Integer | NullNodeId | StartNodeId
+>  deriving (Show, Eq, Ord)
 
 Node
   Represents a node in a workflow graph.
@@ -161,10 +149,16 @@ startWorkflow
 >     | length startNodes > 1 = Left "Error: Workflow has more than one start node"
 >     | otherwise             = Right $ acceptToken token wf
 >   where
->     startNodes = filter (\(NodeId x) -> x < 0) $ Map.keys graph
+>     startNodes = filter (isStartNode) $ Map.keys graph
 >     startNode  = getNode $ graph Map.! (head startNodes)
 >     token      = Token [1] NullNodeId NullNodeId (getNodeId startNode)
 >     wf         = WfInstance graph [] userData
+>
+>     isStartNode StartNodeId = True
+>     isStartNode _           = False
+
+> isWfComplete (WfInstance graph [] userData) = True
+> isWfComplete _                              = False
 
 removeFirst
   Removes the first instance in a list for which the given predicate
@@ -205,14 +199,6 @@ defaultGuard
   Guard function which always accepts the token
 
 > defaultGuard token wf = AcceptToken
-
-Passthrough
-  Accept function for a 'passthrough' node. This type of node is assumed to have one input and one output.
-  The function just passes through to the next node in line.
-
-  passthrough :: Token a -> WfInstance a -> IO (WfInstance a)
-
-> passthrough token wf = do completeExecution token wf
 
 completeExecution
   Generates a new token for each output node of the current node of the given token

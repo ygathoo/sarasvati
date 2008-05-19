@@ -24,9 +24,9 @@
 >             (currValue, xmlElem) -> case (f currValue) of
 >                  XmlProc result -> result xmlElem)
 
-> useDoc (Document _ _ element _ ) = useElem element
+> useDoc (Document _ _ element _ ) = useElement element
 
-> useElem element = XmlProc (\_-> ((), [element]))
+> useElement element = XmlProc (\_-> ((), [element]))
 
 > getAttr name = XmlProc (\(x:xs)-> (getElemAttr x name, (x:xs)))
 
@@ -43,19 +43,30 @@
 
 > unwrapXmlProc (XmlProc a) = case (a []) of (result,_) -> result
 
+The following functions handle the generation of a WfGraph based on an XML document.
+The loadWfGraphFromDoc function takes a map of tag names to function which take
+elements of that type and return the appropriate XmlNode.
+
+> loadWfGraphFromDoc :: Document -> (Map.Map Name (Element->XmlNode a)) -> WfGraph a
 > loadWfGraphFromDoc doc elemFuncMap =
 >     xmlNodesToWfGraph $ unwrapXmlProc $
 >          do useDoc doc
 >             children <- getChildren
 >             return $ processChildNodes children elemFuncMap Map.empty
 
-> processChildNodes [] _ nodeMap = nodeMap
+> processChildNodes []       _           nodeMap = nodeMap
 > processChildNodes (e:rest) elemFuncMap nodeMap = processChildNodes rest elemFuncMap newNodeMap
 >     where
 >         elemName     = case (e) of (Elem name _ _ ) -> name
 >         nodeFunction = elemFuncMap Map.! elemName
 >         node         = nodeFunction e
 >         newNodeMap   = Map.insert (getWfNodeId node) node nodeMap
+
+> processStartElement element = unwrapXmlProc $
+>     do useElement element
+>        return $ Node StartNodeId RequireAll defaultGuard completeExecution
+
+> defaultElemFunctionMap = Map.insert "start" (processStartElement)
 
 The following function deal with converting a map of XmlNode instances to
 a WfGraph. Since XmlNode instances only track outgoing nodes, we need to
