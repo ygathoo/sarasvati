@@ -81,7 +81,7 @@ Author: Paul Lorenz
 >                                 case (result) of
 >                                     Left msg -> putStrLn $ "ERROR: Could not load workflow: " ++ msg
 >                                     Right wfGraph -> do putStrLn "Running workflow"
->                                                         putStrLn (show wfGraph)
+>                                                         putStrLn (showGraph wfGraph)
 >                                                         runWorkflow wfGraph
 >    where
 >        elemFunctionMap = elemMapWith [ ("task", processTaskElement) ]

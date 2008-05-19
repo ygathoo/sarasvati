@@ -67,7 +67,7 @@ Node
 
 > instance Show (Node a) where
 >     show NullNode = "[Node: NullNode]"
->     show a        = "[Node id: " ++ (show (nodeId a)) ++ " ref: " ++ (nodeRefId a) ++ "]"
+>     show a        = "[Node id: " ++ (show.nodeId) a ++ " ref: " ++ nodeRefId a ++ " depth: " ++ (show.wfDepth.source) a ++ "]"
 
 NodeArcs
   Represents the incoming and outgoing connections to other nodes.
@@ -83,7 +83,13 @@ NodeArcs
 >         nodeInputs  :: [Node a],
 >         nodeOutputs :: [Node a]
 >     }
->   deriving (Show)
+>
+
+> instance Show (NodeArcs a) where
+>     show (NodeArcs node inputs outputs) =
+>                         "NodeArc [ node = " ++ (show node) ++
+>       (concatMap (\t->"\n          input=" ++ show t ) inputs) ++
+>       (concatMap (\t->"\n         output=" ++ show t ) outputs) ++ "]"
 
 
 Token
@@ -114,6 +120,8 @@ WFGraph
   for the inputs and outputs of a given node
 
 > type WfGraph a = Map Int (NodeArcs a)
+
+> showGraph graph = concatMap (\a->show a ++ "\n") (Map.elems graph)
 
 > data WfInstance a =
 >     WfInstance {

@@ -83,7 +83,7 @@ elements of that type and return the appropriate XmlNode.
 >     do maybeExternal <- loadExternalWorkflows (Map.elems xmlNodes) funcMap (wfDepth source)
 >        case (maybeExternal) of
 >            Left msg  -> return $ Left msg
->            Right ext -> return $ Right $ xmlNodesToWfGraph xmlNodes
+>            Right ext -> return $ Right $ xmlNodesToWfGraph (importExternals (Map.elems xmlNodes) ext)
 >     where
 >         childNodes = getChildren (rootElement doc)
 >         xmlNodes   = findNodeArcs $ processChildNodes childNodes source funcMap Map.empty 1
@@ -126,10 +126,18 @@ To import an external workflow into loading workflow, we must take the following
   2.
   3. Convert external arcs to regular arcs
 
-> importExternal current external = current ++ (concatMap (importWf) external)
+> importExternals current externals = foldr (importExternal) current (Map.elems externals)
+
+> importExternal graph current = foldr (\node nodeMap-> Map.insert (wfNodeId node) nodeMap) current xmlNodes
 >     where
->         importWf graph     = map (toXmlNode) (Map.elems graph)
->         toXmlNode nodeArcs = XmlNode (arcsNode nodeArcs) (map (nodeId) (nodeOutputs nodeArcs))
+>         baseIncr = Map.size current
+>         xmlNodes = map (importXmlNode baseIncr) $ zip [baseIncr..] (Map.elems graph)
+
+
+> importXmlNode baseIncr (nextId, nodeArcs) = XmlNode node (map ((+baseIncr).nodeId) (nodeOutputs nodeArcs)) [] []
+>     where
+>         node = (fixId.arcsNode) nodeArcs
+>         fixId node = node { nodeId = nextId }
 
 > findNodeArcs nodeMap = foldr (lookupArcs) nodeMap (Map.elems nodeMap)
 >     where
