@@ -11,6 +11,7 @@
 > import Control.Monad.Error
 
 > data ArcType = InArc | OutArc
+>   deriving (Show)
 
 > data XmlNode a =
 >     XmlNode {
@@ -19,6 +20,7 @@
 >         arcRefs      :: [String],
 >         externalArcs :: [ExternalArc]
 >     }
+>  deriving (Show)
 
 > data ExternalArc =
 >     ExternalArc {
@@ -28,6 +30,7 @@
 >       targetInstance :: String,
 >       arcType        :: ArcType
 >     }
+>  deriving (Show)
 
 > wfNodeId = nodeId.wfNode
 
@@ -72,7 +75,7 @@ Given a name and a version number, this function will return the corresponding X
 > loadWfGraph source funcMap =
 >     do maybeDoc <- loadXmlForWorkflow (wfName source) (wfVersion source)
 >        case (maybeDoc) of
->            Right doc -> return $ Right $ loadWfGraphFromDoc doc source funcMap
+>            Right doc -> loadWfGraphFromDoc doc source funcMap
 >            Left  msg -> return $ Left msg
 
 The following functions handle the generation of a WfGraph based on an XML document.
@@ -83,7 +86,9 @@ elements of that type and return the appropriate XmlNode.
 >     do maybeExternal <- loadExternalWorkflows (Map.elems xmlNodes) funcMap (wfDepth source)
 >        case (maybeExternal) of
 >            Left msg  -> return $ Left msg
->            Right ext -> return $ Right $ xmlNodesToWfGraph (importExternals (Map.elems xmlNodes) ext)
+>            Right ext -> do let allXmlNodes = importExternals xmlNodes ext
+>                            putStrLn (show allXmlNodes)
+>                            return $ Right $ xmlNodesToWfGraph allXmlNodes
 >     where
 >         childNodes = getChildren (rootElement doc)
 >         xmlNodes   = findNodeArcs $ processChildNodes childNodes source funcMap Map.empty 1
@@ -113,9 +118,11 @@ elements of that type and return the appropriate XmlNode.
 > loadExternal wfMap extArc funcMap depth =
 >     if (Map.member key wfMap)
 >        then do return $ Right wfMap
->        else do maybeGraph <- loadWfGraph source funcMap
+>        else do putStrLn $ "Loading " ++ (targetWf extArc) ++ " version: " ++ (targetVersion extArc)
+>                maybeGraph <- loadWfGraph source funcMap
 >                case (maybeGraph) of
->                    Right graph -> return $ Right $ Map.insert key graph wfMap
+>                    Right graph -> do putStrLn $ "Loaded: " ++ (showGraph graph)
+>                                      return $ Right $ Map.insert key graph wfMap
 >                    Left  msg   -> return $ Left msg
 >     where
 >         key = targetInstance extArc
@@ -128,10 +135,10 @@ To import an external workflow into loading workflow, we must take the following
 
 > importExternals current externals = foldr (importExternal) current (Map.elems externals)
 
-> importExternal graph current = foldr (\node nodeMap-> Map.insert (wfNodeId node) nodeMap) current xmlNodes
+> importExternal graph current = foldr (\node nodeMap-> Map.insert (wfNodeId node) node nodeMap) current xmlNodes
 >     where
->         baseIncr = Map.size current
->         xmlNodes = map (importXmlNode baseIncr) $ zip [baseIncr..] (Map.elems graph)
+>         nextId   = Map.size current
+>         xmlNodes = map (importXmlNode (nextId - 1)) $ zip [nextId..] (Map.elems graph)
 
 
 > importXmlNode baseIncr (nextId, nodeArcs) = XmlNode node (map ((+baseIncr).nodeId) (nodeOutputs nodeArcs)) [] []
