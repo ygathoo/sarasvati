@@ -13,17 +13,21 @@ Node
 
   Connections between Nodes are represented by NodeArcs and WFGraph
 
-> data Node =
->   Node {
->     nodeId  :: Integer,
->     accept  :: (Token -> WFGraph -> [Token] -> IO [Token])
->   }
+> data Node = NullNode
+>           | Node {
+>               nodeId  :: Integer,
+>               accept  :: (Token -> WFGraph -> [Token] -> IO [Token])
+>             }
 
 > instance Eq Node where
->   node1 == node2 = (nodeId node1) == (nodeId node2)
+>   NullNode  == NullNode = True
+>   NullNode  == _        = False
+>   _         == NullNode = False
+>   node1     == node2    = (nodeId node1) == (nodeId node2)
 
 > instance Show Node where
->   show a = "[Node id: " ++ (show (nodeId a)) ++ "]"
+>   show NullNode = "[Node: NullNode]"
+>   show a        = "[Node id: " ++ (show (nodeId a)) ++ "]"
 
 NodeArcs
   Represents the incoming and outgoing connections to other nodes.
@@ -45,14 +49,18 @@ Token
 
   Members:
     tokenId: A list of int, giving a unique id across all tokens
-    currNode: The node the token is sitting at
-    prevNode: The input node the token came from
+    prevNode: The input node the token came from/is coming from
+    currNode: If the token is being processed by a node, this will be set
+              to that node. Otherwise it will be set to NullNode
+    nextNode: If the token is between nodes, this will be set to the node
+              it is going to. Otherwise it will be set to NullNode
 
 > data Token =
 >   Token {
 >     tokenId::[Int],
+>     prevNode::Node,
 >     currNode::Node,
->     prevNode::Node
+>     nextNode::Node
 >  }
 >  deriving (Show)
 
@@ -86,6 +94,15 @@ graphFromArcs
 
 > graphFromArcs arcs = WFGraph $ Map.fromList $ zip (map (nodeId.node) arcs) arcs
 
+> startWorkflow :: WFGraph -> Either String (IO [Token])
+> startWorkflow graph
+>     | null startNodes       = Left "Error: Workflow has no start node"
+>     | length startNodes > 1 = Left "Error: Workflow has more than one start node"
+>     | otherwise             = Right $ acceptToken (Token [1] NullNode NullNode startNode) graph []
+>   where
+>     startNodes = filter (\x -> x < 0) $ Map.keys (nodeMap graph)
+>     startNode  = node $ (nodeMap graph) Map.! (head startNodes)
+
 removeFirst
   Removes the first instance in a list for which the given predicate
   function returns true
@@ -107,7 +124,7 @@ nextForkId
     [1] -> [1,0]             or  [1,2,5] -> [1,2,5,0]
         -> [1,1]                         -> [1,2,5,1]
 
-> nextForkId (Token tid _ _ ) counter = tid ++ [counter]
+> nextForkId (Token tid _ _ _) counter = tid ++ [counter]
 
 removeInputTokens
   Given a list of input nodes, a target node and a list of tokens,
@@ -116,7 +133,7 @@ removeInputTokens
 
 > removeInputTokens []     _          tokenList = tokenList
 > removeInputTokens (x:xs) targetNode tokenList =
->   removeInputTokens xs targetNode $ removeFirst (\tok->prevNode tok == x && currNode tok == targetNode) tokenList
+>   removeInputTokens xs targetNode $ removeFirst (\tok->prevNode tok == x && nextNode tok == targetNode) tokenList
 
 acceptP
   Accept function for a 'passthrough' node. This type of node is assumed to have one input and one output.
@@ -124,7 +141,7 @@ acceptP
 
 > passthrough :: Token -> WFGraph -> [Token] -> IO [Token]
 > passthrough token graph tokenList =
->   do putStrLn $ "Passing through node " ++ show (currNode token)
+>   do putStrLn $ "Passing through node " ++ show (nextNode token)
 >      completeExecution token graph tokenList
 
 completeExecution
@@ -143,8 +160,8 @@ completeExecution
 >
 >     currentNode                    = currNode token
 >     outputNodes                    = outputs graph currentNode
->     newToken                       = Token (tokenId token) (head outputNodes) currentNode
->     newForkToken nextNode counter  = Token (nextForkId token counter) nextNode currentNode
+>     newToken                       = Token (tokenId token) currentNode NullNode (head outputNodes)
+>     newForkToken nextNode counter  = Token (nextForkId token counter) currentNode NullNode nextNode
 >     split [] tokenList _           = return tokenList
 >     split (x:xs) tokenList counter = do putStrLn $ "Sending token to " ++ show x ++ " from " ++ show currentNode
 >                                         newTokenList <- acceptToken (newForkToken x counter) graph tokenList
@@ -156,17 +173,19 @@ acceptToken
 
 > acceptToken :: Token -> WFGraph -> [Token] -> IO [Token]
 > acceptToken token graph tokenList
->   | areAllInputsPresent = do putStrLn $ "All inputs received at " ++ show currentNode ++ ". Calling accept function"
->                              (accept currentNode) token graph outputTokenList
->   | otherwise           = do putStrLn $ "Join node " ++ show currentNode ++ " doesn't have all inputs yet"
+>   | areAllInputsPresent = do putStrLn $ "All inputs received at " ++ show targetNode ++ ". Calling accept function"
+>                              (accept targetNode) newToken graph outputTokenList
+>   | otherwise           = do putStrLn $ "Join node " ++ show targetNode ++ " doesn't have all inputs yet"
 >                              return $ token : tokenList
 >   where
 >     areAllInputsPresent           = all (inputHasToken (token:tokenList)) inputNodes
 >
 >     inputHasToken []         node = False
->     inputHasToken (tok:rest) node = (currNode tok == currentNode && prevNode tok == node) ||
+>     inputHasToken (tok:rest) node = (nextNode tok == targetNode && prevNode tok == node) ||
 >                                     inputHasToken rest node
 >
->     currentNode                   = currNode token
->     inputNodes                    = inputs graph currentNode
->     outputTokenList               = removeInputTokens inputNodes currentNode tokenList
+>     targetNode                    = nextNode token
+>     inputNodes                    = inputs graph targetNode
+>     outputTokenList               = removeInputTokens inputNodes targetNode tokenList
+>
+>     newToken                      = Token (tokenId token) (prevNode token) (nextNode token) NullNode

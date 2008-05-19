@@ -2,7 +2,7 @@
 > module Main where
 > import Workflow
 
-> n1 = Node 1 passthrough
+> n1 = Node (-1) passthrough
 > n2 = Node 2 passthrough
 > n3 = Node 3 passthrough
 > n4 = Node 4 passthrough
@@ -17,4 +17,6 @@
 >     (NodeArcs n5 [] [n6]),
 >     (NodeArcs n6 [n2,n4,n5] []) ]
 
-> main = do (accept n1) (Token [1] n1 n1) graph []
+> main = do case (startWorkflow graph) of
+>             Left msg -> putStrLn msg
+>             Right tokenListIO -> putStrLn "Workflow started"
