@@ -9,8 +9,8 @@
       This task should spawn tasks "Order Stuff" and "Request Status"
     </description>
 
-    <arc nodeId="2"/>
-    <arc nodeId="3"/>
+    <arc to="2"/>
+    <arc to="3"/>
   </task>
 
   <task nodeId="2">
@@ -20,7 +20,7 @@
 
       Mark Complete shouldn't spawn until this and Request status are both complete.
     </description>
-    <arc nodeId="4"/>
+    <arc to="4"/>
   </task>
 
   <task nodeId="3">
@@ -30,7 +30,7 @@
 
       Mark Complete shouldn't spawn until this and Order Stuff are both complete.
     </description>
-    <arc nodeId="4"/>
+    <arc to="4"/>
   </task>
 
   <task nodeId="4">

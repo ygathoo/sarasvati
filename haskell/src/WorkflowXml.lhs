@@ -6,22 +6,24 @@
 > import Text.XML.HaXml.Types
 > import Workflow
 > import qualified Data.Map as Map
+> import Control.Monad
 
 > data ArcType = InArc | OutArc
 
 > data XmlNode a =
 >     XmlNode {
 >         wfNode :: Node a,
->         arcs :: [NodeId]
+>         arcs :: [NodeId],
+>         externalArcs :: [ExternalArc]
 >     }
 
-> data XmlArc =
->     XmlArc {
->       targetNodeId     :: String,
->       targetWorkflow   :: String,
->       targetVersion    :: Int,
->       targetInstanceId :: Int,
->       arcType          :: ArcType
+> data ExternalArc =
+>     ExternalArc {
+>       targetNodeId   :: String,
+>       targetWf       :: String,
+>       targetVersion  :: Int,
+>       targetInstance :: Int,
+>       arcType        :: ArcType
 >     }
 
 > getWfNodeId = getNodeId.wfNode
@@ -60,13 +62,26 @@
 
 > readArcs = XmlProc (\(x:xs) -> (readArcsFromElem x, (x:xs)))
 
-> readArcsFromElem element = map (attrVal) $ attributed "nodeId" ((tag "arc") `o` children) (CElem element)
+> readArcsFromElem element = map (attrVal) $ attributed "to" ((tag "arc") `o` children) (CElem element)
 >     where attrVal (v,_) = NodeId (read v::Int)
 
-> readArcFromElem element =
->    do useElement element
->       nodeId <- readAttr "nodeId"
->       return $ XmlArc nodeId "" 1 1 OutArc
+> readExternalArcs = XmlProc (\(x:xs) -> (readExternalArcsFromElem x, (x:xs)))
+
+> readExternalArcsFromElem element = map (readExternalArcFromElem.cElemToElem) childElem
+>     where
+>         childElem =  ((tag "externalArc") `o` children) (CElem element)
+
+> readExternalArcFromElem element = unwrapXmlProc $
+>     do useElement element
+>        workflowId <- readAttr "workflowId"
+>        version    <- readAttr "version"
+>        instanceId <- readAttr "instanceId"
+>        nodeId     <- readAttr "nodeId"
+>        arcTypeS   <- readAttr "type"
+>        let arcType = case (arcTypeS) of
+>                          "in"      -> InArc
+>                          otherwise -> OutArc
+>        return $ ExternalArc nodeId workflowId (read version::Int) (read instanceId::Int) arcType
 
 > readText name = XmlProc (\(x:xs) -> (readTextElements x name, (x:xs)))
 
@@ -97,16 +112,27 @@ Given a name and a version number, this function will return the corresponding X
 >     where
 >         filename = name ++ "." ++ (show version) ++ ".wf.xml"
 
+> loadWfGraph :: String -> Int -> (Map.Map Name (Element->XmlNode a)) -> IO (Either String (WfGraph a))
+> loadWfGraph name version elemFuncMap =
+>     do maybeDoc <- loadXmlForWorkflow name version
+>        case (maybeDoc) of
+>            Right doc -> return $ loadWfGraphFromDoc doc elemFuncMap
+>            Left  msg -> return $ Left msg
+
 The following functions handle the generation of a WfGraph based on an XML document.
 The loadWfGraphFromDoc function takes a map of tag names to function which take
 elements of that type and return the appropriate XmlNode.
 
-> loadWfGraphFromDoc :: Document -> (Map.Map Name (Element->XmlNode a)) -> WfGraph a
+ loadWfGraphFromDoc :: Document -> (Map.Map Name (Element->XmlNode a)) -> Either String (WfGraph a)
+
 > loadWfGraphFromDoc doc elemFuncMap =
->     xmlNodesToWfGraph $ unwrapXmlProc $
->          do useDoc doc
->             children <- getChildren
->             return $ processChildNodes children elemFuncMap Map.empty
+>      do liftM $ useDoc doc
+>         children <- getChildren
+>         let nodeMap = processChildNodes children elemFuncMap Map.empty
+>         maybeInstanceMap<- loadExternalWorkflows (Map.elems nodeMap) elemFuncMap
+>         case (maybeInstanceMap) of
+>             Left msg -> return msg
+>             Right instanceMap -> return $ xmlNodesToWfGraph nodeMap
 
 > processChildNodes []       _           nodeMap = nodeMap
 > processChildNodes (e:rest) elemFuncMap nodeMap = processChildNodes rest elemFuncMap newNodeMap
@@ -116,12 +142,38 @@ elements of that type and return the appropriate XmlNode.
 >         node         = nodeFunction e
 >         newNodeMap   = Map.insert (getWfNodeId node) node nodeMap
 
-Function for processing the <start> element. There should be exactly one of these
-per workflow definition.
+> loadExternalWorkflows xmlNodes elemFuncMap = foldWith (f) startMap xmlNodes
+>     where
+>         f wfMap xmlNode = foldWith (f') wfMap (externalArcs xmlNode)
+>         f' maybeMapIO extArc = do maybeMap <- maybeMapIO
+>                                   case (maybeMap) of
+>                                       Right wfMap -> loadExternal wfMap extArc elemFuncMap
+>                                       Left  msg   -> return $ Left msg
+>         startMap = do return $ Right Map.empty
+
+> loadExternal wfMap extArc elemFuncMap =
+>     if (Map.member key wfMap)
+>        then do return $ Right wfMap
+>        else do maybeGraph <- loadWfGraph (targetWf extArc) (targetVersion extArc) elemFuncMap
+>                case (maybeGraph) of
+>                    Right graph -> return $ Right $ Map.insert key graph wfMap
+>                    Left  msg   -> return $ Left msg
+>     where
+>         key = targetInstance extArc
+>
+
+Function for processing the start element. There should be exactly one of these
+per workflow definition. It should contain only arc and externalArc elements. It
+has no attributes
 
 > processStartElement element = unwrapXmlProc $ completeXmlNode node element
 >     where
 >         node = Node StartNodeId RequireAll defaultGuard completeExecution
+
+Function for processing node elements. There can be any number of these in each
+workflow. They have no logic associated with them. They have a nodeId, which
+should be unique in that workflow and a type, which corresponds to the NodeType
+type in Workflow. Nodes should contain only arc and externalArc elements.
 
 > processNodeElement element = unwrapXmlProc $
 >     do useElement element
@@ -136,7 +188,8 @@ per workflow definition.
 > completeXmlNode node element =
 >    do useElement element
 >       arcs <-readArcs
->       return $ XmlNode node arcs
+>       externalArcs <- readExternalArcs
+>       return $ XmlNode node arcs externalArcs
 
 > defaultElemFunctionMap = Map.fromList [ ("start", processStartElement ),
 >                                         ("node",  processNodeElement ) ]
