@@ -27,7 +27,7 @@ public class GraphTreeNode
     }
     else
     {
-      depth = 0;
+      depth = -1;
     }
   }
 
