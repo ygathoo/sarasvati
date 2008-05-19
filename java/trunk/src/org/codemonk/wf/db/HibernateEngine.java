@@ -3,7 +3,6 @@
  */
 package org.codemonk.wf.db;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.codemonk.wf.Engine;
@@ -52,15 +51,11 @@ public class HibernateEngine extends Engine
   }
 
   @Override
-  protected IProcess startWorkflow (IGraph graph)
+  protected IProcess newProcess( IGraph graph )
   {
-    INode startNode = graph.getStartNode();
-
     Process process = new Process( (Graph)graph);
     session.save(  process );
 
-    NodeToken startToken = newNodeToken( process, startNode, new ArrayList<IArcToken>(0) );
-    acceptWithGuard( process, startToken );
     return process;
   }
 }

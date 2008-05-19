@@ -12,7 +12,18 @@ public abstract class Engine
 
   protected abstract IArcToken newArcToken (IProcess process, IArc arc, INodeToken parent);
 
-  protected abstract IProcess startWorkflow (IGraph graph);
+  protected abstract IProcess newProcess (IGraph graph);
+
+  public IProcess startWorkflow (IGraph graph)
+  {
+    INode startNode = graph.getStartNode();
+
+    IProcess process = newProcess( graph );
+
+    INodeToken startToken = newNodeToken( process, startNode, new ArrayList<IArcToken>(0) );
+    acceptWithGuard( process, startToken );
+    return process;
+  }
 
   public void accept (IProcess process, IArcToken token)
   {
