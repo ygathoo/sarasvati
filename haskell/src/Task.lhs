@@ -42,4 +42,4 @@
 
 > completeTask task wf = completeExecution token (closeTask task wf)
 >   where
->     token = tokenForId (getTokId task) wf
+>     token = getTokenForId (getTokId task) wf

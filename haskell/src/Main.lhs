@@ -5,13 +5,13 @@
 > import IO
 > import Data.Char
 
-> n1 = Node (-1) RequireAll defaultGuard passthrough
-> n2 = Node 2 RequireAll defaultGuard (acceptAndCreateTask 1 "Hello" "Here is where one would say hello")
-> n3 = Node 3 RequireAll defaultGuard (acceptAndCreateTask 2 "Introduce" "Here is where you give your name")
-> n4 = Node 4 RequireAll defaultGuard (acceptAndCreateTask 3 "Shake" "Here is where you shake hands")
-> n5 = Node 5 RequireAll defaultGuard (acceptAndCreateTask 4 "Pleasantry" "Here is where you say something like, 'Nice to meet you'")
-> n6 = Node 6 RequireAll (\x y -> SkipNode) passthrough
-> n7 = Node 7 RequireAll defaultGuard (acceptAndCreateTask 5 "Converse" "Start a conversation")
+> n1 = Node (NodeId (-1)) RequireAll defaultGuard passthrough
+> n2 = Node (NodeId 2) RequireAll defaultGuard (acceptAndCreateTask 1 "Hello" "Here is where one would say hello")
+> n3 = Node (NodeId 3) RequireAll defaultGuard (acceptAndCreateTask 2 "Introduce" "Here is where you give your name")
+> n4 = Node (NodeId 4) RequireAll defaultGuard (acceptAndCreateTask 3 "Shake" "Here is where you shake hands")
+> n5 = Node (NodeId 5) RequireAll defaultGuard (acceptAndCreateTask 4 "Pleasantry" "Here is where you say something like, 'Nice to meet you'")
+> n6 = Node (NodeId 6) RequireAll (\x y -> SkipNode) passthrough
+> n7 = Node (NodeId 7) RequireAll defaultGuard (acceptAndCreateTask 5 "Converse" "Start a conversation")
 
 > graph = graphFromArcs
 >   [ (NodeArcs n1 [] [n2, n3]),
