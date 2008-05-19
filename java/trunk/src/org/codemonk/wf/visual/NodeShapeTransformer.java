@@ -4,24 +4,45 @@
 package org.codemonk.wf.visual;
 
 import java.awt.Shape;
-import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 
 import org.apache.commons.collections15.Transformer;
 import org.codemonk.wf.db.HibNodeRef;
 
+import edu.uci.ics.jung.visualization.VertexShapeFactory;
+
 public class NodeShapeTransformer implements Transformer<HibNodeRef, Shape>
 {
+  protected Transformer<HibNodeRef, Integer> sizeTrans = new Transformer<HibNodeRef, Integer>()
+  {
+    @Override
+    public Integer transform( HibNodeRef arg0 )
+    {
+      return 40;
+    }
+  };
+
+  protected Transformer<HibNodeRef, Float> aspectTrans = new Transformer<HibNodeRef, Float>()
+  {
+    @Override
+    public Float transform( HibNodeRef arg0 )
+    {
+      return 1f;
+    }
+  };
+
+  protected VertexShapeFactory<HibNodeRef> factory =
+    new VertexShapeFactory<HibNodeRef>( sizeTrans, aspectTrans );
+
   @Override
   public Shape transform (HibNodeRef nodeRef)
   {
     if ( "task".equals( nodeRef.getType() ) )
     {
-      return new Rectangle2D.Float( -25, -25, 25, 25 );
+      return factory.getRoundRectangle( nodeRef );
     }
     else
     {
-      return new Ellipse2D.Float(-10,-10,20,20);
+      return factory.getEllipse( nodeRef );
     }
   }
 
