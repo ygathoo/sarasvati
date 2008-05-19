@@ -3,7 +3,9 @@
  */
 package org.codemonk.wf.db;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.codemonk.wf.Engine;
 import org.codemonk.wf.IArc;
@@ -45,7 +47,44 @@ public class HibernateEngine extends Engine
   @Override
   protected NodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents)
   {
-    NodeToken token = new NodeToken( (Process)process, (NodeRef)node, (List<ArcToken>)(List<?>)parents );
+    // Here we setup the token attributes for the new node
+    // If the node has no precessors, it will have no attributes
+    // If it has only one processor (or only one processor with attributes)
+    // it will inherit the attributes of that one node
+    // Otherwise, the attributes of all precessor nodes will get merged into
+    // a single set.
+    List<ArcToken> hibParents = (List<ArcToken>)(List<?>)parents;
+
+    NodeToken attrSetToken = null;
+    Map<String,String> attrMap = new HashMap<String,String>();
+
+    boolean isMerge = false;
+
+    for ( ArcToken arcToken : hibParents )
+    {
+      NodeToken parent = arcToken.getParentToken();
+
+      if ( parent.getAttrSetToken() == null )
+      {
+        continue;
+      }
+      if ( attrSetToken == null )
+      {
+        attrSetToken = parent.getAttrSetToken();
+      }
+      else if ( !isMerge )
+      {
+        attrMap.putAll( attrSetToken.getAttrMap() );
+        isMerge = true;
+      }
+
+      if ( isMerge )
+      {
+        attrMap.putAll( parent.getAttrMap() );
+      }
+    }
+
+    NodeToken token = new NodeToken( (Process)process, (NodeRef)node, attrSetToken, attrMap, hibParents);
     session.save( token );
     return token;
   }

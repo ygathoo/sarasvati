@@ -52,5 +52,7 @@ public class NodeTask extends Node
     TaskState open = (TaskState)session.load( TaskState.class, 0 );
     Task newTask = new Task( (NodeToken)token, getTaskName(), getTaskDesc(), open );
     session.save( newTask );
+
+    token.setLongAttribute( newTask.getName(), token.getLongAttribute( newTask.getName() ) + 1 );
   }
 }

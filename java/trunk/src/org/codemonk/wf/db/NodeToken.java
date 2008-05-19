@@ -5,6 +5,7 @@ package org.codemonk.wf.db;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -22,6 +23,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.codemonk.wf.INodeToken;
+import org.hibernate.annotations.CollectionOfElements;
 
 @Entity
 @Table(name="wf_node_token")
@@ -39,6 +41,16 @@ public class NodeToken implements INodeToken
   @JoinColumn(name = "node_ref_id")
   protected NodeRef nodeRef;
 
+  @ManyToOne(fetch = FetchType.EAGER)
+  @JoinColumn(name = "attr_set_id")
+  protected NodeToken attrSetToken;
+
+  @CollectionOfElements
+  @JoinTable( name="wf_token_string_attr", joinColumns={@JoinColumn( name="attr_set_id")})
+  @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
+  @Column( name="value")
+  protected Map<String, String> attrMap;
+
   @ManyToMany (fetch=FetchType.LAZY, cascade= {CascadeType.ALL})
   @JoinTable( name = "wf_node_token_parent",
               joinColumns = @JoinColumn(name = "node_token_id"),
@@ -55,10 +67,12 @@ public class NodeToken implements INodeToken
 
   public NodeToken () { /* Default constructor for Hibernate */ }
 
-  public NodeToken (Process process, NodeRef nodeRef, List<ArcToken> parentTokens)
+  public NodeToken (Process process, NodeRef nodeRef, NodeToken attrSetToken, Map<String,String> attrMap, List<ArcToken> parentTokens)
   {
     this.process      = process;
     this.nodeRef      = nodeRef;
+    this.attrSetToken = attrMap.isEmpty() ? attrSetToken : this;
+    this.attrMap      = attrMap;
     this.parentTokens = parentTokens;
     this.createDate   = new Date();
   }
@@ -92,6 +106,26 @@ public class NodeToken implements INodeToken
   public void setNodeRef (NodeRef nodeRef)
   {
     this.nodeRef = nodeRef;
+  }
+
+  public NodeToken getAttrSetToken()
+  {
+    return attrSetToken;
+  }
+
+  public void setAttrSetToken( NodeToken attrSetToken )
+  {
+    this.attrSetToken = attrSetToken;
+  }
+
+  public Map<String, String> getAttrMap()
+  {
+    return attrMap;
+  }
+
+  public void setAttrMap( Map<String, String> attrMap )
+  {
+    this.attrMap = attrMap;
   }
 
   public List<ArcToken> getParentTokens ()
@@ -128,6 +162,87 @@ public class NodeToken implements INodeToken
   public void markComplete ()
   {
     this.completeDate = new Date();
+  }
+
+  @Override
+  public String getStringAttribute( String name )
+  {
+    if ( attrSetToken == null )
+    {
+      return null;
+    }
+    else if ( !this.equals( attrSetToken ) )
+    {
+      return attrSetToken.getStringAttribute( name );
+    }
+    else
+    {
+      return attrMap.get( name );
+    }
+  }
+
+  protected void copyOnWrite ()
+  {
+    if ( !this.equals( attrSetToken ) )
+    {
+      if ( attrSetToken != null )
+      {
+        attrMap.putAll( attrSetToken.getAttrMap() );
+      }
+      attrSetToken = this;
+    }
+  }
+
+  @Override
+  public void removeAttribute( String name )
+  {
+    copyOnWrite();
+    attrMap.remove( name );
+  }
+
+  @Override
+  public void setStringAttribute( String name, String value )
+  {
+    copyOnWrite();
+    attrMap.put( name, value );
+  }
+
+  @Override
+  public boolean getBooleanAttribute( String name )
+  {
+    return "true".equals( getStringAttribute( name ) );
+  }
+
+  @Override
+  public long getLongAttribute( String name )
+  {
+    String value = getStringAttribute( name );
+
+    if ( value == null )
+    {
+      return 0;
+    }
+
+    try
+    {
+      return Long.parseLong( value );
+    }
+    catch (NumberFormatException nfe )
+    {
+      return 0;
+    }
+  }
+
+  @Override
+  public void setBooleanAttribute( String name, boolean value )
+  {
+    setStringAttribute( name, String.valueOf( value ) );
+  }
+
+  @Override
+  public void setLongAttribute( String name, long value )
+  {
+    setStringAttribute( name, String.valueOf( value ) );
   }
 
   @Override
