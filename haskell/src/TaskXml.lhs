@@ -6,12 +6,11 @@
 
 > processTaskElement element = unwrapXmlProc $
 >     do useElement element
->        nodeId   <- readAttr "id"
->        arcs <- readArcs
+>        nodeId   <- readAttr "nodeId"
 >        nodeType <- readAttr "type"
->        name <- readText "name"
->        desc <- readText "description"
->        return $ XmlNode (createTaskNode nodeId nodeType name desc) arcs
+>        name     <- readText "name"
+>        desc     <- readText "description"
+>        completeXmlNode (createTaskNode nodeId nodeType name desc) element
 
 > createTaskNode strNodeId strNodeType name desc = Node nodeId nodeType defaultGuard acceptFunction
 >     where

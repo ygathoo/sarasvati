@@ -1,15 +1,21 @@
 <!ELEMENT workflow (start,node*)>
 <!ATTLIST workflow
-          id ID #REQUIRED
-          workflow version CDATA #REQUIRED>
+          id      ID    #REQUIRED
+          version CDATA #REQUIRED>
 
 <!ELEMENT start (arc*)>
 
 <!ELEMENT node (arc*)>
 <!ATTLIST node
-          id ID #REQUIRED
+          id   ID                         #REQUIRED
           type (requireSingle|requireAll) "requireAll">
 
 <!ELEMENT arc (#PCDATA)>
-<!ATTLIST arc to IDREF #REQUIRED>
+<!ATTLIST arc nodeId IDREF #REQUIRED>
 
+<!ELEMENT subworkflow (#PCDATA)>
+<!ATTLIST subworkflow workflowId ID       #REQUIRED
+                      version    CDATA    #REQUIRED
+                      instanceId CDATA    #REQUIRED
+                      nodeId     CDATA    #REQUIRED
+                      type       (in|out) #REQUIRED>

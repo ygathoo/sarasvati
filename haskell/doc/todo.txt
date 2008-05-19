@@ -10,11 +10,11 @@ DONE - Create workflow file format (not accounting for nested workflows)
 
 In Progress:
 ---------------------------------------------------------------------
-
+Implement nested workflows
 
 Next steps:
 ---------------------------------------------------------------------
-Implement nested workflows
+
 Allow the token to carry state.
 
 

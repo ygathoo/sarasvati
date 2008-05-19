@@ -55,7 +55,7 @@
 >         onlyJust (Nothing,_)  = False
 >         onlyJust ((Just _),_) = True
 >         stripMaybe (Just x)   = x
->         labels                = textlabelled (txt `o` children `o` (tag name) `o` children) (CElem element)
+>         labels                = textlabelled ( path [ children, tag name, children, txt ] ) (CElem element)
 
 > unwrapXmlProc (XmlProc a) = case (a []) of (result,_) -> result
 
@@ -91,24 +91,24 @@ elements of that type and return the appropriate XmlNode.
 Function for processing the <start> element. There should be exactly one of these
 per workflow definition.
 
-> processStartElement element = unwrapXmlProc $
->     do useElement element
->        arcs <- readArcs
->        return $ XmlNode node arcs
+> processStartElement element = unwrapXmlProc $ completeXmlNode node element
 >     where
 >         node = Node StartNodeId RequireAll defaultGuard completeExecution
 
 > processNodeElement element = unwrapXmlProc $
 >     do useElement element
->        id   <- readAttr "id"
->        arcs <- readArcs
+>        id   <- readAttr "nodeId"
 >        nodeType <- readAttr "type"
->        return $ XmlNode (newNode id nodeType) arcs
+>        completeXmlNode (newNode id nodeType) element
 >     where
 >         newNode id nodeType = Node (NodeId (read id::Int)) (getType nodeType) defaultGuard completeExecution
 >         getType "requireSingle" = RequireSingle
 >         getType _               = RequireAll
 
+> completeXmlNode node element =
+>    do useElement element
+>       arcs <-readArcs
+>       return $ XmlNode node arcs
 
 > defaultElemFunctionMap = Map.fromList [ ("start", processStartElement ),
 >                                         ("node",  processNodeElement ) ]

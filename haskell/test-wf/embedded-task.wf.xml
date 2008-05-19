@@ -1,22 +1,21 @@
 <?xml version="1.0"?>
 <!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="one-node" version="1">
+<workflow id="embedded-task" version="1">
   <start>
     <arc to="1"/>
-    <arc to="2"/>
   </start>
 
-  <task nodeId="1">
-    <name>Hello</name>
+  <task id="1">
+    <name>Enter order</name>
     <description>
-      Here is where one would say hello
+      Enter order into system
     </description>
 
     <arc to="3"/>
   </task>
 
-  <task nodeId="2">
+  <task id="2">
     <name>Shake</name>
     <description>
       Here is where you shake hands
@@ -24,7 +23,7 @@
     <arc to="3"/>
   </task>
 
-  <task nodeId="3">
+  <task id="3">
     <name>Introduce</name>
     <description>
       Here is where you give your name
@@ -32,7 +31,7 @@
     <arc to="4"/>
   </task>
 
-  <task nodeId="4">
+  <task id="4">
     <name>Pleasantry</name>
     <description>
       Here is where you say something like, 'Nice to meet you'
@@ -40,7 +39,7 @@
     <arc to="5"/>
   </task>
 
-  <task nodeId="5">
+  <task id="5">
     <name>Converse</name>
     <description>
       Start a conversation
