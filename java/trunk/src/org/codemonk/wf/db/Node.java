@@ -16,7 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.codemonk.wf.Engine;
-import org.codemonk.wf.GuardResponse;
+import org.codemonk.wf.GuardAction;
 import org.codemonk.wf.IArc;
 import org.codemonk.wf.INode;
 import org.codemonk.wf.INodeToken;
@@ -97,9 +97,9 @@ public class Node implements INode
   }
 
   @Override
-  public GuardResponse guard (IProcess process, INodeToken token)
+  public GuardAction guard (IProcess process, INodeToken token)
   {
-    return GuardResponse.AcceptToken;
+    return GuardAction.AcceptToken;
   }
 
   @Override
