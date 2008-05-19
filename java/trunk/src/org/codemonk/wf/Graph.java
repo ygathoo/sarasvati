@@ -5,7 +5,7 @@ package org.codemonk.wf;
 
 import java.util.List;
 
-public interface IGraph
+public interface Graph
 {
   /**
    * Returns the graph name, which should be unique. Different versions with the same
@@ -31,7 +31,7 @@ public interface IGraph
    * @param node A node belonging to this graph
    * @return A list of arcs
    */
-  List<IArc> getInputArcs (INode node);
+  List<Arc> getInputArcs (Node node);
 
   /**
    * Returns a list of arcs which have the given node as an end point and
@@ -41,7 +41,7 @@ public interface IGraph
    * @param node A node belonging to this graph
    * @return A list of arcs
    */
-  List<IArc> getInputArcs (INode node, String arcName);
+  List<Arc> getInputArcs (Node node, String arcName);
 
   /**
    * Returns a list of arcs which have the given node as a starting point.
@@ -50,7 +50,7 @@ public interface IGraph
    * @param node A node belonging to this graph
    * @return A list of arcs
    */
-  List<IArc> getOutputArcs (INode node);
+  List<Arc> getOutputArcs (Node node);
 
   /**
    * Returns a list of arcs which have the given node as a starting point
@@ -60,7 +60,7 @@ public interface IGraph
    * @param node A node belonging to this graph
    * @return A list of arcs
    */
-  List<IArc> getOutputArcs (INode node, String arcName);
+  List<Arc> getOutputArcs (Node node, String arcName);
 
   /**
    * Returns a list of the nodes at which nodes should be placed to
@@ -68,7 +68,7 @@ public interface IGraph
    *
    * @return A list of nodes
    */
-  List<INode> getStartNodes ();
+  List<Node> getStartNodes ();
 
   /**
    * Returns true if the given arc has an inverse. An inverse arc
@@ -78,5 +78,5 @@ public interface IGraph
    * @param arc An arc belonging to this graph
    * @return True if an inverse of this arc exists in the graph
    */
-  boolean hasArcInverse (IArc arc);
+  boolean hasArcInverse (Arc arc);
 }

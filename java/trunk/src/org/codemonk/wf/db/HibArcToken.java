@@ -17,11 +17,11 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.codemonk.wf.IArcToken;
+import org.codemonk.wf.ArcToken;
 
 @Entity
 @Table (name="wf_arc_token")
-public class HibArcToken implements IArcToken
+public class HibArcToken implements ArcToken
 {
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)

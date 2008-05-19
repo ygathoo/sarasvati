@@ -16,14 +16,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import org.codemonk.wf.IArcToken;
-import org.codemonk.wf.INodeToken;
-import org.codemonk.wf.IProcess;
+import org.codemonk.wf.ArcToken;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.Process;
 import org.hibernate.annotations.Where;
 
 @Entity
 @Table (name="wf_process")
-public class HibProcess implements IProcess
+public class HibProcess implements Process
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -35,19 +35,19 @@ public class HibProcess implements IProcess
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
-  protected List<IArcToken>  arcTokens;
+  protected List<ArcToken>  arcTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
-  protected List<INodeToken>  nodeTokens;
+  protected List<NodeToken>  nodeTokens;
 
   public HibProcess () { /* Default constructor for Hibernate */ }
 
   public HibProcess (HibGraph graph)
   {
     this.graph = graph;
-    this.arcTokens = new LinkedList<IArcToken>();
-    this.nodeTokens = new LinkedList<INodeToken>();
+    this.arcTokens = new LinkedList<ArcToken>();
+    this.nodeTokens = new LinkedList<NodeToken>();
   }
 
   public Long getId ()
@@ -72,46 +72,46 @@ public class HibProcess implements IProcess
   }
 
   @Override
-  public List<IArcToken> getArcTokens ()
+  public List<ArcToken> getArcTokens ()
   {
     return arcTokens;
   }
 
-  public void setArcTokens (List<IArcToken> arcTokens)
+  public void setArcTokens (List<ArcToken> arcTokens)
   {
     this.arcTokens = arcTokens;
   }
 
-  public List<INodeToken> getNodeTokens()
+  public List<NodeToken> getNodeTokens()
   {
     return nodeTokens;
   }
 
-  public void setNodeTokens( List<INodeToken> nodeTokens )
+  public void setNodeTokens( List<NodeToken> nodeTokens )
   {
     this.nodeTokens = nodeTokens;
   }
 
   @Override
-  public void addArcToken (IArcToken token)
+  public void addArcToken (ArcToken token)
   {
     getArcTokens().add( token );
   }
 
   @Override
-  public void removeArcToken (IArcToken token)
+  public void removeArcToken (ArcToken token)
   {
     getArcTokens().remove( token );
   }
 
   @Override
-  public void addNodeToken (INodeToken token)
+  public void addNodeToken (NodeToken token)
   {
     getNodeTokens().add( token );
   }
 
   @Override
-  public void removeNodeToken (INodeToken token)
+  public void removeNodeToken (NodeToken token)
   {
     getNodeTokens().remove( token );
   }

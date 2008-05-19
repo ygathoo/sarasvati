@@ -9,26 +9,26 @@ import java.util.List;
 
 public abstract class Engine
 {
-  protected abstract INodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents);
+  protected abstract NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents);
 
-  protected abstract IArcToken newArcToken (IProcess process, IArc arc, INodeToken parent);
+  protected abstract ArcToken newArcToken (Process process, Arc arc, NodeToken parent);
 
-  protected abstract IProcess newProcess (IGraph graph);
+  protected abstract Process newProcess (Graph graph);
 
-  public IProcess startWorkflow (IGraph graph)
+  public Process startWorkflow (Graph graph)
   {
-    IProcess process = newProcess( graph );
+    Process process = newProcess( graph );
 
-    for (INode startNode : graph.getStartNodes() )
+    for (Node startNode : graph.getStartNodes() )
     {
-      INodeToken startToken = newNodeToken( process, startNode, new ArrayList<IArcToken>(0) );
+      NodeToken startToken = newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
       executeNode( process, startToken );
     }
 
     return process;
   }
 
-  protected void executeArc (IProcess process, IArcToken token)
+  protected void executeArc (Process process, ArcToken token)
   {
     if ( !token.getArc().getEndNode().isJoin() )
     {
@@ -38,15 +38,15 @@ public abstract class Engine
     {
       process.addArcToken( token );
 
-      INode targetNode = token.getArc().getEndNode();
-      List<IArc> inputs = process.getGraph().getInputArcs( targetNode, token.getArc().getName() );
+      Node targetNode = token.getArc().getEndNode();
+      List<Arc> inputs = process.getGraph().getInputArcs( targetNode, token.getArc().getName() );
 
-      IArcToken[] tokens = new IArcToken[inputs.size()];
+      ArcToken[] tokens = new ArcToken[inputs.size()];
       int tokensFound = 0;
 
-      for ( IArc arc : inputs )
+      for ( Arc arc : inputs )
       {
-        for ( IArcToken arcToken : process.getArcTokens() )
+        for ( ArcToken arcToken : process.getArcTokens() )
         {
           if ( arcToken.getArc().equals( arc ) )
           {
@@ -63,9 +63,9 @@ public abstract class Engine
     }
   }
 
-  protected void completeExecuteArc (IProcess process, INode targetNode, IArcToken ... tokens)
+  protected void completeExecuteArc (Process process, Node targetNode, ArcToken ... tokens)
   {
-    for ( IArcToken token : tokens )
+    for ( ArcToken token : tokens )
     {
       process.removeArcToken( token );
       token.markComplete();
@@ -74,9 +74,9 @@ public abstract class Engine
     executeNode( process, newNodeToken( process, targetNode, Arrays.asList( tokens ) ) );
   }
 
-  protected void executeNode (IProcess process, INodeToken token)
+  protected void executeNode (Process process, NodeToken token)
   {
-    IGuardResponse response = token.getNode().guard( process, token );
+    GuardResponse response = token.getNode().guard( process, token );
     switch ( response.getGuardAction() )
     {
       case AcceptToken :
@@ -95,14 +95,14 @@ public abstract class Engine
     }
   }
 
-  public void completeExecuteNode (IProcess process, INodeToken token, String arcName)
+  public void completeExecuteNode (Process process, NodeToken token, String arcName)
   {
-    List<IArc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
+    List<Arc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 
     process.removeNodeToken( token );
     token.markComplete();
 
-    for ( IArc arc : outputArcs )
+    for ( Arc arc : outputArcs )
     {
       executeArc( process, newArcToken( process, arc, token ) );
     }

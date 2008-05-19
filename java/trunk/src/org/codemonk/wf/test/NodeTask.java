@@ -5,8 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 import org.codemonk.wf.Engine;
-import org.codemonk.wf.INodeToken;
-import org.codemonk.wf.IProcess;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.Process;
 import org.codemonk.wf.db.HibEngine;
 import org.codemonk.wf.db.HibNode;
 import org.codemonk.wf.db.HibNodeToken;
@@ -43,7 +43,7 @@ public class NodeTask extends HibNode
   }
 
   @Override
-  public void execute (Engine engine, IProcess process, INodeToken token)
+  public void execute (Engine engine, Process process, NodeToken token)
   {
     HibEngine hibEngine = (HibEngine)engine;
 

@@ -1,8 +1,8 @@
 package org.codemonk.wf;
 
-public interface IGuardResponse
+public interface GuardResponse
 {
-  static IGuardResponse ACCEPT_TOKEN_RESPONSE = new IGuardResponse()
+  static GuardResponse ACCEPT_TOKEN_RESPONSE = new GuardResponse()
   {
     @Override
     public String getExitArcForSkip()
@@ -18,7 +18,7 @@ public interface IGuardResponse
     }
   };
 
-  static IGuardResponse DISCARD_TOKEN_RESPONSE = new IGuardResponse()
+  static GuardResponse DISCARD_TOKEN_RESPONSE = new GuardResponse()
   {
     @Override
     public String getExitArcForSkip()

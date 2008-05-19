@@ -6,8 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.codemonk.wf.IArc;
-import org.codemonk.wf.INode;
+import org.codemonk.wf.Arc;
+import org.codemonk.wf.Node;
 import org.codemonk.wf.db.HibGraph;
 import org.codemonk.wf.db.HibNodeRef;
 
@@ -23,7 +23,7 @@ public class GraphTree
   {
     List<GraphTreeNode> nextLayer = new LinkedList<GraphTreeNode>();
 
-    List<INode> startNodes = graph.getStartNodes();
+    List<Node> startNodes = graph.getStartNodes();
 
     if ( startNodes.isEmpty() )
     {
@@ -31,12 +31,12 @@ public class GraphTree
 
       if ( !nodeRefs.isEmpty() )
       {
-        startNodes = new ArrayList<INode>(1);
+        startNodes = new ArrayList<Node>(1);
         startNodes.add( nodeRefs.get( 0 ) );
       }
     }
 
-    for ( INode node : startNodes )
+    for ( Node node : startNodes )
     {
       HibNodeRef nodeRef = (HibNodeRef)node;
       GraphTreeNode treeNode = GraphTreeNode.newInstance( root, nodeRef );
@@ -56,9 +56,9 @@ public class GraphTree
 
       for ( GraphTreeNode treeNode : layer )
       {
-        List<IArc> arcs = graph.getOutputArcs( treeNode.getNode() );
+        List<Arc> arcs = graph.getOutputArcs( treeNode.getNode() );
 
-        for ( IArc arc : arcs )
+        for ( Arc arc : arcs )
         {
           HibNodeRef target = (HibNodeRef)arc.getEndNode();
           GraphTreeNode targetTreeNode = nodeMap.get( target );

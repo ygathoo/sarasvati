@@ -9,12 +9,12 @@ package org.codemonk.wf;
  *
  * @author Paul Lorenz
  */
-public interface INodeToken extends IToken
+public interface NodeToken extends Token
 {
   /**
    * @return The node that this token points to.
    */
-  INode getNode ();
+  Node getNode ();
 
 
   /**

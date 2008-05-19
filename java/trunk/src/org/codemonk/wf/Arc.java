@@ -3,11 +3,11 @@
  */
 package org.codemonk.wf;
 
-public interface IArc
+public interface Arc
 {
   static String DEFAULT_ARC = "";
 
-  INode getStartNode ();
-  INode getEndNode ();
+  Node getStartNode ();
+  Node getEndNode ();
   String getName ();
 }
