@@ -3,6 +3,9 @@
  */
 package org.codemonk.wf.db;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -11,29 +14,33 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import org.codemonk.wf.Engine;
-import org.codemonk.wf.GuardResponse;
-import org.codemonk.wf.INode;
-import org.codemonk.wf.INodeToken;
+import org.codemonk.wf.IArcToken;
 import org.codemonk.wf.IProcess;
 
 @Entity
-@Table (name="wf_node")
-public class Node implements INode
+@Table (name="wf_process")
+public class Process implements IProcess
 {
   @Id
   @GeneratedValue(strategy=GenerationType.AUTO)
-  protected Long   id;
+  protected Long id;
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn( name="graph_id")
-  protected Graph graph;
+  protected Graph            graph;
 
-  protected String name;
-  protected String type;
+  @Transient
+  protected List<IArcToken>  arcTokens;
 
-  protected boolean join;
+  public Process () { /* Default constructor for Hibernate */ }
+
+  public Process (Graph graph)
+  {
+    this.graph = graph;
+    this.arcTokens = new LinkedList<IArcToken>();
+  }
 
   public Long getId ()
   {
@@ -46,27 +53,6 @@ public class Node implements INode
   }
 
   @Override
-  public String getName ()
-  {
-    return name;
-  }
-
-  public void setName (String name)
-  {
-    this.name = name;
-  }
-
-  @Override
-  public String getType ()
-  {
-    return type;
-  }
-
-  public void setType (String type)
-  {
-    this.type = type;
-  }
-
   public Graph getGraph ()
   {
     return graph;
@@ -78,26 +64,32 @@ public class Node implements INode
   }
 
   @Override
-  public boolean isJoin ()
+  public List<IArcToken> getArcTokens ()
   {
-    return false;
+    if ( arcTokens == null )
+    {
+      // TODO: Load arc tokens
+      throw new UnsupportedOperationException( "Not yet implemented: Process.getArcTokens" );
+    }
+
+    return arcTokens;
   }
 
-  public void setJoin (boolean join)
+  public void setArcTokens (List<IArcToken> arcTokens)
   {
-    this.join = join;
+    this.arcTokens = arcTokens;
   }
 
   @Override
-  public GuardResponse guard (IProcess process, INodeToken token)
+  public void addArcToken (IArcToken token)
   {
-    return GuardResponse.AcceptToken;
+    arcTokens.add( token );
   }
 
   @Override
-  public void execute (Engine engine, IProcess process, INodeToken token)
+  public void removeArcToken (IArcToken token)
   {
-    engine.completeExecution( process, token, "" );
+    arcTokens.remove( token );
   }
 
   @Override
@@ -115,8 +107,8 @@ public class Node implements INode
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof Node ) ) return false;
-    final Node other = (Node)obj;
+    if ( !( obj instanceof Process ) ) return false;
+    final Process other = (Process)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;

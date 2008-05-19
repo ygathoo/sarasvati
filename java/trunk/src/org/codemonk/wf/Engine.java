@@ -8,34 +8,34 @@ import java.util.List;
 
 public abstract class Engine
 {
-  abstract INodeToken newNodeToken (INode node, List<IArcToken> parents);
+  protected abstract INodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents);
 
-  abstract IArcToken newArcToken (IArc arc, INodeToken parent);
+  protected abstract IArcToken newArcToken (IProcess process, IArc arc, INodeToken parent);
 
-  public void accept (WfRun wfRun, IArcToken token)
+  public void accept (IProcess process, IArcToken token)
   {
     if ( token.getArc().getEndNode().isJoin() )
     {
-      acceptJoin( wfRun, token );
+      acceptJoin( process, token );
     }
     else
     {
-      acceptSingle( wfRun, token );
+      acceptSingle( process, token );
     }
   }
 
-  protected void acceptSingle (WfRun wfRun, IArcToken token)
+  protected void acceptSingle (IProcess process, IArcToken token)
   {
     List<IArcToken> tokens = new ArrayList<IArcToken>(1);
     tokens.add( token );
 
-    finishAccept( wfRun, token.getArc().getEndNode(), tokens );
+    finishAccept( process, token.getArc().getEndNode(), tokens );
   }
 
-  protected void acceptJoin (WfRun wfRun, IArcToken token)
+  protected void acceptJoin (IProcess process, IArcToken token)
   {
     INode targetNode = token.getArc().getEndNode();
-    List<IArc> inputs = wfRun.getGraph().getInputArcs( targetNode, token.getArc().getName() );
+    List<IArc> inputs = process.getGraph().getInputArcs( targetNode, token.getArc().getName() );
 
     List<IArcToken> tokens = new ArrayList<IArcToken>(inputs.size());
     tokens.add( token );
@@ -47,7 +47,7 @@ public abstract class Engine
         continue;
       }
 
-      for ( IArcToken arcToken : wfRun.getArcTokens() )
+      for ( IArcToken arcToken : process.getArcTokens() )
       {
         if ( arcToken.getArc().equals( arc ) )
         {
@@ -61,33 +61,31 @@ public abstract class Engine
 
     if ( allInputsPresent )
     {
-      finishAccept( wfRun, targetNode, tokens );
+      finishAccept( process, targetNode, tokens );
     }
     else
     {
-      wfRun.addArcToken( token );
+      process.addArcToken( token );
     }
   }
 
-  protected void finishAccept (WfRun wfRun, INode targetNode, List<IArcToken> tokens)
+  protected void finishAccept (IProcess process, INode targetNode, List<IArcToken> tokens)
   {
     for ( IArcToken arcToken : tokens )
     {
-      wfRun.removeArcToken( arcToken );
+      process.removeArcToken( arcToken );
       arcToken.markComplete();
     }
 
-    INodeToken newToken = newNodeToken( targetNode, tokens );
-    wfRun.addNodeToken( newToken );
-    acceptWithGuard( wfRun, newToken );
+    acceptWithGuard( process, newNodeToken( process, targetNode, tokens ) );
   }
 
-  public void acceptWithGuard (WfRun wfRun, INodeToken token)
+  public void acceptWithGuard (IProcess process, INodeToken token)
   {
-    switch ( token.getNode().guard( wfRun, token ) )
+    switch ( token.getNode().guard( process, token ) )
     {
       case AcceptToken :
-        token.getNode().execute( this, wfRun, token );
+        token.getNode().execute( this, process, token );
         break;
 
       case DiscardToken :
@@ -95,21 +93,20 @@ public abstract class Engine
         break;
 
       case SkipNode :
-        completeExecution( wfRun, token, "" );
+        completeExecution( process, token, "" );
         break;
     }
   }
 
-  public void completeExecution (WfRun wfRun, INodeToken token, String arcName)
+  public void completeExecution (IProcess process, INodeToken token, String arcName)
   {
-    List<IArc> outputArcs = wfRun.getGraph().getOutputArcs( token.getNode(), arcName );
+    List<IArc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 
     token.markComplete();
-    wfRun.removeNodeToken( token );
 
     for ( IArc arc : outputArcs )
     {
-      accept( wfRun, newArcToken( arc, token ) );
+      accept( process, newArcToken( process, arc, token ) );
     }
   }
 }
