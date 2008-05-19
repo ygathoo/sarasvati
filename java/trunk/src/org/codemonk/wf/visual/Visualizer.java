@@ -3,8 +3,6 @@ package org.codemonk.wf.visual;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
