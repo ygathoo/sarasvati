@@ -9,6 +9,6 @@ public interface INode
   String getName ();
   String getType ();
   boolean isJoin ();
-  GuardAction guard (IProcess process, INodeToken token);
+  IGuardResponse guard (IProcess process, INodeToken token);
   void execute(Engine engine, IProcess process, INodeToken token);
 }

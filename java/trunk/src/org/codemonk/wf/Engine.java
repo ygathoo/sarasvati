@@ -76,7 +76,8 @@ public abstract class Engine
 
   protected void executeNode (IProcess process, INodeToken token)
   {
-    switch ( token.getNode().guard( process, token ) )
+    IGuardResponse response = token.getNode().guard( process, token );
+    switch ( response.getGuardAction() )
     {
       case AcceptToken :
         process.addNodeToken( token );
@@ -89,7 +90,7 @@ public abstract class Engine
 
       case SkipNode :
         process.addNodeToken( token );
-        completeExecuteNode( process, token, IArc.DEFAULT_ARC );
+        completeExecuteNode( process, token, response.getExitArcForSkip() );
         break;
     }
   }
