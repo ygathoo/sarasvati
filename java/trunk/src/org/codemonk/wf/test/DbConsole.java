@@ -14,6 +14,7 @@ import org.codemonk.wf.db.NodeToken;
 import org.codemonk.wf.db.Process;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.postgresql.Driver;
@@ -31,6 +32,8 @@ public class DbConsole
     config.setProperty( "hibernate.connection.username", "paul" );
     config.setProperty( "hibernate.connection.password", "thesistest56" );
     config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );
+    //config.setProperty( "hibernate.show_sql", "true" );
+    //config.setProperty( "hibernate.format_sql", "true" );
 
     config.addAnnotatedClass( Arc.class );
     config.addAnnotatedClass( ArcToken.class );
@@ -54,11 +57,13 @@ public class DbConsole
     while ( true )
     {
       Session session = sessionFactory.openSession();
+      Transaction t = session.beginTransaction();
       HibernateEngine engine = new HibernateEngine( session );
 
       Graph graph = getGraph( engine );
       Process process = (Process)engine.startWorkflow( graph );
       session.flush();
+      t.commit();
       session.close();
 
       runWorkflow( process.getId() );
@@ -71,6 +76,7 @@ public class DbConsole
     while (true)
     {
       Session session = sessionFactory.openSession();
+      Transaction trans = session.beginTransaction();
       HibernateEngine engine = new HibernateEngine( session );
 
       Process p = (Process) session.load( Process.class, processId );
@@ -120,6 +126,7 @@ public class DbConsole
       }
 
       session.flush();
+      trans.commit();
       session.close();
     }
   }
