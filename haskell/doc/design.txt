@@ -6,11 +6,13 @@ Node: Node in Directed Graph
 
 Token: Represents the current state of execution
   node: The node that this token is at
+  prev: The node that the token came from
 
 
 Node Types
 
-Split:
+Fork:
   Generates a token at every output.
 
 Join:
+  If there are tokens from every input, generates a token at its output
