@@ -95,7 +95,7 @@ public abstract class Engine
         break;
 
       case SkipNode :
-        completeExecution( process, token, "" );
+        completeExecution( process, token, IArc.DEFAULT_ARC );
         break;
     }
   }

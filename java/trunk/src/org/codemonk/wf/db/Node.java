@@ -14,6 +14,7 @@ import javax.persistence.Table;
 
 import org.codemonk.wf.Engine;
 import org.codemonk.wf.GuardResponse;
+import org.codemonk.wf.IArc;
 import org.codemonk.wf.INode;
 import org.codemonk.wf.INodeToken;
 import org.codemonk.wf.IProcess;
@@ -97,7 +98,7 @@ public class Node implements INode
   @Override
   public void execute (Engine engine, IProcess process, INodeToken token)
   {
-    engine.completeExecution( process, token, "" );
+    engine.completeExecution( process, token, IArc.DEFAULT_ARC );
   }
 
   @Override
