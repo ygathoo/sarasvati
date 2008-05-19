@@ -97,7 +97,11 @@ public class GraphDrawing extends JComponent
       Point startPoint = start.getRightAnchor();
       Point endPoint   = end.getLeftAnchor();
 
-      if ( start.getDepth() == end.getDepth() - 1 )
+      if ( graph.hasArcInverse( arc ) )
+      {
+        g.drawArc( startPoint.x, startPoint.y, 1,1,1,1 );
+      }
+      else
       {
         g.drawLine( startPoint.x, startPoint.y, endPoint.x, endPoint.y );
       }
