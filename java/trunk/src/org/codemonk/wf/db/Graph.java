@@ -22,14 +22,13 @@ import javax.persistence.Transient;
 import org.codemonk.wf.IArc;
 import org.codemonk.wf.IGraph;
 import org.codemonk.wf.INode;
-import org.codemonk.wf.WorkflowException;
 
 @Entity
 @Table (name="wf_graph")
 public class Graph implements IGraph
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long   id;
   protected String name;
   protected int    version;
@@ -100,6 +99,10 @@ public class Graph implements IGraph
   @Override
   public List<IArc> getInputArcs (INode node)
   {
+    if ( inputMap == null )
+    {
+      initialize();
+    }
     return inputMap.get( node );
   }
 
@@ -122,6 +125,10 @@ public class Graph implements IGraph
   @Override
   public List<IArc> getOutputArcs (INode node)
   {
+    if (outputMap == null)
+    {
+      initialize();
+    }
     return outputMap.get( node );
   }
 
@@ -141,13 +148,8 @@ public class Graph implements IGraph
     return result;
   }
 
-  public void ensureInitialized ()
+  public void initialize ()
   {
-    if ( inputMap != null && outputMap != null )
-    {
-      return;
-    }
-
     inputMap  = new HashMap<NodeRef, List<IArc>>();
     outputMap = new HashMap<NodeRef, List<IArc>>();
 
@@ -190,17 +192,20 @@ public class Graph implements IGraph
     }
   }
 
-  public INode getStartNode ()
+  @Override
+  public List<INode> getStartNodes ()
   {
+    List<INode> startNodes = new LinkedList<INode>();
+
     for ( NodeRef node : getNodeRefs() )
     {
       if ( "start".equals( node.getType() ) && node.getGraph().equals( this ) )
       {
-        return node;
+        startNodes.add( node );
       }
     }
 
-    throw new WorkflowException( "No start node found for: " + this );
+    return startNodes;
   }
 
   @Override

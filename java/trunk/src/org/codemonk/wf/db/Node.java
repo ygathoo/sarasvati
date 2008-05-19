@@ -3,11 +3,14 @@
  */
 package org.codemonk.wf.db;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -18,13 +21,15 @@ import org.codemonk.wf.IArc;
 import org.codemonk.wf.INode;
 import org.codemonk.wf.INodeToken;
 import org.codemonk.wf.IProcess;
+import org.hibernate.annotations.Type;
 
 @Entity
 @Table (name="wf_node")
+@Inheritance (strategy=InheritanceType.JOINED)
 public class Node implements INode
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long   id;
 
   @ManyToOne (fetch=FetchType.EAGER)
@@ -34,6 +39,8 @@ public class Node implements INode
   protected String name;
   protected String type;
 
+  @Column (name="is_join")
+  @Type (type="yes_no")
   protected boolean join;
 
   public Long getId ()
@@ -81,7 +88,7 @@ public class Node implements INode
   @Override
   public boolean isJoin ()
   {
-    return false;
+    return join;
   }
 
   public void setJoin (boolean join)

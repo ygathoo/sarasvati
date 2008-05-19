@@ -28,7 +28,7 @@ import org.codemonk.wf.INodeToken;
 public class NodeToken implements INodeToken
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.AUTO)
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long    id;
 
   @ManyToOne(fetch = FetchType.EAGER)
@@ -36,8 +36,8 @@ public class NodeToken implements INodeToken
   protected Process process;
 
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "node_id")
-  protected Node     node;
+  @JoinColumn(name = "node_ref_id")
+  protected NodeRef nodeRef;
 
   @ManyToMany (fetch=FetchType.LAZY, cascade= {CascadeType.ALL})
   @JoinTable( name = "wf_node_token_parent",
@@ -46,18 +46,19 @@ public class NodeToken implements INodeToken
   protected List<ArcToken> parentTokens;
 
   @Temporal(TemporalType.TIMESTAMP)
-  @Column(updatable = false)
+  @Column (name="create_date", updatable = false)
   protected Date    createDate;
 
   @Temporal(TemporalType.TIMESTAMP)
+  @Column (name="complete_date")
   protected Date    completeDate;
 
   public NodeToken () { /* Default constructor for Hibernate */ }
 
-  public NodeToken (Process process, Node node, List<ArcToken> parentTokens)
+  public NodeToken (Process process, NodeRef nodeRef, List<ArcToken> parentTokens)
   {
     this.process      = process;
-    this.node         = node;
+    this.nodeRef      = nodeRef;
     this.parentTokens = parentTokens;
     this.createDate   = new Date();
   }
@@ -83,14 +84,14 @@ public class NodeToken implements INodeToken
   }
 
   @Override
-  public Node getNode ()
+  public NodeRef getNode ()
   {
-    return node;
+    return nodeRef;
   }
 
-  public void setNode (Node node)
+  public void setNodeRef (NodeRef nodeRef)
   {
-    this.node = node;
+    this.nodeRef = nodeRef;
   }
 
   public List<ArcToken> getParentTokens ()

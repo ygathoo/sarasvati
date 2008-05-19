@@ -16,17 +16,20 @@ public abstract class Engine
 
   public IProcess startWorkflow (IGraph graph)
   {
-    INode startNode = graph.getStartNode();
-
     IProcess process = newProcess( graph );
 
-    INodeToken startToken = newNodeToken( process, startNode, new ArrayList<IArcToken>(0) );
-    acceptWithGuard( process, startToken );
+    for (INode startNode : graph.getStartNodes() )
+    {
+      INodeToken startToken = newNodeToken( process, startNode, new ArrayList<IArcToken>(0) );
+      acceptWithGuard( process, startToken );
+    }
+
     return process;
   }
 
   public void accept (IProcess process, IArcToken token)
   {
+    System.out.println( "Processing: " + token.getArc() + "is join: " + token.getArc().getEndNode().isJoin() );
     if ( token.getArc().getEndNode().isJoin() )
     {
       acceptJoin( process, token );
@@ -55,24 +58,20 @@ public abstract class Engine
 
     for ( IArc arc : inputs )
     {
-      if ( arc.equals( token.getArc() ) )
+      if ( !arc.equals( token.getArc() ) )
       {
-        continue;
-      }
-
-      for ( IArcToken arcToken : process.getArcTokens() )
-      {
-        if ( arcToken.getArc().equals( arc ) )
+        for ( IArcToken arcToken : process.getArcTokens() )
         {
-          tokens.add( arcToken );
-          break;
+          if ( arcToken.getArc().equals( arc ) )
+          {
+            tokens.add( arcToken );
+            break;
+          }
         }
       }
     }
 
-    boolean allInputsPresent = tokens.size() == inputs.size();
-
-    if ( allInputsPresent )
+    if ( tokens.size() == inputs.size() )
     {
       finishAccept( process, targetNode, tokens );
     }
@@ -98,6 +97,7 @@ public abstract class Engine
     switch ( token.getNode().guard( process, token ) )
     {
       case AcceptToken :
+        process.addNodeToken( token );
         token.getNode().execute( this, process, token );
         break;
 
@@ -106,6 +106,7 @@ public abstract class Engine
         break;
 
       case SkipNode :
+        process.addNodeToken( token );
         completeExecution( process, token, IArc.DEFAULT_ARC );
         break;
     }
@@ -115,6 +116,7 @@ public abstract class Engine
   {
     List<IArc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 
+    process.removeNodeToken( token );
     token.markComplete();
 
     for ( IArc arc : outputArcs )
