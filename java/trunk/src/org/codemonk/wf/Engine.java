@@ -12,33 +12,15 @@ public abstract class Engine
 
   abstract IArcToken newArcToken (IArc arc, INodeToken parent);
 
-  public void acceptWithGuard (WfRun wfRun, INodeToken token)
-  {
-    switch ( token.getNode().guard( wfRun, token ) )
-    {
-      case AcceptToken :
-        token.getNode().execute( this, wfRun, token );
-        break;
-
-      case DiscardToken :
-        token.markComplete();
-        break;
-
-      case SkipNode :
-        completeExecution( wfRun, token, "" );
-        break;
-    }
-  }
-
   public void accept (WfRun wfRun, IArcToken token)
   {
     if ( token.getArc().getEndNode().isJoin() )
     {
-      acceptSingle( wfRun, token );
+      acceptJoin( wfRun, token );
     }
     else
     {
-      acceptJoin( wfRun, token );
+      acceptSingle( wfRun, token );
     }
   }
 
@@ -98,6 +80,24 @@ public abstract class Engine
     INodeToken newToken = newNodeToken( targetNode, tokens );
     wfRun.addNodeToken( newToken );
     acceptWithGuard( wfRun, newToken );
+  }
+
+  public void acceptWithGuard (WfRun wfRun, INodeToken token)
+  {
+    switch ( token.getNode().guard( wfRun, token ) )
+    {
+      case AcceptToken :
+        token.getNode().execute( this, wfRun, token );
+        break;
+
+      case DiscardToken :
+        token.markComplete();
+        break;
+
+      case SkipNode :
+        completeExecution( wfRun, token, "" );
+        break;
+    }
   }
 
   public void completeExecution (WfRun wfRun, INodeToken token, String arcName)
