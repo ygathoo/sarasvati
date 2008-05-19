@@ -10,4 +10,10 @@ import org.codemonk.wf.db.NodeRef;
 public interface NodePainter
 {
   void paintNode (Graphics g, NodeRef node, int x, int y);
+
+  Point getLeftAnchor (int originX, int originY);
+
+  Point getRightAnchor (int originX, int originY);
+
+  Point getTopAnchor (int originX, int originY);
 }
