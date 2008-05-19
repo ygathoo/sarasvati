@@ -5,12 +5,12 @@
 > import IO
 > import Data.Char
 
-> n1 = Node (-1) passthrough
-> n2 = Node 2 (acceptAndCreateTask 1 "Hello" "Here is where one would say hello")
-> n3 = Node 3 (acceptAndCreateTask 2 "Introduce" "Here is where you give your name")
-> n4 = Node 4 (acceptAndCreateTask 3 "Shake" "Here is where you shake hands")
-> n5 = Node 5 (acceptAndCreateTask 4 "Pleasantry" "Here is where you say something like, 'Nice to meet you'")
-> n6 = Node 6 (acceptAndCreateTask 5 "Converse" "Start a conversation")
+> n1 = Node (-1) RequireAll defaultGuard passthrough
+> n2 = Node 2 RequireAll defaultGuard (acceptAndCreateTask 1 "Hello" "Here is where one would say hello")
+> n3 = Node 3 RequireAll defaultGuard (acceptAndCreateTask 2 "Introduce" "Here is where you give your name")
+> n4 = Node 4 RequireAll defaultGuard (acceptAndCreateTask 3 "Shake" "Here is where you shake hands")
+> n5 = Node 5 RequireAll defaultGuard (acceptAndCreateTask 4 "Pleasantry" "Here is where you say something like, 'Nice to meet you'")
+> n6 = Node 6 RequireAll defaultGuard (acceptAndCreateTask 5 "Converse" "Start a conversation")
 
 > graph = graphFromArcs
 >   [ (NodeArcs n1 [] [n2, n3]),
