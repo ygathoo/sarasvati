@@ -1,7 +1,9 @@
 /**
  * Created on May 7, 2008
  */
-package org.codemonk.wf.visual;
+package org.codemonk.wf.visual.painter;
+
+import org.codemonk.wf.visual.Point;
 
 public abstract class BaseNodePainter implements NodePainter
 {

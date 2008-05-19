@@ -5,6 +5,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.codemonk.wf.db.NodeRef;
+import org.codemonk.wf.visual.painter.NodePainter;
+import org.codemonk.wf.visual.painter.NodePainterFactory;
 
 public class GraphTreeNode
 {

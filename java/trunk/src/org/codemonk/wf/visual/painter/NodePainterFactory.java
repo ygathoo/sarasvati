@@ -1,7 +1,7 @@
 /**
  * Created on May 7, 2008
  */
-package org.codemonk.wf.visual;
+package org.codemonk.wf.visual.painter;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +14,7 @@ public class NodePainterFactory
   static
   {
     painterMap.put( "start", new StartNodePainter() );
+    painterMap.put( "task", new TaskNodePainter() );
   }
 
   public static NodePainter getInstance (String type)

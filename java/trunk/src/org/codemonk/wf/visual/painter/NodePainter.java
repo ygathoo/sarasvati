@@ -1,11 +1,12 @@
 /**
  * Created on May 6, 2008
  */
-package org.codemonk.wf.visual;
+package org.codemonk.wf.visual.painter;
 
 import java.awt.Graphics;
 
 import org.codemonk.wf.db.NodeRef;
+import org.codemonk.wf.visual.Point;
 
 public interface NodePainter
 {
