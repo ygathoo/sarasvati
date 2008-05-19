@@ -15,10 +15,10 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.codemonk.wf.db.Arc;
-import org.codemonk.wf.db.Graph;
-import org.codemonk.wf.db.HibernateEngine;
-import org.codemonk.wf.db.NodeRef;
+import org.codemonk.wf.db.HibArc;
+import org.codemonk.wf.db.HibGraph;
+import org.codemonk.wf.db.HibEngine;
+import org.codemonk.wf.db.HibNodeRef;
 import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;
 
@@ -31,7 +31,7 @@ import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
 public class JungVisualizer
 {
-  protected static Graph currentGraph = null;
+  protected static HibGraph currentGraph = null;
 
   @SuppressWarnings("serial")
   public static void main( String[] args ) throws Exception
@@ -39,7 +39,7 @@ public class JungVisualizer
     TestSetup.init();
 
     Session session = TestSetup.openSession();
-    HibernateEngine engine = new HibernateEngine( session );
+    HibEngine engine = new HibEngine( session );
 
     JFrame frame = new JFrame( "Workflow Visualizer" );
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
@@ -49,7 +49,7 @@ public class JungVisualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( Graph g : engine.getGraphs() )
+    for ( HibGraph g : engine.getGraphs() )
     {
       listModel.addElement( g );
     }
@@ -62,7 +62,7 @@ public class JungVisualizer
                                                      boolean cellHasFocus )
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-        setText( ((Graph)value).getName() );
+        setText( ((HibGraph)value).getName() );
         return this;
       }
     };
@@ -79,11 +79,11 @@ public class JungVisualizer
 
     //TreeLayout<NodeRef, Arc> layout = new TreeLayout<NodeRef, Arc>();
 
-    DirectedSparseMultigraph<NodeRef, Arc> graph = new DirectedSparseMultigraph<NodeRef, Arc>();
+    DirectedSparseMultigraph<HibNodeRef, HibArc> graph = new DirectedSparseMultigraph<HibNodeRef, HibArc>();
 
     //final SpringLayout2<NodeRef, Arc> layout = new SpringLayout2<NodeRef, Arc>(graph);
-    final KKLayout<NodeRef, Arc> layout = new KKLayout<NodeRef, Arc>(graph);
-    final BasicVisualizationServer<NodeRef, Arc> vs = new BasicVisualizationServer<NodeRef, Arc>(layout);
+    final KKLayout<HibNodeRef, HibArc> layout = new KKLayout<HibNodeRef, HibArc>(graph);
+    final BasicVisualizationServer<HibNodeRef, HibArc> vs = new BasicVisualizationServer<HibNodeRef, HibArc>(layout);
 
     final JScrollPane scrollPane = new JScrollPane( vs );
     scrollPane.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
@@ -102,7 +102,7 @@ public class JungVisualizer
           return;
         }
 
-        final Graph g = (Graph)graphList.getSelectedValue();
+        final HibGraph g = (HibGraph)graphList.getSelectedValue();
 
         if ( ( g == null && currentGraph == null ) ||
              (g != null && g.equals( currentGraph ) ) )
@@ -112,14 +112,14 @@ public class JungVisualizer
 
         currentGraph = g;
 
-        DirectedSparseMultigraph<NodeRef, Arc> jungGraph = new DirectedSparseMultigraph<NodeRef, Arc>();
+        DirectedSparseMultigraph<HibNodeRef, HibArc> jungGraph = new DirectedSparseMultigraph<HibNodeRef, HibArc>();
 
-        for ( NodeRef ref : currentGraph.getNodeRefs() )
+        for ( HibNodeRef ref : currentGraph.getNodeRefs() )
         {
           jungGraph.addVertex( ref );
         }
 
-        for ( Arc arc : currentGraph.getArcs() )
+        for ( HibArc arc : currentGraph.getArcs() )
         {
           jungGraph.addEdge( arc, arc.getStartNode(), arc.getEndNode() );
         }

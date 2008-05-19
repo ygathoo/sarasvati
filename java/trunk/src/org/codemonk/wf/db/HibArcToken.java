@@ -21,7 +21,7 @@ import org.codemonk.wf.IArcToken;
 
 @Entity
 @Table (name="wf_arc_token")
-public class ArcToken implements IArcToken
+public class HibArcToken implements IArcToken
 {
   @Id
   @GeneratedValue (strategy=GenerationType.IDENTITY)
@@ -29,15 +29,15 @@ public class ArcToken implements IArcToken
 
   @ManyToOne (fetch = FetchType.EAGER)
   @JoinColumn (name = "process_id")
-  protected Process process;
+  protected HibProcess process;
 
   @ManyToOne (fetch = FetchType.EAGER)
   @JoinColumn (name = "arc_id")
-  protected Arc     arc;
+  protected HibArc     arc;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn (name = "parent_token_id", nullable=false)
-  protected NodeToken parentToken;
+  protected HibNodeToken parentToken;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column (name="create_date", updatable = false)
@@ -47,9 +47,9 @@ public class ArcToken implements IArcToken
   @Column (name="complete_date")
   protected Date    completeDate;
 
-  public ArcToken () { /* Default constructor for hibernate */ }
+  public HibArcToken () { /* Default constructor for hibernate */ }
 
-  public ArcToken (Process process, Arc arc, NodeToken parentToken)
+  public HibArcToken (HibProcess process, HibArc arc, HibNodeToken parentToken)
   {
     this.process     = process;
     this.arc         = arc;
@@ -67,33 +67,33 @@ public class ArcToken implements IArcToken
     this.id = id;
   }
 
-  public Process getProcess ()
+  public HibProcess getProcess ()
   {
     return process;
   }
 
-  public void setProcess (Process process)
+  public void setProcess (HibProcess process)
   {
     this.process = process;
   }
 
   @Override
-  public Arc getArc ()
+  public HibArc getArc ()
   {
     return arc;
   }
 
-  public void setArc (Arc arc)
+  public void setArc (HibArc arc)
   {
     this.arc = arc;
   }
 
-  public NodeToken getParentToken ()
+  public HibNodeToken getParentToken ()
   {
     return parentToken;
   }
 
-  public void setPreviousToken (NodeToken parentToken)
+  public void setPreviousToken (HibNodeToken parentToken)
   {
     this.parentToken = parentToken;
   }
@@ -139,8 +139,8 @@ public class ArcToken implements IArcToken
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof ArcToken ) ) return false;
-    final ArcToken other = (ArcToken)obj;
+    if ( !( obj instanceof HibArcToken ) ) return false;
+    final HibArcToken other = (HibArcToken)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;

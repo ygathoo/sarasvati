@@ -3,12 +3,12 @@ package org.codemonk.wf.visual;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import org.codemonk.wf.db.NodeRef;
+import org.codemonk.wf.db.HibNodeRef;
 import org.codemonk.wf.test.NodeTask;
 
 public class TaskGraphTreeNode extends GraphTreeNode
 {
-  public TaskGraphTreeNode( GraphTreeNode parent, NodeRef node )
+  public TaskGraphTreeNode( GraphTreeNode parent, HibNodeRef node )
   {
     super( parent, node );
     color = new Color( 102, 152, 102 );

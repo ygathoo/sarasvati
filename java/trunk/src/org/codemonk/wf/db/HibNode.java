@@ -26,7 +26,7 @@ import org.hibernate.annotations.Type;
 @Entity
 @Table (name="wf_node")
 @Inheritance (strategy=InheritanceType.JOINED)
-public class Node implements INode
+public class HibNode implements INode
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -34,7 +34,7 @@ public class Node implements INode
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn( name="graph_id")
-  protected Graph graph;
+  protected HibGraph graph;
 
   protected String name;
   protected String type;
@@ -75,12 +75,12 @@ public class Node implements INode
     this.type = type;
   }
 
-  public Graph getGraph ()
+  public HibGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (Graph graph)
+  public void setGraph (HibGraph graph)
   {
     this.graph = graph;
   }
@@ -123,8 +123,8 @@ public class Node implements INode
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof Node ) ) return false;
-    final Node other = (Node)obj;
+    if ( !( obj instanceof HibNode ) ) return false;
+    final HibNode other = (HibNode)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;

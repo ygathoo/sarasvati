@@ -1,12 +1,12 @@
 package org.codemonk.wf.test;
 
-import org.codemonk.wf.db.Arc;
-import org.codemonk.wf.db.ArcToken;
-import org.codemonk.wf.db.Graph;
-import org.codemonk.wf.db.Node;
-import org.codemonk.wf.db.NodeRef;
-import org.codemonk.wf.db.NodeToken;
-import org.codemonk.wf.db.Process;
+import org.codemonk.wf.db.HibArc;
+import org.codemonk.wf.db.HibArcToken;
+import org.codemonk.wf.db.HibGraph;
+import org.codemonk.wf.db.HibNode;
+import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.db.HibNodeToken;
+import org.codemonk.wf.db.HibProcess;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -29,13 +29,13 @@ public class TestSetup
     //config.setProperty( "hibernate.show_sql", "true" );
     //config.setProperty( "hibernate.format_sql", "true" );
 
-    config.addAnnotatedClass( Arc.class );
-    config.addAnnotatedClass( ArcToken.class );
-    config.addAnnotatedClass( Graph.class );
-    config.addAnnotatedClass( Node.class );
-    config.addAnnotatedClass( NodeRef.class );
-    config.addAnnotatedClass( NodeToken.class );
-    config.addAnnotatedClass( Process.class );
+    config.addAnnotatedClass( HibArc.class );
+    config.addAnnotatedClass( HibArcToken.class );
+    config.addAnnotatedClass( HibGraph.class );
+    config.addAnnotatedClass( HibNode.class );
+    config.addAnnotatedClass( HibNodeRef.class );
+    config.addAnnotatedClass( HibNodeToken.class );
+    config.addAnnotatedClass( HibProcess.class );
 
     config.addAnnotatedClass( NodeTask.class );
     config.addAnnotatedClass( Task.class );

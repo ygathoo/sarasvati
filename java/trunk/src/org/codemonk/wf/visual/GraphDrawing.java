@@ -8,26 +8,26 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.codemonk.wf.IArc;
-import org.codemonk.wf.db.Graph;
-import org.codemonk.wf.db.NodeRef;
+import org.codemonk.wf.db.HibGraph;
+import org.codemonk.wf.db.HibNodeRef;
 
 public class GraphDrawing extends JComponent
 {
   private static final long serialVersionUID = 1L;
 
-  protected Graph graph = null;
+  protected HibGraph graph = null;
   protected GraphTree graphTree = null;
 
   public GraphDrawing ()
   {
   }
 
-  public Graph getGraph ()
+  public HibGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (Graph graph)
+  public void setGraph (HibGraph graph)
   {
     this.graph = graph;
     this.graphTree = graph == null ? null : new GraphTree( graph );
@@ -80,7 +80,7 @@ public class GraphDrawing extends JComponent
 
         for ( IArc arc : graph.getOutputArcs( treeNode.getNode() ) )
         {
-          GraphTreeNode targetNode = graphTree.getTreeNode( (NodeRef)arc.getEndNode() );
+          GraphTreeNode targetNode = graphTree.getTreeNode( (HibNodeRef)arc.getEndNode() );
           drawArc( g, arc, treeNode, targetNode );
         }
       }

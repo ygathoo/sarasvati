@@ -27,7 +27,7 @@ import org.hibernate.annotations.CollectionOfElements;
 
 @Entity
 @Table(name="wf_node_token")
-public class NodeToken implements INodeToken
+public class HibNodeToken implements INodeToken
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -35,15 +35,15 @@ public class NodeToken implements INodeToken
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "process_id")
-  protected Process process;
+  protected HibProcess process;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "node_ref_id")
-  protected NodeRef nodeRef;
+  protected HibNodeRef nodeRef;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "attr_set_id")
-  protected NodeToken attrSetToken;
+  protected HibNodeToken attrSetToken;
 
   @CollectionOfElements
   @JoinTable( name="wf_token_string_attr", joinColumns={@JoinColumn( name="attr_set_id")})
@@ -55,7 +55,7 @@ public class NodeToken implements INodeToken
   @JoinTable( name = "wf_node_token_parent",
               joinColumns = @JoinColumn(name = "node_token_id"),
               inverseJoinColumns = @JoinColumn(name = "arc_token_id") )
-  protected List<ArcToken> parentTokens;
+  protected List<HibArcToken> parentTokens;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column (name="create_date", updatable = false)
@@ -65,9 +65,9 @@ public class NodeToken implements INodeToken
   @Column (name="complete_date")
   protected Date    completeDate;
 
-  public NodeToken () { /* Default constructor for Hibernate */ }
+  public HibNodeToken () { /* Default constructor for Hibernate */ }
 
-  public NodeToken (Process process, NodeRef nodeRef, NodeToken attrSetToken, Map<String,String> attrMap, List<ArcToken> parentTokens)
+  public HibNodeToken (HibProcess process, HibNodeRef nodeRef, HibNodeToken attrSetToken, Map<String,String> attrMap, List<HibArcToken> parentTokens)
   {
     this.process      = process;
     this.nodeRef      = nodeRef;
@@ -87,33 +87,33 @@ public class NodeToken implements INodeToken
     this.id = id;
   }
 
-  public Process getProcess ()
+  public HibProcess getProcess ()
   {
     return process;
   }
 
-  public void setProcess (Process process)
+  public void setProcess (HibProcess process)
   {
     this.process = process;
   }
 
   @Override
-  public NodeRef getNode ()
+  public HibNodeRef getNode ()
   {
     return nodeRef;
   }
 
-  public void setNodeRef (NodeRef nodeRef)
+  public void setNodeRef (HibNodeRef nodeRef)
   {
     this.nodeRef = nodeRef;
   }
 
-  public NodeToken getAttrSetToken()
+  public HibNodeToken getAttrSetToken()
   {
     return attrSetToken;
   }
 
-  public void setAttrSetToken( NodeToken attrSetToken )
+  public void setAttrSetToken( HibNodeToken attrSetToken )
   {
     this.attrSetToken = attrSetToken;
   }
@@ -128,12 +128,12 @@ public class NodeToken implements INodeToken
     this.attrMap = attrMap;
   }
 
-  public List<ArcToken> getParentTokens ()
+  public List<HibArcToken> getParentTokens ()
   {
     return parentTokens;
   }
 
-  public void setParentTokens (List<ArcToken> parentTokens)
+  public void setParentTokens (List<HibArcToken> parentTokens)
   {
     this.parentTokens = parentTokens;
   }
@@ -260,8 +260,8 @@ public class NodeToken implements INodeToken
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof NodeToken ) ) return false;
-    final NodeToken other = (NodeToken)obj;
+    if ( !( obj instanceof HibNodeToken ) ) return false;
+    final HibNodeToken other = (HibNodeToken)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;
