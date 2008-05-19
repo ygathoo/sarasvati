@@ -16,14 +16,18 @@
 >          Left msg -> return $ Left msg
 >          Right (Document _ _ elem _ ) -> return $ processDoc (CElem elem)
 
-> processDoc doc
->     | null wfElems       = Left "No workflow tag found"
->     | length wfElems > 1 = Left "Too many workflow elements found"
->     | otherwise          = Right $ "Found workflow "
+> processDoc doc = Right ( "version: " ++ wfVersion ++ " id: " ++ wfId )
 >   where
->     wfElems   = tag "workflow" doc
->     wfVersion = attr "version" (head wfElems)
->     wfId      = attr "id"      (head wfElems)
+>     wfElem    = head $ tag "workflow" doc
+>     wfVersion = getAttr wfElem "version"
+>     wfId      = getAttr wfElem "id"
+
+> getAttr (CElem (Elem _ attrList _ )) name
+>    | null attrs = ""
+>    | otherwise  = attrVal' (head attrs)
+>   where
+>     attrs = filter (\(attrName, attrValue) -> attrName == name) attrList
+>     attrVal' (_, AttValue atlist) = case (head atlist) of (Left val) -> val
 
 > loadWorkflow filename =
 >   do result <- process filename
