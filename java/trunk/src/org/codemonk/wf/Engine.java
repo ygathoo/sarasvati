@@ -4,6 +4,7 @@
 package org.codemonk.wf;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public abstract class Engine
@@ -21,67 +22,53 @@ public abstract class Engine
     for (INode startNode : graph.getStartNodes() )
     {
       INodeToken startToken = newNodeToken( process, startNode, new ArrayList<IArcToken>(0) );
-      acceptWithGuard( process, startToken );
+      executeNode( process, startToken );
     }
 
     return process;
   }
 
-  public void accept (IProcess process, IArcToken token)
+  public void executeArc (IProcess process, IArcToken token)
   {
-    System.out.println( "Processing: " + token.getArc() + "is join: " + token.getArc().getEndNode().isJoin() );
     if ( token.getArc().getEndNode().isJoin() )
     {
-      acceptJoin( process, token );
+      executeArcJoin( process, token );
     }
     else
     {
-      acceptSingle( process, token );
+      completeExecuteArc( process, token.getArc().getEndNode(), token );
     }
   }
 
-  protected void acceptSingle (IProcess process, IArcToken token)
+  protected void executeArcJoin (IProcess process, IArcToken token)
   {
-    List<IArcToken> tokens = new ArrayList<IArcToken>(1);
-    tokens.add( token );
+    process.addArcToken( token );
 
-    finishAccept( process, token.getArc().getEndNode(), tokens );
-  }
-
-  protected void acceptJoin (IProcess process, IArcToken token)
-  {
     INode targetNode = token.getArc().getEndNode();
     List<IArc> inputs = process.getGraph().getInputArcs( targetNode, token.getArc().getName() );
 
-    List<IArcToken> tokens = new ArrayList<IArcToken>(inputs.size());
-    tokens.add( token );
+    IArcToken[] tokens = new IArcToken[inputs.size()];
+    int tokensFound = 0;
 
     for ( IArc arc : inputs )
     {
-      if ( !arc.equals( token.getArc() ) )
+      for ( IArcToken arcToken : process.getArcTokens() )
       {
-        for ( IArcToken arcToken : process.getArcTokens() )
+        if ( arcToken.getArc().equals( arc ) )
         {
-          if ( arcToken.getArc().equals( arc ) )
-          {
-            tokens.add( arcToken );
-            break;
-          }
+          tokens[tokensFound++] = arcToken;
+          break;
         }
       }
     }
 
-    if ( tokens.size() == inputs.size() )
+    if ( tokensFound == tokens.length )
     {
-      finishAccept( process, targetNode, tokens );
-    }
-    else
-    {
-      process.addArcToken( token );
+      completeExecuteArc( process, targetNode, tokens );
     }
   }
 
-  private void finishAccept (IProcess process, INode targetNode, List<IArcToken> tokens)
+  private void completeExecuteArc (IProcess process, INode targetNode, IArcToken ... tokens)
   {
     for ( IArcToken token : tokens )
     {
@@ -89,10 +76,10 @@ public abstract class Engine
       token.markComplete();
     }
 
-    acceptWithGuard( process, newNodeToken( process, targetNode, tokens ) );
+    executeNode( process, newNodeToken( process, targetNode,  Arrays.asList( tokens ) ) );
   }
 
-  public void acceptWithGuard (IProcess process, INodeToken token)
+  public void executeNode (IProcess process, INodeToken token)
   {
     switch ( token.getNode().guard( process, token ) )
     {
@@ -121,7 +108,7 @@ public abstract class Engine
 
     for ( IArc arc : outputArcs )
     {
-      accept( process, newArcToken( process, arc, token ) );
+      executeArc( process, newArcToken( process, arc, token ) );
     }
   }
 }
