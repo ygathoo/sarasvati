@@ -49,8 +49,6 @@ public class TaskIcon implements Icon
     g.setColor( Color.black );
     String taskName = task.getTaskName();
 
-    //int width = g.getFontMetrics().stringWidth( taskName );
-    //int height = g.getFontMetrics().getHeight();
     String[] lines = FontUtil.split( taskName );
 
     int padding = 2;
@@ -61,9 +59,11 @@ public class TaskIcon implements Icon
     if ( lines.length == 1 )
     {
       FontUtil.setSizedFont( g, taskName, 11, maxWidth );
-      g.drawString( taskName, startX, y + (getIconWidth() >> 1) );
+      int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[0], g ).getWidth() );
+      int left = startX + ((maxWidth - strWidth) >> 1);
+      g.drawString( taskName, left, y + (getIconHeight() >> 1) );
     }
-    else
+    else if ( lines.length == 2 )
     {
       FontUtil.setSizedFont( g, lines[0], 11, maxWidth );
 
