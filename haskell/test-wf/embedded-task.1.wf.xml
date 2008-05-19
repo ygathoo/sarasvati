@@ -12,11 +12,11 @@
       Enter order into system
     </description>
 
-    <externalArc workflowId="subwf-tasks" version="1" instanceId="1" nodeId="1" type="out"/>
+    <externalArc workflow="subwf-tasks" version="1" instance="1" nodeId="1" type="out"/>
   </task>
 
   <node id="2">
-    <externalArc workflowId="subwf-tasks" version="1" instanceId="1" nodeId="4" type="in"/>
+    <externalArc workflow="subwf-tasks" version="1" instance="1" nodeId="4" type="in"/>
   </node>
 
 </workflow>

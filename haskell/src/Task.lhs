@@ -8,7 +8,7 @@
 > data Task =
 >   Task {
 >     getTokId   :: [Int],
->     getTaskId  :: Int,
+>     getTaskId  :: String,
 >     getName    :: String,
 >     getDesc    :: String,
 >     getState   :: TaskState
@@ -28,7 +28,7 @@
 > acceptAndCreateTask taskId name desc token wf@(WfInstance graph tokenList tasks) =
 >   do return $ WfInstance graph tokenList ((newTask token taskId name desc):tasks)
 
-> newTask token taskId name desc = Task (getTokenId token) taskId name desc Open
+> newTask token taskId name desc = Task (tokenId token) taskId name desc Open
 
 > closeTask task@(Task tokId taskId name desc state) (WfInstance graph tokenList tasks) =
 >     WfInstance graph tokenList newTaskList

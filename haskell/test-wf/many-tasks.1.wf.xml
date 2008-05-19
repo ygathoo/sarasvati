@@ -3,8 +3,8 @@
 
 <workflow id="one-node" version="1">
   <start>
-    <arc nodeId="1"/>
-    <arc nodeId="2"/>
+    <arc to="1"/>
+    <arc to="2"/>
   </start>
 
   <task nodeId="1">
@@ -13,7 +13,7 @@
       Here is where one would say hello
     </description>
 
-    <arc nodeId="3"/>
+    <arc to="3"/>
   </task>
 
   <task nodeId="2">
@@ -21,7 +21,7 @@
     <description>
       Here is where you shake hands
     </description>
-    <arc nodeId="3"/>
+    <arc to="3"/>
   </task>
 
   <task nodeId="3">
@@ -29,7 +29,7 @@
     <description>
       Here is where you give your name
     </description>
-    <arc nodeId="4"/>
+    <arc to="4"/>
   </task>
 
   <task nodeId="4">
@@ -37,7 +37,7 @@
     <description>
       Here is where you say something like, 'Nice to meet you'
     </description>
-    <arc nodeId="5"/>
+    <arc to="5"/>
   </task>
 
   <task nodeId="5">

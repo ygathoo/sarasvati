@@ -3,9 +3,9 @@
           id      ID    #REQUIRED
           version CDATA #REQUIRED>
 
-<!ELEMENT start (arc*)>
+<!ELEMENT start (arc*, externalArc*)>
 
-<!ELEMENT node (arc*)>
+<!ELEMENT node (arc*, externalArc*)>
 <!ATTLIST node
           id   ID                         #REQUIRED
           type (requireSingle|requireAll) "requireAll">
@@ -15,8 +15,8 @@
 
 
 <!ELEMENT externalArc (#PCDATA)>
-<!ATTLIST externalArc workflowId ID       #IMPLIED
-                      version    CDATA    #IMPLIED
-                      instanceId CDATA    #IMPLIED
-                      nodeId     CDATA    #REQUIRED
-                      type       (in|out) "out">
+<!ATTLIST externalArc workflow ID       #IMPLIED
+                      version  CDATA    #IMPLIED
+                      instance CDATA    #IMPLIED
+                      nodeId   CDATA    #REQUIRED
+                      type     (in|out) "out">

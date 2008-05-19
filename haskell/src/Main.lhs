@@ -27,7 +27,7 @@ Author: Paul Lorenz
 
 > getTask _ [] = Left "Invalid task number"
 > getTask taskNumber tasks@(first:rest)
->     | taskNumber < 1  = Left "Invalid task number"
+>     | taskNumber <  1 = Left "Invalid task number"
 >     | taskNumber == 1 = Right first
 >     | otherwise       = getTask (taskNumber - 1) rest
 
@@ -81,7 +81,7 @@ Author: Paul Lorenz
 >                                 case (result) of
 >                                     Left msg -> putStrLn $ "ERROR: Could not load workflow: " ++ msg
 >                                     Right wfGraph -> do putStrLn "Running workflow"
->                                                         -- putStrLn (show wfGraph)
+>                                                         putStrLn (show wfGraph)
 >                                                         runWorkflow wfGraph
 >    where
 >        elemFunctionMap = elemMapWith [ ("task", processTaskElement) ]

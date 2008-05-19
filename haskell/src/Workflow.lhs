@@ -31,8 +31,14 @@ GuardResponse
 > data GuardResponse = AcceptToken | DiscardToken | SkipNode
 >   deriving (Show)
 
-> data NodeId = NodeId Int | NullNodeId | StartNodeId
->   deriving (Show, Eq, Ord)
+> data NodeSource =
+>     NodeSource {
+>         wfName     :: String,
+>         wfVersion  :: String,
+>         wfInstance :: String,
+>         wfDepth    :: Int
+>     }
+>  deriving (Show)
 
 Node
   Represents a node in a workflow graph.
@@ -45,21 +51,23 @@ Node
 
 > data Node a = NullNode
 >             | Node {
->                 getNodeId         :: NodeId,
->                 getNodeType       :: NodeType,
->                 getGuardFunction  :: (Token -> WfInstance a -> GuardResponse),
->                 getAcceptFunction :: (Token -> WfInstance a -> IO (WfInstance a))
+>                 nodeId         :: Int,
+>                 nodeRefId      :: String,
+>                 source         :: NodeSource,
+>                 nodeType       :: NodeType,
+>                 guardFunction  :: (Token a -> WfInstance a -> GuardResponse),
+>                 acceptFunction :: (Token a -> WfInstance a -> IO (WfInstance a))
 >               }
 
 > instance Eq (Node a) where
 >     NullNode  == NullNode = True
 >     NullNode  == _        = False
 >     _         == NullNode = False
->     node1     == node2    = (getNodeId node1) == (getNodeId node2)
+>     node1     == node2    = (nodeId node1) == (nodeId node2)
 
 > instance Show (Node a) where
 >     show NullNode = "[Node: NullNode]"
->     show a        = "[Node id: " ++ (show (getNodeId a)) ++ "]"
+>     show a        = "[Node id: " ++ (show (nodeId a)) ++ " ref: " ++ (nodeRefId a) ++ "]"
 
 NodeArcs
   Represents the incoming and outgoing connections to other nodes.
@@ -71,9 +79,9 @@ NodeArcs
 
 > data NodeArcs a =
 >     NodeArcs {
->         getNode        :: Node a,
->         getNodeInputs  :: [Node a],
->         getNodeOutputs :: [Node a]
+>         arcsNode    :: Node a,
+>         nodeInputs  :: [Node a],
+>         nodeOutputs :: [Node a]
 >     }
 >   deriving (Show)
 
@@ -89,60 +97,58 @@ Token
     nextNode: If the token is between nodes, this will be set to the node
               it is going to. Otherwise it will be set to NullNode
 
-> data Token =
+> data Token a =
 >     Token {
->         getTokenId    :: [Int],
->         getPrevNodeId :: NodeId,
->         getCurrNodeId :: NodeId,
->         getNextNodeId :: NodeId
+>         tokenId  :: [Int],
+>         prevNode :: Node a,
+>         currNode :: Node a,
+>         nextNode :: Node a
 >     }
 >     deriving (Show)
 
-> instance Eq (Token) where
->     t1 == t2 = (getTokenId t1) == (getTokenId t2)
+> instance Eq (Token a) where
+>     t1 == t2 = (tokenId t1) == (tokenId t2)
 
 WFGraph
   This is just a container for NodeArcs, which can be queried
   for the inputs and outputs of a given node
 
-> type WfGraph a = Map NodeId (NodeArcs a)
+> type WfGraph a = Map Int (NodeArcs a)
 
 > data WfInstance a =
 >     WfInstance {
 >         wfGraph   :: WfGraph a,
->         tokenList :: [Token],
+>         tokenList :: [Token a],
 >         userData  :: a
 >     }
 
 inputs
   Returns the Nodes which are inputs to the given node
 
-> inputs graph node = getNodeInputs $ graph Map.! (getNodeId node)
+> inputs graph node = nodeInputs $ graph Map.! (nodeId node)
 
 outputs
   Returns the Nodes which are outputs of the given node
 
-> outputs graph node = getNodeOutputs $ graph Map.! (getNodeId node)
+> outputs graph node = nodeOutputs $ graph Map.! (nodeId node)
 
 graphFromArcs
   Generates a WFGraph from a list of NodeArcs
 
-> graphFromArcs arcs = Map.fromList $ zip (map (getNodeId.getNode) arcs) arcs
+> graphFromArcs arcs = Map.fromList $ zip (map (nodeId.arcsNode) arcs) arcs
 
 getTokenForId
   Given a token id and a workflow instance gives back the actual token
   corresponding to that id
 
-> getTokenForId tokenId (WfInstance graph tokenList userData) =
->   head $ filter (\t -> (getTokenId t) == tokenId) tokenList
+> getTokenForId id (WfInstance graph tokenList userData) =
+>   head $ filter (\t -> (tokenId t) == id) tokenList
 
 getNodeForId
   Given a node id and a workflow instance gives back the actual node
   corresponding to that id
 
-
-> getNodeForId NullNodeId _ = NullNode
-> getNodeForId nodeId (WfInstance graph tokenList userData) = getNode $ graph Map.! nodeId
+> getNodeForId nodeId (WfInstance graph tokenList userData) = arcsNode $ graph Map.! nodeId
 
 startWorkflow
   Given a workflow definition (WfGraph) and initial userData, gives
@@ -155,12 +161,12 @@ startWorkflow
 >     | otherwise             = Right $ acceptToken token wf
 >   where
 >     startNodes = filter (isStartNode) $ Map.keys graph
->     startNode  = getNode $ graph Map.! (head startNodes)
->     token      = Token [1] NullNodeId NullNodeId (getNodeId startNode)
+>     startNode  = arcsNode $ graph Map.! (head startNodes)
+>     token      = Token [1] NullNode NullNode startNode
 >     wf         = WfInstance graph [] userData
 >
->     isStartNode StartNodeId = True
->     isStartNode _           = False
+>     isStartNode (-1) = True
+>     isStartNode _    = False
 
 > isWfComplete (WfInstance graph [] userData) = True
 > isWfComplete _                              = False
@@ -197,8 +203,8 @@ removeInputTokens
 > removeInputTokens (x:xs) targetNode tokenList =
 >     removeInputTokens xs targetNode $ removeFirst (isInputToken) tokenList
 >   where
->     isInputToken tok = getPrevNodeId tok == getNodeId x &&
->                        getNextNodeId tok == getNodeId targetNode
+>     isInputToken tok = prevNode tok == x &&
+>                        nextNode tok == targetNode
 
 defaultGuard
   Guard function which always accepts the token
@@ -208,7 +214,7 @@ defaultGuard
 completeExecution
   Generates a new token for each output node of the current node of the given token
 
-> completeExecution :: Token -> WfInstance a -> IO (WfInstance a)
+> completeExecution :: Token a -> WfInstance a -> IO (WfInstance a)
 > completeExecution token wf@(WfInstance graph tokenList userData)
 >   | hasNoOutputs = do return newWf
 >   | hasOneOutput = do acceptToken newToken newWf
@@ -217,10 +223,10 @@ completeExecution
 >     hasNoOutputs                   = null outputNodes
 >     hasOneOutput                   = null $ tail outputNodes
 >
->     currentNode                    = getNodeForId (getCurrNodeId token) wf
+>     currentNode                    = currNode token
 >     outputNodes                    = outputs graph currentNode
->     newToken                       = Token (getTokenId token) (getNodeId currentNode) NullNodeId (getNodeId (head outputNodes))
->     newForkToken nextNode counter  = Token (nextForkId token counter) (getNodeId currentNode) NullNodeId (getNodeId nextNode)
+>     newToken                       = Token (tokenId token) currentNode NullNode (head outputNodes)
+>     newForkToken nextNode counter  = Token (nextForkId token counter) currentNode NullNode nextNode
 >
 >     newWf                          = WfInstance graph (removeFirst (\t->t == token) tokenList) userData
 >
@@ -233,25 +239,25 @@ acceptToken
   tokens at all inputs. If it doesn't, the acceptSingle function is called. Otherwise
   it calls acceptJoin.
 
-> acceptToken :: Token -> WfInstance a -> IO (WfInstance a)
+> acceptToken :: Token a -> WfInstance a -> IO (WfInstance a)
 > acceptToken token wf@(WfInstance graph tokenList userData)
 >     | isAcceptSingle = acceptSingle token wf
 >     | otherwise      = acceptJoin   token wf
 >   where
->     isAcceptSingle = case (getNodeType targetNode) of
+>     isAcceptSingle = case (nodeType targetNode) of
 >                        RequireAll    -> False
 >                        RequireSingle -> True
->     targetNode     = getNodeForId (getNextNodeId token) wf
+>     targetNode     = nextNode token
 
 acceptSingle
   Called when a node requires only a single incoming token to activate.
   Moves the token into the node and calls the guard function
 
-> acceptSingle :: Token -> WfInstance a -> IO (WfInstance a)
+> acceptSingle :: Token a -> WfInstance a -> IO (WfInstance a)
 > acceptSingle token wf@(WfInstance graph tokenList userData) = acceptWithGuard newToken newWf
 >   where
->     targetNode = getNodeForId (getNextNodeId token) wf
->     newToken   = Token (getTokenId token) (getPrevNodeId token) (getNextNodeId token) NullNodeId
+>     targetNode = nextNode token
+>     newToken   = Token (tokenId token) (prevNode token) (nextNode token) NullNode
 >     newWf      = WfInstance graph tokenList userData
 
 acceptJoin
@@ -261,7 +267,7 @@ acceptJoin
   If all inputs don't yet have inputs, adds the current token to the workflow
   instance and returns.
 
-> acceptJoin :: Token -> WfInstance a -> IO (WfInstance a)
+> acceptJoin :: Token a -> WfInstance a -> IO (WfInstance a)
 > acceptJoin token wf@(WfInstance graph tokenList userData)
 >   | areAllInputsPresent = acceptWithGuard newToken newWf
 >   | otherwise           = do return $ WfInstance graph (token:tokenList) userData
@@ -269,15 +275,15 @@ acceptJoin
 >     areAllInputsPresent           = all (inputHasToken (token:tokenList)) inputNodes
 >
 >     inputHasToken []         node = False
->     inputHasToken (tok:rest) node = ( getNextNodeId tok == getNodeId targetNode &&
->                                       getPrevNodeId tok == getNodeId node) ||
+>     inputHasToken (tok:rest) node = ( nextNode tok == targetNode &&
+>                                       prevNode tok == node) ||
 >                                     inputHasToken rest node
 >
->     targetNode                    = getNodeForId (getNextNodeId token) wf
+>     targetNode                    = nextNode token
 >     inputNodes                    = inputs graph targetNode
 >     outputTokenList               = removeInputTokens inputNodes targetNode tokenList
 >
->     newToken                      = Token (getTokenId token) (getPrevNodeId token) (getNextNodeId token) NullNodeId
+>     newToken                      = Token (tokenId token) (prevNode token) (nextNode token) NullNode
 >     newWf                         = WfInstance graph (newToken:outputTokenList) userData
 
 acceptWithGuard
@@ -293,6 +299,6 @@ acceptWithGuard
 >       DiscardToken -> do return $ WfInstance graph (removeFirst (\t->t == token) tokenList) userData
 >       SkipNode     -> completeExecution token wf
 >  where
->    currentNode = getNodeForId (getCurrNodeId token) wf
->    guard       = getGuardFunction currentNode
->    accept      = getAcceptFunction currentNode
+>    currentNode = currNode token
+>    guard       = guardFunction currentNode
+>    accept      = acceptFunction currentNode
