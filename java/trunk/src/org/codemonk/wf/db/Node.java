@@ -105,7 +105,7 @@ public class Node implements INode
   @Override
   public void execute (Engine engine, IProcess process, INodeToken token)
   {
-    engine.completeExecution( process, token, IArc.DEFAULT_ARC );
+    engine.completeExecuteNode( process, token, IArc.DEFAULT_ARC );
   }
 
   @Override

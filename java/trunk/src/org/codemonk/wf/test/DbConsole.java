@@ -156,13 +156,13 @@ public class DbConsole
       {
         System.out.println( "Completing task" );
         t.setState( (TaskState) engine.getSession().load( TaskState.class, 1 ) );
-        engine.completeExecution( t.getNodeToken().getProcess(), t.getNodeToken(), IArc.DEFAULT_ARC );
+        engine.completeExecuteNode( t.getNodeToken().getProcess(), t.getNodeToken(), IArc.DEFAULT_ARC );
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
         t.setState( (TaskState) engine.getSession().load( TaskState.class, 2 ) );
-        engine.completeExecution( t.getNodeToken().getProcess(), t.getNodeToken(), "reject" );
+        engine.completeExecuteNode( t.getNodeToken().getProcess(), t.getNodeToken(), "reject" );
       }
       else
       {

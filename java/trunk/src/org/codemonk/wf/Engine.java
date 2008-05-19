@@ -94,12 +94,12 @@ public abstract class Engine
 
       case SkipNode :
         process.addNodeToken( token );
-        completeExecution( process, token, IArc.DEFAULT_ARC );
+        completeExecuteNode( process, token, IArc.DEFAULT_ARC );
         break;
     }
   }
 
-  public void completeExecution (IProcess process, INodeToken token, String arcName)
+  public void completeExecuteNode (IProcess process, INodeToken token, String arcName)
   {
     List<IArc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 
