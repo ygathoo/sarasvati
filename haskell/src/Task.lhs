@@ -17,7 +17,7 @@
 > showTaskList tasks =
 >   do putStrLn "Tasks:"
 >      if (null tasks)
->        then putStrLn "  Workflow complete"
+>        then putStrLn "  No tasks to display"
 >        else showTasks tasks 1
 
 > showTasks [] _ = do return ()

@@ -13,7 +13,7 @@ NodeType
   RequireAll    - Node will only fire when there tokens at every input
 
 > data NodeType = RequireSingle | RequireAll
->  deriving (Show)
+>   deriving (Show)
 
 GuardResponse
   Nodes have guard functions which determine if the accept function when a token
@@ -26,10 +26,10 @@ GuardResponse
                  the completeExecution function is called instead.
 
 > data GuardResponse = AcceptToken | DiscardToken | SkipNode
->  deriving (Show)
+>   deriving (Show)
 
-> data NodeId = NodeId Integer | NullNodeId | StartNodeId
->  deriving (Show, Eq, Ord)
+> data NodeId = NodeId Int | NullNodeId | StartNodeId
+>   deriving (Show, Eq, Ord)
 
 Node
   Represents a node in a workflow graph.
@@ -49,14 +49,14 @@ Node
 >               }
 
 > instance Eq (Node a) where
->   NullNode  == NullNode = True
->   NullNode  == _        = False
->   _         == NullNode = False
->   node1     == node2    = (getNodeId node1) == (getNodeId node2)
+>     NullNode  == NullNode = True
+>     NullNode  == _        = False
+>     _         == NullNode = False
+>     node1     == node2    = (getNodeId node1) == (getNodeId node2)
 
 > instance Show (Node a) where
->   show NullNode = "[Node: NullNode]"
->   show a        = "[Node id: " ++ (show (getNodeId a)) ++ "]"
+>     show NullNode = "[Node: NullNode]"
+>     show a        = "[Node id: " ++ (show (getNodeId a)) ++ "]"
 
 NodeArcs
   Represents the incoming and outgoing connections to other nodes.
@@ -67,11 +67,13 @@ NodeArcs
     nodeOutputs: The list of outgoing node connections
 
 > data NodeArcs a =
->   NodeArcs {
->     getNode        :: Node a,
->     getNodeInputs  :: [Node a],
->     getNodeOutputs :: [Node a]
->  }
+>     NodeArcs {
+>         getNode        :: Node a,
+>         getNodeInputs  :: [Node a],
+>         getNodeOutputs :: [Node a]
+>     }
+>   deriving (Show)
+
 
 Token
   The set of current tokens gives the current state of the workflow.
@@ -85,16 +87,16 @@ Token
               it is going to. Otherwise it will be set to NullNode
 
 > data Token =
->   Token {
->     getTokenId    :: [Int],
->     getPrevNodeId :: NodeId,
->     getCurrNodeId :: NodeId,
->     getNextNodeId :: NodeId
->  }
->  deriving (Show)
+>     Token {
+>         getTokenId    :: [Int],
+>         getPrevNodeId :: NodeId,
+>         getCurrNodeId :: NodeId,
+>         getNextNodeId :: NodeId
+>     }
+>     deriving (Show)
 
 > instance Eq (Token) where
->   t1 == t2 = (getTokenId t1) == (getTokenId t2)
+>     t1 == t2 = (getTokenId t1) == (getTokenId t2)
 
 WFGraph
   This is just a container for NodeArcs, which can be queried
@@ -103,11 +105,11 @@ WFGraph
 > type WfGraph a = Map NodeId (NodeArcs a)
 
 > data WfInstance a =
->   WfInstance {
->     wfGraph   :: WfGraph a,
->     tokenList :: [Token],
->     userData  :: a
->   }
+>     WfInstance {
+>         wfGraph   :: WfGraph a,
+>         tokenList :: [Token],
+>         userData  :: a
+>     }
 
 inputs
   Returns the Nodes which are inputs to the given node
@@ -283,7 +285,8 @@ acceptWithGuard
 
 > acceptWithGuard token wf@(WfInstance graph tokenList userData) =
 >     case (guard token wf) of
->       AcceptToken  -> accept token wf
+>       AcceptToken  -> do -- putStrLn $ "Token accepted into " ++ show currentNode
+>                          accept token wf
 >       DiscardToken -> do return $ WfInstance graph (removeFirst (\t->t == token) tokenList) userData
 >       SkipNode     -> completeExecution token wf
 >  where

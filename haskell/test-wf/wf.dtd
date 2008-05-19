@@ -8,7 +8,7 @@
 <!ELEMENT node (arc*)>
 <!ATTLIST node
           id ID #REQUIRED
-          type (requireSingle|requireAll) #REQUIRED>
+          type (requireSingle|requireAll) "requireAll">
 
 <!ELEMENT arc (#PCDATA)>
 <!ATTLIST arc to IDREF #REQUIRED>

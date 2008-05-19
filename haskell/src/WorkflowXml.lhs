@@ -28,28 +28,35 @@
 
 > useElement element = XmlProc (\_-> ((), [element]))
 
-> getAttr name = XmlProc (\(x:xs)-> (getElemAttr x name, (x:xs)))
+> readAttr name = XmlProc (\(x:xs)-> (getElemAttr x name, (x:xs)))
 
 > getChildren = XmlProc (\(x:xs)-> (map (cElemToElem) (childElements (CElem x)), (x:xs)))
->     where
->         childElements = elm `o` children
+>     where childElements = elm `o` children
 
 > getElemAttr (Elem _ attrList _ ) name
->    | null attrs = ""
->    | otherwise  = attrVal' (head attrs)
->   where
->     attrs = filter (\(attrName, attrValue) -> attrName == name) attrList
->     attrVal' (_, AttValue atlist) = case (head atlist) of (Left val) -> val
+>      | null attrs = ""
+>      | otherwise  = attrVal' (head attrs)
+>     where
+>         attrs = filter (\(attrName, attrValue) -> attrName == name) attrList
+>         attrVal' (_, AttValue atlist) = case (head atlist) of (Left val) -> val
 
 > cElemToElem (CElem element) = element
 
+> readArcs = XmlProc (\(x:xs) -> (readArcsFromElem x, (x:xs)))
+
+> readArcsFromElem element = map (attrVal) $ attributed "to" ((tag "arc") `o` children) (CElem element)
+>     where attrVal (v,_) = NodeId (read v::Int)
+
 > unwrapXmlProc (XmlProc a) = case (a []) of (result,_) -> result
 
+loadWfGraphFromFile
+  Loads a WfGraph from the given file, using the given map of tag names to functions.
+
 > loadWfGraphFromFile filename elemFuncMap =
->   do xmlStr <- readFile filename
->      case (xmlParse' filename xmlStr) of
->          Left msg -> return $ Left msg
->          Right doc -> return $ Right $ loadWfGraphFromDoc doc elemFuncMap
+>     do xmlStr <- readFile filename
+>        case (xmlParse' filename xmlStr) of
+>            Left msg -> return $ Left msg
+>            Right doc -> return $ Right $ loadWfGraphFromDoc doc elemFuncMap
 
 The following functions handle the generation of a WfGraph based on an XML document.
 The loadWfGraphFromDoc function takes a map of tag names to function which take
@@ -72,11 +79,25 @@ elements of that type and return the appropriate XmlNode.
 
 > processStartElement element = unwrapXmlProc $
 >     do useElement element
->        return $ XmlNode node []
+>        arcs <- readArcs
+>        return $ XmlNode node arcs
 >     where
 >         node = Node StartNodeId RequireAll defaultGuard completeExecution
 
-> defaultElemFunctionMap = Map.insert "start" (processStartElement) Map.empty
+> processNodeElement element = unwrapXmlProc $
+>     do useElement element
+>        id   <- readAttr "id"
+>        arcs <- readArcs
+>        nodeType <- readAttr "type"
+>        return $ XmlNode (newNode id nodeType) arcs
+>     where
+>         newNode id nodeType = Node (NodeId (read id::Int)) (getType nodeType) defaultGuard completeExecution
+>         getType "requireSingle" = RequireSingle
+>         getType _               = RequireAll
+
+
+> defaultElemFunctionMap = Map.fromList [ ("start", processStartElement ),
+>                                         ("node",  processNodeElement ) ]
 
 The following function deal with converting a map of XmlNode instances to
 a WfGraph. Since XmlNode instances only track outgoing nodes, we need to
@@ -89,19 +110,12 @@ infer the incoming nodes.
 > xmlNodeToNodeArcs nodeMap xmlNode = NodeArcs node inputs outputs
 >     where
 >         node      = getWfNode xmlNode
->         inputs    = xmlNodeInputs xmlNode nodeMap
+>         inputs    = map (getWfNode) $ xmlNodeInputs xmlNode nodeMap
 >         outputs   = map (toNode) $ getArcs xmlNode
 >         mapLookup = (Map.!) nodeMap
 >         toNode    = getWfNode.mapLookup
 
-> xmlNodeInputs xmlNode nodeMap = concatMap (matching) nodes
+> xmlNodeInputs xmlNode nodeMap = filter (isInput) $ Map.elems nodeMap
 >     where
->         matching = getMatchingOutputs xmlNode nodeMap
->         nodes    = Map.elems nodeMap
-
-> getMatchingOutputs target nodeMap source = map (toNode) matchingNodeIds
->     where
->         mapLookup       = (Map.!) nodeMap
->         toNode          = getWfNode.mapLookup
->         matchingNodeIds = filter ((==) targetNodeId) (getArcs source)
->         targetNodeId    = getWfNodeId target
+>         isInput source = not.null $ filter ((==) targetNodeId) (getArcs source)
+>         targetNodeId   = getWfNodeId xmlNode

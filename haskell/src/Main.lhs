@@ -1,3 +1,4 @@
+Author: Paul Lorenz
 
 > module Main where
 > import Workflow
@@ -47,13 +48,10 @@
 >     | otherwise       = getTask (taskNumber - 1) rest
 
 > showTokens []     = do return ()
-> showTokens (x:xs) =
->     do putStrLn (show x)
->        showTokens xs
+> showTokens (x:xs) = do putStrLn (show x)
+>                        showTokens xs
 
-> processTasks wf@(WfInstance graph [] tasks) =
->     do putStrLn "Workflow complete!"
-
+> processTasks wf@(WfInstance graph []        tasks) = do putStrLn "Workflow complete!"
 > processTasks wf@(WfInstance graph tokenList tasks) =
 >     do putStrLn ""
 >        showTaskList tasks
@@ -98,14 +96,15 @@
 >     | otherwise            = do result <- loadWfGraphFromFile (wfList !! idx) defaultElemFunctionMap
 >                                 case (result) of
 >                                     Left msg -> putStrLn $ "ERROR: Could not load workflow: " ++ msg
->                                     Right wfGraph -> runWorkflow wfGraph
+>                                     Right wfGraph -> do putStrLn "Running workflow"
+>                                                         -- putStrLn (show wfGraph)
+>                                                         runWorkflow wfGraph
 
 > runWorkflow wfGraph =
 >     case (startWorkflow wfGraph []) of
 >            Left msg -> putStrLn msg
 >            Right wfInstanceIO -> do wf <- wfInstanceIO
 >                                     processTasks wf
-
 
 > showWorkflows [] _ = do return ()
 > showWorkflows (wf:rest) counter =
