@@ -3,9 +3,11 @@ package org.codemonk.wf.visual;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Paint;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
+import javax.swing.Icon;
 import javax.swing.JFrame;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
@@ -15,10 +17,12 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.apache.commons.collections15.Transformer;
 import org.codemonk.wf.db.HibArc;
 import org.codemonk.wf.db.HibEngine;
 import org.codemonk.wf.db.HibGraph;
 import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.test.NodeTask;
 import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;
 
@@ -84,10 +88,33 @@ public class JungVisualizer
     //final KKLayout<HibNodeRef, HibArc> layout = new KKLayout<HibNodeRef, HibArc>(graph);
     final TreeLayout layout = new TreeLayout( graph );
     final BasicVisualizationServer<HibNodeRef, HibArc> vs = new BasicVisualizationServer<HibNodeRef, HibArc>(layout);
-    vs.getRenderContext().setVertexLabelTransformer( new NodeLabeller() );
-    vs.getRenderContext().setEdgeLabelTransformer( new ArcLabeller() );
+    //vs.getRenderContext().setVertexLabelTransformer( new NodeLabeller() );
+    //vs.getRenderContext().setEdgeLabelTransformer( new ArcLabeller() );
     vs.getRenderContext().setVertexShapeTransformer( new NodeShapeTransformer() );
     vs.getRenderContext().setVertexFillPaintTransformer( new NodeColorTransformer() );
+    vs.getRenderContext().setLabelOffset( 5 );
+    vs.getRenderContext().setVertexIconTransformer( new Transformer<HibNodeRef,Icon>()
+    {
+      @Override public Icon transform (HibNodeRef nodeRef)
+      {
+        return nodeRef.getNode() instanceof NodeTask ?
+                 new TaskIcon( (NodeTask)nodeRef.getNode() ) : null;
+      }
+    });
+
+    Transformer<HibArc,Paint> edgeColorTrans = new Transformer<HibArc,Paint>()
+    {
+      private Color darkRed = new Color( 128, 0, 0 );
+
+      @Override
+      public Paint transform (HibArc arc)
+      {
+        return "reject".equals( arc.getName() ) ? darkRed : Color.black;
+      }
+    };
+
+    vs.getRenderContext().setEdgeDrawPaintTransformer( edgeColorTrans );
+    vs.getRenderContext().setArrowDrawPaintTransformer( edgeColorTrans );
 
 
     final JScrollPane scrollPane = new JScrollPane( vs );
