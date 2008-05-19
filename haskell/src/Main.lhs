@@ -56,13 +56,13 @@
 >       ShowTokenCmd -> do showTokens tokenList
 >                          processTasks wf
 >       TaskCmd ->
->         case (getTask ((read cmd)::Integer) tasks) of
->           Left msg -> do putStrLn msg
->                          processTasks wf
->           Right task -> do newWf <- handleTask task wf
->                            processTasks newWf
->       BadCmd     -> do putStrLn $ cmd ++ " is not a valid command or task entry"
->                        processTasks wf
+>           case (getTask ((read cmd)::Integer) tasks) of
+>               Left msg -> do putStrLn msg
+>                              processTasks wf
+>               Right task -> do newWf <- handleTask task wf
+>                                processTasks newWf
+>       BadCmd -> do putStrLn $ cmd ++ " is not a valid command or task entry"
+>                    processTasks wf
 
 > data CmdType = ShowTokenCmd | TaskCmd | BadCmd
 

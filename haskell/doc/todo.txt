@@ -1,13 +1,16 @@
-
-Next steps:
+Completed work
 ---------------------------------------------------------------------
+DONE - Create basic workflow representation
+DONE - Create fork, join and passthrough functions
 DONE - Create notion of task queue.
 DONE - Have node generate task in queue
 DONE - Have console UI to view task in queue and complete tasks
+DONE - Implement Node guards
 
-Implement Node guards
-Look at subworkflows
-Look at workflow file format (jPDL?)
+Next steps:
+---------------------------------------------------------------------
+Create workflow file format
+Implement nested workflows
 
 
 Future posibilities:
