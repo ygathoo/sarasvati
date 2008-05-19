@@ -38,7 +38,7 @@
 > testLoadWf = do fileList <- getDirectoryContents wfDir
 >                 mapM (loadWorkflow) $ (useFullPath.filterWfs) fileList
 >   where
->     wfDir = "/home/paul/workspace/functional-workflow/test-workflows/"
+>     wfDir = "/home/paul/workspace/functional-workflow/test-wf/"
 >     filterWfs = (filter (hasExtension ".wf"))
 >     useFullPath = (map (\f->wfDir ++ f))
 
