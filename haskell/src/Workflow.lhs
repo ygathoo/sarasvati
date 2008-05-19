@@ -15,6 +15,9 @@ NodeType
 > data NodeType = RequireSingle | RequireAll
 >   deriving (Show)
 
+> nodeTypeFromString "requireSingle" = RequireSingle
+> nodeTypeFromString _               = RequireAll
+
 GuardResponse
   Nodes have guard functions which determine if the accept function when a token
   arrives and the node is ready to be activated. Guard functions must return a

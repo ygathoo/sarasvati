@@ -7,23 +7,7 @@ Author: Paul Lorenz
 > import Data.Char
 > import System.Directory
 > import WorkflowXml
-
-> n1 = Node StartNodeId RequireAll defaultGuard completeExecution
-> n2 = Node (NodeId 2) RequireAll defaultGuard (acceptAndCreateTask 1 "Hello" "Here is where one would say hello")
-> n3 = Node (NodeId 3) RequireAll defaultGuard (acceptAndCreateTask 2 "Introduce" "Here is where you give your name")
-> n4 = Node (NodeId 4) RequireAll defaultGuard (acceptAndCreateTask 3 "Shake" "Here is where you shake hands")
-> n5 = Node (NodeId 5) RequireAll defaultGuard (acceptAndCreateTask 4 "Pleasantry" "Here is where you say something like, 'Nice to meet you'")
-> n6 = Node (NodeId 6) RequireAll (\x y -> SkipNode) completeExecution
-> n7 = Node (NodeId 7) RequireAll defaultGuard (acceptAndCreateTask 5 "Converse" "Start a conversation")
-
-> graph = graphFromArcs
->   [ (NodeArcs n1 [] [n2, n3]),
->     (NodeArcs n2 [n1] [n7]),
->     (NodeArcs n3 [n1] [n4, n5]),
->     (NodeArcs n4 [n3] [n7]),
->     (NodeArcs n5 [n3] [n6]),
->     (NodeArcs n6 [n5] [n7]),
->     (NodeArcs n7 [n2,n4,n6] []) ]
+> import TaskXml
 
 > handleTask :: Task -> WfInstance [Task] -> IO (WfInstance [Task])
 > handleTask task wf =
@@ -93,12 +77,14 @@ Author: Paul Lorenz
 
 > useWorkflow wfList idx
 >     | length wfList <= idx = do putStrLn "ERROR: Invalid workflow number"
->     | otherwise            = do result <- loadWfGraphFromFile (wfList !! idx) defaultElemFunctionMap
+>     | otherwise            = do result <- loadWfGraphFromFile (wfList !! idx) elemFunctionMap
 >                                 case (result) of
 >                                     Left msg -> putStrLn $ "ERROR: Could not load workflow: " ++ msg
 >                                     Right wfGraph -> do putStrLn "Running workflow"
 >                                                         -- putStrLn (show wfGraph)
 >                                                         runWorkflow wfGraph
+>    where
+>        elemFunctionMap = elemMapWith [ ("task", processTaskElement) ]
 
 > runWorkflow wfGraph =
 >     case (startWorkflow wfGraph []) of
@@ -116,7 +102,7 @@ Author: Paul Lorenz
 >        return $ (useFullPath.filterWfs) fileList
 >   where
 >     wfDir = "/home/paul/workspace/functional-workflow/test-wf/"
->     filterWfs = (filter (hasExtension ".wf"))
+>     filterWfs = (filter (hasExtension ".wf.xml"))
 >     useFullPath = (map (\f->wfDir ++ f))
 
 > hasExtension ext name = all (\(x,y) -> x == y) $ zip (reverse ext) (reverse name)

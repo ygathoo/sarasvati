@@ -6,10 +6,11 @@ DONE - Create notion of task queue.
 DONE - Have node generate task in queue
 DONE - Have console UI to view task in queue and complete tasks
 DONE - Implement Node guards
+DONE - Create workflow file format (not accounting for nested workflows)
 
 In Progress:
 ---------------------------------------------------------------------
-Create workflow file format
+
 
 Next steps:
 ---------------------------------------------------------------------

@@ -47,7 +47,17 @@
 > readArcsFromElem element = map (attrVal) $ attributed "to" ((tag "arc") `o` children) (CElem element)
 >     where attrVal (v,_) = NodeId (read v::Int)
 
+> readText name = XmlProc (\(x:xs) -> (readTextElements x name, (x:xs)))
+
+> readTextElements element name = concatMap (stripMaybe.fst) $ filter (onlyJust) labels
+>     where
+>         onlyJust (Nothing,_)  = False
+>         onlyJust ((Just _),_) = True
+>         stripMaybe (Just x)   = x
+>         labels                = textlabelled (txt `o` children `o` (tag name) `o` children) (CElem element)
+
 > unwrapXmlProc (XmlProc a) = case (a []) of (result,_) -> result
+
 
 loadWfGraphFromFile
   Loads a WfGraph from the given file, using the given map of tag names to functions.
@@ -77,6 +87,9 @@ elements of that type and return the appropriate XmlNode.
 >         node         = nodeFunction e
 >         newNodeMap   = Map.insert (getWfNodeId node) node nodeMap
 
+Function for processing the <start> element. There should be exactly one of these
+per workflow definition.
+
 > processStartElement element = unwrapXmlProc $
 >     do useElement element
 >        arcs <- readArcs
@@ -99,6 +112,11 @@ elements of that type and return the appropriate XmlNode.
 > defaultElemFunctionMap = Map.fromList [ ("start", processStartElement ),
 >                                         ("node",  processNodeElement ) ]
 
+> elemMapWith list = addToMap list defaultElemFunctionMap
+>    where
+>        addToMap []     map = map
+>        addToMap (x:xs) map = addToMap xs $ Map.insert (fst x) (snd x) map
+
 The following function deal with converting a map of XmlNode instances to
 a WfGraph. Since XmlNode instances only track outgoing nodes, we need to
 infer the incoming nodes.
@@ -107,9 +125,8 @@ infer the incoming nodes.
 
 > xmlNodesToNodeArcs nodeMap = map (xmlNodeToNodeArcs nodeMap) (Map.elems nodeMap)
 
-> xmlNodeToNodeArcs nodeMap xmlNode = NodeArcs node inputs outputs
+> xmlNodeToNodeArcs nodeMap xmlNode = NodeArcs (getWfNode xmlNode) inputs outputs
 >     where
->         node      = getWfNode xmlNode
 >         inputs    = map (getWfNode) $ xmlNodeInputs xmlNode nodeMap
 >         outputs   = map (toNode) $ getArcs xmlNode
 >         mapLookup = (Map.!) nodeMap
