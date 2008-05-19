@@ -11,19 +11,30 @@ Author: Paul Lorenz
 
 > handleTask :: Task -> WfInstance [Task] -> IO (WfInstance [Task])
 > handleTask task wf =
->     do putStrLn $ "Task name: " ++ (getName task)
->        putStrLn $ "Task desc: " ++ (getDesc task)
->        putStrLn $ "Task state: " ++ show (getState task)
->        case (getState task) of
->            Open -> do putStr "Would you like to complete this task (Y/N): "
+>     do putStrLn $ "Task name: " ++ (taskName task)
+>        putStrLn $ "Task desc: " ++ (taskDesc task)
+>        putStrLn $ "Task state: " ++ show (taskState task)
+>        case (taskState task) of
+>            Open -> do putStr prompt
 >                       response <- getLine
->                       case (map (toUpper) response) of
->                           "Y" -> do newWf <- completeTask task wf
+>                       case (response) of
+>                           "1" -> do newWf <- completeTask task wf
 >                                     putStrLn "Task Completed"
 >                                     return newWf
->                           otherwise -> do putStrLn "Suit yourself."
+>                           "2" -> if (rejectable)
+>                                      then do newWf <- rejectTask task wf
+>                                              putStrLn "Task Rejected"
+>                                              return newWf
+>                                      else do putStrLn "Ok. Leaving open"
+>                                              return wf
+>                           otherwise -> do putStrLn "Ok. Leaving open"
 >                                           return wf
 >            Complete -> do return wf
+>     where
+>         rejectable = taskRejectable task
+>         prompt = case (rejectable) of
+>                      True ->  "1. Complete task\n2. Reject task\n3. Leave task open\nAction: "
+>                      False -> "1. Complete task\n2. Leave task open\nAction: "
 
 > getTask _ [] = Left "Invalid task number"
 > getTask taskNumber tasks@(first:rest)

@@ -11,7 +11,8 @@
           type (requireSingle|requireAll) "requireAll">
 
 <!ELEMENT arc (#PCDATA)>
-<!ATTLIST arc to ID #IMPLIED>
+<!ATTLIST arc to   ID    #REQUIRED
+              name CDATA #IMPLIED>
 
 
 <!ELEMENT externalArc (#PCDATA)>
@@ -19,4 +20,5 @@
                       version  CDATA    #IMPLIED
                       instance CDATA    #IMPLIED
                       nodeId   CDATA    #REQUIRED
+                      name     CDATA    #REQUIRED
                       type     (in|out) "out">

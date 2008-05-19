@@ -50,9 +50,15 @@ Once this is done, we can complete the load by converting the LoadNodes to NodeA
 >     do maybeExternal <- loadExternalWorkflows loadFunction (Map.elems linkedNodeMap) (wfDepth source)
 >        case (maybeExternal) of
 >            Left msg  -> return $ Left msg
->            Right ext -> do let allLoadNodes = importExternals linkedNodeMap ext
+>            Right ext -> do putStrLn "Unlinked before externals: "
+>                            putStrLn (show unlinkedNodeMap)
+>                            putStrLn "Linked before externals: "
+>                            putStrLn (show linkedNodeMap)
+>                            let allLoadNodes = importExternals linkedNodeMap ext
+>                            putStrLn "\nAfter import of externals"
 >                            putStrLn (show allLoadNodes)
 >                            let resolvedLoadNodes = resolveAllExternalArcs allLoadNodes
+>                            putStrLn "\nAfter resolving arcs"
 >                            putStrLn (show resolvedLoadNodes)
 >                            return $ Right $ loadNodesToWfGraph resolvedLoadNodes
 >    where
@@ -103,7 +109,7 @@ To import an external workflow into loading workflow, we must take the following
 
 > importExternal graph nodeMap = foldr (\node nodeMap-> Map.insert (wfNodeId node) node nodeMap) nodeMap xmlNodes
 >     where
->         nextId   = Map.size nodeMap
+>         nextId   = (Map.size nodeMap) + 1
 >         xmlNodes = map (importXmlNode (nextId - 1)) $ zip [nextId..] (Map.elems graph)
 
 > importXmlNode baseIncr (nextId, nodeArcs) = LoadNode node (map (toFixedIdOutput) (nodeOutputs nodeArcs)) [] []
@@ -145,12 +151,15 @@ infer the incoming nodes.
 
 > loadNodeToNodeArcs nodeMap loadNode = NodeArcs (wfNode loadNode) inputs outputs
 >     where
->         inputs            = map (wfNode) $ loadNodeInputs loadNode nodeMap
+>         inputs            = loadNodeInputs loadNode nodeMap
 >         outputs           = map (toNode) $ arcs loadNode
 >         mapLookup         = (Map.!) nodeMap
 >         toNode (name, id) = (name, (wfNode.mapLookup) id)
 
-> loadNodeInputs loadNode nodeMap = filter (isInput) $ Map.elems nodeMap
+> loadNodeInputs loadNode nodeMap = foldr (scanArcs) [] $ Map.elems nodeMap
 >     where
->         isInput source = not.null $ filter (((==) targetNodeId).snd) (arcs source)
->         targetNodeId   = wfNodeId loadNode
+>         scanArcs node inputs        = foldr (maybeAddArc node) inputs (arcs node)
+>         maybeAddArc node arc inputs = if (snd arc == targetNodeId)
+>                                           then (fst arc, wfNode node):inputs
+>                                           else inputs
+>         targetNodeId                = wfNodeId loadNode

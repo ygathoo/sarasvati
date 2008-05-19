@@ -80,7 +80,7 @@ NodeArcs
 > data NodeArcs a =
 >     NodeArcs {
 >         arcsNode    :: Node a,
->         nodeInputs  :: [Node a],
+>         nodeInputs  :: [(String,Node a)],
 >         nodeOutputs :: [(String,Node a)]
 >     }
 >
@@ -97,6 +97,7 @@ Token
 
   Members:
     tokenId: A list of int, giving a unique id across all tokens
+    tokenArcName: The name of arc we are traversing or just traversed
     prevNode: The input node the token came from/is coming from
     currNode: If the token is being processed by a node, this will be set
               to that node. Otherwise it will be set to NullNode
@@ -105,15 +106,18 @@ Token
 
 > data Token a =
 >     Token {
->         tokenId  :: [Int],
->         prevNode :: Node a,
->         currNode :: Node a,
->         nextNode :: Node a
+>         tokenId       :: [Int],
+>         tokenArcName  :: String,
+>         prevNode      :: Node a,
+>         currNode      :: Node a,
+>         nextNode      :: Node a
 >     }
 >     deriving (Show)
 
 > instance Eq (Token a) where
 >     t1 == t2 = (tokenId t1) == (tokenId t2)
+
+> defaultArc = ""
 
 WFGraph
   This is just a container for NodeArcs, which can be queried
@@ -170,7 +174,7 @@ startWorkflow
 >   where
 >     startNodes = filter (isStartNode) $ Map.keys graph
 >     startNode  = arcsNode $ graph Map.! (head startNodes)
->     token      = Token [1] NullNode NullNode startNode
+>     token      = Token [1] defaultArc NullNode NullNode startNode
 >     wf         = WfInstance graph [] userData
 >
 >     isStartNode (-1) = True
@@ -200,7 +204,7 @@ nextForkId
     [1] -> [1,0]             or  [1,2,5] -> [1,2,5,0]
         -> [1,1]                         -> [1,2,5,1]
 
-> nextForkId (Token tid _ _ _) counter = tid ++ [counter]
+> nextForkId (Token tid _ _ _ _) counter = tid ++ [counter]
 
 removeInputTokens
   Given a list of input nodes, a target node and a list of tokens,
@@ -211,7 +215,7 @@ removeInputTokens
 > removeInputTokens (x:xs) targetNode tokenList =
 >     removeInputTokens xs targetNode $ removeFirst (isInputToken) tokenList
 >   where
->     isInputToken tok = prevNode tok == x &&
+>     isInputToken tok = prevNode tok == snd x &&
 >                        nextNode tok == targetNode
 
 defaultGuard
@@ -241,8 +245,8 @@ completeExecution
 >
 >     firstOutputName                = (fst.head) outputNodes
 >     firstOutputNode                = (snd.head) outputNodes
->     newToken                       = Token (tokenId token) currentNode NullNode firstOutputNode
->     newForkToken nextNode counter  = Token (nextForkId token counter) currentNode NullNode nextNode
+>     newToken                       = Token (tokenId token) arcName currentNode NullNode firstOutputNode
+>     newForkToken nextNode counter  = Token (nextForkId token counter) arcName currentNode NullNode nextNode
 >
 >     newWf                          = WfInstance graph (removeFirst (\t->t == token) tokenList) userData
 >
@@ -250,7 +254,7 @@ completeExecution
 >     split ((name,x):xs) wf counter = if (name == arcName)
 >                                          then do newWf <- acceptToken (newForkToken x counter) wf
 >                                                  split xs newWf (counter + 1)
->                                          else split xs newWf (counter)
+>                                          else split xs wf (counter)
 
 acceptToken
   Called when a token arrives at a node. The node is checked to see if it requires
@@ -275,7 +279,7 @@ acceptSingle
 > acceptSingle token wf@(WfInstance graph tokenList userData) = acceptWithGuard newToken newWf
 >   where
 >     targetNode = nextNode token
->     newToken   = Token (tokenId token) (prevNode token) (nextNode token) NullNode
+>     newToken   = Token (tokenId token) (tokenArcName token) (prevNode token) (nextNode token) NullNode
 >     newWf      = WfInstance graph tokenList userData
 
 acceptJoin
@@ -292,17 +296,19 @@ acceptJoin
 >   where
 >     areAllInputsPresent           = all (inputHasToken (token:tokenList)) inputNodes
 >
->     inputHasToken []         node = False
->     inputHasToken (tok:rest) node = ( nextNode tok == targetNode &&
->                                       prevNode tok == node) ||
->                                     inputHasToken rest node
+>     inputHasToken []         input = False
+>     inputHasToken (tok:rest) input = fst input /= tokenArcName token ||
+>                                       ( nextNode tok == targetNode &&
+>                                        prevNode tok == snd input &&
+>                                        tokenArcName  tok == tokenArcName token ) ||
+>                                      inputHasToken rest input
 >
->     targetNode                    = nextNode token
->     inputNodes                    = inputs graph targetNode
->     outputTokenList               = removeInputTokens inputNodes targetNode tokenList
+>     targetNode                     = nextNode token
+>     inputNodes                     = inputs graph targetNode
+>     outputTokenList                = removeInputTokens inputNodes targetNode tokenList
 >
->     newToken                      = Token (tokenId token) (prevNode token) (nextNode token) NullNode
->     newWf                         = WfInstance graph (newToken:outputTokenList) userData
+>     newToken                       = Token (tokenId token) (tokenArcName token) (prevNode token) (nextNode token) NullNode
+>     newWf                          = WfInstance graph (newToken:outputTokenList) userData
 
 acceptWithGuard
   This is only called once the node is ready to fire. The given token is now in the node

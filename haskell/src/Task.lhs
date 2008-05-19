@@ -2,16 +2,17 @@
 > module Task where
 > import Workflow
 
-> data TaskState = Open | Complete
->  deriving Show
+> data TaskState = Open | Complete | Rejected
+>  deriving (Show,Eq)
 
 > data Task =
 >   Task {
->     getTokId   :: [Int],
->     getTaskId  :: String,
->     getName    :: String,
->     getDesc    :: String,
->     getState   :: TaskState
+>     getTokId       :: [Int],
+>     taskId         :: String,
+>     taskName       :: String,
+>     taskDesc       :: String,
+>     taskState      :: TaskState,
+>     taskRejectable :: Bool
 >   }
 
 > showTaskList tasks =
@@ -22,24 +23,29 @@
 
 > showTasks [] _ = do return ()
 > showTasks (task:rest) counter =
->  do putStrLn $ show counter ++ ": " ++ (getName task) ++ " - " ++ show (getState task)
+>  do putStrLn $ show counter ++ ": " ++ (taskName task) ++ " - " ++ show (taskState task)
 >     showTasks rest (counter + 1)
 
 > acceptAndCreateTask taskId name desc token wf@(WfInstance graph tokenList tasks) =
->   do return $ WfInstance graph tokenList ((newTask token taskId name desc):tasks)
+>     return $ WfInstance graph tokenList ((newTask wf token taskId name desc):tasks)
 
-> newTask token taskId name desc = Task (tokenId token) taskId name desc Open
+> newTask wf token taskId name desc = Task (tokenId token) taskId name desc Open hasReject
+>     where
+>         currentNode = currNode token
+>         hasReject   = not.null $ filter (\(name,node) -> name=="reject") (outputs (wfGraph wf) currentNode)
 
-> closeTask task@(Task tokId taskId name desc state) (WfInstance graph tokenList tasks) =
->     WfInstance graph tokenList newTaskList
+> closeTask task wf newState = wf { userData = newTaskList }
 >   where
->     newTaskList = map (\t-> if (getTaskId t == getTaskId task)
->                               then closedTaskInstance task
->                               else t ) tasks
+>     newTaskList = map (closeIfMatches) (userData wf)
+>     closeIfMatches t = if (taskId t == taskId task && (taskState t == Open))
+>                            then t { taskState=newState }
+>                            else t
 >
 
-> closedTaskInstance task@(Task tokId taskId name desc state) = Task tokId taskId name desc Complete
+> completeTask task wf = completeDefaultExecution token (closeTask task wf Complete)
+>   where
+>     token = getTokenForId (getTokId task) wf
 
-> completeTask task wf = completeDefaultExecution token (closeTask task wf)
+> rejectTask task wf = completeExecution token "reject" (closeTask task wf Rejected)
 >   where
 >     token = getTokenForId (getTokId task) wf
