@@ -11,11 +11,8 @@
           type (requireSingle|requireAll) "requireAll">
 
 <!ELEMENT arc (#PCDATA)>
-<!ATTLIST arc nodeId IDREF #REQUIRED>
-
-<!ELEMENT subworkflow (#PCDATA)>
-<!ATTLIST subworkflow workflowId ID       #REQUIRED
-                      version    CDATA    #REQUIRED
-                      instanceId CDATA    #REQUIRED
-                      nodeId     CDATA    #REQUIRED
-                      type       (in|out) #REQUIRED>
+<!ATTLIST arc workflowId ID       #IMPLIED
+              version    CDATA    #IMPLIED
+              instanceId CDATA    #IMPLIED
+              nodeId     CDATA    #REQUIRED
+              type       (in|out) "out">

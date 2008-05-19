@@ -7,13 +7,22 @@
 > import Workflow
 > import qualified Data.Map as Map
 
+> data ArcType = InArc | OutArc
+
 > data XmlNode a =
 >     XmlNode {
->         getWfNode :: Node a,
->         getArcs :: [NodeId]
+>         wfNode :: Node a,
+>         arcs :: [NodeId]
 >     }
 
-> getWfNodeId = getNodeId.getWfNode
+> data XmlArc =
+>     XmlArc {
+>       targetNodeId     :: Int,
+>       targetInstanceId :: Int,
+>       arcType          :: ArcType
+>     }
+
+> getWfNodeId = getNodeId.wfNode
 
 > data XmlProc a = XmlProc ([Element]->(a, [Element]))
 
@@ -45,7 +54,7 @@
 
 > readArcs = XmlProc (\(x:xs) -> (readArcsFromElem x, (x:xs)))
 
-> readArcsFromElem element = map (attrVal) $ attributed "to" ((tag "arc") `o` children) (CElem element)
+> readArcsFromElem element = map (attrVal) $ attributed "nodeId" ((tag "arc") `o` children) (CElem element)
 >     where attrVal (v,_) = NodeId (read v::Int)
 
 > readText name = XmlProc (\(x:xs) -> (readTextElements x name, (x:xs)))
@@ -126,14 +135,14 @@ infer the incoming nodes.
 
 > xmlNodesToNodeArcs nodeMap = map (xmlNodeToNodeArcs nodeMap) (Map.elems nodeMap)
 
-> xmlNodeToNodeArcs nodeMap xmlNode = NodeArcs (getWfNode xmlNode) inputs outputs
+> xmlNodeToNodeArcs nodeMap xmlNode = NodeArcs (wfNode xmlNode) inputs outputs
 >     where
->         inputs    = map (getWfNode) $ xmlNodeInputs xmlNode nodeMap
->         outputs   = map (toNode) $ getArcs xmlNode
+>         inputs    = map (wfNode) $ xmlNodeInputs xmlNode nodeMap
+>         outputs   = map (toNode) $ arcs xmlNode
 >         mapLookup = (Map.!) nodeMap
->         toNode    = getWfNode.mapLookup
+>         toNode    = wfNode.mapLookup
 
 > xmlNodeInputs xmlNode nodeMap = filter (isInput) $ Map.elems nodeMap
 >     where
->         isInput source = not.null $ filter ((==) targetNodeId) (getArcs source)
+>         isInput source = not.null $ filter ((==) targetNodeId) (arcs source)
 >         targetNodeId   = getWfNodeId xmlNode
