@@ -40,6 +40,6 @@
 
 > closedTaskInstance task@(Task tokId taskId name desc state) = Task tokId taskId name desc Complete
 
-> completeTask task wf = completeExecution token (closeTask task wf)
+> completeTask task wf = completeDefaultExecution token (closeTask task wf)
 >   where
 >     token = getTokenForId (getTokId task) wf

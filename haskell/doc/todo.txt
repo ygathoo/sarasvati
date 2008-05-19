@@ -11,12 +11,11 @@ DONE - Implement nested workflows
 
 In Progress:
 ---------------------------------------------------------------------
-
+Allow for named arcs - mostly done. Need to add UI support and test cases
 
 Next steps:
 ---------------------------------------------------------------------
-Allow for named arcs
-Allow the token to carry state.
+Allow the token to carry state - will allow more interesting guards
 
 
 Future posibilities:

@@ -6,6 +6,12 @@
 
 > readAttr element name = head $ map (\(val,_)->val) $ attributed name (keep) (CElem element)
 
+> readOptionalAttr element name defaultValue
+>     | null attrList = defaultValue
+>     | otherwise     = head attrList
+>     where
+>         attrList = map (\(val,_)->val) $ attributed name (keep) (CElem element)
+
 > cElemToElem (CElem element) = element
 
 > toElem = map (cElemToElem)

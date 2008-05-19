@@ -81,7 +81,7 @@ NodeArcs
 >     NodeArcs {
 >         arcsNode    :: Node a,
 >         nodeInputs  :: [Node a],
->         nodeOutputs :: [Node a]
+>         nodeOutputs :: [(String,Node a)]
 >     }
 >
 
@@ -219,13 +219,18 @@ defaultGuard
 
 > defaultGuard token wf = AcceptToken
 
-completeExecution
-  Generates a new token for each output node of the current node of the given token
+> completeDefaultExecution token wf = completeExecution token [] wf
 
-> completeExecution :: Token a -> WfInstance a -> IO (WfInstance a)
-> completeExecution token wf@(WfInstance graph tokenList userData)
->   | hasNoOutputs = do return newWf
->   | hasOneOutput = do acceptToken newToken newWf
+completeExecution
+  Generates a new token for each output node of the current node of the given
+  token.
+
+> completeExecution :: Token a -> String -> WfInstance a -> IO (WfInstance a)
+> completeExecution token arcName wf@(WfInstance graph tokenList userData)
+>   | hasNoOutputs = return newWf
+>   | hasOneOutput = if (firstOutputName == arcName)
+>                        then acceptToken newToken newWf
+>                        else return newWf
 >   | otherwise    = split outputNodes newWf 0
 >   where
 >     hasNoOutputs                   = null outputNodes
@@ -233,14 +238,19 @@ completeExecution
 >
 >     currentNode                    = currNode token
 >     outputNodes                    = outputs graph currentNode
->     newToken                       = Token (tokenId token) currentNode NullNode (head outputNodes)
+>
+>     firstOutputName                = (fst.head) outputNodes
+>     firstOutputNode                = (snd.head) outputNodes
+>     newToken                       = Token (tokenId token) currentNode NullNode firstOutputNode
 >     newForkToken nextNode counter  = Token (nextForkId token counter) currentNode NullNode nextNode
 >
 >     newWf                          = WfInstance graph (removeFirst (\t->t == token) tokenList) userData
 >
 >     split [] wf _                  = return wf
->     split (x:xs) wf counter        = do newWf <- acceptToken (newForkToken x counter) wf
->                                         split xs newWf (counter + 1)
+>     split ((name,x):xs) wf counter = if (name == arcName)
+>                                          then do newWf <- acceptToken (newForkToken x counter) wf
+>                                                  split xs newWf (counter + 1)
+>                                          else split xs newWf (counter)
 
 acceptToken
   Called when a token arrives at a node. The node is checked to see if it requires
@@ -305,7 +315,7 @@ acceptWithGuard
 >       AcceptToken  -> do -- putStrLn $ "Token accepted into " ++ show currentNode
 >                          accept token wf
 >       DiscardToken -> do return $ WfInstance graph (removeFirst (\t->t == token) tokenList) userData
->       SkipNode     -> completeExecution token wf
+>       SkipNode     -> completeExecution token [] wf
 >  where
 >    currentNode = currNode token
 >    guard       = guardFunction currentNode

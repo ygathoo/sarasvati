@@ -11,20 +11,24 @@
 > import Control.Monad.Error
 > import WorkflowLoad
 
-> readArcs element =
->     do map (attrVal) $ attributed "to" ((tag "arc") `o` children) (CElem element)
->     where attrVal (v,_) = v
+> readArcs element = map (toArc) arcChildren
+>     where
+>         attrVal (v,_) = v
+>         arcChildren   = XmlUtil.toElem $ ((tag "arc") `o` children) (CElem element)
+>         toArc e       = (readOptionalAttr e "name" "", readAttr e "to")
+>
 
 > readExternalArcs element = map (readExternalArcFromElem) childElem
 >     where
 >         childElem = XmlUtil.toElem $ ((tag "externalArc") `o` children) (CElem element)
 
-> readExternalArcFromElem e = ExternalArc nodeId workflowId version instanceId arcType
+> readExternalArcFromElem e = ExternalArc nodeId workflowId version instanceId arcName arcType
 >     where
 >        workflowId = readAttr e "workflow"
 >        version    = readAttr e "version"
 >        instanceId = readAttr e "instance"
 >        nodeId     = readAttr e "nodeId"
+>        arcName    = readOptionalAttr e "name" ""
 >        arcType    = case (readAttr e "type") of
 >                         "in"      -> InArc
 >                         otherwise -> OutArc
@@ -81,7 +85,7 @@ Function for processing the start element. There should be exactly one of these
 per workflow definition. It should contain only arc and externalArc elements. It
 has no attributes
 
-> processStartElement element source = Node (-1) "start" source RequireSingle defaultGuard completeExecution
+> processStartElement element source = Node (-1) "start" source RequireSingle defaultGuard completeDefaultExecution
 
 Function for processing node elements. There can be any number of these in each
 workflow. They have no logic associated with them. They have a nodeId, which
@@ -90,7 +94,7 @@ type in Workflow. Nodes should contain only arc and externalArc elements.
 
 > processNodeElement element source = newNode nodeId nodeType
 >     where
->         newNode nodeId nodeType = Node 0 nodeId source nodeType defaultGuard completeExecution
+>         newNode nodeId nodeType = Node 0 nodeId source nodeType defaultGuard completeDefaultExecution
 >         nodeId    = readAttr element "nodeId"
 >         nodeTypeS = readAttr element "type"
 >         nodeType  = nodeTypeFromString nodeTypeS
