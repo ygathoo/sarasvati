@@ -8,12 +8,21 @@ import java.awt.Graphics;
 
 import org.codemonk.wf.db.NodeRef;
 
-public class DefaultNodePainter implements NodePainter
+public class DefaultNodePainter extends BaseNodePainter
 {
   @Override
   public void paintNode (Graphics g, NodeRef node, int x, int y)
   {
     g.setColor( Color.blue );
-    g.fillRect( x, y, 20, 20 );
+
+    int maxRadius = NodeDrawConfig.getMaxNodeRadius();
+
+    g.fillRect( x - maxRadius, y - maxRadius, maxRadius << 1, maxRadius << 1 );
+  }
+
+  @Override
+  protected int getOffset ()
+  {
+    return NodeDrawConfig.getMaxNodeRadius();
   }
 }

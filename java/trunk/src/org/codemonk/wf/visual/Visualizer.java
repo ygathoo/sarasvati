@@ -70,7 +70,10 @@ public class Visualizer
     graphDrawing.setBackground( Color.white );
     graphDrawing.setOpaque( true );
 
-    JScrollPane scrollPane = new JScrollPane( graphDrawing );
+    final JScrollPane scrollPane = new JScrollPane( graphDrawing );
+    scrollPane.setHorizontalScrollBarPolicy( JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED );
+    scrollPane.setVerticalScrollBarPolicy( JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED );
+
     splitPane.add( scrollPane );
     scrollPane.setBackground( Color.white );
 
@@ -94,7 +97,7 @@ public class Visualizer
         }
 
         graphDrawing.setGraph( g );
-        graphDrawing.repaint();
+        scrollPane.repaint();
       }
     } );
 
