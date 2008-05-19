@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 import org.codemonk.wf.Engine;
-import org.codemonk.wf.IArc;
-import org.codemonk.wf.IArcToken;
-import org.codemonk.wf.IGraph;
-import org.codemonk.wf.INode;
-import org.codemonk.wf.INodeToken;
-import org.codemonk.wf.IProcess;
+import org.codemonk.wf.Arc;
+import org.codemonk.wf.ArcToken;
+import org.codemonk.wf.Graph;
+import org.codemonk.wf.Node;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.Process;
 import org.hibernate.Session;
 
 public class HibEngine extends Engine
@@ -36,7 +36,7 @@ public class HibEngine extends Engine
   }
 
   @Override
-  protected HibArcToken newArcToken (IProcess process, IArc arc, INodeToken previousToken)
+  protected HibArcToken newArcToken (Process process, Arc arc, NodeToken previousToken)
   {
     HibArcToken token = new HibArcToken( (HibProcess)process, (HibArc)arc, (HibNodeToken)previousToken );
     session.save( token );
@@ -45,7 +45,7 @@ public class HibEngine extends Engine
 
   @SuppressWarnings("unchecked")
   @Override
-  protected HibNodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents)
+  protected HibNodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
   {
     // Here we setup the token attributes for the new node
     // If the node has no predecessors, it will have no attributes
@@ -90,7 +90,7 @@ public class HibEngine extends Engine
   }
 
   @Override
-  protected HibProcess newProcess( IGraph graph )
+  protected HibProcess newProcess( Graph graph )
   {
     HibProcess process = new HibProcess( (HibGraph)graph);
     session.save(  process );

@@ -1,8 +1,8 @@
 package org.codemonk.wf;
 
-public class SkipNodeGuardResponse implements IGuardResponse
+public class SkipNodeGuardResponse implements GuardResponse
 {
-  public static final SkipNodeGuardResponse DEFAULT_ARC_SKIP_NODE_RESPONSE = new SkipNodeGuardResponse( IArc.DEFAULT_ARC );
+  public static final SkipNodeGuardResponse DEFAULT_ARC_SKIP_NODE_RESPONSE = new SkipNodeGuardResponse( Arc.DEFAULT_ARC );
 
   protected String exitArcForSkip = null;
 

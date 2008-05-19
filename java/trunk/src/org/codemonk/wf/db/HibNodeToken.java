@@ -22,12 +22,12 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import org.codemonk.wf.INodeToken;
+import org.codemonk.wf.NodeToken;
 import org.hibernate.annotations.CollectionOfElements;
 
 @Entity
 @Table(name="wf_node_token")
-public class HibNodeToken implements INodeToken
+public class HibNodeToken implements NodeToken
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)

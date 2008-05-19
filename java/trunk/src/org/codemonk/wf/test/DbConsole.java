@@ -3,7 +3,7 @@ package org.codemonk.wf.test;
 import java.io.Console;
 import java.util.List;
 
-import org.codemonk.wf.IArc;
+import org.codemonk.wf.Arc;
 import org.codemonk.wf.db.HibGraph;
 import org.codemonk.wf.db.HibEngine;
 import org.codemonk.wf.db.HibProcess;
@@ -125,7 +125,7 @@ public class DbConsole
       {
         System.out.println( "Completing task" );
         t.setState( (TaskState) engine.getSession().load( TaskState.class, 1 ) );
-        engine.completeExecuteNode( t.getNodeToken().getProcess(), t.getNodeToken(), IArc.DEFAULT_ARC );
+        engine.completeExecuteNode( t.getNodeToken().getProcess(), t.getNodeToken(), Arc.DEFAULT_ARC );
       }
       else if ( line == 2 && t.isRejectable() )
       {

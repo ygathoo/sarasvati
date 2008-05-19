@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JComponent;
 
-import org.codemonk.wf.IArc;
+import org.codemonk.wf.Arc;
 import org.codemonk.wf.db.HibGraph;
 import org.codemonk.wf.db.HibNodeRef;
 
@@ -78,7 +78,7 @@ public class GraphDrawing extends JComponent
         GraphTreeNode treeNode = layer.get( y );
         treeNode.paintNode( g );
 
-        for ( IArc arc : graph.getOutputArcs( treeNode.getNode() ) )
+        for ( Arc arc : graph.getOutputArcs( treeNode.getNode() ) )
         {
           GraphTreeNode targetNode = graphTree.getTreeNode( (HibNodeRef)arc.getEndNode() );
           drawArc( g, arc, treeNode, targetNode );
@@ -102,7 +102,7 @@ public class GraphDrawing extends JComponent
    * @param start
    * @param end
    */
-  protected void drawArc (Graphics g, IArc arc, GraphTreeNode start, GraphTreeNode end)
+  protected void drawArc (Graphics g, Arc arc, GraphTreeNode start, GraphTreeNode end)
   {
     boolean isReject = "reject".equals( arc.getName() );
     g.setColor( isReject ? Color.red : Color.black );

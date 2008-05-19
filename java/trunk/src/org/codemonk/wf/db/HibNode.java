@@ -16,17 +16,17 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.codemonk.wf.Engine;
-import org.codemonk.wf.IArc;
-import org.codemonk.wf.IGuardResponse;
-import org.codemonk.wf.INode;
-import org.codemonk.wf.INodeToken;
-import org.codemonk.wf.IProcess;
+import org.codemonk.wf.Arc;
+import org.codemonk.wf.GuardResponse;
+import org.codemonk.wf.Node;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.Process;
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table (name="wf_node")
 @Inheritance (strategy=InheritanceType.JOINED)
-public class HibNode implements INode
+public class HibNode implements Node
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -97,15 +97,15 @@ public class HibNode implements INode
   }
 
   @Override
-  public IGuardResponse guard (IProcess process, INodeToken token)
+  public GuardResponse guard (Process process, NodeToken token)
   {
-    return IGuardResponse.ACCEPT_TOKEN_RESPONSE;
+    return GuardResponse.ACCEPT_TOKEN_RESPONSE;
   }
 
   @Override
-  public void execute (Engine engine, IProcess process, INodeToken token)
+  public void execute (Engine engine, Process process, NodeToken token)
   {
-    engine.completeExecuteNode( process, token, IArc.DEFAULT_ARC );
+    engine.completeExecuteNode( process, token, Arc.DEFAULT_ARC );
   }
 
   @Override

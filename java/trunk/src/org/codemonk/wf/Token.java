@@ -13,7 +13,7 @@ package org.codemonk.wf;
  *
  * @author Paul Lorenz
  */
-public interface IToken
+public interface Token
 {
   void markComplete ();
 }

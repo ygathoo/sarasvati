@@ -13,14 +13,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.codemonk.wf.Engine;
-import org.codemonk.wf.IGuardResponse;
-import org.codemonk.wf.INode;
-import org.codemonk.wf.INodeToken;
-import org.codemonk.wf.IProcess;
+import org.codemonk.wf.GuardResponse;
+import org.codemonk.wf.Node;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.Process;
 
 @Entity
 @Table (name="wf_node_ref")
-public class HibNodeRef implements INode
+public class HibNodeRef implements Node
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -93,13 +93,13 @@ public class HibNodeRef implements INode
   }
 
   @Override
-  public IGuardResponse guard (IProcess process, INodeToken token)
+  public GuardResponse guard (Process process, NodeToken token)
   {
     return node.guard( process, token );
   }
 
   @Override
-  public void execute (Engine engine, IProcess process, INodeToken token)
+  public void execute (Engine engine, Process process, NodeToken token)
   {
     node.execute( engine, process, token );
   }

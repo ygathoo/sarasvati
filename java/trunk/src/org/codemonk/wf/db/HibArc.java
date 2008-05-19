@@ -12,11 +12,11 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.codemonk.wf.IArc;
+import org.codemonk.wf.Arc;
 
 @Entity
 @Table (name="wf_arc")
-public class HibArc implements IArc
+public class HibArc implements Arc
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)

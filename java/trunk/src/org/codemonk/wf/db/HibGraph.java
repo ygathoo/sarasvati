@@ -19,13 +19,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import org.codemonk.wf.IArc;
-import org.codemonk.wf.IGraph;
-import org.codemonk.wf.INode;
+import org.codemonk.wf.Arc;
+import org.codemonk.wf.Graph;
+import org.codemonk.wf.Node;
 
 @Entity
 @Table (name="wf_graph")
-public class HibGraph implements IGraph
+public class HibGraph implements Graph
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -40,10 +40,10 @@ public class HibGraph implements IGraph
   protected List<HibArc>     arcs;
 
   @Transient
-  protected Map<HibNodeRef, List<IArc>> inputMap;
+  protected Map<HibNodeRef, List<Arc>> inputMap;
 
   @Transient
-  protected Map<HibNodeRef, List<IArc>> outputMap;
+  protected Map<HibNodeRef, List<Arc>> outputMap;
 
   public Long getId ()
   {
@@ -97,7 +97,7 @@ public class HibGraph implements IGraph
   }
 
   @Override
-  public List<IArc> getInputArcs (INode node)
+  public List<Arc> getInputArcs (Node node)
   {
     if ( inputMap == null )
     {
@@ -107,12 +107,12 @@ public class HibGraph implements IGraph
   }
 
   @Override
-  public List<IArc> getInputArcs (INode node, String arcName)
+  public List<Arc> getInputArcs (Node node, String arcName)
   {
-    List<IArc> arcList = getInputArcs( node );
-    List<IArc> result = new ArrayList<IArc>( arcList.size() );
+    List<Arc> arcList = getInputArcs( node );
+    List<Arc> result = new ArrayList<Arc>( arcList.size() );
 
-    for ( IArc arc : arcList )
+    for ( Arc arc : arcList )
     {
       if ( arcName.equals( arc.getName() ) )
       {
@@ -123,7 +123,7 @@ public class HibGraph implements IGraph
   }
 
   @Override
-  public List<IArc> getOutputArcs (INode node)
+  public List<Arc> getOutputArcs (Node node)
   {
     if (outputMap == null)
     {
@@ -133,12 +133,12 @@ public class HibGraph implements IGraph
   }
 
   @Override
-  public List<IArc> getOutputArcs (INode node, String arcName)
+  public List<Arc> getOutputArcs (Node node, String arcName)
   {
-    List<IArc> arcList = getOutputArcs( node );
-    List<IArc> result = new ArrayList<IArc>( arcList.size() );
+    List<Arc> arcList = getOutputArcs( node );
+    List<Arc> result = new ArrayList<Arc>( arcList.size() );
 
-    for ( IArc arc : arcList )
+    for ( Arc arc : arcList )
     {
       if ( arcName.equals( arc.getName() ) )
       {
@@ -150,17 +150,17 @@ public class HibGraph implements IGraph
 
   public void initialize ()
   {
-    inputMap  = new HashMap<HibNodeRef, List<IArc>>();
-    outputMap = new HashMap<HibNodeRef, List<IArc>>();
+    inputMap  = new HashMap<HibNodeRef, List<Arc>>();
+    outputMap = new HashMap<HibNodeRef, List<Arc>>();
 
     for ( HibArc arc : arcs )
     {
       HibNodeRef node = arc.getStartNode();
-      List<IArc> list = outputMap.get( node );
+      List<Arc> list = outputMap.get( node );
 
       if ( list == null )
       {
-        list = new LinkedList<IArc>();
+        list = new LinkedList<Arc>();
         outputMap.put( node, list );
       }
 
@@ -171,14 +171,14 @@ public class HibGraph implements IGraph
 
       if ( list == null )
       {
-        list = new LinkedList<IArc>();
+        list = new LinkedList<Arc>();
         inputMap.put( node, list );
       }
 
       list.add( arc );
     }
 
-    List<IArc> emptyList = Collections.emptyList();
+    List<Arc> emptyList = Collections.emptyList();
     for (HibNodeRef node : nodeRefs )
     {
       if ( !inputMap.containsKey( node ) )
@@ -193,9 +193,9 @@ public class HibGraph implements IGraph
   }
 
   @Override
-  public List<INode> getStartNodes ()
+  public List<Node> getStartNodes ()
   {
-    List<INode> startNodes = new LinkedList<INode>();
+    List<Node> startNodes = new LinkedList<Node>();
 
     for ( HibNodeRef node : getNodeRefs() )
     {
@@ -209,9 +209,9 @@ public class HibGraph implements IGraph
   }
 
   @Override
-  public boolean hasArcInverse( IArc arc )
+  public boolean hasArcInverse( Arc arc )
   {
-    for (IArc tmpArc : arcs)
+    for (Arc tmpArc : arcs)
     {
       if ( arc.getStartNode().equals( tmpArc.getEndNode() ) &&
            arc.getEndNode().equals( tmpArc.getStartNode() ) )
