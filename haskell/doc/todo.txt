@@ -7,9 +7,12 @@ DONE - Have node generate task in queue
 DONE - Have console UI to view task in queue and complete tasks
 DONE - Implement Node guards
 
-Next steps:
+In Progress:
 ---------------------------------------------------------------------
 Create workflow file format
+
+Next steps:
+---------------------------------------------------------------------
 Implement nested workflows
 
 
