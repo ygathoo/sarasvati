@@ -9,7 +9,7 @@
 > n5 = Node 5 acceptP
 > n6 = Node 6 acceptJoin
 
-> graph = graphFromArcList [1..6]
+> graph = graphFromArcs
 >   [ (NodeArcs n1 [] [n2, n3]),
 >     (NodeArcs n2 [n1] [n6]),
 >     (NodeArcs n3 [n1] [n4, n5]),
@@ -17,5 +17,4 @@
 >     (NodeArcs n5 [] [n6]),
 >     (NodeArcs n6 [n2,n4,n5] []) ]
 
-> main =
->   do putStrLn "Hello"
+> main = do (accept n1) (Token [1] n1 n1) graph []
