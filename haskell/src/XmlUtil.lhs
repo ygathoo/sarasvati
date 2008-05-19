@@ -4,11 +4,7 @@
 > import Text.XML.HaXml.Types
 > import Control.Monad.Error
 
-> readAttr element name
->      | null attrs = throwError "Attribute not found"
->      | otherwise  = return $ head attrs
->     where
->         attrs = map (\(val,_)->val) $ attributed name (keep) (CElem element)
+> readAttr element name = head $ map (\(val,_)->val) $ attributed name (keep) (CElem element)
 
 > cElemToElem (CElem element) = element
 

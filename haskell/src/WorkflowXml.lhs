@@ -34,20 +34,20 @@
 >     do map (attrVal) $ attributed "to" ((tag "arc") `o` children) (CElem element)
 >     where attrVal (v,_) = NodeId (read v::Int)
 
-> readExternalArcs element = forM childElem (readExternalArcFromElem)
+> readExternalArcs element = map (readExternalArcFromElem) childElem
 >     where
 >         childElem = XmlUtil.toElem $ ((tag "externalArc") `o` children) (CElem element)
 
-> readExternalArcFromElem e =
->     do workflowId <- readAttr e "workflowId"
->        version    <- readAttr e "version"
->        instanceId <- readAttr e "instanceId"
->        nodeId     <- readAttr e "nodeId"
->        arcTypeS   <- readAttr e "type"
->        let arcType = case (arcTypeS) of
->                          "in"      -> InArc
->                          otherwise -> OutArc
->        return $ ExternalArc nodeId workflowId (read version::Int) (read instanceId::Int) arcType
+> readExternalArcFromElem e = ExternalArc nodeId workflowId (read version::Int) (read instanceId::Int) arcType
+>     where
+>        workflowId = readAttr e "workflowId"
+>        version    = readAttr e "versionId"
+>        instanceId = readAttr e "instance"
+>        nodeId     = readAttr e "nodeId"
+>        arcType    = case (readAttr e "type") of
+>                         "in"      -> InArc
+>                         otherwise -> OutArc
+
 
 loadWfGraphFromFile
   Loads a WfGraph from the given file, using the given map of tag names to functions.
@@ -69,18 +69,23 @@ Given a name and a version number, this function will return the corresponding X
  loadWfGraph :: String -> Int -> (Map.Map Name (Element->XmlNode a)) -> IO (Either String (WfGraph a))
 
 > loadWfGraph name version elemFuncMap =
->     do maybeDoc <- liftIO $ loadXmlForWorkflow name version
+>     do maybeDoc <- loadXmlForWorkflow name version
 >        case (maybeDoc) of
->            Right doc -> return $ loadWfGraphFromDoc doc elemFuncMap
->            Left  msg -> throwError msg
+>            Right doc -> return $ Right $ loadWfGraphFromDoc doc elemFuncMap
+>            Left  msg -> return $ Left msg
 
 The following functions handle the generation of a WfGraph based on an XML document.
 The loadWfGraphFromDoc function takes a map of tag names to function which take
 elements of that type and return the appropriate XmlNode.
 
-> loadWfGraphFromDoc doc elemFuncMap = xmlNodesToWfGraph $ processChildNodes childNodes elemFuncMap Map.empty
+> loadWfGraphFromDoc doc elemFuncMap =
+>     do maybeExternal <- loadExternalWorkflows (Map.elems xmlNodes) elemFuncMap
+>        case (maybeExternal) of
+>            Left msg  -> return $ Left msg
+>            Right ext -> return $ Right $ xmlNodesToWfGraph xmlNodes
 >     where
 >         childNodes = getChildren (rootElement doc)
+>         xmlNodes   = processChildNodes childNodes elemFuncMap Map.empty
 
 > processChildNodes []       _           nodeMap = nodeMap
 > processChildNodes (e:rest) elemFuncMap nodeMap = processChildNodes rest elemFuncMap newNodeMap
@@ -90,25 +95,25 @@ elements of that type and return the appropriate XmlNode.
 >         node         = nodeFunction e
 >         newNodeMap   = Map.insert (getWfNodeId node) node nodeMap
 
---> loadExternalWorkflows xmlNodes elemFuncMap = foldr (f) startMap xmlNodes
--->     where
--->         f xmlNode wfMap = foldr (f') wfMap (externalArcs xmlNode)
--->         f' extArc maybeMapIO = do maybeMap <- maybeMapIO
--->                                   case (maybeMap) of
--->                                       Right wfMap -> loadExternal wfMap extArc elemFuncMap
--->                                       Left  msg   -> return $ Left msg
--->         startMap = do return $ Right Map.empty
---
---> loadExternal wfMap extArc elemFuncMap =
--->     if (Map.member key wfMap)
--->        then do return $ Right wfMap
--->        else do maybeGraph <- loadWfGraph (targetWf extArc) (targetVersion extArc) elemFuncMap
--->                case (maybeGraph) of
--->                    Right graph -> return $ Right $ Map.insert key graph wfMap
--->                    Left  msg   -> return $ Left msg
--->     where
--->         key = targetInstance extArc
--->
+> loadExternalWorkflows xmlNodes elemFuncMap = foldr (f) startMap xmlNodes
+>     where
+>         f xmlNode wfMap = foldr (f') wfMap (externalArcs xmlNode)
+>         f' extArc maybeMapIO = do maybeMap <- maybeMapIO
+>                                   case (maybeMap) of
+>                                       Right wfMap -> loadExternal wfMap extArc elemFuncMap
+>                                       Left  msg   -> return $ Left msg
+>         startMap = do return $ Right Map.empty
+
+> loadExternal wfMap extArc elemFuncMap =
+>     if (Map.member key wfMap)
+>        then do return $ Right wfMap
+>        else do maybeGraph <- loadWfGraph (targetWf extArc) (targetVersion extArc) elemFuncMap
+>                case (maybeGraph) of
+>                    Right graph -> return $ Right $ Map.insert key graph wfMap
+>                    Left  msg   -> return $ Left msg
+>     where
+>         key = targetInstance extArc
+>
 
 Function for processing the start element. There should be exactly one of these
 per workflow definition. It should contain only arc and externalArc elements. It
@@ -123,17 +128,13 @@ workflow. They have no logic associated with them. They have a nodeId, which
 should be unique in that workflow and a type, which corresponds to the NodeType
 type in Workflow. Nodes should contain only arc and externalArc elements.
 
-> processNodeElement element =
->     do nodeId   <- readAttr element "nodeId"
->        nodeType <- readAttr element "type"
->        completeXmlNode (newNode nodeId nodeType) element
+> processNodeElement element = completeXmlNode (newNode nodeId nodeType) element
 >     where
 >         newNode nodeId nodeType = Node (NodeId (read nodeId::Int)) (nodeTypeFromString nodeType) defaultGuard completeExecution
+>         nodeId = readAttr element "nodeId"
+>         nodeType = readAttr element "type"
 
-> completeXmlNode node element =
->    do externalArcs <- readExternalArcs element
->       return $ XmlNode node arcs externalArcs
->    where arcs = readArcs element
+> completeXmlNode node element = XmlNode node (readArcs element) (readExternalArcs element)
 
 > defaultElemFunctionMap = Map.fromList [ ("start", processStartElement),
 >                                         ("node",  processNodeElement) ]
