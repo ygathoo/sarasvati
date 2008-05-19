@@ -7,14 +7,15 @@ DONE - Have node generate task in queue
 DONE - Have console UI to view task in queue and complete tasks
 DONE - Implement Node guards
 DONE - Create workflow file format (not accounting for nested workflows)
+DONE - Implement nested workflows
 
 In Progress:
 ---------------------------------------------------------------------
-Implement nested workflows
+
 
 Next steps:
 ---------------------------------------------------------------------
-
+Allow for named arcs
 Allow the token to carry state.
 
 
