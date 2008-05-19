@@ -3,7 +3,7 @@
  */
 package org.codemonk.wf;
 
-public enum GuardResponse
+public enum GuardAction
 {
   AcceptToken, DiscardToken, SkipNode;
 }
