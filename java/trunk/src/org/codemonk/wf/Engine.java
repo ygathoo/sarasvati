@@ -81,12 +81,12 @@ public abstract class Engine
     }
   }
 
-  protected void finishAccept (IProcess process, INode targetNode, List<IArcToken> tokens)
+  private void finishAccept (IProcess process, INode targetNode, List<IArcToken> tokens)
   {
-    for ( IArcToken arcToken : tokens )
+    for ( IArcToken token : tokens )
     {
-      process.removeArcToken( arcToken );
-      arcToken.markComplete();
+      process.removeArcToken( token );
+      token.markComplete();
     }
 
     acceptWithGuard( process, newNodeToken( process, targetNode, tokens ) );
