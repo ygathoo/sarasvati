@@ -1,5 +1,6 @@
 package org.codemonk.wf.test;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -12,44 +13,44 @@ import org.codemonk.wf.db.NodeToken;
 import org.hibernate.Session;
 
 @Entity
-@Table (name="wf_node_task")
+@Table (name = "wf_node_task")
 public class NodeTask extends Node
 {
-  protected String name;
+  @Column (name = "name")
+  protected String taskName;
 
-  protected String description;
+  @Column (name = "description")
+  protected String taskDesc;
 
-  public String getName()
+  public String getTaskName ()
   {
-    return name;
+    return taskName;
   }
 
-  public void setName( String name )
+  public void setTaskName (String taskName)
   {
-    this.name = name;
+    this.taskName = taskName;
   }
 
-  public String getDescription()
+  public String getTaskDesc ()
   {
-    return description;
+    return taskDesc;
   }
 
-  public void setDescription( String description )
+  public void setTaskDesc (String taskDesc)
   {
-    this.description = description;
+    this.taskDesc = taskDesc;
   }
 
   @Override
-  public void execute( Engine engine, IProcess process, INodeToken token )
+  public void execute (Engine engine, IProcess process, INodeToken token)
   {
     HibernateEngine hibEngine = (HibernateEngine)engine;
 
     Session session = hibEngine.getSession();
 
-    TaskState open = (TaskState) session.load( TaskState.class, 0 );
-    Task newTask = new Task( (NodeToken)token, getName(), getDescription(), open );
+    TaskState open = (TaskState)session.load( TaskState.class, 0 );
+    Task newTask = new Task( (NodeToken)token, getTaskName(), getTaskDesc(), open );
     session.save( newTask );
   }
-
-
 }

@@ -88,6 +88,7 @@ public class Arc implements IArc
     this.endNode = endNode;
   }
 
+  @Override
   public String toString ()
   {
     return "[Arc id=" + id + " name=" + name + "]";
