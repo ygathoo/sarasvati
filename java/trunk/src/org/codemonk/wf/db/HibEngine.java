@@ -101,6 +101,6 @@ public class HibEngine extends Engine
   @SuppressWarnings("unchecked")
   public List<HibGraph> getGraphs ()
   {
-    return session.createQuery( "from Graph" ).list();
+    return session.createQuery( "from HibGraph" ).list();
   }
 }

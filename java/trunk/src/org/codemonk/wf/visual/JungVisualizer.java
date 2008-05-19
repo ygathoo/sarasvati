@@ -16,16 +16,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.codemonk.wf.db.HibArc;
-import org.codemonk.wf.db.HibGraph;
 import org.codemonk.wf.db.HibEngine;
+import org.codemonk.wf.db.HibGraph;
 import org.codemonk.wf.db.HibNodeRef;
 import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;
 
-import edu.uci.ics.jung.algorithms.layout.KKLayout;
-import edu.uci.ics.jung.algorithms.layout.SpringLayout2;
-import edu.uci.ics.jung.algorithms.layout.TreeLayout;
-import edu.uci.ics.jung.graph.DirectedSparseGraph;
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
@@ -82,7 +78,8 @@ public class JungVisualizer
     DirectedSparseMultigraph<HibNodeRef, HibArc> graph = new DirectedSparseMultigraph<HibNodeRef, HibArc>();
 
     //final SpringLayout2<NodeRef, Arc> layout = new SpringLayout2<NodeRef, Arc>(graph);
-    final KKLayout<HibNodeRef, HibArc> layout = new KKLayout<HibNodeRef, HibArc>(graph);
+    // final KKLayout<HibNodeRef, HibArc> layout = new KKLayout<HibNodeRef, HibArc>(graph);
+    final TreeLayout layout = new TreeLayout( graph );
     final BasicVisualizationServer<HibNodeRef, HibArc> vs = new BasicVisualizationServer<HibNodeRef, HibArc>(layout);
 
     final JScrollPane scrollPane = new JScrollPane( vs );
@@ -124,7 +121,10 @@ public class JungVisualizer
           jungGraph.addEdge( arc, arc.getStartNode(), arc.getEndNode() );
         }
 
+        GraphTree graphTree = new GraphTree( g );
         layout.setGraph( jungGraph );
+        layout.setInitializer( new NodeLocationTransformer( graphTree ) );
+        // layout.setGraph( jungGraph );
         scrollPane.repaint();
       }
     } );
