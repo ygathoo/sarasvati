@@ -43,6 +43,12 @@ public class NodeTask extends HibNode
   }
 
   @Override
+  public String getLabel ()
+  {
+    return taskName;
+  }
+
+  @Override
   public void execute (Engine engine, Process process, NodeToken token)
   {
     HibEngine hibEngine = (HibEngine)engine;

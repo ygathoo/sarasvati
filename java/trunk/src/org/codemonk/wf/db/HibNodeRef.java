@@ -93,6 +93,12 @@ public class HibNodeRef implements Node
   }
 
   @Override
+  public String getLabel ()
+  {
+    return node.getLabel();
+  }
+
+  @Override
   public GuardResponse guard (Process process, NodeToken token)
   {
     return node.guard( process, token );
