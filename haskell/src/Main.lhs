@@ -42,16 +42,34 @@
 >   | taskNumber == 1 = Right first
 >   | otherwise       = getTask (taskNumber - 1) rest
 
+> showTokens []     = do return ()
+> showTokens (x:xs) =
+>   do putStrLn (show x)
+>      showTokens xs
+
 > processTasks wf@(WfInstance graph tokenList tasks) =
 >  do putStrLn ""
 >     showTaskList tasks
 >     putStr "> "
->     taskNo <- getLine
->     case (getTask ((read taskNo)::Integer) tasks) of
->       Left msg -> do putStrLn msg
->                      processTasks wf
->       Right task -> do newWf <- handleTask task wf
->                        processTasks newWf
+>     cmd <- getLine
+>     case (getCmdType cmd) of
+>       ShowTokenCmd -> do showTokens tokenList
+>                          processTasks wf
+>       TaskCmd ->
+>         case (getTask ((read cmd)::Integer) tasks) of
+>           Left msg -> do putStrLn msg
+>                          processTasks wf
+>           Right task -> do newWf <- handleTask task wf
+>                            processTasks newWf
+>       BadCmd     -> do putStrLn $ cmd ++ " is not a valid command or task entry"
+>                        processTasks wf
+
+> data CmdType = ShowTokenCmd | TaskCmd | BadCmd
+
+> getCmdType input
+>   | (map (toUpper) input) == "T" = ShowTokenCmd
+>   | all (isDigit) input          = TaskCmd
+>   | otherwise                    = BadCmd
 
 > main = do hSetBuffering stdout NoBuffering
 >           case (startWorkflow graph []) of
