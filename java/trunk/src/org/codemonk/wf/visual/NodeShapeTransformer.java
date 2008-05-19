@@ -15,17 +15,27 @@ public class NodeShapeTransformer implements Transformer<HibNodeRef, Shape>
   protected Transformer<HibNodeRef, Integer> sizeTrans = new Transformer<HibNodeRef, Integer>()
   {
     @Override
-    public Integer transform( HibNodeRef arg0 )
+    public Integer transform( HibNodeRef nodeRef )
     {
-      return 40;
+      if ( "task".equals( nodeRef.getType() ) )
+      {
+        return TaskIcon.WIDTH;
+      }
+
+      return 20;
     }
   };
 
   protected Transformer<HibNodeRef, Float> aspectTrans = new Transformer<HibNodeRef, Float>()
   {
     @Override
-    public Float transform( HibNodeRef arg0 )
+    public Float transform( HibNodeRef nodeRef )
     {
+      if ( "task".equals( nodeRef.getType() ) )
+      {
+        return (float)TaskIcon.HEIGHT / TaskIcon.WIDTH;
+      }
+
       return 1f;
     }
   };
