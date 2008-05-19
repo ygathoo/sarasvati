@@ -9,8 +9,8 @@
 >     where
 >         nodeId         = readAttr element "nodeId"
 >         nodeTypeStr    = readAttr element "type"
->         name           = readAttr element "name"
->         desc           = readAttr element "description"
+>         name           = readText element "name"
+>         desc           = readText element "description"
 >
 >         nodeType       = nodeTypeFromString nodeTypeStr
 >
