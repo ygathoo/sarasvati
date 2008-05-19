@@ -3,7 +3,7 @@
  */
 package org.codemonk.wf;
 
-public interface IArcToken extends IToken
+public interface IToken
 {
-  IArc getArc ();
+  void markComplete ();
 }

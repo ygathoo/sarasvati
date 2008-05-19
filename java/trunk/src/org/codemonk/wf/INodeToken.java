@@ -3,7 +3,7 @@
  */
 package org.codemonk.wf;
 
-public interface INodeToken
+public interface INodeToken extends IToken
 {
   INode getNode ();
 }

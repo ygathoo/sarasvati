@@ -8,10 +8,6 @@ import java.util.List;
 
 public abstract class Engine
 {
-  abstract void markTokenComplete (IArcToken token);
-
-  abstract void markTokenComplete (INodeToken token);
-
   abstract INodeToken newNodeToken (INode node, List<IArcToken> parents);
 
   abstract IArcToken newArcToken (IArc arc, INodeToken parent);
@@ -25,7 +21,7 @@ public abstract class Engine
         break;
 
       case DiscardToken :
-        markTokenComplete( token );
+        token.markComplete();
         break;
 
       case SkipNode :
@@ -96,7 +92,7 @@ public abstract class Engine
     for ( IArcToken arcToken : tokens )
     {
       wfRun.removeArcToken( arcToken );
-      markTokenComplete( arcToken );
+      arcToken.markComplete();
     }
 
     INodeToken newToken = newNodeToken( targetNode, tokens );
@@ -108,7 +104,7 @@ public abstract class Engine
   {
     List<IArc> outputArcs = wfRun.getGraph().getOutputArcs( token.getNode(), arcName );
 
-    markTokenComplete( token );
+    token.markComplete();
     wfRun.removeNodeToken( token );
 
     for ( IArc arc : outputArcs )
