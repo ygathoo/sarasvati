@@ -48,10 +48,10 @@ public class HibernateEngine extends Engine
   protected NodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents)
   {
     // Here we setup the token attributes for the new node
-    // If the node has no precessors, it will have no attributes
+    // If the node has no predecessors, it will have no attributes
     // If it has only one processor (or only one processor with attributes)
     // it will inherit the attributes of that one node
-    // Otherwise, the attributes of all precessor nodes will get merged into
+    // Otherwise, the attributes of all predecessor nodes will get merged into
     // a single set.
     List<ArcToken> hibParents = (List<ArcToken>)(List<?>)parents;
 
