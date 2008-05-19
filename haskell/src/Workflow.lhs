@@ -3,6 +3,7 @@
 
 > data Token =
 >   Token {
+>     tokenId::[Int],
 >     node::Node
 >  }
 >  deriving (Show)
@@ -11,13 +12,24 @@
 
 > data Node =
 >   Node {
->     nodeType::NodeType,
->     outputs::[Node]
+>     name    :: String,
+>     nodeType:: NodeType,
+>     inputs  :: [Node],
+>     outputs :: [Node]
 >   }
 
-> instance Show WFNode where
+> instance Show Node where
 >   show a = "[Node outputs" ++ (show (outputs a)) ++ "]"
 
-> passthrough node [] = []
+> removeToken token [] = []
+> removeToken token (x:xs)
+>    | (tokenId token) == (tokenId x) = xs
+>    | otherwise = x : removeToken token xs
 
-> passthrough node (x:xs) =
+> accept :: Token -> [Token] -> Node -> [Token]
+> accept token tokenList (Node name PassThrough inputs []) = removeToken token tokenList
+> accept token tokenList (Node name PassThrough inputs [x]) =
+>    accept newToken newTokenList x
+>  where
+>    newToken = Token (tokenId token) x
+>    newTokenList = newToken : removeToken token tokenList

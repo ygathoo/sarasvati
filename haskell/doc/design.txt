@@ -1,6 +1,16 @@
 
 
+Node: Node in Directed Graph
+  inputs: List of nodes. Each node in the list has this node as an output.
+  outputs: List of nodes. Each node in the list has this node as an input.
+
+Token: Represents the current state of execution
+  node: The node that this token is at
+
+
 Node Types
 
 Split:
-  Behaviour: Generates a token at every output
+  Generates a token at every output.
+
+Join:
