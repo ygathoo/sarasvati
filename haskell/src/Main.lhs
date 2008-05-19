@@ -19,4 +19,6 @@
 
 > main = do case (startWorkflow graph) of
 >             Left msg -> putStrLn msg
->             Right tokenListIO -> putStrLn "Workflow started"
+>             Right tokenListIO -> do tokenList <- tokenListIO
+>                                     putStrLn "Workflow started"
+>                                     putStrLn $ "Result: " ++ show tokenList
