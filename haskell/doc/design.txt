@@ -1,0 +1,6 @@
+
+
+Node Types
+
+Split:
+  Behaviour: Generates a token at every output
