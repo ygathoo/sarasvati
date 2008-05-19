@@ -8,12 +8,15 @@
 	<classpathentry kind="lib" path="lib/antlr-2.7.6.jar"/>
 	<classpathentry kind="lib" path="lib/asm.jar"/>
 	<classpathentry kind="lib" path="lib/cglib.jar"/>
-	<classpathentry kind="lib" path="lib/commons-collections.jar"/>
 	<classpathentry kind="lib" path="lib/commons-logging.jar"/>
 	<classpathentry kind="lib" path="lib/dom4j.jar"/>
 	<classpathentry kind="lib" path="lib/jboss-j2ee.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-3.2.6.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-annotations-3.3.1.jar"/>
 	<classpathentry kind="lib" path="lib/hibernate-commons-annotations-3.3.1.jar"/>
+	<classpathentry kind="lib" path="lib/collections-generic-4.01.jar"/>
+	<classpathentry kind="lib" path="lib/colt-1.2.0.jar"/>
+	<classpathentry kind="lib" path="lib/commons-collections-3.2.jar"/>
+	<classpathentry kind="lib" path="lib/jung-2.0-alpha3.jar" sourcepath="lib/jung-2.0-alpha3-src.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
