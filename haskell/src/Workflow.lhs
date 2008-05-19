@@ -13,19 +13,19 @@ Node
 
   Connections between Nodes are represented by NodeArcs and WFGraph
 
-> data Node = NullNode
->           | Node {
->               nodeId  :: Integer,
->               accept  :: (Token -> WFGraph -> [Token] -> IO [Token])
->             }
+> data Node a = NullNode
+>             | Node {
+>                 nodeId  :: Integer,
+>                 accept  :: (Token a -> WfInstance a -> IO (WfInstance a))
+>               }
 
-> instance Eq Node where
+> instance Eq (Node a) where
 >   NullNode  == NullNode = True
 >   NullNode  == _        = False
 >   _         == NullNode = False
 >   node1     == node2    = (nodeId node1) == (nodeId node2)
 
-> instance Show Node where
+> instance Show (Node a) where
 >   show NullNode = "[Node: NullNode]"
 >   show a        = "[Node id: " ++ (show (nodeId a)) ++ "]"
 
@@ -37,11 +37,11 @@ NodeArcs
     nodeInputs: The list of incoming node connections
     nodeOutputs: The list of outgoing node connections
 
-> data NodeArcs =
+> data NodeArcs a =
 >   NodeArcs {
->     node :: Node,
->     nodeInputs :: [Node],
->     nodeOutputs :: [Node]
+>     node :: Node a,
+>     nodeInputs :: [Node a],
+>     nodeOutputs :: [Node a]
 >  }
 
 Token
@@ -55,53 +55,57 @@ Token
     nextNode: If the token is between nodes, this will be set to the node
               it is going to. Otherwise it will be set to NullNode
 
-> data Token =
+> data Token a =
 >   Token {
 >     tokenId::[Int],
->     prevNode::Node,
->     currNode::Node,
->     nextNode::Node
+>     prevNode::Node a,
+>     currNode::Node a,
+>     nextNode::Node a
 >  }
 >  deriving (Show)
 
-> instance Eq Token where
+> instance Eq (Token a) where
 >   t1 == t2 = (tokenId t1) == (tokenId t2)
 
 WFGraph
   This is just a container for NodeArcs, which can be queried
   for the inputs and outputs of a given node
 
-> data WFGraph =
->   WFGraph {
->     nodeMap :: Map Integer NodeArcs
->   }
+> type WfGraph a = Map Integer (NodeArcs a)
 
-> instance Show WFGraph where
->  show graph = "[WFGraph " ++ show (Map.size $ nodeMap graph) ++ "]"
+> data WfInstance a =
+>   WfInstance {
+>     wfGraph   :: WfGraph a,
+>     tokenList :: [Token a],
+>     userData  :: a
+>   }
 
 inputs
   Returns the Nodes which are inputs to the given node
 
-> inputs graph node = nodeInputs $ (nodeMap graph) Map.! (nodeId node)
+> inputs graph node = nodeInputs $ graph Map.! (nodeId node)
 
 outputs
   Returns the Nodes which are outputs of the given node
 
-> outputs graph node = nodeOutputs $ (nodeMap graph) Map.! (nodeId node)
+> outputs graph node = nodeOutputs $ graph Map.! (nodeId node)
 
 graphFromArcs
   Generates a WFGraph from a list of NodeArcs
 
-> graphFromArcs arcs = WFGraph $ Map.fromList $ zip (map (nodeId.node) arcs) arcs
+> graphFromArcs arcs = Map.fromList $ zip (map (nodeId.node) arcs) arcs
 
-> startWorkflow :: WFGraph -> Either String (IO [Token])
-> startWorkflow graph
+> tokenForId tid (WfInstance graph tokenList userData) =
+>   head $ filter (\t -> (tokenId t) == tid) tokenList
+
+> startWorkflow :: WfGraph a -> a -> Either String (IO (WfInstance a))
+> startWorkflow graph userData
 >     | null startNodes       = Left "Error: Workflow has no start node"
 >     | length startNodes > 1 = Left "Error: Workflow has more than one start node"
->     | otherwise             = Right $ acceptToken (Token [1] NullNode NullNode startNode) graph []
+>     | otherwise             = Right $ acceptToken (Token [1] NullNode NullNode startNode) $ WfInstance graph [] userData
 >   where
->     startNodes = filter (\x -> x < 0) $ Map.keys (nodeMap graph)
->     startNode  = node $ (nodeMap graph) Map.! (head startNodes)
+>     startNodes = filter (\x -> x < 0) $ Map.keys graph
+>     startNode  = node $ graph Map.! (head startNodes)
 
 removeFirst
   Removes the first instance in a list for which the given predicate
@@ -139,21 +143,21 @@ acceptP
   Accept function for a 'passthrough' node. This type of node is assumed to have one input and one output.
   The function just passes through to the next node in line.
 
-> passthrough :: Token -> WFGraph -> [Token] -> IO [Token]
-> passthrough token graph tokenList =
->   do putStrLn $ "Passing through node " ++ show (nextNode token)
->      completeExecution token graph tokenList
+  passthrough :: Token a -> WfInstance a -> IO (WfInstance a)
+
+> passthrough token wf = do putStrLn $ "Passing through node " ++ show (currNode token)
+>                           completeExecution token wf
 
 completeExecution
   Generates a new token for each output node of the current node of the given token
 
-> completeExecution :: Token -> WFGraph -> [Token] -> IO [Token]
-> completeExecution token graph tokenList
+> completeExecution :: Token a -> WfInstance a -> IO (WfInstance a)
+> completeExecution token wf@(WfInstance graph tokenList userData)
 >   | hasNoOutputs = do putStrLn $ (show currentNode) ++ " has no outputs. Discarding tokens"
->                       return tokenList
+>                       return wf
 >   | hasOneOutput = do putStrLn $ "Sending token to " ++ show (head outputNodes) ++ " from " ++ show currentNode
->                       acceptToken newToken graph tokenList
->   | otherwise    = split outputNodes tokenList 0
+>                       acceptToken newToken wf
+>   | otherwise    = split outputNodes wf 0
 >   where
 >     hasNoOutputs                   = null outputNodes
 >     hasOneOutput                   = null $ tail outputNodes
@@ -162,21 +166,21 @@ completeExecution
 >     outputNodes                    = outputs graph currentNode
 >     newToken                       = Token (tokenId token) currentNode NullNode (head outputNodes)
 >     newForkToken nextNode counter  = Token (nextForkId token counter) currentNode NullNode nextNode
->     split [] tokenList _           = return tokenList
->     split (x:xs) tokenList counter = do putStrLn $ "Sending token to " ++ show x ++ " from " ++ show currentNode
->                                         newTokenList <- acceptToken (newForkToken x counter) graph tokenList
->                                         split xs newTokenList (counter + 1)
+>     split [] wf _                  = return wf
+>     split (x:xs) wf counter        = do putStrLn $ "Sending token to " ++ show x ++ " from " ++ show currentNode
+>                                         newWf <- acceptToken (newForkToken x counter) wf
+>                                         split xs newWf (counter + 1)
 
 acceptToken
   Requires that a token from every input (counting the currently processed token) exist before
   passing a token to the output node.
 
-> acceptToken :: Token -> WFGraph -> [Token] -> IO [Token]
-> acceptToken token graph tokenList
+> acceptToken :: Token a -> WfInstance a -> IO (WfInstance a)
+> acceptToken token wf@(WfInstance graph tokenList userData)
 >   | areAllInputsPresent = do putStrLn $ "All inputs received at " ++ show targetNode ++ ". Calling accept function"
->                              (accept targetNode) newToken graph outputTokenList
+>                              (accept targetNode) newToken (WfInstance graph (newToken:outputTokenList) userData)
 >   | otherwise           = do putStrLn $ "Join node " ++ show targetNode ++ " doesn't have all inputs yet"
->                              return $ token : tokenList
+>                              return $ WfInstance graph (token : tokenList) userData
 >   where
 >     areAllInputsPresent           = all (inputHasToken (token:tokenList)) inputNodes
 >
