@@ -89,14 +89,8 @@ public class GraphDrawing extends JComponent
 
   protected void drawArc (Graphics g, IArc arc, GraphTreeNode start, GraphTreeNode end)
   {
-    if ( "reject".equals( arc.getName() ) )
-    {
-      g.setColor( Color.red );
-    }
-    else
-    {
-      g.setColor( Color.black );
-    }
+    boolean isReject = "reject".equals( arc.getName() );
+    g.setColor( isReject ? Color.red : Color.black );
 
     if ( start.getDepth() < end.getDepth() )
     {
