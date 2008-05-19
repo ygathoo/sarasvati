@@ -8,18 +8,18 @@ import java.util.Map;
 
 import org.codemonk.wf.IArc;
 import org.codemonk.wf.INode;
-import org.codemonk.wf.db.Graph;
-import org.codemonk.wf.db.NodeRef;
+import org.codemonk.wf.db.HibGraph;
+import org.codemonk.wf.db.HibNodeRef;
 
 public class GraphTree
 {
-  protected Map<NodeRef, GraphTreeNode> nodeMap = new HashMap<NodeRef, GraphTreeNode>();
+  protected Map<HibNodeRef, GraphTreeNode> nodeMap = new HashMap<HibNodeRef, GraphTreeNode>();
 
   protected GraphTreeNode root = new GraphTreeNode( null, null );
 
   protected List<List<GraphTreeNode>> layers = new LinkedList<List<GraphTreeNode>>();
 
-  public GraphTree (Graph graph)
+  public GraphTree (HibGraph graph)
   {
     List<GraphTreeNode> nextLayer = new LinkedList<GraphTreeNode>();
 
@@ -27,7 +27,7 @@ public class GraphTree
 
     if ( startNodes.isEmpty() )
     {
-      List<NodeRef> nodeRefs = graph.getNodeRefs();
+      List<HibNodeRef> nodeRefs = graph.getNodeRefs();
 
       if ( !nodeRefs.isEmpty() )
       {
@@ -38,7 +38,7 @@ public class GraphTree
 
     for ( INode node : startNodes )
     {
-      NodeRef nodeRef = (NodeRef)node;
+      HibNodeRef nodeRef = (HibNodeRef)node;
       GraphTreeNode treeNode = GraphTreeNode.newInstance( root, nodeRef );
 
       nodeMap.put( nodeRef, treeNode );
@@ -60,7 +60,7 @@ public class GraphTree
 
         for ( IArc arc : arcs )
         {
-          NodeRef target = (NodeRef)arc.getEndNode();
+          HibNodeRef target = (HibNodeRef)arc.getEndNode();
           GraphTreeNode targetTreeNode = nodeMap.get( target );
 
           if (targetTreeNode == null)
@@ -74,7 +74,7 @@ public class GraphTree
     }
   }
 
-  public GraphTreeNode getTreeNode (NodeRef node)
+  public GraphTreeNode getTreeNode (HibNodeRef node)
   {
     return nodeMap.get( node );
   }

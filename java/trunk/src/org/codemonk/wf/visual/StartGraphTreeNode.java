@@ -3,11 +3,11 @@ package org.codemonk.wf.visual;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import org.codemonk.wf.db.NodeRef;
+import org.codemonk.wf.db.HibNodeRef;
 
 public class StartGraphTreeNode extends GraphTreeNode
 {
-  public StartGraphTreeNode( GraphTreeNode parent, NodeRef node )
+  public StartGraphTreeNode( GraphTreeNode parent, HibNodeRef node )
   {
     super( parent, node );
     color = new Color( 102, 152, 102 );

@@ -9,8 +9,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.codemonk.wf.db.NodeRef;
-import org.codemonk.wf.db.NodeToken;
+import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.db.HibNodeToken;
 
 @Entity
 @Table(name = "wf_task")
@@ -22,7 +22,7 @@ public class Task
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "node_token_id")
-  protected NodeToken nodeToken;
+  protected HibNodeToken nodeToken;
 
   protected String    name;
 
@@ -34,7 +34,7 @@ public class Task
 
   public Task() { /* Default constructor for Hibernate */ }
 
-  public Task( NodeToken nodeToken, String name, String description, TaskState state )
+  public Task( HibNodeToken nodeToken, String name, String description, TaskState state )
   {
     this.nodeToken = nodeToken;
     this.name = name;
@@ -52,12 +52,12 @@ public class Task
     this.id = id;
   }
 
-  public NodeToken getNodeToken()
+  public HibNodeToken getNodeToken()
   {
     return nodeToken;
   }
 
-  public void setNodeToken( NodeToken nodeToken )
+  public void setNodeToken( HibNodeToken nodeToken )
   {
     this.nodeToken = nodeToken;
   }
@@ -94,7 +94,7 @@ public class Task
 
   public boolean isRejectable ()
   {
-    NodeRef nodeRef = getNodeToken().getNode();
+    HibNodeRef nodeRef = getNodeToken().getNode();
     return !nodeRef.getGraph().getOutputArcs( nodeRef, "reject" ).isEmpty();
   }
 

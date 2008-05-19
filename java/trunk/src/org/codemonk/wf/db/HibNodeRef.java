@@ -20,7 +20,7 @@ import org.codemonk.wf.IProcess;
 
 @Entity
 @Table (name="wf_node_ref")
-public class NodeRef implements INode
+public class HibNodeRef implements INode
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -28,11 +28,11 @@ public class NodeRef implements INode
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn(name="node_id")
-  protected Node node;
+  protected HibNode node;
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="graph_id")
-  protected Graph graph;
+  protected HibGraph graph;
 
   protected String instance;
 
@@ -46,22 +46,22 @@ public class NodeRef implements INode
     this.id = id;
   }
 
-  public Node getNode ()
+  public HibNode getNode ()
   {
     return node;
   }
 
-  public void setNode (Node node)
+  public void setNode (HibNode node)
   {
     this.node = node;
   }
 
-  public Graph getGraph ()
+  public HibGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (Graph graph)
+  public void setGraph (HibGraph graph)
   {
     this.graph = graph;
   }
@@ -119,8 +119,8 @@ public class NodeRef implements INode
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof NodeRef ) ) return false;
-    final NodeRef other = (NodeRef)obj;
+    if ( !( obj instanceof HibNodeRef ) ) return false;
+    final HibNodeRef other = (HibNodeRef)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;

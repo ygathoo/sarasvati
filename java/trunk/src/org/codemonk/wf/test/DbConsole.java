@@ -4,9 +4,9 @@ import java.io.Console;
 import java.util.List;
 
 import org.codemonk.wf.IArc;
-import org.codemonk.wf.db.Graph;
-import org.codemonk.wf.db.HibernateEngine;
-import org.codemonk.wf.db.Process;
+import org.codemonk.wf.db.HibGraph;
+import org.codemonk.wf.db.HibEngine;
+import org.codemonk.wf.db.HibProcess;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -20,10 +20,10 @@ public class DbConsole
     {
       Session session = TestSetup.openSession();
       Transaction t = session.beginTransaction();
-      HibernateEngine engine = new HibernateEngine( session );
+      HibEngine engine = new HibEngine( session );
 
-      Graph graph = getGraph( engine );
-      Process process = (Process)engine.startWorkflow( graph );
+      HibGraph graph = getGraph( engine );
+      HibProcess process = (HibProcess)engine.startWorkflow( graph );
       session.flush();
       t.commit();
       session.close();
@@ -39,9 +39,9 @@ public class DbConsole
     {
       Session session = TestSetup.openSession();
       Transaction trans = session.beginTransaction();
-      HibernateEngine engine = new HibernateEngine( session );
+      HibEngine engine = new HibEngine( session );
 
-      Process p = (Process) session.load( Process.class, processId );
+      HibProcess p = (HibProcess) session.load( HibProcess.class, processId );
       if (p.isComplete() )
       {
         System.out.println( "Workflow complete" );
@@ -93,7 +93,7 @@ public class DbConsole
     }
   }
 
-  public static void processTask (Task t, HibernateEngine engine)
+  public static void processTask (Task t, HibEngine engine)
   {
     System.out.println( "Task " );
     System.out.println( "\tName        : "  + t.getName() );
@@ -144,16 +144,16 @@ public class DbConsole
     }
   }
 
-  public static Graph getGraph (HibernateEngine engine)
+  public static HibGraph getGraph (HibEngine engine)
   {
-    Graph graph = null;
+    HibGraph graph = null;
 
     while ( graph == null )
     {
-      List<Graph> graphs = engine.getGraphs();
+      List<HibGraph> graphs = engine.getGraphs();
 
       int count = 0;
-      for (Graph g : engine.getGraphs() )
+      for (HibGraph g : engine.getGraphs() )
       {
         System.out.println( (++count) + ": " + g.getName() + ": version " + g.getVersion() );
       }

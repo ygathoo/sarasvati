@@ -25,7 +25,7 @@ import org.codemonk.wf.INode;
 
 @Entity
 @Table (name="wf_graph")
-public class Graph implements IGraph
+public class HibGraph implements IGraph
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -34,16 +34,16 @@ public class Graph implements IGraph
   protected int    version;
 
   @OneToMany (fetch=FetchType.EAGER, mappedBy="graph")
-  protected List<NodeRef> nodeRefs;
+  protected List<HibNodeRef> nodeRefs;
 
   @OneToMany (fetch=FetchType.EAGER, mappedBy="graph")
-  protected List<Arc>     arcs;
+  protected List<HibArc>     arcs;
 
   @Transient
-  protected Map<NodeRef, List<IArc>> inputMap;
+  protected Map<HibNodeRef, List<IArc>> inputMap;
 
   @Transient
-  protected Map<NodeRef, List<IArc>> outputMap;
+  protected Map<HibNodeRef, List<IArc>> outputMap;
 
   public Long getId ()
   {
@@ -76,22 +76,22 @@ public class Graph implements IGraph
     this.version = version;
   }
 
-  public List<NodeRef> getNodeRefs ()
+  public List<HibNodeRef> getNodeRefs ()
   {
     return nodeRefs;
   }
 
-  public void setNodeRefs (List<NodeRef> nodeRefs)
+  public void setNodeRefs (List<HibNodeRef> nodeRefs)
   {
     this.nodeRefs = nodeRefs;
   }
 
-  public List<Arc> getArcs ()
+  public List<HibArc> getArcs ()
   {
     return arcs;
   }
 
-  public void setArcs (List<Arc> arcs)
+  public void setArcs (List<HibArc> arcs)
   {
     this.arcs = arcs;
   }
@@ -150,12 +150,12 @@ public class Graph implements IGraph
 
   public void initialize ()
   {
-    inputMap  = new HashMap<NodeRef, List<IArc>>();
-    outputMap = new HashMap<NodeRef, List<IArc>>();
+    inputMap  = new HashMap<HibNodeRef, List<IArc>>();
+    outputMap = new HashMap<HibNodeRef, List<IArc>>();
 
-    for ( Arc arc : arcs )
+    for ( HibArc arc : arcs )
     {
-      NodeRef node = arc.getStartNode();
+      HibNodeRef node = arc.getStartNode();
       List<IArc> list = outputMap.get( node );
 
       if ( list == null )
@@ -179,7 +179,7 @@ public class Graph implements IGraph
     }
 
     List<IArc> emptyList = Collections.emptyList();
-    for (NodeRef node : nodeRefs )
+    for (HibNodeRef node : nodeRefs )
     {
       if ( !inputMap.containsKey( node ) )
       {
@@ -197,7 +197,7 @@ public class Graph implements IGraph
   {
     List<INode> startNodes = new LinkedList<INode>();
 
-    for ( NodeRef node : getNodeRefs() )
+    for ( HibNodeRef node : getNodeRefs() )
     {
       if ( "start".equals( node.getType() ) && node.getGraph().equals( this ) )
       {
@@ -238,8 +238,8 @@ public class Graph implements IGraph
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof Graph ) ) return false;
-    final Graph other = (Graph)obj;
+    if ( !( obj instanceof HibGraph ) ) return false;
+    final HibGraph other = (HibGraph)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;

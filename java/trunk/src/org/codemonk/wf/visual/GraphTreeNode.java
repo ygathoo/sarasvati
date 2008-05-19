@@ -4,13 +4,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-import org.codemonk.wf.db.NodeRef;
+import org.codemonk.wf.db.HibNodeRef;
 
 public class GraphTreeNode
 {
   protected GraphTreeNode parent;
 
-  protected NodeRef node;
+  protected HibNodeRef node;
   protected int     depth;
   protected int     index;
 
@@ -19,7 +19,7 @@ public class GraphTreeNode
 
   protected Color   color = new Color( 102, 152, 102 );
 
-  public static GraphTreeNode newInstance (GraphTreeNode parent, NodeRef nodeRef)
+  public static GraphTreeNode newInstance (GraphTreeNode parent, HibNodeRef nodeRef)
   {
     if ( "start".equalsIgnoreCase( nodeRef.getType() ) )
     {
@@ -36,7 +36,7 @@ public class GraphTreeNode
   }
 
 
-  public GraphTreeNode (GraphTreeNode parent, NodeRef node)
+  public GraphTreeNode (GraphTreeNode parent, HibNodeRef node)
   {
     this.node = node;
     this.parent = parent;
@@ -51,7 +51,7 @@ public class GraphTreeNode
     }
   }
 
-  public NodeRef getNode ()
+  public HibNodeRef getNode ()
   {
     return node;
   }

@@ -23,7 +23,7 @@ import org.hibernate.annotations.Where;
 
 @Entity
 @Table (name="wf_process")
-public class Process implements IProcess
+public class HibProcess implements IProcess
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -31,19 +31,19 @@ public class Process implements IProcess
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn( name="graph_id")
-  protected Graph            graph;
+  protected HibGraph            graph;
 
-  @OneToMany (mappedBy="process", targetEntity=ArcToken.class, fetch=FetchType.LAZY)
+  @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
   protected List<IArcToken>  arcTokens;
 
-  @OneToMany (mappedBy="process", targetEntity=NodeToken.class, fetch=FetchType.LAZY)
+  @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
   protected List<INodeToken>  nodeTokens;
 
-  public Process () { /* Default constructor for Hibernate */ }
+  public HibProcess () { /* Default constructor for Hibernate */ }
 
-  public Process (Graph graph)
+  public HibProcess (HibGraph graph)
   {
     this.graph = graph;
     this.arcTokens = new LinkedList<IArcToken>();
@@ -61,12 +61,12 @@ public class Process implements IProcess
   }
 
   @Override
-  public Graph getGraph ()
+  public HibGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (Graph graph)
+  public void setGraph (HibGraph graph)
   {
     this.graph = graph;
   }
@@ -136,8 +136,8 @@ public class Process implements IProcess
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof Process ) ) return false;
-    final Process other = (Process)obj;
+    if ( !( obj instanceof HibProcess ) ) return false;
+    final HibProcess other = (HibProcess)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;

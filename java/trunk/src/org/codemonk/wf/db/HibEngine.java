@@ -16,11 +16,11 @@ import org.codemonk.wf.INodeToken;
 import org.codemonk.wf.IProcess;
 import org.hibernate.Session;
 
-public class HibernateEngine extends Engine
+public class HibEngine extends Engine
 {
   protected Session session;
 
-  public HibernateEngine (Session session)
+  public HibEngine (Session session)
   {
     this.session = session;
   }
@@ -36,16 +36,16 @@ public class HibernateEngine extends Engine
   }
 
   @Override
-  protected ArcToken newArcToken (IProcess process, IArc arc, INodeToken previousToken)
+  protected HibArcToken newArcToken (IProcess process, IArc arc, INodeToken previousToken)
   {
-    ArcToken token = new ArcToken( (Process)process, (Arc)arc, (NodeToken)previousToken );
+    HibArcToken token = new HibArcToken( (HibProcess)process, (HibArc)arc, (HibNodeToken)previousToken );
     session.save( token );
     return token;
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  protected NodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents)
+  protected HibNodeToken newNodeToken (IProcess process, INode node, List<IArcToken> parents)
   {
     // Here we setup the token attributes for the new node
     // If the node has no predecessors, it will have no attributes
@@ -53,16 +53,16 @@ public class HibernateEngine extends Engine
     // it will inherit the attributes of that one node
     // Otherwise, the attributes of all predecessor nodes will get merged into
     // a single set.
-    List<ArcToken> hibParents = (List<ArcToken>)(List<?>)parents;
+    List<HibArcToken> hibParents = (List<HibArcToken>)(List<?>)parents;
 
-    NodeToken attrSetToken = null;
+    HibNodeToken attrSetToken = null;
     Map<String,String> attrMap = new HashMap<String,String>();
 
     boolean isMerge = false;
 
-    for ( ArcToken arcToken : hibParents )
+    for ( HibArcToken arcToken : hibParents )
     {
-      NodeToken parent = arcToken.getParentToken();
+      HibNodeToken parent = arcToken.getParentToken();
 
       if ( parent.getAttrSetToken() == null )
       {
@@ -84,22 +84,22 @@ public class HibernateEngine extends Engine
       }
     }
 
-    NodeToken token = new NodeToken( (Process)process, (NodeRef)node, attrSetToken, attrMap, hibParents);
+    HibNodeToken token = new HibNodeToken( (HibProcess)process, (HibNodeRef)node, attrSetToken, attrMap, hibParents);
     session.save( token );
     return token;
   }
 
   @Override
-  protected Process newProcess( IGraph graph )
+  protected HibProcess newProcess( IGraph graph )
   {
-    Process process = new Process( (Graph)graph);
+    HibProcess process = new HibProcess( (HibGraph)graph);
     session.save(  process );
 
     return process;
   }
 
   @SuppressWarnings("unchecked")
-  public List<Graph> getGraphs ()
+  public List<HibGraph> getGraphs ()
   {
     return session.createQuery( "from Graph" ).list();
   }

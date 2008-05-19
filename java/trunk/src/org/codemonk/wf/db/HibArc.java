@@ -16,7 +16,7 @@ import org.codemonk.wf.IArc;
 
 @Entity
 @Table (name="wf_arc")
-public class Arc implements IArc
+public class HibArc implements IArc
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -25,15 +25,15 @@ public class Arc implements IArc
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="graph_id")
-  protected Graph graph;
+  protected HibGraph graph;
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="a_node_ref_id")
-  protected NodeRef startNode;
+  protected HibNodeRef startNode;
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="z_node_ref_id")
-  protected NodeRef endNode;
+  protected HibNodeRef endNode;
 
   public Long getId ()
   {
@@ -56,34 +56,34 @@ public class Arc implements IArc
     this.name = name;
   }
 
-  public Graph getGraph ()
+  public HibGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (Graph graph)
+  public void setGraph (HibGraph graph)
   {
     this.graph = graph;
   }
 
   @Override
-  public NodeRef getStartNode ()
+  public HibNodeRef getStartNode ()
   {
     return startNode;
   }
 
-  public void setStartNode (NodeRef startNode)
+  public void setStartNode (HibNodeRef startNode)
   {
     this.startNode = startNode;
   }
 
   @Override
-  public NodeRef getEndNode ()
+  public HibNodeRef getEndNode ()
   {
     return endNode;
   }
 
-  public void setEndNode (NodeRef endNode)
+  public void setEndNode (HibNodeRef endNode)
   {
     this.endNode = endNode;
   }
@@ -109,8 +109,8 @@ public class Arc implements IArc
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof Arc ) ) return false;
-    final Arc other = (Arc)obj;
+    if ( !( obj instanceof HibArc ) ) return false;
+    final HibArc other = (HibArc)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;

@@ -15,8 +15,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.codemonk.wf.db.Graph;
-import org.codemonk.wf.db.HibernateEngine;
+import org.codemonk.wf.db.HibGraph;
+import org.codemonk.wf.db.HibEngine;
 import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;
 
@@ -28,7 +28,7 @@ public class Visualizer
     TestSetup.init();
 
     Session session = TestSetup.openSession();
-    HibernateEngine engine = new HibernateEngine( session );
+    HibEngine engine = new HibEngine( session );
 
     JFrame frame = new JFrame( "Workflow Visualizer" );
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
@@ -38,7 +38,7 @@ public class Visualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( Graph g : engine.getGraphs() )
+    for ( HibGraph g : engine.getGraphs() )
     {
       listModel.addElement( g );
     }
@@ -51,7 +51,7 @@ public class Visualizer
                                                      boolean cellHasFocus )
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-        setText( ((Graph)value).getName() );
+        setText( ((HibGraph)value).getName() );
         return this;
       }
     };
@@ -88,7 +88,7 @@ public class Visualizer
           return;
         }
 
-        final Graph g = (Graph)graphList.getSelectedValue();
+        final HibGraph g = (HibGraph)graphList.getSelectedValue();
 
         if ( ( g == null && graphDrawing.getGraph() == null ) ||
              (g != null && g.equals( graphDrawing.getGraph() ) ) )
