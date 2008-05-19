@@ -19,6 +19,7 @@
 
 > instance Monad (XmlProc) where
 >     return a = XmlProc (\_->(a,[]))
+>
 >     XmlProc a >>= f = XmlProc (\elemArray->
 >         case (a elemArray) of
 >             (currValue, xmlElem) -> case (f currValue) of
