@@ -1,9 +1,13 @@
 
 Next steps:
 ---------------------------------------------------------------------
-Create notion of task queue.
-Have node generate task in queue
-Have console UI to view task in queue and complete tasks
+DONE - Create notion of task queue.
+DONE - Have node generate task in queue
+DONE - Have console UI to view task in queue and complete tasks
+
+Implement Node guards
+Look at subworkflows
+Look at workflow file format (jPDL?)
 
 
 Future posibilities:
