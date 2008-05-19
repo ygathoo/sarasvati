@@ -29,11 +29,11 @@ public class Arc implements IArc
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="a_ref_node_id")
-  protected Node startNode;
+  protected NodeRef startNode;
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="z_ref_node_id")
-  protected Node endNode;
+  protected NodeRef endNode;
 
   public Long getId ()
   {
@@ -67,23 +67,23 @@ public class Arc implements IArc
   }
 
   @Override
-  public Node getStartNode ()
+  public NodeRef getStartNode ()
   {
     return startNode;
   }
 
-  public void setStartNode (Node startNode)
+  public void setStartNode (NodeRef startNode)
   {
     this.startNode = startNode;
   }
 
   @Override
-  public Node getEndNode ()
+  public NodeRef getEndNode ()
   {
     return endNode;
   }
 
-  public void setEndNode (Node endNode)
+  public void setEndNode (NodeRef endNode)
   {
     this.endNode = endNode;
   }

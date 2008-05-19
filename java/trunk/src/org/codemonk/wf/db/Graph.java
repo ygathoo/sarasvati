@@ -3,13 +3,21 @@
  */
 package org.codemonk.wf.db;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.codemonk.wf.IArc;
 import org.codemonk.wf.IGraph;
@@ -24,6 +32,18 @@ public class Graph implements IGraph
   protected Long   id;
   protected String name;
   protected int    version;
+
+  @OneToMany (fetch=FetchType.EAGER, mappedBy="graph")
+  protected List<NodeRef> nodeRefs;
+
+  @OneToMany (fetch=FetchType.EAGER, mappedBy="graph")
+  protected List<Arc>     arcs;
+
+  @Transient
+  protected Map<NodeRef, List<IArc>> inputMap;
+
+  @Transient
+  protected Map<NodeRef, List<IArc>> outputMap;
 
   public Long getId ()
   {
@@ -56,28 +76,117 @@ public class Graph implements IGraph
     this.version = version;
   }
 
+  public List<NodeRef> getNodeRefs ()
+  {
+    return nodeRefs;
+  }
+
+  public void setNodeRefs (List<NodeRef> nodeRefs)
+  {
+    this.nodeRefs = nodeRefs;
+  }
+
+  public List<Arc> getArcs ()
+  {
+    return arcs;
+  }
+
+  public void setArcs (List<Arc> arcs)
+  {
+    this.arcs = arcs;
+  }
+
   @Override
   public List<IArc> getInputArcs (INode node)
   {
-    return null;
+    return inputMap.get( node );
   }
 
   @Override
   public List<IArc> getInputArcs (INode node, String arcName)
   {
-    return null;
+    List<IArc> arcList = getInputArcs( node );
+    List<IArc> result = new ArrayList<IArc>( arcList.size() );
+
+    for ( IArc arc : arcList )
+    {
+      if ( arcName.equals( arc.getName() ) )
+      {
+        result.add( arc );
+      }
+    }
+    return result;
   }
 
   @Override
   public List<IArc> getOutputArcs (INode node)
   {
-    return null;
+    return outputMap.get( node );
   }
 
   @Override
   public List<IArc> getOutputArcs (INode node, String arcName)
   {
-    return null;
+    List<IArc> arcList = getOutputArcs( node );
+    List<IArc> result = new ArrayList<IArc>( arcList.size() );
+
+    for ( IArc arc : arcList )
+    {
+      if ( arcName.equals( arc.getName() ) )
+      {
+        result.add( arc );
+      }
+    }
+    return result;
+  }
+
+  public void ensureInitialized ()
+  {
+    if ( inputMap != null && outputMap != null )
+    {
+      return;
+    }
+
+    inputMap  = new HashMap<NodeRef, List<IArc>>();
+    outputMap = new HashMap<NodeRef, List<IArc>>();
+
+    for ( Arc arc : arcs )
+    {
+      NodeRef node = arc.getStartNode();
+      List<IArc> list = outputMap.get( node );
+
+      if ( list == null )
+      {
+        list = new LinkedList<IArc>();
+        outputMap.put( node, list );
+      }
+
+      list.add( arc );
+
+      node = arc.getEndNode();
+      list = inputMap.get( node );
+
+      if ( list == null )
+      {
+        list = new LinkedList<IArc>();
+        inputMap.put( node, list );
+      }
+
+      list.add( arc );
+    }
+
+    List<IArc> emptyList = Collections.emptyList();
+    for (NodeRef node : nodeRefs )
+    {
+      if ( !inputMap.containsKey( node ) )
+      {
+        inputMap.put( node, emptyList );
+      }
+      if ( !outputMap.containsKey( node ) )
+      {
+        outputMap.put( node, emptyList );
+      }
+    }
   }
 
   @Override
