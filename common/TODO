@@ -13,19 +13,21 @@ DONE - Database persistence
        Implemented relatively space efficient means of storing composed workflows in database
        Tokens provide flow history
 DONE - Allow the token to carry state - will allow more interesting guards
+DONE - basic graph visualization
+DONE - Guard domain specific langauge - for haskell
 
 
 In Progress:
 ---------------------------------------------------------------------
-Visualizations
-Guard domain specific language
+Moving to code.google.com
 
 Next steps:
 ---------------------------------------------------------------------
+Implement GuardLang in java version
+Visualizations for processes overlaid on graphs
 Investigate moving token marking from one version to next
 More work with workflow graph composition.
 
 Future posibilities:
 ---------------------------------------------------------------------
 Web UI
-GTK UI
