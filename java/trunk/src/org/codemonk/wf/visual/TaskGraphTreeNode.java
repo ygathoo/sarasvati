@@ -21,7 +21,7 @@ package org.codemonk.wf.visual;
 import java.awt.Color;
 import java.awt.Graphics;
 
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibNodeRef;
 import org.codemonk.wf.test.NodeTask;
 
 public class TaskGraphTreeNode extends GraphTreeNode

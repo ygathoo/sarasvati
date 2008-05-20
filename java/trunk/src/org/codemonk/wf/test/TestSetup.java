@@ -18,13 +18,13 @@
 */
 package org.codemonk.wf.test;
 
-import org.codemonk.wf.db.HibArc;
-import org.codemonk.wf.db.HibArcToken;
-import org.codemonk.wf.db.HibGraph;
-import org.codemonk.wf.db.HibNode;
-import org.codemonk.wf.db.HibNodeRef;
-import org.codemonk.wf.db.HibNodeToken;
-import org.codemonk.wf.db.HibProcess;
+import org.codemonk.wf.hib.HibArc;
+import org.codemonk.wf.hib.HibArcToken;
+import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibNode;
+import org.codemonk.wf.hib.HibNodeRef;
+import org.codemonk.wf.hib.HibNodeToken;
+import org.codemonk.wf.hib.HibProcess;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;

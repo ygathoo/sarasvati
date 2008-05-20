@@ -22,7 +22,7 @@ import java.awt.Color;
 import java.awt.Paint;
 
 import org.apache.commons.collections15.Transformer;
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibNodeRef;
 
 public class NodeColorTransformer implements Transformer<HibNodeRef, Paint>
 {

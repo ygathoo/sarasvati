@@ -24,7 +24,7 @@ package org.codemonk.wf.visual;
 import java.awt.Shape;
 
 import org.apache.commons.collections15.Transformer;
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibNodeRef;
 
 import edu.uci.ics.jung.visualization.VertexShapeFactory;
 

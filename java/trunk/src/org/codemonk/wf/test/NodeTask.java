@@ -25,9 +25,9 @@ import javax.persistence.Table;
 import org.codemonk.wf.Engine;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.Process;
-import org.codemonk.wf.db.HibEngine;
-import org.codemonk.wf.db.HibNode;
-import org.codemonk.wf.db.HibNodeToken;
+import org.codemonk.wf.hib.HibEngine;
+import org.codemonk.wf.hib.HibNode;
+import org.codemonk.wf.hib.HibNodeToken;
 import org.hibernate.Session;
 
 @Entity

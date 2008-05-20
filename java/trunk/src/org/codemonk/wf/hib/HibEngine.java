@@ -19,7 +19,7 @@
 /**
  * Created on Apr 25, 2008
  */
-package org.codemonk.wf.db;
+package org.codemonk.wf.hib;
 
 import java.util.HashMap;
 import java.util.List;

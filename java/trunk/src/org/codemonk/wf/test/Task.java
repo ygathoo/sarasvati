@@ -27,8 +27,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.codemonk.wf.db.HibNodeRef;
-import org.codemonk.wf.db.HibNodeToken;
+import org.codemonk.wf.hib.HibNodeRef;
+import org.codemonk.wf.hib.HibNodeToken;
 
 @Entity
 @Table(name = "wf_task")

@@ -22,7 +22,7 @@
 package org.codemonk.wf.visual;
 
 import org.apache.commons.collections15.Transformer;
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibNodeRef;
 
 public class NodeLabeller implements Transformer<HibNodeRef,String>
 {
