@@ -36,10 +36,10 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.collections15.Transformer;
-import org.codemonk.wf.db.HibArc;
-import org.codemonk.wf.db.HibEngine;
-import org.codemonk.wf.db.HibGraph;
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibArc;
+import org.codemonk.wf.hib.HibEngine;
+import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibNodeRef;
 import org.codemonk.wf.test.NodeTask;
 import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;

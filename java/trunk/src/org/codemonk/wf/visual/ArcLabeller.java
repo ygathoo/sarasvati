@@ -22,7 +22,7 @@
 package org.codemonk.wf.visual;
 
 import org.apache.commons.collections15.Transformer;
-import org.codemonk.wf.db.HibArc;
+import org.codemonk.wf.hib.HibArc;
 
 public class ArcLabeller implements Transformer<HibArc,String>
 {

@@ -22,9 +22,9 @@ import java.io.Console;
 import java.util.List;
 
 import org.codemonk.wf.Arc;
-import org.codemonk.wf.db.HibGraph;
-import org.codemonk.wf.db.HibEngine;
-import org.codemonk.wf.db.HibProcess;
+import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibEngine;
+import org.codemonk.wf.hib.HibProcess;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 

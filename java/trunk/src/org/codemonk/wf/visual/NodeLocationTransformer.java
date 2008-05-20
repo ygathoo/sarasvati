@@ -24,7 +24,7 @@ package org.codemonk.wf.visual;
 import java.awt.geom.Point2D;
 
 import org.apache.commons.collections15.Transformer;
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibNodeRef;
 
 public class NodeLocationTransformer implements Transformer<HibNodeRef, Point2D>
 {

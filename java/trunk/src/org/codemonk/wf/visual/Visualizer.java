@@ -33,8 +33,8 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.codemonk.wf.db.HibGraph;
-import org.codemonk.wf.db.HibEngine;
+import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibEngine;
 import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;
 

@@ -21,8 +21,8 @@
  */
 package org.codemonk.wf.visual;
 
-import org.codemonk.wf.db.HibArc;
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibArc;
+import org.codemonk.wf.hib.HibNodeRef;
 
 import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
 

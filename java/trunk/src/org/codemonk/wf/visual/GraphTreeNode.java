@@ -22,7 +22,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibNodeRef;
 
 public class GraphTreeNode
 {

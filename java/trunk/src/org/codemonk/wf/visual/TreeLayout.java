@@ -21,8 +21,8 @@ package org.codemonk.wf.visual;
 import java.awt.geom.Point2D;
 
 import org.apache.commons.collections15.Transformer;
-import org.codemonk.wf.db.HibArc;
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibArc;
+import org.codemonk.wf.hib.HibNodeRef;
 
 import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
 import edu.uci.ics.jung.graph.Graph;

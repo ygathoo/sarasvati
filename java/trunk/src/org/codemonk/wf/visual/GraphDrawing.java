@@ -26,8 +26,8 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.codemonk.wf.Arc;
-import org.codemonk.wf.db.HibGraph;
-import org.codemonk.wf.db.HibNodeRef;
+import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibNodeRef;
 
 public class GraphDrawing extends JComponent
 {
