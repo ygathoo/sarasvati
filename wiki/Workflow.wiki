@@ -1,0 +1,35 @@
+#summary Introduction to workflow
+
+= Introduction =
+
+To help understand what workflow is, we start with definitions of the main components of a workflow system.
+
+== Definitions ==
+
+ * *Actor* - A person or program which performs some _action_.
+ * *Action* - Something to be performed by an _actor_. Once an actor is notified that a given action is to be completed, they may perform it synchronously or asynchronously. It may take hours or days to complete the action.  
+ * *Process Definition* - A set of actions which need to be performed. The actions have a defined order in which they must be performed. Some actions may be performed concurrently with others. 
+ * *Process* - An instantiation of a _process definition_. Each _process definition_ may many processes running at once. If a _process definition_ is seen like a class defintion in OO programming, then a _process_ is like an instantiated object of that class.
+ * *Workflow Engine* - A program, library or API which can load _process definitions_ and from them, generate and execute a _processes_.
+
+Workflow is a label for systems which enable the building of process definitions and the execution of processes. 
+
+== Why workflow? ==
+So what is so special about workflow? After all, dependencies can be handled programatically. If action A is followed by action B, then action A can just invoke action B when it is complete. Concurrency can be handed by threads. 
+
+What workflow generally provides over a manual implementation is
+  * Ease of implementation
+    * If there are complicated dependencies, these are tracked by the workflow engine. Each action doesn't need to worry about what comes before or after it. This also allows actions to be more easily abstracted and reused.
+    * The workflow engine also ideally handles persistence. Processes can be long running, taking weeks or months to complete. The workflow engine will handle persisting the state of the workflow, so if the containing program dies, needs to be update or restarted, the  process will not be lost.
+  * Ease of definition
+    * Workflow system generally provide an easier way of designing and/or specifying process definitions than by doing it manually in code. 
+    * Generally workflow systems can read in process definitions in a human readable file format.
+    * Many workflow systems also provide visual editors.
+
+== Examples ==
+
+Example 1: Order Fulfillment
+---------------------------------------
+
+ 
+==== Actors ====
