@@ -1,4 +1,4 @@
-#summary Why is the called Sarasvati
+#summary Why is the project named Sarasvati
 
 [http://en.wikipedia.org/wiki/Saraswati Sarasvati] is both the name of river and of a Hindu Goddess. This project is named in honor of the goddess. According to Wikipedia:
 
