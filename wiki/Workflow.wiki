@@ -28,8 +28,19 @@ What workflow generally provides over a manual implementation is
 
 == Examples ==
 
-Example 1: Order Fulfillment
+_Example 1: Order Fulfillment_
 ---------------------------------------
-
+The scenario here is of a small company which sells beach balls. They have a process for servicing an order.
  
 ==== Actors ====
+Sales (person)
+Billing (program)
+Warehouse (person)
+Marketing (program)
+
+==== The process ====
+The sales person receives an order and enters it into the system. This includes what is order and the payment information. Once this is complete, the order will go to both billing and the warehouse. While the warehouse people package and ship the order, the billing system will perform whatever credit card transactions are necessary. Once the product is both shipped and billed, a marketing system will determine what promotional material and/or special offers to send to the customer, in order to elicit future business.
+
+Graphically, the process could be represented as follows:
+
+[http://static.flickr.com/3078/2514733261_b1967b7d07.jpg]
