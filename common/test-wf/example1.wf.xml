@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE workflow SYSTEM "wf.dtd">
+
+<workflow id="example1" version="1">
+  <start>
+    <arc to="1"/>
+  </start>
+
+  <task name="1">
+    <task-name>Enter Order</task-name>
+    <description>
+      Enter order and billing info
+    </description>
+
+    <arc to="2"/>
+    <arc to="3"/>
+  </task>
+
+  <task name="2">
+    <task-name>Bill Customer</task-name>
+    <description>
+      Bill the customer
+    </description>
+    <arc to="4"/>
+  </task>
+
+  <task name="3">
+    <task-name>Ship product</task-name>
+    <description>
+      Package and ship product
+    </description>
+    <arc to="4"/>
+  </task>
+
+  <task name="4">
+    <task-name>Market to Customer</task-name>
+    <description>
+      Send marketing material to customer
+    </description>
+  </task>
+
+</workflow>
