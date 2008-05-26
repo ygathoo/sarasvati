@@ -7,6 +7,7 @@ drop table if exists wf_node_token;
 drop table if exists wf_arc;
 drop table if exists wf_node_ref;
 drop table if exists wf_node_task;
+drop table if exists wf_node_type;
 drop table if exists wf_node;
 drop table if exists wf_process;
 drop table if exists wf_graph;
@@ -28,13 +29,26 @@ create table wf_process
   graph_id int    NOT NULL
 );
 
+create table wf_node_type
+(
+   id          varchar(255) NOT NULL PRIMARY KEY,
+   description varchar(255) NOT NULL,
+   behaviour   varchar(255) NOT NULL REFERENCES wf_node_type
+);
+
+insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' );
+insert into wf_node_type values ( 'start', 'Node where execution of a process begins. Aside from this, is identical to generic node', 'node' );
+insert into wf_node_type values ( 'task', 'Node which generates tasks', 'task' );
+insert into wf_node_type values ( 'init', 'Node which generates a random number and updates a counter', 'init' );
+insert into wf_node_type values ( 'dump', 'Node which indicates on stdout that it has been invoked', 'dump' );
+
 create table wf_node
 (
   id              serial       NOT NULL PRIMARY KEY,
   graph_id        int          NOT NULL REFERENCES wf_graph,
   name            varchar(255) NOT NULL,
   is_join         char(1)      NOT NULL,
-  type            varchar(255) NOT NULL,
+  type            varchar(255) NOT NULL REFERENCES wf_node_type,
   guard           varchar(255) NOT NULL
 );
 
