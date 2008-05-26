@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -34,6 +34,12 @@ public interface NodeToken extends Token
    */
   Node getNode ();
 
+  /**
+   * Returns the process that this node token belongs to.
+   *
+   * @return The associated process
+   */
+  Process getProcess ();
 
   /**
    * Gets an attribute as a String. If there is no value set for
@@ -99,4 +105,12 @@ public interface NodeToken extends Token
    * @param name The name of the attribute to remove
    */
   void removeAttribute (String name);
+
+  /**
+   * Checks if the given attribute is present.
+   *
+   * @param name Name of the attribute to check for
+   * @return True if the given attribute is present, false otherwise.
+   */
+  boolean hasAttribute (String name);
 }

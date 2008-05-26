@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -22,6 +22,10 @@ import java.io.Console;
 import java.util.List;
 
 import org.codemonk.wf.Arc;
+import org.codemonk.wf.Engine;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.guardlang.GuardLangPredicate;
+import org.codemonk.wf.guardlang.PredicateRepository;
 import org.codemonk.wf.hib.HibGraph;
 import org.codemonk.wf.hib.HibEngine;
 import org.codemonk.wf.hib.HibProcess;
@@ -32,6 +36,34 @@ public class DbConsole
 {
   public static void main (String[] args) throws Exception
   {
+    PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
+    {
+      @Override
+      public boolean evaluate( Engine engine, NodeToken token )
+      {
+        return token.getLongAttribute( "rand" ) % 2 == 1;
+      }
+    });
+
+    PredicateRepository.addPredicate( "isRandEven", new GuardLangPredicate()
+    {
+      @Override
+      public boolean evaluate( Engine engine, NodeToken token )
+      {
+        return token.getLongAttribute( "rand" ) % 2 == 0;
+      }
+    });
+
+    PredicateRepository.addPredicate( "isTenthIteration", new GuardLangPredicate()
+    {
+      @Override
+      public boolean evaluate( Engine engine, NodeToken token )
+      {
+        return token.getLongAttribute( "iter" ) == 10;
+      }
+    });
+
+
     TestSetup.init();
 
     while ( true )
@@ -143,13 +175,13 @@ public class DbConsole
       {
         System.out.println( "Completing task" );
         t.setState( (TaskState) engine.getSession().load( TaskState.class, 1 ) );
-        engine.completeExecuteNode( t.getNodeToken().getProcess(), t.getNodeToken(), Arc.DEFAULT_ARC );
+        engine.completeExecuteNode( t.getNodeToken(), Arc.DEFAULT_ARC );
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
         t.setState( (TaskState) engine.getSession().load( TaskState.class, 2 ) );
-        engine.completeExecuteNode( t.getNodeToken().getProcess(), t.getNodeToken(), "reject" );
+        engine.completeExecuteNode( t.getNodeToken(), "reject" );
       }
       else
       {

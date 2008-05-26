@@ -18,53 +18,32 @@
 */
 package org.codemonk.wf.test;
 
+import java.util.Random;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 
+import org.codemonk.wf.Arc;
 import org.codemonk.wf.Engine;
 import org.codemonk.wf.NodeToken;
-import org.codemonk.wf.hib.HibEngine;
 import org.codemonk.wf.hib.HibNode;
-import org.codemonk.wf.hib.HibNodeToken;
-import org.hibernate.Session;
 
 @Entity
-@DiscriminatorValue( "task" )
-public class NodeTask extends HibNode
+@DiscriminatorValue( "init" )
+public class NodeInit extends HibNode
 {
-  @OneToOne
-  @PrimaryKeyJoinColumn
-  protected NodeTaskDetail detail;
-
-  public String getTaskName ()
-  {
-    return detail.getTaskName();
-  }
-
-  public String getTaskDesc ()
-  {
-    return detail.getTaskDesc();
-  }
-
-  @Override
-  public String getLabel ()
-  {
-    return getTaskName();
-  }
-
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    HibEngine hibEngine = (HibEngine)engine;
+    long iter = 0;
 
-    Session session = hibEngine.getSession();
+    if ( token.hasAttribute( "iter" ) )
+    {
+      iter = token.getLongAttribute( "iter" );
+    }
 
-    TaskState open = (TaskState)session.load( TaskState.class, 0 );
-    Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), open );
-    session.save( newTask );
-
-    token.setLongAttribute( newTask.getName(), token.getLongAttribute( newTask.getName() ) + 1 );
+    token.setLongAttribute( "iter", ++iter );
+    token.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
+    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
   }
 }
