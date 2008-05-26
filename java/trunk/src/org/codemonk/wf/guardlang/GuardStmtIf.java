@@ -16,34 +16,27 @@
 
     Copyright 2008 Paul Lorenz
 */
-package org.codemonk.wf;
 
-public class SkipNodeGuardResponse implements GuardResponse
+package org.codemonk.wf.guardlang;
+
+import org.codemonk.wf.GuardResponse;
+
+public class GuardStmtIf implements GuardStmt
 {
-  public static final SkipNodeGuardResponse DEFAULT_ARC_SKIP_NODE_RESPONSE = new SkipNodeGuardResponse( Arc.DEFAULT_ARC );
+  protected GuardExpr expr;
+  protected GuardStmt ifStmt;
+  protected GuardStmt elseStmt;
 
-  protected String exitArcForSkip = null;
-
-  public SkipNodeGuardResponse (String arcName)
+  public GuardStmtIf (GuardExpr expr, GuardStmt ifStmt, GuardStmt elseStmt)
   {
-    this.exitArcForSkip = arcName;
+    this.expr = expr;
+    this.ifStmt = ifStmt;
+    this.elseStmt = elseStmt;
   }
 
   @Override
-  public final GuardAction getGuardAction()
+  public GuardResponse eval( GuardEnv env )
   {
-    return GuardAction.SkipNode;
-  }
-
-  @Override
-  public String getExitArcForSkip()
-  {
-    return exitArcForSkip;
-  }
-
-  @Override
-  public String toString()
-  {
-    return Arc.DEFAULT_ARC.equals( exitArcForSkip ) ? "SkipNodeResponse"  : "SkipNodeResponse (" + exitArcForSkip + ")";
+    return expr.eval( env ) ? ifStmt.eval(  env ) : elseStmt.eval( env );
   }
 }

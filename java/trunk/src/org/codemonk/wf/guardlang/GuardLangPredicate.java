@@ -16,34 +16,13 @@
 
     Copyright 2008 Paul Lorenz
 */
-package org.codemonk.wf;
 
-public class SkipNodeGuardResponse implements GuardResponse
+package org.codemonk.wf.guardlang;
+
+import org.codemonk.wf.Engine;
+import org.codemonk.wf.NodeToken;
+
+public interface GuardLangPredicate
 {
-  public static final SkipNodeGuardResponse DEFAULT_ARC_SKIP_NODE_RESPONSE = new SkipNodeGuardResponse( Arc.DEFAULT_ARC );
-
-  protected String exitArcForSkip = null;
-
-  public SkipNodeGuardResponse (String arcName)
-  {
-    this.exitArcForSkip = arcName;
-  }
-
-  @Override
-  public final GuardAction getGuardAction()
-  {
-    return GuardAction.SkipNode;
-  }
-
-  @Override
-  public String getExitArcForSkip()
-  {
-    return exitArcForSkip;
-  }
-
-  @Override
-  public String toString()
-  {
-    return Arc.DEFAULT_ARC.equals( exitArcForSkip ) ? "SkipNodeResponse"  : "SkipNodeResponse (" + exitArcForSkip + ")";
-  }
+  boolean evaluate (Engine engine, NodeToken token);
 }

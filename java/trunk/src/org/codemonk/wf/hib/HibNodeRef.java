@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -34,7 +34,6 @@ import org.codemonk.wf.Engine;
 import org.codemonk.wf.GuardResponse;
 import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
-import org.codemonk.wf.Process;
 
 @Entity
 @Table (name="wf_node_ref")
@@ -117,15 +116,15 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public GuardResponse guard (Process process, NodeToken token)
+  public GuardResponse guard (Engine engine, NodeToken token)
   {
-    return node.guard( process, token );
+    return node.guard( engine, token );
   }
 
   @Override
-  public void execute (Engine engine, Process process, NodeToken token)
+  public void execute (Engine engine, NodeToken token)
   {
-    node.execute( engine, process, token );
+    node.execute( engine, token );
   }
 
   @Override

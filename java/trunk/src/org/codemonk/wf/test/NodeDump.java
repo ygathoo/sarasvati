@@ -20,51 +20,20 @@ package org.codemonk.wf.test;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 
+import org.codemonk.wf.Arc;
 import org.codemonk.wf.Engine;
 import org.codemonk.wf.NodeToken;
-import org.codemonk.wf.hib.HibEngine;
 import org.codemonk.wf.hib.HibNode;
-import org.codemonk.wf.hib.HibNodeToken;
-import org.hibernate.Session;
 
 @Entity
-@DiscriminatorValue( "task" )
-public class NodeTask extends HibNode
+@DiscriminatorValue( "dump" )
+public class NodeDump extends HibNode
 {
-  @OneToOne
-  @PrimaryKeyJoinColumn
-  protected NodeTaskDetail detail;
-
-  public String getTaskName ()
-  {
-    return detail.getTaskName();
-  }
-
-  public String getTaskDesc ()
-  {
-    return detail.getTaskDesc();
-  }
-
-  @Override
-  public String getLabel ()
-  {
-    return getTaskName();
-  }
-
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    HibEngine hibEngine = (HibEngine)engine;
-
-    Session session = hibEngine.getSession();
-
-    TaskState open = (TaskState)session.load( TaskState.class, 0 );
-    Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), open );
-    session.save( newTask );
-
-    token.setLongAttribute( newTask.getName(), token.getLongAttribute( newTask.getName() ) + 1 );
+    System.out.println( "Accepted into: " + getName() );
+    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
   }
 }

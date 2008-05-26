@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -22,6 +22,7 @@
 package org.codemonk.wf.hib;
 
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -33,17 +34,21 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.codemonk.wf.Engine;
 import org.codemonk.wf.Arc;
+import org.codemonk.wf.Engine;
 import org.codemonk.wf.GuardResponse;
 import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
-import org.codemonk.wf.Process;
+import org.codemonk.wf.guardlang.GuardLang;
+import org.codemonk.wf.guardlang.PredicateRepository;
+import org.hibernate.annotations.DiscriminatorFormula;
 import org.hibernate.annotations.Type;
 
 @Entity
 @Table (name="wf_node")
-@Inheritance (strategy=InheritanceType.JOINED)
+@Inheritance (strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorFormula( "(select t.behaviour from wf_node_type t where t.id = type)" )
+@DiscriminatorValue( "node" )
 public class HibNode implements Node
 {
   @Id
@@ -60,6 +65,8 @@ public class HibNode implements Node
   @Column (name="is_join")
   @Type (type="yes_no")
   protected boolean join;
+
+  protected String guard;
 
   public Long getId ()
   {
@@ -120,16 +127,31 @@ public class HibNode implements Node
     return "";
   }
 
-  @Override
-  public GuardResponse guard (Process process, NodeToken token)
+  public String getGuard()
   {
-    return GuardResponse.ACCEPT_TOKEN_RESPONSE;
+    return guard;
+  }
+
+  public void setGuard( String guard )
+  {
+    this.guard = guard;
   }
 
   @Override
-  public void execute (Engine engine, Process process, NodeToken token)
+  public GuardResponse guard (Engine engine, NodeToken token)
   {
-    engine.completeExecuteNode( process, token, Arc.DEFAULT_ARC );
+    if ( guard == null || guard.trim().length() == 0 )
+    {
+      return GuardResponse.ACCEPT_TOKEN_RESPONSE;
+    }
+
+    return GuardLang.eval( guard, PredicateRepository.newGuardEnv( engine, token ) );
+  }
+
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
   }
 
   @Override
