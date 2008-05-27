@@ -113,4 +113,11 @@ public interface NodeToken extends Token
    * @return True if the given attribute is present, false otherwise.
    */
   boolean hasAttribute (String name);
+
+  /**
+   * Returns an Iterable of attribute names.
+   *
+   * @return Iterable of attribute names
+   */
+  Iterable<String> getAttributeNames ();
 }

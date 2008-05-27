@@ -16,27 +16,48 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
-package org.codemonk.wf;
 
-/**
- * The set of tokens in a process represent the current state
- * of the workflow. There are two types of tokens, node tokens
- * and arc tokens. Node tokens point at nodes and arc tokens
- * point to arcs. Tokens are never moved. They may be marked
- * as complete and new tokens will be created in the areas of
- * the workflow now in progress.
- *
- * @author Paul Lorenz
- */
-public interface Token
+package org.codemonk.wf.mem;
+
+import org.codemonk.wf.Arc;
+import org.codemonk.wf.ArcToken;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.Process;
+
+public class MemArcToken implements ArcToken
 {
-  /**
-   * Marks this token as being complete, in the sense that it no longer
-   * represents an active part of the process. Once a token is marked
-   * complete, it is generally only of historical interest.
-   */
-  void markComplete ();
+  protected Arc arc;
+  protected Process process;
+  protected NodeToken parentToken;
+
+  public MemArcToken (Arc arc, Process process, NodeToken parentToken)
+  {
+    this.arc = arc;
+    this.process = process;
+    this.parentToken = parentToken;
+  }
+
+  @Override
+  public Arc getArc()
+  {
+    return arc;
+  }
+
+  @Override
+  public Process getProcess()
+  {
+    return process;
+  }
+
+  @Override
+  public NodeToken getParentToken ()
+  {
+    return parentToken;
+  }
+
+  @Override
+  public void markComplete()
+  {
+    /* Does nothing */
+  }
 }

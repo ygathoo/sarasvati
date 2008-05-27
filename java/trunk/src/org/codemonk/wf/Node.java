@@ -21,13 +21,41 @@
  */
 package org.codemonk.wf;
 
-
+/**
+ * A node is a vertex in a work-flow graph. It may perform some
+ * function. In some cases it may not complete immediately, but
+ * enter a wait state. At some point it will return and the
+ * process can then continue execution.
+ *
+ * Every node can have a guard associated with it. This guard
+ * will determine if an incoming token is accepted (and the
+ * node functionality executed), or discarded, or if the token
+ * is passed through without executing the node.
+ *
+ * Every node may have multiple incoming arcs. If isJoin()
+ * return true, then tokens coming in will wait for tokens
+ * to be present on all arcs with the same label.
+ *
+ * Every node may also have multiple outgoing arcs. When
+ * a node token is completed, it may pick which arcs to exit
+ * on by passing an arc label. Every arc with the given label
+ * will have an arc token places on it.
+ *
+ * @author Paul Lorenz
+ */
 public interface Node
 {
   String getName ();
   String getType ();
   boolean isJoin ();
+  String getGuard ();
   GuardResponse guard (Engine engine, NodeToken token);
+
+  /**
+   * @param engine The engine which is performing the execution.
+   * @param token The token which is currently executing in this node.
+   */
   void execute(Engine engine, NodeToken token);
+
   String getLabel ();
 }

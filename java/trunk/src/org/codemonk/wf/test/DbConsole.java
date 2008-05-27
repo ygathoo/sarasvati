@@ -203,7 +203,7 @@ public class DbConsole
       List<HibGraph> graphs = engine.getGraphs();
 
       int count = 0;
-      for (HibGraph g : engine.getGraphs() )
+      for ( HibGraph g : engine.getGraphs() )
       {
         System.out.println( (++count) + ": " + g.getName() + ": version " + g.getVersion() );
       }
