@@ -21,6 +21,7 @@
  */
 package org.codemonk.wf.hib;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -278,6 +279,23 @@ public class HibNodeToken implements NodeToken
     else
     {
       return attrMap.containsKey( name );
+    }
+  }
+
+  @Override
+  public Iterable<String> getAttributeNames()
+  {
+    if ( attrSetToken == null )
+    {
+      return Collections.emptyList();
+    }
+    else if ( !this.equals( attrSetToken ) )
+    {
+      return attrSetToken.getAttributeNames();
+    }
+    else
+    {
+      return attrMap.keySet();
     }
   }
 

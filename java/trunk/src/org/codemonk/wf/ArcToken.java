@@ -21,6 +21,14 @@
  */
 package org.codemonk.wf;
 
+/**
+ * Arc tokens point to arcs in the graph. Arc tokens may be active
+ * only briefly, if the node at the end of the arc is ready to
+ * execute. However, if the node is a join node, and not all incoming
+ * arcs have tokens, an arc token may be active for some time.
+ *
+ * @author Paul Lorenz
+ */
 public interface ArcToken extends Token
 {
   /**
@@ -36,4 +44,12 @@ public interface ArcToken extends Token
    * @return The associated process
    */
   Process getProcess ();
+
+  /**
+   * Returns the node token which directly preceded this
+   * arc token.
+   *
+   * @return The parent NodeToken
+   */
+  NodeToken getParentToken ();
 }

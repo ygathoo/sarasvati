@@ -83,6 +83,11 @@ public class HibNodeRef implements Node
     this.graph = graph;
   }
 
+  public String getGuard ()
+  {
+    return node.getGuard();
+  }
+
   public String getInstance ()
   {
     return instance;
