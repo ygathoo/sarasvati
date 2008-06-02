@@ -37,7 +37,7 @@ import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.collections15.Transformer;
 import org.codemonk.wf.hib.HibArc;
-import org.codemonk.wf.hib.HibEngine;
+import org.codemonk.wf.hib.HibWfEngine;
 import org.codemonk.wf.hib.HibWfGraph;
 import org.codemonk.wf.hib.HibNodeRef;
 import org.codemonk.wf.test.NodeTask;
@@ -57,7 +57,7 @@ public class JungVisualizer
     TestSetup.init();
 
     Session session = TestSetup.openSession();
-    HibEngine engine = new HibEngine( session );
+    HibWfEngine engine = new HibWfEngine( session );
 
     JFrame frame = new JFrame( "Workflow Visualizer" );
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );

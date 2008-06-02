@@ -22,7 +22,7 @@ package org.codemonk.wf.guardlang;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.codemonk.wf.Engine;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.NodeToken;
 
 public class PredicateRepository
@@ -39,7 +39,7 @@ public class PredicateRepository
     return predicateMap.get( name );
   }
 
-  public static GuardEnv newGuardEnv (final Engine engine, final NodeToken token)
+  public static GuardEnv newGuardEnv (final WfEngine engine, final NodeToken token)
   {
     return new GuardEnv()
     {

@@ -49,13 +49,13 @@ public interface Node
   String getType ();
   boolean isJoin ();
   String getGuard ();
-  GuardResponse guard (Engine engine, NodeToken token);
+  GuardResponse guard (WfEngine engine, NodeToken token);
 
   /**
    * @param engine The engine which is performing the execution.
    * @param token The token which is currently executing in this node.
    */
-  void execute(Engine engine, NodeToken token);
+  void execute(WfEngine engine, NodeToken token);
 
   String getLabel ();
 }

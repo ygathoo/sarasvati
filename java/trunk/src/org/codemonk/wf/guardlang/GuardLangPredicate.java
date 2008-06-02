@@ -19,10 +19,10 @@
 
 package org.codemonk.wf.guardlang;
 
-import org.codemonk.wf.Engine;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.NodeToken;
 
 public interface GuardLangPredicate
 {
-  boolean evaluate (Engine engine, NodeToken token);
+  boolean evaluate (WfEngine engine, NodeToken token);
 }

@@ -23,9 +23,9 @@ import javax.persistence.Entity;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
 
-import org.codemonk.wf.Engine;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.NodeToken;
-import org.codemonk.wf.hib.HibEngine;
+import org.codemonk.wf.hib.HibWfEngine;
 import org.codemonk.wf.hib.HibNode;
 import org.codemonk.wf.hib.HibNodeToken;
 import org.hibernate.Session;
@@ -55,9 +55,9 @@ public class NodeTask extends HibNode
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (WfEngine engine, NodeToken token)
   {
-    HibEngine hibEngine = (HibEngine)engine;
+    HibWfEngine hibEngine = (HibWfEngine)engine;
 
     Session session = hibEngine.getSession();
 

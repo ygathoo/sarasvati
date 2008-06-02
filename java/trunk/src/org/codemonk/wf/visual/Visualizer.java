@@ -34,7 +34,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.codemonk.wf.hib.HibWfGraph;
-import org.codemonk.wf.hib.HibEngine;
+import org.codemonk.wf.hib.HibWfEngine;
 import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;
 
@@ -46,7 +46,7 @@ public class Visualizer
     TestSetup.init();
 
     Session session = TestSetup.openSession();
-    HibEngine engine = new HibEngine( session );
+    HibWfEngine engine = new HibWfEngine( session );
 
     JFrame frame = new JFrame( "Workflow Visualizer" );
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
