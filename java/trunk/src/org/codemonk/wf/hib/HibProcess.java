@@ -49,7 +49,7 @@ public class HibProcess implements Process
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn( name="graph_id")
-  protected HibGraph            graph;
+  protected HibWfGraph            graph;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
@@ -61,7 +61,7 @@ public class HibProcess implements Process
 
   public HibProcess () { /* Default constructor for Hibernate */ }
 
-  public HibProcess (HibGraph graph)
+  public HibProcess (HibWfGraph graph)
   {
     this.graph = graph;
     this.arcTokens = new LinkedList<ArcToken>();
@@ -79,12 +79,12 @@ public class HibProcess implements Process
   }
 
   @Override
-  public HibGraph getGraph ()
+  public HibWfGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (HibGraph graph)
+  public void setGraph (HibWfGraph graph)
   {
     this.graph = graph;
   }

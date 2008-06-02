@@ -23,7 +23,7 @@ package org.codemonk.wf;
 
 import java.util.List;
 
-public interface Graph
+public interface WfGraph
 {
   /**
    * Returns the graph name, which should be unique. Different versions with the same

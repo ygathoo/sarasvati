@@ -26,7 +26,7 @@ import java.util.Map;
 
 import org.codemonk.wf.Arc;
 import org.codemonk.wf.Node;
-import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibWfGraph;
 import org.codemonk.wf.hib.HibNodeRef;
 
 public class GraphTree
@@ -37,7 +37,7 @@ public class GraphTree
 
   protected List<List<GraphTreeNode>> layers = new LinkedList<List<GraphTreeNode>>();
 
-  public GraphTree (HibGraph graph)
+  public GraphTree (HibWfGraph graph)
   {
     List<GraphTreeNode> nextLayer = new LinkedList<GraphTreeNode>();
 

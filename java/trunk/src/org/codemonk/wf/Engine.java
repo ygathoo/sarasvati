@@ -31,9 +31,9 @@ public abstract class Engine
 
   protected abstract ArcToken newArcToken (Process process, Arc arc, NodeToken parent);
 
-  protected abstract Process newProcess (Graph graph);
+  protected abstract Process newProcess (WfGraph graph);
 
-  public Process startWorkflow (Graph graph)
+  public Process startWorkflow (WfGraph graph)
   {
     Process process = newProcess( graph );
 

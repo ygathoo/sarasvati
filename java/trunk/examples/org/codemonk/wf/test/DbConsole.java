@@ -26,7 +26,7 @@ import org.codemonk.wf.Engine;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.guardlang.GuardLangPredicate;
 import org.codemonk.wf.guardlang.PredicateRepository;
-import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibWfGraph;
 import org.codemonk.wf.hib.HibEngine;
 import org.codemonk.wf.hib.HibProcess;
 import org.hibernate.Session;
@@ -72,7 +72,7 @@ public class DbConsole
       Transaction t = session.beginTransaction();
       HibEngine engine = new HibEngine( session );
 
-      HibGraph graph = getGraph( engine );
+      HibWfGraph graph = getGraph( engine );
       HibProcess process = (HibProcess)engine.startWorkflow( graph );
       session.flush();
       t.commit();
@@ -194,16 +194,16 @@ public class DbConsole
     }
   }
 
-  public static HibGraph getGraph (HibEngine engine)
+  public static HibWfGraph getGraph (HibEngine engine)
   {
-    HibGraph graph = null;
+    HibWfGraph graph = null;
 
     while ( graph == null )
     {
-      List<HibGraph> graphs = engine.getGraphs();
+      List<HibWfGraph> graphs = engine.getGraphs();
 
       int count = 0;
-      for ( HibGraph g : engine.getGraphs() )
+      for ( HibWfGraph g : engine.getGraphs() )
       {
         System.out.println( (++count) + ": " + g.getName() + ": version " + g.getVersion() );
       }

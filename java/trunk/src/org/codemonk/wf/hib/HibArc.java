@@ -43,7 +43,7 @@ public class HibArc implements Arc
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="graph_id")
-  protected HibGraph graph;
+  protected HibWfGraph graph;
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="a_node_ref_id")
@@ -74,12 +74,12 @@ public class HibArc implements Arc
     this.name = name;
   }
 
-  public HibGraph getGraph ()
+  public HibWfGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (HibGraph graph)
+  public void setGraph (HibWfGraph graph)
   {
     this.graph = graph;
   }

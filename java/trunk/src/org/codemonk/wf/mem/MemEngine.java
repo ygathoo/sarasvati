@@ -24,7 +24,7 @@ import java.util.List;
 import org.codemonk.wf.Arc;
 import org.codemonk.wf.ArcToken;
 import org.codemonk.wf.Engine;
-import org.codemonk.wf.Graph;
+import org.codemonk.wf.WfGraph;
 import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.Process;
@@ -55,7 +55,7 @@ public class MemEngine extends Engine
   }
 
   @Override
-  protected Process newProcess (Graph graph)
+  protected Process newProcess (WfGraph graph)
   {
     return new MemProcess( graph );
   }

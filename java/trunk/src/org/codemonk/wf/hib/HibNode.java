@@ -57,7 +57,7 @@ public class HibNode implements Node
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn( name="graph_id")
-  protected HibGraph graph;
+  protected HibWfGraph graph;
 
   protected String name;
   protected String type;
@@ -100,12 +100,12 @@ public class HibNode implements Node
     this.type = type;
   }
 
-  public HibGraph getGraph ()
+  public HibWfGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (HibGraph graph)
+  public void setGraph (HibWfGraph graph)
   {
     this.graph = graph;
   }
