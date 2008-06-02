@@ -30,7 +30,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.codemonk.wf.Engine;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.GuardResponse;
 import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
@@ -121,13 +121,13 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public GuardResponse guard (Engine engine, NodeToken token)
+  public GuardResponse guard (WfEngine engine, NodeToken token)
   {
     return node.guard( engine, token );
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (WfEngine engine, NodeToken token)
   {
     node.execute( engine, token );
   }

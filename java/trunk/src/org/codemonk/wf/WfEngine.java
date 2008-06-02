@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class Engine
+public abstract class WfEngine
 {
   protected abstract NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents);
 

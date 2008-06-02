@@ -22,7 +22,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import org.codemonk.wf.Arc;
-import org.codemonk.wf.Engine;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.hib.HibNode;
 
@@ -31,7 +31,7 @@ import org.codemonk.wf.hib.HibNode;
 public class NodeDump extends HibNode
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (WfEngine engine, NodeToken token)
   {
     System.out.println( "Accepted into: " + getName() );
     engine.completeExecuteNode( token, Arc.DEFAULT_ARC );

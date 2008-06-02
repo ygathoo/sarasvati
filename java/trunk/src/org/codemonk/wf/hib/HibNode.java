@@ -35,7 +35,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.codemonk.wf.Arc;
-import org.codemonk.wf.Engine;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.GuardResponse;
 import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
@@ -138,7 +138,7 @@ public class HibNode implements Node
   }
 
   @Override
-  public GuardResponse guard (Engine engine, NodeToken token)
+  public GuardResponse guard (WfEngine engine, NodeToken token)
   {
     if ( guard == null || guard.trim().length() == 0 )
     {
@@ -149,7 +149,7 @@ public class HibNode implements Node
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (WfEngine engine, NodeToken token)
   {
     engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
   }

@@ -23,13 +23,13 @@ import java.util.List;
 
 import org.codemonk.wf.Arc;
 import org.codemonk.wf.ArcToken;
-import org.codemonk.wf.Engine;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.WfGraph;
 import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.Process;
 
-public class MemEngine extends Engine
+public class MemWfEngine extends WfEngine
 {
   @Override
   protected ArcToken newArcToken (Process process, Arc arc, NodeToken parent)

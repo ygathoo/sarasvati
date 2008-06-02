@@ -27,18 +27,18 @@ import java.util.Map;
 
 import org.codemonk.wf.Arc;
 import org.codemonk.wf.ArcToken;
-import org.codemonk.wf.Engine;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.WfGraph;
 import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.Process;
 import org.hibernate.Session;
 
-public class HibEngine extends Engine
+public class HibWfEngine extends WfEngine
 {
   protected Session session;
 
-  public HibEngine (Session session)
+  public HibWfEngine (Session session)
   {
     this.session = session;
   }
