@@ -38,7 +38,7 @@ import javax.swing.event.ListSelectionListener;
 import org.apache.commons.collections15.Transformer;
 import org.codemonk.wf.hib.HibArc;
 import org.codemonk.wf.hib.HibEngine;
-import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibWfGraph;
 import org.codemonk.wf.hib.HibNodeRef;
 import org.codemonk.wf.test.NodeTask;
 import org.codemonk.wf.test.TestSetup;
@@ -49,7 +49,7 @@ import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
 public class JungVisualizer
 {
-  protected static HibGraph currentGraph = null;
+  protected static HibWfGraph currentGraph = null;
 
   @SuppressWarnings("serial")
   public static void main( String[] args ) throws Exception
@@ -67,7 +67,7 @@ public class JungVisualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( HibGraph g : engine.getGraphs() )
+    for ( HibWfGraph g : engine.getGraphs() )
     {
       listModel.addElement( g );
     }
@@ -81,7 +81,7 @@ public class JungVisualizer
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 
-        HibGraph g = (HibGraph)value;
+        HibWfGraph g = (HibWfGraph)value;
 
         setText( g.getName() + "." + g.getVersion() + "  " );
         return this;
@@ -152,7 +152,7 @@ public class JungVisualizer
           return;
         }
 
-        final HibGraph g = (HibGraph)graphList.getSelectedValue();
+        final HibWfGraph g = (HibWfGraph)graphList.getSelectedValue();
 
         if ( ( g == null && currentGraph == null ) ||
              (g != null && g.equals( currentGraph ) ) )

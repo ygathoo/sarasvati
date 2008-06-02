@@ -38,12 +38,12 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.codemonk.wf.Arc;
-import org.codemonk.wf.Graph;
+import org.codemonk.wf.WfGraph;
 import org.codemonk.wf.Node;
 
 @Entity
 @Table (name="wf_graph")
-public class HibGraph implements Graph
+public class HibWfGraph implements WfGraph
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -256,8 +256,8 @@ public class HibGraph implements Graph
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof HibGraph ) ) return false;
-    final HibGraph other = (HibGraph)obj;
+    if ( !( obj instanceof HibWfGraph ) ) return false;
+    final HibWfGraph other = (HibWfGraph)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;

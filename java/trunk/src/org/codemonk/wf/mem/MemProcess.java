@@ -23,17 +23,17 @@ import java.util.LinkedList;
 import java.util.List;
 
 import org.codemonk.wf.ArcToken;
-import org.codemonk.wf.Graph;
+import org.codemonk.wf.WfGraph;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.Process;
 
 public class MemProcess implements Process
 {
-  protected Graph graph;
+  protected WfGraph graph;
   protected List<ArcToken> arcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> nodeTokens = new LinkedList<NodeToken>();
 
-  public MemProcess( Graph graph )
+  public MemProcess( WfGraph graph )
   {
     this.graph = graph;
   }
@@ -57,7 +57,7 @@ public class MemProcess implements Process
   }
 
   @Override
-  public Graph getGraph ()
+  public WfGraph getGraph ()
   {
     return graph;
   }

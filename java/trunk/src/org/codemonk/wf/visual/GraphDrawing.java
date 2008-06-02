@@ -26,26 +26,26 @@ import java.util.List;
 import javax.swing.JComponent;
 
 import org.codemonk.wf.Arc;
-import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibWfGraph;
 import org.codemonk.wf.hib.HibNodeRef;
 
 public class GraphDrawing extends JComponent
 {
   private static final long serialVersionUID = 1L;
 
-  protected HibGraph graph = null;
+  protected HibWfGraph graph = null;
   protected GraphTree graphTree = null;
 
   public GraphDrawing ()
   {
   }
 
-  public HibGraph getGraph ()
+  public HibWfGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (HibGraph graph)
+  public void setGraph (HibWfGraph graph)
   {
     this.graph = graph;
     this.graphTree = graph == null ? null : new GraphTree( graph );

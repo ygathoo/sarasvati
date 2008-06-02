@@ -25,7 +25,7 @@ import java.util.List;
 
 public interface Process
 {
-  Graph getGraph ();
+  WfGraph getGraph ();
   List<? extends ArcToken> getArcTokens ();
   void addArcToken (ArcToken token);
   void removeArcToken (ArcToken token);

@@ -20,7 +20,7 @@ package org.codemonk.wf.test;
 
 import org.codemonk.wf.hib.HibArc;
 import org.codemonk.wf.hib.HibArcToken;
-import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibWfGraph;
 import org.codemonk.wf.hib.HibNode;
 import org.codemonk.wf.hib.HibNodeRef;
 import org.codemonk.wf.hib.HibNodeToken;
@@ -49,7 +49,7 @@ public class TestSetup
 
     config.addAnnotatedClass( HibArc.class );
     config.addAnnotatedClass( HibArcToken.class );
-    config.addAnnotatedClass( HibGraph.class );
+    config.addAnnotatedClass( HibWfGraph.class );
     config.addAnnotatedClass( HibNode.class );
     config.addAnnotatedClass( HibNodeRef.class );
     config.addAnnotatedClass( HibNodeToken.class );

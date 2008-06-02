@@ -28,7 +28,7 @@ import java.util.Map;
 import org.codemonk.wf.Arc;
 import org.codemonk.wf.ArcToken;
 import org.codemonk.wf.Engine;
-import org.codemonk.wf.Graph;
+import org.codemonk.wf.WfGraph;
 import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.Process;
@@ -108,16 +108,16 @@ public class HibEngine extends Engine
   }
 
   @Override
-  protected HibProcess newProcess( Graph graph )
+  protected HibProcess newProcess( WfGraph graph )
   {
-    HibProcess process = new HibProcess( (HibGraph)graph);
+    HibProcess process = new HibProcess( (HibWfGraph)graph);
     session.save(  process );
 
     return process;
   }
 
   @SuppressWarnings("unchecked")
-  public List<HibGraph> getGraphs ()
+  public List<HibWfGraph> getGraphs ()
   {
     return session.createQuery( "from HibGraph" ).list();
   }

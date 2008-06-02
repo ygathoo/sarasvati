@@ -33,7 +33,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.codemonk.wf.hib.HibGraph;
+import org.codemonk.wf.hib.HibWfGraph;
 import org.codemonk.wf.hib.HibEngine;
 import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;
@@ -56,7 +56,7 @@ public class Visualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( HibGraph g : engine.getGraphs() )
+    for ( HibWfGraph g : engine.getGraphs() )
     {
       listModel.addElement( g );
     }
@@ -69,7 +69,7 @@ public class Visualizer
                                                      boolean cellHasFocus )
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-        setText( ((HibGraph)value).getName() );
+        setText( ((HibWfGraph)value).getName() );
         return this;
       }
     };
@@ -106,7 +106,7 @@ public class Visualizer
           return;
         }
 
-        final HibGraph g = (HibGraph)graphList.getSelectedValue();
+        final HibWfGraph g = (HibWfGraph)graphList.getSelectedValue();
 
         if ( ( g == null && graphDrawing.getGraph() == null ) ||
              (g != null && g.equals( graphDrawing.getGraph() ) ) )
