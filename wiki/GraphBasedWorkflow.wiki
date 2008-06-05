@@ -23,3 +23,6 @@ There are other ways of representing workflows. For example, one could just list
  * 4 - Market to Customer for Marketing depends on 2, 3
 
 While this would work fine for simple processes, it doesn't offer a way to define cycles. If for example, the warehouse people determine that they are out of stock, they may need to send the workflow back to the sales department so they can interact with the customer. This mechanism also lacks a clear means of flow control. For example, a single workflow may cover the order fulfillment process for many different product types. It is likely that some sections of the workflow would only apply to specific products. 
+
+
+[Workflow <-- Prev: What is Workflow] ... [EngineConcepts Next: Core Concepts  -->]
