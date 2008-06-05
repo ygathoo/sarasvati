@@ -1,5 +1,7 @@
 #summary Introduction to workflow
 
+[GraphBasedWorkflow Next: Why graph based workflow? -->]
+
 = Introduction =
 
 To help understand what workflow is, we start with definitions of the main components of a workflow system.
@@ -48,3 +50,6 @@ The scenario here is of a small company which sells beach balls. They have a pro
 Graphically, the process could be represented as follows:
 
 [http://static.flickr.com/3078/2514733261_b1967b7d07.jpg]
+
+
+[GraphBasedWorkflow Next: Why graph based workflow? -->]
