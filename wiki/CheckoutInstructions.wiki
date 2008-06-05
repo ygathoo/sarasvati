@@ -1,0 +1,10 @@
+#summary Test source page
+
+= Introduction =
+
+test
+
+
+= Details =
+
+test
