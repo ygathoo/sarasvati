@@ -1,4 +1,4 @@
-#summary Test source page
+#summary SVN checkout instructions
 
 = NOTE: Non-Standard SVN Layout =
 
