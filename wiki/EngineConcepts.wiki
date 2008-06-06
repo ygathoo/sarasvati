@@ -1,0 +1,7 @@
+#summary Core Sarasvati engine concepts.
+
+= Introduction =
+
+Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references. 
+
+We begin with the features likely to be common across most engines, then move on to Sarasvati specifics.
