@@ -1,7 +1,22 @@
 #summary Core Sarasvati engine concepts.
 
+[GraphBasedWorkflow <-- Prev: Why graph based workflow?] ... [XMLFileFormat Next: XML File Format  -->]
+
+
 = Introduction =
 
-Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references. 
+Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below). 
 
-We begin with the features likely to be common across most engines, then move on to Sarasvati specifics.
+We begin with the some definitions, move on to features likely to be common across most engines, then explain Sarasvati specifics.
+
+== Definitions ==
+
+Graphs come with a set of common terms. To begin with, a graph is made up a set of things, hereafter refered to as *nodes* and a set of connections between _nodes_, know as *arcs*.
+
+  * *Node* - A element of a graph. A node corresponds roughly to an action as defined [Workflow previously]. Nodes can be thought of as pieces of code, waiting to be executed when their turn comes. 
+    * Also known as: Vertex, Place
+
+  * *Arc* - A directed connection between two nodes. 'Directed' means that arcs have a start node and an end node. Process can only move along the arc in that one direction.  In same cases, an arc may have a label, or name. Named arcs are discussed in more detail later. 
+    * Also know as: Edge, Transition
+
+  * *Predecessor* - If two nodes are conencted by an arc then the node at the beginning of the arc is the _predecessor_ of the node at the end of the arc. How nodes are connected by arcs defines the order of execution. Generally a node may not execute until at last one, potentially many or all, of its predecessors has executed. Nodes may have many arcs exiting and entering them.
