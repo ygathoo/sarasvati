@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:s="http://sarasvati.googlecode.com/workflow/" targetNamespace="http://sarasvati.googlecode.com/workflow/">
+    <element name="workflow" type="s:Workflow"></element>
+
+    <complexType name="Workflow">
+      <annotation>
+        <documentation></documentation>
+      </annotation>
+      <sequence>
+        <element name="node" type="s:Node" minOccurs="1"
+          maxOccurs="unbounded" >
+          <annotation>
+            <documentation>
+              Every process definition must have at least one
+              node. If a process definition contains no nodes
+              with the isStart attribute set to true, it can
+              not be run on it's own. This is still valid
+              however, since it could be referenced from
+              another process definition.
+            </documentation>
+          </annotation></element>
+      </sequence>
+      <attribute name="name" type="string" use="required">
+        <annotation>
+          <documentation>
+            Every process definition must have a unique name.
+          </documentation>
+        </annotation></attribute>
+    </complexType>
+
+    <complexType name="Node">
+      <sequence>
+        <element name="guard"
+                 type="s:Guard"
+                 minOccurs="0"
+                 maxOccurs="1"/>
+        <element name="arc"
+                 type="s:Arc"
+                 minOccurs="0"
+                 maxOccurs="unbounded"/>
+        <element name="externalArc"
+                 type="s:ExternalArc"
+                 minOccurs="0"
+                 maxOccurs="unbounded"/>
+      </sequence>
+
+      <attribute name="name" type="string" use="required">
+        <annotation>
+          <documentation>
+            Node names must be unique within a given process
+            definition.
+          </documentation>
+        </annotation></attribute>
+      <attribute name="isJoin"
+                 type="boolean"
+                 use="optional"
+                 default="false"/>
+      <attribute name="type"
+                 type="string"
+                 use="optional"/>
+      <attribute name="isStart"
+                 type="boolean"
+                 use="optional"
+                 default="false">
+        <annotation>
+          <documentation>
+            If isStart is set to true, this node will have a token
+            placed in it. Guard functions will still be called for
+            start nodes.
+          </documentation>
+        </annotation></attribute>
+    </complexType>
+
+    <simpleType name="Guard">
+        <annotation>
+          <documentation>
+            Contains a GuardLang statement
+          </documentation>
+        </annotation>
+        <restriction base="string">
+        <whiteSpace value="collapse"></whiteSpace>
+      </restriction>
+    </simpleType>
+
+    <complexType name="Arc">
+      <attribute name="nodeName" type="string" use="required"/>
+      <attribute name="name" type="string" use="optional" default=""/>
+    </complexType>
+
+    <complexType name="ExternalArc">
+      <attribute name="workflow" type="string">
+        <annotation>
+          <documentation>
+            Specifies the name of the external process definition that is
+            being linked to. The latest version of the external
+            process definition will be used.
+          </documentation>
+        </annotation></attribute>
+      <attribute name="instance" type="string" use="required">
+        <annotation>
+          <documentation>
+            It may be desirable to included multiple distinct
+            instances of an external process definition. The instance
+            attribute allows a way to distinguish between
+            instances. All external arcs which point to the same
+            process definition and have the same instance name will
+            refer to the same set of imported nodes.
+          </documentation>
+        </annotation></attribute>
+      <attribute name="nodeName" type="string" use="required" >
+        <annotation>
+          <documentation>
+            Name of the node in the specified external process
+            definition that this arc will connect to
+          </documentation>
+        </annotation></attribute>
+      <attribute name="name" type="string" use="optional" default="" >
+        <annotation>
+          <documentation>The arc name</documentation>
+        </annotation></attribute>
+      <attribute name="type" type="s:ExternalArcType"
+        use="required">
+            <annotation>
+              <documentation>
+                The arc type, which may be either in or out. Out
+                arcs will use the surrounding node as the start
+                node. In arcs will use the surrounding node as the
+                end node.
+              </documentation>
+            </annotation>
+      </attribute>
+
+    </complexType>
+
+    <simpleType name="ExternalArcType">
+      <restriction base="string">
+        <enumeration value="in"/>
+        <enumeration value="out"/>
+      </restriction>
+    </simpleType>
+</schema>
