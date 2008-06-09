@@ -1,23 +1,29 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="embedded-task-rej" version="1">
-  <start>
+<workflow name="embedded-task-rej"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
+
+  <node name="start" isStart="true">
     <arc to="1"/>
-  </start>
+  </node>
 
-  <task name="1">
-    <task-name>Enter order</task-name>
-    <description>
-      Enter order into system
-    </description>
+  <node name="1" type="task">
+    <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub1" type="out"/>
+    <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub1" type="in" name="reject"/>
 
-    <externalArc workflow="subwf-tasks-rej" instance="1" nodeId="sub1" type="out"/>
-    <externalArc workflow="subwf-tasks-rej" instance="1" nodeId="sub1" type="in" name="reject"/>
-  </task>
+    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
+                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
+      <ex:task-name>Enter order</ex:task-name>
+      <ex:description>
+        Enter order into system
+      </ex:description>
+    </ex:task-def>
+
+  </node>
 
   <node name="2">
-    <externalArc workflow="subwf-tasks-rej" instance="1" nodeId="sub4" type="in"/>
+    <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub4" type="in"/>
   </node>
 
 </workflow>
