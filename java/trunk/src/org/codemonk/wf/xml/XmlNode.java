@@ -3,9 +3,15 @@ package org.codemonk.wf.xml;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
+@XmlRootElement (name="node")
+@XmlAccessorType(XmlAccessType.FIELD)
 public class XmlNode
 {
   @XmlAttribute (name="name", required=true)
@@ -20,14 +26,17 @@ public class XmlNode
   @XmlAttribute (name="isStart", required=false)
   protected Boolean start;
 
-  @XmlElement (name="guard",required=false)
+  @XmlElement (name="guard", namespace="http://sarasvati.googlecode.com/workflow/", required=false)
   protected String guard;
 
-  @XmlElement (name="arc",required=false)
+  @XmlElement (name="arc",namespace="http://sarasvati.googlecode.com/workflow/", required=false)
   protected List<XmlArc> arcs = new ArrayList<XmlArc>();
 
-  @XmlElement (name="externalArc",required=false)
+  @XmlElement (name="externalArc", namespace="http://sarasvati.googlecode.com/workflow/", required=false)
   protected List<XmlExternalArc> externalArcs = new ArrayList<XmlExternalArc>();
+
+  @XmlAnyElement (lax=true)
+  protected List<Object> custom;
 
   public String getName()
   {
@@ -37,6 +46,11 @@ public class XmlNode
   public void setName( String name )
   {
     this.name = name;
+  }
+
+  public boolean isJoin ()
+  {
+    return join == null ? false : join;
   }
 
   public Boolean getJoin()
@@ -57,6 +71,11 @@ public class XmlNode
   public void setType( String type )
   {
     this.type = type;
+  }
+
+  public boolean isStart ()
+  {
+    return start == null ? false : start;
   }
 
   public Boolean getStart()
@@ -97,5 +116,54 @@ public class XmlNode
   public void setExternalArcs( List<XmlExternalArc> externalArcs )
   {
     this.externalArcs = externalArcs;
+  }
+
+  public List<Object> getCustom ()
+  {
+    return custom;
+  }
+
+  public void setCustom (List<Object> custom)
+  {
+    this.custom = custom;
+  }
+
+  @Override
+  public String toString ()
+  {
+    StringBuilder buf = new StringBuilder();
+    buf.append( "<node name=\"" );
+    buf.append( name );
+    buf.append( "\" isJoin=\"" );
+    buf.append( isJoin() );
+    buf.append( "\" type=\"" );
+    buf.append( type );
+    buf.append( "\" isStart=\"" );
+    buf.append( isStart() );
+    buf.append( "\">\n" );
+
+    for ( XmlArc arc : arcs )
+    {
+      buf.append( arc );
+      buf.append( "\n" );
+    }
+
+    for ( XmlExternalArc arc : externalArcs )
+    {
+      buf.append( arc );
+      buf.append( "\n" );
+    }
+
+    if (custom != null )
+    {
+      for ( Object o : custom )
+      {
+        buf.append( o );
+        buf.append( "\n" );
+      }
+    }
+
+    buf.append( "</node>" );
+    return buf.toString();
   }
 }
