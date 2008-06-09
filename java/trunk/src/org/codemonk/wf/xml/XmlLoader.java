@@ -5,9 +5,12 @@ package org.codemonk.wf.xml;
 
 import java.io.File;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 public class XmlLoader
@@ -46,6 +49,11 @@ public class XmlLoader
   public void loadWorkflow (File file) throws JAXBException
   {
     XmlWorkflow wf = (XmlWorkflow)getUnmarshaller().unmarshal( file );
+    /*
+    Marshaller m = context.createMarshaller();
+    m.setProperty( "jaxb.formatted.output", true );
+    m.marshal( wf, System.out );
+    */
   }
 
   public void loadWorkflow (InputStream in) throws JAXBException
