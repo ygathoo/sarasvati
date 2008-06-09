@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:s="http://sarasvati.googlecode.com/workflow/" targetNamespace="http://sarasvati.googlecode.com/workflow/">
+<schema xmlns="http://www.w3.org/2001/XMLSchema"
+        xmlns:s="http://sarasvati.googlecode.com/workflow/"
+        targetNamespace="http://sarasvati.googlecode.com/workflow/">
+
     <element name="workflow" type="s:Workflow"></element>
 
     <complexType name="Workflow">
@@ -30,18 +33,13 @@
 
     <complexType name="Node">
       <sequence>
-        <element name="guard"
-                 type="s:Guard"
-                 minOccurs="0"
-                 maxOccurs="1"/>
-        <element name="arc"
-                 type="s:Arc"
-                 minOccurs="0"
-                 maxOccurs="unbounded"/>
-        <element name="externalArc"
-                 type="s:ExternalArc"
-                 minOccurs="0"
-                 maxOccurs="unbounded"/>
+        <element name="guard" type="s:Guard" minOccurs="0"
+          maxOccurs="1" />
+        <element name="arc" type="s:Arc" minOccurs="0"
+          maxOccurs="unbounded" />
+        <element name="externalArc" type="s:ExternalArc" minOccurs="0"
+          maxOccurs="unbounded" />
+        <any namespace="##other" minOccurs="0" maxOccurs="1" processContents="strict"/>
       </sequence>
 
       <attribute name="name" type="string" use="required">
@@ -138,4 +136,5 @@
         <enumeration value="out"/>
       </restriction>
     </simpleType>
+
 </schema>
