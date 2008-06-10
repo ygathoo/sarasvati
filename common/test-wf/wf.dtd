@@ -5,10 +5,13 @@
 
 <!ELEMENT start (arc*, externalArc*)>
 
-<!ELEMENT node (arc*, externalArc*)>
+<!ELEMENT node (arc*, externalArc*,guard?)>
 <!ATTLIST node
-          name ID             #REQUIRED
-          isJoin (true|false) "false">
+          name   ID           #REQUIRED
+          isJoin (true|false) "false"
+          type   CDATA        #IMPLIED>
+
+<!ELEMENT guard (#PCDATA)>
 
 <!ELEMENT arc (#PCDATA)>
 <!ATTLIST arc to   ID    #REQUIRED
