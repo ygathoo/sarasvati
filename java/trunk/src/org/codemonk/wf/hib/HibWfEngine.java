@@ -119,16 +119,19 @@ public class HibWfEngine extends WfEngine
   @SuppressWarnings("unchecked")
   public List<HibWfGraph> getGraphs ()
   {
-    return session.createQuery( "from HibGraph" ).list();
+    return session.createQuery( "from HibWfGraph" ).list();
   }
 
   @SuppressWarnings("unchecked")
   public HibWfGraph getLatestGraph (String name)
   {
-    String query = "from HibGraph " +
+    String query = "from HibWfGraph " +
                    " where name = :name " +
-                   "   and version in (select max(version) from HibGraph where name = :name)";
+                   "   and version in (select max(version) from HibWfGraph where name = :name)";
 
-    return (HibWfGraph)session.createQuery( query ).uniqueResult();
+    return
+      (HibWfGraph)session.createQuery( query )
+        .setString(  "name", name )
+        .uniqueResult();
   }
 }

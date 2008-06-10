@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -54,6 +55,7 @@ public class HibWfGraph implements WfGraph
   protected String name;
   protected int    version;
 
+  @Column (name="create_date", updatable=false)
   @Temporal (TemporalType.TIMESTAMP)
   protected Date   createDate;
 
@@ -64,6 +66,8 @@ public class HibWfGraph implements WfGraph
     this.name = name;
     this.version = version;
     this.createDate = new Date();
+    this.nodeRefs = new LinkedList<HibNodeRef>();
+    this.arcs = new LinkedList<HibArc>();
   }
 
   @OneToMany (fetch=FetchType.EAGER, mappedBy="graph")

@@ -66,14 +66,14 @@ public class HibNode implements Node
   @Type (type="yes_no")
   protected boolean join;
 
-  @Column (name="is_join")
+  @Column (name="is_start")
   @Type (type="yes_no")
   protected boolean start;
 
   protected String guard;
 
   protected HibNode () { /* Default constructor for Hibernate */ }
-  
+
   public HibNode (HibWfGraph graph,
                   String name,
                   String type,
@@ -88,7 +88,17 @@ public class HibNode implements Node
     this.start = start;
     this.guard = guard;
   }
-  
+
+  public HibNode (HibNode other)
+  {
+    this.graph = other.graph;
+    this.name  = other.name;
+    this.type  = other.type;
+    this.join  = other.join;
+    this.start = other.start;
+    this.guard = other.guard;
+  }
+
   public Long getId ()
   {
     return id;

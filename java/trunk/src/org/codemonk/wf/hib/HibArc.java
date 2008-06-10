@@ -60,7 +60,7 @@ public class HibArc implements Arc
     this.graph = graph;
     this.startNode = startNode;
     this.endNode = endNode;
-    this.name = name;
+    this.name = name == null ? Arc.DEFAULT_ARC : name;
   }
 
   public Long getId ()

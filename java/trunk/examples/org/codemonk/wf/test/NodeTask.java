@@ -18,6 +18,7 @@
 */
 package org.codemonk.wf.test;
 
+import javax.persistence.CascadeType;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -34,9 +35,17 @@ import org.hibernate.Session;
 @DiscriminatorValue( "task" )
 public class NodeTask extends HibNode
 {
-  @OneToOne
+  @OneToOne (cascade = { CascadeType.REMOVE } )
   @PrimaryKeyJoinColumn
   protected NodeTaskDetail detail;
+
+  protected NodeTask() { /* Default constructor for Hibernate */ }
+
+  public NodeTask( HibNode other )
+  {
+    super( other );
+    detail = new NodeTaskDetail ();
+  }
 
   public NodeTaskDetail getDetail ()
   {

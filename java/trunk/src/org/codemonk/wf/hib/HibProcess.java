@@ -25,6 +25,7 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -62,6 +63,7 @@ public class HibProcess implements Process
   @Where (clause="complete_date is null")
   protected List<NodeToken>  nodeTokens;
 
+  @Column (name="create_date", updatable=false)
   @Temporal (TemporalType.TIMESTAMP)
   protected Date createDate;
 
@@ -72,6 +74,7 @@ public class HibProcess implements Process
     this.graph = graph;
     this.arcTokens = new LinkedList<ArcToken>();
     this.nodeTokens = new LinkedList<NodeToken>();
+    this.createDate = new Date();
   }
 
   public Long getId ()
