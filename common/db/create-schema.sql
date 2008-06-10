@@ -17,7 +17,7 @@ create table wf_graph
   id          serial       NOT NULL PRIMARY KEY,
   name        varchar(255) NOT NULL,
   version     int          NOT NULL,
-  create_date timestamp    NOT NULL
+  create_date timestamp    NOT NULL DEFAULT current_timestamp
 );
 
 ALTER TABLE wf_graph
@@ -28,7 +28,7 @@ create table wf_process
 (
   id          serial       NOT NULL PRIMARY KEY,
   graph_id    int          NOT NULL,
-  create_date timestamp    NOT NULL
+  create_date timestamp    NOT NULL DEFAULT current_timestamp
 );
 
 create table wf_node_type
