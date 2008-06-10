@@ -115,6 +115,12 @@ public class HibNodeRef implements Node
   }
 
   @Override
+  public boolean isStart ()
+  {
+    return node.isStart();
+  }
+
+  @Override
   public String getLabel ()
   {
     return node.getLabel();

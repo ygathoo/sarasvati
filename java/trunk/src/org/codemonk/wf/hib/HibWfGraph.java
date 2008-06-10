@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -23,6 +23,7 @@ package org.codemonk.wf.hib;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -35,6 +36,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.codemonk.wf.Arc;
@@ -50,6 +53,18 @@ public class HibWfGraph implements WfGraph
   protected Long   id;
   protected String name;
   protected int    version;
+
+  @Temporal (TemporalType.TIMESTAMP)
+  protected Date   createDate;
+
+  protected HibWfGraph () { /* Default constructor for hibernate */ }
+
+  protected HibWfGraph (String name, int version)
+  {
+    this.name = name;
+    this.version = version;
+    this.createDate = new Date();
+  }
 
   @OneToMany (fetch=FetchType.EAGER, mappedBy="graph")
   protected List<HibNodeRef> nodeRefs;
@@ -92,6 +107,16 @@ public class HibWfGraph implements WfGraph
   public void setVersion (int version)
   {
     this.version = version;
+  }
+
+  public Date getCreateDate()
+  {
+    return createDate;
+  }
+
+  public void setCreateDate( Date createDate )
+  {
+    this.createDate = createDate;
   }
 
   public List<HibNodeRef> getNodeRefs ()
@@ -217,7 +242,7 @@ public class HibWfGraph implements WfGraph
 
     for ( HibNodeRef node : getNodeRefs() )
     {
-      if ( "start".equals( node.getType() ) && node.getGraph().equals( this ) )
+      if ( node.isStart() && node.getGraph().equals( this ) )
       {
         startNodes.add( node );
       }

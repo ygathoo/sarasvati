@@ -53,6 +53,16 @@ public class HibArc implements Arc
   @JoinColumn (name="z_node_ref_id")
   protected HibNodeRef endNode;
 
+  protected HibArc () { /* Default constructor for hibernate */ }
+
+  protected HibArc (HibWfGraph graph, HibNodeRef startNode, HibNodeRef endNode, String name)
+  {
+    this.graph = graph;
+    this.startNode = startNode;
+    this.endNode = endNode;
+    this.name = name;
+  }
+
   public Long getId ()
   {
     return id;
