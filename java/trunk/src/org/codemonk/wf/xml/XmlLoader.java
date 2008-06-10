@@ -5,13 +5,13 @@ package org.codemonk.wf.xml;
 
 import java.io.File;
 import java.io.InputStream;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.Reader;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+
+import org.xml.sax.InputSource;
 
 public class XmlLoader
 {
@@ -46,18 +46,23 @@ public class XmlLoader
     return u;
   }
 
-  public void loadWorkflow (File file) throws JAXBException
+  public XmlWorkflow loadWorkflow (File file) throws JAXBException
   {
-    XmlWorkflow wf = (XmlWorkflow)getUnmarshaller().unmarshal( file );
-    /*
-    Marshaller m = context.createMarshaller();
-    m.setProperty( "jaxb.formatted.output", true );
-    m.marshal( wf, System.out );
-    */
+    return (XmlWorkflow)getUnmarshaller().unmarshal( file );
   }
 
-  public void loadWorkflow (InputStream in) throws JAXBException
+  public XmlWorkflow loadWorkflow (InputStream in) throws JAXBException
   {
-    XmlWorkflow wf = (XmlWorkflow)getUnmarshaller().unmarshal( in );
+    return (XmlWorkflow)getUnmarshaller().unmarshal( in );
   }
+  
+  public XmlWorkflow loadWorkflow (Reader in) throws JAXBException
+  {
+    return (XmlWorkflow)getUnmarshaller().unmarshal( in );
+  }
+  
+  public XmlWorkflow loadWorkflow (InputSource in) throws JAXBException
+  {
+    return (XmlWorkflow)getUnmarshaller().unmarshal( in );
+  }  
 }

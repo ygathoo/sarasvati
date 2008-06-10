@@ -53,6 +53,15 @@ public class HibNodeRef implements Node
 
   protected String instance;
 
+  protected HibNodeRef () { /* Default constructor for Hibernate */ }
+  
+  protected HibNodeRef (HibWfGraph graph, HibNode node, String instance )
+  {
+    this.graph    = graph;
+    this.node     = node;
+    this.instance = instance;
+  }
+  
   public Long getId ()
   {
     return id;
