@@ -1,8 +1,7 @@
-package org.codemonk.wf;        
+package org.codemonk.wf;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
@@ -35,9 +34,9 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
                                    boolean isJoin,
                                    boolean isStart,
                                    String guard,
-                                   List<Object> extraData)
+                                   Object custom)
     throws ImportException;
-  
+
   protected abstract Map<String,N> importInstance (String externalName, String instanceName) throws ImportException;
 
   protected void importNodes (XmlWorkflow xmlDef) throws ImportException
@@ -58,7 +57,7 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
                               xmlNode.isJoin(),
                               xmlNode.isStart(),
                               xmlNode.getGuard(),
-                              xmlNode.getCustom() );       
+                              xmlNode.getCustom() );
       nodeCache.put( nodeName, newNode );
     }
   }
@@ -151,7 +150,7 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
   {
     stack.add( name );
     XmlWorkflow xmlDef = resolver.resolve( name );
-  
+
     for ( XmlNode node : xmlDef.getNodes() )
     {
       for (XmlExternalArc extArc : node.getExternalArcs() )
@@ -161,16 +160,16 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
         {
           throw new ImportException( "Process definition '" + name + "' contains an illegal recursive reference to '" + extName + "'" );
         }
-        
-        if ( isLoaded( extName ) )
-        {          
+
+        if ( !isLoaded( extName ) )
+        {
           importWithDependencies( extName, resolver, stack );
         }
       }
     }
-    
+
     stack.remove( stack.size() - 1 );
-    
-    importDefinition( xmlDef );    
+
+    importDefinition( xmlDef );
   }
 }

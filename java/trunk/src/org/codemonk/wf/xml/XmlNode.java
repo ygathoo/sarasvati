@@ -36,7 +36,7 @@ public class XmlNode
   protected List<XmlExternalArc> externalArcs = new ArrayList<XmlExternalArc>();
 
   @XmlAnyElement (lax=true)
-  protected List<Object> custom;
+  protected Object custom;
 
   public String getName()
   {
@@ -118,12 +118,12 @@ public class XmlNode
     this.externalArcs = externalArcs;
   }
 
-  public List<Object> getCustom ()
+  public Object getCustom ()
   {
     return custom;
   }
 
-  public void setCustom (List<Object> custom)
+  public void setCustom (Object custom)
   {
     this.custom = custom;
   }
@@ -156,11 +156,8 @@ public class XmlNode
 
     if (custom != null )
     {
-      for ( Object o : custom )
-      {
-        buf.append( o );
-        buf.append( "\n" );
-      }
+      buf.append( custom );
+      buf.append( "\n" );
     }
 
     buf.append( "</node>" );
