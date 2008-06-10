@@ -7,8 +7,8 @@ drop table if exists wf_node_token;
 drop table if exists wf_arc;
 drop table if exists wf_node_ref;
 drop table if exists wf_node_task;
-drop table if exists wf_node_type;
 drop table if exists wf_node;
+drop table if exists wf_node_type;
 drop table if exists wf_process;
 drop table if exists wf_graph;
 
@@ -52,7 +52,7 @@ create table wf_node
   is_join         char(1)      NOT NULL,
   is_start        char(1)      NOT NULL,
   type            varchar(255) NOT NULL REFERENCES wf_node_type,
-  guard           varchar(255) NOT NULL
+  guard           varchar(255) NULL
 );
 
 ALTER TABLE wf_node
