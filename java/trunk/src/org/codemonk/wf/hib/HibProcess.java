@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -21,6 +21,7 @@
  */
 package org.codemonk.wf.hib;
 
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -33,6 +34,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.codemonk.wf.ArcToken;
 import org.codemonk.wf.NodeToken;
@@ -58,6 +61,9 @@ public class HibProcess implements Process
   @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
   protected List<NodeToken>  nodeTokens;
+
+  @Temporal (TemporalType.TIMESTAMP)
+  protected Date createDate;
 
   public HibProcess () { /* Default constructor for Hibernate */ }
 
@@ -108,6 +114,16 @@ public class HibProcess implements Process
   public void setNodeTokens( List<NodeToken> nodeTokens )
   {
     this.nodeTokens = nodeTokens;
+  }
+
+  public Date getCreateDate()
+  {
+    return createDate;
+  }
+
+  public void setCreateDate( Date createDate )
+  {
+    this.createDate = createDate;
   }
 
   @Override

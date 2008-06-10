@@ -108,7 +108,7 @@ public class HibWfEngine extends WfEngine
   }
 
   @Override
-  protected HibProcess newProcess( WfGraph graph )
+  protected HibProcess newProcess (WfGraph graph)
   {
     HibProcess process = new HibProcess( (HibWfGraph)graph);
     session.save(  process );
@@ -120,5 +120,15 @@ public class HibWfEngine extends WfEngine
   public List<HibWfGraph> getGraphs ()
   {
     return session.createQuery( "from HibGraph" ).list();
+  }
+
+  @SuppressWarnings("unchecked")
+  public HibWfGraph getLatestGraph (String name)
+  {
+    String query = "from HibGraph " +
+                   " where name = :name " +
+                   "   and version in (select max(version) from HibGraph where name = :name)";
+
+    return (HibWfGraph)session.createQuery( query ).uniqueResult();
   }
 }

@@ -66,6 +66,10 @@ public class HibNode implements Node
   @Type (type="yes_no")
   protected boolean join;
 
+  @Column (name="is_join")
+  @Type (type="yes_no")
+  protected boolean start;
+
   protected String guard;
 
   public Long getId ()
@@ -119,6 +123,17 @@ public class HibNode implements Node
   public void setJoin (boolean join)
   {
     this.join = join;
+  }
+
+  @Override
+  public boolean isStart()
+  {
+    return start;
+  }
+
+  public void setStart( boolean start )
+  {
+    this.start = start;
   }
 
   @Override
