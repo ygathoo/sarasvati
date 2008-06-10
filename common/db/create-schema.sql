@@ -14,9 +14,10 @@ drop table if exists wf_graph;
 
 create table wf_graph
 (
-  id      serial       NOT NULL PRIMARY KEY,
-  name    varchar(255) NOT NULL,
-  version int          NOT NULL
+  id          serial       NOT NULL PRIMARY KEY,
+  name        varchar(255) NOT NULL,
+  version     int          NOT NULL,
+  create_date timestamp    NOT NULL
 );
 
 ALTER TABLE wf_graph
@@ -25,8 +26,9 @@ ALTER TABLE wf_graph
 
 create table wf_process
 (
-  id       serial NOT NULL PRIMARY KEY,
-  graph_id int    NOT NULL
+  id          serial       NOT NULL PRIMARY KEY,
+  graph_id    int          NOT NULL,
+  create_date timestamp    NOT NULL
 );
 
 create table wf_node_type
@@ -48,6 +50,7 @@ create table wf_node
   graph_id        int          NOT NULL REFERENCES wf_graph,
   name            varchar(255) NOT NULL,
   is_join         char(1)      NOT NULL,
+  is_start        char(1)      NOT NULL,
   type            varchar(255) NOT NULL REFERENCES wf_node_type,
   guard           varchar(255) NOT NULL
 );
