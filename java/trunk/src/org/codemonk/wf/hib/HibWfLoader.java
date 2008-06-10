@@ -10,7 +10,56 @@ import org.codemonk.wf.WfGraph;
 
 public class HibWfLoader extends BaseWfLoader<HibWfGraph, HibNodeRef>
 {
+  public static interface NodeFactory
+  {
+    HibNode createNode( HibNode node, List<Object> custom);
+  }
+  
+  protected Map<String,NodeFactory> customTypeFactories = new HashMap<String, NodeFactory>();
   protected HibWfEngine engine;
+
+  public HibWfLoader (HibWfEngine engine)
+  {
+    this.engine = engine;
+  }
+  
+  public void addCustomType (String type, NodeFactory factory)
+  {
+    customTypeFactories.put( type, factory );
+  }
+  
+  @Override
+  protected HibWfGraph createWfGraph (String name)
+  {
+    WfGraph latest = engine.getLatestGraph( name );
+    HibWfGraph graph = new HibWfGraph( name, latest.getVersion() + 1 );
+    engine.getSession().save( graph );
+    return graph;
+  }  
+  
+  @Override
+  protected HibNodeRef createNode (String name, 
+                                   String type, 
+                                   boolean isJoin,
+                                   boolean isStart, 
+                                   String guard, 
+                                   List<Object> custom)
+    throws ImportException
+  {
+    HibNode node = new HibNode(getWfGraph(), name, type, isJoin, isStart, guard);
+    
+    NodeFactory factory = customTypeFactories.get( type );
+    if ( type != null )
+    {
+      node = factory.createNode( node, custom );
+    }
+    
+    engine.getSession().save( node );
+    
+    HibNodeRef nodeRef = new HibNodeRef( getWfGraph(), node, null );
+    engine.getSession().save( nodeRef  );
+    return nodeRef;
+  }
 
   @Override
   protected void createArc (HibNodeRef startNode, HibNodeRef endNode, String name)
@@ -19,28 +68,6 @@ public class HibWfLoader extends BaseWfLoader<HibWfGraph, HibNodeRef>
     HibArc arc = new HibArc( getWfGraph(), startNode, endNode, name );
     engine.getSession().save( arc );
   }
-
-  @Override
-  protected HibNodeRef createNode (String name,
-                                   String type,
-                                   boolean isJoin,
-                                   boolean isStart,
-                                   String guard,
-                                   List<Object> extraData)
-    throws ImportException
-  {
-    return null;
-  }
-
-  @Override
-  protected HibWfGraph createWfGraph (String name)
-  {
-    WfGraph latest = engine.getLatestGraph( name );
-    HibWfGraph graph = new HibWfGraph( name, latest.getVersion() + 1 );
-    engine.getSession().save( graph );
-    return graph;
-  }
-
 
   @Override
   protected Map<String,HibNodeRef> importInstance (String externalName, String instanceName)
@@ -52,13 +79,10 @@ public class HibWfLoader extends BaseWfLoader<HibWfGraph, HibNodeRef>
 
     for ( HibNodeRef nodeRef : graph.getNodeRefs() )
     {
-      HibNodeRef newRef = new HibNodeRef ();
-      newRef.setGraph( getWfGraph() );
-      newRef.setNode( nodeRef.getNode() );
-
-      String label = newRef.getInstance();
+      String label = nodeRef.getInstance();
       label = label == null || "".equals( label ) ? instanceName : instanceName + ":" + label;
-      newRef.setInstance( label );
+      
+      HibNodeRef newRef = new HibNodeRef( getWfGraph(), nodeRef.getNode(), label );      
       engine.getSession().save( newRef );
 
       if ( nodeRef.getGraph().equals( getWfGraph() ) )
@@ -67,5 +91,10 @@ public class HibWfLoader extends BaseWfLoader<HibWfGraph, HibNodeRef>
       }
     }
     return refMap;
+  }
+  
+  public boolean isLoaded (String name)
+  {
+    return null != engine.getLatestGraph( name );
   }
 }

@@ -72,6 +72,23 @@ public class HibNode implements Node
 
   protected String guard;
 
+  protected HibNode () { /* Default constructor for Hibernate */ }
+  
+  public HibNode (HibWfGraph graph,
+                  String name,
+                  String type,
+                  boolean join,
+                  boolean start,
+                  String guard)
+  {
+    this.graph = graph;
+    this.name  = name;
+    this.type  = type;
+    this.join  = join;
+    this.start = start;
+    this.guard = guard;
+  }
+  
   public Long getId ()
   {
     return id;

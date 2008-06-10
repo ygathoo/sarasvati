@@ -38,6 +38,16 @@ public class NodeTask extends HibNode
   @PrimaryKeyJoinColumn
   protected NodeTaskDetail detail;
 
+  public NodeTaskDetail getDetail ()
+  {
+    return detail;
+  }
+
+  public void setDetail (NodeTaskDetail detail)
+  {
+    this.detail = detail;
+  }
+
   public String getTaskName ()
   {
     return detail.getTaskName();

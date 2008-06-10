@@ -1,27 +1,25 @@
-package org.codemonk.wf;
+package org.codemonk.wf;        
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.xml.bind.JAXBException;
 
 import org.codemonk.wf.xml.XmlArc;
 import org.codemonk.wf.xml.XmlExternalArc;
 import org.codemonk.wf.xml.XmlExternalArcType;
 import org.codemonk.wf.xml.XmlNode;
 import org.codemonk.wf.xml.XmlWorkflow;
+import org.codemonk.wf.xml.XmlWorkflowResolver;
 
-public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements WfLoader
+public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements WfLoader<G,N>
 {
   protected Map<String,Map<String,N>> instanceCache = null;
   protected Map<String,N>             nodeCache     = null;
 
   protected G graph;
-
-  protected void clearCaches ()
-  {
-    instanceCache = new HashMap<String, Map<String,N>>();
-    nodeCache     = new HashMap<String, N>();
-  }
 
   protected G getWfGraph ()
   {
@@ -30,6 +28,8 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
 
   protected abstract G createWfGraph (String name);
 
+  protected abstract void createArc (N startNode, N endNode, String name) throws ImportException;
+
   protected abstract N createNode (String name,
                                    String type,
                                    boolean isJoin,
@@ -37,14 +37,12 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
                                    String guard,
                                    List<Object> extraData)
     throws ImportException;
-
-  protected abstract void createArc (N startNode, N endNode, String name ) throws ImportException;
-
+  
   protected abstract Map<String,N> importInstance (String externalName, String instanceName) throws ImportException;
 
   protected void importNodes (XmlWorkflow xmlDef) throws ImportException
   {
-    for (XmlNode xmlNode : xmlDef.getNodes() )
+    for ( XmlNode xmlNode : xmlDef.getNodes() )
     {
       String nodeName = xmlNode.getName();
 
@@ -55,13 +53,13 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
 
       String type = xmlNode.getType();
 
-      nodeCache.put( nodeName,
-                     createNode( nodeName,
-                                 type == null ? "node" : type,
-                                 xmlNode.isJoin(),
-                                 xmlNode.isStart(),
-                                 xmlNode.getGuard(),
-                                 xmlNode.getCustom() ) );
+      N newNode = createNode( nodeName,
+                              type == null ? "node" : type,
+                              xmlNode.isJoin(),
+                              xmlNode.isStart(),
+                              xmlNode.getGuard(),
+                              xmlNode.getCustom() );       
+      nodeCache.put( nodeName, newNode );
     }
   }
 
@@ -104,7 +102,7 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
 
   protected void importExternalArcs (XmlWorkflow xmlDef) throws ImportException
   {
-    for (XmlNode xmlNode : xmlDef.getNodes() )
+    for ( XmlNode xmlNode : xmlDef.getNodes() )
     {
       for ( XmlExternalArc externalArc : xmlNode.getExternalArcs() )
       {
@@ -133,10 +131,46 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
   @Override
   public void importDefinition (XmlWorkflow xmlDef) throws ImportException
   {
-    clearCaches();
+    instanceCache = new HashMap<String, Map<String,N>>();
+    nodeCache     = new HashMap<String, N>();
 
     graph = createWfGraph( xmlDef.getName() );
     importNodes( xmlDef );
     importArcs( xmlDef );
+    importExternalArcs(  xmlDef );
+  }
+
+  public void importWithDependencies (String name, XmlWorkflowResolver resolver)
+    throws JAXBException, ImportException
+  {
+    importWithDependencies( name, resolver, new ArrayList<String>( 10 ) );
+  }
+
+  private void importWithDependencies (String name, XmlWorkflowResolver resolver, ArrayList<String> stack)
+      throws JAXBException, ImportException
+  {
+    stack.add( name );
+    XmlWorkflow xmlDef = resolver.resolve( name );
+  
+    for ( XmlNode node : xmlDef.getNodes() )
+    {
+      for (XmlExternalArc extArc : node.getExternalArcs() )
+      {
+        String extName = extArc.getExternal();
+        if ( stack.contains( extName ) )
+        {
+          throw new ImportException( "Process definition '" + name + "' contains an illegal recursive reference to '" + extName + "'" );
+        }
+        
+        if ( isLoaded( extName ) )
+        {          
+          importWithDependencies( extName, resolver, stack );
+        }
+      }
+    }
+    
+    stack.remove( stack.size() - 1 );
+    
+    importDefinition( xmlDef );    
   }
 }
