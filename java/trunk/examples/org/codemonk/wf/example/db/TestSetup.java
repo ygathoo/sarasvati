@@ -16,7 +16,8 @@
 
     Copyright 2008 Paul Lorenz
 */
-package org.codemonk.wf.test;
+
+package org.codemonk.wf.example.db;
 
 import org.codemonk.wf.hib.HibArc;
 import org.codemonk.wf.hib.HibArcToken;

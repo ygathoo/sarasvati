@@ -244,9 +244,9 @@ public class HibWfGraph implements WfGraph
   {
     List<Node> startNodes = new LinkedList<Node>();
 
-    for ( HibNodeRef node : getNodeRefs() )
+    for ( Node node : getNodeRefs() )
     {
-      if ( node.isStart() && node.getGraph().equals( this ) )
+      if ( node.isStart() )
       {
         startNodes.add( node );
       }
@@ -255,7 +255,6 @@ public class HibWfGraph implements WfGraph
     return startNodes;
   }
 
-  @Override
   public boolean hasArcInverse( Arc arc )
   {
     for (Arc tmpArc : arcs)
@@ -266,7 +265,6 @@ public class HibWfGraph implements WfGraph
         return true;
       }
     }
-
     return false;
   }
 

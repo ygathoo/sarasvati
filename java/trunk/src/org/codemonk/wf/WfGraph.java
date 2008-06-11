@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -23,6 +23,14 @@ package org.codemonk.wf;
 
 import java.util.List;
 
+/**
+ * A WfGraph is graph corresponding to a process definition. It has a set of
+ * Nodes, which correspond to actions that need to be taken for the process
+ * to complete. It also has a set of Arcs which define the relationships
+ * between the Nodes.
+ *
+ * @author Paul Lorenz
+ */
 public interface WfGraph
 {
   /**
@@ -87,14 +95,4 @@ public interface WfGraph
    * @return A list of nodes
    */
   List<Node> getStartNodes ();
-
-  /**
-   * Returns true if the given arc has an inverse. An inverse arc
-   * would have the end node of the given arc as a start node and
-   * the start node of the given arc as an end node.
-   *
-   * @param arc An arc belonging to this graph
-   * @return True if an inverse of this arc exists in the graph
-   */
-  boolean hasArcInverse (Arc arc);
 }

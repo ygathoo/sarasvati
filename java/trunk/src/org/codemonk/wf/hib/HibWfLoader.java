@@ -1,3 +1,22 @@
+/*
+    This file is part of Sarasvati.
+
+    Sarasvati is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    Sarasvati is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2008 Paul Lorenz
+*/
+
 package org.codemonk.wf.hib;
 
 import java.util.HashMap;
@@ -35,9 +54,9 @@ public class HibWfLoader extends BaseWfLoader<HibWfGraph, HibNodeRef>
 
     int version = latest == null ? 1 : latest.getVersion() + 1;
 
-    HibWfGraph graph = new HibWfGraph( name, version );
-    engine.getSession().save( graph );
-    return graph;
+    HibWfGraph newGraph = new HibWfGraph( name, version );
+    engine.getSession().save( newGraph );
+    return newGraph;
   }
 
   @Override
@@ -82,9 +101,9 @@ public class HibWfLoader extends BaseWfLoader<HibWfGraph, HibNodeRef>
   protected Map<String,HibNodeRef> importInstance (String externalName, String instanceName)
       throws ImportException
   {
-    HibWfGraph graph = engine.getLatestGraph( externalName );
+    HibWfGraph instanceGraph = engine.getLatestGraph( externalName );
 
-    if ( graph == null )
+    if ( instanceGraph == null )
     {
       throw new ImportException( "Referenced external '" + externalName + "' not found in database" );
     }
@@ -92,7 +111,7 @@ public class HibWfLoader extends BaseWfLoader<HibWfGraph, HibNodeRef>
     Map<String, HibNodeRef> refMap = new HashMap<String, HibNodeRef>();
     Map<Long,HibNodeRef>    arcRefMap = new HashMap<Long, HibNodeRef>();
 
-    for ( HibNodeRef nodeRef : graph.getNodeRefs() )
+    for ( HibNodeRef nodeRef : instanceGraph.getNodeRefs() )
     {
       String label = nodeRef.getInstance();
       label = label == null || "".equals( label ) ? instanceName : instanceName + ":" + label;
@@ -107,7 +126,7 @@ public class HibWfLoader extends BaseWfLoader<HibWfGraph, HibNodeRef>
       }
     }
 
-    for ( HibArc arc : graph.getArcs() )
+    for ( HibArc arc : instanceGraph.getArcs() )
     {
       HibNodeRef startNode = arcRefMap.get( arc.getStartNode().getId() );
       HibNodeRef endNode = arcRefMap.get( arc.getEndNode().getId() );

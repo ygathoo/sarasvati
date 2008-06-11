@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as
+    it under the terms of the GNU Lesser General Public License as 
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,59 +11,45 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public
+    You should have received a copy of the GNU Lesser General Public 
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
 */
-package org.codemonk.wf.test;
+package org.codemonk.wf.example.db;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table (name = "wf_node_task")
-public class NodeTaskDetail
+@Table (name="wf_task_state")
+public class TaskState
 {
   @Id
-  protected Long id;
+  protected Integer id;
+  protected String  description;
 
-  @Column (name = "name")
-  protected String taskName;
+  public TaskState () { /* Default constructor for Hibernate */ }
 
-  @Column (name = "description")
-  protected String taskDesc;
-
-  public Long getId()
+  public Integer getId()
   {
     return id;
   }
 
-  public void setId( Long id )
+  public void setId( Integer id )
   {
     this.id = id;
   }
 
-  public String getTaskName ()
+  public String getDescription()
   {
-    return taskName;
+    return description;
   }
 
-  public void setTaskName (String taskName)
+  public void setName( String description )
   {
-    this.taskName = taskName;
-  }
-
-  public String getTaskDesc ()
-  {
-    return taskDesc;
-  }
-
-  public void setTaskDesc (String taskDesc)
-  {
-    this.taskDesc = taskDesc;
+    this.description = description;
   }
 
   @Override
@@ -82,9 +68,9 @@ public class NodeTaskDetail
       return true;
     if (obj == null)
       return false;
-    if (!(obj instanceof NodeTaskDetail))
+    if (getClass() != obj.getClass())
       return false;
-    final NodeTaskDetail other = (NodeTaskDetail) obj;
+    final TaskState other = (TaskState) obj;
     if (id == null)
     {
       if (other.id != null)
@@ -93,4 +79,6 @@ public class NodeTaskDetail
       return false;
     return true;
   }
+
+
 }

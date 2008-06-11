@@ -27,7 +27,7 @@ import java.awt.Graphics;
 
 import javax.swing.Icon;
 
-import org.codemonk.wf.test.NodeTask;
+import org.codemonk.wf.example.db.NodeTask;
 
 public class TaskIcon implements Icon
 {

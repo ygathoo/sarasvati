@@ -16,24 +16,41 @@
 
     Copyright 2008 Paul Lorenz
 */
-package org.codemonk.wf.test;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+package org.codemonk.wf.mem;
 
 import org.codemonk.wf.Arc;
-import org.codemonk.wf.WfEngine;
-import org.codemonk.wf.NodeToken;
-import org.codemonk.wf.hib.HibNode;
+import org.codemonk.wf.Node;
 
-@Entity
-@DiscriminatorValue( "dump" )
-public class NodeDump extends HibNode
+public class MemArc implements Arc
 {
-  @Override
-  public void execute (WfEngine engine, NodeToken token)
+  protected String  name;
+  protected MemNode startNode;
+  protected MemNode endNode;
+
+  public MemArc (String name, MemNode startNode, MemNode endNode)
   {
-    System.out.println( "Accepted into: " + getName() );
-    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
+    super();
+    this.name = name;
+    this.startNode = startNode;
+    this.endNode = endNode;
+  }
+
+  @Override
+  public Node getEndNode ()
+  {
+    return endNode;
+  }
+
+  @Override
+  public String getName ()
+  {
+    return name;
+  }
+
+  @Override
+  public Node getStartNode ()
+  {
+    return startNode;
   }
 }

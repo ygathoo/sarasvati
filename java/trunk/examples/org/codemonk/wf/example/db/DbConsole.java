@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package org.codemonk.wf.test;
+package org.codemonk.wf.example.db;
 
 import java.io.Console;
 import java.util.List;
