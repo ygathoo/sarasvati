@@ -17,14 +17,22 @@
     Copyright 2008 Paul Lorenz
 */
 
-package org.codemonk.wf.xml;
+package org.codemonk.wf.mem;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
+import java.util.HashMap;
+import java.util.Map;
 
-@XmlEnum(String.class)
-public enum XmlExternalArcType
+public class MemWfGraphCache
 {
-  @XmlEnumValue("in")   IN,
-  @XmlEnumValue ("out") OUT;
+  private static Map<String,MemWfGraph> cache = new HashMap<String, MemWfGraph>();
+
+  public static void addToCache (String name, MemWfGraph graph)
+  {
+    cache.put( name, graph );
+  }
+
+  public static MemWfGraph get (String name)
+  {
+    return cache.get( name );
+  }
 }

@@ -1,7 +1,23 @@
-/**
- * Created on Jun 9, 2008
- */
-package org.codemonk.wf.test;
+/*
+    This file is part of Sarasvati.
+
+    Sarasvati is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    Sarasvati is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2008 Paul Lorenz
+*/
+
+package org.codemonk.wf.example.db;
 
 import java.io.File;
 
@@ -9,12 +25,13 @@ import org.codemonk.wf.ImportException;
 import org.codemonk.wf.hib.HibNode;
 import org.codemonk.wf.hib.HibWfEngine;
 import org.codemonk.wf.hib.HibWfLoader;
+import org.codemonk.wf.test.XmlTaskDef;
 import org.codemonk.wf.xml.DefaultFileXmlWorkflowResolver;
 import org.codemonk.wf.xml.XmlLoader;
 import org.codemonk.wf.xml.XmlWorkflowResolver;
 import org.hibernate.Session;
 
-public class TestLoad
+public class TestDbLoad
 {
   public static void main (String[] args) throws Exception
   {
@@ -30,7 +47,7 @@ public class TestLoad
     wfLoader.addCustomType( "task", new HibWfLoader.NodeFactory()
     {
       @Override
-      public HibNode createNode( HibWfEngine engine, HibNode node, Object custom )
+      public HibNode createNode( HibWfEngine wfEngine, HibNode node, Object custom )
         throws ImportException
       {
         if ( custom == null || !(custom instanceof XmlTaskDef) )
@@ -43,12 +60,12 @@ public class TestLoad
         XmlTaskDef taskDef = (XmlTaskDef)custom;
 
         NodeTask nodeTask = new NodeTask( node );
-        engine.getSession().save( nodeTask );
+        wfEngine.getSession().save( nodeTask );
 
         nodeTask.getDetail().setId( nodeTask.getId() );
         nodeTask.getDetail().setTaskName( taskDef.getTaskName() );
         nodeTask.getDetail().setTaskDesc( taskDef.getDescription().trim() );
-        engine.getSession().save( nodeTask.getDetail() );
+        wfEngine.getSession().save( nodeTask.getDetail() );
 
         return nodeTask;
       }

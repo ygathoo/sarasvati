@@ -16,15 +16,24 @@
 
     Copyright 2008 Paul Lorenz
 */
+package org.codemonk.wf.example.db;
 
-package org.codemonk.wf.xml;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
+import org.codemonk.wf.Arc;
+import org.codemonk.wf.WfEngine;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.hib.HibNode;
 
-@XmlEnum(String.class)
-public enum XmlExternalArcType
+@Entity
+@DiscriminatorValue( "dump" )
+public class NodeDump extends HibNode
 {
-  @XmlEnumValue("in")   IN,
-  @XmlEnumValue ("out") OUT;
+  @Override
+  public void execute (WfEngine engine, NodeToken token)
+  {
+    System.out.println( "Accepted into: " + getName() );
+    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
+  }
 }

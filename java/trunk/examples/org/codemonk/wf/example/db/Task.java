@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package org.codemonk.wf.test;
+package org.codemonk.wf.example.db;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;

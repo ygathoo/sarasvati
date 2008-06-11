@@ -36,12 +36,12 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.apache.commons.collections15.Transformer;
+import org.codemonk.wf.example.db.NodeTask;
+import org.codemonk.wf.example.db.TestSetup;
 import org.codemonk.wf.hib.HibArc;
 import org.codemonk.wf.hib.HibWfEngine;
 import org.codemonk.wf.hib.HibWfGraph;
 import org.codemonk.wf.hib.HibNodeRef;
-import org.codemonk.wf.test.NodeTask;
-import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;

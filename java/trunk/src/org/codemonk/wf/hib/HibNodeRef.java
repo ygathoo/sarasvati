@@ -126,7 +126,7 @@ public class HibNodeRef implements Node
   @Override
   public boolean isStart ()
   {
-    return node.isStart();
+    return node.isStart() && getGraph().equals( node.getGraph() );
   }
 
   @Override

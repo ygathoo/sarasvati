@@ -33,9 +33,9 @@ import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.codemonk.wf.example.db.TestSetup;
 import org.codemonk.wf.hib.HibWfGraph;
 import org.codemonk.wf.hib.HibWfEngine;
-import org.codemonk.wf.test.TestSetup;
 import org.hibernate.Session;
 
 public class Visualizer
