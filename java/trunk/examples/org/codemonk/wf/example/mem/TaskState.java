@@ -16,20 +16,11 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
-package org.codemonk.wf;
+package org.codemonk.wf.example.mem;
 
-import java.util.List;
-
-public interface Process
+public enum TaskState
 {
-  WfGraph getGraph ();
-  List<? extends ArcToken> getArcTokens ();
-  void addArcToken (ArcToken token);
-  void removeArcToken (ArcToken token);
-  void addNodeToken (NodeToken token);
-  void removeNodeToken (NodeToken token);
-  boolean isComplete ();
+  Open,
+  Completed,
+  Rejected
 }

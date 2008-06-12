@@ -16,20 +16,24 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
-package org.codemonk.wf;
+package org.codemonk.wf.example.mem;
 
-import java.util.List;
+import org.codemonk.wf.Arc;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.WfEngine;
+import org.codemonk.wf.mem.MemNode;
 
-public interface Process
+public class NodeDump extends MemNode
 {
-  WfGraph getGraph ();
-  List<? extends ArcToken> getArcTokens ();
-  void addArcToken (ArcToken token);
-  void removeArcToken (ArcToken token);
-  void addNodeToken (NodeToken token);
-  void removeNodeToken (NodeToken token);
-  boolean isComplete ();
+  public NodeDump (MemNode node)
+  {
+    super( node );
+  }
+
+  @Override
+  public void execute (WfEngine engine, NodeToken token)
+  {
+    System.out.println( "Accepted into: " + getName() );
+    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
+  }
 }

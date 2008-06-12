@@ -16,20 +16,34 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
-package org.codemonk.wf;
+package org.codemonk.wf.example.mem;
 
-import java.util.List;
+import java.util.Random;
 
-public interface Process
+import org.codemonk.wf.Arc;
+import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.WfEngine;
+import org.codemonk.wf.mem.MemNode;
+
+public class NodeInit extends MemNode
 {
-  WfGraph getGraph ();
-  List<? extends ArcToken> getArcTokens ();
-  void addArcToken (ArcToken token);
-  void removeArcToken (ArcToken token);
-  void addNodeToken (NodeToken token);
-  void removeNodeToken (NodeToken token);
-  boolean isComplete ();
+  public NodeInit (MemNode node)
+  {
+    super( node );
+  }
+
+  @Override
+  public void execute (WfEngine engine, NodeToken token)
+  {
+    long iter = 0;
+
+    if ( token.hasAttribute( "iter" ) )
+    {
+      iter = token.getLongAttribute( "iter" );
+    }
+
+    token.setLongAttribute( "iter", ++iter );
+    token.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
+    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
+  }
 }

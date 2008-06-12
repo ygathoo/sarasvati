@@ -153,6 +153,7 @@ public class HibProcess implements Process
     getNodeTokens().remove( token );
   }
 
+  @Override
   public boolean isComplete ()
   {
     return getArcTokens().isEmpty() && getNodeTokens().isEmpty();
