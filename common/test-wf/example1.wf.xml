@@ -1,42 +1,56 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="example1" version="1">
-  <start>
+<workflow name="example1"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
+  <node name="start" isStart="true">
     <arc to="1"/>
-  </start>
+  </node>
 
-  <task name="1">
-    <task-name>Enter Order</task-name>
-    <description>
-      Enter order and billing info
-    </description>
-
+  <node name="1" type="task">
     <arc to="2"/>
     <arc to="3"/>
-  </task>
 
-  <task name="2">
-    <task-name>Bill Customer</task-name>
-    <description>
-      Bill the customer
-    </description>
+    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
+                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
+      <ex:task-name>Enter order</ex:task-name>
+      <ex:description>
+        Enter order and billing info
+      </ex:description>
+    </ex:task-def>
+
+  </node>
+
+  <node type="task" name="2">
     <arc to="4"/>
-  </task>
+    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
+                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
+      <ex:task-name>Bill Customer</ex:task-name>
+      <ex:description>
+        Bill the Customer
+      </ex:description>
+    </ex:task-def>
+  </node>
 
-  <task name="3">
-    <task-name>Ship product</task-name>
-    <description>
-      Package and ship product
-    </description>
+  <node type="task" name="3">
     <arc to="4"/>
-  </task>
+    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
+                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
+      <ex:task-name>Ship product</ex:task-name>
+      <ex:description>
+        Package and ship product
+      </ex:description>
+    </ex:task-def>
+  </node>
 
-  <task name="4">
-    <task-name>Market to Customer</task-name>
-    <description>
-      Send marketing material to customer
-    </description>
-  </task>
+  <node type="task" name="4">
+    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
+                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
+      <ex:task-name>Market to Customer</ex:task-name>
+      <ex:description>
+        Send marketing material to customer
+      </ex:description>
+    </ex:task-def>
+  </node>
 
 </workflow>

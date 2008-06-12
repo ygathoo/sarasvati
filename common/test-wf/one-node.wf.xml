@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="one-node" version="1">
-  <start>
+<workflow name="one-node"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
+  <node name="start" isStart="true">
     <arc to="one-node.1"/>
-  </start>
+  </node>
 
   <node name="one-node.1" isJoin="true"/>
 </workflow>

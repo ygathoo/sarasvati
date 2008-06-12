@@ -16,26 +16,36 @@
 
     Copyright 2008 Paul Lorenz
 */
-package org.codemonk.wf.example.db;
+package org.codemonk.wf.example.mem;
 
 import java.io.Console;
+import java.io.File;
+import java.io.FilenameFilter;
 import java.util.List;
 
 import org.codemonk.wf.Arc;
-import org.codemonk.wf.WfEngine;
+import org.codemonk.wf.ImportException;
 import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.guardlang.GuardLangPredicate;
 import org.codemonk.wf.guardlang.PredicateRepository;
-import org.codemonk.wf.hib.HibWfGraph;
-import org.codemonk.wf.hib.HibWfEngine;
-import org.codemonk.wf.hib.HibProcess;
-import org.hibernate.Session;
-import org.hibernate.Transaction;
+import org.codemonk.wf.mem.MemNode;
+import org.codemonk.wf.mem.MemProcess;
+import org.codemonk.wf.mem.MemWfEngine;
+import org.codemonk.wf.mem.MemWfGraph;
+import org.codemonk.wf.mem.MemWfGraphCache;
+import org.codemonk.wf.mem.MemWfLoader;
+import org.codemonk.wf.test.XmlTaskDef;
+import org.codemonk.wf.xml.DefaultFileXmlWorkflowResolver;
+import org.codemonk.wf.xml.XmlLoader;
+import org.codemonk.wf.xml.XmlWorkflowResolver;
 
-public class DbConsole
+public class MemConsole
 {
   public static void main (String[] args) throws Exception
   {
+    loadWorkflows();
+
     PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
     {
       @Override
@@ -64,45 +74,30 @@ public class DbConsole
     });
 
 
-    TestSetup.init();
-
     while ( true )
     {
-      Session session = TestSetup.openSession();
-      Transaction t = session.beginTransaction();
-      HibWfEngine engine = new HibWfEngine( session );
+      MemWfEngine engine = new MemWfEngine();
 
-      HibWfGraph graph = getGraph( engine );
-      HibProcess process = (HibProcess)engine.startWorkflow( graph );
-      session.flush();
-      t.commit();
-      session.close();
+      MemWfGraph graph = getGraph( engine );
+      MemProcess process = (MemProcess)engine.startWorkflow( graph );
 
-      runWorkflow( process.getId() );
+      runWorkflow( process );
     }
   }
 
   @SuppressWarnings("unchecked")
-  public static void runWorkflow (long processId)
+  public static void runWorkflow (MemProcess process)
   {
     while (true)
     {
-      Session session = TestSetup.openSession();
-      Transaction trans = session.beginTransaction();
-      HibWfEngine engine = new HibWfEngine( session );
-
-      HibProcess p = (HibProcess) session.load( HibProcess.class, processId );
-      if (p.isComplete() )
+      MemWfEngine engine = new MemWfEngine();
+      if (process.isComplete() )
       {
         System.out.println( "Workflow complete" );
         return;
       }
 
-      List<Task> tasks =
-        session
-          .createQuery( "from Task where nodeToken.process = ? order by state" )
-          .setEntity( 0, p )
-          .list();
+      List<Task> tasks = TaskList.getTasks();
 
       Task t = null;
 
@@ -111,7 +106,7 @@ public class DbConsole
         int count = 0;
         for (Task task : tasks )
         {
-          System.out.println( (++count) + ": " + task.getName() + " - " + task.getState().getDescription() );
+          System.out.println( (++count) + ": " + task.getName() + " - " + task.getState() );
         }
 
         System.out.print( "> " );
@@ -136,21 +131,17 @@ public class DbConsole
           System.out.println( "Please enter a valid number" );
         }
       }
-
-      session.flush();
-      trans.commit();
-      session.close();
     }
   }
 
-  public static void processTask (Task t, HibWfEngine engine)
+  public static void processTask (Task t, MemWfEngine engine)
   {
     System.out.println( "Task " );
     System.out.println( "\tName        : "  + t.getName() );
     System.out.println( "\tDescription : "  + t.getDescription() );
-    System.out.println( "\tState       : "  + t.getState().getDescription() );
+    System.out.println( "\tState       : "  + t.getState() );
 
-    if ( t.getState().getId() != 0 )
+    if ( t.getState() != TaskState.Open )
     {
       return;
     }
@@ -174,13 +165,13 @@ public class DbConsole
       if ( line == 1 )
       {
         System.out.println( "Completing task" );
-        t.setState( (TaskState) engine.getSession().load( TaskState.class, 1 ) );
+        t.setState( TaskState.Completed );
         engine.completeExecuteNode( t.getNodeToken(), Arc.DEFAULT_ARC );
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
-        t.setState( (TaskState) engine.getSession().load( TaskState.class, 2 ) );
+        t.setState( TaskState.Rejected );
         engine.completeExecuteNode( t.getNodeToken(), "reject" );
       }
       else
@@ -194,16 +185,16 @@ public class DbConsole
     }
   }
 
-  public static HibWfGraph getGraph (HibWfEngine engine)
+  public static MemWfGraph getGraph (MemWfEngine engine)
   {
-    HibWfGraph graph = null;
+    MemWfGraph graph = null;
 
     while ( graph == null )
     {
-      List<HibWfGraph> graphs = engine.getGraphs();
+      List<MemWfGraph> graphs = MemWfGraphCache.getGraphs();
 
       int count = 0;
-      for ( HibWfGraph g : graphs )
+      for ( MemWfGraph g : graphs )
       {
         System.out.println( (++count) + ": " + g.getName() + ": version " + g.getVersion() );
       }
@@ -231,5 +222,83 @@ public class DbConsole
     }
 
     return graph;
+  }
+
+  public static void loadWorkflows () throws Exception
+  {
+    XmlLoader xmlLoader = new XmlLoader( XmlTaskDef.class );
+    MemWfLoader wfLoader = new MemWfLoader();
+
+    wfLoader.addCustomType( "task", new MemWfLoader.NodeFactory()
+    {
+      @Override
+      public MemNode createNode( MemNode node, Object custom )
+        throws ImportException
+      {
+        if ( custom == null || !(custom instanceof XmlTaskDef) )
+        {
+          throw new ImportException( "Task node '" + node.getName() +
+                                     "' in definition of '" + node.getGraph().getName() +
+                                     "' contains no (or improperly specified) task-def element." );
+        }
+
+        XmlTaskDef taskDef = (XmlTaskDef)custom;
+
+        NodeTask nodeTask = new NodeTask( node );
+        nodeTask.setTaskName( taskDef.getTaskName() );
+        nodeTask.setTaskDesc( taskDef.getDescription() );
+
+        return nodeTask;
+      }
+    });
+
+    wfLoader.addCustomType( "init", new MemWfLoader.NodeFactory()
+    {
+      @Override
+      public MemNode createNode( MemNode node, Object custom )
+      {
+        return new NodeInit( node );
+      }
+    });
+
+    wfLoader.addCustomType( "dump", new MemWfLoader.NodeFactory()
+    {
+      @Override
+      public MemNode createNode( MemNode node, Object custom )
+      {
+        return new NodeDump( node );
+      }
+    });
+
+    File basePath = new File( "/home/paul/workspace/wf-common/test-wf/" );
+    XmlWorkflowResolver resolver = new DefaultFileXmlWorkflowResolver(xmlLoader, basePath );
+
+    FilenameFilter filter = new FilenameFilter()
+    {
+      @Override
+      public boolean accept (File dir, String name)
+      {
+        return name.endsWith( ".wf.xml" );
+      }
+    };
+
+    for ( File file : basePath.listFiles( filter ) )
+    {
+      String name = file.getName();
+      name = name.substring( 0, name.length() - ".wf.xml".length() );
+
+      if ( MemWfGraphCache.get( name ) == null )
+      {
+        try
+        {
+          wfLoader.importWithDependencies( name, resolver );
+        }
+        catch( Exception e )
+        {
+          System.out.println( "Failed to load: " + name + "   Message: " + e.getMessage() );
+          e.printStackTrace();
+        }
+      }
+    }
   }
 }

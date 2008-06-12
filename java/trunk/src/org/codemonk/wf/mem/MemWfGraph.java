@@ -19,8 +19,12 @@
 
 package org.codemonk.wf.mem;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import org.codemonk.wf.Arc;
 import org.codemonk.wf.Node;
@@ -31,6 +35,10 @@ public class MemWfGraph implements WfGraph
   protected String        name;
   protected List<MemNode> nodes;
   protected List<MemArc>  arcs;
+
+  protected Map<Node, List<Arc>> inputMap;
+
+  protected Map<Node, List<Arc>> outputMap;
 
   public MemWfGraph (String name)
   {
@@ -50,37 +58,105 @@ public class MemWfGraph implements WfGraph
   }
 
   @Override
-  public List<Arc> getInputArcs (Node node)
-  {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public List<Arc> getInputArcs (Node node, String arcName)
-  {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
   public String getName ()
   {
     return name;
   }
 
   @Override
+  public List<Arc> getInputArcs (Node node)
+  {
+    if ( inputMap == null )
+    {
+      initialize();
+    }
+    return inputMap.get( node );
+  }
+
+  @Override
+  public List<Arc> getInputArcs (Node node, String arcName)
+  {
+    List<Arc> arcList = getInputArcs( node );
+    List<Arc> result = new ArrayList<Arc>( arcList.size() );
+
+    for ( Arc arc : arcList )
+    {
+      if ( arcName.equals( arc.getName() ) )
+      {
+        result.add( arc );
+      }
+    }
+    return result;
+  }
+
+  @Override
   public List<Arc> getOutputArcs (Node node)
   {
-    // TODO Auto-generated method stub
-    return null;
+    if (outputMap == null)
+    {
+      initialize();
+    }
+    return outputMap.get( node );
   }
 
   @Override
   public List<Arc> getOutputArcs (Node node, String arcName)
   {
-    // TODO Auto-generated method stub
-    return null;
+    List<Arc> arcList = getOutputArcs( node );
+    List<Arc> result = new ArrayList<Arc>( arcList.size() );
+
+    for ( Arc arc : arcList )
+    {
+      if ( arcName.equals( arc.getName() ) )
+      {
+        result.add( arc );
+      }
+    }
+    return result;
+  }
+
+  public void initialize ()
+  {
+    inputMap  = new HashMap<Node, List<Arc>>();
+    outputMap = new HashMap<Node, List<Arc>>();
+
+    for ( Arc arc : arcs )
+    {
+      Node node = arc.getStartNode();
+      List<Arc> list = outputMap.get( node );
+
+      if ( list == null )
+      {
+        list = new LinkedList<Arc>();
+        outputMap.put( node, list );
+      }
+
+      list.add( arc );
+
+      node = arc.getEndNode();
+      list = inputMap.get( node );
+
+      if ( list == null )
+      {
+        list = new LinkedList<Arc>();
+        inputMap.put( node, list );
+      }
+
+      list.add( arc );
+    }
+
+    List<Arc> emptyList = Collections.emptyList();
+    for (MemNode node : nodes )
+    {
+      if ( !inputMap.containsKey( node ) )
+      {
+        inputMap.put( node, emptyList );
+      }
+      if ( !outputMap.containsKey( node ) )
+      {
+        outputMap.put( node, emptyList );
+      }
+    }
   }
 
   @Override

@@ -19,7 +19,9 @@
 
 package org.codemonk.wf.mem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MemWfGraphCache
@@ -34,5 +36,10 @@ public class MemWfGraphCache
   public static MemWfGraph get (String name)
   {
     return cache.get( name );
+  }
+
+  public static List<MemWfGraph> getGraphs ()
+  {
+    return new ArrayList<MemWfGraph>( cache.values() );
   }
 }

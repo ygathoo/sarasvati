@@ -73,4 +73,10 @@ public class MemProcess implements Process
   {
     nodeTokens.add( token );
   }
+
+  @Override
+  public boolean isComplete ()
+  {
+    return arcTokens.isEmpty() && nodeTokens.isEmpty();
+  }
 }
