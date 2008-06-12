@@ -26,12 +26,15 @@ import org.codemonk.wf.Process;
 
 public class MemArcToken implements ArcToken
 {
+  protected long id;
+
   protected Arc arc;
-  protected Process process;
+  protected MemProcess process;
   protected NodeToken parentToken;
 
-  public MemArcToken (Arc arc, Process process, NodeToken parentToken)
+  public MemArcToken (Arc arc, MemProcess process, NodeToken parentToken)
   {
+    this.id = process.nextTokenId();
     this.arc = arc;
     this.process = process;
     this.parentToken = parentToken;
@@ -59,5 +62,25 @@ public class MemArcToken implements ArcToken
   public void markComplete()
   {
     /* Does nothing */
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + (int)( id ^ ( id >>> 32 ) );
+    return result;
+  }
+
+  @Override
+  public boolean equals (Object obj)
+  {
+    if ( this == obj ) return true;
+    if ( obj == null ) return false;
+    if ( !( obj instanceof MemArcToken ) ) return false;
+    final MemArcToken other = (MemArcToken)obj;
+    if ( id != other.id ) return false;
+    return true;
   }
 }

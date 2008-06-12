@@ -25,7 +25,7 @@ import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.WfEngine;
 
-public class MemNode implements Node
+public class MemNode implements Node, Cloneable
 {
   protected MemWfGraph graph;
 
@@ -35,7 +35,12 @@ public class MemNode implements Node
   protected boolean isStart;
   protected String guard;
 
-  protected boolean isExternal = false;
+  protected boolean isExternal;
+
+  protected MemNode ()
+  {
+    /* Default constructor */
+  }
 
   public MemNode (MemWfGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard)
   {
@@ -66,6 +71,11 @@ public class MemNode implements Node
   public MemWfGraph getGraph ()
   {
     return graph;
+  }
+
+  public void setGraph (MemWfGraph graph)
+  {
+    this.graph = graph;
   }
 
   @Override
@@ -107,7 +117,7 @@ public class MemNode implements Node
   @Override
   public boolean isStart ()
   {
-    return isStart && !isExternal;
+    return isStart;
   }
 
   public boolean isExternal ()
@@ -118,5 +128,18 @@ public class MemNode implements Node
   public void setExternal (boolean isExternal)
   {
     this.isExternal = isExternal;
+  }
+
+  @Override
+  public MemNode clone ()
+  {
+    try
+    {
+      return (MemNode)super.clone();
+    }
+    catch( CloneNotSupportedException cnse )
+    {
+      throw new RuntimeException( cnse );
+    }
   }
 }

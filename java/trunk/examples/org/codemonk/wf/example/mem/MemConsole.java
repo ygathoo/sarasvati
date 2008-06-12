@@ -18,9 +18,11 @@
 */
 package org.codemonk.wf.example.mem;
 
-import java.io.Console;
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import org.codemonk.wf.Arc;
@@ -110,8 +112,7 @@ public class MemConsole
         }
 
         System.out.print( "> " );
-        Console c = System.console();
-        String input = c.readLine();
+        String input = readLine();
 
         try
         {
@@ -156,8 +157,7 @@ public class MemConsole
     System.out.println( "Anything else to cancel" );
 
     System.out.print( "> " );
-    Console c = System.console();
-    String input = c.readLine();
+    String input = readLine();
 
     try
     {
@@ -200,8 +200,7 @@ public class MemConsole
       }
 
       System.out.print( "> " );
-      Console c = System.console();
-      String input = c.readLine();
+      String input = readLine();
 
       try
       {
@@ -299,6 +298,18 @@ public class MemConsole
           e.printStackTrace();
         }
       }
+    }
+  }
+
+  public static String readLine ()
+  {
+    try
+    {
+      return new BufferedReader( new InputStreamReader( System.in ) ).readLine();
+    }
+    catch (IOException ioe )
+    {
+      throw new RuntimeException( ioe );
     }
   }
 }

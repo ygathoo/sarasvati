@@ -31,7 +31,7 @@ public class MemArc implements Arc
   public MemArc (String name, MemNode startNode, MemNode endNode)
   {
     super();
-    this.name = name;
+    this.name = name == null ? Arc.DEFAULT_ARC : name;
     this.startNode = startNode;
     this.endNode = endNode;
   }
