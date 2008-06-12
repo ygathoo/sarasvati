@@ -29,6 +29,8 @@ import org.codemonk.wf.Process;
 
 public class MemProcess implements Process
 {
+  protected long tokenCounter = 0;
+
   protected WfGraph graph;
   protected List<ArcToken> arcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> nodeTokens = new LinkedList<NodeToken>();
@@ -78,5 +80,10 @@ public class MemProcess implements Process
   public boolean isComplete ()
   {
     return arcTokens.isEmpty() && nodeTokens.isEmpty();
+  }
+
+  public synchronized long nextTokenId ()
+  {
+    return tokenCounter++;
   }
 }

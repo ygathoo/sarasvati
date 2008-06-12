@@ -25,13 +25,18 @@ public class Task
 {
   protected NodeToken nodeToken;
 
+  protected String name;
+  protected String description;
+
   protected TaskState state;
 
   public Task() { /* Default constructor for Hibernate */ }
 
-  public Task( NodeToken nodeToken, TaskState state )
+  public Task( NodeToken nodeToken, String name, String description, TaskState state )
   {
     this.nodeToken = nodeToken;
+    this.name = name;
+    this.description = description;
     this.state = state;
   }
 
@@ -47,12 +52,12 @@ public class Task
 
   public String getName()
   {
-    return ((NodeTask)nodeToken.getNode()).getTaskName();
+    return name;
   }
 
   public String getDescription()
   {
-    return ((NodeTask)nodeToken.getNode()).getTaskDesc();
+    return description;
   }
 
   public TaskState getState()

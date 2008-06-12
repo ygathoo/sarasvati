@@ -61,7 +61,7 @@ public class NodeTask extends MemNode
   @Override
   public void execute (WfEngine engine, NodeToken token)
   {
-    Task newTask = new Task( token, TaskState.Open );
+    Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );
     TaskList.getTasks().add( newTask );
     token.setLongAttribute( newTask.getName(), token.getLongAttribute( newTask.getName() ) + 1 );
   }

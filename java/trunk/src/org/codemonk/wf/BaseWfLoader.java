@@ -134,13 +134,15 @@ public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements 
                                      " in process definition '" + externalArc.getExternal() + "'" );
         }
 
+        String arcName = externalArc.getName() == null ? Arc.DEFAULT_ARC : externalArc.getName();
+
         if ( externalArc.getType() == XmlExternalArcType.OUT )
         {
-          createArc( localNode, extNode, externalArc.getName() );
+          createArc( localNode, extNode, arcName );
         }
         else
         {
-          createArc( extNode, localNode, externalArc.getName() );
+          createArc( extNode, localNode, arcName );
         }
       }
     }

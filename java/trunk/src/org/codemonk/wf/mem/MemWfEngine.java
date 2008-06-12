@@ -34,13 +34,13 @@ public class MemWfEngine extends WfEngine
   @Override
   protected ArcToken newArcToken (Process process, Arc arc, NodeToken parent)
   {
-    return new MemArcToken( arc, process, parent );
+    return new MemArcToken( arc, (MemProcess)process, parent );
   }
 
   @Override
   protected NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
   {
-    MemNodeToken token = new MemNodeToken( node, process );
+    MemNodeToken token = new MemNodeToken( node, (MemProcess)process );
 
     for ( ArcToken t : parents )
     {

@@ -20,6 +20,7 @@
 package org.codemonk.wf.mem;
 
 import java.util.HashMap;
+import java.util.IdentityHashMap;
 import java.util.Map;
 
 import org.codemonk.wf.BaseWfLoader;
@@ -89,19 +90,23 @@ public class MemWfLoader extends BaseWfLoader<MemWfGraph,MemNode>
       throw new ImportException( "Referenced external '" + externalName + "' not found in cache." );
     }
 
-    Map<MemNode, MemNode> lookupMap = new HashMap<MemNode, MemNode>();
+    Map<MemNode, MemNode> lookupMap = new IdentityHashMap<MemNode, MemNode>();
 
     for ( MemNode node : instanceGraph.getNodes() )
     {
-      MemNode newNode = new MemNode( node );
+      MemNode newNode = node.clone();
+      newNode.setGraph( getWfGraph() );
       newNode.setExternal( true );
       getWfGraph().getNodes().add( newNode );
 
       lookupMap.put( node, newNode );
 
-      if ( !node.isExternal )
+      // Since we can only link nodes defined in the top level,
+      // we don't want to include nodes which were themselves imported
+      // into the graph which is being imported
+      if ( !node.isExternal() )
       {
-        nodeMap.put( node.getName(), node );
+        nodeMap.put( node.getName(), newNode );
       }
     }
 
