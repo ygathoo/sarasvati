@@ -29,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -70,10 +71,10 @@ public class HibWfGraph implements WfGraph
     this.arcs = new LinkedList<HibArc>();
   }
 
-  @OneToMany (fetch=FetchType.EAGER, mappedBy="graph")
+  @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE)
   protected List<HibNodeRef> nodeRefs;
 
-  @OneToMany (fetch=FetchType.EAGER, mappedBy="graph")
+  @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE)
   protected List<HibArc>     arcs;
 
   @Transient

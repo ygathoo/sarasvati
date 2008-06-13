@@ -18,17 +18,19 @@
 */
 package org.codemonk.wf.example.db;
 
-import java.io.Console;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import org.codemonk.wf.Arc;
-import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.WfEngine;
 import org.codemonk.wf.guardlang.GuardLangPredicate;
 import org.codemonk.wf.guardlang.PredicateRepository;
-import org.codemonk.wf.hib.HibWfGraph;
-import org.codemonk.wf.hib.HibWfEngine;
 import org.codemonk.wf.hib.HibProcess;
+import org.codemonk.wf.hib.HibWfEngine;
+import org.codemonk.wf.hib.HibWfGraph;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -115,8 +117,8 @@ public class DbConsole
         }
 
         System.out.print( "> " );
-        Console c = System.console();
-        String input = c.readLine();
+
+        String input = readLine();
 
         try
         {
@@ -165,8 +167,7 @@ public class DbConsole
     System.out.println( "Anything else to cancel" );
 
     System.out.print( "> " );
-    Console c = System.console();
-    String input = c.readLine();
+    String input = readLine();
 
     try
     {
@@ -209,8 +210,7 @@ public class DbConsole
       }
 
       System.out.print( "> " );
-      Console c = System.console();
-      String input = c.readLine();
+      String input = readLine();
 
       try
       {
@@ -231,5 +231,17 @@ public class DbConsole
     }
 
     return graph;
+  }
+
+  public static String readLine ()
+  {
+    try
+    {
+      return new BufferedReader( new InputStreamReader( System.in ) ).readLine();
+    }
+    catch (IOException ioe )
+    {
+      throw new RuntimeException( ioe );
+    }
   }
 }

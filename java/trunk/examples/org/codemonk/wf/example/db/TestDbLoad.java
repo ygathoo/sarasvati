@@ -20,6 +20,7 @@
 package org.codemonk.wf.example.db;
 
 import java.io.File;
+import java.io.FilenameFilter;
 
 import org.codemonk.wf.ImportException;
 import org.codemonk.wf.hib.HibNode;
@@ -71,10 +72,34 @@ public class TestDbLoad
       }
     });
 
-    XmlWorkflowResolver resolver = new DefaultFileXmlWorkflowResolver(xmlLoader, new File( "/home/paul/workspace/wf-common/test-wf/" ) );
-    wfLoader.importWithDependencies( "embedded-task-rej", resolver );
+    File baseDir = new File( "/home/paul/workspace/wf-common/test-wf/" );
 
+    XmlWorkflowResolver resolver = new DefaultFileXmlWorkflowResolver(xmlLoader, baseDir );
 
+    FilenameFilter filter = new FilenameFilter()
+    {
+      @Override
+      public boolean accept( File dir, String name )
+      {
+        return name.endsWith( ".wf.xml" );
+      }
+    };
+
+    for ( File file : baseDir.listFiles( filter ) )
+    {
+      String name = file.getName();
+      name = name.substring( 0, name.length() - ".wf.xml".length() );
+
+      try
+      {
+        wfLoader.importWithDependencies( name, resolver );
+      }
+      catch ( Exception t )
+      {
+        System.out.println( "Failed to load: " + name + "  because: " + t.getMessage() );
+        t.printStackTrace();
+      }
+    }
 
     sess.getTransaction().commit();
   }

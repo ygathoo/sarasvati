@@ -67,13 +67,13 @@ public class MemProcess implements Process
   @Override
   public void removeArcToken (ArcToken token)
   {
-    arcTokens.add( token );
+    arcTokens.remove( token );
   }
 
   @Override
   public void removeNodeToken (NodeToken token)
   {
-    nodeTokens.add( token );
+    nodeTokens.remove( token );
   }
 
   @Override

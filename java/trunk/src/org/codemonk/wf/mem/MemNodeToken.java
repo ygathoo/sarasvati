@@ -28,15 +28,13 @@ import org.codemonk.wf.Process;
 
 public class MemNodeToken implements NodeToken
 {
-  protected long id;
   protected Node node;
-  protected MemProcess process;
+  protected Process process;
 
   protected Map<String, String> attributes = new HashMap<String, String>();
 
-  public MemNodeToken( Node node, MemProcess process )
+  public MemNodeToken( Node node, Process process )
   {
-    this.id = process.nextTokenId();
     this.node = node;
     this.process = process;
   }
@@ -125,25 +123,5 @@ public class MemNodeToken implements NodeToken
   public void markComplete ()
   {
     /** Does nothing */
-  }
-
-  @Override
-  public int hashCode ()
-  {
-    final int prime = 31;
-    int result = 1;
-    result = prime * result + (int)( id ^ ( id >>> 32 ) );
-    return result;
-  }
-
-  @Override
-  public boolean equals (Object obj)
-  {
-    if ( this == obj ) return true;
-    if ( obj == null ) return false;
-    if ( !( obj instanceof MemNodeToken ) ) return false;
-    final MemNodeToken other = (MemNodeToken)obj;
-    if ( id != other.id ) return false;
-    return true;
   }
 }

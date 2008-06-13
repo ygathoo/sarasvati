@@ -21,6 +21,7 @@
  */
 package org.codemonk.wf.hib;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -43,7 +44,7 @@ public class HibNodeRef implements Node
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long   id;
 
-  @ManyToOne (fetch=FetchType.EAGER)
+  @ManyToOne (fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
   @JoinColumn(name="node_id")
   protected HibNode node;
 

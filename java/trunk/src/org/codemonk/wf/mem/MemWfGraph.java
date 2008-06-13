@@ -21,7 +21,7 @@ package org.codemonk.wf.mem;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.IdentityHashMap;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -116,8 +116,8 @@ public class MemWfGraph implements WfGraph
 
   public void initialize ()
   {
-    inputMap  = new IdentityHashMap<Node, List<Arc>>();
-    outputMap = new IdentityHashMap<Node, List<Arc>>();
+    inputMap  = new HashMap<Node, List<Arc>>();
+    outputMap = new HashMap<Node, List<Arc>>();
 
     for ( Arc arc : arcs )
     {
