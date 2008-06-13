@@ -1,6 +1,6 @@
 #summary SVN checkout instructions
 
-= NOTE: Non-Standard SVN Layout =
+= NOTE: (Slightly) Non-Standard SVN Layout =
 
 Because Sarasvati has multiple implementations in different languages, the source control is organized somewhat differently from the default layout.
 
