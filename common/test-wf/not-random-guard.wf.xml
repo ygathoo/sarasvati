@@ -1,40 +1,42 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="not-random-guard" version="1">
-  <start>
+<workflow name="not-random-guard"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
+
+  <node type="node" name="start" isStart="true">
     <arc to="first-node"/>
-  </start>
+  </node>
 
-  <init name="first-node">
+  <node type="init" name="first-node">
     <arc to="dump1"/>
     <arc to="dump2"/>
-  </init>
+  </node>
 
-  <dump name="dump1">
+  <node type="dump" name="dump1">
     <guard>IF isRandOdd THEN Accept ELSE Discard</guard>
     <arc to="join"/>
-  </dump>
+  </node>
 
-  <dump name="dump2">
+  <node type="dump" name="dump2">
     <guard>IF NOT isRandOdd THEN Accept ELSE Discard</guard>
     <arc to="join"/>
-  </dump>
+  </node>
 
   <node name="join" isJoin="false">
     <arc to="dump3"/>
     <arc to="dump4"/>
   </node>
 
-  <dump name="dump3">
+  <node type="dump" name="dump3">
     <guard>IF isRandOdd THEN Accept ELSE Skip</guard>
     <arc to="leave-decision"/>
-  </dump>
+  </node>
 
-  <dump name="dump4">
+  <node type="dump" name="dump4">
     <guard>IF NOT isRandOdd THEN Accept ELSE Skip</guard>
     <arc to="leave-decision"/>
-  </dump>
+  </node>
 
   <node name="leave-decision" isJoin="true">
     <guard>IF isTenthIteration THEN Skip exit ELSE Skip beginning</guard>
