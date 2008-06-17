@@ -68,12 +68,6 @@ public class NodeTask extends HibNode
   }
 
   @Override
-  public String getLabel ()
-  {
-    return getTaskName();
-  }
-
-  @Override
   public void execute (WfEngine engine, NodeToken token)
   {
     HibWfEngine hibEngine = (HibWfEngine)engine;

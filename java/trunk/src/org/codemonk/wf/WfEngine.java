@@ -86,7 +86,7 @@ public abstract class WfEngine
     for ( ArcToken token : tokens )
     {
       process.removeArcToken( token );
-      token.markComplete();
+      token.markComplete( this );
     }
 
     executeNode( process, newNodeToken( process, targetNode, Arrays.asList( tokens ) ) );
@@ -95,6 +95,8 @@ public abstract class WfEngine
   protected void executeNode (Process process, NodeToken token)
   {
     GuardResponse response = token.getNode().guard( this, token );
+    token.recordGuardAction( this, response.getGuardAction() );
+
     switch ( response.getGuardAction() )
     {
       case AcceptToken :
@@ -103,7 +105,7 @@ public abstract class WfEngine
         break;
 
       case DiscardToken :
-        token.markComplete();
+        token.markComplete( this );
         break;
 
       case SkipNode :
@@ -119,7 +121,7 @@ public abstract class WfEngine
     List<Arc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 
     process.removeNodeToken( token );
-    token.markComplete();
+    token.markComplete( this );
 
     for ( Arc arc : outputArcs )
     {

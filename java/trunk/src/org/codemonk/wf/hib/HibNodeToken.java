@@ -41,7 +41,9 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.codemonk.wf.GuardAction;
 import org.codemonk.wf.NodeToken;
+import org.codemonk.wf.WfEngine;
 import org.hibernate.annotations.CollectionOfElements;
 
 @Entity
@@ -84,6 +86,9 @@ public class HibNodeToken implements NodeToken
   @Column (name="complete_date")
   protected Date    completeDate;
 
+  @Column (name="guard_action")
+  protected GuardAction guardAction;
+
   public HibNodeToken () { /* Default constructor for Hibernate */ }
 
   public HibNodeToken (HibProcess process, HibNodeRef nodeRef, HibNodeToken attrSetToken, Map<String,String> attrMap, List<HibArcToken> parentTokens)
@@ -125,6 +130,18 @@ public class HibNodeToken implements NodeToken
   public void setNodeRef (HibNodeRef nodeRef)
   {
     this.nodeRef = nodeRef;
+  }
+
+  @Override
+  public GuardAction getGuardAction ()
+  {
+    return guardAction;
+  }
+
+  @Override
+  public void recordGuardAction (WfEngine engine, GuardAction action)
+  {
+    this.guardAction = action;
   }
 
   public HibNodeToken getAttrSetToken()
@@ -178,7 +195,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void markComplete ()
+  public void markComplete (WfEngine engine)
   {
     this.completeDate = new Date();
   }

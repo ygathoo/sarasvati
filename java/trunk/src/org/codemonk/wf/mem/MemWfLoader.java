@@ -29,7 +29,7 @@ public class MemWfLoader extends BaseWfLoader<MemWfGraph,MemNode>
 {
   public static interface NodeFactory
   {
-    MemNode createNode( MemNode node, Object custom)
+    MemNode createNode (MemNode node, Object custom)
       throws ImportException;
   }
 
