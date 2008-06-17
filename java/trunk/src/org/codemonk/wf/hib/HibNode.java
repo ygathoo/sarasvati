@@ -163,12 +163,6 @@ public class HibNode implements Node
     this.start = start;
   }
 
-  @Override
-  public String getLabel ()
-  {
-    return "";
-  }
-
   public String getGuard()
   {
     return guard;

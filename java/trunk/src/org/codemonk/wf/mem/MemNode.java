@@ -85,12 +85,6 @@ public class MemNode implements Node, Cloneable
   }
 
   @Override
-  public String getLabel ()
-  {
-    return name;
-  }
-
-  @Override
   public String getName ()
   {
     return name;

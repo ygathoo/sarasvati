@@ -30,7 +30,9 @@ package org.codemonk.wf;
 public interface NodeToken extends Token
 {
   /**
-   * @return The node that this token points to.
+   * Returns the node that this token points to.
+   *
+   * @return The node associated node.
    */
   Node getNode ();
 
@@ -120,4 +122,25 @@ public interface NodeToken extends Token
    * @return Iterable of attribute names
    */
   Iterable<String> getAttributeNames ();
+
+  /**
+   * A NodeToken is evaluated by the {@link Node#guard(WfEngine, NodeToken)}
+   * method. recordGuardAction will be called by the engine to
+   * record the result of the guard.
+   *
+   * @param engine The {@link WfEngine} being used to execute the associated {@link Process}.
+   * @param action The {@link GuardAction} taken with this NodeToken.
+   * @see
+   */
+  void recordGuardAction (WfEngine engine, GuardAction action);
+
+  /**
+   * Returns the GuardAction that was returned from the Node guard
+   * called on this token or null if the guard has not completed
+   * or been called.
+   *
+   * @return The result of the Node guard called on this token, or
+   *         null if the guard has not completed or been called.
+   */
+  GuardAction getGuardAction ();
 }

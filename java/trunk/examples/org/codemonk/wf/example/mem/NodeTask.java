@@ -53,12 +53,6 @@ public class NodeTask extends MemNode
   }
 
   @Override
-  public String getLabel ()
-  {
-    return getTaskName();
-  }
-
-  @Override
   public void execute (WfEngine engine, NodeToken token)
   {
     Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );

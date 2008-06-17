@@ -23,6 +23,7 @@ import org.codemonk.wf.Arc;
 import org.codemonk.wf.ArcToken;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.Process;
+import org.codemonk.wf.WfEngine;
 
 public class MemArcToken implements ArcToken
 {
@@ -38,13 +39,13 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public Arc getArc()
+  public Arc getArc ()
   {
     return arc;
   }
 
   @Override
-  public Process getProcess()
+  public Process getProcess ()
   {
     return process;
   }
@@ -56,7 +57,7 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public void markComplete()
+  public void markComplete (WfEngine engine)
   {
     /* Does nothing */
   }

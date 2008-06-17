@@ -131,12 +131,6 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public String getLabel ()
-  {
-    return node.getLabel();
-  }
-
-  @Override
   public GuardResponse guard (WfEngine engine, NodeToken token)
   {
     return node.guard( engine, token );

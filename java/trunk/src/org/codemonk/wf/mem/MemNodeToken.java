@@ -22,18 +22,21 @@ package org.codemonk.wf.mem;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.codemonk.wf.GuardAction;
 import org.codemonk.wf.Node;
 import org.codemonk.wf.NodeToken;
 import org.codemonk.wf.Process;
+import org.codemonk.wf.WfEngine;
 
 public class MemNodeToken implements NodeToken
 {
   protected Node node;
   protected Process process;
+  protected GuardAction guardAction;
 
   protected Map<String, String> attributes = new HashMap<String, String>();
 
-  public MemNodeToken( Node node, Process process )
+  public MemNodeToken (Node node, Process process)
   {
     this.node = node;
     this.process = process;
@@ -66,15 +69,27 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public Node getNode()
+  public Node getNode ()
   {
     return node;
   }
 
   @Override
-  public Process getProcess()
+  public Process getProcess ()
   {
     return process;
+  }
+
+  @Override
+  public GuardAction getGuardAction ()
+  {
+    return guardAction;
+  }
+
+  @Override
+  public void recordGuardAction (WfEngine engine, GuardAction action)
+  {
+    this.guardAction = action;
   }
 
   @Override
@@ -84,13 +99,13 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public boolean hasAttribute( String name )
+  public boolean hasAttribute (String name)
   {
     return attributes.containsKey( name );
   }
 
   @Override
-  public void removeAttribute( String name )
+  public void removeAttribute (String name)
   {
     attributes.remove( name );
   }
@@ -114,13 +129,13 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public Iterable<String> getAttributeNames()
+  public Iterable<String> getAttributeNames ()
   {
     return attributes.keySet();
   }
 
   @Override
-  public void markComplete ()
+  public void markComplete (WfEngine engine)
   {
     /** Does nothing */
   }

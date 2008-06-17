@@ -53,6 +53,13 @@ public interface Node
    */
   String getName ();
 
+  /**
+   * Every node has a type. The default is 'node'. Nodes of
+   * different types may have different (user defined) behavior
+   * when the execute method is invoked.
+   *
+   * @return The type
+   */
   String getType ();
 
   /**
@@ -77,19 +84,50 @@ public interface Node
    */
   boolean isStart ();
 
+  /**
+   * Every node may have a guard associated with it. The guard
+   * may be blank or null, which by default, will be treated as
+   * an Accept. If it is not null or blank, the guard method
+   * may interpret it in some fashion. It may be a GuardLang
+   * statement, it could be some other script language or it
+   * could be interpreted in some other way entirely.
+   *
+   * @return The guard
+   */
   String getGuard ();
+
+  /**
+   * When a NodeToken is created, the associated Node will not
+   * automatically be executed. First, the guard function is called,
+   * which will indicate which action should be taken. The possible
+   * actions are:
+   *
+   * <ul>
+   *    <li> {@link GuardAction#DiscardToken}: The token will be discard.
+   *    <li> {@link GuardAction#SkipNode}: Skip the node.
+   *         The {@link Node#execute(WfEngine, NodeToken)} method will not
+   *         be called. The {@link GuardResponse} will indicate which
+   *         arc(s) to leave on.
+   *    <li> {@link GuardAction#AcceptToken}: Accept the token. The execute function of the
+   *         Node will be called.
+   *
+   * </ul>
+   *
+   * @param engine The engine being used to execute the process
+   * @param token  The node token which is currently entering a node
+   *
+   * @return A GuardResponse
+   */
   GuardResponse guard (WfEngine engine, NodeToken token);
 
   /**
-   * @param engine The engine which is performing the execution.
-   * @param token The token which is currently executing in this node.
+   * Performs Node specific logic. Either from the execute method,
+   * or later from outside, the
+   * {@link WfEngine#completeExecuteNode(NodeToken, String)} method
+   * must be called to continue executing the {@link Process}.
+   *
+   * @param engine The {@link WfEngine} which is performing the execution.
+   * @param token The {@link NodeToken} which is currently executing in this node.
    */
   void execute(WfEngine engine, NodeToken token);
-
-  /**
-   * Returns the label to be used when the node is being visualized.
-   *
-   * @return The display label
-   */
-  String getLabel ();
 }
