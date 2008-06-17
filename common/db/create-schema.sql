@@ -76,6 +76,16 @@ create table wf_arc
   name          varchar(255) NOT NULL
 );
 
+create table wf_guard_action
+(
+  id           int         NOT NULL PRIMARY KEY,
+  name         varchar(50) NOT NULL
+);
+
+insert into wf_guard_action values ( 0, 'Accept Token' );
+insert into wf_guard_action values ( 1, 'Discard Token' );
+insert into wf_guard_action values ( 2, 'Skip Node' );
+
 create table wf_node_token
 (
   id            serial    NOT NULL PRIMARY KEY,
@@ -83,6 +93,7 @@ create table wf_node_token
   node_ref_id   int       NOT NULL REFERENCES wf_node_ref,
   attr_set_id   int       NULL     REFERENCES wf_node_token,
   create_date   timestamp NOT NULL DEFAULT current_timestamp,
+  guard_action  int       NULL     REFERENCES wf_guard_action,
   complete_date timestamp NULL
 );
 
