@@ -130,7 +130,7 @@ public interface NodeToken extends Token
    *
    * @param engine The {@link WfEngine} being used to execute the associated {@link Process}.
    * @param action The {@link GuardAction} taken with this NodeToken.
-   * @see
+   * @see Node#guard(WfEngine, NodeToken)
    */
   void recordGuardAction (WfEngine engine, GuardAction action);
 
