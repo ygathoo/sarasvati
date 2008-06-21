@@ -43,7 +43,7 @@
     </ex:task-def>
   </node>
 
-  <node type="task" name="4">
+  <node type="task" name="4" isJoin="true">
     <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
                  ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
       <ex:task-name>Market to Customer</ex:task-name>
