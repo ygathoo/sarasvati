@@ -19,10 +19,10 @@ Graphs come with a set of common terms. To begin with, a graph is made up a set 
   * *Node* - An element of a graph. A node corresponds roughly to an action as defined [Workflow previously]. Nodes can be thought of as pieces of code, waiting to be executed when their turn comes. 
     * Also known as: Vertex, Place
 
-  * *Arc* - A directed connection between two nodes. 'Directed' means that arcs have a start node and an end node. Process can only move along the arc in that one direction.  In same cases, an arc may have a label, or name. Named arcs are discussed in more detail later. 
+  * *Arc* - A directed connection between two nodes. 'Directed' means that arcs have a start node and an end node. In same cases, an arc may have a label, or name. Named arcs are discussed in more detail later. 
     * Also know as: Edge, Transition
 
-  * *Predecessor* - If two nodes are conencted by an arc then the node at the beginning of the arc is the _predecessor_ of the node at the end of the arc. How nodes are connected by arcs defines the order of execution. Generally a node may not execute until at last one, potentially many or all, of its predecessors has executed. Nodes may have many arcs exiting and entering them.
+  * *Predecessor* - If two nodes are connected by an arc then the node at the beginning of the arc is the _predecessor_ of the node at the end of the arc. How nodes are connected by arcs defines the order of execution. Generally a node may not execute until at last one, potentially many or all, of its predecessors has executed. Nodes may have many arcs exiting and entering them.
 
 These definitions cover the parts of a process definition. However, they don't cover how that process definition is actually executed. When a process definition gets executed, it is called a *process*. Somehow, a process must track which nodes are being executed. This is generally accomplished by placing markers on the active nodes. These markers are generally called *tokens*.
 
