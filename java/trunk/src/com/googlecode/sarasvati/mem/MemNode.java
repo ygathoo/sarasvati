@@ -23,7 +23,7 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 
 public class MemNode implements Node, Cloneable
 {
@@ -63,7 +63,7 @@ public class MemNode implements Node, Cloneable
   }
 
   @Override
-  public void execute (WfEngine engine, NodeToken token)
+  public void execute (Engine engine, NodeToken token)
   {
     engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
   }
@@ -97,7 +97,7 @@ public class MemNode implements Node, Cloneable
   }
 
   @Override
-  public GuardResponse guard (WfEngine engine, NodeToken token)
+  public GuardResponse guard (Engine engine, NodeToken token)
   {
     return GuardResponse.ACCEPT_TOKEN_RESPONSE;
   }

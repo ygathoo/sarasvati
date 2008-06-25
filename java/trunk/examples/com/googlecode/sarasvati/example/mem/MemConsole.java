@@ -29,16 +29,16 @@ import java.util.List;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.mem.MemNode;
 import com.googlecode.sarasvati.mem.MemProcess;
-import com.googlecode.sarasvati.mem.MemWfEngine;
+import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemWfGraph;
 import com.googlecode.sarasvati.mem.MemWfGraphCache;
-import com.googlecode.sarasvati.mem.MemWfLoader;
+import com.googlecode.sarasvati.mem.MemLoader;
 import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
@@ -52,7 +52,7 @@ public class MemConsole
     PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( WfEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 1;
       }
@@ -61,7 +61,7 @@ public class MemConsole
     PredicateRepository.addPredicate( "isRandEven", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( WfEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 0;
       }
@@ -70,7 +70,7 @@ public class MemConsole
     PredicateRepository.addPredicate( "isTenthIteration", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( WfEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "iter" ) == 10;
       }
@@ -79,7 +79,7 @@ public class MemConsole
 
     while ( true )
     {
-      MemWfEngine engine = new MemWfEngine();
+      MemEngine engine = new MemEngine();
 
       MemWfGraph graph = getGraph( engine );
       MemProcess process = (MemProcess)engine.startWorkflow( graph );
@@ -93,7 +93,7 @@ public class MemConsole
   {
     while (true)
     {
-      MemWfEngine engine = new MemWfEngine();
+      MemEngine engine = new MemEngine();
       if (process.isComplete() )
       {
         System.out.println( "Workflow complete" );
@@ -136,7 +136,7 @@ public class MemConsole
     }
   }
 
-  public static void processTask (Task t, MemWfEngine engine)
+  public static void processTask (Task t, MemEngine engine)
   {
     System.out.println( "Task " );
     System.out.println( "\tName        : "  + t.getName() );
@@ -186,7 +186,7 @@ public class MemConsole
     }
   }
 
-  public static MemWfGraph getGraph (MemWfEngine engine)
+  public static MemWfGraph getGraph (MemEngine engine)
   {
     MemWfGraph graph = null;
 
@@ -227,9 +227,9 @@ public class MemConsole
   public static void loadWorkflows () throws Exception
   {
     XmlLoader xmlLoader = new XmlLoader( XmlTaskDef.class );
-    MemWfLoader wfLoader = new MemWfLoader();
+    MemLoader wfLoader = new MemLoader();
 
-    wfLoader.addCustomType( "task", new MemWfLoader.NodeFactory()
+    wfLoader.addCustomType( "task", new MemLoader.NodeFactory()
     {
       @Override
       public MemNode createNode( MemNode node, Object custom )
@@ -252,7 +252,7 @@ public class MemConsole
       }
     });
 
-    wfLoader.addCustomType( "init", new MemWfLoader.NodeFactory()
+    wfLoader.addCustomType( "init", new MemLoader.NodeFactory()
     {
       @Override
       public MemNode createNode( MemNode node, Object custom )
@@ -261,7 +261,7 @@ public class MemConsole
       }
     });
 
-    wfLoader.addCustomType( "dump", new MemWfLoader.NodeFactory()
+    wfLoader.addCustomType( "dump", new MemLoader.NodeFactory()
     {
       @Override
       public MemNode createNode( MemNode node, Object custom )

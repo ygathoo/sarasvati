@@ -34,7 +34,7 @@ import javax.persistence.Table;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 
 @Entity
 @Table (name="wf_node_ref")
@@ -131,13 +131,13 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public GuardResponse guard (WfEngine engine, NodeToken token)
+  public GuardResponse guard (Engine engine, NodeToken token)
   {
     return node.guard( engine, token );
   }
 
   @Override
-  public void execute (WfEngine engine, NodeToken token)
+  public void execute (Engine engine, NodeToken token)
   {
     node.execute( engine, token );
   }

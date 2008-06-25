@@ -42,7 +42,7 @@ import com.googlecode.sarasvati.example.db.NodeTask;
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibArc;
 import com.googlecode.sarasvati.hib.HibNodeRef;
-import com.googlecode.sarasvati.hib.HibWfEngine;
+import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibWfGraph;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
@@ -58,7 +58,7 @@ public class JungVisualizer
     TestSetup.init();
 
     Session session = TestSetup.openSession();
-    HibWfEngine engine = new HibWfEngine( session );
+    HibEngine engine = new HibEngine( session );
 
     JFrame frame = new JFrame( "Workflow Visualizer" );
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );

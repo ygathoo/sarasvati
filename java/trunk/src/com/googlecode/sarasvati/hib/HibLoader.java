@@ -22,22 +22,22 @@ package com.googlecode.sarasvati.hib;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.googlecode.sarasvati.BaseWfLoader;
+import com.googlecode.sarasvati.BaseLoader;
 import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.WfGraph;
 
-public class HibWfLoader extends BaseWfLoader<HibWfGraph, HibNodeRef>
+public class HibLoader extends BaseLoader<HibWfGraph, HibNodeRef>
 {
   public static interface NodeFactory
   {
-    HibNode createNode( HibWfEngine engine, HibNode node, Object custom)
+    HibNode createNode( HibEngine engine, HibNode node, Object custom)
       throws ImportException;
   }
 
   protected Map<String,NodeFactory> customTypeFactories = new HashMap<String, NodeFactory>();
-  protected HibWfEngine engine;
+  protected HibEngine engine;
 
-  public HibWfLoader (HibWfEngine engine)
+  public HibLoader (HibEngine engine)
   {
     this.engine = engine;
   }

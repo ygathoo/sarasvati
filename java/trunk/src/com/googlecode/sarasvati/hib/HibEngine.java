@@ -32,14 +32,14 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.WfGraph;
 
-public class HibWfEngine extends WfEngine
+public class HibEngine extends Engine
 {
   protected Session session;
 
-  public HibWfEngine (Session session)
+  public HibEngine (Session session)
   {
     this.session = session;
   }

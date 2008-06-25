@@ -28,11 +28,11 @@ import org.hibernate.Transaction;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.hib.HibProcess;
-import com.googlecode.sarasvati.hib.HibWfEngine;
+import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibWfGraph;
 
 public class DbConsole
@@ -42,7 +42,7 @@ public class DbConsole
     PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( WfEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 1;
       }
@@ -51,7 +51,7 @@ public class DbConsole
     PredicateRepository.addPredicate( "isRandEven", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( WfEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 0;
       }
@@ -60,7 +60,7 @@ public class DbConsole
     PredicateRepository.addPredicate( "isTenthIteration", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( WfEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "iter" ) == 10;
       }
@@ -73,7 +73,7 @@ public class DbConsole
     {
       Session session = TestSetup.openSession();
       Transaction t = session.beginTransaction();
-      HibWfEngine engine = new HibWfEngine( session );
+      HibEngine engine = new HibEngine( session );
 
       HibWfGraph graph = getGraph( engine );
       HibProcess process = (HibProcess)engine.startWorkflow( graph );
@@ -92,7 +92,7 @@ public class DbConsole
     {
       Session session = TestSetup.openSession();
       Transaction trans = session.beginTransaction();
-      HibWfEngine engine = new HibWfEngine( session );
+      HibEngine engine = new HibEngine( session );
 
       HibProcess p = (HibProcess) session.load( HibProcess.class, processId );
       if (p.isComplete() )
@@ -146,7 +146,7 @@ public class DbConsole
     }
   }
 
-  public static void processTask (Task t, HibWfEngine engine)
+  public static void processTask (Task t, HibEngine engine)
   {
     System.out.println( "Task " );
     System.out.println( "\tName        : "  + t.getName() );
@@ -196,7 +196,7 @@ public class DbConsole
     }
   }
 
-  public static HibWfGraph getGraph (HibWfEngine engine)
+  public static HibWfGraph getGraph (HibEngine engine)
   {
     HibWfGraph graph = null;
 

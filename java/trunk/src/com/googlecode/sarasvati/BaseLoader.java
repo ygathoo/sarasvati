@@ -32,7 +32,7 @@ import com.googlecode.sarasvati.xml.XmlNode;
 import com.googlecode.sarasvati.xml.XmlWorkflow;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
 
-public abstract class BaseWfLoader<G extends WfGraph,N extends Node> implements WfLoader<G,N>
+public abstract class BaseLoader<G extends WfGraph,N extends Node> implements Loader<G,N>
 {
   protected Map<String,Map<String,N>> instanceCache = null;
   protected Map<String,N>             nodeCache     = null;

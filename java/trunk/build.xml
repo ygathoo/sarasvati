@@ -1,0 +1,20 @@
+<project name="sarasvati">
+  <property name="distdir" value="dist" />
+  <property name="builddir" value="${distdir}/build" />
+
+  <path id="classpath">
+    <fileset dir="lib/">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
+  <target name="compile">
+    <mkdir dir="${builddir}" />
+    <javac srcdir="src" destdir="${builddir}" source="1.6">
+      <include name="com/googlecode/sarasvati/**/*.java" />
+      <exclude name="com/googlecode/sarasvati/visual/**"/>
+      <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+</project>

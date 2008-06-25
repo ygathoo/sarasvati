@@ -26,7 +26,7 @@ import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 
 public class MemNodeToken implements NodeToken
 {
@@ -87,7 +87,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void recordGuardAction (WfEngine engine, GuardAction action)
+  public void recordGuardAction (Engine engine, GuardAction action)
   {
     this.guardAction = action;
   }
@@ -135,7 +135,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void markComplete (WfEngine engine)
+  public void markComplete (Engine engine)
   {
     /** Does nothing */
   }

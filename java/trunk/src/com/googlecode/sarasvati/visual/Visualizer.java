@@ -36,7 +36,7 @@ import javax.swing.event.ListSelectionListener;
 import org.hibernate.Session;
 
 import com.googlecode.sarasvati.example.db.TestSetup;
-import com.googlecode.sarasvati.hib.HibWfEngine;
+import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibWfGraph;
 
 public class Visualizer
@@ -47,7 +47,7 @@ public class Visualizer
     TestSetup.init();
 
     Session session = TestSetup.openSession();
-    HibWfEngine engine = new HibWfEngine( session );
+    HibEngine engine = new HibEngine( session );
 
     JFrame frame = new JFrame( "Workflow Visualizer" );
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );

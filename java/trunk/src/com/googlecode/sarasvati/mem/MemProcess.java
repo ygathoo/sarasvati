@@ -35,7 +35,7 @@ public class MemProcess implements Process
   protected List<ArcToken> arcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> nodeTokens = new LinkedList<NodeToken>();
 
-  public MemProcess( WfGraph graph )
+  public MemProcess (WfGraph graph)
   {
     this.graph = graph;
   }
@@ -56,6 +56,12 @@ public class MemProcess implements Process
   public List<? extends ArcToken> getArcTokens ()
   {
     return arcTokens;
+  }
+
+  @Override
+  public List<? extends NodeToken> getNodeTokens ()
+  {
+    return nodeTokens;
   }
 
   @Override

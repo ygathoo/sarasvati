@@ -26,10 +26,10 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.WfGraph;
 
-public class MemWfEngine extends WfEngine
+public class MemEngine extends Engine
 {
   @Override
   protected ArcToken newArcToken (Process process, Arc arc, NodeToken parent)

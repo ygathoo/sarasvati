@@ -27,10 +27,10 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import org.hibernate.Session;
 
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.hib.HibNodeToken;
-import com.googlecode.sarasvati.hib.HibWfEngine;
+import com.googlecode.sarasvati.hib.HibEngine;
 
 @Entity
 @DiscriminatorValue( "task" )
@@ -69,9 +69,9 @@ public class NodeTask extends HibNode
   }
 
   @Override
-  public void execute (WfEngine engine, NodeToken token)
+  public void execute (Engine engine, NodeToken token)
   {
-    HibWfEngine hibEngine = (HibWfEngine)engine;
+    HibEngine hibEngine = (HibEngine)engine;
 
     Session session = hibEngine.getSession();
 

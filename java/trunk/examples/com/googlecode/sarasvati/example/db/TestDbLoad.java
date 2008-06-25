@@ -27,8 +27,8 @@ import org.hibernate.Session;
 import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.hib.HibNode;
-import com.googlecode.sarasvati.hib.HibWfEngine;
-import com.googlecode.sarasvati.hib.HibWfLoader;
+import com.googlecode.sarasvati.hib.HibEngine;
+import com.googlecode.sarasvati.hib.HibLoader;
 import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
@@ -42,14 +42,14 @@ public class TestDbLoad
     Session sess = TestSetup.openSession();
     sess.beginTransaction();
 
-    HibWfEngine engine = new HibWfEngine( sess );
+    HibEngine engine = new HibEngine( sess );
     XmlLoader xmlLoader = new XmlLoader( XmlTaskDef.class );
-    HibWfLoader wfLoader = new HibWfLoader( engine );
+    HibLoader wfLoader = new HibLoader( engine );
 
-    wfLoader.addCustomType( "task", new HibWfLoader.NodeFactory()
+    wfLoader.addCustomType( "task", new HibLoader.NodeFactory()
     {
       @Override
-      public HibNode createNode( HibWfEngine wfEngine, HibNode node, Object custom )
+      public HibNode createNode( HibEngine wfEngine, HibNode node, Object custom )
         throws ImportException
       {
         if ( custom == null || !(custom instanceof XmlTaskDef) )

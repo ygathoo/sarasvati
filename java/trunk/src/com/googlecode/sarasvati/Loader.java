@@ -21,7 +21,7 @@ package com.googlecode.sarasvati;
 
 import com.googlecode.sarasvati.xml.XmlWorkflow;
 
-public interface WfLoader<G extends WfGraph,N extends Node>
+public interface Loader<G extends WfGraph,N extends Node>
 {
   void importDefinition (XmlWorkflow definition) throws ImportException;
 

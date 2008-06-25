@@ -105,7 +105,7 @@ public interface Node
    * <ul>
    *    <li> {@link GuardAction#DiscardToken}: The token will be discard.
    *    <li> {@link GuardAction#SkipNode}: Skip the node.
-   *         The {@link Node#execute(WfEngine, NodeToken)} method will not
+   *         The {@link Node#execute(Engine, NodeToken)} method will not
    *         be called. The {@link GuardResponse} will indicate which
    *         arc(s) to leave on.
    *    <li> {@link GuardAction#AcceptToken}: Accept the token. The execute function of the
@@ -118,16 +118,16 @@ public interface Node
    *
    * @return A GuardResponse
    */
-  GuardResponse guard (WfEngine engine, NodeToken token);
+  GuardResponse guard (Engine engine, NodeToken token);
 
   /**
    * Performs Node specific logic. Either from the execute method,
    * or later from outside, the
-   * {@link WfEngine#completeExecuteNode(NodeToken, String)} method
+   * {@link Engine#completeExecuteNode(NodeToken, String)} method
    * must be called to continue executing the {@link Process}.
    *
-   * @param engine The {@link WfEngine} which is performing the execution.
+   * @param engine The {@link Engine} which is performing the execution.
    * @param token The {@link NodeToken} which is currently executing in this node.
    */
-  void execute(WfEngine engine, NodeToken token);
+  void execute(Engine engine, NodeToken token);
 }
