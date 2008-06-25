@@ -23,13 +23,67 @@ package com.googlecode.sarasvati;
 
 import java.util.List;
 
+/**
+ * A Process represents a currently executing workflow graph.
+ *
+ * @author Paul Lorenz
+ */
 public interface Process
 {
+  /**
+   * Returns the graph being executed.
+   *
+   * @return The graph being executed.
+   */
   WfGraph getGraph ();
+
+  /**
+   * Returns the list of current ArcTokens.
+   *
+   * @return The list of current ArcTokens.
+   */
   List<? extends ArcToken> getArcTokens ();
+
+  /**
+   * Returns the list of current NodeTokens.
+   *
+   * @return The list of current NodeTokens.
+   */
+  List<? extends NodeToken> getNodeTokens ();
+
+  /**
+   * Adds an ArcToken to the list of active ArcTokens.
+   *
+   * @param token The token being added
+   */
   void addArcToken (ArcToken token);
+
+  /**
+   * Removes an ArcToken from the list of active ArcTokens.
+   *
+   * @param token The token being removed.
+   */
   void removeArcToken (ArcToken token);
+
+  /**
+   * Adds a NodeToken to the list of active NodeTokens.
+   *
+   * @param token The token being added
+   */
   void addNodeToken (NodeToken token);
+
+  /**
+   * Removes a NodeToken from the list of active NodeTokens.
+   *
+   * @param token The token being removed.
+   */
   void removeNodeToken (NodeToken token);
+
+  /**
+   * Return true if the process has completed, false otherwise. A process
+   * is complete if it has no active tokens, either ArcTokens or NodeTokens.
+   *
+   * @return True if the process has completed, false otherwise.
+   */
   boolean isComplete ();
 }

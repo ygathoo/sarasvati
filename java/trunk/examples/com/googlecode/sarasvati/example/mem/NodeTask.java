@@ -19,7 +19,7 @@
 package com.googlecode.sarasvati.example.mem;
 
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.mem.MemNode;
 
 public class NodeTask extends MemNode
@@ -53,7 +53,7 @@ public class NodeTask extends MemNode
   }
 
   @Override
-  public void execute (WfEngine engine, NodeToken token)
+  public void execute (Engine engine, NodeToken token)
   {
     Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );
     TaskList.getTasks().add( newTask );

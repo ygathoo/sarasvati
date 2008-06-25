@@ -23,7 +23,7 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 
 public class MemArcToken implements ArcToken
 {
@@ -57,7 +57,7 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public void markComplete (WfEngine engine)
+  public void markComplete (Engine engine)
   {
     /* Does nothing */
   }

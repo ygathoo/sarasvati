@@ -36,7 +36,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 
 @Entity
 @Table (name="wf_arc_token")
@@ -138,7 +138,7 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public void markComplete (WfEngine engine)
+  public void markComplete (Engine engine)
   {
     this.completeDate = new Date();
   }

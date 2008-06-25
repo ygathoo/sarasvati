@@ -20,9 +20,9 @@
 package com.googlecode.sarasvati.guardlang;
 
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 
 public interface GuardLangPredicate
 {
-  boolean evaluate (WfEngine engine, NodeToken token);
+  boolean evaluate (Engine engine, NodeToken token);
 }

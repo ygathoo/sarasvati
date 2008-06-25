@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class WfEngine
+public abstract class Engine
 {
   protected abstract NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents);
 
@@ -46,7 +46,7 @@ public abstract class WfEngine
     return process;
   }
 
-  protected void executeArc (Process process, ArcToken token)
+  private void executeArc (Process process, ArcToken token)
   {
     if ( !token.getArc().getEndNode().isJoin() )
     {
@@ -81,7 +81,7 @@ public abstract class WfEngine
     }
   }
 
-  protected void completeExecuteArc (Process process, Node targetNode, ArcToken ... tokens)
+  private void completeExecuteArc (Process process, Node targetNode, ArcToken ... tokens)
   {
     for ( ArcToken token : tokens )
     {

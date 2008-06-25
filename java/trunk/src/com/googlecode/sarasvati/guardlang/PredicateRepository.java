@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 
 public class PredicateRepository
 {
@@ -39,7 +39,7 @@ public class PredicateRepository
     return predicateMap.get( name );
   }
 
-  public static GuardEnv newGuardEnv (final WfEngine engine, final NodeToken token)
+  public static GuardEnv newGuardEnv (final Engine engine, final NodeToken token)
   {
     return new GuardEnv()
     {

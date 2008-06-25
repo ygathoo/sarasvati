@@ -22,10 +22,10 @@ package com.googlecode.sarasvati.mem;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.googlecode.sarasvati.BaseWfLoader;
+import com.googlecode.sarasvati.BaseLoader;
 import com.googlecode.sarasvati.ImportException;
 
-public class MemWfLoader extends BaseWfLoader<MemWfGraph,MemNode>
+public class MemLoader extends BaseLoader<MemWfGraph,MemNode>
 {
   public static interface NodeFactory
   {

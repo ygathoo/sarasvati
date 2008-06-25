@@ -124,15 +124,15 @@ public interface NodeToken extends Token
   Iterable<String> getAttributeNames ();
 
   /**
-   * A NodeToken is evaluated by the {@link Node#guard(WfEngine, NodeToken)}
+   * A NodeToken is evaluated by the {@link Node#guard(Engine, NodeToken)}
    * method. recordGuardAction will be called by the engine to
    * record the result of the guard.
    *
-   * @param engine The {@link WfEngine} being used to execute the associated {@link Process}.
+   * @param engine The {@link Engine} being used to execute the associated {@link Process}.
    * @param action The {@link GuardAction} taken with this NodeToken.
-   * @see Node#guard(WfEngine, NodeToken)
+   * @see Node#guard(Engine, NodeToken)
    */
-  void recordGuardAction (WfEngine engine, GuardAction action);
+  void recordGuardAction (Engine engine, GuardAction action);
 
   /**
    * Returns the GuardAction that was returned from the Node guard

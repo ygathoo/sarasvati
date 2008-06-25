@@ -22,7 +22,7 @@ import java.util.Random;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WfEngine;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.mem.MemNode;
 
 public class NodeInit extends MemNode
@@ -33,7 +33,7 @@ public class NodeInit extends MemNode
   }
 
   @Override
-  public void execute (WfEngine engine, NodeToken token)
+  public void execute (Engine engine, NodeToken token)
   {
     long iter = 0;
 
