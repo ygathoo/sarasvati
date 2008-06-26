@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,12 +11,12 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.jung;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -38,19 +38,19 @@ import javax.swing.event.ListSelectionListener;
 import org.apache.commons.collections15.Transformer;
 import org.hibernate.Session;
 
-import com.googlecode.sarasvati.example.db.NodeTask;
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.example.db.TestSetup;
-import com.googlecode.sarasvati.hib.HibArc;
-import com.googlecode.sarasvati.hib.HibNodeRef;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.hib.HibGraph;
+import com.googlecode.sarasvati.visual.GraphTree;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
 public class JungVisualizer
 {
-  protected static HibGraph currentGraph = null;
+  protected static Graph currentGraph = null;
 
   @SuppressWarnings("serial")
   public static void main( String[] args ) throws Exception
@@ -68,7 +68,7 @@ public class JungVisualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( HibGraph g : engine.getGraphs() )
+    for ( Graph g : engine.getGraphs() )
     {
       listModel.addElement( g );
     }
@@ -82,7 +82,7 @@ public class JungVisualizer
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 
-        HibGraph g = (HibGraph)value;
+        Graph g = (Graph)value;
 
         setText( g.getName() + "." + g.getVersion() + "  " );
         return this;
@@ -101,32 +101,31 @@ public class JungVisualizer
 
     //TreeLayout<NodeRef, Arc> layout = new TreeLayout<NodeRef, Arc>();
 
-    DirectedSparseMultigraph<HibNodeRef, HibArc> graph = new DirectedSparseMultigraph<HibNodeRef, HibArc>();
+    DirectedSparseMultigraph<Node, Arc> graph = new DirectedSparseMultigraph<Node, Arc>();
 
     //final SpringLayout2<HibNodeRef, HibArc> layout = new SpringLayout2<HibNodeRef, HibArc>(graph);
     //final KKLayout<HibNodeRef, HibArc> layout = new KKLayout<HibNodeRef, HibArc>(graph);
     final TreeLayout layout = new TreeLayout( graph );
-    final BasicVisualizationServer<HibNodeRef, HibArc> vs = new BasicVisualizationServer<HibNodeRef, HibArc>(layout);
+    final BasicVisualizationServer<Node, Arc> vs = new BasicVisualizationServer<Node, Arc>(layout);
     //vs.getRenderContext().setVertexLabelTransformer( new NodeLabeller() );
     //vs.getRenderContext().setEdgeLabelTransformer( new ArcLabeller() );
     vs.getRenderContext().setVertexShapeTransformer( new NodeShapeTransformer() );
     vs.getRenderContext().setVertexFillPaintTransformer( new NodeColorTransformer() );
     vs.getRenderContext().setLabelOffset( 5 );
-    vs.getRenderContext().setVertexIconTransformer( new Transformer<HibNodeRef,Icon>()
+    vs.getRenderContext().setVertexIconTransformer( new Transformer<Node,Icon>()
     {
-      @Override public Icon transform (HibNodeRef nodeRef)
+      @Override public Icon transform (Node node)
       {
-        return nodeRef.getNode() instanceof NodeTask ?
-                 new TaskIcon( (NodeTask)nodeRef.getNode() ) : null;
+        return "task".equals( node.getType() ) ? new TaskIcon( node ) : null;
       }
     });
 
-    Transformer<HibArc,Paint> edgeColorTrans = new Transformer<HibArc,Paint>()
+    Transformer<Arc,Paint> edgeColorTrans = new Transformer<Arc,Paint>()
     {
       private Color darkRed = new Color( 128, 0, 0 );
 
       @Override
-      public Paint transform (HibArc arc)
+      public Paint transform (Arc arc)
       {
         return "reject".equals( arc.getName() ) ? darkRed : Color.black;
       }
@@ -153,7 +152,7 @@ public class JungVisualizer
           return;
         }
 
-        final HibGraph g = (HibGraph)graphList.getSelectedValue();
+        final Graph g = (Graph)graphList.getSelectedValue();
 
         if ( ( g == null && currentGraph == null ) ||
              (g != null && g.equals( currentGraph ) ) )
@@ -163,14 +162,14 @@ public class JungVisualizer
 
         currentGraph = g;
 
-        DirectedSparseMultigraph<HibNodeRef, HibArc> jungGraph = new DirectedSparseMultigraph<HibNodeRef, HibArc>();
+        DirectedSparseMultigraph<Node, Arc> jungGraph = new DirectedSparseMultigraph<Node, Arc>();
 
-        for ( HibNodeRef ref : currentGraph.getNodeRefs() )
+        for ( Node ref : currentGraph.getNodes() )
         {
           jungGraph.addVertex( ref );
         }
 
-        for ( HibArc arc : currentGraph.getArcs() )
+        for ( Arc arc : currentGraph.getArcs() )
         {
           jungGraph.addEdge( arc, arc.getStartNode(), arc.getEndNode() );
         }

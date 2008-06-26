@@ -27,7 +27,6 @@ import javax.swing.JComponent;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.hib.HibNodeRef;
 
 public class GraphDrawing extends JComponent
 {
@@ -98,7 +97,7 @@ public class GraphDrawing extends JComponent
 
         for ( Arc arc : graph.getOutputArcs( treeNode.getNode() ) )
         {
-          GraphTreeNode targetNode = graphTree.getTreeNode( (HibNodeRef)arc.getEndNode() );
+          GraphTreeNode targetNode = graphTree.getTreeNode( arc.getEndNode() );
           drawArc( g, arc, treeNode, targetNode );
         }
       }

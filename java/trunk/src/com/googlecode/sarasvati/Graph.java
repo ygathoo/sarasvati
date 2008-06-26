@@ -51,6 +51,13 @@ public interface Graph
   int getVersion ();
 
   /**
+   * Returns a list of all arcs in the graph.
+   *
+   * @return A list of arcs
+   */
+  List<? extends Arc> getArcs ();
+
+  /**
    * Returns a list of arcs which have the given node as an end point. The
    * list may be empty, but will never be null.
    *

@@ -19,22 +19,31 @@
 /**
  * Created on May 15, 2008
  */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.jung;
+
+import java.awt.geom.Point2D;
 
 import org.apache.commons.collections15.Transformer;
 
-import com.googlecode.sarasvati.example.db.NodeTask;
-import com.googlecode.sarasvati.hib.HibNodeRef;
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.visual.GraphTree;
+import com.googlecode.sarasvati.visual.GraphTreeNode;
 
-public class NodeLabeller implements Transformer<HibNodeRef,String>
+public class NodeLocationTransformer implements Transformer<Node, Point2D>
 {
-  @Override
-  public String transform (HibNodeRef nodeRef)
+  protected GraphTree graphTree;
+
+  public NodeLocationTransformer (GraphTree graphTree)
   {
-    if ( "task".equals( nodeRef.getType() ) )
-    {
-      return ((NodeTask)nodeRef.getNode()).getTaskName();
-    }
-    return nodeRef.getName();
+    this.graphTree = graphTree;
+  }
+
+  @Override
+  public Point2D transform (Node node)
+  {
+    GraphTreeNode treeNode = graphTree.getTreeNode( node );
+    Point2D point = new Point2D.Double();
+    point.setLocation( treeNode.getDepth() * 100 + 50, treeNode.getIndex() * 100 + 50 );
+    return point;
   }
 }

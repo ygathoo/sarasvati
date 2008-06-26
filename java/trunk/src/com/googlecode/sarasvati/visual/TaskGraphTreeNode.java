@@ -22,8 +22,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 
 import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.example.db.NodeTask;
-import com.googlecode.sarasvati.hib.HibNodeRef;
 
 public class TaskGraphTreeNode extends GraphTreeNode
 {
@@ -42,9 +40,7 @@ public class TaskGraphTreeNode extends GraphTreeNode
 
     g.draw3DRect( originX - maxRadius, originY - maxRadius, maxRadius << 1, maxRadius << 1, false );
 
-    NodeTask nodeTask = (NodeTask)((HibNodeRef)node).getNode();
-
-    String taskName = nodeTask.getTaskName();
+    String taskName = node.getDisplayText();
 
     int width = g.getFontMetrics().stringWidth( taskName );
     int height = g.getFontMetrics().getHeight();

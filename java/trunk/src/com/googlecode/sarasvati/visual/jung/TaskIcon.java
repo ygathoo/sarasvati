@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -19,7 +19,7 @@
 /**
  * Created on May 16, 2008
  */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.jung;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -27,7 +27,8 @@ import java.awt.Graphics;
 
 import javax.swing.Icon;
 
-import com.googlecode.sarasvati.example.db.NodeTask;
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.visual.FontUtil;
 
 public class TaskIcon implements Icon
 {
@@ -37,11 +38,11 @@ public class TaskIcon implements Icon
   private static final Color darkBlue = new Color( 0, 0, 128 );
   private static final Color cream    = new Color( 255, 255, 245 );
 
-  protected NodeTask task;
+  protected Node node;
 
-  public TaskIcon( NodeTask task )
+  public TaskIcon( Node node )
   {
-    this.task = task;
+    this.node = node;
   }
 
   @Override
@@ -65,7 +66,7 @@ public class TaskIcon implements Icon
     g.drawRoundRect( x, y, getIconWidth(), getIconHeight(), 10, 10 );
 
     g.setColor( Color.black );
-    String taskName = task.getTaskName();
+    String taskName = node.getDisplayText();
 
     String[] lines = FontUtil.split( taskName );
 

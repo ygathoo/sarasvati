@@ -19,7 +19,7 @@
 /**
  * Created on May 15, 2008
  */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.jung;
 
 import org.apache.commons.collections15.Transformer;
 
