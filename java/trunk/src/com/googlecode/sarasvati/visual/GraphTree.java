@@ -92,7 +92,7 @@ public class GraphTree
     }
   }
 
-  public GraphTreeNode getTreeNode (HibNodeRef node)
+  public GraphTreeNode getTreeNode (Node node)
   {
     return nodeMap.get( node );
   }

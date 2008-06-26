@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,27 +11,27 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.jung;
 
 import java.awt.Color;
 import java.awt.Paint;
 
 import org.apache.commons.collections15.Transformer;
 
-import com.googlecode.sarasvati.hib.HibNodeRef;
+import com.googlecode.sarasvati.Node;
 
-public class NodeColorTransformer implements Transformer<HibNodeRef, Paint>
+public class NodeColorTransformer implements Transformer<Node, Paint>
 {
   protected Color startColor = new Color( 102, 152, 102 );
   protected Color nodeColor  = new Color( 102, 102, 152 );
 
   @Override
-  public Paint transform( HibNodeRef nodeRef )
+  public Paint transform( Node nodeRef )
   {
     if ( "start".equals( nodeRef.getType() ) )
     {

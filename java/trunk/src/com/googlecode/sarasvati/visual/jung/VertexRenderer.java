@@ -16,37 +16,17 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual;
-
-import java.awt.geom.Point2D;
-
-import org.apache.commons.collections15.Transformer;
+/**
+ * Created on May 15, 2008
+ */
+package com.googlecode.sarasvati.visual.jung;
 
 import com.googlecode.sarasvati.hib.HibArc;
 import com.googlecode.sarasvati.hib.HibNodeRef;
 
-import edu.uci.ics.jung.algorithms.layout.AbstractLayout;
-import edu.uci.ics.jung.graph.Graph;
+import edu.uci.ics.jung.visualization.renderers.BasicVertexRenderer;
 
-public class TreeLayout extends AbstractLayout<HibNodeRef, HibArc>
+public class VertexRenderer extends BasicVertexRenderer<HibNodeRef, HibArc>
 {
-  protected TreeLayout (Graph<HibNodeRef, HibArc> graph)
-  {
-    super( graph );
-  }
 
-  protected TreeLayout (Graph<HibNodeRef, HibArc> graph, Transformer<HibNodeRef, Point2D> trans)
-  {
-    super( graph, trans );
-  }
-
-  @Override
-  public void initialize ()
-  {
-  }
-
-  @Override
-  public void reset ()
-  {
-  }
 }
