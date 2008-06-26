@@ -24,10 +24,12 @@ import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.guardlang.GuardLang;
+import com.googlecode.sarasvati.guardlang.PredicateRepository;
 
 public class MemNode implements Node, Cloneable
 {
-  protected MemWfGraph graph;
+  protected MemGraph graph;
 
   protected String  name;
   protected String  type;
@@ -42,7 +44,7 @@ public class MemNode implements Node, Cloneable
     /* Default constructor */
   }
 
-  public MemNode (MemWfGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard)
+  public MemNode (MemGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard)
   {
     this.graph = graph;
     this.name = name;
@@ -68,12 +70,12 @@ public class MemNode implements Node, Cloneable
     engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
   }
 
-  public MemWfGraph getGraph ()
+  public MemGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (MemWfGraph graph)
+  public void setGraph (MemGraph graph)
   {
     this.graph = graph;
   }
@@ -99,7 +101,12 @@ public class MemNode implements Node, Cloneable
   @Override
   public GuardResponse guard (Engine engine, NodeToken token)
   {
-    return GuardResponse.ACCEPT_TOKEN_RESPONSE;
+    if ( guard == null || guard.trim().length() == 0 )
+    {
+      return GuardResponse.ACCEPT_TOKEN_RESPONSE;
+    }
+
+    return GuardLang.eval( guard, PredicateRepository.newGuardEnv( engine, token ) );
   }
 
   @Override
@@ -122,6 +129,12 @@ public class MemNode implements Node, Cloneable
   public void setExternal (boolean isExternal)
   {
     this.isExternal = isExternal;
+  }
+
+  @Override
+  public String getDisplayText ()
+  {
+    return name;
   }
 
   @Override

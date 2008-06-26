@@ -50,13 +50,13 @@ public class HibNodeRef implements Node
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="graph_id")
-  protected HibWfGraph graph;
+  protected HibGraph graph;
 
   protected String instance;
 
   protected HibNodeRef () { /* Default constructor for Hibernate */ }
 
-  protected HibNodeRef (HibWfGraph graph, HibNode node, String instance )
+  protected HibNodeRef (HibGraph graph, HibNode node, String instance )
   {
     this.graph    = graph;
     this.node     = node;
@@ -83,12 +83,12 @@ public class HibNodeRef implements Node
     this.node = node;
   }
 
-  public HibWfGraph getGraph ()
+  public HibGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (HibWfGraph graph)
+  public void setGraph (HibGraph graph)
   {
     this.graph = graph;
   }
@@ -140,6 +140,12 @@ public class HibNodeRef implements Node
   public void execute (Engine engine, NodeToken token)
   {
     node.execute( engine, token );
+  }
+
+  @Override
+  public String getDisplayText ()
+  {
+    return node.getDisplayText();
   }
 
   public boolean isNodeDefinedInTopLevel ()

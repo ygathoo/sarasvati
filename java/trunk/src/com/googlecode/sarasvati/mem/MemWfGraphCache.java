@@ -26,20 +26,20 @@ import java.util.Map;
 
 public class MemWfGraphCache
 {
-  private static Map<String,MemWfGraph> cache = new HashMap<String, MemWfGraph>();
+  private static Map<String,MemGraph> cache = new HashMap<String, MemGraph>();
 
-  public static void addToCache (String name, MemWfGraph graph)
+  public static void addToCache (String name, MemGraph graph)
   {
     cache.put( name, graph );
   }
 
-  public static MemWfGraph get (String name)
+  public static MemGraph get (String name)
   {
     return cache.get( name );
   }
 
-  public static List<MemWfGraph> getGraphs ()
+  public static List<MemGraph> getGraphs ()
   {
-    return new ArrayList<MemWfGraph>( cache.values() );
+    return new ArrayList<MemGraph>( cache.values() );
   }
 }

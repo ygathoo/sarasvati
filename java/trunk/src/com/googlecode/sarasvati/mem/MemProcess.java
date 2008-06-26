@@ -25,17 +25,17 @@ import java.util.List;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
-import com.googlecode.sarasvati.WfGraph;
+import com.googlecode.sarasvati.Graph;
 
 public class MemProcess implements Process
 {
   protected long tokenCounter = 0;
 
-  protected WfGraph graph;
+  protected Graph graph;
   protected List<ArcToken> arcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> nodeTokens = new LinkedList<NodeToken>();
 
-  public MemProcess (WfGraph graph)
+  public MemProcess (Graph graph)
   {
     this.graph = graph;
   }
@@ -65,7 +65,7 @@ public class MemProcess implements Process
   }
 
   @Override
-  public WfGraph getGraph ()
+  public Graph getGraph ()
   {
     return graph;
   }

@@ -25,7 +25,7 @@ import java.util.Map;
 import com.googlecode.sarasvati.BaseLoader;
 import com.googlecode.sarasvati.ImportException;
 
-public class MemLoader extends BaseLoader<MemWfGraph,MemNode>
+public class MemLoader extends BaseLoader<MemGraph,MemNode>
 {
   public static interface NodeFactory
   {
@@ -70,9 +70,9 @@ public class MemLoader extends BaseLoader<MemWfGraph,MemNode>
   }
 
   @Override
-  protected MemWfGraph createWfGraph (String name)
+  protected MemGraph createWfGraph (String name)
   {
-    MemWfGraph graph = new MemWfGraph( name );
+    MemGraph graph = new MemGraph( name );
     MemWfGraphCache.addToCache( name, graph );
     return graph;
   }
@@ -82,7 +82,7 @@ public class MemLoader extends BaseLoader<MemWfGraph,MemNode>
   {
     Map<String,MemNode> nodeMap = new HashMap<String, MemNode>();
 
-    MemWfGraph instanceGraph = MemWfGraphCache.get( externalName );
+    MemGraph instanceGraph = MemWfGraphCache.get( externalName );
 
     if ( instanceGraph == null )
     {

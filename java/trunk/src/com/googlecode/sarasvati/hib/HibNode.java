@@ -58,7 +58,7 @@ public class HibNode implements Node
 
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn( name="graph_id")
-  protected HibWfGraph graph;
+  protected HibGraph graph;
 
   protected String name;
   protected String type;
@@ -75,7 +75,7 @@ public class HibNode implements Node
 
   protected HibNode () { /* Default constructor for Hibernate */ }
 
-  public HibNode (HibWfGraph graph,
+  public HibNode (HibGraph graph,
                   String name,
                   String type,
                   boolean join,
@@ -132,12 +132,12 @@ public class HibNode implements Node
     this.type = type;
   }
 
-  public HibWfGraph getGraph ()
+  public HibGraph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (HibWfGraph graph)
+  public void setGraph (HibGraph graph)
   {
     this.graph = graph;
   }
@@ -183,6 +183,12 @@ public class HibNode implements Node
     }
 
     return GuardLang.eval( guard, PredicateRepository.newGuardEnv( engine, token ) );
+  }
+
+  @Override
+  public String getDisplayText ()
+  {
+    return name;
   }
 
   @Override

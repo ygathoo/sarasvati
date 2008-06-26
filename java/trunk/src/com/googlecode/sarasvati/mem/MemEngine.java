@@ -23,13 +23,13 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NonRecursiveEngine;
 import com.googlecode.sarasvati.Process;
-import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.WfGraph;
 
-public class MemEngine extends Engine
+public class MemEngine extends NonRecursiveEngine
 {
   @Override
   protected ArcToken newArcToken (Process process, Arc arc, NodeToken parent)
@@ -55,7 +55,7 @@ public class MemEngine extends Engine
   }
 
   @Override
-  protected Process newProcess (WfGraph graph)
+  protected Process newProcess (Graph graph)
   {
     return new MemProcess( graph );
   }

@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -21,13 +21,13 @@ package com.googlecode.sarasvati.visual;
 import java.awt.Color;
 import java.awt.Graphics;
 
-
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.example.db.NodeTask;
 import com.googlecode.sarasvati.hib.HibNodeRef;
 
 public class TaskGraphTreeNode extends GraphTreeNode
 {
-  public TaskGraphTreeNode( GraphTreeNode parent, HibNodeRef node )
+  public TaskGraphTreeNode( GraphTreeNode parent, Node node )
   {
     super( parent, node );
     color = new Color( 102, 152, 102 );
@@ -42,7 +42,7 @@ public class TaskGraphTreeNode extends GraphTreeNode
 
     g.draw3DRect( originX - maxRadius, originY - maxRadius, maxRadius << 1, maxRadius << 1, false );
 
-    NodeTask nodeTask = (NodeTask)node.getNode();
+    NodeTask nodeTask = (NodeTask)((HibNodeRef)node).getNode();
 
     String taskName = nodeTask.getTaskName();
 

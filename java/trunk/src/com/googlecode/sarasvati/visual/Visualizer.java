@@ -37,7 +37,7 @@ import org.hibernate.Session;
 
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.hib.HibWfGraph;
+import com.googlecode.sarasvati.hib.HibGraph;
 
 public class Visualizer
 {
@@ -57,7 +57,7 @@ public class Visualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( HibWfGraph g : engine.getGraphs() )
+    for ( HibGraph g : engine.getGraphs() )
     {
       listModel.addElement( g );
     }
@@ -70,7 +70,7 @@ public class Visualizer
                                                      boolean cellHasFocus )
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
-        setText( ((HibWfGraph)value).getName() );
+        setText( ((HibGraph)value).getName() );
         return this;
       }
     };
@@ -107,7 +107,7 @@ public class Visualizer
           return;
         }
 
-        final HibWfGraph g = (HibWfGraph)graphList.getSelectedValue();
+        final HibGraph g = (HibGraph)graphList.getSelectedValue();
 
         if ( ( g == null && graphDrawing.getGraph() == null ) ||
              (g != null && g.equals( graphDrawing.getGraph() ) ) )

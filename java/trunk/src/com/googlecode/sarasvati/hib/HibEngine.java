@@ -29,13 +29,13 @@ import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NonRecursiveEngine;
 import com.googlecode.sarasvati.Process;
-import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.WfGraph;
 
-public class HibEngine extends Engine
+public class HibEngine extends NonRecursiveEngine
 {
   protected Session session;
 
@@ -109,29 +109,29 @@ public class HibEngine extends Engine
   }
 
   @Override
-  protected HibProcess newProcess (WfGraph graph)
+  protected HibProcess newProcess (Graph graph)
   {
-    HibProcess process = new HibProcess( (HibWfGraph)graph);
+    HibProcess process = new HibProcess( (HibGraph)graph);
     session.save(  process );
 
     return process;
   }
 
   @SuppressWarnings("unchecked")
-  public List<HibWfGraph> getGraphs ()
+  public List<HibGraph> getGraphs ()
   {
-    return session.createQuery( "from HibWfGraph" ).list();
+    return session.createQuery( "from HibGraph" ).list();
   }
 
   @SuppressWarnings("unchecked")
-  public HibWfGraph getLatestGraph (String name)
+  public HibGraph getLatestGraph (String name)
   {
-    String query = "from HibWfGraph " +
+    String query = "from HibGraph " +
                    " where name = :name " +
-                   "   and version in (select max(version) from HibWfGraph where name = :name)";
+                   "   and version in (select max(version) from HibGraph where name = :name)";
 
     return
-      (HibWfGraph)session.createQuery( query )
+      (HibGraph)session.createQuery( query )
         .setString(  "name", name )
         .uniqueResult();
   }

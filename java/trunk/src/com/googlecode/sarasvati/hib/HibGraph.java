@@ -44,11 +44,11 @@ import javax.persistence.Transient;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.WfGraph;
+import com.googlecode.sarasvati.Graph;
 
 @Entity
 @Table (name="wf_graph")
-public class HibWfGraph implements WfGraph
+public class HibGraph implements Graph
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -60,9 +60,9 @@ public class HibWfGraph implements WfGraph
   @Temporal (TemporalType.TIMESTAMP)
   protected Date   createDate;
 
-  protected HibWfGraph () { /* Default constructor for hibernate */ }
+  protected HibGraph () { /* Default constructor for hibernate */ }
 
-  protected HibWfGraph (String name, int version)
+  protected HibGraph (String name, int version)
   {
     this.name = name;
     this.version = version;
@@ -256,6 +256,12 @@ public class HibWfGraph implements WfGraph
     return startNodes;
   }
 
+  @Override
+  public List<? extends Node> getNodes ()
+  {
+    return getNodeRefs();
+  }
+
   public boolean hasArcInverse( Arc arc )
   {
     for (Arc tmpArc : arcs)
@@ -284,8 +290,8 @@ public class HibWfGraph implements WfGraph
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof HibWfGraph ) ) return false;
-    final HibWfGraph other = (HibWfGraph)obj;
+    if ( !( obj instanceof HibGraph ) ) return false;
+    final HibGraph other = (HibGraph)obj;
     if ( id == null )
     {
       if ( other.id != null ) return false;
