@@ -21,17 +21,17 @@ package com.googlecode.sarasvati;
 import java.util.LinkedList;
 
 /**
- * {@link Engine} is recursive by default. So if you have a very deep graph
+ * {@link BaseEngine} is recursive by default. So if you have a very deep graph
  * or a one which loops without waiting, it is possible to run out of
  * stack space. This implementation turns the recursion into iterative
  * loop, which can handle arbitrarily deep graphs.
  * 
- * Unlike the the default {@link Engine}, this implementation is no longer
+ * Unlike the the default {@link BaseEngine}, this implementation is no longer
  * thread safe. 
  *
  * @author Paul Lorenz
  */
-public abstract class NonRecursiveEngine extends Engine
+public abstract class NonRecursiveEngine extends BaseEngine
 {
   private static class TokenArcNamePair
   {

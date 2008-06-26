@@ -29,7 +29,7 @@ import java.util.List;
  *
  * @author Paul Lorenz
  */
-public abstract class Engine
+public abstract class BaseEngine
 {
   protected abstract NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents);
 
