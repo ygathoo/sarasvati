@@ -20,9 +20,9 @@
 package com.googlecode.sarasvati.guardlang;
 
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.BaseEngine;
 
 public interface GuardLangPredicate
 {
-  boolean evaluate (Engine engine, NodeToken token);
+  boolean evaluate (BaseEngine engine, NodeToken token);
 }

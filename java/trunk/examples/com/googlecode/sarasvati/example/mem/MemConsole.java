@@ -29,7 +29,7 @@ import java.util.List;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
@@ -52,7 +52,7 @@ public class MemConsole
     PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( Engine engine, NodeToken token )
+      public boolean evaluate( BaseEngine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 1;
       }
@@ -61,7 +61,7 @@ public class MemConsole
     PredicateRepository.addPredicate( "isRandEven", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( Engine engine, NodeToken token )
+      public boolean evaluate( BaseEngine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 0;
       }
@@ -70,7 +70,7 @@ public class MemConsole
     PredicateRepository.addPredicate( "isTenthIteration", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( Engine engine, NodeToken token )
+      public boolean evaluate( BaseEngine engine, NodeToken token )
       {
         System.out.println( "iter: " + token.getLongAttribute( "iter" ) );
         return token.getLongAttribute( "iter" ) == 1000;

@@ -25,7 +25,7 @@ import javax.persistence.Entity;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.hib.HibNode;
 
 @Entity
@@ -33,7 +33,7 @@ import com.googlecode.sarasvati.hib.HibNode;
 public class NodeInit extends HibNode
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (BaseEngine engine, NodeToken token)
   {
     long iter = 0;
 
