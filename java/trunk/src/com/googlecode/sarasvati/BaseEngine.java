@@ -29,14 +29,8 @@ import java.util.List;
  *
  * @author Paul Lorenz
  */
-public abstract class BaseEngine
+public abstract class BaseEngine implements Engine
 {
-  protected abstract NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents);
-
-  protected abstract ArcToken newArcToken (Process process, Arc arc, NodeToken parent);
-
-  protected abstract Process newProcess (Graph graph);
-
   public Process startWorkflow (Graph graph)
   {
     Process process = newProcess( graph );
@@ -114,12 +108,12 @@ public abstract class BaseEngine
 
       case SkipNode :
         process.addNodeToken( token );
-        completeExecuteNode( token, response.getExitArcForSkip() );
+        completeExecution( token, response.getExitArcForSkip() );
         break;
     }
   }
 
-  public void completeExecuteNode (NodeToken token, String arcName)
+  public void completeExecution (NodeToken token, String arcName)
   {
     System.out.println( "Stack depth: " + new Exception().getStackTrace().length );
     Process process = token.getProcess();

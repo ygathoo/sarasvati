@@ -55,7 +55,7 @@ public class HibEngine extends NonRecursiveEngine
   }
 
   @Override
-  protected HibArcToken newArcToken (Process process, Arc arc, NodeToken previousToken)
+  public HibArcToken newArcToken (Process process, Arc arc, NodeToken previousToken)
   {
     HibArcToken token = new HibArcToken( (HibProcess)process, (HibArc)arc, (HibNodeToken)previousToken );
     session.save( token );
@@ -64,7 +64,7 @@ public class HibEngine extends NonRecursiveEngine
 
   @SuppressWarnings("unchecked")
   @Override
-  protected HibNodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
+  public HibNodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
   {
     // Here we setup the token attributes for the new node
     // If the node has no predecessors, it will have no attributes
@@ -109,7 +109,7 @@ public class HibEngine extends NonRecursiveEngine
   }
 
   @Override
-  protected HibProcess newProcess (Graph graph)
+  public HibProcess newProcess (Graph graph)
   {
     HibProcess process = new HibProcess( (HibGraph)graph);
     session.save(  process );

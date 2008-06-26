@@ -22,11 +22,11 @@ package com.googlecode.sarasvati.mem;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
-import com.googlecode.sarasvati.BaseEngine;
 
 public class MemNodeToken implements NodeToken
 {
@@ -87,7 +87,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void recordGuardAction (BaseEngine engine, GuardAction action)
+  public void recordGuardAction (Engine engine, GuardAction action)
   {
     this.guardAction = action;
   }
@@ -135,7 +135,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void markComplete (BaseEngine engine)
+  public void markComplete (Engine engine)
   {
     /** Does nothing */
   }

@@ -21,8 +21,8 @@ package com.googlecode.sarasvati.example.mem;
 import java.util.Random;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.mem.MemNode;
 
 public class NodeInit extends MemNode
@@ -33,7 +33,7 @@ public class NodeInit extends MemNode
   }
 
   @Override
-  public void execute (BaseEngine engine, NodeToken token)
+  public void execute (Engine engine, NodeToken token)
   {
     long iter = 0;
 
@@ -44,6 +44,6 @@ public class NodeInit extends MemNode
 
     token.setLongAttribute( "iter", ++iter );
     token.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
-    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }

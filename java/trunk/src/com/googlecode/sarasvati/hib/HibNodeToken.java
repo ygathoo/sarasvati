@@ -43,9 +43,9 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CollectionOfElements;
 
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.BaseEngine;
 
 @Entity
 @Table(name="wf_node_token")
@@ -140,7 +140,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void recordGuardAction (BaseEngine engine, GuardAction action)
+  public void recordGuardAction (Engine engine, GuardAction action)
   {
     this.guardAction = action;
   }
@@ -196,7 +196,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void markComplete (BaseEngine engine)
+  public void markComplete (Engine engine)
   {
     this.completeDate = new Date();
   }
