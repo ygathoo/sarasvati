@@ -32,13 +32,13 @@ import com.googlecode.sarasvati.Process;
 public class MemEngine extends NonRecursiveEngine
 {
   @Override
-  protected ArcToken newArcToken (Process process, Arc arc, NodeToken parent)
+  public ArcToken newArcToken (Process process, Arc arc, NodeToken parent)
   {
     return new MemArcToken( arc, process, parent );
   }
 
   @Override
-  protected NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
+  public NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
   {
     MemNodeToken token = new MemNodeToken( node, process );
 
@@ -55,7 +55,7 @@ public class MemEngine extends NonRecursiveEngine
   }
 
   @Override
-  protected Process newProcess (Graph graph)
+  public Process newProcess (Graph graph)
   {
     return new MemProcess( graph );
   }

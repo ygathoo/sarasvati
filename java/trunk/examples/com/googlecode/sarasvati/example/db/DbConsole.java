@@ -27,13 +27,13 @@ import org.hibernate.Session;
 import org.hibernate.Transaction;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
-import com.googlecode.sarasvati.hib.HibProcess;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
+import com.googlecode.sarasvati.hib.HibProcess;
 
 public class DbConsole
 {
@@ -42,7 +42,7 @@ public class DbConsole
     PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( BaseEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 1;
       }
@@ -51,7 +51,7 @@ public class DbConsole
     PredicateRepository.addPredicate( "isRandEven", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( BaseEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 0;
       }
@@ -60,7 +60,7 @@ public class DbConsole
     PredicateRepository.addPredicate( "isTenthIteration", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( BaseEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "iter" ) == 10;
       }
@@ -177,13 +177,13 @@ public class DbConsole
       {
         System.out.println( "Completing task" );
         t.setState( (TaskState) engine.getSession().load( TaskState.class, 1 ) );
-        engine.completeExecuteNode( t.getNodeToken(), Arc.DEFAULT_ARC );
+        engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
         t.setState( (TaskState) engine.getSession().load( TaskState.class, 2 ) );
-        engine.completeExecuteNode( t.getNodeToken(), "reject" );
+        engine.completeExecution( t.getNodeToken(), "reject" );
       }
       else
       {

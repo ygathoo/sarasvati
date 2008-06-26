@@ -49,7 +49,7 @@ public abstract class NonRecursiveEngine extends BaseEngine
   protected boolean firstExecution = true;
 
   @Override
-  public void completeExecuteNode (NodeToken token, String arcName)
+  public void completeExecution (NodeToken token, String arcName)
   {
     if ( !firstExecution )
     {
@@ -58,12 +58,12 @@ public abstract class NonRecursiveEngine extends BaseEngine
     else
     {
       firstExecution = false;
-      super.completeExecuteNode( token, arcName );
+      super.completeExecution( token, arcName );
 
       while ( !queue.isEmpty() )
       {
         TokenArcNamePair pair = queue.removeFirst();
-        super.completeExecuteNode( pair.token, pair.arcName );
+        super.completeExecution( pair.token, pair.arcName );
       }
       firstExecution = true;
     }

@@ -38,10 +38,10 @@ import org.hibernate.annotations.DiscriminatorFormula;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.guardlang.GuardLang;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 
@@ -175,7 +175,7 @@ public class HibNode implements Node
   }
 
   @Override
-  public GuardResponse guard (BaseEngine engine, NodeToken token)
+  public GuardResponse guard (Engine engine, NodeToken token)
   {
     if ( guard == null || guard.trim().length() == 0 )
     {
@@ -192,9 +192,9 @@ public class HibNode implements Node
   }
 
   @Override
-  public void execute (BaseEngine engine, NodeToken token)
+  public void execute (Engine engine, NodeToken token)
   {
-    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 
   @Override

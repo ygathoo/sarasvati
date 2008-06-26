@@ -38,5 +38,5 @@ public interface Token
    * represents an active part of the process. Once a token is marked
    * complete, it is generally only of historical interest.
    */
-  void markComplete (BaseEngine engine);
+  void markComplete (Engine engine);
 }

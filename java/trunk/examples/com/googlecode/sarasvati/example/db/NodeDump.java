@@ -22,8 +22,8 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.hib.HibNode;
 
 @Entity
@@ -31,9 +31,9 @@ import com.googlecode.sarasvati.hib.HibNode;
 public class NodeDump extends HibNode
 {
   @Override
-  public void execute (BaseEngine engine, NodeToken token)
+  public void execute (Engine engine, NodeToken token)
   {
     System.out.println( "Accepted into: " + getName() );
-    engine.completeExecuteNode( token, Arc.DEFAULT_ARC );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }

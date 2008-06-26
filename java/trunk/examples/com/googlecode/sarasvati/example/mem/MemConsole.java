@@ -25,20 +25,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
 
-
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
-import com.googlecode.sarasvati.mem.MemNode;
-import com.googlecode.sarasvati.mem.MemProcess;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
-import com.googlecode.sarasvati.mem.MemWfGraphCache;
 import com.googlecode.sarasvati.mem.MemLoader;
+import com.googlecode.sarasvati.mem.MemNode;
+import com.googlecode.sarasvati.mem.MemProcess;
+import com.googlecode.sarasvati.mem.MemWfGraphCache;
 import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
@@ -52,7 +51,7 @@ public class MemConsole
     PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( BaseEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 1;
       }
@@ -61,7 +60,7 @@ public class MemConsole
     PredicateRepository.addPredicate( "isRandEven", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( BaseEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         return token.getLongAttribute( "rand" ) % 2 == 0;
       }
@@ -70,7 +69,7 @@ public class MemConsole
     PredicateRepository.addPredicate( "isTenthIteration", new GuardLangPredicate()
     {
       @Override
-      public boolean evaluate( BaseEngine engine, NodeToken token )
+      public boolean evaluate( Engine engine, NodeToken token )
       {
         System.out.println( "iter: " + token.getLongAttribute( "iter" ) );
         return token.getLongAttribute( "iter" ) == 1000;
@@ -168,13 +167,13 @@ public class MemConsole
       {
         System.out.println( "Completing task" );
         t.setState( TaskState.Completed );
-        engine.completeExecuteNode( t.getNodeToken(), Arc.DEFAULT_ARC );
+        engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
         t.setState( TaskState.Rejected );
-        engine.completeExecuteNode( t.getNodeToken(), "reject" );
+        engine.completeExecution( t.getNodeToken(), "reject" );
       }
       else
       {
