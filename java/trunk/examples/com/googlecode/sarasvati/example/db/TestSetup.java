@@ -31,7 +31,7 @@ import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.hib.HibNodeRef;
 import com.googlecode.sarasvati.hib.HibNodeToken;
 import com.googlecode.sarasvati.hib.HibProcess;
-import com.googlecode.sarasvati.hib.HibWfGraph;
+import com.googlecode.sarasvati.hib.HibGraph;
 
 public class TestSetup
 {
@@ -51,7 +51,7 @@ public class TestSetup
 
     config.addAnnotatedClass( HibArc.class );
     config.addAnnotatedClass( HibArcToken.class );
-    config.addAnnotatedClass( HibWfGraph.class );
+    config.addAnnotatedClass( HibGraph.class );
     config.addAnnotatedClass( HibNode.class );
     config.addAnnotatedClass( HibNodeRef.class );
     config.addAnnotatedClass( HibNodeToken.class );

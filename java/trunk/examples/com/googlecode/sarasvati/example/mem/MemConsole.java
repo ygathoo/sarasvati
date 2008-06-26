@@ -36,7 +36,7 @@ import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.mem.MemNode;
 import com.googlecode.sarasvati.mem.MemProcess;
 import com.googlecode.sarasvati.mem.MemEngine;
-import com.googlecode.sarasvati.mem.MemWfGraph;
+import com.googlecode.sarasvati.mem.MemGraph;
 import com.googlecode.sarasvati.mem.MemWfGraphCache;
 import com.googlecode.sarasvati.mem.MemLoader;
 import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
@@ -72,7 +72,8 @@ public class MemConsole
       @Override
       public boolean evaluate( Engine engine, NodeToken token )
       {
-        return token.getLongAttribute( "iter" ) == 10;
+        System.out.println( "iter: " + token.getLongAttribute( "iter" ) );
+        return token.getLongAttribute( "iter" ) == 1000;
       }
     });
 
@@ -81,7 +82,7 @@ public class MemConsole
     {
       MemEngine engine = new MemEngine();
 
-      MemWfGraph graph = getGraph( engine );
+      MemGraph graph = getGraph( engine );
       MemProcess process = (MemProcess)engine.startWorkflow( graph );
 
       runWorkflow( process );
@@ -186,16 +187,16 @@ public class MemConsole
     }
   }
 
-  public static MemWfGraph getGraph (MemEngine engine)
+  public static MemGraph getGraph (MemEngine engine)
   {
-    MemWfGraph graph = null;
+    MemGraph graph = null;
 
     while ( graph == null )
     {
-      List<MemWfGraph> graphs = MemWfGraphCache.getGraphs();
+      List<MemGraph> graphs = MemWfGraphCache.getGraphs();
 
       int count = 0;
-      for ( MemWfGraph g : graphs )
+      for ( MemGraph g : graphs )
       {
         System.out.println( (++count) + ": " + g.getName() + ": version " + g.getVersion() );
       }

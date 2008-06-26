@@ -317,14 +317,14 @@ public class GuardLangParser
       @throws yyException on irrecoverable parse error.
     */
   public Object yyparse (yyInput yyLex) throws java.io.IOException, yyException {
-    if (yyMax <= 0) yyMax = 256;			// initial size
-    int yyState = 0, yyStates[] = new int[yyMax];	// state stack
-    Object yyVal = null, yyVals[] = new Object[yyMax];	// value stack
-    int yyToken = -1;					// current input
-    int yyErrorFlag = 0;				// #tokens to shift
+    if (yyMax <= 0) yyMax = 256;      // initial size
+    int yyState = 0, yyStates[] = new int[yyMax];  // state stack
+    Object yyVal = null, yyVals[] = new Object[yyMax];  // value stack
+    int yyToken = -1;          // current input
+    int yyErrorFlag = 0;        // #tokens to shift
 
     yyLoop: for (int yyTop = 0;; ++ yyTop) {
-      if (yyTop >= yyStates.length) {			// dynamically increase
+      if (yyTop >= yyStates.length) {      // dynamically increase
         int[] i = new int[yyStates.length+yyMax];
         System.arraycopy(yyStates, 0, i, 0, yyStates.length);
         yyStates = i;
@@ -336,9 +336,9 @@ public class GuardLangParser
       yyVals[yyTop] = yyVal;
 //t      if (yydebug != null) yydebug.push(yyState, yyVal);
 
-      yyDiscarded: for (;;) {	// discarding a token does not change stack
+      yyDiscarded: for (;;) {  // discarding a token does not change stack
         int yyN;
-        if ((yyN = yyDefRed[yyState]) == 0) {	// else [default] reduce (yyN)
+        if ((yyN = yyDefRed[yyState]) == 0) {  // else [default] reduce (yyN)
           if (yyToken < 0) {
             yyToken = yyLex.advance() ? yyLex.token() : 0;
 //t            if (yydebug != null)
@@ -348,7 +348,7 @@ public class GuardLangParser
               && yyN < yyTable.length && yyCheck[yyN] == yyToken) {
 //t            if (yydebug != null)
 //t              yydebug.shift(yyState, yyTable[yyN], yyErrorFlag > 0 ? yyErrorFlag-1 : 0);
-            yyState = yyTable[yyN];		// shift to yyN
+            yyState = yyTable[yyN];    // shift to yyN
             yyVal = yyLex.value();
             yyToken = -1;
             if (yyErrorFlag > 0) -- yyErrorFlag;
@@ -356,7 +356,7 @@ public class GuardLangParser
           }
           if ((yyN = yyRindex[yyState]) != 0 && (yyN += yyToken) >= 0
               && yyN < yyTable.length && yyCheck[yyN] == yyToken)
-            yyN = yyTable[yyN];			// reduce (yyN)
+            yyN = yyTable[yyN];      // reduce (yyN)
           else
             switch (yyErrorFlag) {
 
@@ -389,7 +389,7 @@ public class GuardLangParser
 //t              if (yydebug != null)
 //t                yydebug.discard(yyState, yyToken, yyName(yyToken), yyLex.value());
               yyToken = -1;
-              continue yyDiscarded;		// leave stack alone
+              continue yyDiscarded;    // leave stack alone
             }
         }
         int yyV = yyTop + 1-yyLen[yyN];
@@ -419,7 +419,7 @@ case 5:
   break;
 case 6:
           // line 55 "/home/paul/workspace/wf-java/lang/guard.y"
-  { yyVal = ((GuardExpr)yyVals[0+yyTop]);                         }
+  { yyVal = yyVals[0+yyTop];                         }
   break;
 case 7:
           // line 58 "/home/paul/workspace/wf-java/lang/guard.y"
@@ -427,7 +427,7 @@ case 7:
   break;
 case 8:
           // line 59 "/home/paul/workspace/wf-java/lang/guard.y"
-  { yyVal = ((GuardExpr)yyVals[-1+yyTop]);                          }
+  { yyVal = yyVals[-1+yyTop];                          }
   break;
 case 9:
           // line 62 "/home/paul/workspace/wf-java/lang/guard.y"

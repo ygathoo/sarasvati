@@ -25,15 +25,19 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ *
+ * @author Paul Lorenz
+ */
 public abstract class Engine
 {
   protected abstract NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents);
 
   protected abstract ArcToken newArcToken (Process process, Arc arc, NodeToken parent);
 
-  protected abstract Process newProcess (WfGraph graph);
+  protected abstract Process newProcess (Graph graph);
 
-  public Process startWorkflow (WfGraph graph)
+  public Process startWorkflow (Graph graph)
   {
     Process process = newProcess( graph );
 
@@ -57,7 +61,7 @@ public abstract class Engine
       process.addArcToken( token );
 
       Node targetNode = token.getArc().getEndNode();
-      List<Arc> inputs = process.getGraph().getInputArcs( targetNode, token.getArc().getName() );
+      List<? extends Arc> inputs = process.getGraph().getInputArcs( targetNode, token.getArc().getName() );
 
       ArcToken[] tokens = new ArcToken[inputs.size()];
       int tokensFound = 0;
@@ -117,8 +121,9 @@ public abstract class Engine
 
   public void completeExecuteNode (NodeToken token, String arcName)
   {
+    System.out.println( "Stack depth: " + new Exception().getStackTrace().length );
     Process process = token.getProcess();
-    List<Arc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
+    List<? extends Arc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 
     process.removeNodeToken( token );
     token.markComplete( this );

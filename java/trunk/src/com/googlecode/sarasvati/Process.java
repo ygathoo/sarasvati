@@ -35,7 +35,7 @@ public interface Process
    *
    * @return The graph being executed.
    */
-  WfGraph getGraph ();
+  Graph getGraph ();
 
   /**
    * Returns the list of current ArcTokens.

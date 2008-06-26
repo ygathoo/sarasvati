@@ -33,7 +33,7 @@ import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.hib.HibProcess;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.hib.HibWfGraph;
+import com.googlecode.sarasvati.hib.HibGraph;
 
 public class DbConsole
 {
@@ -75,7 +75,7 @@ public class DbConsole
       Transaction t = session.beginTransaction();
       HibEngine engine = new HibEngine( session );
 
-      HibWfGraph graph = getGraph( engine );
+      HibGraph graph = getGraph( engine );
       HibProcess process = (HibProcess)engine.startWorkflow( graph );
       session.flush();
       t.commit();
@@ -196,16 +196,16 @@ public class DbConsole
     }
   }
 
-  public static HibWfGraph getGraph (HibEngine engine)
+  public static HibGraph getGraph (HibEngine engine)
   {
-    HibWfGraph graph = null;
+    HibGraph graph = null;
 
     while ( graph == null )
     {
-      List<HibWfGraph> graphs = engine.getGraphs();
+      List<HibGraph> graphs = engine.getGraphs();
 
       int count = 0;
-      for ( HibWfGraph g : graphs )
+      for ( HibGraph g : graphs )
       {
         System.out.println( (++count) + ": " + g.getName() + ": version " + g.getVersion() );
       }

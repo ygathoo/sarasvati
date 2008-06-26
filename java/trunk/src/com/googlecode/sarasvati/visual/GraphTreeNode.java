@@ -2,7 +2,7 @@
     This file is part of Sarasvati.
 
     Sarasvati is free software: you can redistribute it and/or modify
-    it under the terms of the GNU Lesser General Public License as 
+    it under the terms of the GNU Lesser General Public License as
     published by the Free Software Foundation, either version 3 of the
     License, or (at your option) any later version.
 
@@ -11,7 +11,7 @@
     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
     GNU Lesser General Public License for more details.
 
-    You should have received a copy of the GNU Lesser General Public 
+    You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
@@ -22,13 +22,13 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.util.List;
 
-import com.googlecode.sarasvati.hib.HibNodeRef;
+import com.googlecode.sarasvati.Node;
 
 public class GraphTreeNode
 {
   protected GraphTreeNode parent;
 
-  protected HibNodeRef node;
+  protected Node    node;
   protected int     depth;
   protected int     index;
 
@@ -37,7 +37,7 @@ public class GraphTreeNode
 
   protected Color   color = new Color( 102, 152, 102 );
 
-  public static GraphTreeNode newInstance (GraphTreeNode parent, HibNodeRef nodeRef)
+  public static GraphTreeNode newInstance (GraphTreeNode parent, Node nodeRef)
   {
     if ( "start".equalsIgnoreCase( nodeRef.getType() ) )
     {
@@ -54,7 +54,7 @@ public class GraphTreeNode
   }
 
 
-  public GraphTreeNode (GraphTreeNode parent, HibNodeRef node)
+  public GraphTreeNode (GraphTreeNode parent, Node node)
   {
     this.node = node;
     this.parent = parent;
@@ -69,7 +69,7 @@ public class GraphTreeNode
     }
   }
 
-  public HibNodeRef getNode ()
+  public Node getNode ()
   {
     return node;
   }

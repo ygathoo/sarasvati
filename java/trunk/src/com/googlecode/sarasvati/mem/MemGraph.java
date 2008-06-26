@@ -28,9 +28,9 @@ import java.util.Map;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.WfGraph;
+import com.googlecode.sarasvati.Graph;
 
-public class MemWfGraph implements WfGraph
+public class MemGraph implements Graph
 {
   protected String        name;
   protected List<MemNode> nodes;
@@ -39,7 +39,7 @@ public class MemWfGraph implements WfGraph
   protected Map<Node, List<Arc>> inputMap;
   protected Map<Node, List<Arc>> outputMap;
 
-  public MemWfGraph (String name)
+  public MemGraph (String name)
   {
     this.name  = name;
     this.nodes = new LinkedList<MemNode>();

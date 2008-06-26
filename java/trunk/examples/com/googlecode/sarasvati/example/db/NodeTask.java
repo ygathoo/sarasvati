@@ -69,6 +69,12 @@ public class NodeTask extends HibNode
   }
 
   @Override
+  public String getDisplayText ()
+  {
+    return detail.getTaskName();
+  }
+
+  @Override
   public void execute (Engine engine, NodeToken token)
   {
     HibEngine hibEngine = (HibEngine)engine;

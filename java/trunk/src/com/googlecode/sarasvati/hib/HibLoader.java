@@ -24,9 +24,9 @@ import java.util.Map;
 
 import com.googlecode.sarasvati.BaseLoader;
 import com.googlecode.sarasvati.ImportException;
-import com.googlecode.sarasvati.WfGraph;
+import com.googlecode.sarasvati.Graph;
 
-public class HibLoader extends BaseLoader<HibWfGraph, HibNodeRef>
+public class HibLoader extends BaseLoader<HibGraph, HibNodeRef>
 {
   public static interface NodeFactory
   {
@@ -48,13 +48,13 @@ public class HibLoader extends BaseLoader<HibWfGraph, HibNodeRef>
   }
 
   @Override
-  protected HibWfGraph createWfGraph (String name)
+  protected HibGraph createWfGraph (String name)
   {
-    WfGraph latest = engine.getLatestGraph( name );
+    Graph latest = engine.getLatestGraph( name );
 
     int version = latest == null ? 1 : latest.getVersion() + 1;
 
-    HibWfGraph newGraph = new HibWfGraph( name, version );
+    HibGraph newGraph = new HibGraph( name, version );
     engine.getSession().save( newGraph );
     return newGraph;
   }
@@ -101,7 +101,7 @@ public class HibLoader extends BaseLoader<HibWfGraph, HibNodeRef>
   protected Map<String,HibNodeRef> importInstance (String externalName, String instanceName)
       throws ImportException
   {
-    HibWfGraph instanceGraph = engine.getLatestGraph( externalName );
+    HibGraph instanceGraph = engine.getLatestGraph( externalName );
 
     if ( instanceGraph == null )
     {

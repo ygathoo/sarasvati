@@ -43,14 +43,14 @@ import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibArc;
 import com.googlecode.sarasvati.hib.HibNodeRef;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.hib.HibWfGraph;
+import com.googlecode.sarasvati.hib.HibGraph;
 
 import edu.uci.ics.jung.graph.DirectedSparseMultigraph;
 import edu.uci.ics.jung.visualization.BasicVisualizationServer;
 
 public class JungVisualizer
 {
-  protected static HibWfGraph currentGraph = null;
+  protected static HibGraph currentGraph = null;
 
   @SuppressWarnings("serial")
   public static void main( String[] args ) throws Exception
@@ -68,7 +68,7 @@ public class JungVisualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( HibWfGraph g : engine.getGraphs() )
+    for ( HibGraph g : engine.getGraphs() )
     {
       listModel.addElement( g );
     }
@@ -82,7 +82,7 @@ public class JungVisualizer
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 
-        HibWfGraph g = (HibWfGraph)value;
+        HibGraph g = (HibGraph)value;
 
         setText( g.getName() + "." + g.getVersion() + "  " );
         return this;
@@ -153,7 +153,7 @@ public class JungVisualizer
           return;
         }
 
-        final HibWfGraph g = (HibWfGraph)graphList.getSelectedValue();
+        final HibGraph g = (HibGraph)graphList.getSelectedValue();
 
         if ( ( g == null && currentGraph == null ) ||
              (g != null && g.equals( currentGraph ) ) )
