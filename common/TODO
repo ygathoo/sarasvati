@@ -15,15 +15,19 @@ DONE - Database persistence
 DONE - Allow the token to carry state - will allow more interesting guards
 DONE - basic graph visualization
 DONE - Guard domain specific langauge - for haskell
-
+DONE - Moving to code.google.com
+DONE - Implement GuardLang in java version
+DONE - Implement loader for Java
+DONE - Implement memory engine for Java
+DONE - Clean up haskell loader infrastructure
 
 In Progress:
 ---------------------------------------------------------------------
-Moving to code.google.com
+
 
 Next steps:
 ---------------------------------------------------------------------
-Implement GuardLang in java version
+
 Visualizations for processes overlaid on graphs
 Investigate moving token marking from one version to next
 More work with workflow graph composition.
