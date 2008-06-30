@@ -5,9 +5,10 @@
   <property name="dist.dir" value="dist"/>
   <property name="build.dir" value="${dist.dir}/build"/>
 
+  <property name="dist.name" value="sarasvati-java-${version}"/>
   <property name="release.name" value="sarasvati-${version}"/>
 
-  <property name="archive.base" value="${dist.dir}/${release.name}"/>
+  <property name="archive.base" value="${dist.dir}/${dist.name}"/>
   <property name="fetch.indicator" value="lib/.fetchlibs"/>
 
   <path id="classpath">
@@ -87,10 +88,10 @@
     <touch file="${archive.base}/${fetch.indicator}"/>
 
     <zip destfile="${archive.base}.zip" basedir="${dist.dir}" compress="true" level="9">
-      <include name="${release.name}/**"/>
+      <include name="${dist.name}/**"/>
     </zip>
     <tar destfile="${archive.base}.tar" basedir="${dist.dir}" longfile="gnu">
-      <include name="${release.name}/**"/>
+      <include name="${dist.name}/**"/>
     </tar>
     <bzip2 src="${archive.base}.tar" destfile="${archive.base}.tar.bz2"/>
     <delete file="${archive.base}.tar"/>
