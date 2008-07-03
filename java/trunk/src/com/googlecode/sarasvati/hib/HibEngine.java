@@ -123,7 +123,6 @@ public class HibEngine extends NonRecursiveEngine
     return session.createQuery( "from HibGraph" ).list();
   }
 
-  @SuppressWarnings("unchecked")
   public HibGraph getLatestGraph (String name)
   {
     String query = "from HibGraph " +

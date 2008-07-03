@@ -41,12 +41,14 @@ public class TreeLayout extends AbstractLayout<Node, Arc>
   }
 
   @Override
-  public void initialize ()
+  public void initialize()
   {
+    /* does nothing */
   }
 
   @Override
-  public void reset ()
+  public void reset()
   {
+    /* does nothing */
   }
 }

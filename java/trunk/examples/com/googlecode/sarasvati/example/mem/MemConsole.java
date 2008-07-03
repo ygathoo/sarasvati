@@ -81,14 +81,13 @@ public class MemConsole
     {
       MemEngine engine = new MemEngine();
 
-      MemGraph graph = getGraph( engine );
+      MemGraph graph = getGraph();
       MemProcess process = (MemProcess)engine.startWorkflow( graph );
 
       runWorkflow( process );
     }
   }
 
-  @SuppressWarnings("unchecked")
   public static void runWorkflow (MemProcess process)
   {
     while (true)
@@ -186,7 +185,7 @@ public class MemConsole
     }
   }
 
-  public static MemGraph getGraph (MemEngine engine)
+  public static MemGraph getGraph ()
   {
     MemGraph graph = null;
 
