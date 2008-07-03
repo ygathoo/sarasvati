@@ -35,10 +35,6 @@ public class GraphDrawing extends JComponent
   protected Graph graph = null;
   protected GraphTree graphTree = null;
 
-  public GraphDrawing ()
-  {
-  }
-
   public Graph getGraph ()
   {
     return graph;

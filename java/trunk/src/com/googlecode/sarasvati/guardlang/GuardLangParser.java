@@ -288,7 +288,7 @@ public class GuardLangParser
       @return result of the last reduction, if any.
       @throws yyException on irrecoverable parse error.
     */
-  public Object yyparse (yyInput yyLex, Object yydebug)
+  public Object yyparse (yyInput yyLex, @SuppressWarnings("unused") Object yydebug)
         throws java.io.IOException, yyException {
 //t    this.yydebug = (jay.yydebug.yyDebug)yydebug;
     return yyparse(yyLex);
