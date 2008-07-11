@@ -3,8 +3,9 @@
 [GraphBasedWorkflow <-- Prev: Why graph based workflow?] ... [XMLFileFormat Next: XML File Format  -->]
 
 
-= Introduction =
+= Core Concepts =
 
+== Introduction ==
 Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below). 
 
 We begin with the some definitions, move on to features likely to be common across most engines, then explain Sarasvati specifics.
@@ -31,3 +32,7 @@ These definitions cover the parts of a process definition. However, they don't c
 
   * *Token* - The set of active tokens marks the current process state. Tokens generally point to a node which is currently executing. Tokens sometimes have associated state, which is a way of passing data from node to node. 
     * Also know as: Execution
+
+== Building Graphs/Process Definitions ==
+
+TODO
