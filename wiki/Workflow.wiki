@@ -63,7 +63,7 @@ This scenario concerns a news aggregation company called NewsCO which takes in n
   * Editor (person)
   * NewsCO XML web publisher (program)
   * NewsCO XML Analyzer (program)
-  * NewsCO XML RSS publisher
+  * NewsCO XML RSS publisher (program)
 
 ==== The process ====
   # The process begins when an article arrives, either from an RSS feed or via a file drop in plain text format.
