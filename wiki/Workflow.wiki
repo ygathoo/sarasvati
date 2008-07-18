@@ -55,10 +55,10 @@ Graphically, the process could be represented as follows:
 ---------------------------------------
 _*Example 2: Document conversion*_
 ---------------------------------------
-This scenario concerns a news aggregation company calls NewsCo which takes in news from various sources and republishes it in a variety of formats. Here we will look at a simplified workflow which handles two input formats.
+This scenario concerns a news aggregation company called NewsCO which takes in news from various sources and republishes it in a variety of formats. Here we will look at a simplified workflow which handles two input formats.
 
 ==== Actors ====
-  * RSS -> NewsCo XML format Converter (program)
+  * RSS -> NewsCO XML format Converter (program)
   * Plain text -> NewsCO XML format converter (program)
   * Editor (person)
   * NewsCO XML web publisher (program)
@@ -75,6 +75,10 @@ This scenario concerns a news aggregation company calls NewsCo which takes in ne
     # The NewCO XML will be converted to a webpage and posted on a web site for consumption by the public. The web publisher is an asynchronous program which accepts XML and later provides notification when the publishing is complete. This could be a separate workflow.
     # NewsCO customers receive RSS feeds of articles based on keywords. The article will be scanned for keywords. A database entry will be created.
     # Each customer who has expressed interest in a keyword found in the article will have their RSS feed updated with a link to the published web article. 
-  
+
+
+Graphically, the process could be represented as follows:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/example2.jpg]  
 
 [GraphBasedWorkflow Next: Why graph based workflow? -->]
