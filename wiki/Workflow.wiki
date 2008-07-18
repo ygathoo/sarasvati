@@ -30,7 +30,8 @@ What workflow generally provides over a manual implementation is
 
 == Examples ==
 
-_Example 1: Order Fulfillment_
+---------------------------------------
+_*Example 1: Order Fulfillment*_
 ---------------------------------------
 The scenario here is of a small company which sells beach balls. They have a process for servicing an order.
  
@@ -49,7 +50,31 @@ The scenario here is of a small company which sells beach balls. They have a pro
 
 Graphically, the process could be represented as follows:
 
-[http://static.flickr.com/3078/2514733261_b1967b7d07.jpg]
+[http://sarasvati.googlecode.com/svn/wiki/images/example1.jpg]
 
+---------------------------------------
+_*Example 2: Document conversion*_
+---------------------------------------
+This scenario concerns a news aggregation company calls NewsCo which takes in news from various sources and republishes it in a variety of formats. Here we will look at a simplified workflow which handles two input formats.
+
+==== Actors ====
+  * RSS -> NewsCo XML format Converter (program)
+  * Plain text -> NewsCO XML format converter (program)
+  * Editor (person)
+  * NewsCO XML web publisher (program)
+  * NewsCO XML Analyzer (program)
+  * NewsCO XML RSS publisher
+
+==== The process ====
+  # The process begins when an article arrives, either from an RSS feed or via a file drop in plain text format.
+  # Conversion:
+    # If the article is in RSS format, the RSS XML will be converted to a proprietary XML format (the NewsCO XML format)
+    # If the article is in plain text, it will be parsed and converted to the NewsCO XML format.
+    # If there is an error in the conversion process, the article will be handed to a human editor who will manually do the conversion
+  # Publishing
+    # The NewCO XML will be converted to a webpage and posted on a web site for consumption by the public. The web publisher is an asynchronous program which accepts XML and later provides notification when the publishing is complete. This could be a separate workflow.
+    # NewsCO customers receive RSS feeds of articles based on keywords. The article will be scanned for keywords. A database entry will be created.
+    # Each customer who has expressed interest in a keyword found in the article will have their RSS feed updated with a link to the published web article. 
+  
 
 [GraphBasedWorkflow Next: Why graph based workflow? -->]
