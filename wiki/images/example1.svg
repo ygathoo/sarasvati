@@ -96,15 +96,17 @@
       </g>
     </g>
     <g
-       id="g2521"
-       transform="translate(-6.5894864e-6,-1.9920919)">
-      <path
-         style="fill:none;fill-opacity:0.16129031;fill-rule:evenodd;stroke:#000000;stroke-width:2.31911397;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
-         d="M 595.16121,138.57464 C 579.85358,139.90114 562.70419,141.76765 551.07632,154.39438 C 545.77143,160.32208 550.61226,169.21187 556.2449,172.11872 C 576.15542,184.51688 600.33269,184.93819 622.36932,181.05492 C 632.85692,178.32765 645.76401,175.56859 651.88038,164.11167 C 654.65498,154.77262 644.96801,148.99896 638.8745,145.95977 C 625.13242,139.62116 609.99578,138.01181 595.16121,138.57464 z"
-         id="path2456" />
+       id="g5162">
+      <g
+         id="g5159">
+        <path
+           id="path2456"
+           d="M 595.1612,136.58255 C 579.85357,137.90905 562.70418,139.77556 551.07631,152.40229 C 545.77142,158.32999 550.61225,167.21978 556.24489,170.12663 C 576.15541,182.52479 600.33268,182.9461 622.36931,179.06283 C 632.85691,176.33556 645.764,173.5765 651.88037,162.11958 C 654.65497,152.78053 644.968,147.00687 638.87449,143.96768 C 625.13241,137.62907 609.99577,136.01972 595.1612,136.58255 z"
+           style="fill:none;fill-opacity:0.16129030999999999;fill-rule:evenodd;stroke:#000000;stroke-width:2.31911397;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:4.63822794,2.31911397;stroke-opacity:1;stroke-dashoffset:0" />
+      </g>
       <g
          id="g2458"
-         transform="translate(427.90463,-128.33191)">
+         transform="translate(427.90462,-130.324)">
         <text
            id="text2460"
            y="285.64728"
@@ -184,14 +186,12 @@
        d="M 415.6575,83.422726 L 547.62878,137.25527"
        id="path2532"
        inkscape:connector-type="polyline"
-       inkscape:connection-start="#g2509"
-       inkscape:connection-end="#g2521" />
+       inkscape:connection-start="#g2509" />
     <path
        style="fill:none;fill-rule:evenodd;stroke:#000000;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;marker-end:url(#Arrow1Lend);stroke-opacity:1"
        d="M 405.81644,259.5956 L 555.07784,182.38946"
        id="path2534"
        inkscape:connector-type="polyline"
-       inkscape:connection-start="#g2515"
-       inkscape:connection-end="#g2521" />
+       inkscape:connection-start="#g2515" />
   </g>
 </svg>
