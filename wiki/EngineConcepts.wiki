@@ -35,4 +35,14 @@ These definitions cover the parts of a process definition. However, they don't c
 
 == Building Graphs/Process Definitions ==
 
-TODO
+Let us start with a simple process definition, the classic 'Hello World'. When executed, this process will print out 'Hello, World!' and then complete.
+
+First, we introduce a graphical notation for process definitions. Not all the symbols will make sense immediately, but they will all be explained.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/legend.jpg]
+
+The simplest useful process definition would consist of a simple node. Here is the graphical representation:
+
+*Example One*
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts1.jpg]
