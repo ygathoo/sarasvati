@@ -37,13 +37,16 @@ These definitions cover the parts of a process definition. However, they don't c
 
 Let us start with a simple process definition, the classic 'Hello World'. When executed, this process will print out 'Hello, World!' and then complete.
 
+==== Legend ====
+---------------------------------
 First, we introduce a graphical notation for process definitions and execution. Not all the symbols will make sense immediately, but they will all be explained.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/legend.jpg]
 
-The simplest useful process definition would consist of a simple node. Here is the graphical representation:
 
-*Example One*
+==== Example One: Single Node ====
+----------------------------------
+The simplest useful process definition would consist of a simple node. Here is the graphical representation:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts1.jpg]
 
@@ -55,7 +58,7 @@ There are various ways of handling this. For example, there may be a specific ty
 
 Assuming that the 'Hello World' node is a start node, execution would begin by creating a new *node token* at the 'Hello World' node.
 
-  * *Node Token* - A token situated at a node. As we will see later, there are also arc tokens (which are situated on arcs). They are distinct because they serve different functions.
+  * *Node Token* - A token situated at a node. Node tokens track the response of the node guard (see below). They may also have attributes. As we will see later, there are also arc tokens (which are situated on arcs). They are distinct because they serve different functions.
 
 The process would now look like:
 
@@ -77,3 +80,34 @@ By default, a node's guard will return Accept. The node will then be *executed*.
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts1-2.jpg]
 
   * *Process Completion* - A process with no active tokens is considered complete.
+
+
+====Example Two: Two nodes====
+-------------------
+Let's now example a slightly more complicated example. Instead of a single node, we'll have two, the first of which prints out 'Hello', the second prints out 'World'. It looks as follows:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts2.jpg]
+
+The _Hello_ node is a *predecessor* of the _World_ node. This dependency is indicated by the directed arc.
+
+As the _Hello_ node is marked as a start node, a node token will be placed there when the process begins executing.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts2-1.jpg]
+
+When the node token on _Hello_ is completed, an *arc token* will be generated on the outgoing arc.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts2-2.jpg]
+
+  * *Arc Token* - A token situated on an arc. Arc tokens exist so that join nodes (see below) know when to execute. Arc tokens may not have attributes.
+
+Since the arc on which the arc token is situated goes into a *non-join node*, a node token will be created on _World_ immediately.
+
+  * *Non-join node* - A node which is activated whenever an arc token arrives on an incoming node. Activated means the incoming arc token is completed an active node token is created. This stands in contrast to a *join node*, where active arc tokens must exist on all incoming arcs with the same name. This will be explored in more detail below.
+
+The process now looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts2-3.jpg]
+
+The _World_ node will now run its guard and then execute. Finally the node token will be completed.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts2-4.jpg]
