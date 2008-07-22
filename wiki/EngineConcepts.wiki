@@ -33,11 +33,11 @@ These definitions cover the parts of a process definition. However, they don't c
   * *Token* - The set of active tokens marks the current process state. Tokens generally point to a node which is currently executing. Tokens sometimes have associated state, which is a way of passing data from node to node. 
     * Also know as: Execution
 
-== Building Graphs/Process Definitions ==
+== Sarasvati Graph Execution ==
 
 Let us start with a simple process definition, the classic 'Hello World'. When executed, this process will print out 'Hello, World!' and then complete.
 
-First, we introduce a graphical notation for process definitions. Not all the symbols will make sense immediately, but they will all be explained.
+First, we introduce a graphical notation for process definitions and execution. Not all the symbols will make sense immediately, but they will all be explained.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/legend.jpg]
 
@@ -53,7 +53,9 @@ How will this process be executed? First the engine needs to determine where to 
 
 There are various ways of handling this. For example, there may be a specific type of node designated for start positions. All nodes of this type will have tokens placed in them at process start. Alternately, nodes may have an attribute which indicates whether or not they are a start node, allowing any node to be a start node. Sarasvati takes this second approach.
 
-Assuming that the 'Hello World' node is a start node, execution would begin by creating a new node token at the 'Hello World' node and passing it to that node's guard.
+Assuming that the 'Hello World' node is a start node, execution would begin by creating a new *node token* at the 'Hello World' node.
+
+  * *Node Token* - A token situated at a node. As we will see later, there are also arc tokens (which are situated on arcs). They are distinct because they serve different functions.
 
 The process would now look like:
 
@@ -61,14 +63,17 @@ The process would now look like:
 
 As you can see, the node now has an active node token stationed on it.
 
-  * *Node Token* - A token situated at a node. As we will see later, there are also arc tokens (which are situated on arcs). They are distinct because they serve different functions.
-  * *Node Guard* - Nodes have functionality associated with them, which will be executed when a node token is accepted into the node. However, before a node is executed, it's guard will be executed. The guard will is allowed one of three responses:
+At this point the node has not yet been executed. Before it can be though, its *guard* would need to be invoked.
+
+  * *Node Guard* - Nodes have functionality associated with them, which will be executed when a node token is accepted into the node. However, before a node is executed, its guard will be executed. The guard will is allowed one of three responses:
     * *Accept* - The node will be executed.
     * *Discard* - The node token will be marked as discarded and the node will not be executed. 
     * *Skip*    - The node will _not_ be executed, however, processing will continue as if the node had completed execution normally.
 
-By default, a node's guard will return Accept. The node will then be executed. This should cause 'Hello, World!' to be printed out. To complete node execution, the node must inform the engine that that the given node token has been completed. As there are no further steps in the process, it is now complete and looks like:
+By default, a node's guard will return Accept. The node will then be *executed*.
+
+ This should cause 'Hello, World!' to be printed out. To complete node execution, the node must inform the engine that that the given node token has been completed. As there are no further steps in the process, it is now *complete* and looks like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts1-2.jpg]
 
-  * A process with no active tokens is considered complete.
+  * *Process Completion* - A process with no active tokens is considered complete.
