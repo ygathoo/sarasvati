@@ -27,6 +27,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibNode;
@@ -85,6 +86,10 @@ public class NodeTask extends HibNode
     Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), open );
     session.save( newTask );
 
-    token.setLongAttribute( newTask.getName(), token.getLongAttribute( newTask.getName() ) + 1 );
+    Env env = token.getEnv();
+    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
+
+    env = token.getProcess().getEnv();
+    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
   }
 }

@@ -3,6 +3,9 @@ drop table if exists wf_task_state;
 drop table if exists wf_node_task;
 
 drop table if exists wf_token_string_attr;
+
+drop table if exists wf_token_attr;
+drop table if exists wf_process_attr;
 drop table if exists wf_node_token_parent;
 drop table if exists wf_arc_token;
 drop table if exists wf_node_token;
@@ -32,6 +35,16 @@ create table wf_process
   graph_id    int          NOT NULL,
   create_date timestamp    NOT NULL DEFAULT current_timestamp
 );
+
+create table wf_process_attr
+(
+  process_id  int          NOT NULL REFERENCES wf_process,
+  name        varchar(64)  NOT NULL,
+  value       varchar(255) NOT NULL
+);
+
+ALTER TABLE wf_process_attr
+  ADD PRIMARY KEY (process_id, name);
 
 create table wf_node_type
 (
@@ -115,12 +128,12 @@ create table wf_node_token_parent
    arc_token_id  INT NOT NULL REFERENCES wf_arc_token
 );
 
-create table wf_token_string_attr
+create table wf_token_attr
 (
   attr_set_id  int          NOT NULL REFERENCES wf_node_token,
   name         varchar(64)  NOT NULL,
   value        varchar(255) NOT NULL
 );
 
-ALTER TABLE wf_token_string_attr
+ALTER TABLE wf_token_attr
   ADD PRIMARY KEY (attr_set_id, name);

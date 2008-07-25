@@ -34,14 +34,17 @@ public abstract class BaseEngine implements Engine
   public Process startWorkflow (Graph graph)
   {
     Process process = newProcess( graph );
+    startWorkflow( process );
+    return process;
+  }
 
-    for (Node startNode : graph.getStartNodes() )
+  public void startWorkflow (Process process)
+  {
+    for (Node startNode : process.getGraph().getStartNodes() )
     {
       NodeToken startToken = newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
       executeNode( process, startToken );
     }
-
-    return process;
   }
 
   private void executeArc (Process process, ArcToken token)

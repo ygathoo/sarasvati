@@ -44,7 +44,7 @@ public class DbConsole
       @Override
       public boolean evaluate( Engine engine, NodeToken token )
       {
-        return token.getLongAttribute( "rand" ) % 2 == 1;
+        return token.getEnv().getLongAttribute( "rand" ) % 2 == 1;
       }
     });
 
@@ -53,7 +53,7 @@ public class DbConsole
       @Override
       public boolean evaluate( Engine engine, NodeToken token )
       {
-        return token.getLongAttribute( "rand" ) % 2 == 0;
+        return token.getEnv().getLongAttribute( "rand" ) % 2 == 0;
       }
     });
 
@@ -62,7 +62,7 @@ public class DbConsole
       @Override
       public boolean evaluate( Engine engine, NodeToken token )
       {
-        return token.getLongAttribute( "iter" ) == 10;
+        return token.getEnv().getLongAttribute( "iter" ) == 10;
       }
     });
 

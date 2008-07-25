@@ -23,9 +23,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
-import com.googlecode.sarasvati.Graph;
 
 public class MemProcess implements Process
 {
@@ -34,6 +36,8 @@ public class MemProcess implements Process
   protected Graph graph;
   protected List<ArcToken> arcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> nodeTokens = new LinkedList<NodeToken>();
+
+  protected Env env = new MapEnv();
 
   public MemProcess (Graph graph)
   {
@@ -62,6 +66,12 @@ public class MemProcess implements Process
   public List<? extends NodeToken> getNodeTokens ()
   {
     return nodeTokens;
+  }
+
+  @Override
+  public Env getEnv()
+  {
+    return env;
   }
 
   @Override

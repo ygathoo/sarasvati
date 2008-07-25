@@ -42,7 +42,7 @@ public class TestSetup
     AnnotationConfiguration config = new AnnotationConfiguration ();
     config.setProperty( "hibernate.dialect", PostgreSQLDialect.class.getName() );
     config.setProperty( "hibernate.connection.driver_class", Driver.class.getName() );
-    config.setProperty( "hibernate.connection.url", "jdbc:postgresql://localhost:5433/paul" );
+    config.setProperty( "hibernate.connection.url", "jdbc:postgresql://localhost:5432/paul" );
     config.setProperty( "hibernate.connection.username", "paul" );
     config.setProperty( "hibernate.connection.password", "thesistest56" );
     config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );

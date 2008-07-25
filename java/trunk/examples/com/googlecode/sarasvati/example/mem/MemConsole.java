@@ -53,7 +53,7 @@ public class MemConsole
       @Override
       public boolean evaluate( Engine engine, NodeToken token )
       {
-        return token.getLongAttribute( "rand" ) % 2 == 1;
+        return token.getEnv().getLongAttribute( "rand" ) % 2 == 1;
       }
     });
 
@@ -62,7 +62,7 @@ public class MemConsole
       @Override
       public boolean evaluate( Engine engine, NodeToken token )
       {
-        return token.getLongAttribute( "rand" ) % 2 == 0;
+        return token.getEnv().getLongAttribute( "rand" ) % 2 == 0;
       }
     });
 
@@ -71,8 +71,8 @@ public class MemConsole
       @Override
       public boolean evaluate( Engine engine, NodeToken token )
       {
-        System.out.println( "iter: " + token.getLongAttribute( "iter" ) );
-        return token.getLongAttribute( "iter" ) == 1000;
+        System.out.println( "iter: " + token.getEnv().getLongAttribute( "iter" ) );
+        return token.getEnv().getLongAttribute( "iter" ) == 1000;
       }
     });
 
