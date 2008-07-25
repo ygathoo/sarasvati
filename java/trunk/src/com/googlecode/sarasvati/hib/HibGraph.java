@@ -42,12 +42,16 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.Graph;
 
 @Entity
 @Table (name="wf_graph")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 public class HibGraph implements Graph
 {
   @Id

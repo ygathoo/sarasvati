@@ -50,6 +50,7 @@ import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.ProcessState;
 
 @Entity
 @Table (name="wf_process")
@@ -80,6 +81,8 @@ public class HibProcess implements Process
   @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
   @Column( name="value")
   protected Map<String, String> attrMap;
+
+  protected ProcessState state;
 
   @Transient
   protected Env env = null;
@@ -188,6 +191,17 @@ public class HibProcess implements Process
   public void removeNodeToken (NodeToken token)
   {
     getNodeTokens().remove( token );
+  }
+
+  @Override
+  public ProcessState getState ()
+  {
+    return state;
+  }
+
+  public void setState (ProcessState state)
+  {
+    this.state = state;
   }
 
   @Override

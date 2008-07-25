@@ -22,7 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Implements Env using a Map
+ * Implements {@link Env} using a Map
  *
  * @author Paul Lorenz
  */

@@ -118,7 +118,6 @@ public abstract class BaseEngine implements Engine
 
   public void completeExecution (NodeToken token, String arcName)
   {
-    System.out.println( "Stack depth: " + new Exception().getStackTrace().length );
     Process process = token.getProcess();
     List<? extends Arc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 

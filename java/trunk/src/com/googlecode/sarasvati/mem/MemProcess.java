@@ -28,6 +28,7 @@ import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.ProcessState;
 
 public class MemProcess implements Process
 {
@@ -36,12 +37,14 @@ public class MemProcess implements Process
   protected Graph graph;
   protected List<ArcToken> arcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> nodeTokens = new LinkedList<NodeToken>();
+  protected ProcessState state;
 
   protected Env env = new MapEnv();
 
   public MemProcess (Graph graph)
   {
     this.graph = graph;
+    this.state = ProcessState.Created;
   }
 
   @Override
@@ -90,6 +93,12 @@ public class MemProcess implements Process
   public void removeNodeToken (NodeToken token)
   {
     nodeTokens.remove( token );
+  }
+
+  @Override
+  public ProcessState getState ()
+  {
+    return state;
   }
 
   @Override
