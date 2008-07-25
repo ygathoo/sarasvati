@@ -23,7 +23,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.GuardAction;
+import com.googlecode.sarasvati.MapEnv;
+import com.googlecode.sarasvati.NestedEnv;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
@@ -36,36 +39,13 @@ public class MemNodeToken implements NodeToken
 
   protected Map<String, String> attributes = new HashMap<String, String>();
 
+  protected Env env = new MapEnv();
+  protected Env fullEnv = null;
+
   public MemNodeToken (Node node, Process process)
   {
     this.node = node;
     this.process = process;
-  }
-
-  @Override
-  public boolean getBooleanAttribute (String name)
-  {
-    return Boolean.valueOf( attributes.get( name ) );
-  }
-
-  @Override
-  public long getLongAttribute (String name)
-  {
-    String val = attributes.get( name );
-
-    if ( val == null )
-    {
-      return 0;
-    }
-
-    try
-    {
-      return Long.parseLong( val );
-    }
-    catch (NumberFormatException nfe)
-    {
-      return 0;
-    }
   }
 
   @Override
@@ -93,50 +73,24 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public String getStringAttribute (String name)
-  {
-    return attributes.get( name );
-  }
-
-  @Override
-  public boolean hasAttribute (String name)
-  {
-    return attributes.containsKey( name );
-  }
-
-  @Override
-  public void removeAttribute (String name)
-  {
-    attributes.remove( name );
-  }
-
-  @Override
-  public void setBooleanAttribute (String name, boolean value)
-  {
-    attributes.put( name, String.valueOf( value ) );
-  }
-
-  @Override
-  public void setLongAttribute (String name, long value)
-  {
-    attributes.put( name, String.valueOf( value ) );
-  }
-
-  @Override
-  public void setStringAttribute (String name, String value)
-  {
-    attributes.put( name, value );
-  }
-
-  @Override
-  public Iterable<String> getAttributeNames ()
-  {
-    return attributes.keySet();
-  }
-
-  @Override
   public void markComplete (Engine engine)
   {
     /** Does nothing */
+  }
+
+  @Override
+  public Env getFullEnv()
+  {
+    if ( fullEnv == null )
+    {
+      fullEnv = new NestedEnv( env, process.getEnv() );
+    }
+    return fullEnv;
+  }
+
+  @Override
+  public Env getEnv()
+  {
+    return env;
   }
 }

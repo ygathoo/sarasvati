@@ -22,6 +22,7 @@ import java.util.Random;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.mem.MemNode;
 
@@ -37,13 +38,14 @@ public class NodeInit extends MemNode
   {
     long iter = 0;
 
-    if ( token.hasAttribute( "iter" ) )
+    Env env = token.getEnv();
+    if ( env.hasAttribute( "iter" ) )
     {
-      iter = token.getLongAttribute( "iter" );
+      iter = env.getLongAttribute( "iter" );
     }
 
-    token.setLongAttribute( "iter", ++iter );
-    token.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
+    env.setLongAttribute( "iter", ++iter );
+    env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }

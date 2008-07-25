@@ -16,9 +16,6 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
 package com.googlecode.sarasvati;
 
 /**
@@ -44,84 +41,26 @@ public interface NodeToken extends Token
   Process getProcess ();
 
   /**
-   * Gets an attribute as a String. If there is no value set for
-   * the attribute, null will be returned.
+   * Returns the full environment. This will include variables set on the
+   * token as well as variables set on the process. If a variable with the
+   * same name exists in both the token and process environments, the token
+   * variable will be returned.
    *
-   * @param name The name of the attribute to get
-   * @return The value of attribute or null if no value is set for the attribute.
+   * NOTE: Changes can only be made at the token level. Updates or removals
+   *       will only be applied to the token attributes.
    *
+   * @return An {@link Env} containing variables from this token and from the {@link Process}
+   * @see Process#getEnv()
    */
-  String getStringAttribute (String name);
+  Env getFullEnv ();
 
   /**
-   * Sets the attribute of the given name to the given string value.
+   * Returns the environment for just this token. Variables defined on the
+   * process will not be found.
    *
-   * @param name The name of the attribute to set.
-   * @param value The value to set the attribute to
+   * @return An {@link Env} containing variables from just this token
    */
-  void setStringAttribute (String name, String value);
-
-  /**
-   * Gets an attribute as a long. If there is no value set for
-   * the attribute or if the attribute can not be read as a long,
-   * 0 will be returned.
-   *
-   * @param name The name of the attribute to get
-   * @return The value of attribute or 0 if no value is set for the attribute or
-   *         the value cannot be interpreted as a long
-   *
-   */
-  long getLongAttribute (String name);
-
-  /**
-   * Sets the attribute of the given name to the given long value.
-   *
-   * @param name The name of the attribute to set.
-   * @param value The value to set the attribute to
-   */
-  void setLongAttribute (String name, long value);
-
-  /**
-   * Gets an attribute as a boolean. If there is no value set for
-   * the attribute or if the attribute can not be read as a boolean,
-   * false will be returned.
-   *
-   * @param name The name of the attribute to get
-   * @return The value of attribute or false if no value is set for the attribute or
-   *         the value cannot be interpreted as a boolean.
-   *
-   */
-  boolean getBooleanAttribute (String name);
-
-  /**
-   * Sets the attribute of the given name to the given boolean value.
-   *
-   * @param name The name of the attribute to set.
-   * @param value The value to set the attribute to
-   */
-  void setBooleanAttribute (String name, boolean value);
-
-  /**
-   * Unsets any attribute with the given name.
-   *
-   * @param name The name of the attribute to remove
-   */
-  void removeAttribute (String name);
-
-  /**
-   * Checks if the given attribute is present.
-   *
-   * @param name Name of the attribute to check for
-   * @return True if the given attribute is present, false otherwise.
-   */
-  boolean hasAttribute (String name);
-
-  /**
-   * Returns an Iterable of attribute names.
-   *
-   * @return Iterable of attribute names
-   */
-  Iterable<String> getAttributeNames ();
+  Env getEnv ();
 
   /**
    * A NodeToken is evaluated by the {@link Node#guard(Engine, NodeToken)}

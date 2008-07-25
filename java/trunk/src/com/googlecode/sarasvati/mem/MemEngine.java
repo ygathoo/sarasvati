@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
@@ -41,13 +42,14 @@ public class MemEngine extends NonRecursiveEngine
   public NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
   {
     MemNodeToken token = new MemNodeToken( node, process );
+    Env env = token.getEnv();
 
     for ( ArcToken t : parents )
     {
-      MemNodeToken parentToken = (MemNodeToken)t.getParentToken();
-      for ( String name : parentToken.getAttributeNames() )
+      Env mergeEnv = t.getParentToken().getEnv();
+      for ( String name : mergeEnv.getAttributeNames() )
       {
-        token.setStringAttribute( name, parentToken.getStringAttribute( name ) );
+        env.setStringAttribute( name, mergeEnv.getStringAttribute( name ) );
       }
     }
 

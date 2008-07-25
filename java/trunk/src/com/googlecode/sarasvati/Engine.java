@@ -29,6 +29,19 @@ public interface Engine
   Process startWorkflow (Graph graph);
 
   /**
+   * Sometimes it is desirable to separate process creation from
+   * starting execution of the process. For example, one may wish
+   * to set some variables into the process environment before
+   * starting execution.
+   *
+   * startWorkflow will generate a new {@link NodeToken} on each
+   * start node contained in the given process.
+   *
+   * @param process The process on which to begin execution.
+   */
+  void startWorkflow (Process process);
+
+  /**
    * Generates a new {@link NodeToken} for the given {@link Process}, pointing
    * to the given {@link Node}.
    *

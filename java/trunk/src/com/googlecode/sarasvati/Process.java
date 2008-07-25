@@ -38,6 +38,13 @@ public interface Process
   Graph getGraph ();
 
   /**
+   * Returns the environment for the process.
+   *
+   * @return An Env containing variables defined on this process
+   */
+  Env getEnv ();
+
+  /**
    * Returns the list of current ArcTokens.
    *
    * @return The list of current ArcTokens.

@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.example.mem;
 
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.mem.MemNode;
 
@@ -57,6 +58,11 @@ public class NodeTask extends MemNode
   {
     Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );
     TaskList.getTasks().add( newTask );
-    token.setLongAttribute( newTask.getName(), token.getLongAttribute( newTask.getName() ) + 1 );
+
+    Env env = token.getEnv();
+    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
+
+    env = token.getProcess().getEnv();
+    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
   }
 }

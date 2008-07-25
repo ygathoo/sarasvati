@@ -40,11 +40,14 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.GuardAction;
+import com.googlecode.sarasvati.NestedEnv;
 import com.googlecode.sarasvati.NodeToken;
 
 @Entity
@@ -68,7 +71,7 @@ public class HibNodeToken implements NodeToken
   protected HibNodeToken attrSetToken;
 
   @CollectionOfElements
-  @JoinTable( name="wf_token_string_attr", joinColumns={@JoinColumn( name="attr_set_id")})
+  @JoinTable( name="wf_token_attr", joinColumns={@JoinColumn( name="attr_set_id")})
   @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
   @Column( name="value")
   protected Map<String, String> attrMap;
@@ -89,6 +92,12 @@ public class HibNodeToken implements NodeToken
 
   @Column (name="guard_action")
   protected GuardAction guardAction;
+
+  @Transient
+  protected Env env = null;
+
+  @Transient
+  protected Env fullEnv = null;
 
   public HibNodeToken () { /* Default constructor for Hibernate */ }
 
@@ -202,118 +211,145 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public String getStringAttribute( String name )
+  public Env getFullEnv()
   {
-    if ( attrSetToken == null )
+    if ( fullEnv == null )
     {
-      return null;
+      fullEnv = new NestedEnv( env, process.getEnv() );
     }
-    else if ( !this.equals( attrSetToken ) )
-    {
-      return attrSetToken.getStringAttribute( name );
-    }
-    else
-    {
-      return attrMap.get( name );
-    }
+    return fullEnv;
   }
 
-  protected void copyOnWrite ()
+  @Override
+  public Env getEnv()
   {
-    if ( !this.equals( attrSetToken ) )
+    if ( env == null )
     {
-      if ( attrSetToken != null )
+      env = new HibTokenEnv();
+    }
+    return env;
+  }
+
+  private class HibTokenEnv implements Env
+  {
+    private boolean isAttributeSetLocal ()
+    {
+      return HibNodeToken.this.equals( attrSetToken );
+    }
+
+    @Override
+    public String getStringAttribute( String name )
+    {
+      if ( attrSetToken == null )
       {
-        attrMap.putAll( attrSetToken.getAttrMap() );
+        return null;
       }
-      attrSetToken = this;
-    }
-  }
-
-  @Override
-  public void removeAttribute( String name )
-  {
-    copyOnWrite();
-    attrMap.remove( name );
-  }
-
-  @Override
-  public void setStringAttribute( String name, String value )
-  {
-    copyOnWrite();
-    attrMap.put( name, value );
-  }
-
-  @Override
-  public boolean getBooleanAttribute( String name )
-  {
-    return "true".equals( getStringAttribute( name ) );
-  }
-
-  @Override
-  public long getLongAttribute( String name )
-  {
-    String value = getStringAttribute( name );
-
-    if ( value == null )
-    {
-      return 0;
+      else if ( !isAttributeSetLocal() )
+      {
+        return attrSetToken.getEnv().getStringAttribute( name );
+      }
+      else
+      {
+        return attrMap.get( name );
+      }
     }
 
-    try
+    protected void copyOnWrite ()
     {
-      return Long.parseLong( value );
+      if ( !isAttributeSetLocal() )
+      {
+        if ( attrSetToken != null )
+        {
+          attrMap.putAll( attrSetToken.getAttrMap() );
+        }
+        attrSetToken = HibNodeToken.this;
+      }
     }
-    catch (NumberFormatException nfe )
-    {
-      return 0;
-    }
-  }
 
-  @Override
-  public void setBooleanAttribute( String name, boolean value )
-  {
-    setStringAttribute( name, String.valueOf( value ) );
-  }
+    @Override
+    public void removeAttribute( String name )
+    {
+      copyOnWrite();
+      attrMap.remove( name );
+    }
 
-  @Override
-  public void setLongAttribute( String name, long value )
-  {
-    setStringAttribute( name, String.valueOf( value ) );
-  }
+    @Override
+    public void setStringAttribute( String name, String value )
+    {
+      copyOnWrite();
+      attrMap.put( name, value );
+    }
 
+    @Override
+    public boolean getBooleanAttribute( String name )
+    {
+      return "true".equals( getStringAttribute( name ) );
+    }
 
-  @Override
-  public boolean hasAttribute( String name )
-  {
-    if ( attrSetToken == null )
+    @Override
+    public long getLongAttribute( String name )
     {
-      return false;
-    }
-    else if ( !this.equals( attrSetToken ) )
-    {
-      return attrSetToken.hasAttribute( name );
-    }
-    else
-    {
-      return attrMap.containsKey( name );
-    }
-  }
+      String value = getStringAttribute( name );
 
-  @Override
-  public Iterable<String> getAttributeNames()
-  {
-    if ( attrSetToken == null )
-    {
-      return Collections.emptyList();
+      if ( value == null )
+      {
+        return 0;
+      }
+
+      try
+      {
+        return Long.parseLong( value );
+      }
+      catch (NumberFormatException nfe )
+      {
+        return 0;
+      }
     }
-    else if ( !this.equals( attrSetToken ) )
+
+    @Override
+    public void setBooleanAttribute( String name, boolean value )
     {
-      return attrSetToken.getAttributeNames();
+      setStringAttribute( name, String.valueOf( value ) );
     }
-    else
+
+    @Override
+    public void setLongAttribute( String name, long value )
     {
-      return attrMap.keySet();
+      setStringAttribute( name, String.valueOf( value ) );
+    }
+
+    @Override
+    public boolean hasAttribute( String name )
+    {
+      if ( attrSetToken == null )
+      {
+        return false;
+      }
+      else if ( !isAttributeSetLocal() )
+      {
+        return attrSetToken.getEnv().hasAttribute( name );
+      }
+      else
+      {
+        return attrMap.containsKey( name );
+      }
+    }
+
+    @Override
+    public Iterable<String> getAttributeNames()
+    {
+      if ( attrSetToken == null )
+      {
+        return Collections.emptyList();
+      }
+      else if ( !isAttributeSetLocal() )
+      {
+        return attrSetToken.getEnv().getAttributeNames();
+      }
+      else
+      {
+        return attrMap.keySet();
+      }
     }
   }
 
