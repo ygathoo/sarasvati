@@ -18,23 +18,46 @@
 */
 package com.googlecode.sarasvati;
 
+/**
+ * Encapsulates a skip node response from {@link Node#guard(Engine, NodeToken)}.
+ * Allows specifying an arc name to exit on.
+ *
+ * @author Paul Lorenz
+ */
 public class SkipNodeGuardResponse implements GuardResponse
 {
+  /**
+   * Singleton instance to be used when skipping a node and leaving on arc(s) with the default name.
+   */
   public static final SkipNodeGuardResponse DEFAULT_ARC_SKIP_NODE_RESPONSE = new SkipNodeGuardResponse( Arc.DEFAULT_ARC );
 
   protected String exitArcForSkip = null;
 
+  /**
+   * Constructor which takes the name of the arc(s) on which to
+   * exit the current node.
+   *
+   * @param arcName The name of the arc(s) to exit on when leaving the node
+   */
   public SkipNodeGuardResponse (String arcName)
   {
     this.exitArcForSkip = arcName;
   }
 
+  /**
+   * Always returns {@link GuardAction#SkipNode}.
+   *
+   * @see GuardResponse#getGuardAction()
+   */
   @Override
   public final GuardAction getGuardAction()
   {
     return GuardAction.SkipNode;
   }
 
+  /**
+   * @see GuardResponse#getExitArcForSkip()
+   */
   @Override
   public String getExitArcForSkip()
   {

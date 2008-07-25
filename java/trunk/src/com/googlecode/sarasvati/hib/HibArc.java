@@ -30,10 +30,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cache;
+import org.hibernate.annotations.CacheConcurrencyStrategy;
+
 import com.googlecode.sarasvati.Arc;
 
 @Entity
 @Table (name="wf_arc")
+@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 public class HibArc implements Arc
 {
   @Id

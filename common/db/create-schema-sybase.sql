@@ -2,12 +2,15 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_task') drop table wf_task
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_task_state') drop table wf_task_state
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_task') drop table wf_node_task
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_string_attr') drop table wf_token_string_attr
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_attr') drop table wf_token_attr
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token_parent') drop table wf_node_token_parent
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc_token') drop table wf_arc_token
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token') drop table wf_node_token
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_ref') drop table wf_node_ref
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node') drop table wf_node
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_type') drop table wf_node_type
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_guard_action') drop table wf_guard_action
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_attr') drop table wf_process_attr
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process') drop table wf_process
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_graph') drop table wf_graph
 go
@@ -33,6 +36,18 @@ create table wf_process
   graph_id    bigint                NOT NULL,
   create_date datetime              DEFAULT getDate() NOT NULL
 ) with identity_gap = 10
+go
+
+create table wf_process_attr
+(
+  process_id   bigint       NOT NULL REFERENCES wf_process,
+  name         varchar(64)  NOT NULL,
+  value        varchar(255) NOT NULL
+)
+go
+
+ALTER TABLE wf_process_attr
+  ADD PRIMARY KEY (process_id, name)
 go
 
 create table wf_node_type
@@ -128,14 +143,14 @@ create table wf_node_token_parent
 )
 go
 
-create table wf_token_string_attr
+create table wf_token_attr
 (
   attr_set_id  bigint       NOT NULL REFERENCES wf_node_token,
   name         varchar(64)  NOT NULL,
   value        varchar(255) NOT NULL
-) with identity_gap = 100
+)
 go
 
-ALTER TABLE wf_token_string_attr
+ALTER TABLE wf_token_attr
   ADD PRIMARY KEY (attr_set_id, name)
 go

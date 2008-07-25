@@ -134,4 +134,14 @@ public class HibEngine extends NonRecursiveEngine
         .setString(  "name", name )
         .uniqueResult();
   }
+
+  public HibProcess loadProcess (long processId)
+  {
+    return (HibProcess)session.load( HibProcess.class, processId );
+  }
+
+  public HibNodeToken loadNodeToken (long tokenId)
+  {
+    return (HibNodeToken)session.load( HibNodeToken.class, tokenId );
+  }
 }

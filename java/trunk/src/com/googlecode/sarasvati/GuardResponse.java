@@ -18,8 +18,22 @@
 */
 package com.googlecode.sarasvati;
 
+/**
+ * A GuardResponse is returned from {@link Node#guard(Engine, NodeToken)} to indicate
+ * what should be done with an incoming {@link NodeToken}.
+ *
+ * Most of this is imparted by which {@link GuardAction} is returned. In the cases of
+ * {@link GuardAction#AcceptToken} and {@link GuardAction#DiscardToken}, no further
+ * information is required. In the case of {@link GuardAction#SkipNode}, the guard
+ * may wish to select which arcs to exit, based on arc name.
+ *
+ * @author Paul Lorenz
+ */
 public interface GuardResponse
 {
+  /**
+   * Singleton instance for indicating an accept token response.
+   */
   static GuardResponse ACCEPT_TOKEN_RESPONSE = new GuardResponse()
   {
     @Override
@@ -42,6 +56,9 @@ public interface GuardResponse
     }
   };
 
+  /**
+   * Singleton instance for indicating an accept token response.
+   */
   static GuardResponse DISCARD_TOKEN_RESPONSE = new GuardResponse()
   {
     @Override
@@ -49,7 +66,6 @@ public interface GuardResponse
     {
       throw new UnsupportedOperationException(
         "getExitArcsForSkip should never be called on a GuardResponse with action of DiscardToken" );
-
     }
 
     @Override
@@ -65,7 +81,19 @@ public interface GuardResponse
     }
   };
 
+  /**
+   * Indicates which {@link GuardAction} has been selected.
+   *
+   * @return The {@link GuardAction} selected.
+   */
   GuardAction getGuardAction ();
 
+  /**
+   * If {@link GuardAction#SkipNode} is returned from {@link Node#guard(Engine, NodeToken)},
+   * it may indicate an arc name other than the default on which to exit. This can be useful
+   * for decision logic.
+   *
+   * @return The name of the arc or arcs on which to exit this node.
+   */
   String getExitArcForSkip ();
 }

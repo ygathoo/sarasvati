@@ -87,6 +87,13 @@ public interface Process
   void removeNodeToken (NodeToken token);
 
   /**
+   * Returns the current {@link ProcessState}
+   *
+   * @return The current {@link ProcessState}
+   */
+  ProcessState getState();
+
+  /**
    * Return true if the process has completed, false otherwise. A process
    * is complete if it has no active tokens, either ArcTokens or NodeTokens.
    *
