@@ -26,7 +26,7 @@ public interface Engine
    * @param graph The {@link Graph} to execute.
    * @return A {@link Process} executing the given {@link Graph}.
    */
-  Process startWorkflow (Graph graph);
+  Process startProcess (Graph graph);
 
   /**
    * Sometimes it is desirable to separate process creation from
@@ -34,12 +34,19 @@ public interface Engine
    * to set some variables into the process environment before
    * starting execution.
    *
-   * startWorkflow will generate a new {@link NodeToken} on each
+   * startProcess will generate a new {@link NodeToken} on each
    * start node contained in the given process.
    *
    * @param process The process on which to begin execution.
    */
-  void startWorkflow (Process process);
+  void startProcess (Process process);
+
+  /**
+   * Cancels the given process. The process state is set to {@link ProcessState#PendingCancel}.
+   *
+   * @param process The process to cancel
+   */
+  void cancelProcess (Process process);
 
   /**
    * Generates a new {@link NodeToken} for the given {@link Process}, pointing
@@ -67,7 +74,7 @@ public interface Engine
    * Generates a new {@link Process} for the given {@link Graph}. Execution
    * of the process is not started by this method.
    *
-   * The method will be used by {@link Engine#startWorkflow(Graph)}, and
+   * The method will be used by {@link Engine#startProcess(Graph)}, and
    * should not need to be called otherwise.
    *
    * @param graph The {@link Graph} the Process will be executing.
@@ -83,12 +90,20 @@ public interface Engine
    * state. It may happen, for example, if the action represented by that node
    * must be done by a human or some external system.
    *
+   * <br/>
+   *
    * When the external system has determined that the {@link Node} has completed its
    * work, it should invoke this method to continue executing the process.
+   *
+   * <br/>
+   *
+   * If the token belongs to a process which is _not_ in state {@link ProcessState#Executing}
+   * this call will return immediately.
    *
    * @param token   The {@link NodeToken} to resume execution on
    * @param arcName The name of the {@link Arc} (or arcs, as more than one {@link Arc} can
    *                have the same name) to generate ArcTokens on.
+   *
    */
   void completeExecution (NodeToken token, String arcName);
 }

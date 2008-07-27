@@ -7,5 +7,5 @@ public enum ProcessState
   PendingCompletion,
   Completed,
   PendingCancel,
-  Cancelled
+  Canceled
 }

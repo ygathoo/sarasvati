@@ -72,7 +72,7 @@ public class MemProcess implements Process
   }
 
   @Override
-  public Env getEnv()
+  public Env getEnv ()
   {
     return env;
   }
@@ -102,9 +102,27 @@ public class MemProcess implements Process
   }
 
   @Override
-  public boolean isComplete ()
+  public void setState (ProcessState state)
   {
-    return arcTokens.isEmpty() && nodeTokens.isEmpty();
+    this.state = state;
+  }
+
+  @Override
+  public boolean isCanceled()
+  {
+    return state == ProcessState.PendingCancel || state == ProcessState.Canceled;
+  }
+
+  @Override
+  public boolean isExecuting ()
+  {
+    return state == ProcessState.Executing;
+  }
+
+  @Override
+  public boolean hasActiveTokens ()
+  {
+    return !arcTokens.isEmpty() || !nodeTokens.isEmpty();
   }
 
   public synchronized long nextTokenId ()

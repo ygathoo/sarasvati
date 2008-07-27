@@ -206,9 +206,21 @@ public class HibProcess implements Process
   }
 
   @Override
-  public boolean isComplete ()
+  public boolean isCanceled ()
   {
-    return getArcTokens().isEmpty() && getNodeTokens().isEmpty();
+    return state == ProcessState.PendingCancel || state == ProcessState.Canceled;
+  }
+
+  @Override
+  public boolean isExecuting ()
+  {
+    return state == ProcessState.Executing;
+  }
+
+  @Override
+  public boolean hasActiveTokens ()
+  {
+    return !arcTokens.isEmpty() && !nodeTokens.isEmpty();
   }
 
   @Override
