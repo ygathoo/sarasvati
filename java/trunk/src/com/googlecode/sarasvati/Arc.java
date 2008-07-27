@@ -36,9 +36,9 @@ public interface Arc
 {
   /**
    * If no name is specified for an Arc, it will be
-   * given the default name, which is the empty string.
+   * given the default name, which is null.
    */
-  static String DEFAULT_ARC = "";
+  static String DEFAULT_ARC = null;
 
   /**
    * Returns the {@link Node} at the start of the arc.
@@ -55,8 +55,10 @@ public interface Arc
   Node getEndNode ();
 
   /**
-   * Returns the arc name. This name should never
-   * be null, but it may be blank.
+   * Returns the arc name. Nulls and blanks are allowed,
+   * but care should be taken as some databases have
+   * issues with blanks and treat them either as nulls
+   * or as single spaces.
    *
    * @return The arc name.
    */

@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.hibernate.Session;
+import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
@@ -143,5 +144,24 @@ public class HibEngine extends NonRecursiveEngine
   public HibNodeToken loadNodeToken (long tokenId)
   {
     return (HibNodeToken)session.load( HibNodeToken.class, tokenId );
+  }
+
+  public static void addToConfiguration (AnnotationConfiguration config, boolean enableCaching)
+  {
+    config.addAnnotatedClass( HibArc.class );
+    config.addAnnotatedClass( HibArcToken.class );
+    config.addAnnotatedClass( HibGraph.class );
+    config.addAnnotatedClass( HibNode.class );
+    config.addAnnotatedClass( HibNodeRef.class );
+    config.addAnnotatedClass( HibNodeToken.class );
+    config.addAnnotatedClass( HibProcess.class );
+
+    if (enableCaching )
+    {
+      config.setCacheConcurrencyStrategy( HibGraph.class.getName(),"read-only" );
+      config.setCacheConcurrencyStrategy( HibNode.class.getName(),"read-only" );
+      config.setCacheConcurrencyStrategy( HibNodeRef.class.getName(),"read-only" );
+      config.setCacheConcurrencyStrategy( HibArc.class.getName(),"read-only" );
+    }
   }
 }

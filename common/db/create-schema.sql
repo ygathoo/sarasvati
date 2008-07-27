@@ -33,6 +33,7 @@ create table wf_process
 (
   id          serial       NOT NULL PRIMARY KEY,
   graph_id    int          NOT NULL,
+  state       int          NOT NULL,
   create_date timestamp    NOT NULL DEFAULT current_timestamp
 );
 
@@ -88,7 +89,7 @@ create table wf_arc
   graph_id      int          NOT NULL REFERENCES wf_graph,
   a_node_ref_id int          NOT NULL REFERENCES wf_node_ref,
   z_node_ref_id int          NOT NULL REFERENCES wf_node_ref,
-  name          varchar(255) NOT NULL
+  name          varchar(255) NULL
 );
 
 create table wf_guard_action

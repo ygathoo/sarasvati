@@ -34,6 +34,7 @@ create table wf_process
 (
   id          bigint       IDENTITY NOT NULL PRIMARY KEY,
   graph_id    bigint                NOT NULL,
+  state       int                   NOT NULL,
   create_date datetime              DEFAULT getDate() NOT NULL
 ) with identity_gap = 10
 go
@@ -97,7 +98,7 @@ create table wf_arc
   graph_id      bigint                NOT NULL REFERENCES wf_graph,
   a_node_ref_id bigint                NOT NULL REFERENCES wf_node_ref,
   z_node_ref_id bigint                NOT NULL REFERENCES wf_node_ref,
-  name          varchar(255)          NOT NULL
+  name          varchar(255)          NULL
 ) with identity_gap = 10
 go
 

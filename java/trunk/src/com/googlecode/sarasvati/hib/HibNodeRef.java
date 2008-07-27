@@ -31,9 +31,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
@@ -41,7 +38,6 @@ import com.googlecode.sarasvati.NodeToken;
 
 @Entity
 @Table (name="wf_node_ref")
-@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 public class HibNodeRef implements Node
 {
   @Id

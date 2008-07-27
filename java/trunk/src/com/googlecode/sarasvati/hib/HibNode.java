@@ -34,8 +34,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
 import org.hibernate.annotations.DiscriminatorFormula;
 import org.hibernate.annotations.Type;
 
@@ -52,7 +50,6 @@ import com.googlecode.sarasvati.guardlang.PredicateRepository;
 @Inheritance (strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorFormula( "(select t.behaviour from wf_node_type t where t.id = type)" )
 @DiscriminatorValue( "node" )
-@Cache(usage=CacheConcurrencyStrategy.READ_ONLY)
 public class HibNode implements Node
 {
   @Id

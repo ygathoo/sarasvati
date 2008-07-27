@@ -18,6 +18,8 @@
 */
 package com.googlecode.sarasvati;
 
+import com.googlecode.sarasvati.util.SvUtil;
+
 /**
  * Encapsulates a skip node response from {@link Node#guard(Engine, NodeToken)}.
  * Allows specifying an arc name to exit on.
@@ -67,6 +69,6 @@ public class SkipNodeGuardResponse implements GuardResponse
   @Override
   public String toString()
   {
-    return Arc.DEFAULT_ARC.equals( exitArcForSkip ) ? "SkipNodeResponse"  : "SkipNodeResponse (" + exitArcForSkip + ")";
+    return SvUtil.equals( Arc.DEFAULT_ARC, exitArcForSkip ) ? "SkipNodeResponse"  : "SkipNodeResponse (" + exitArcForSkip + ")";
   }
 }
