@@ -76,7 +76,7 @@ public class DbConsole
       HibEngine engine = new HibEngine( session );
 
       HibGraph graph = getGraph( engine );
-      HibProcess process = (HibProcess)engine.startWorkflow( graph );
+      HibProcess process = (HibProcess)engine.startProcess( graph );
       session.flush();
       t.commit();
       session.close();
@@ -95,7 +95,7 @@ public class DbConsole
       HibEngine engine = new HibEngine( session );
 
       HibProcess p = (HibProcess) session.load( HibProcess.class, processId );
-      if (p.isComplete() )
+      if ( !p.hasActiveTokens() )
       {
         System.out.println( "Workflow complete" );
         return;

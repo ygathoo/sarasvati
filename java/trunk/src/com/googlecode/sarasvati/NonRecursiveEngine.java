@@ -25,9 +25,9 @@ import java.util.LinkedList;
  * or a one which loops without waiting, it is possible to run out of
  * stack space. This implementation turns the recursion into iterative
  * loop, which can handle arbitrarily deep graphs.
- * 
+ *
  * Unlike the the default {@link BaseEngine}, this implementation is no longer
- * thread safe. 
+ * thread safe.
  *
  * @author Paul Lorenz
  */
@@ -58,14 +58,20 @@ public abstract class NonRecursiveEngine extends BaseEngine
     else
     {
       firstExecution = false;
-      super.completeExecution( token, arcName );
-
-      while ( !queue.isEmpty() )
+      try
       {
-        TokenArcNamePair pair = queue.removeFirst();
-        super.completeExecution( pair.token, pair.arcName );
+        super.completeExecution( token, arcName );
+
+        while ( !queue.isEmpty() )
+        {
+          TokenArcNamePair pair = queue.removeFirst();
+          super.completeExecution( pair.token, pair.arcName );
+        }
       }
-      firstExecution = true;
+      finally
+      {
+        firstExecution = true;
+      }
     }
   }
 }

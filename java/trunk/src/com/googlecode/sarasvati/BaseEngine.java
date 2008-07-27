@@ -31,20 +31,30 @@ import java.util.List;
  */
 public abstract class BaseEngine implements Engine
 {
-  public Process startWorkflow (Graph graph)
+  public Process startProcess (Graph graph)
   {
     Process process = newProcess( graph );
-    startWorkflow( process );
+    startProcess( process );
     return process;
   }
 
-  public void startWorkflow (Process process)
+  public void startProcess (Process process)
   {
-    for (Node startNode : process.getGraph().getStartNodes() )
+    process.setState( ProcessState.Executing );
+
+    List<? extends Node> startNodes = process.getGraph().getStartNodes();
+
+    for (Node startNode : startNodes )
     {
       NodeToken startToken = newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
       executeNode( process, startToken );
     }
+  }
+
+  @Override
+  public void cancelProcess (Process process)
+  {
+    process.setState( ProcessState.PendingCancel );
   }
 
   private void executeArc (Process process, ArcToken token)
@@ -119,6 +129,12 @@ public abstract class BaseEngine implements Engine
   public void completeExecution (NodeToken token, String arcName)
   {
     Process process = token.getProcess();
+
+    if ( !process.isExecuting() )
+    {
+      return;
+    }
+
     List<? extends Arc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 
     process.removeNodeToken( token );

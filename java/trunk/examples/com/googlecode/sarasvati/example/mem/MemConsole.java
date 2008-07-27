@@ -82,7 +82,7 @@ public class MemConsole
       MemEngine engine = new MemEngine();
 
       MemGraph graph = getGraph();
-      MemProcess process = (MemProcess)engine.startWorkflow( graph );
+      MemProcess process = (MemProcess)engine.startProcess( graph );
 
       runWorkflow( process );
     }
@@ -93,7 +93,7 @@ public class MemConsole
     while (true)
     {
       MemEngine engine = new MemEngine();
-      if (process.isComplete() )
+      if ( !process.hasActiveTokens() )
       {
         System.out.println( "Workflow complete" );
         return;

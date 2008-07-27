@@ -91,13 +91,37 @@ public interface Process
    *
    * @return The current {@link ProcessState}
    */
-  ProcessState getState();
+  ProcessState getState ();
 
   /**
-   * Return true if the process has completed, false otherwise. A process
-   * is complete if it has no active tokens, either ArcTokens or NodeTokens.
+   * Sets the current {@link ProcessState}. The state should
+   * be set to {@link ProcessState#Created} by {@link Engine#newProcess(Graph)}.
+   * It should then be set to {@link ProcessState#Executing} by
+   * {@link Engine#startProcess(Process)}.
    *
-   * @return True if the process has completed, false otherwise.
+   * @param state The new {@link ProcessState}
    */
-  boolean isComplete ();
+  void setState (ProcessState state);
+
+  /**
+   * Returns true if the process state is either {@link ProcessState#PendingCancel} or {@link ProcessState#Canceled}
+   *
+   * @return True if the process state is either {@link ProcessState#PendingCancel} or {@link ProcessState#Canceled}
+   */
+  boolean isCanceled ();
+
+  /**
+   * Returns true if the process state is {@link ProcessState#Executing}
+   *
+   * @return True if the process state is {@link ProcessState#Executing}
+   */
+  boolean isExecuting ();
+
+  /**
+   * Return true if the process has any active arc or node tokens. A process
+   * with no active tokens should be marked pending complete.
+   *
+   * @return True if the process has active tokens, false otherwise.
+   */
+  boolean hasActiveTokens ();
 }
