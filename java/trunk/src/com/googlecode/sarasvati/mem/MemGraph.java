@@ -29,6 +29,7 @@ import java.util.Map;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.util.SvUtil;
 
 public class MemGraph implements Graph
 {
@@ -80,7 +81,7 @@ public class MemGraph implements Graph
 
     for ( Arc arc : arcList )
     {
-      if ( arcName.equals( arc.getName() ) )
+      if ( SvUtil.equals( arcName, arc.getName() ) )
       {
         result.add( arc );
       }
@@ -106,7 +107,7 @@ public class MemGraph implements Graph
 
     for ( Arc arc : arcList )
     {
-      if ( arcName.equals( arc.getName() ) )
+      if ( SvUtil.equals( arcName, arc.getName() ) )
       {
         result.add( arc );
       }

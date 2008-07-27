@@ -25,13 +25,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.postgresql.Driver;
 
-import com.googlecode.sarasvati.hib.HibArc;
-import com.googlecode.sarasvati.hib.HibArcToken;
-import com.googlecode.sarasvati.hib.HibNode;
-import com.googlecode.sarasvati.hib.HibNodeRef;
-import com.googlecode.sarasvati.hib.HibNodeToken;
-import com.googlecode.sarasvati.hib.HibProcess;
-import com.googlecode.sarasvati.hib.HibGraph;
+import com.googlecode.sarasvati.hib.HibEngine;
 
 public class TestSetup
 {
@@ -46,16 +40,12 @@ public class TestSetup
     config.setProperty( "hibernate.connection.username", "paul" );
     config.setProperty( "hibernate.connection.password", "thesistest56" );
     config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );
+    config.setProperty( "hibernate.cache.use_second_level_cache", "true" );
+
     //config.setProperty( "hibernate.show_sql", "true" );
     //config.setProperty( "hibernate.format_sql", "true" );
 
-    config.addAnnotatedClass( HibArc.class );
-    config.addAnnotatedClass( HibArcToken.class );
-    config.addAnnotatedClass( HibGraph.class );
-    config.addAnnotatedClass( HibNode.class );
-    config.addAnnotatedClass( HibNodeRef.class );
-    config.addAnnotatedClass( HibNodeToken.class );
-    config.addAnnotatedClass( HibProcess.class );
+    HibEngine.addToConfiguration( config, false );
 
     config.addAnnotatedClass( NodeTask.class );
     config.addAnnotatedClass( Task.class );

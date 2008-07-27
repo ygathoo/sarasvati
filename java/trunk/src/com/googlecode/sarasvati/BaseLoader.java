@@ -25,6 +25,7 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
 import com.googlecode.sarasvati.xml.XmlExternalArcType;
@@ -95,7 +96,7 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
           throw new ImportException( "Arc in node '" + xmlNode.getName() + "' points to non-existent node '" + xmlArc.getTo() + "'" );
         }
 
-        createArc( startNode, endNode, xmlArc.getName() == null ? "" : xmlArc.getName() );
+        createArc( startNode, endNode, SvUtil.isBlankOrNull( xmlArc.getName() ) ? Arc.DEFAULT_ARC : xmlArc.getName() );
       }
     }
   }
@@ -134,7 +135,7 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
                                      " in process definition '" + externalArc.getExternal() + "'" );
         }
 
-        String arcName = externalArc.getName() == null ? Arc.DEFAULT_ARC : externalArc.getName();
+        String arcName = SvUtil.isBlankOrNull( externalArc.getName() ) ? Arc.DEFAULT_ARC : externalArc.getName();
 
         if ( externalArc.getType() == XmlExternalArcType.OUT )
         {

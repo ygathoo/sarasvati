@@ -94,6 +94,7 @@ public class HibProcess implements Process
     this.graph = graph;
     this.arcTokens = new LinkedList<ArcToken>();
     this.nodeTokens = new LinkedList<NodeToken>();
+    this.state = ProcessState.Created;
     this.createDate = new Date();
     this.attrMap = new HashMap<String, String>();
   }
