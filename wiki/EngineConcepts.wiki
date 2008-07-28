@@ -104,7 +104,7 @@ When the node token on _Hello_ is completed, an *arc token* will be generated on
 
 Since the arc on which the arc token is situated goes into a *non-join node*, a node token will be created on _World_ immediately.
 
-  * *Non-join node* - A node which is activated whenever an arc token arrives on an incoming node. Activated means the incoming arc token is completed an active node token is created. This stands in contrast to a *join node*, where active arc tokens must exist on all incoming arcs with the same name. This will be explored in more detail below.
+  * *Non-join node* - A node which is activated whenever an arc token arrives on an incoming node. Activated means the incoming arc token is completed and an active node token is created. This stands in contrast to a *join node*, where active arc tokens must exist on all incoming arcs with the same name. This will be explored in more detail below.
 
 The process now looks like:
 
@@ -113,3 +113,7 @@ The process now looks like:
 The _World_ node will now run its guard and then execute. Finally the node token will be completed.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts2-4.jpg]
+
+====Example Three: Split and Join====
+-------------------
+TODO
