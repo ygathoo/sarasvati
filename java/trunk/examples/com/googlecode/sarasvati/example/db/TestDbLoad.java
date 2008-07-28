@@ -75,7 +75,7 @@ public class TestDbLoad
 
     File baseDir = new File( "/home/paul/workspace/wf-common/test-wf/" );
 
-    XmlWorkflowResolver resolver = new DefaultFileXmlWorkflowResolver(xmlLoader, baseDir );
+    XmlWorkflowResolver resolver = new DefaultFileXmlWorkflowResolver( xmlLoader, baseDir );
 
     FilenameFilter filter = new FilenameFilter()
     {
