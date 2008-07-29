@@ -220,7 +220,7 @@ public class HibProcess implements Process
   @Override
   public boolean hasActiveTokens ()
   {
-    return !arcTokens.isEmpty() && !nodeTokens.isEmpty();
+    return !arcTokens.isEmpty() || !nodeTokens.isEmpty();
   }
 
   @Override
