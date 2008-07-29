@@ -44,6 +44,11 @@ public abstract class BaseEngine implements Engine
 
     List<? extends Node> startNodes = process.getGraph().getStartNodes();
 
+    if ( startNodes.isEmpty() )
+    {
+      checkForCompletion( process );
+    }
+
     for (Node startNode : startNodes )
     {
       NodeToken startToken = newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
@@ -54,7 +59,45 @@ public abstract class BaseEngine implements Engine
   @Override
   public void cancelProcess (Process process)
   {
-    process.setState( ProcessState.PendingCancel );
+    if ( isProcessEndAsynchronous() )
+    {
+      process.setState( ProcessState.PendingCancel );
+      doAsyncCancel( process );
+    }
+    else
+    {
+      finalizeCancel( process );
+    }
+  }
+
+  @Override
+  public boolean isProcessEndAsynchronous()
+  {
+    return false;
+  }
+
+  @Override
+  public void doAsyncCancel(Process process)
+  {
+    // does nothing by default
+  }
+
+  @Override
+  public void doAsyncComplete(Process process)
+  {
+    // does nothing by default
+  }
+
+  @Override
+  public void finalizeComplete (Process process)
+  {
+    process.setState( ProcessState.Completed );
+  }
+
+  @Override
+  public void finalizeCancel (Process process)
+  {
+    process.setState( ProcessState.Canceled );
   }
 
   private void executeArc (Process process, ArcToken token)
@@ -117,6 +160,7 @@ public abstract class BaseEngine implements Engine
 
       case DiscardToken :
         token.markComplete( this );
+        checkForCompletion( process );
         break;
 
       case SkipNode :
@@ -143,6 +187,27 @@ public abstract class BaseEngine implements Engine
     for ( Arc arc : outputArcs )
     {
       executeArc( process, newArcToken( process, arc, token ) );
+    }
+
+    if ( outputArcs.isEmpty() )
+    {
+      checkForCompletion( process );
+    }
+  }
+
+  private void checkForCompletion (Process process)
+  {
+    if ( !process.hasActiveTokens() )
+    {
+      if ( isProcessEndAsynchronous() )
+      {
+        process.setState( ProcessState.PendingCompletion );
+        doAsyncComplete( process );
+      }
+      else
+      {
+        finalizeComplete( process );
+      }
     }
   }
 }
