@@ -42,18 +42,13 @@ public abstract class BaseEngine implements Engine
   {
     process.setState( ProcessState.Executing );
 
-    List<? extends Node> startNodes = process.getGraph().getStartNodes();
-
-    if ( startNodes.isEmpty() )
-    {
-      checkForCompletion( process );
-    }
-
-    for (Node startNode : startNodes )
+    for (Node startNode : process.getGraph().getStartNodes() )
     {
       NodeToken startToken = newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
       executeNode( process, startToken );
     }
+
+    checkForCompletion( process );
   }
 
   @Override
@@ -160,7 +155,6 @@ public abstract class BaseEngine implements Engine
 
       case DiscardToken :
         token.markComplete( this );
-        checkForCompletion( process );
         break;
 
       case SkipNode :
@@ -189,10 +183,7 @@ public abstract class BaseEngine implements Engine
       executeArc( process, newArcToken( process, arc, token ) );
     }
 
-    if ( outputArcs.isEmpty() )
-    {
-      checkForCompletion( process );
-    }
+    checkForCompletion( process );
   }
 
   private void checkForCompletion (Process process)
