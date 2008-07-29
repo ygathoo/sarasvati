@@ -68,7 +68,7 @@ public class HibLoader extends BaseLoader<HibGraph, HibNodeRef>
                                    Object custom)
     throws ImportException
   {
-    HibNode node = new HibNode(getWfGraph(), name, type, isJoin, isStart, guard);
+    HibNode node = new HibNode(getGraph(), name, type, isJoin, isStart, guard);
 
     NodeFactory factory = customTypeFactories.get( type );
 
@@ -81,9 +81,9 @@ public class HibLoader extends BaseLoader<HibGraph, HibNodeRef>
       node = factory.createNode( engine, node, custom );
     }
 
-    HibNodeRef nodeRef = new HibNodeRef( getWfGraph(), node, "" );
+    HibNodeRef nodeRef = new HibNodeRef( getGraph(), node, "" );
     engine.getSession().save( nodeRef  );
-    getWfGraph().getNodeRefs().add( nodeRef );
+    getGraph().getNodeRefs().add( nodeRef );
 
     return nodeRef;
   }
@@ -92,9 +92,9 @@ public class HibLoader extends BaseLoader<HibGraph, HibNodeRef>
   protected void createArc (HibNodeRef startNode, HibNodeRef endNode, String name)
       throws ImportException
   {
-    HibArc arc = new HibArc( getWfGraph(), startNode, endNode, name );
+    HibArc arc = new HibArc( getGraph(), startNode, endNode, name );
     engine.getSession().save( arc );
-    getWfGraph().getArcs().add( arc );
+    getGraph().getArcs().add( arc );
   }
 
   @Override
@@ -116,8 +116,9 @@ public class HibLoader extends BaseLoader<HibGraph, HibNodeRef>
       String label = nodeRef.getInstance();
       label = label == null || "".equals( label ) ? instanceName : instanceName + ":" + label;
 
-      HibNodeRef newRef = new HibNodeRef( getWfGraph(), nodeRef.getNode(), label );
+      HibNodeRef newRef = new HibNodeRef( getGraph(), nodeRef.getNode(), label );
       engine.getSession().save( newRef );
+      getGraph().getNodeRefs().add( newRef );
 
       arcRefMap.put( nodeRef.getId(), newRef );
       if ( nodeRef.isNodeDefinedInTopLevel() )
@@ -130,8 +131,9 @@ public class HibLoader extends BaseLoader<HibGraph, HibNodeRef>
     {
       HibNodeRef startNode = arcRefMap.get( arc.getStartNode().getId() );
       HibNodeRef endNode = arcRefMap.get( arc.getEndNode().getId() );
-      HibArc newArc = new HibArc( getWfGraph(), startNode, endNode, arc.getName() );
+      HibArc newArc = new HibArc( getGraph(), startNode, endNode, arc.getName() );
       engine.getSession().save( newArc );
+      getGraph().getArcs().add( newArc );
     }
 
     return refMap;

@@ -40,7 +40,7 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
 
   private G graph;
 
-  protected G getWfGraph ()
+  protected G getGraph ()
   {
     return graph;
   }
@@ -67,7 +67,7 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
 
       if ( nodeCache.containsKey( nodeName ) )
       {
-        throw new ImportException( "Node name '" + nodeName + "' is not unique in workflow: " + getWfGraph().getName() );
+        throw new ImportException( "Node name '" + nodeName + "' is not unique in workflow: " + getGraph().getName() );
       }
 
       String type = xmlNode.getType();

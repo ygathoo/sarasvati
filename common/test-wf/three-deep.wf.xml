@@ -1,18 +1,19 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="three-deep" version="1">
+<workflow name="three-deep"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
 
-  <start>
+  <node name="start" isStart="true">
     <arc to="three-deep.1"/>
-  </start>
+  </node>
 
   <node name="three-deep.1">
-    <externalArc workflow="two-deep" instance="1" nodeId="two-deep.1" type="out"/>
+    <externalArc external="two-deep" instance="1" nodeName="two-deep.1" type="out"/>
   </node>
 
   <node name="three-deep.2">
-    <externalArc workflow="two-deep" instance="1" nodeId="two-deep.2" type="in"/>
+    <externalArc external="two-deep" instance="1" nodeName="two-deep.2" type="in"/>
   </node>
 
 </workflow>
