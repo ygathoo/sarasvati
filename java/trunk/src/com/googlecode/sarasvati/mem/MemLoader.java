@@ -44,7 +44,7 @@ public class MemLoader extends BaseLoader<MemGraph,MemNode>
   protected void createArc (MemNode startNode, MemNode endNode, String name) throws ImportException
   {
     MemArc arc = new MemArc(name, startNode, endNode );
-    getWfGraph().getArcs().add( arc );
+    getGraph().getArcs().add( arc );
   }
 
   @Override
@@ -56,7 +56,7 @@ public class MemLoader extends BaseLoader<MemGraph,MemNode>
                                 Object custom)
     throws ImportException
   {
-    MemNode node = new MemNode( getWfGraph(), name, type, isJoin, isStart, guard );
+    MemNode node = new MemNode( getGraph(), name, type, isJoin, isStart, guard );
 
     NodeFactory factory = customTypeFactories.get( type );
 
@@ -65,7 +65,7 @@ public class MemLoader extends BaseLoader<MemGraph,MemNode>
       node = factory.createNode( node, custom );
     }
 
-    getWfGraph().getNodes().add( node );
+    getGraph().getNodes().add( node );
     return node;
   }
 
@@ -94,9 +94,9 @@ public class MemLoader extends BaseLoader<MemGraph,MemNode>
     for ( MemNode node : instanceGraph.getNodes() )
     {
       MemNode newNode = node.clone();
-      newNode.setGraph( getWfGraph() );
+      newNode.setGraph( getGraph() );
       newNode.setExternal( true );
-      getWfGraph().getNodes().add( newNode );
+      getGraph().getNodes().add( newNode );
 
       lookupMap.put( node, newNode );
 
@@ -115,7 +115,7 @@ public class MemLoader extends BaseLoader<MemGraph,MemNode>
       MemNode endNode = lookupMap.get( arc.getEndNode() );
 
       MemArc newArc = new MemArc( arc.getName(), startNode, endNode );
-      getWfGraph().getArcs().add( newArc );
+      getGraph().getArcs().add( newArc );
     }
 
     return nodeMap;
