@@ -1,14 +1,15 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="densest" version="1">
+<workflow name="densest"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
 
-  <start>
+  <node name="start" isStart="true">
     <arc to="1"/>
     <arc to="2"/>
     <arc to="3"/>
     <arc to="4"/>
-  </start>
+  </node>
 
   <node name="1">
     <arc to="5"/>
