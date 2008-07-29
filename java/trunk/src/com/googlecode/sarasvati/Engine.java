@@ -42,11 +42,65 @@ public interface Engine
   void startProcess (Process process);
 
   /**
+   * Competes and cancels may be performed synchronously or asynchronously. If
+   * synchronous, {@link #finalizeComplete(Process)} and {@link #finalizeCancel(Process)}
+   * will be called directly by the engine. If asynchronous, {@link #doAsyncComplete(Process)}
+   * and {@link #doAsyncCancel(Process)} will be called. These methods should be overridden
+   * by subclasses. The subclass with then be responsible for calling the appropriate
+   * finalize method when ready.
+   * <br/>
+   * If this method returns false, the process will never enter the {@link ProcessState#PendingCancel}
+   * and {@value ProcessState#PendingCompletion} states.
+   * <br/>
+   *
+   * Returns false by default.
+   *
+   * @return True if complete and cancel should be performed asynchronously.
+   */
+  boolean isProcessEndAsynchronous ();
+
+  /**
    * Cancels the given process. The process state is set to {@link ProcessState#PendingCancel}.
    *
    * @param process The process to cancel
    */
   void cancelProcess (Process process);
+
+  /**
+   * Hook for subclasses to set up asynchronous completion if desired. The process will
+   * be in state {@link ProcessState#PendingCompletion}.
+  * <br/>
+   * Only invoked if {@link #isProcessEndAsynchronous()} returns true;
+
+   * @param process The process being completed.
+   */
+  void doAsyncComplete (Process process);
+
+  /**
+   * Hook for subclasses to set up asynchronous cancellation if desired. The process will
+   * be in state {@link ProcessState#PendingCancel}.
+   * <br/>
+   * Only invoked if {@link #isProcessEndAsynchronous()} returns true;
+   *
+   * @param process The process being canceled.
+   */
+  void doAsyncCancel (Process process);
+
+  /**
+   * Will set the state to {@link ProcessState#Completed} and perform whatever
+   * cleanup is required.
+   *
+   * @param process The process being completed.
+   */
+  void finalizeComplete (Process process);
+
+  /**
+   * Will set the state to {@link ProcessState#Canceled} and perform whatever
+   * cleanup is required.
+   *
+   * @param process The process being canceled.
+   */
+  void finalizeCancel (Process process);
 
   /**
    * Generates a new {@link NodeToken} for the given {@link Process}, pointing
