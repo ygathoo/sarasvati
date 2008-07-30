@@ -50,7 +50,7 @@ public interface Engine
    * finalize method when ready.
    * <br/>
    * If this method returns false, the process will never enter the {@link ProcessState#PendingCancel}
-   * and {@value ProcessState#PendingCompletion} states.
+   * and {@link ProcessState#PendingCompletion} states.
    * <br/>
    *
    * Returns false by default.
