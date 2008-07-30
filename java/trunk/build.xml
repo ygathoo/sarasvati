@@ -49,7 +49,7 @@
 
   <target name="compile" depends="fetchlibs">
     <mkdir dir="${build.dir}" />
-    <javac srcdir="src" destdir="${build.dir}" source="1.6">
+    <javac srcdir="src" destdir="${build.dir}" source="1.5" target="1.5" debug="true">
       <include name="com/googlecode/sarasvati/**/*.java" />
       <exclude name="com/googlecode/sarasvati/visual/**"/>
       <classpath refid="classpath"/>
