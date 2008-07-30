@@ -141,9 +141,9 @@ public class HibArc implements Arc
     final HibArc other = (HibArc)obj;
     if ( id == null )
     {
-      if ( other.id != null ) return false;
+      if ( other.getId() != null ) return false;
     }
-    else if ( !id.equals( other.id ) ) return false;
+    else if ( !id.equals( other.getId() ) ) return false;
     return true;
   }
 }
