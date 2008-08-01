@@ -5,12 +5,21 @@
 
 = Core Concepts =
 
-== Introduction ==
+== Contents ==
+ * [EngineConcepts#Introduction Introduction]
+ * [EngineConcepts#Definitions Definitions]
+ * [EngineConcepts#Sarasvati_Graph_Execution Graph Execution Explained]
+   * [EngineConcepts#Legend  Legend]
+   * [EngineConcepts#One_Node Single Node]
+   * [EngineConcepts#Two_Nodes Two Nodes]
+   * [EngineConcepts#Split_and_Join Split and Join]
+
+==Introduction==
 Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below). 
 
 We begin with the some definitions, move on to features likely to be common across most engines, then explain Sarasvati specifics.
 
-== Definitions ==
+==Definitions==
 
 Graphs come with a set of common terms. To begin with, a graph is made up a set of things, hereafter refered to as *nodes* and a set of connections between _nodes_, know as *arcs*.
 
@@ -33,6 +42,8 @@ These definitions cover the parts of a process definition. However, they don't c
   * *Token* - The set of active tokens marks the current process state. Tokens generally point to a node which is currently executing. Tokens sometimes have associated state, which is a way of passing data from node to node. 
     * Also know as: Execution
 
+[EngineConcepts#Contents back to table of contents]
+
 == Sarasvati Graph Execution ==
 
 Let us start with a simple process definition, the classic 'Hello World'. When executed, this process will print out 'Hello, World!' and then complete.
@@ -43,8 +54,9 @@ First, we introduce a graphical notation for process definitions and execution. 
 
 [http://sarasvati.googlecode.com/svn/wiki/images/legend.jpg]
 
+[EngineConcepts#Contents back to table of contents]
 
-==== Example One: Single Node ====
+==== Single Node Example ====
 ----------------------------------
 The simplest useful process definition would consist of a simple node. Here is the graphical representation:
 
@@ -83,8 +95,9 @@ As there are no further steps in the process, it is now *complete* and looks lik
 
   * *Process Completion* - A process with no active tokens is considered complete.
 
+[EngineConcepts#Contents back to table of contents]
 
-====Example Two: Two nodes====
+====Two nodes====
 -------------------
 Let's now example a slightly more complicated example. Instead of a single node, we'll have two, the first of which prints out 'Hello', the second prints out 'World'. It looks as follows:
 
@@ -114,7 +127,9 @@ The _World_ node will now run its guard and then execute. Finally the node token
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts2-4.jpg]
 
-====Example Three: Split and Join====
+[EngineConcepts#Contents back to table of contents]
+
+====Split and Join====
 -------------------
 Let us now examine an example which contains concurrent execution. 
 
@@ -190,9 +205,10 @@ At some point later, the token at _Approval 1_ is completed. This generates an a
 Now when the engine tries to execute _Grant_ it finds arc tokens on all the incoming 'default' arcs. These arc tokens are marked complete and a node token is generated on _Grant_. 
 
 
-
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-8.jpg]
 
 Once the _Grant_ task is finished, its node token will also be completed and the process will be complete.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-9.jpg]
+
+[EngineConcepts#Contents back to table of contents]
