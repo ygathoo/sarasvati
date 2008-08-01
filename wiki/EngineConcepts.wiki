@@ -116,4 +116,13 @@ The _World_ node will now run its guard and then execute. Finally the node token
 
 ====Example Three: Split and Join====
 -------------------
-TODO
+Let us now examine an example which contains concurrent execution. 
+
+The process describes an approval process. 
+  # A request is made
+  # Two approvals must be obtained
+  # The request is granted
+
+The process looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3.jpg]
