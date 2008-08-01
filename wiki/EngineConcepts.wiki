@@ -172,3 +172,27 @@ Here the node token will enter a wait state. Since no further execution can take
 Again, since node _Approval 2_ can be executed immediately, the arc token will be completed and a node token will be created. It will also enter into a wait state once the notification to the user has been created.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-5.jpg]
+
+At some point one of the approvals will be completed. Let's say that it's _Approval 2_. This will mark the node token complete and generate an arc token on the outgoing arc.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-6.jpg]
+
+Now the engine will see if the  _Grant_ node can be executed. However, as the dashed border indicates, the _Grant_ node is a *join node*.
+
+  * *Join node* - When an arc token arrives a join node, arc tokens must exist on all other arc *with the same name* before the node will accept a node token.
+
+Since there are two arcs with the 'default' name coming into _Grant_, and only one of them has an arc token, the node can not be executed at this time. Execution will halt at this point.
+
+At some point later, the token at _Approval 1_ is completed. This generates an arc token on the outgoing node.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-7.jpg]
+
+Now when the engine tries to execute _Grant_ it finds arc tokens on all the incoming 'default' arcs. These arc tokens are marked complete and a node token is generated on _Grant_. 
+
+
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-8.jpg]
+
+Once the _Grant_ task is finished, its node token will also be completed and the process will be complete.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-9.jpg]
