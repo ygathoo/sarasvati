@@ -29,6 +29,7 @@ import java.util.Map;
 public class MapEnv implements Env
 {
   protected Map<String,String> attributes;
+  protected Map<String,Object> transientAttributes;
 
   /**
    * Create a MapEnv which uses a {@link HashMap} for storage.
@@ -36,6 +37,7 @@ public class MapEnv implements Env
   public MapEnv ()
   {
     this.attributes = new HashMap<String, String>();
+    this.transientAttributes = new HashMap<String,Object>();
   }
 
   public MapEnv (Map<String,String> attributes)
@@ -109,5 +111,29 @@ public class MapEnv implements Env
   public Iterable<String> getAttributeNames ()
   {
     return attributes.keySet();
+  }
+
+  @Override
+  public void setTransientAttribute (String name, Object value)
+  {
+    transientAttributes.put( name, value );
+  }
+
+  @Override
+  public boolean hasTransientAttribute (String name)
+  {
+    return transientAttributes.containsKey( name );
+  }
+
+  @Override
+  public Object getTransientAttribute (String name)
+  {
+    return transientAttributes.get( name );
+  }
+
+  @Override
+  public void removeTransientAttribute (String name)
+  {
+    transientAttributes.remove( name );
   }
 }

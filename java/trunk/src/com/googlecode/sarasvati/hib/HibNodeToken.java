@@ -23,6 +23,7 @@ package com.googlecode.sarasvati.hib;
 
 import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -232,6 +233,8 @@ public class HibNodeToken implements NodeToken
 
   private class HibTokenEnv implements Env
   {
+    private Map<String,Object> transientAttributes = new HashMap<String, Object>();
+
     public HibTokenEnv()
     {
       // Default constructor
@@ -355,6 +358,30 @@ public class HibNodeToken implements NodeToken
       {
         return attrMap.keySet();
       }
+    }
+
+    @Override
+    public void setTransientAttribute (String name, Object value)
+    {
+      transientAttributes.put( name, value );
+    }
+
+    @Override
+    public Object getTransientAttribute (String name)
+    {
+      return transientAttributes.get( name );
+    }
+
+    @Override
+    public boolean hasTransientAttribute (String name)
+    {
+      return transientAttributes.containsKey( name );
+    }
+
+    @Override
+    public void removeTransientAttribute (String name)
+    {
+      transientAttributes.remove( name );
     }
   }
 
