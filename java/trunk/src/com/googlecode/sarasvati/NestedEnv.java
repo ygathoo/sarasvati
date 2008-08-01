@@ -100,4 +100,28 @@ public class NestedEnv implements Env
   {
     outerEnv.setStringAttribute(name, value);
   }
+
+  @Override
+  public void setTransientAttribute (String name, Object value)
+  {
+    outerEnv.setTransientAttribute( name, value );
+  }
+
+  @Override
+  public boolean hasTransientAttribute (String name)
+  {
+    return outerEnv.hasAttribute( name ) || innerEnv.hasAttribute( name );
+  }
+
+  @Override
+  public Object getTransientAttribute (String name)
+  {
+    return outerEnv.hasAttribute( name ) ? outerEnv.getTransientAttribute( name ) : innerEnv.getTransientAttribute( name );
+  }
+
+  @Override
+  public void removeTransientAttribute (String name)
+  {
+    outerEnv.removeTransientAttribute( name );
+  }
 }

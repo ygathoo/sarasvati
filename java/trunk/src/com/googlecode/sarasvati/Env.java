@@ -106,4 +106,48 @@ public interface Env
    * @return Iterable of attribute names
    */
   Iterable<String> getAttributeNames ();
+
+  /**
+   * Set a transient attribute of the environment. The attribute will
+   * only be in the environment as long as the associated {@link Process} or
+   * {@link NodeToken} instance is in memory. In other words, these
+   * attributes will not be persisted to whatever the backing store
+   * is.
+   *
+   * <br/>
+   * If a transient value already existed for the given name, the value
+   * will be overwritten
+   * <br/>
+   *
+   * In the case of a memory back implementation, these transient
+   * attributes will have the same lifetime as other attributes.
+   *
+   * @param name The name of the attribute
+   * @param value The value of the attribute
+   */
+  void setTransientAttribute (String name, Object value);
+
+  /**
+   * Returns true if this transient attribute exists in the environment
+   * and false otherwise.
+   *
+   * @param name The transient attribute name
+   * @return True if the given transient attribute exists in this environment
+   */
+  boolean hasTransientAttribute (String name);
+
+  /**
+   * Returns the value associated with the given named transient attribute.
+   *
+   * @param name The attribute name
+   * @return The attribute value, or null if a value has not been set.
+   */
+  Object getTransientAttribute (String name);
+
+  /**
+   * Remove the given attribute from the environment.
+   *
+   * @param name The attribute name
+   */
+  void removeTransientAttribute (String name);
 }
