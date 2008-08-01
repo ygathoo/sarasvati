@@ -12,7 +12,8 @@
    * [#Legend  Legend]
    * [#Single_Node Single Node]
    * [#Two_Nodes Two Nodes]
-   * [#Split_and_Join Split and Join]
+   * [#Split_and_Join_with_Wait_States Split and Join - With Wait States]
+   * [#Split_and_Join_without_Wait_States Split and Join - Without Wait States]
 
 ==Introduction==
 Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below). 
@@ -42,7 +43,7 @@ These definitions cover the parts of a process definition. However, they don't c
   * *Token* - The set of active tokens marks the current process state. Tokens generally point to a node which is currently executing. Tokens sometimes have associated state, which is a way of passing data from node to node. 
     * Also know as: Execution
 
-[#Contents back to table of contents]
+[#Contents Back to Table of Contents]
 
 == Sarasvati Graph Execution ==
 
@@ -54,7 +55,7 @@ First, we introduce a graphical notation for process definitions and execution. 
 
 [http://sarasvati.googlecode.com/svn/wiki/images/legend.jpg]
 
-[#Contents back to table of contents]
+[#Contents Back to Table of Contents]
 
 ==== Single Node ====
 ----------------------------------
@@ -95,7 +96,7 @@ As there are no further steps in the process, it is now *complete* and looks lik
 
   * *Process Completion* - A process with no active tokens is considered complete.
 
-[#Contents back to table of contents]
+[#Contents Back to Table of Contents]
 
 ====Two Nodes====
 -------------------
@@ -127,9 +128,9 @@ The _World_ node will now run its guard and then execute. Finally the node token
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts2-4.jpg]
 
-[#Contents back to table of contents]
+[#Contents Back to Table of Contents]
 
-====Split and Join====
+====Split and Join with Wait States====
 -------------------
 Let us now examine an example which contains concurrent execution. 
 
@@ -211,4 +212,36 @@ Once the _Grant_ task is finished, its node token will also be completed and the
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-9.jpg]
 
-[#Contents back to table of contents]
+[#Contents Back to Table of Contents]
+
+====Split and Join with Wait States====
+-------------------
+Lets now take a look at the same process, except now the approvals will be done by software and will not require a wait state.
+
+The execution will be the same up to the point where _Approval 1_ is executing.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-3.jpg]
+
+Previously, the node token went into a wait state. This time, the approval is done synchronously and the token will be completed. This will generate an arc token on the outgoing arc.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-10.jpg]
+
+Again, the _Grant_ node is a join node, so it will wait for an arc token on the other incoming arc before executing. Execution will continue on the lower outgoing arc of _Request_.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-11.jpg]
+
+Execution will continue into _Approval 2_.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-12.jpg]
+
+This execution will also finish synchronously and an arc token will be generated on the outgoing arc.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-13.jpg]
+
+Execution will finish as before now that all required incoming arcs have tokens on them.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-14.jpg]
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-15.jpg]
+
+[#Contents Back to Table of Contents]
