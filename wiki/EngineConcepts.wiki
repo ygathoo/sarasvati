@@ -126,3 +126,49 @@ The process describes an approval process.
 The process looks like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3.jpg]
+
+This a simplified system, since it does not allow approvals to be denied.
+
+There is more than one way that this process could be executed. 
+
+  * If the approvals are granted by people, the nodes will almost certainly executed asynchronously. This means that when a token arrives at _Approval 1_, the node will generate a notification to the user who is to do the approval. The token will then enter a *wait state*. Execution may continue elsewhere in the process, but this token will wait until the user enters the system and grants approval. 
+  * If approvals are done by software which does a check and then returns immediately the tokens will not have enter a *wait state*, but may continue immediately.
+
+  * *Wait State* - When a token enters a node and the node is executed, it may choose not to immediately continue process execution at the end of the node method. In this case the token will remain in the node until it is complete asynchronously. While the token is waiting to be completed, it is considered to be in a wait state.
+
+Let us view process execution for both these cases, starting with the case where approvals are done by people and thus tokens will need to enter wait states.
+
+Execution will begin as usual, by placing a node token in the nodes marked as being start nodes.
+
+The _Request_ node will be executed. It generates a task for the requester to complete. Until the requester has filled out out the request and completed the task, the token will be in a wait state. During this time the process will look like:
+
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-1.jpg]
+
+*Question:* What happens once the _Request_ has been completed? Which arc or arcs will arc tokens be generated on? 
+
+*Answer:* Sarasvati requires that an arc name be specified when completing a node token. All arcs with this name will have arc tokens generated on them.
+
+Some things to note:
+
+  * Most arcs have no name specified. They are considered to have the 'default' name. 
+  * Usually when completing a node token, the default arc name will be given.
+  * Each arc will have an arc token placed on it in turn. No specific order is guaranteed
+  * When an arc token is place on a node, it will continue on to node immediately and see if the node can be executed. 
+ 
+
+So, now the node token on _Request_ has been completed and arc tokens will be generated on the outgoing arcs. First a node token will be generated on the upper arc (though order of arc execution is not guaranteed).
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-2.jpg]
+
+This arc leads to a node which can be executed. The arc token will be completed and a node token will be placed in the _Approval 1_ node.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-3.jpg]
+
+Here the node token will enter a wait state. Since no further execution can take place here, an arc token will now be generated on the second outgoing arc.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-4.jpg]
+
+Again, since node _Approval 2_ can be executed immediately, the arc token will be completed and a node token will be created. It will also enter into a wait state once the notification to the user has been created.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-5.jpg]
