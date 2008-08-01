@@ -10,7 +10,7 @@
  * [EngineConcepts#Definitions Definitions]
  * [EngineConcepts#Sarasvati_Graph_Execution Graph Execution Explained]
    * [EngineConcepts#Legend  Legend]
-   * [EngineConcepts#One_Node Single Node]
+   * [EngineConcepts#Single_Node Single Node]
    * [EngineConcepts#Two_Nodes Two Nodes]
    * [EngineConcepts#Split_and_Join Split and Join]
 
@@ -56,7 +56,7 @@ First, we introduce a graphical notation for process definitions and execution. 
 
 [EngineConcepts#Contents back to table of contents]
 
-==== Single Node Example ====
+==== Single Node ====
 ----------------------------------
 The simplest useful process definition would consist of a simple node. Here is the graphical representation:
 
@@ -97,7 +97,7 @@ As there are no further steps in the process, it is now *complete* and looks lik
 
 [EngineConcepts#Contents back to table of contents]
 
-====Two nodes====
+====Two Nodes====
 -------------------
 Let's now example a slightly more complicated example. Instead of a single node, we'll have two, the first of which prints out 'Hello', the second prints out 'World'. It looks as follows:
 
