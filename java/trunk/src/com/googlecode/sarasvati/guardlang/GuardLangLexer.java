@@ -55,27 +55,27 @@ public class GuardLangLexer implements GuardLangParser.yyInput
     {
       token = ')';
     }
-    else if ( "IF".equals( next ) )
+    else if ( "if".equalsIgnoreCase( next ) )
     {
       token = GuardLangParser.IF;
     }
-    else if ( "THEN".equals( next ) )
+    else if ( "then".equalsIgnoreCase( next ) )
     {
       token = GuardLangParser.THEN;
     }
-    else if ( "ELSE".equals( next ) )
+    else if ( "else".equalsIgnoreCase( next ) )
     {
       token = GuardLangParser.ELSE;
     }
-    else if ( "AND".equals( next ) )
+    else if ( "and".equalsIgnoreCase( next ) )
     {
       token = GuardLangParser.AND;
     }
-    else if ( "OR".equals( next ) )
+    else if ( "or".equalsIgnoreCase( next ) )
     {
       token = GuardLangParser.OR;
     }
-    else if ( "NOT".equals( next ) )
+    else if ( "not".equalsIgnoreCase( next ) )
     {
       token = GuardLangParser.NOT;
     }

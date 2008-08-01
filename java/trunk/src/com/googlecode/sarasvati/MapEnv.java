@@ -43,6 +43,7 @@ public class MapEnv implements Env
   public MapEnv (Map<String,String> attributes)
   {
     this.attributes = attributes;
+    this.transientAttributes = new HashMap<String,Object>();
   }
 
   @Override
