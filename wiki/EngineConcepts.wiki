@@ -14,6 +14,7 @@
    * [#Two_Nodes Two Nodes]
    * [#Split_and_Join_with_Wait_States Split and Join - With Wait States]
    * [#Split_and_Join_without_Wait_States Split and Join - Without Wait States]
+   * [#Flow Control with Guards Flow Control with Guards]
 
 ==Introduction==
 Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below). 
@@ -245,3 +246,39 @@ Execution will finish as before now that all required incoming arcs have tokens 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-15.jpg]
 
 [#Contents Back to Table of Contents]
+
+====Flow Control with Guards====
+-------------------
+Now that we've seen how execution can split across arcs and join nodes can bring current executions back together, let us examine how to select which outgoing arcs receive tokens and which nodes get executed.
+
+This example uses almost the same process as the previous example. The difference is that either or both approvals may be optional, depending on what is being requested. 
+
+Let is pick up execution after the request has been entered and an arc token generated on the upper arc:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-2.jpg]
+
+Now the node token will be generated in _Approval 1_. 
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-3.jpg]
+
+However, remember that this does *not* mean that the node will immediately execute. First the *guard* must be invoked. Up until now, the guard has always been assumed to just return *Accept*. This time however, the guard is intelligent. It will check to see if this approval is required. If not, it will return a *Skip* response. 
+
+  * *Skip* - A guard response which indicates that the node should not be executed, but that execution should continue on the outgoing nodes. An arc name may be specifying indicated which arcs should be used. If no arc name is given, arcs with the default name (unnamed arcs) will be used.
+
+Assume that _Approval 1_ is not required. The node token will marked as having skipped the node, and execution will continue on the outgoing arc.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-16.jpg]
+
+If the guard for _Approval 2_ returns Accept, then execution will play as follows:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-17.jpg]
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-18.jpg]
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-19.jpg]
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-20.jpg]
+
+
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-21.jpg]
