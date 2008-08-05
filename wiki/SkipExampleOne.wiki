@@ -1,6 +1,8 @@
-#summary Example using Skip
+#summary Concepts: Skip Example One
 
 [EngineConcepts Back to Concepts]
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts3.jpg]
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-1.jpg]
 
