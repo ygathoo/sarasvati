@@ -280,15 +280,15 @@ For the case where the guard for _Approval 2_ returns Accept, the entire executi
 
 ====Flow Control with Guards using Discard====
 -------------------
-Having seen Skip, let us examine how to use the Discard response from guards. Again, using the same example. This time, the assumption is that only one of the guards is required. 
+Having seen Skip, let us examine how to use the Discard response from guards. The same basic process definition is used, only this time, the assumption is that only one of the guards is required. 
 
-The process now looks like:
+The graph now looks like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts4.jpg]
 
 Because we are using discard, only one token will reach _Grant_. This is why the _Grant_ node is no longer a *join node*.
 
-Execution begins as normal. Here we see it as the node token has been generated in _Approval 1_.
+Execution begins as normal. We pick up execution where a node token has been generated in _Approval 1_.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts4-3.jpg]
 
@@ -314,4 +314,4 @@ Remember, because _Grant_ is no longer a join node, it will have a node token ge
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts4-8.jpg]
 
-The complete process can be seen [ConceptExamplesDiscardOne here].
+The complete process can be seen [ConceptsExampleDiscardOne here].
