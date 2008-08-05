@@ -97,6 +97,8 @@ As there are no further steps in the process, it is now *complete* and looks lik
 
   * *Process Completion* - A process with no active tokens is considered complete.
 
+The entire process can be viewed [ConceptsExample1 here].
+
 [#Contents Back to Table of Contents]
 
 ====Two Nodes====
@@ -129,7 +131,10 @@ The _World_ node will now run its guard and then execute. Finally the node token
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts2-4.jpg]
 
+The entire process can be viewed [ConceptsExample2 here].
+
 [#Contents Back to Table of Contents]
+
 
 ====Split and Join with Wait States====
 -------------------
