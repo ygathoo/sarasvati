@@ -133,6 +133,7 @@ The _World_ node will now run its guard and then execute. Finally the node token
 
 ====Split and Join with Wait States====
 -------------------
+
 Let us now examine an example which contains concurrent execution. 
 
 The process describes an approval process. 
@@ -269,16 +270,4 @@ Assume that _Approval 1_ is not required. The node token will marked as having s
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-16.jpg]
 
-If the guard for _Approval 2_ returns Accept, then execution will play as follows:
-
-[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-17.jpg]
-
-[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-18.jpg]
-
-[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-19.jpg]
-
-[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-20.jpg]
-
-
-
-[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-21.jpg]
+For the case where the guard for _Approval 2_ returns Accept, the entire execution can be seen [SkipExampleOne here].
