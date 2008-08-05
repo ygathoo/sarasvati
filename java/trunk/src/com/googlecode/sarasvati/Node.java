@@ -132,6 +132,16 @@ public interface Node
   void execute(Engine engine, NodeToken token);
 
   /**
+   * Allows for Node specific logic to be invoked after
+   * {@link Engine#completeExecution(NodeToken, String)} has been called
+   * on the associated {@link NodeToken}.
+   *
+   * @param engine The {@link Engine} which is executing the process
+   * @param token  The {@link NodeToken} which was just completed.
+   */
+  void completed (Engine engine, NodeToken token);
+
+  /**
    * Returns the text to display when being displayed visually
    *
    * @return The text to display when being presented visually
