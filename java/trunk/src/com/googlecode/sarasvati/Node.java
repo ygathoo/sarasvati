@@ -97,6 +97,13 @@ public interface Node
   String getGuard ();
 
   /**
+   * Returns the graph that this node belongs to.
+   *
+   * @return The associated Graph
+   */
+  Graph getGraph ();
+
+  /**
    * When a NodeToken is created, the associated Node will not
    * automatically be executed. First, the guard function is called,
    * which will indicate which action should be taken. The possible
@@ -138,8 +145,9 @@ public interface Node
    *
    * @param engine The {@link Engine} which is executing the process
    * @param token  The {@link NodeToken} which was just completed.
+   * @param arcName The arc name selected when completing the node token exeuction
    */
-  void completed (Engine engine, NodeToken token);
+  void completed (Engine engine, NodeToken token, String arcName);
 
   /**
    * Returns the text to display when being displayed visually
