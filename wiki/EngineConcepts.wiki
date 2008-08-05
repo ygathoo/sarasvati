@@ -219,6 +219,8 @@ Once the _Grant_ task is finished, its node token will also be completed and the
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-9.jpg]
 
+The entire process can be viewed [ConceptsExampleSplitJoinOne here].
+
 [#Contents Back to Table of Contents]
 
 ====Split and Join without Wait States====
@@ -247,9 +249,7 @@ This execution will also finish synchronously and an arc token will be generated
 
 Execution will finish as before now that all required incoming arcs have tokens on them.
 
-[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-14.jpg]
-
-[http://sarasvati.googlecode.com/svn/wiki/images/concepts3-15.jpg]
+The entire process can be viewed [ConceptsExampleSplitJoinTwo here].
 
 [#Contents Back to Table of Contents]
 
