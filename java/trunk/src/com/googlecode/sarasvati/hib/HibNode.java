@@ -197,6 +197,17 @@ public class HibNode implements Node
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 
+  /**
+   * Does nothing by default. May be overridden by subclasses.
+   *
+   * @see com.googlecode.sarasvati.Node#completed(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.NodeToken)
+   */
+  @Override
+  public void completed (Engine engine, NodeToken token)
+  {
+    // does nothing by default
+  }
+
   @Override
   public int hashCode ()
   {

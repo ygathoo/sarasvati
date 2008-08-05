@@ -178,6 +178,8 @@ public abstract class BaseEngine implements Engine
     process.removeNodeToken( token );
     token.markComplete( this );
 
+    token.getNode().completed( this, token );
+
     for ( Arc arc : outputArcs )
     {
       executeArc( process, newArcToken( process, arc, token ) );
