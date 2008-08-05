@@ -73,15 +73,15 @@ public class MemNode implements Node, Cloneable
   /**
    * Does nothing by default. May be overridden by subclasses.
    *
-   * @see com.googlecode.sarasvati.Node#completed(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.NodeToken)
+   * @see com.googlecode.sarasvati.Node#completed(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.NodeToken, java.lang.String)
    */
   @Override
-  public void completed (Engine engine, NodeToken token)
+  public void completed (Engine engine, NodeToken token, String arcName)
   {
     // does nothing by default
   }
 
-
+  @Override
   public MemGraph getGraph ()
   {
     return graph;
