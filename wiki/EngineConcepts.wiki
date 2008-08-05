@@ -14,7 +14,8 @@
    * [#Two_Nodes Two Nodes]
    * [#Split_and_Join_with_Wait_States Split and Join - With Wait States]
    * [#Split_and_Join_without_Wait_States Split and Join - Without Wait States]
-   * [#Flow_Control_with_Guards Flow Control with Guards]
+   * [#Flow_Control_with_Guards_using_Skip Flow Control with Guards using Skip]
+   * [#Flow_Control_with_Guards_using_Discard Flow Control with Guards using Discard]
 
 ==Introduction==
 Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below). 
@@ -253,13 +254,13 @@ The entire process can be viewed [ConceptsExampleSplitJoinTwo here].
 
 [#Contents Back to Table of Contents]
 
-====Flow Control with Guards====
+====Flow Control with Guards using Skip====
 -------------------
 Now that we've seen how execution can split across arcs and join nodes can bring current executions back together, let us examine how to select which outgoing arcs receive tokens and which nodes get executed.
 
 This example uses almost the same process as the previous example. The difference is that either or both approvals may be optional, depending on what is being requested. 
 
-Let is pick up execution after the request has been entered and an arc token generated on the upper arc:
+Let us pick up execution after the request has been entered and an arc token generated on the upper arc:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-2.jpg]
 
@@ -276,3 +277,41 @@ Assume that _Approval 1_ is not required. The node token will marked as having s
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-16.jpg]
 
 For the case where the guard for _Approval 2_ returns Accept, the entire execution can be seen [SkipExampleOne here].
+
+====Flow Control with Guards using Discard====
+-------------------
+Having seen Skip, let us examine how to use the Discard response from guards. Again, using the same example. This time, the assumption is that only one of the guards is required. 
+
+The process now looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts4.jpg]
+
+Because we are using discard, only one token will reach _Grant_. This is why the _Grant_ node is no longer a *join node*.
+
+Execution begins as normal. Here we see it as the node token has been generated in _Approval 1_.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts4-3.jpg]
+
+In this case, the guard determines that _Approval 1_ is not required, and returns a *Discard* response.
+
+  * *Discard* - A guard response indicating that the node token should be marked as discard, the node should *not* be executed and no tokens will be generated on outgoing arcs.
+
+The process now looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts4-4.jpg]
+
+The node token has been discarded, and execution has continued from the completion of _Request_ where an arc token has been generated on the lower outgoing arc. Execution will now continue as normal. 
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts4-5.jpg]
+
+_Approval 2_ will accept its node token and will continue normally.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts4-6.jpg]
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts4-7.jpg]
+
+Remember, because _Grant_ is no longer a join node, it will have a node token generated on it as soon as any arc tokens arrived.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts4-8.jpg]
+
+The complete process can be seen [ConceptExamplesDiscardOne here].
