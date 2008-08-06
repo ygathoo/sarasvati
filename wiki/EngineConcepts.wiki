@@ -334,7 +334,7 @@ It starts normally. Let us pick it up as _Select_ has a node token generated on 
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts5-3.jpg]
 
-The _Select_ guard will return a *Skip* response which includes the arc name on which to exit. *All arcs with this name will have an arc token generated on them*. In this case, let us say the guard determines that _Approval 2_ is required. It returns *Skip two*. An arc token is then generated on the arc named _two_.
+The _Select_ guard will return a *Skip* response which includes the arc name on which to exit. *All arcs with this name will have an arc token generated on them*. In this case, let us say the guard determines that _Approval 2_ is required. It returns *Skip two*. An arc token is then generated on all arcs named _two_ (of which is there only one in this case).
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts5-4.jpg]
 
