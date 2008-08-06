@@ -16,6 +16,7 @@
    * [#Split_and_Join_without_Wait_States Split and Join - Without Wait States]
    * [#Flow_Control_with_Guards_using_Skip Flow Control with Guards using Skip]
    * [#Flow_Control_with_Guards_using_Discard Flow Control with Guards using Discard]
+   * [#Flow_Control_with_Guards_using_Named_Arcs Flow Control with Guards using Named Arcs]
 
 ==Introduction==
 Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below). 
@@ -129,6 +130,7 @@ The process now looks like:
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts2-3.jpg]
 
 The _World_ node will now run its guard and then execute. Finally the node token will be completed.
+
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts2-4.jpg]
 
@@ -278,6 +280,8 @@ Assume that _Approval 1_ is not required. The node token will marked as having s
 
 For the case where the guard for _Approval 2_ returns Accept, the entire execution can be seen [SkipExampleOne here].
 
+[#Contents Back to Table of Contents]
+
 ====Flow Control with Guards using Discard====
 -------------------
 Having seen Skip, let us examine how to use the Discard response from guards. The same basic process definition is used, only this time, the assumption is that only one of the guards is required. 
@@ -315,3 +319,27 @@ Remember, because _Grant_ is no longer a join node, it will have a node token ge
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts4-8.jpg]
 
 The complete process can be seen [ConceptsExampleDiscardOne here].
+
+[#Contents Back to Table of Contents]
+
+====Flow Control with Guards using Named Arcs====
+-------------------
+This same basic process could be implemented using a guard which returns Skip along with an arc name.
+
+In this variant, a _Select_ node has been inserted after _Request_. This node has no functionality, it only exists to give the guard a place to run.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts5.jpg]
+
+It starts normally, let us pick it up as _Select_ has a node token generated on it, and it's guard is invoked.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts5-3.jpg]
+
+The _Select_ guard will return a *Skip* response which includes the arc name on which to exit. *All arcs with this name will have an arc token generated on them*. In this case, let us say the guard determines that _Approval 2_ is required. It returns *Skip two*. An arc token is then generated on the arc named _two_.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts5-4.jpg]
+
+From here execution continues as normal.
+
+The complete process can be seen [ConceptsExampleSkipTwo here].
+
+[#Contents Back to Table of Contents]
