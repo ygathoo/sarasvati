@@ -330,7 +330,7 @@ In this variant, a _Select_ node has been inserted after _Request_. This node ha
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts5.jpg]
 
-It starts normally, let us pick it up as _Select_ has a node token generated on it, and it's guard is invoked.
+It starts normally. Let us pick it up as _Select_ has a node token generated on it, and its guard is invoked.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts5-3.jpg]
 
