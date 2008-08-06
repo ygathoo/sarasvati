@@ -205,7 +205,7 @@ At some point one of the approvals will be completed. Let's say that it's _Appro
 
 Now the engine will see if the  _Grant_ node can be executed. However, as the dashed border indicates, the _Grant_ node is a *join node*.
 
-  * *Join node* - When an arc token arrives a join node, arc tokens must exist on all other arc *with the same name* before the node will accept a node token.
+  * *Join node* - When an arc token arrives a join node, arc tokens must exist on all other arcs *with the same name* before the node will accept a node token.
 
 Since there are two arcs with the 'default' name coming into _Grant_, and only one of them has an arc token, the node can not be executed at this time. Execution will halt at this point.
 
