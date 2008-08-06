@@ -180,7 +180,7 @@ Some things to note:
   * Most arcs have no name specified. They are considered to have the 'default' name. 
   * Usually when completing a node token, the default arc name will be given.
   * Each arc will have an arc token placed on it in turn. No specific order is guaranteed
-  * When an arc token is place on a node, it will continue on to node immediately and see if the node can be executed. 
+  * When an arc token is place on a node, it will continue on to its end node immediately and see if the node can be executed. 
  
 
 So, now the node token on _Request_ has been completed and arc tokens will be generated on the outgoing arcs. First a node token will be generated on the upper arc (though order of arc execution is not guaranteed).
