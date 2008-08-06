@@ -49,7 +49,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="359.05891"
+     inkscape:cx="269.41605"
      inkscape:cy="826.28437"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -280,14 +280,6 @@
        id="path19591"
        style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:2;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline"
        sodipodi:type="arc" />
-    <rect
-       ry="2.3036981"
-       y="111.55653"
-       x="201.5031"
-       height="13.039894"
-       width="12.251196"
-       id="rect2861"
-       style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.8547982;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1;display:inline" />
     <path
        transform="matrix(0.9232637,0,0,0.974556,-24.919634,-48.307876)"
        d="M 365.71207,170.04579 A 5.471283,5.183321 0 1 1 354.7695,170.04579 A 5.471283,5.183321 0 1 1 365.71207,170.04579 z"
@@ -324,5 +316,34 @@
        x="582.21735"
        y="111.55653"
        ry="2.3036981" />
+    <g
+       style="display:inline"
+       id="g2896"
+       transform="translate(-147.37602,-22.091888)">
+      <rect
+         ry="2.3036981"
+         y="133.64842"
+         x="348.87912"
+         height="13.039894"
+         width="12.251196"
+         id="rect3350"
+         style="fill:#000000;fill-opacity:1;stroke:#000000;stroke-width:1.8547982;stroke-linecap:round;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1" />
+      <path
+         transform="matrix(0.9237282,0,0,0.7199169,77.567916,-63.100941)"
+         d="M 304.66406,282.35107 L 296.02519,287.33873 L 296.02519,277.36342 L 304.66406,282.35107 z"
+         inkscape:randomized="0"
+         inkscape:rounded="0"
+         inkscape:flatsided="true"
+         sodipodi:arg2="1.0471976"
+         sodipodi:arg1="0"
+         sodipodi:r2="2.8796227"
+         sodipodi:r1="5.7592454"
+         sodipodi:cy="282.35107"
+         sodipodi:cx="298.90482"
+         sodipodi:sides="3"
+         id="path3376"
+         style="fill:#ffffff;fill-opacity:1;stroke:#ffffff;stroke-width:1;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+         sodipodi:type="star" />
+    </g>
   </g>
 </svg>
