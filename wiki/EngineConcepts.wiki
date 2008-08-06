@@ -343,3 +343,23 @@ From here execution continues as normal.
 The complete process can be seen [ConceptsExampleSkipTwo here].
 
 [#Contents Back to Table of Contents]
+
+====Flow Control from Node Completion using Named Arcs====
+-------------------
+As mentioned previously, when a node token is completed, an arc name must be specified. Arc tokens will be generated on all outgoing arcs with that name. So the previous example could also be implemented like this:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts6.jpg]
+
+Instead of using the guard on the _Select_ node, the _Request_ node will specify which arc to exit on.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts6-1.jpg]
+
+If we again, specify _two_, the an arc token will be generated on that arc.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts6-2.jpg]
+
+From there, execution will continue normally.
+
+The complete process can be seen [ConceptsExampleSelectArcOne here].
+
+[#Contents Back to Table of Contents]
