@@ -95,6 +95,9 @@ public class HibNodeToken implements NodeToken
   protected GuardAction guardAction;
 
   @Transient
+  private Map<String,Object> transientAttributes = new HashMap<String, Object>();
+
+  @Transient
   protected Env env = null;
 
   @Transient
@@ -102,7 +105,12 @@ public class HibNodeToken implements NodeToken
 
   public HibNodeToken () { /* Default constructor for Hibernate */ }
 
-  public HibNodeToken (HibProcess process, HibNodeRef nodeRef, HibNodeToken attrSetToken, Map<String,String> attrMap, List<HibArcToken> parentTokens)
+  public HibNodeToken (HibProcess process,
+                       HibNodeRef nodeRef,
+                       HibNodeToken attrSetToken,
+                       Map<String,String> attrMap,
+                       List<HibArcToken> parentTokens,
+                       Map<String,Object> transientAttributes)
   {
     this.process      = process;
     this.nodeRef      = nodeRef;
@@ -110,6 +118,8 @@ public class HibNodeToken implements NodeToken
     this.attrMap      = attrMap;
     this.parentTokens = parentTokens;
     this.createDate   = new Date();
+
+    this.transientAttributes = transientAttributes;
   }
 
   public Long getId ()
@@ -233,8 +243,6 @@ public class HibNodeToken implements NodeToken
 
   private class HibTokenEnv implements Env
   {
-    private Map<String,Object> transientAttributes = new HashMap<String, Object>();
-
     public HibTokenEnv()
     {
       // Default constructor
@@ -382,6 +390,26 @@ public class HibNodeToken implements NodeToken
     public void removeTransientAttribute (String name)
     {
       transientAttributes.remove( name );
+    }
+
+    @Override
+    public Iterable<String> getTransientAttributeNames()
+    {
+      return transientAttributes.keySet();
+    }
+
+    @Override
+    public void importEnv(Env copyEnv)
+    {
+      for ( String name : copyEnv.getAttributeNames() )
+      {
+        setStringAttribute( name, copyEnv.getStringAttribute( name ) );
+      }
+
+      for ( String name : copyEnv.getTransientAttributeNames() )
+      {
+        setTransientAttribute( name, copyEnv.getTransientAttribute( name ) );
+      }
     }
   }
 

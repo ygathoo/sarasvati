@@ -150,4 +150,18 @@ public interface Env
    * @param name The attribute name
    */
   void removeTransientAttribute (String name);
+
+  /**
+   * Returns an {@link Iterable} of transient attribute names.
+   *
+   * @return {@link Iterable} of transient attribute names
+   */
+  Iterable<String> getTransientAttributeNames ();
+
+  /**
+   * Copy all attributes from given env, including transient attributes.
+   *
+   * @param env The environment to copy
+   */
+  void importEnv (Env env);
 }

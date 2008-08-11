@@ -16,45 +16,31 @@
 
     Copyright 2008 Paul Lorenz
 */
-
 package com.googlecode.sarasvati.mem;
 
-import java.util.List;
-
-import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.NonRecursiveEngine;
 import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.WorkflowException;
 
-public class MemEngine extends NonRecursiveEngine
+public class MemSubProcessNode extends MemNode
 {
-  @Override
-  public ArcToken newArcToken (Process process, Arc arc, NodeToken parent)
-  {
-    return new MemArcToken( arc, process, parent );
-  }
+  protected String graphName;
 
   @Override
-  public NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
+  public void execute (Engine engine, NodeToken token)
   {
-    MemNodeToken token = new MemNodeToken( node, process );
-    Env env = token.getEnv();
+    Graph subGraph = MemWfGraphCache.get( graphName );
 
-    for ( ArcToken t : parents )
+    if ( subGraph == null )
     {
-      env.importEnv( t.getParentToken().getEnv() );
+      throw new WorkflowException( "No version of graph named '" + graphName + "'. " +
+                                   "Used by node " + getName() + " in graph " + getGraph().getName() );
     }
 
-    return token;
-  }
-
-  @Override
-  public Process newProcess (Graph graph)
-  {
-    return new MemProcess( graph );
+    Process subProcess =  engine.newProcess( subGraph );
+    subProcess.getEnv().importEnv( token.getFullEnv() );
+    engine.startProcess( subProcess );
   }
 }
