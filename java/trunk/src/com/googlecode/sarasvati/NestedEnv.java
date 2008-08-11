@@ -124,4 +124,31 @@ public class NestedEnv implements Env
   {
     outerEnv.removeTransientAttribute( name );
   }
+
+  @Override
+  public Iterable<String> getTransientAttributeNames()
+  {
+    Set<String> names = new HashSet<String>();
+
+    for ( String name : outerEnv.getTransientAttributeNames() )
+    {
+      names.add( name );
+    }
+
+    for ( String name : innerEnv.getTransientAttributeNames() )
+    {
+      names.add( name );
+    }
+
+    return names;
+  }
+
+  /**
+   * Imports the given env into the outer env
+   */
+  @Override
+  public void importEnv(Env env)
+  {
+    outerEnv.importEnv( env );
+  }
 }

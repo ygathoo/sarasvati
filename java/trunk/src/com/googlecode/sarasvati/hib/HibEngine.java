@@ -30,6 +30,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
@@ -77,7 +78,7 @@ public class HibEngine extends NonRecursiveEngine
 
     HibNodeToken attrSetToken = null;
     Map<String,String> attrMap = new HashMap<String,String>();
-
+    Map<String,Object> transientAttributes = new HashMap<String, Object>();
     boolean isMerge = false;
 
     for ( HibArcToken arcToken : hibParents )
@@ -102,9 +103,15 @@ public class HibEngine extends NonRecursiveEngine
       {
         attrMap.putAll( parent.getAttrMap() );
       }
+
+      Env mergeEnv = parent.getEnv();
+      for ( String name : mergeEnv.getTransientAttributeNames() )
+      {
+        transientAttributes.put( name, mergeEnv.getTransientAttribute( name ) );
+      }
     }
 
-    HibNodeToken token = new HibNodeToken( (HibProcess)process, (HibNodeRef)node, attrSetToken, attrMap, hibParents);
+    HibNodeToken token = new HibNodeToken( (HibProcess)process, (HibNodeRef)node, attrSetToken, attrMap, hibParents, transientAttributes);
     session.save( token );
     return token;
   }

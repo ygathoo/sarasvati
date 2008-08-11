@@ -137,4 +137,24 @@ public class MapEnv implements Env
   {
     transientAttributes.remove( name );
   }
+
+  @Override
+  public Iterable<String> getTransientAttributeNames()
+  {
+    return transientAttributes.keySet();
+  }
+
+  @Override
+  public void importEnv (Env env)
+  {
+    for ( String name : env.getAttributeNames() )
+    {
+      setStringAttribute( name, env.getStringAttribute( name ) );
+    }
+
+    for ( String name : env.getTransientAttributeNames() )
+    {
+      setTransientAttribute( name, env.getTransientAttribute( name ) );
+    }
+  }
 }
