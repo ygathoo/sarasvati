@@ -15,6 +15,7 @@ drop table if exists wf_node;
 drop table if exists wf_node_type;
 drop table if exists wf_guard_action;
 drop table if exists wf_process;
+drop table if exists wf_process_state;
 drop table if exists wf_graph;
 
 create table wf_graph
@@ -25,6 +26,20 @@ create table wf_graph
   create_date timestamp    NOT NULL DEFAULT current_timestamp
 );
 
+create table wf_process_state
+(
+  id int NOT NULL PRIMARY KEY,
+  description varchar(255) NOT NULL
+);
+
+insert into wf_process_state values ( 0, 'Created' );
+insert into wf_process_state values ( 1, 'Executing' );
+insert into wf_process_state values ( 2, 'Pending Completion' );
+insert into wf_process_state values ( 3, 'Completed' );
+insert into wf_process_state values ( 4, 'Pending Cancel' );
+insert into wf_process_state values ( 5, 'Canceled' );
+
+
 ALTER TABLE wf_graph
   ADD CONSTRAINT wf_graph_unique
     UNIQUE(name,version);
@@ -33,7 +48,7 @@ create table wf_process
 (
   id          serial       NOT NULL PRIMARY KEY,
   graph_id    int          NOT NULL,
-  state       int          NOT NULL,
+  state       int          NOT NULL REFERENCES wf_process_state,
   create_date timestamp    NOT NULL DEFAULT current_timestamp
 );
 
@@ -49,9 +64,9 @@ ALTER TABLE wf_process_attr
 
 create table wf_node_type
 (
-   id          varchar(255) NOT NULL PRIMARY KEY,
-   description varchar(255) NOT NULL,
-   behaviour   varchar(255) NOT NULL REFERENCES wf_node_type
+  id          varchar(255) NOT NULL PRIMARY KEY,
+  description varchar(255) NOT NULL,
+  behaviour   varchar(255) NOT NULL REFERENCES wf_node_type
 );
 
 insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' );
