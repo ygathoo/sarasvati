@@ -95,7 +95,7 @@ public class HibNodeToken implements NodeToken
   protected GuardAction guardAction;
 
   @Transient
-  private Map<String,Object> transientAttributes = new HashMap<String, Object>();
+  protected Map<String,Object> transientAttributes = new HashMap<String, Object>();
 
   @Transient
   protected Env env = null;
