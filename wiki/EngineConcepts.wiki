@@ -370,8 +370,12 @@ The complete process can be seen [ConceptsExampleSelectArcOne here].
   _This section is a work in progress_
 
   * *Nested Process* - A node in an executing process may create a separate, new process (of the same or different process definition). This new process is known a nested process. The new process gets initialized with the process state of the containing process and the current token. When the nested process completes, the token in the containing process will be completed.
+    * Advantages
+      * The nested process will have it's own process state
+      * Processes may nested recursively
+      * Nested processes will always use the latest version process definition at the time the node is executed.
     * Restrictions
-      * The interaction with the nested process must all be contained by a single node.
+      * The interaction with the nested process must all be contained by a single node. The nested process will execute in isolation. The nodes in the nested process won't interact with the those of the containing process in any way. 
 
 
 There are several reasons why nested processes are desirable:
@@ -381,4 +385,16 @@ There are several reasons why nested processes are desirable:
   # Having a new scope for process variables
   # Recursive behavior
 
-The first two reasons differ from the second two, in that they are, in some sense, optional. Extracting common functionality and componentizing large process definitions are done for solid software engineering reasons. However, the process definitions could be build as single large graph.
+The first two reasons differ from the second two, in that they are, in some sense, optional. Extracting common functionality and componentizing large process definitions are done for the software engineering reasons of resuse and encapsulation. However, the process definitions could be build as single large graph. For this reason, Sarasvati uses *graph composition* to handle these cases.
+
+  * *Graph composition* - The set of process definitions may be seen as a single, disconnnected graph. A node may contain arcs to nodes in other process definitions. These arcs are refered to as *external arcs*. When the process definition is loaded, referenced external processss definitions will be loaded as well. All the process definitions will be composed into a single, larger graph. The external arcs wil become regular arcs. The same external processes definition may be embedded more than once. Each *external instance* of an external process definition will be given a unique identifier.
+    * Advantages
+      * Interactions with external process definitions are not limited to a single node. The connections may be as complicated as within process definition.
+      * Since the graph is not nested, execution is simple.
+      * All nodes will share a single process variable scope, allowing easy sharing of variables.
+    * Disadvantages
+      * Recursion is not allowed, since this would lead to an infinite loop during loading. *NOTE:* As in regular programing, recursive structures can be implemented using non-recursive techniques.
+      * All nodes will share a single process variable scope. Sometimes it is desirable to have shared state for a subset of the nodes in a process definition.
+      * The version of an external graph is set when the process definition is loaded, rather than when nodes from that graph are executed. If an external process definition is updated, process definitions referring to it must be reloaded as well to pick up the changes.
+
+  * *External Instance* - 
