@@ -401,7 +401,7 @@ The first two reasons differ from the second two, in that they are, in some sens
       * All nodes will share a single process variable scope. Sometimes it is desirable to have shared state for a subset of the nodes in a process definition.
       * The version of an external graph is set when the process definition is loaded, rather than when nodes from that graph are executed. If an external process definition is updated, process definitions referring to it must be reloaded as well to pick up the changes.
 
-  * *External Arc* - An arc which has an endpoint in an external process definition. While normal arcs are always specified as originating in the node where they are defined (aka *out arcs*(, it is not possible to add arcs to an external process. Therefore external arcs may either be *in arcs* or *out arcs*.
+  * *External Arc* - An arc which has an endpoint in an external process definition. While normal arcs are always specified as originating in the node where they are defined (aka *out arcs*), it is not possible to add arcs to an external process. Therefore external arcs may either be *in arcs* or *out arcs*.
     * *Out Arc* - An arc which starts in the defining node and ends in a specified node
     * *In Arc* - An arc which starts in a specified and ends in the node in which it is defined.
 
