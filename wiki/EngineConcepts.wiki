@@ -20,7 +20,7 @@
    * [#Flow_Control_from_Node_Completion_using_Named_Arcs Flow Control from Node Completion using Named Arcs]
 
 ==Introduction==
-Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below). 
+Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below).
 
 We begin with the some definitions, move on to features likely to be common across most engines, then explain Sarasvati specifics.
 
@@ -28,23 +28,23 @@ We begin with the some definitions, move on to features likely to be common acro
 
 Graphs come with a set of common terms. To begin with, a graph is made up a set of things, hereafter refered to as *nodes* and a set of connections between _nodes_, know as *arcs*.
 
-  * *Graph* - Set of nodes, with set of arcs connecting the nodes. While graphs have a wider applicability, graph here is synonymous with process definition. 
+  * *Graph* - Set of nodes, with set of arcs connecting the nodes. While graphs have a wider applicability, graph here is synonymous with process definition.
     * Also know as: Process Definition, Network, Workflow
 
-  * *Node* - An element of a graph. A node corresponds roughly to an action as defined [Workflow previously]. Nodes can be thought of as pieces of code, waiting to be executed when their turn comes. 
+  * *Node* - An element of a graph. A node corresponds roughly to an action as defined [Workflow previously]. Nodes can be thought of as pieces of code, waiting to be executed when their turn comes.
     * Also known as: Vertex, Place
 
-  * *Arc* - A directed connection between two nodes. 'Directed' means that arcs have a start node and an end node. In same cases, an arc may have a label, or name. Named arcs are discussed in more detail later. 
+  * *Arc* - A directed connection between two nodes. 'Directed' means that arcs have a start node and an end node. In same cases, an arc may have a label, or name. Named arcs are discussed in more detail later.
     * Also know as: Edge, Transition
 
   * *Predecessor* - If two nodes are connected by an arc then the node at the beginning of the arc is the _predecessor_ of the node at the end of the arc. How nodes are connected by arcs defines the order of execution. Generally a node may not execute until at last one, potentially many or all, of its predecessors has executed. Nodes may have many arcs exiting and entering them.
 
 These definitions cover the parts of a process definition. However, they don't cover how that process definition is actually executed. When a process definition gets executed, it is called a *process*. Somehow, a process must track which nodes are being executed. This is generally accomplished by placing markers on the active nodes. These markers are generally called *tokens*.
 
-  * *Process* - An executing process definition. A process definition may have have zero, one or many processes executing at any given time. 
+  * *Process* - An executing process definition. A process definition may have have zero, one or many processes executing at any given time.
     * Also known as: Case, Instance, Workflow
 
-  * *Token* - The set of active tokens marks the current process state. Tokens generally point to a node which is currently executing. Tokens sometimes have associated state, which is a way of passing data from node to node. 
+  * *Token* - The set of active tokens marks the current process state. Tokens generally point to a node which is currently executing. Tokens sometimes have associated state, which is a way of passing data from node to node.
     * Also know as: Execution
 
 [#Contents Back to Table of Contents]
@@ -67,7 +67,7 @@ The simplest useful process definition would consist of a simple node. Here is t
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts1.jpg]
 
-How will this process be executed? First the engine needs to determine where to start execution. 
+How will this process be executed? First the engine needs to determine where to start execution.
 
   * *Start Node* - A node at which a token will be placed when process execution begins.
 
@@ -87,10 +87,10 @@ At this point the node has not yet been executed. Before it can be though, its *
 
   * *Node Guard* - Nodes have functionality associated with them, which will be executed when a node token is accepted into the node. However, before a node is executed, its guard will be executed. The guard will is allowed one of three responses:
     * *Accept* - The node will be executed.
-    * *Discard* - The node token will be marked as discarded and the node will not be executed. 
+    * *Discard* - The node token will be marked as discarded and the node will not be executed.
     * *Skip*    - The node will _not_ be executed, however, processing will continue as if the node had completed execution normally.
 
-By default, a node's guard will return Accept. The node will then be *executed*. This should cause 'Hello, World!' to be printed out. 
+By default, a node's guard will return Accept. The node will then be *executed*. This should cause 'Hello, World!' to be printed out.
 
   * *Node Execution* - When a node is executed, whatever custom logic has been assigned by the developer will run. To complete node execution, the node must inform the engine that that the given node token has been completed. Node completion may happen synchronously as part of the execution of the node function or it may happen later, asynchronously.
 
@@ -143,9 +143,9 @@ The entire process can be viewed [ConceptsExample2 here].
 ====Split and Join with Wait States====
 -------------------
 
-Let us now examine an example which contains concurrent execution. 
+Let us now examine an example which contains concurrent execution.
 
-The process describes an approval process. 
+The process describes an approval process.
   # A request is made
   # Two approvals must be obtained
   # The request is granted
@@ -156,9 +156,9 @@ The process looks like:
 
 This a simplified system, since it does not allow approvals to be denied.
 
-There is more than one way that this process could be executed. 
+There is more than one way that this process could be executed.
 
-  * If the approvals are granted by people, the nodes will almost certainly executed asynchronously. This means that when a token arrives at _Approval 1_, the node will generate a notification to the user who is to do the approval. The token will then enter a *wait state*. Execution may continue elsewhere in the process, but this token will wait until the user enters the system and grants approval. 
+  * If the approvals are granted by people, the nodes will almost certainly executed asynchronously. This means that when a token arrives at _Approval 1_, the node will generate a notification to the user who is to do the approval. The token will then enter a *wait state*. Execution may continue elsewhere in the process, but this token will wait until the user enters the system and grants approval.
   * If approvals are done by software which does a check and then returns immediately the tokens will not have enter a *wait state*, but may continue immediately.
 
   * *Wait State* - When a token enters a node and the node is executed, it may choose not to immediately continue process execution at the end of the node method. In this case the token will remain in the node until it is complete asynchronously. While the token is waiting to be completed, it is considered to be in a wait state.
@@ -172,17 +172,17 @@ The _Request_ node will be executed. It generates a task for the requester to co
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-1.jpg]
 
-*Question:* What happens once the _Request_ has been completed? Which arc or arcs will arc tokens be generated on? 
+*Question:* What happens once the _Request_ has been completed? Which arc or arcs will arc tokens be generated on?
 
 *Answer:* Sarasvati requires that an arc name be specified when completing a node token. All arcs with this name will have arc tokens generated on them.
 
 Some things to note:
 
-  * Most arcs have no name specified. They are considered to have the 'default' name. 
+  * Most arcs have no name specified. They are considered to have the 'default' name.
   * Usually when completing a node token, the default arc name will be given.
   * Each arc will have an arc token placed on it in turn. No specific order is guaranteed
-  * When an arc token is place on a node, it will continue on to its end node immediately and see if the node can be executed. 
- 
+  * When an arc token is place on a node, it will continue on to its end node immediately and see if the node can be executed.
+
 
 So, now the node token on _Request_ has been completed and arc tokens will be generated on the outgoing arcs. First a node token will be generated on the upper arc (though order of arc execution is not guaranteed).
 
@@ -214,7 +214,7 @@ At some point later, the token at _Approval 1_ is completed. This generates an a
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-7.jpg]
 
-Now when the engine tries to execute _Grant_ it finds arc tokens on all the incoming 'default' arcs. These arc tokens are marked complete and a node token is generated on _Grant_. 
+Now when the engine tries to execute _Grant_ it finds arc tokens on all the incoming 'default' arcs. These arc tokens are marked complete and a node token is generated on _Grant_.
 
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-8.jpg]
@@ -261,17 +261,17 @@ The entire process can be viewed [ConceptsExampleSplitJoinTwo here].
 -------------------
 Now that we've seen how execution can split across arcs and join nodes can bring current executions back together, let us examine how to select which outgoing arcs receive tokens and which nodes get executed.
 
-This example uses almost the same process as the previous example. The difference is that either or both approvals may be optional, depending on what is being requested. 
+This example uses almost the same process as the previous example. The difference is that either or both approvals may be optional, depending on what is being requested.
 
 Let us pick up execution after the request has been entered and an arc token generated on the upper arc:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-2.jpg]
 
-Now the node token will be generated in _Approval 1_. 
+Now the node token will be generated in _Approval 1_.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-3.jpg]
 
-However, remember that this does *not* mean that the node will immediately execute. First the *guard* must be invoked. Up until now, the guard has always been assumed to just return *Accept*. This time however, the guard is intelligent. It will check to see if this approval is required. If not, it will return a *Skip* response. 
+However, remember that this does *not* mean that the node will immediately execute. First the *guard* must be invoked. Up until now, the guard has always been assumed to just return *Accept*. This time however, the guard is intelligent. It will check to see if this approval is required. If not, it will return a *Skip* response.
 
   * *Skip* - A guard response which indicates that the node should not be executed, but that execution should continue on the outgoing nodes. An arc name may be specifying indicated which arcs should be used. If no arc name is given, arcs with the default name (unnamed arcs) will be used.
 
@@ -285,7 +285,7 @@ For the case where the guard for _Approval 2_ returns Accept, the entire executi
 
 ====Flow Control with Guards using Discard====
 -------------------
-Having seen Skip, let us examine how to use the Discard response from guards. The same basic process definition is used, only this time, the assumption is that only one of the guards is required. 
+Having seen Skip, let us examine how to use the Discard response from guards. The same basic process definition is used, only this time, the assumption is that only one of the guards is required.
 
 The graph now looks like:
 
@@ -305,7 +305,7 @@ The process now looks like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts4-4.jpg]
 
-The node token has been discarded, and execution has continued from the completion of _Request_ where an arc token has been generated on the lower outgoing arc. Execution will now continue as normal. 
+The node token has been discarded, and execution has continued from the completion of _Request_ where an arc token has been generated on the lower outgoing arc. Execution will now continue as normal.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts4-5.jpg]
 
@@ -364,3 +364,21 @@ From there, execution will continue normally.
 The complete process can be seen [ConceptsExampleSelectArcOne here].
 
 [#Contents Back to Table of Contents]
+
+===Nested Processes and Graph Composition===
+-------------------------------------------------------------------------
+  _This section is a work in progress_
+
+  * *Nested Process* - A node in an executing process may create a separate, new process (of the same or different process definition). This new process is known a nested process. The new process gets initialized with the process state of the containing process and the current token. When the nested process completes, the token in the containing process will be completed.
+    * Restrictions
+      * The interaction with the nested process must all be contained by a single node.
+
+
+There are several reasons why nested processes are desirable:
+
+  # Extracting common functionality
+  # Make large process definitions easier to work with by componentizing them
+  # Having a new scope for process variables
+  # Recursive behavior
+
+The first two reasons differ from the second two, in that they are, in some sense, optional. Extracting common functionality and componentizing large process definitions are done for solid software engineering reasons. However, the process definitions could be build as single large graph.
