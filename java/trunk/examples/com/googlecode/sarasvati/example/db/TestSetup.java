@@ -47,12 +47,12 @@ public class TestSetup
 
     HibEngine.addToConfiguration( config, false );
 
-    config.addAnnotatedClass( NodeTask.class );
+    config.addAnnotatedClass( TaskNode.class );
     config.addAnnotatedClass( Task.class );
     config.addAnnotatedClass( TaskState.class );
     config.addAnnotatedClass( NodeTaskDetail.class );
-    config.addAnnotatedClass( NodeInit.class );
-    config.addAnnotatedClass( NodeDump.class );
+    config.addAnnotatedClass( InitNode.class );
+    config.addAnnotatedClass( DumpNode.class );
 
     sessionFactory = config.buildSessionFactory();
   }

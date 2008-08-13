@@ -34,12 +34,14 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.Session;
 import org.hibernate.annotations.DiscriminatorFormula;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.guardlang.GuardLang;
@@ -73,7 +75,7 @@ public class HibNode implements Node
 
   protected String guard;
 
-  protected HibNode () { /* Default constructor for Hibernate */ }
+  public HibNode () { /* Default constructor for Hibernate */ }
 
   public HibNode (HibGraph graph,
                   String name,
@@ -216,6 +218,13 @@ public class HibNode implements Node
    */
   @Override
   public void completed (Engine engine, NodeToken token, String arcName)
+  {
+    // does nothing by default
+  }
+
+  @SuppressWarnings("unused")
+  public void loadCustom (Session session, Object custom)
+    throws ImportException
   {
     // does nothing by default
   }

@@ -18,51 +18,17 @@
 */
 package com.googlecode.sarasvati.example.mem;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.mem.MemNode;
 
-public class NodeTask extends MemNode
+public class DumpNode extends MemNode
 {
-  protected String taskName;
-  protected String taskDesc;
-
-  public NodeTask (MemNode other)
-  {
-    super( other );
-  }
-
-  public String getTaskName ()
-  {
-    return taskName;
-  }
-
-  public void setTaskName (String taskName)
-  {
-    this.taskName = taskName;
-  }
-
-  public String getTaskDesc ()
-  {
-    return taskDesc;
-  }
-
-  public void setTaskDesc (String taskDesc)
-  {
-    this.taskDesc = taskDesc;
-  }
-
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );
-    TaskList.getTasks().add( newTask );
-
-    Env env = token.getEnv();
-    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
-
-    env = token.getProcess().getEnv();
-    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
+    System.out.println( "Accepted into: " + getName() );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }

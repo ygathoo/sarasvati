@@ -27,17 +27,15 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.ImportException;
+import com.googlecode.sarasvati.GraphLoader;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
-import com.googlecode.sarasvati.mem.MemLoader;
-import com.googlecode.sarasvati.mem.MemNode;
-import com.googlecode.sarasvati.mem.MemProcess;
 import com.googlecode.sarasvati.mem.MemGraphRepository;
+import com.googlecode.sarasvati.mem.MemProcess;
 import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
@@ -226,48 +224,13 @@ public class MemConsole
   public static void loadWorkflows () throws Exception
   {
     XmlLoader xmlLoader = new XmlLoader( XmlTaskDef.class );
-    MemLoader wfLoader = new MemLoader();
+    MemEngine engine = new MemEngine();
 
-    wfLoader.addCustomType( "task", new MemLoader.NodeFactory()
-    {
-      @Override
-      public MemNode createNode( MemNode node, Object custom )
-        throws ImportException
-      {
-        if ( custom == null || !(custom instanceof XmlTaskDef) )
-        {
-          throw new ImportException( "Task node '" + node.getName() +
-                                     "' in definition of '" + node.getGraph().getName() +
-                                     "' contains no (or improperly specified) task-def element." );
-        }
+    engine.getFactory().addType( "task", TaskNode.class );
+    engine.getFactory().addType( "init", InitNode.class );
+    engine.getFactory().addType( "dump", DumpNode.class );
 
-        XmlTaskDef taskDef = (XmlTaskDef)custom;
-
-        NodeTask nodeTask = new NodeTask( node );
-        nodeTask.setTaskName( taskDef.getTaskName() );
-        nodeTask.setTaskDesc( taskDef.getDescription() );
-
-        return nodeTask;
-      }
-    });
-
-    wfLoader.addCustomType( "init", new MemLoader.NodeFactory()
-    {
-      @Override
-      public MemNode createNode( MemNode node, Object custom )
-      {
-        return new NodeInit( node );
-      }
-    });
-
-    wfLoader.addCustomType( "dump", new MemLoader.NodeFactory()
-    {
-      @Override
-      public MemNode createNode( MemNode node, Object custom )
-      {
-        return new NodeDump( node );
-      }
-    });
+    GraphLoader<MemGraph> wfLoader = new GraphLoader<MemGraph>( engine.getFactory(), engine.getRepository() );
 
     File basePath = new File( "/home/paul/workspace/wf-common/test-wf/" );
     XmlWorkflowResolver resolver = new DefaultFileXmlWorkflowResolver(xmlLoader, basePath );
@@ -290,7 +253,7 @@ public class MemConsole
       {
         try
         {
-          wfLoader.importWithDependencies( name, resolver );
+          wfLoader.loadWithDependencies( name, resolver );
         }
         catch( Exception e )
         {

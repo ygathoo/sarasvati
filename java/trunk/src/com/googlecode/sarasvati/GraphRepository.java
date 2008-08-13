@@ -20,13 +20,45 @@ package com.googlecode.sarasvati;
 
 import java.util.List;
 
+/**
+ * The graph repository is an engine specific way of accessing instances of
+ * {@link Graph} which have been loaded. A database backed engine would
+ * provide a repository which queried the database, while a memory backed
+ * engine would use some memory cache. Other implementation are possible,
+ * such as a file backed repository.
+ *
+ * @author Paul Lorenz
+ */
 public interface GraphRepository<T extends Graph>
 {
+  /**
+   * Returns The newest {@link Graph} with the given name, or null if none is found.
+   *
+   * @param name The graph name
+   *
+   * @return The newest {@link Graph} with the given name, or null if none is found.
+   */
   T getLatestGraph (String name);
 
+  /**
+   * Returns all graphs with the given name.
+   *
+   * @param name The name to match
+   * @return All graphs with the given name
+   */
   List<T> getGraphs (String name);
 
+  /**
+   * Returns all graphs accessible via this repository.
+   *
+   * @return All graphs accessible via this repository.
+   */
   List<T> getGraphs ();
 
+  /**
+   * Adds a graph to the repository. Used by the {@link GraphLoader}.
+   *
+   * @param graph The graph to add to the repository.
+   */
   void addGraph (T graph);
 }
