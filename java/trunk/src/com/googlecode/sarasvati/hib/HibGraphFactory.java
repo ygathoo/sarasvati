@@ -25,22 +25,23 @@ import java.util.Map;
 
 import org.hibernate.Session;
 
+import com.googlecode.sarasvati.AbstractGraphFactory;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.GraphFactory;
+import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 
-public class HibGraphFactory implements GraphFactory
+public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 {
   private Session session;
 
   HibGraphFactory(Session session)
   {
-    super();
+    super( HibNode.class );
     this.session = session;
   }
 
@@ -53,13 +54,35 @@ public class HibGraphFactory implements GraphFactory
   }
 
   @Override
-  public HibArc createArc (Graph graph, Node startNode, Node endNode, String name)
+  public HibArc newArc (HibGraph graph, Node startNode, Node endNode, String name)
   {
-    HibGraph hibGraph = (HibGraph)graph;
-    HibArc arc = new HibArc( hibGraph, startNode, endNode, name );
+    HibArc arc = new HibArc( graph, startNode, endNode, name );
     session.save( arc );
-    hibGraph.getArcs().add( arc );
+    graph.getArcs().add( arc );
     return arc;
+  }
+
+  @Override
+  public Node newNode (HibGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard, Object custom)
+    throws ImportException
+  {
+    HibNode node = (HibNode)newNode( type );
+    node.setGraph( graph );
+    node.setName( name );
+    node.setType( type );
+    node.setJoin( isJoin );
+    node.setStart( isStart );
+    node.setGuard( guard );
+
+    node.loadCustom( session, custom );
+
+    session.save( node );
+
+    HibNodeRef nodeRef = new HibNodeRef( graph, node, "" );
+    session.save( nodeRef );
+    graph.getNodes().add( nodeRef );
+
+    return nodeRef;
   }
 
   @Override
@@ -71,19 +94,18 @@ public class HibGraphFactory implements GraphFactory
   }
 
   @Override
-  public Node importNode (Graph graph, Node node, String instanceName)
+  public Node importNode (HibGraph graph, Node node, String instanceName)
   {
     HibNodeRef nodeRef = (HibNodeRef)node;
-    HibGraph   hibGraph   = (HibGraph)graph;
 
     String label = nodeRef.getInstance();
     label = label == null || "".equals( label ) ? instanceName : instanceName + ":" + label;
 
-    HibNodeRef newRef = new HibNodeRef( hibGraph, nodeRef.getNode(), label );
+    HibNodeRef newRef = new HibNodeRef( graph, nodeRef.getNode(), label );
     session.save( newRef );
-    hibGraph.getNodes().add( newRef );
+    graph.getNodes().add( newRef );
 
-    return nodeRef;
+    return newRef;
   }
 
   @SuppressWarnings("unchecked")

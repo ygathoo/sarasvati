@@ -1,8 +1,26 @@
+/*
+    This file is part of Sarasvati.
+
+    Sarasvati is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    Sarasvati is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2008 Paul Lorenz
+*/
 package com.googlecode.sarasvati;
 
 import java.util.List;
 
-public interface GraphFactory
+public interface GraphFactory<G extends Graph>
 {
   /**
    * Generates a new graph instance with the given name and version.
@@ -11,7 +29,7 @@ public interface GraphFactory
    * @param version The version of the graph to create
    * @return A new {@link Graph}
    */
-  Graph newGraph (String name, int version);
+  G newGraph (String name, int version);
 
   /**
    * Creates a new {@link Arc} with given start node, end node and node name.
@@ -24,7 +42,10 @@ public interface GraphFactory
    *
    * @throws ImportException If the arc can not be created, or if it is passed invalid data.
    */
-  Arc createArc (Graph graph, Node startNode, Node endNode, String name) throws ImportException;
+  Arc newArc (G graph, Node startNode, Node endNode, String name) throws ImportException;
+
+  Node newNode (G graph, String name, String type, boolean isJoin, boolean isStart, String guard, Object custom)
+    throws ImportException;
 
   /**
    * Imports a node from an external graph into the given graph.
@@ -35,7 +56,7 @@ public interface GraphFactory
    *
    * @return The new, imported node
    */
-  Node importNode (Graph graph, Node node, String instanceName);
+  Node importNode (G graph, Node node, String instanceName);
 
   /**
    * Generates a new {@link Process} for the given {@link Graph}. Execution

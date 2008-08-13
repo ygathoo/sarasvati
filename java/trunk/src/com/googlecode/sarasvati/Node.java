@@ -21,6 +21,7 @@
  */
 package com.googlecode.sarasvati;
 
+
 /**
  * A node corresponds to an action in a process definition.
  * It may perform some function. In some cases it may not

@@ -23,6 +23,7 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.guardlang.GuardLang;
@@ -40,7 +41,7 @@ public class MemNode implements Node, Cloneable
 
   protected boolean isExternal;
 
-  protected MemNode ()
+  public MemNode ()
   {
     /* Default constructor */
   }
@@ -99,16 +100,31 @@ public class MemNode implements Node, Cloneable
     return guard;
   }
 
+  public void setGuard (String guard)
+  {
+    this.guard = guard;
+  }
+
   @Override
   public String getName ()
   {
     return name;
   }
 
+  public void setName (String name)
+  {
+    this.name = name;
+  }
+
   @Override
   public String getType ()
   {
     return type;
+  }
+
+  public void setType (String type)
+  {
+    this.type = type;
   }
 
   @Override
@@ -128,10 +144,20 @@ public class MemNode implements Node, Cloneable
     return isJoin;
   }
 
+  public void setJoin (boolean isJoin)
+  {
+    this.isJoin = isJoin;
+  }
+
   @Override
   public boolean isStart ()
   {
     return isStart;
+  }
+
+  public void setStart (boolean isStart)
+  {
+    this.isStart = isStart;
   }
 
   public boolean isExternal ()
@@ -150,6 +176,12 @@ public class MemNode implements Node, Cloneable
     return name;
   }
 
+  @SuppressWarnings("unused")
+  public void loadCustom (Object custom) throws ImportException
+  {
+    // does nothing by default
+  }
+
   @Override
   public MemNode clone ()
   {
@@ -157,7 +189,7 @@ public class MemNode implements Node, Cloneable
     {
       return (MemNode)super.clone();
     }
-    catch( CloneNotSupportedException cnse )
+    catch ( CloneNotSupportedException cnse )
     {
       throw new RuntimeException( cnse );
     }

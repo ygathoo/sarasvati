@@ -24,11 +24,10 @@ import java.io.FilenameFilter;
 
 import org.hibernate.Session;
 
-import com.googlecode.sarasvati.ImportException;
+import com.googlecode.sarasvati.GraphLoader;
 import com.googlecode.sarasvati.example.XmlTaskDef;
-import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.hib.HibLoader;
+import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
@@ -44,34 +43,13 @@ public class TestDbLoad
 
     HibEngine engine = new HibEngine( sess );
     XmlLoader xmlLoader = new XmlLoader( XmlTaskDef.class );
-    HibLoader wfLoader = new HibLoader( engine );
 
-    wfLoader.addCustomType( "task", new HibLoader.NodeFactory()
-    {
-      @Override
-      public HibNode createNode( HibEngine wfEngine, HibNode node, Object custom )
-        throws ImportException
-      {
-        if ( custom == null || !(custom instanceof XmlTaskDef) )
-        {
-          throw new ImportException( "Task node '" + node.getName() +
-                                     "' in definition of '" + node.getGraph().getName() +
-                                     "' contains no (or improperly specified) task-def element." );
-        }
+    engine.getFactory().addType( "task", TaskNode.class );
+    engine.getFactory().addType( "init", InitNode.class );
+    engine.getFactory().addType( "dump", DumpNode.class );
 
-        XmlTaskDef taskDef = (XmlTaskDef)custom;
-
-        NodeTask nodeTask = new NodeTask( node );
-        wfEngine.getSession().save( nodeTask );
-
-        nodeTask.getDetail().setId( nodeTask.getId() );
-        nodeTask.getDetail().setTaskName( taskDef.getTaskName() );
-        nodeTask.getDetail().setTaskDesc( taskDef.getDescription().trim() );
-        wfEngine.getSession().save( nodeTask.getDetail() );
-
-        return nodeTask;
-      }
-    });
+    GraphLoader<HibGraph> wfLoader = new GraphLoader<HibGraph>( engine.getFactory(),
+                                                                engine.getRepository() );
 
     File baseDir = new File( "/home/paul/workspace/wf-common/test-wf/" );
 
@@ -93,7 +71,7 @@ public class TestDbLoad
 
       try
       {
-        wfLoader.importWithDependencies( name, resolver );
+        wfLoader.loadWithDependencies( name, resolver );
       }
       catch ( Exception t )
       {

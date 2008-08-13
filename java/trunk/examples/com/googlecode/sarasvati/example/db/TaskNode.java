@@ -28,26 +28,22 @@ import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.hib.HibNodeToken;
 
 @Entity
 @DiscriminatorValue( "task" )
-public class NodeTask extends HibNode
+public class TaskNode extends HibNode
 {
   @OneToOne (cascade = { CascadeType.REMOVE } )
   @PrimaryKeyJoinColumn
   protected NodeTaskDetail detail;
 
-  protected NodeTask() { /* Default constructor for Hibernate */ }
-
-  public NodeTask( HibNode other )
-  {
-    super( other );
-    detail = new NodeTaskDetail ();
-  }
+  public TaskNode() { /* Default constructor for Hibernate */ }
 
   public NodeTaskDetail getDetail ()
   {
@@ -91,5 +87,27 @@ public class NodeTask extends HibNode
 
     env = token.getProcess().getEnv();
     env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
+  }
+
+  @Override
+  public void loadCustom (Session session, Object custom)
+    throws ImportException
+  {
+    if ( custom == null || !(custom instanceof XmlTaskDef) )
+    {
+      throw new ImportException( "Task node '" + getName() +
+                                 "' in definition of '" + getGraph().getName() +
+                                 "' contains no (or improperly specified) task-def element." );
+    }
+
+    XmlTaskDef taskDef = (XmlTaskDef)custom;
+
+    session.save( this );
+
+    detail = new NodeTaskDetail();
+    detail.setId( getId() );
+    detail.setTaskName( taskDef.getTaskName() );
+    detail.setTaskDesc( taskDef.getDescription().trim() );
+    session.save( detail );
   }
 }

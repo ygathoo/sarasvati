@@ -21,47 +21,68 @@ package com.googlecode.sarasvati.mem;
 
 import java.util.List;
 
+import com.googlecode.sarasvati.AbstractGraphFactory;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.GraphFactory;
 import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 
-public class MemGraphFactory implements GraphFactory
+public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
 {
   public static final MemGraphFactory INSTANCE = new MemGraphFactory();
+
+  public MemGraphFactory ()
+  {
+    super( MemNode.class );
+  }
 
   @Override
   public MemGraph newGraph (String name, int version)
   {
-    MemGraph graph = new MemGraph( name );
-    MemGraphRepository.INSTANCE.addGraph( graph );
-    return graph;
+    return new MemGraph( name );
   }
 
   @Override
-  public Arc createArc (Graph graph, Node startNode, Node endNode, String name)
+  public Arc newArc (MemGraph graph, Node startNode, Node endNode, String name)
       throws ImportException
   {
     MemArc arc = new MemArc( name, startNode, endNode );
-    ((MemGraph)graph).getArcs().add( arc );
+    graph.getArcs().add( arc );
     return arc;
   }
 
   @Override
-  public Node importNode (Graph graph, Node node, String instanceName)
+  public Node newNode (MemGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard, Object custom)
+    throws ImportException
+  {
+    MemNode node = (MemNode)newNode( type );
+    node.setGraph( graph );
+    node.setName( name );
+    node.setType( type );
+    node.setJoin( isJoin );
+    node.setStart( isStart );
+    node.setGuard( guard );
+
+    node.loadCustom( custom );
+
+    graph.getNodes().add( node);
+
+    return node;
+  }
+
+  @Override
+  public Node importNode (MemGraph graph, Node node, String instanceName)
   {
     MemNode memNode = (MemNode)node;
     MemNode newNode = memNode.clone();
     newNode.setGraph( graph );
     newNode.setExternal( true );
 
-    MemGraph memGraph = (MemGraph)graph;
-    memGraph.getNodes().add( newNode );
+    graph.getNodes().add( newNode );
 
     return newNode;
   }

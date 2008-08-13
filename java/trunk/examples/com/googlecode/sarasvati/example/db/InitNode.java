@@ -16,24 +16,37 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.example.mem;
+package com.googlecode.sarasvati.example.db;
+
+import java.util.Random;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.mem.MemNode;
+import com.googlecode.sarasvati.hib.HibNode;
 
-public class NodeDump extends MemNode
+@Entity
+@DiscriminatorValue( "init" )
+public class InitNode extends HibNode
 {
-  public NodeDump (MemNode node)
-  {
-    super( node );
-  }
-
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    System.out.println( "Accepted into: " + getName() );
+    long iter = 0;
+
+    Env env = token.getEnv();
+
+    if ( env.hasAttribute( "iter" ) )
+    {
+      iter = env.getLongAttribute( "iter" );
+    }
+
+    env.setLongAttribute( "iter", ++iter );
+    env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }
