@@ -18,6 +18,8 @@
    * [#Flow_Control_with_Guards_using_Discard Flow Control with Guards using Discard]
    * [#Flow_Control_with_Guards_using_Named_Arcs Flow Control with Guards using Named Arcs]
    * [#Flow_Control_from_Node_Completion_using_Named_Arcs Flow Control from Node Completion using Named Arcs]
+   * [#Flow_Control_from_Node_Completion_using_Named_Arcs Flow Control from Node Completion using Named Arcs]
+ * [#Nested_Processes_and_Graph_Composition Nested Processes and Graph Composition]
 
 ==Introduction==
 Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below).
@@ -369,6 +371,8 @@ The complete process can be seen [ConceptsExampleSelectArcOne here].
 -------------------------------------------------------------------------
   _This section is a work in progress_
 
+There are times when process definitions have overlapping functionality, or where one process should invoke a second process. There are various ways of handling this, including copy-and-paste. One cleaner solution involves *nested processes*.
+
   * *Nested Process* - A node in an executing process may create a separate, new process (of the same or different process definition). This new process is known a nested process. The new process gets initialized with the process state of the containing process and the current token. When the nested process completes, the token in the containing process will be completed.
     * Advantages
       * The nested process will have it's own process state
@@ -385,16 +389,20 @@ There are several reasons why nested processes are desirable:
   # Having a new scope for process variables
   # Recursive behavior
 
-The first two reasons differ from the second two, in that they are, in some sense, optional. Extracting common functionality and componentizing large process definitions are done for the software engineering reasons of resuse and encapsulation. However, the process definitions could be build as single large graph. For this reason, Sarasvati uses *graph composition* to handle these cases.
+The first two reasons differ from the second two, in that they are, in some sense, optional. Extracting common functionality and componentizing large process definitions are done for the software engineering reasons of reuse and encapsulation. However, the process definitions could be build as single large graph. For this reason, Sarasvati uses *graph composition* to handle these cases.
 
-  * *Graph composition* - The set of process definitions may be seen as a single, disconnnected graph. A node may contain arcs to nodes in other process definitions. These arcs are refered to as *external arcs*. When the process definition is loaded, referenced external processss definitions will be loaded as well. All the process definitions will be composed into a single, larger graph. The external arcs wil become regular arcs. The same external processes definition may be embedded more than once. Each *external instance* of an external process definition will be given a unique identifier.
+  * *Graph composition* - The set of process definitions may be seen as a single, disconnected graph. A node may contain arcs to nodes in other process definitions. These arcs are referred to as *external arcs*. When the process definition is loaded, referenced external process definitions will be loaded as well. All the process definitions will be composed into a single, larger graph. The external arcs will become regular arcs. The same external processes definition may be embedded more than once. Each *external instance* of an external process definition will be given a unique identifier.
     * Advantages
       * Interactions with external process definitions are not limited to a single node. The connections may be as complicated as within process definition.
       * Since the graph is not nested, execution is simple.
       * All nodes will share a single process variable scope, allowing easy sharing of variables.
-    * Disadvantages
+    * Restrictions
       * Recursion is not allowed, since this would lead to an infinite loop during loading. *NOTE:* As in regular programing, recursive structures can be implemented using non-recursive techniques.
       * All nodes will share a single process variable scope. Sometimes it is desirable to have shared state for a subset of the nodes in a process definition.
       * The version of an external graph is set when the process definition is loaded, rather than when nodes from that graph are executed. If an external process definition is updated, process definitions referring to it must be reloaded as well to pick up the changes.
 
-  * *External Instance* - 
+  * *External Arc* - An arc which has an endpoint in an external process definition. While normal arcs are always specified as originating in the node where they are defined (aka *out arcs*(, it is not possible to add arcs to an external process. Therefore external arcs may either be *in arcs* or *out arcs*.
+    * *Out Arc* - An arc which starts in the defining node and ends in a specified node
+    * *In Arc* - An arc which starts in a specified and ends in the node in which it is defined.
+
+  * *External Instance* - A specific external process definition may be referenced multiple times. It may also be imported into the referring process definition multiple times, or just a single time. Each external arc specifies a specific instance of the external process definition. 
