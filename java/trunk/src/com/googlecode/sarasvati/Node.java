@@ -104,6 +104,14 @@ public interface Node
   Graph getGraph ();
 
   /**
+   * Returns true if this node was imported from an external process definition,
+   * false otherwise.
+   *
+   * @return True if this node was imported from an external process definition.
+   */
+  boolean isExternal ();
+
+  /**
    * When a NodeToken is created, the associated Node will not
    * automatically be executed. First, the guard function is called,
    * which will indicate which action should be taken. The possible

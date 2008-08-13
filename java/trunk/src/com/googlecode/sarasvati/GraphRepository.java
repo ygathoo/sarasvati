@@ -16,30 +16,17 @@
 
     Copyright 2008 Paul Lorenz
 */
+package com.googlecode.sarasvati;
 
-package com.googlecode.sarasvati.mem;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-public class MemWfGraphCache
+public interface GraphRepository<T extends Graph>
 {
-  private static Map<String,MemGraph> cache = new HashMap<String, MemGraph>();
+  T getLatestGraph (String name);
 
-  public static void addToCache (String name, MemGraph graph)
-  {
-    cache.put( name, graph );
-  }
+  List<T> getGraphs (String name);
 
-  public static MemGraph get (String name)
-  {
-    return cache.get( name );
-  }
+  List<T> getGraphs ();
 
-  public static List<MemGraph> getGraphs ()
-  {
-    return new ArrayList<MemGraph>( cache.values() );
-  }
+  void addGraph (T graph);
 }

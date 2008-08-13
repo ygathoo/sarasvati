@@ -31,7 +31,7 @@ public class MemSubProcessNode extends MemNode
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    Graph subGraph = MemWfGraphCache.get( graphName );
+    Graph subGraph = engine.getRepository().getLatestGraph( graphName );
 
     if ( subGraph == null )
     {
@@ -39,7 +39,7 @@ public class MemSubProcessNode extends MemNode
                                    "Used by node " + getName() + " in graph " + getGraph().getName() );
     }
 
-    Process subProcess =  engine.newProcess( subGraph );
+    Process subProcess =  engine.getFactory().newProcess( subGraph );
     subProcess.getEnv().importEnv( token.getFullEnv() );
     engine.startProcess( subProcess );
   }

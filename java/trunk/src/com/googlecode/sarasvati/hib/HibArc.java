@@ -31,6 +31,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Node;
 
 @Entity
 @Table (name="wf_arc")
@@ -45,17 +46,17 @@ public class HibArc implements Arc
   @JoinColumn (name="graph_id")
   protected HibGraph graph;
 
-  @ManyToOne (fetch=FetchType.EAGER)
+  @ManyToOne (fetch=FetchType.EAGER, targetEntity=HibNodeRef.class)
   @JoinColumn (name="a_node_ref_id")
-  protected HibNodeRef startNode;
+  protected Node startNode;
 
-  @ManyToOne (fetch=FetchType.EAGER)
+  @ManyToOne (fetch=FetchType.EAGER, targetEntity=HibNodeRef.class)
   @JoinColumn (name="z_node_ref_id")
-  protected HibNodeRef endNode;
+  protected Node endNode;
 
   protected HibArc () { /* Default constructor for hibernate */ }
 
-  protected HibArc (HibGraph graph, HibNodeRef startNode, HibNodeRef endNode, String name)
+  protected HibArc (HibGraph graph, Node startNode, Node endNode, String name)
   {
     this.graph = graph;
     this.startNode = startNode;
@@ -95,23 +96,23 @@ public class HibArc implements Arc
   }
 
   @Override
-  public HibNodeRef getStartNode ()
+  public Node getStartNode ()
   {
     return startNode;
   }
 
-  public void setStartNode (HibNodeRef startNode)
+  public void setStartNode (Node startNode)
   {
     this.startNode = startNode;
   }
 
   @Override
-  public HibNodeRef getEndNode ()
+  public Node getEndNode ()
   {
     return endNode;
   }
 
-  public void setEndNode (HibNodeRef endNode)
+  public void setEndNode (Node endNode)
   {
     this.endNode = endNode;
   }

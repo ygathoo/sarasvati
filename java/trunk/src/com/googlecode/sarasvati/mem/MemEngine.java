@@ -19,42 +19,19 @@
 
 package com.googlecode.sarasvati.mem;
 
-import java.util.List;
-
-import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.Env;
-import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.NonRecursiveEngine;
-import com.googlecode.sarasvati.Process;
 
 public class MemEngine extends NonRecursiveEngine
 {
   @Override
-  public ArcToken newArcToken (Process process, Arc arc, NodeToken parent)
+  public MemGraphFactory getFactory()
   {
-    return new MemArcToken( arc, process, parent );
+    return MemGraphFactory.INSTANCE;
   }
 
   @Override
-  public NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
+  public MemGraphRepository getRepository()
   {
-    MemNodeToken token = new MemNodeToken( node, process );
-    Env env = token.getEnv();
-
-    for ( ArcToken t : parents )
-    {
-      env.importEnv( t.getParentToken().getEnv() );
-    }
-
-    return token;
-  }
-
-  @Override
-  public Process newProcess (Graph graph)
-  {
-    return new MemProcess( graph );
+    return MemGraphRepository.INSTANCE;
   }
 }

@@ -68,21 +68,21 @@ public class HibGraph implements Graph
     this.name = name;
     this.version = version;
     this.createDate = new Date();
-    this.nodeRefs = new LinkedList<HibNodeRef>();
+    this.nodes = new LinkedList<HibNodeRef>();
     this.arcs = new LinkedList<HibArc>();
   }
 
   @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE)
-  protected List<HibNodeRef> nodeRefs;
+  protected List<HibNodeRef> nodes;
 
   @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE)
   protected List<HibArc>     arcs;
 
   @Transient
-  protected Map<HibNodeRef, List<Arc>> inputMap;
+  protected Map<Node, List<Arc>> inputMap;
 
   @Transient
-  protected Map<HibNodeRef, List<Arc>> outputMap;
+  protected Map<Node, List<Arc>> outputMap;
 
   public Long getId ()
   {
@@ -125,14 +125,15 @@ public class HibGraph implements Graph
     this.createDate = createDate;
   }
 
-  public List<HibNodeRef> getNodeRefs ()
+  @Override
+  public List<HibNodeRef> getNodes ()
   {
-    return nodeRefs;
+    return nodes;
   }
 
-  public void setNodeRefs (List<HibNodeRef> nodeRefs)
+  public void setNodes (List<HibNodeRef> nodeRefs)
   {
-    this.nodeRefs = nodeRefs;
+    this.nodes = nodeRefs;
   }
 
   public List<HibArc> getArcs ()
@@ -199,12 +200,12 @@ public class HibGraph implements Graph
 
   public void initialize ()
   {
-    inputMap  = new HashMap<HibNodeRef, List<Arc>>();
-    outputMap = new HashMap<HibNodeRef, List<Arc>>();
+    inputMap  = new HashMap<Node, List<Arc>>();
+    outputMap = new HashMap<Node, List<Arc>>();
 
     for ( HibArc arc : arcs )
     {
-      HibNodeRef node = arc.getStartNode();
+      Node node = arc.getStartNode();
       List<Arc> list = outputMap.get( node );
 
       if ( list == null )
@@ -228,7 +229,7 @@ public class HibGraph implements Graph
     }
 
     List<Arc> emptyList = Collections.emptyList();
-    for (HibNodeRef node : nodeRefs )
+    for (HibNodeRef node : nodes )
     {
       if ( !inputMap.containsKey( node ) )
       {
@@ -246,7 +247,7 @@ public class HibGraph implements Graph
   {
     List<Node> startNodes = new LinkedList<Node>();
 
-    for ( Node node : getNodeRefs() )
+    for ( Node node : nodes )
     {
       if ( node.isStart() )
       {
@@ -255,12 +256,6 @@ public class HibGraph implements Graph
     }
 
     return startNodes;
-  }
-
-  @Override
-  public List<? extends Node> getNodes ()
-  {
-    return getNodeRefs();
   }
 
   public boolean hasArcInverse( Arc arc )

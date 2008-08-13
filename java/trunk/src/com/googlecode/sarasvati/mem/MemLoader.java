@@ -25,7 +25,7 @@ import java.util.Map;
 import com.googlecode.sarasvati.BaseLoader;
 import com.googlecode.sarasvati.ImportException;
 
-public class MemLoader extends BaseLoader<MemGraph,MemNode>
+public class MemLoader extends BaseLoader<MemEngine,MemGraph>
 {
   public static interface NodeFactory
   {
@@ -35,16 +35,14 @@ public class MemLoader extends BaseLoader<MemGraph,MemNode>
 
   protected Map<String,NodeFactory> customTypeFactories = new HashMap<String, NodeFactory>();
 
+  public MemLoader()
+  {
+    super( new MemEngine() );
+  }
+
   public void addCustomType (String type, NodeFactory factory)
   {
     customTypeFactories.put( type, factory );
-  }
-
-  @Override
-  protected void createArc (MemNode startNode, MemNode endNode, String name) throws ImportException
-  {
-    MemArc arc = new MemArc(name, startNode, endNode );
-    getGraph().getArcs().add( arc );
   }
 
   @Override
@@ -67,63 +65,5 @@ public class MemLoader extends BaseLoader<MemGraph,MemNode>
 
     getGraph().getNodes().add( node );
     return node;
-  }
-
-  @Override
-  protected MemGraph createWfGraph (String name)
-  {
-    MemGraph graph = new MemGraph( name );
-    MemWfGraphCache.addToCache( name, graph );
-    return graph;
-  }
-
-  @Override
-  protected Map<String,MemNode> importInstance (String externalName, String instanceName) throws ImportException
-  {
-    Map<String,MemNode> nodeMap = new HashMap<String, MemNode>();
-
-    MemGraph instanceGraph = MemWfGraphCache.get( externalName );
-
-    if ( instanceGraph == null )
-    {
-      throw new ImportException( "Referenced external '" + externalName + "' not found in cache." );
-    }
-
-    Map<MemNode, MemNode> lookupMap = new HashMap<MemNode, MemNode>();
-
-    for ( MemNode node : instanceGraph.getNodes() )
-    {
-      MemNode newNode = node.clone();
-      newNode.setGraph( getGraph() );
-      newNode.setExternal( true );
-      getGraph().getNodes().add( newNode );
-
-      lookupMap.put( node, newNode );
-
-      // Since we can only link nodes defined in the top level,
-      // we don't want to include nodes which were themselves imported
-      // into the graph which is being imported
-      if ( !node.isExternal() )
-      {
-        nodeMap.put( node.getName(), newNode );
-      }
-    }
-
-    for ( MemArc arc : instanceGraph.getArcs() )
-    {
-      MemNode startNode = lookupMap.get( arc.getStartNode() );
-      MemNode endNode = lookupMap.get( arc.getEndNode() );
-
-      MemArc newArc = new MemArc( arc.getName(), startNode, endNode );
-      getGraph().getArcs().add( newArc );
-    }
-
-    return nodeMap;
-  }
-
-  @Override
-  public boolean isLoaded (String name)
-  {
-    return null != MemWfGraphCache.get( name );
   }
 }
