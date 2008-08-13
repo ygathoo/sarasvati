@@ -175,6 +175,17 @@ public class HibNode implements Node
     this.guard = guard;
   }
 
+  /**
+   * This is meaningless for HibNode, since these are never directly
+   * external. This maybe wrapped by some node refs which are external
+   * and others which aren't.
+   */
+  @Override
+  public boolean isExternal()
+  {
+    return false;
+  }
+
   @Override
   public GuardResponse guard (Engine engine, NodeToken token)
   {

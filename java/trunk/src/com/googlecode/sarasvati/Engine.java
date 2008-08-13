@@ -3,7 +3,6 @@
  */
 package com.googlecode.sarasvati;
 
-import java.util.List;
 
 /**
  * An {@link Engine} executes a process. A {@link Graph} specifies
@@ -103,40 +102,6 @@ public interface Engine
   void finalizeCancel (Process process);
 
   /**
-   * Generates a new {@link NodeToken} for the given {@link Process}, pointing
-   * to the given {@link Node}.
-   *
-   * @param process The {@link Process} which the new {@link NodeToken} will belong to
-   * @param node    The {@link Node} the new {@link NodeToken} is being placed on
-   * @param parents The list of ArcTokens which preceded this {@link NodeToken}
-   * @return        A new {@link NodeToken}
-   */
-  NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents);
-
-  /**
-   * Generates a new {@link ArcToken} for the given {@link Process}, pointing
-   * to the given {@link Arc}.
-   *
-   * @param process The {@link Process} which the new ArcToken will belong to
-   * @param arc     The {@link Arc} the new ArcToken is being placed on
-   * @param parent  The {@link NodeToken} which preceded this {@link ArcToken}.
-   * @return A new {@link ArcToken}
-   */
-  ArcToken newArcToken (Process process, Arc arc, NodeToken parent);
-
-  /**
-   * Generates a new {@link Process} for the given {@link Graph}. Execution
-   * of the process is not started by this method.
-   *
-   * The method will be used by {@link Engine#startProcess(Graph)}, and
-   * should not need to be called otherwise.
-   *
-   * @param graph The {@link Graph} the Process will be executing.
-   * @return A new {@link Process}
-   */
-  Process newProcess (Graph graph);
-
-  /**
    * Continues execution of a process in a wait state.
    * If a call to {@link Node#execute(Engine, NodeToken)} does not contain a
    * call to {@link Engine#completeExecution(NodeToken, String)}, then execution
@@ -160,4 +125,20 @@ public interface Engine
    *
    */
   void completeExecution (NodeToken token, String arcName);
+
+  /**
+   * Returns an appropriate {@link GraphRepository} for this {@link Engine}. Subclases
+   * may override this to provide custom behavior.
+   *
+   * @return An appropriate {@link GraphRepository} for this {@link Engine}
+   */
+  GraphRepository<? extends Graph> getRepository ();
+
+  /**
+   * Returns an appropriate {@link GraphFactory} for this {@link Engine}. Subclasses
+   * may override this provide customer behavior.
+   *
+   * @return A {@link GraphFactory} which will generate the appropriate types for this {@link Engine}.
+   */
+  GraphFactory getFactory ();
 }

@@ -24,9 +24,8 @@ import java.util.Map;
 
 import com.googlecode.sarasvati.BaseLoader;
 import com.googlecode.sarasvati.ImportException;
-import com.googlecode.sarasvati.Graph;
 
-public class HibLoader extends BaseLoader<HibGraph, HibNodeRef>
+public class HibLoader extends BaseLoader<HibEngine,HibGraph>
 {
   public static interface NodeFactory
   {
@@ -35,28 +34,15 @@ public class HibLoader extends BaseLoader<HibGraph, HibNodeRef>
   }
 
   protected Map<String,NodeFactory> customTypeFactories = new HashMap<String, NodeFactory>();
-  protected HibEngine engine;
 
   public HibLoader (HibEngine engine)
   {
-    this.engine = engine;
+    super( engine );
   }
 
   public void addCustomType (String type, NodeFactory factory)
   {
     customTypeFactories.put( type, factory );
-  }
-
-  @Override
-  protected HibGraph createWfGraph (String name)
-  {
-    Graph latest = engine.getLatestGraph( name );
-
-    int version = latest == null ? 1 : latest.getVersion() + 1;
-
-    HibGraph newGraph = new HibGraph( name, version );
-    engine.getSession().save( newGraph );
-    return newGraph;
   }
 
   @Override
@@ -83,64 +69,8 @@ public class HibLoader extends BaseLoader<HibGraph, HibNodeRef>
 
     HibNodeRef nodeRef = new HibNodeRef( getGraph(), node, "" );
     engine.getSession().save( nodeRef  );
-    getGraph().getNodeRefs().add( nodeRef );
+    getGraph().getNodes().add( nodeRef );
 
     return nodeRef;
-  }
-
-  @Override
-  protected void createArc (HibNodeRef startNode, HibNodeRef endNode, String name)
-      throws ImportException
-  {
-    HibArc arc = new HibArc( getGraph(), startNode, endNode, name );
-    engine.getSession().save( arc );
-    getGraph().getArcs().add( arc );
-  }
-
-  @Override
-  protected Map<String,HibNodeRef> importInstance (String externalName, String instanceName)
-      throws ImportException
-  {
-    HibGraph instanceGraph = engine.getLatestGraph( externalName );
-
-    if ( instanceGraph == null )
-    {
-      throw new ImportException( "Referenced external '" + externalName + "' not found in database" );
-    }
-
-    Map<String, HibNodeRef> refMap = new HashMap<String, HibNodeRef>();
-    Map<Long,HibNodeRef>    arcRefMap = new HashMap<Long, HibNodeRef>();
-
-    for ( HibNodeRef nodeRef : instanceGraph.getNodeRefs() )
-    {
-      String label = nodeRef.getInstance();
-      label = label == null || "".equals( label ) ? instanceName : instanceName + ":" + label;
-
-      HibNodeRef newRef = new HibNodeRef( getGraph(), nodeRef.getNode(), label );
-      engine.getSession().save( newRef );
-      getGraph().getNodeRefs().add( newRef );
-
-      arcRefMap.put( nodeRef.getId(), newRef );
-      if ( nodeRef.isNodeDefinedInTopLevel() )
-      {
-        refMap.put( nodeRef.getName(), newRef );
-      }
-    }
-
-    for ( HibArc arc : instanceGraph.getArcs() )
-    {
-      HibNodeRef startNode = arcRefMap.get( arc.getStartNode().getId() );
-      HibNodeRef endNode = arcRefMap.get( arc.getEndNode().getId() );
-      HibArc newArc = new HibArc( getGraph(), startNode, endNode, arc.getName() );
-      engine.getSession().save( newArc );
-      getGraph().getArcs().add( newArc );
-    }
-
-    return refMap;
-  }
-
-  public boolean isLoaded (String name)
-  {
-    return null != engine.getLatestGraph( name );
   }
 }

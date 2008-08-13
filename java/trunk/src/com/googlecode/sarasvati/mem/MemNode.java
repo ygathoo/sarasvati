@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.mem;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
@@ -29,7 +30,7 @@ import com.googlecode.sarasvati.guardlang.PredicateRepository;
 
 public class MemNode implements Node, Cloneable
 {
-  protected MemGraph graph;
+  protected Graph graph;
 
   protected String  name;
   protected String  type;
@@ -44,7 +45,7 @@ public class MemNode implements Node, Cloneable
     /* Default constructor */
   }
 
-  public MemNode (MemGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard)
+  public MemNode (Graph graph, String name, String type, boolean isJoin, boolean isStart, String guard)
   {
     this.graph = graph;
     this.name = name;
@@ -82,12 +83,12 @@ public class MemNode implements Node, Cloneable
   }
 
   @Override
-  public MemGraph getGraph ()
+  public Graph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (MemGraph graph)
+  public void setGraph (Graph graph)
   {
     this.graph = graph;
   }

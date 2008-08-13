@@ -33,7 +33,7 @@ public abstract class BaseEngine implements Engine
 {
   public Process startProcess (Graph graph)
   {
-    Process process = newProcess( graph );
+    Process process = getFactory().newProcess( graph );
     startProcess( process );
     return process;
   }
@@ -44,7 +44,7 @@ public abstract class BaseEngine implements Engine
 
     for (Node startNode : process.getGraph().getStartNodes() )
     {
-      NodeToken startToken = newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
+      NodeToken startToken = getFactory().newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
       executeNode( process, startToken );
     }
 
@@ -138,7 +138,7 @@ public abstract class BaseEngine implements Engine
       token.markComplete( this );
     }
 
-    executeNode( process, newNodeToken( process, targetNode, Arrays.asList( tokens ) ) );
+    executeNode( process, getFactory().newNodeToken( process, targetNode, Arrays.asList( tokens ) ) );
   }
 
   protected void executeNode (Process process, NodeToken token)
@@ -182,7 +182,7 @@ public abstract class BaseEngine implements Engine
 
     for ( Arc arc : outputArcs )
     {
-      executeArc( process, newArcToken( process, arc, token ) );
+      executeArc( process, getFactory().newArcToken( process, arc, token ) );
     }
 
     checkForCompletion( process );

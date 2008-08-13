@@ -69,7 +69,7 @@ public class JungVisualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( Graph g : engine.getGraphs() )
+    for ( Graph g : engine.getRepository().getGraphs() )
     {
       listModel.addElement( g );
     }

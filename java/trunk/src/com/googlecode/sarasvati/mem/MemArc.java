@@ -25,10 +25,10 @@ import com.googlecode.sarasvati.Node;
 public class MemArc implements Arc
 {
   protected String  name;
-  protected MemNode startNode;
-  protected MemNode endNode;
+  protected Node startNode;
+  protected Node endNode;
 
-  public MemArc (String name, MemNode startNode, MemNode endNode)
+  public MemArc (String name, Node startNode, Node endNode)
   {
     super();
     this.name = name;

@@ -33,10 +33,17 @@ import com.googlecode.sarasvati.xml.XmlNode;
 import com.googlecode.sarasvati.xml.XmlWorkflow;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
 
-public abstract class BaseLoader<G extends Graph,N extends Node> implements Loader<G,N>
+public abstract class BaseLoader<E extends Engine, G extends Graph> implements Loader<G>
 {
-  protected Map<String,Map<String,N>> instanceCache = null;
-  protected Map<String,N>             nodeCache     = null;
+  protected Map<String,Map<String,Node>> instanceCache = null;
+  protected Map<String,Node>             nodeCache     = null;
+
+  protected E engine;
+
+  public BaseLoader (E engine)
+  {
+    this.engine = engine;
+  }
 
   private G graph;
 
@@ -45,19 +52,15 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
     return graph;
   }
 
-  protected abstract G createWfGraph (String name);
-
-  protected abstract void createArc (N startNode, N endNode, String name) throws ImportException;
-
-  protected abstract N createNode (String name,
-                                   String type,
-                                   boolean isJoin,
-                                   boolean isStart,
-                                   String guard,
-                                   Object custom)
+  protected abstract Node createNode (String name,
+                                      String type,
+                                      boolean isJoin,
+                                      boolean isStart,
+                                      String guard,
+                                      Object custom)
     throws ImportException;
 
-  protected abstract Map<String,N> importInstance (String externalName, String instanceName) throws ImportException;
+
 
   protected void importNodes (XmlWorkflow xmlDef) throws ImportException
   {
@@ -72,12 +75,12 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
 
       String type = xmlNode.getType();
 
-      N newNode = createNode( nodeName,
-                              type == null ? "node" : type,
-                              xmlNode.isJoin(),
-                              xmlNode.isStart(),
-                              xmlNode.getGuard(),
-                              xmlNode.getCustom() );
+      Node newNode = createNode( nodeName,
+                                 type == null ? "node" : type,
+                                 xmlNode.isJoin(),
+                                 xmlNode.isStart(),
+                                 xmlNode.getGuard(),
+                                 xmlNode.getCustom() );
       nodeCache.put( nodeName, newNode );
     }
   }
@@ -88,15 +91,15 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
     {
       for ( XmlArc xmlArc : xmlNode.getArcs() )
       {
-        N startNode = nodeCache.get( xmlNode.getName() );
-        N endNode   = nodeCache.get( xmlArc.getTo() );
+        Node startNode = nodeCache.get( xmlNode.getName() );
+        Node endNode   = nodeCache.get( xmlArc.getTo() );
 
         if ( endNode == null )
         {
           throw new ImportException( "Arc in node '" + xmlNode.getName() + "' points to non-existent node '" + xmlArc.getTo() + "'" );
         }
 
-        createArc( startNode, endNode, SvUtil.isBlankOrNull( xmlArc.getName() ) ? Arc.DEFAULT_ARC : xmlArc.getName() );
+        engine.getFactory().createArc( graph, startNode, endNode, SvUtil.isBlankOrNull( xmlArc.getName() ) ? Arc.DEFAULT_ARC : xmlArc.getName() );
       }
     }
   }
@@ -106,9 +109,9 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
     return externalArc.getExternal() + ":" + externalArc.getInstance();
   }
 
-  protected N getExternalNode (XmlExternalArc externalArc) throws ImportException
+  protected Node getExternalNode (XmlExternalArc externalArc) throws ImportException
   {
-    Map<String,N> instance = instanceCache.get( getInstanceKey( externalArc ) );
+    Map<String,Node> instance = instanceCache.get( getInstanceKey( externalArc ) );
 
     if (instance == null)
     {
@@ -125,8 +128,8 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
     {
       for ( XmlExternalArc externalArc : xmlNode.getExternalArcs() )
       {
-        N localNode = nodeCache.get( xmlNode.getName() );
-        N extNode = getExternalNode( externalArc );
+        Node localNode = nodeCache.get( xmlNode.getName() );
+        Node extNode = getExternalNode( externalArc );
 
         if ( extNode == null )
         {
@@ -139,23 +142,62 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
 
         if ( externalArc.getType() == XmlExternalArcType.OUT )
         {
-          createArc( localNode, extNode, arcName );
+          engine.getFactory().createArc( graph, localNode, extNode, arcName );
         }
         else
         {
-          createArc( extNode, localNode, arcName );
+          engine.getFactory().createArc( graph, extNode, localNode, arcName );
         }
       }
     }
   }
 
+  protected Map<String,Node> importInstance (String externalName, String instanceName)
+      throws ImportException
+  {
+    Map<String, Node> nodeMap = new HashMap<String, Node>();
+    Graph instanceGraph = engine.getRepository().getLatestGraph( externalName );
+
+    if ( instanceGraph == null )
+    {
+      throw new ImportException( "Referenced external '" + externalName + "' not found in database" );
+    }
+
+    Map<Node,Node> lookupMap = new HashMap<Node, Node>();
+
+    for ( Node node : instanceGraph.getNodes() )
+    {
+      Node newNode = engine.getFactory().importNode( getGraph(), node, instanceName);
+
+      lookupMap.put( node, newNode );
+      if ( !node.isExternal() )
+      {
+        nodeMap.put( node.getName(), newNode );
+      }
+    }
+
+    for ( Arc arc : instanceGraph.getArcs() )
+    {
+      Node startNode = lookupMap.get( arc.getStartNode() );
+      Node endNode = lookupMap.get( arc.getEndNode() );
+      engine.getFactory().createArc( getGraph(), startNode, endNode, arc.getName() );
+    }
+
+    return nodeMap;
+  }
+
+  @SuppressWarnings("unchecked")
   @Override
   public void importDefinition (XmlWorkflow xmlDef) throws ImportException
   {
-    instanceCache = new HashMap<String, Map<String,N>>();
-    nodeCache     = new HashMap<String, N>();
+    instanceCache = new HashMap<String, Map<String,Node>>();
+    nodeCache     = new HashMap<String, Node>();
 
-    graph = createWfGraph( xmlDef.getName() );
+    Graph latest = engine.getRepository().getLatestGraph( xmlDef.getName() );
+
+    int version = latest == null ? 1 : latest.getVersion() + 1;
+
+    graph = (G)engine.getFactory().newGraph( xmlDef.getName(), version );
     importNodes( xmlDef );
     importArcs( xmlDef );
     importExternalArcs(  xmlDef );
@@ -193,5 +235,11 @@ public abstract class BaseLoader<G extends Graph,N extends Node> implements Load
     stack.remove( stack.size() - 1 );
 
     importDefinition( xmlDef );
+  }
+
+  @Override
+  public boolean isLoaded(String name)
+  {
+    return null != engine.getRepository().getLatestGraph( name );
   }
 }

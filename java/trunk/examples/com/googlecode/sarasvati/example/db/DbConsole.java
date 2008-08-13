@@ -202,7 +202,7 @@ public class DbConsole
 
     while ( graph == null )
     {
-      List<HibGraph> graphs = engine.getGraphs();
+      List<HibGraph> graphs = engine.getRepository().getGraphs();
 
       int count = 0;
       for ( HibGraph g : graphs )

@@ -160,9 +160,10 @@ public class HibNodeRef implements Node
     return node.getDisplayText();
   }
 
-  public boolean isNodeDefinedInTopLevel ()
+  @Override
+  public boolean isExternal ()
   {
-    return graph.equals( getNode().getGraph() );
+    return !graph.equals( getNode().getGraph() );
   }
 
   @Override

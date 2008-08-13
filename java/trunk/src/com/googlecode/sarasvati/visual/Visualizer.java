@@ -58,7 +58,7 @@ public class Visualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( HibGraph g : engine.getGraphs() )
+    for ( HibGraph g : engine.getRepository().getGraphs() )
     {
       listModel.addElement( g );
     }
