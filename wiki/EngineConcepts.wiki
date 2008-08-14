@@ -371,7 +371,7 @@ The complete process can be seen [ConceptsExampleSelectArcOne here].
 -------------------------------------------------------------------------
   _This section is a work in progress_
 
-There are times when process definitions have overlapping functionality, or where one process should invoke a second process. There are various ways of handling this, including copy-and-paste. One cleaner solution involves *nested processes*.
+There are times when process definitions have overlapping functionality, or where one process needs the functionality from a second process. There are various ways of handling this, including copy-and-paste. A cleaner solution involves *nested processes*.
 
   * *Nested Process* - A node in an executing process may create a separate, new process (of the same or different process definition). This new process is known a nested process. The new process gets initialized with the process state of the containing process and the current token. When the nested process completes, the token in the containing process will be completed.
     * Advantages
@@ -382,7 +382,7 @@ There are times when process definitions have overlapping functionality, or wher
       * The interaction with the nested process must all be contained by a single node. The nested process will execute in isolation. The nodes in the nested process won't interact with the those of the containing process in any way. 
 
 
-There are several reasons why nested processes are desirable:
+There are several reasons in which nested processes can be useful:
 
   # Extracting common functionality
   # Make large process definitions easier to work with by componentizing them
