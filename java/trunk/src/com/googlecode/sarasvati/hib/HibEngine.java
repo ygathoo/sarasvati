@@ -27,12 +27,14 @@ import com.googlecode.sarasvati.NonRecursiveEngine;
 public class HibEngine extends NonRecursiveEngine
 {
   protected Session session;
-  protected HibGraphFactory graphFactory;
+  protected HibGraphFactory factory;
+  protected HibGraphRepository repository;
 
   public HibEngine (Session session)
   {
     this.session = session;
-    this.graphFactory = new HibGraphFactory( session );
+    this.factory = new HibGraphFactory( session );
+    this.repository = new HibGraphRepository( session );
   }
 
   public Session getSession ()
@@ -48,13 +50,13 @@ public class HibEngine extends NonRecursiveEngine
   @Override
   public HibGraphRepository getRepository()
   {
-    return new HibGraphRepository( session );
+    return repository;
   }
 
   @Override
   public HibGraphFactory getFactory()
   {
-    return graphFactory;
+    return factory;
   }
 
   public static void addToConfiguration (AnnotationConfiguration config, boolean enableCaching)
