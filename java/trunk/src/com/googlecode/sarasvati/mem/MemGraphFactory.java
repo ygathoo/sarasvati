@@ -108,8 +108,16 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public Process newProcess (Graph graph)
+  public MemProcess newProcess (Graph graph)
   {
     return new MemProcess( graph );
+  }
+
+  @Override
+  public Process newNestedProcess (Graph graph, NodeToken parentToken)
+  {
+    MemProcess process = newProcess( graph );
+    process.setParentToken( parentToken );
+    return process;
   }
 }

@@ -41,6 +41,8 @@ public class MemProcess implements Process
 
   protected Env env = new MapEnv();
 
+  protected NodeToken parentToken;
+
   public MemProcess (Graph graph)
   {
     this.graph = graph;
@@ -81,6 +83,16 @@ public class MemProcess implements Process
   public Graph getGraph ()
   {
     return graph;
+  }
+
+  public NodeToken getParentToken ()
+  {
+    return parentToken;
+  }
+
+  public void setParentToken (NodeToken parentToken)
+  {
+    this.parentToken = parentToken;
   }
 
   @Override

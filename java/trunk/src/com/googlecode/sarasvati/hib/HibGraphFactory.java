@@ -165,7 +165,15 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   {
     HibProcess process = new HibProcess( (HibGraph)graph);
     session.save(  process );
+    return process;
+  }
 
+  @Override
+  public Process newNestedProcess (Graph graph, NodeToken parentToken)
+  {
+    HibProcess process = new HibProcess( (HibGraph)graph);
+    process.setParentToken( parentToken );
+    session.save(  process );
     return process;
   }
 }

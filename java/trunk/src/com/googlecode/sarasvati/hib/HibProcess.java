@@ -72,6 +72,10 @@ public class HibProcess implements Process
   @Where (clause="complete_date is null")
   protected List<NodeToken>  nodeTokens;
 
+  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
+  @JoinColumn (name = "parent_token_id", nullable=true)
+  protected NodeToken parentToken;
+
   @Column (name="create_date", updatable=false)
   @Temporal (TemporalType.TIMESTAMP)
   protected Date createDate;
@@ -139,6 +143,17 @@ public class HibProcess implements Process
   public void setNodeTokens( List<NodeToken> nodeTokens )
   {
     this.nodeTokens = nodeTokens;
+  }
+
+  @Override
+  public NodeToken getParentToken ()
+  {
+    return parentToken;
+  }
+
+  public void setParentToken (NodeToken parentToken)
+  {
+    this.parentToken = parentToken;
   }
 
   public Date getCreateDate()

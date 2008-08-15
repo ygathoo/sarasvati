@@ -62,13 +62,24 @@ public interface GraphFactory<G extends Graph>
    * Generates a new {@link Process} for the given {@link Graph}. Execution
    * of the process is not started by this method.
    *
-   * The method will be used by {@link Engine#startProcess(Graph)}, and
-   * should not need to be called otherwise.
+   * The method will be used by {@link Engine#startProcess(Graph)}.
    *
    * @param graph The {@link Graph} the Process will be executing.
    * @return A new {@link Process}
    */
   Process newProcess (Graph graph);
+
+  /**
+   * Generates a new {@link Process} for the given {@link Graph}. Execution
+   * of the process is not started by this method. This method is specfically
+   * for created a new nested process.
+   *
+   * @param graph The {@link Graph} the Process will be executing.
+   * @param parentToken The {@link NodeToken} whose execution is causing this
+   *                    nested process to be created.
+   * @return A new {@link Process}
+   */
+  Process newNestedProcess (Graph graph, NodeToken parentToken);
 
   /**
    * Generates a new {@link NodeToken} for the given {@link Process}, pointing
