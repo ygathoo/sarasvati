@@ -49,7 +49,7 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.4"
-     inkscape:cx="367.91659"
+     inkscape:cx="278.27373"
      inkscape:cy="793.17684"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
@@ -126,12 +126,12 @@
     <text
        xml:space="preserve"
        style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
-       x="70.774551"
+       x="99.265762"
        y="118.07647"
        id="text9069"><tspan
          sodipodi:role="line"
          id="tspan9071"
-         x="70.774551"
-         y="118.07647">Process definition: external-one</tspan></text>
+         x="99.265762"
+         y="118.07647">Process definition: ext</tspan></text>
   </g>
 </svg>
