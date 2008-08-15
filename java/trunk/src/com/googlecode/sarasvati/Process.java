@@ -121,4 +121,17 @@ public interface Process
    * @return True if the process has active tokens, false otherwise.
    */
   boolean hasActiveTokens ();
+
+  /**
+   * If this a nested process, then this will return the
+   * parent {@link NodeToken} and null otherwise.
+   *
+   * A nested process is one was started from a different process. The process is
+   * started when a specific node is executed. The node will be in a wait state
+   * while the nested process executes.  When the nested process completes, the
+   * node execution will be completed.
+   *
+   * @return If this is a nested process, this will return the parent {@link NodeToken}, and null otherwise.
+   */
+  NodeToken getParentToken ();
 }

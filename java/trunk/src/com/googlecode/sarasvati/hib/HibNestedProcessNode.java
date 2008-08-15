@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.mem;
+package com.googlecode.sarasvati.hib;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
@@ -24,7 +24,7 @@ import com.googlecode.sarasvati.Process;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.WorkflowException;
 
-public class MemSubProcessNode extends MemNode
+public class HibNestedProcessNode extends HibNode
 {
   protected String graphName;
 
@@ -39,7 +39,7 @@ public class MemSubProcessNode extends MemNode
                                    "Used by node " + getName() + " in graph " + getGraph().getName() );
     }
 
-    Process subProcess =  engine.getFactory().newProcess( subGraph );
+    Process subProcess =  engine.getFactory().newNestedProcess( subGraph, token );
     subProcess.getEnv().importEnv( token.getFullEnv() );
     engine.startProcess( subProcess );
   }

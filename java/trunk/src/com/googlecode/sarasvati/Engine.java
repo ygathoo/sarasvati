@@ -104,6 +104,9 @@ public interface Engine
    * Will set the state to {@link ProcessState#Completed} and perform whatever
    * cleanup is required.
    *
+   * If this process is a nested process, at this point the containing
+   * token will be completed.
+   *
    * @param process The process being completed.
    */
   void finalizeComplete (Process process);

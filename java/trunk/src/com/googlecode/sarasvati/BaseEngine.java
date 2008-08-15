@@ -84,6 +84,12 @@ public abstract class BaseEngine implements Engine
   public void finalizeComplete (Process process)
   {
     process.setState( ProcessState.Completed );
+
+    NodeToken parentToken = process.getParentToken();
+    if ( parentToken != null )
+    {
+      completeExecution( parentToken, Arc.DEFAULT_ARC );
+    }
   }
 
   @Override
