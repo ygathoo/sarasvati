@@ -371,7 +371,7 @@ The complete process can be seen [ConceptsExampleSelectArcOne here].
 
 [#Contents Back to Table of Contents]
 
-===Nested Processes and Graph Composition===
+==Nested Processes and Graph Composition==
 -------------------------------------------------------------------------
 There are times when process definitions have overlapping functionality, or where one process needs the functionality from a second process. There are various ways of handling this, including copy-and-paste. A cleaner solution involves *nested processes*.
 
@@ -451,21 +451,23 @@ As you can see, we now have two copies of 'ext' embedded in the process definiti
 
 [#Contents Back to Table of Contents]
 
-===Execution Environment===
+==Execution Environment==
 -------------------------------------------------------------------------
-_TBD_
+While executing your process definitions, it may be desirable to have some shared state or to send data between nodes via the tokens. Sarasvati supports both these things via the execution *environment*. Each process has an environment on which attributes/variables can be set. In addition, each token also has its own environment. 
 
-
-[#Contents Back to Table of Contents]
+  * *Environment* - A set of key/value attributes
 
 ====Process Attributes====
 -------------------------------------------------------------------------
-_TBD_
+If you want state that is accessible from anywhere during process execution, then attributes can be set on the process environment. These attributes are visible and mutable by all nodes. 
 
-[#Contents Back to Table of Contents]
-
-====Process Attributes====
+====Token Attributes====
 -------------------------------------------------------------------------
-_TBD_
+Each *node token* also has its own environment. Arc tokens do not have an environment, because they do not execute in the same way that node tokens do, and thus have no need for private state. Node tokens are initialized with the state of their *parent tokens*.
+
+ * *Parent token* - Each node tokens has zero to many parents. 
+   * A node token on a start node has no parents
+   * A node token on a node with one incoming arc of a given name has a single parent. The environment will be copied from the parent.
+   * A node token on a join node may have multiple parents, one for each arc of the same name. In this case the environments of all the parents must be combined in some way. By default, each environment will be imported into that of the new node. So if more than one parent has an attribute with the same one, the last one imported will overwrite the previous values. This behavior may be overridden, but if this is a concern, then usually using process level attributes is advisable.
 
 [#Contents Back to Table of Contents]
