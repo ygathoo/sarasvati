@@ -18,7 +18,6 @@
    * [#Flow_Control_with_Guards_using_Discard Flow Control with Guards using Discard]
    * [#Flow_Control_with_Guards_using_Named_Arcs Flow Control with Guards using Named Arcs]
    * [#Flow_Control_from_Node_Completion_using_Named_Arcs Flow Control from Node Completion using Named Arcs]
-   * [#Flow_Control_from_Node_Completion_using_Named_Arcs Flow Control from Node Completion using Named Arcs]
  * [#Nested_Processes_and_Graph_Composition Nested Processes and Graph Composition]
 
 ==Introduction==
