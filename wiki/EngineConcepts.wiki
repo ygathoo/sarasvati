@@ -19,7 +19,7 @@
    * [#Flow_Control_with_Guards_using_Named_Arcs Flow Control with Guards using Named Arcs]
    * [#Flow_Control_from_Node_Completion_using_Named_Arcs Flow Control from Node Completion using Named Arcs]
  * [#Nested_Processes_and_Graph_Composition Nested Processes and Graph Composition]
-
+   * [#Graph_Composition_Example_One Graph Composition Example One]
 ==Introduction==
 Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below).
 
@@ -368,8 +368,6 @@ The complete process can be seen [ConceptsExampleSelectArcOne here].
 
 ===Nested Processes and Graph Composition===
 -------------------------------------------------------------------------
-  _This section is a work in progress_
-
 There are times when process definitions have overlapping functionality, or where one process needs the functionality from a second process. There are various ways of handling this, including copy-and-paste. A cleaner solution involves *nested processes*.
 
   * *Nested Process* - A node in an executing process may create a separate, new process (of the same or different process definition). This new process is known a nested process. The new process gets initialized with the process state of the containing process and the current token. When the nested process completes, the token in the containing process will be completed.
@@ -400,8 +398,34 @@ The first two reasons differ from the second two, in that they are, in some sens
       * All nodes will share a single process variable scope. Sometimes it is desirable to have shared state for a subset of the nodes in a process definition.
       * The version of an external graph is set when the process definition is loaded, rather than when nodes from that graph are executed. If an external process definition is updated, process definitions referring to it must be reloaded as well to pick up the changes.
 
-  * *External Arc* - An arc which has an endpoint in an external process definition. While normal arcs are always specified as originating in the node where they are defined (aka *out arcs*), it is not possible to add arcs to an external process. Therefore external arcs may either be *in arcs* or *out arcs*.
+  * *External Arc* - An arc which has an endpoint in an external process definition. While normal arcs are always specified as originating in the node where they are defined (aka *out arcs*), it is not possible to add arcs to an external process. Therefore external arcs may either be *in arcs* or *out arcs*. Note that external arcs may be *named* just like regular arcs.
     * *Out Arc* - An arc which starts in the defining node and ends in a specified node
     * *In Arc* - An arc which starts in a specified and ends in the node in which it is defined.
 
   * *External Instance* - A specific external process definition may be referenced multiple times. It may also be imported into the referring process definition multiple times, or just a single time. Each external arc specifies a specific instance of the external process definition. 
+
+[#Contents Back to Table of Contents]
+
+====Graph Composition Example One====
+-------------------------------------------------------------------------
+
+Let's look at an examples of how this works in practice. Here is a small process definition which we want to embed. This process definition will be named 'ext'.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals1.jpg]
+
+It only has two nodes. Notice that both nodes are join nodes, even though one node has no inputs and the other only has one. However, in the composed graph these nodes may have more inputs. 
+
+Next is the process definition which will be using 'ext'.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals2.jpg]
+
+This process definition looks very different from previous examples. It isn't even fully connected. 
+
+Some things to node:
+  * The external arcs are labeled with the process definition name, instance and node name that they are intended to link to.
+  * In this case, all the arcs are connecting to the same instance of 'ext', instance 1.
+  * Both in and out external arcs may connect to any node in the target external. They are not limited to just start nodes, for example.
+
+When the graph is loaded, the composed version will look as follows:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals3.jpg]
