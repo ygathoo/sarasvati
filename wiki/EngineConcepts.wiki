@@ -20,6 +20,8 @@
    * [#Flow_Control_from_Node_Completion_using_Named_Arcs Flow Control from Node Completion using Named Arcs]
  * [#Nested_Processes_and_Graph_Composition Nested Processes and Graph Composition]
    * [#Graph_Composition_Example_One Graph Composition Example One]
+   * [#Graph_Composition_Example_Two Graph Composition Example Two]
+
 ==Introduction==
 Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below).
 
@@ -421,7 +423,7 @@ Next is the process definition which will be using 'ext'.
 
 This process definition looks very different from previous examples. It isn't even fully connected. 
 
-Some things to node:
+Some things to note:
   * The external arcs are labeled with the process definition name, instance and node name that they are intended to link to.
   * In this case, all the arcs are connecting to the same instance of 'ext', instance 1.
   * Both in and out external arcs may connect to any node in the target external. They are not limited to just start nodes, for example.
@@ -429,3 +431,19 @@ Some things to node:
 When the graph is loaded, the composed version will look as follows:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals3.jpg]
+
+[#Contents Back to Table of Contents]
+
+====Graph Composition Example Two====
+-------------------------------------------------------------------------
+The previous example referenced only a single instance. Here as the example using two instances 'ext. 
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals4.jpg]
+
+When it is loaded, the composed graph looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals5.jpg]
+
+As you can see, we now have two copies of 'ext' embedded in the process definition. One copy will be made for each unique instance referenced. A process definition can have references to any number of different external definitions and each external process definition can be imported any number of times.
+
+[#Contents Back to Table of Contents]
