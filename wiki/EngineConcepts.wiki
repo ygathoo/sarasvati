@@ -455,7 +455,13 @@ As you can see, we now have two copies of 'ext' embedded in the process definiti
 -------------------------------------------------------------------------
 While executing your process definitions, it may be desirable to have some shared state or to send data between nodes via the tokens. Sarasvati supports both these things via the execution *environment*. Each process has an environment on which attributes/variables can be set. In addition, each token also has its own environment. 
 
-  * *Environment* - A set of key/value attributes
+  * *Environment* - A set of key/value attributes. 
+
+When using a memory backed engine, all environment attributes are stored in memory. However, when using a database backed engine, we may wish to persist only certain attributes. Also, storing objects in the database can be complicated, storing arbitrary objects in memory is easier than doing so in the database. By default, attributes are *persistent*, however, there is a separate set of variables which are *transient*. 
+
+  * *Persistent Attributes* - These attributes will be stored for the lifetime of the process. There may be restriction on what can be (easily) stored a persistent attribute, since it may need to be stored in a database table.
+
+  * *Transient Attributes* - These attributes will be stored in memory, only as long as the process and/or token is in memory. For a memory backed engine, these have the same scope as the persistent attributes. There are no restrictions on what can be stored as a transient attribute.
 
 ====Process Attributes====
 -------------------------------------------------------------------------
@@ -466,8 +472,8 @@ If you want state that is accessible from anywhere during process execution, the
 Each *node token* also has its own environment. Arc tokens do not have an environment, because they do not execute in the same way that node tokens do, and thus have no need for private state. Node tokens are initialized with the state of their *parent tokens*.
 
  * *Parent token* - Each node tokens has zero to many parents. 
-   * A node token on a start node has no parents
-   * A node token on a node with one incoming arc of a given name has a single parent. The environment will be copied from the parent.
+   * A node token on a start node has no parents. It will start with an empty environment.
+   * A node token on a node with one incoming arc of a given name has a single parent. Its environment will be copied from the parent.
    * A node token on a join node may have multiple parents, one for each arc of the same name. In this case the environments of all the parents must be combined in some way. By default, each environment will be imported into that of the new node. So if more than one parent has an attribute with the same one, the last one imported will overwrite the previous values. This behavior may be overridden, but if this is a concern, then usually using process level attributes is advisable.
 
 [#Contents Back to Table of Contents]
