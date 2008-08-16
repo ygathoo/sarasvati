@@ -1,4 +1,5 @@
 #summary Core Sarasvati engine concepts.
+#labels Featured
 
 [GraphBasedWorkflow <-- Prev: Why graph based workflow?] ... [XMLFileFormat Next: XML File Format  -->]
 
