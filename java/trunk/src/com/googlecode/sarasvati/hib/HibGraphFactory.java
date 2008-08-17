@@ -25,15 +25,15 @@ import java.util.Map;
 
 import org.hibernate.Session;
 
-import com.googlecode.sarasvati.AbstractGraphFactory;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.load.AbstractGraphFactory;
+import com.googlecode.sarasvati.load.LoadException;
 
 public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 {
@@ -64,7 +64,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 
   @Override
   public Node newNode (HibGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard, Object custom)
-    throws ImportException
+    throws LoadException
   {
     HibNode node = (HibNode)newNode( type );
     node.setGraph( graph );

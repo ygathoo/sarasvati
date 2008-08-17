@@ -17,14 +17,18 @@
     Copyright 2008 Paul Lorenz
 */
 
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.load;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
@@ -63,7 +67,7 @@ public class GraphLoader<G extends Graph>
   }
 
   protected void importNodes (XmlWorkflow xmlDef)
-    throws ImportException
+    throws LoadException
   {
     for ( XmlNode xmlNode : xmlDef.getNodes() )
     {
@@ -71,7 +75,7 @@ public class GraphLoader<G extends Graph>
 
       if ( nodeCache.containsKey( nodeName ) )
       {
-        throw new ImportException( "Node name '" + nodeName + "' is not unique in workflow: " + graph.getName() );
+        throw new LoadException( "Node name '" + nodeName + "' is not unique in workflow: " + graph.getName() );
       }
 
       String type = xmlNode.getType();
@@ -86,7 +90,7 @@ public class GraphLoader<G extends Graph>
     }
   }
 
-  protected void importArcs (XmlWorkflow xmlDef) throws ImportException
+  protected void importArcs (XmlWorkflow xmlDef) throws LoadException
   {
     for (XmlNode xmlNode : xmlDef.getNodes())
     {
@@ -97,7 +101,7 @@ public class GraphLoader<G extends Graph>
 
         if ( endNode == null )
         {
-          throw new ImportException( "Arc in node '" + xmlNode.getName() + "' points to non-existent node '" + xmlArc.getTo() + "'" );
+          throw new LoadException( "Arc in node '" + xmlNode.getName() + "' points to non-existent node '" + xmlArc.getTo() + "'" );
         }
 
         factory.newArc( graph, startNode, endNode, SvUtil.isBlankOrNull( xmlArc.getName() ) ? Arc.DEFAULT_ARC : xmlArc.getName() );
@@ -110,7 +114,7 @@ public class GraphLoader<G extends Graph>
     return externalArc.getExternal() + ":" + externalArc.getInstance();
   }
 
-  protected Node getExternalNode (XmlExternalArc externalArc) throws ImportException
+  protected Node getExternalNode (XmlExternalArc externalArc) throws LoadException
   {
     Map<String,Node> instance = instanceCache.get( getInstanceKey( externalArc ) );
 
@@ -123,7 +127,7 @@ public class GraphLoader<G extends Graph>
     return instance.get( externalArc.getNodeName() );
   }
 
-  protected void importExternalArcs (XmlWorkflow xmlDef) throws ImportException
+  protected void importExternalArcs (XmlWorkflow xmlDef) throws LoadException
   {
     for ( XmlNode xmlNode : xmlDef.getNodes() )
     {
@@ -134,7 +138,7 @@ public class GraphLoader<G extends Graph>
 
         if ( extNode == null )
         {
-          throw new ImportException( "External arc in node '" + xmlNode.getName() +
+          throw new LoadException( "External arc in node '" + xmlNode.getName() +
                                      "' points to non-existent node '" + externalArc.getNodeName() + "'" +
                                      " in process definition '" + externalArc.getExternal() + "'" );
         }
@@ -154,14 +158,14 @@ public class GraphLoader<G extends Graph>
   }
 
   protected Map<String,Node> importInstance (String externalName, String instanceName)
-      throws ImportException
+      throws LoadException
   {
     Map<String, Node> nodeMap = new HashMap<String, Node>();
     Graph instanceGraph = repository.getLatestGraph( externalName );
 
     if ( instanceGraph == null )
     {
-      throw new ImportException( "Referenced external '" + externalName + "' not found in database" );
+      throw new LoadException( "Referenced external '" + externalName + "' not found in database" );
     }
 
     Map<Node,Node> lookupMap = new HashMap<Node, Node>();
@@ -188,7 +192,7 @@ public class GraphLoader<G extends Graph>
   }
 
   public void loadDefinition (XmlWorkflow xmlDef)
-    throws ImportException
+    throws LoadException
   {
     instanceCache = new HashMap<String, Map<String,Node>>();
     nodeCache     = new HashMap<String, Node>();
@@ -205,13 +209,13 @@ public class GraphLoader<G extends Graph>
   }
 
   public void loadWithDependencies (String name, XmlWorkflowResolver resolver)
-    throws JAXBException, ImportException
+    throws JAXBException, LoadException
   {
     loadWithDependencies( name, resolver, new ArrayList<String>() );
   }
 
-  private void loadWithDependencies (String name, XmlWorkflowResolver resolver, ArrayList<String> stack)
-      throws JAXBException, ImportException
+  private void loadWithDependencies (String name, XmlWorkflowResolver resolver, List<String> stack)
+      throws JAXBException, LoadException
   {
     stack.add( name );
     XmlWorkflow xmlDef = resolver.resolve( name );
@@ -223,7 +227,7 @@ public class GraphLoader<G extends Graph>
         String extName = extArc.getExternal();
         if ( stack.contains( extName ) )
         {
-          throw new ImportException( "Process definition '" + name + "' contains an illegal recursive reference to '" + extName + "'" );
+          throw new LoadException( "Process definition '" + name + "' contains an illegal recursive reference to '" + extName + "'" );
         }
 
         if ( !isLoaded( extName ) )

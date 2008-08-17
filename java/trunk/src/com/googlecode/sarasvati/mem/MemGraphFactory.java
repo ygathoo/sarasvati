@@ -21,15 +21,15 @@ package com.googlecode.sarasvati.mem;
 
 import java.util.List;
 
-import com.googlecode.sarasvati.AbstractGraphFactory;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.load.AbstractGraphFactory;
+import com.googlecode.sarasvati.load.LoadException;
 
 public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
 {
@@ -48,7 +48,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
 
   @Override
   public Arc newArc (MemGraph graph, Node startNode, Node endNode, String name)
-      throws ImportException
+      throws LoadException
   {
     MemArc arc = new MemArc( name, startNode, endNode );
     graph.getArcs().add( arc );
@@ -57,7 +57,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
 
   @Override
   public Node newNode (MemGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard, Object custom)
-    throws ImportException
+    throws LoadException
   {
     MemNode node = (MemNode)newNode( type );
     node.setGraph( graph );

@@ -16,10 +16,13 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.load;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.Node;
 
 public abstract class AbstractGraphFactory<G extends Graph> implements GraphFactory<G>
 {
@@ -36,7 +39,7 @@ public abstract class AbstractGraphFactory<G extends Graph> implements GraphFact
     typeMap.put( type, clazz );
   }
 
-  public Node newNode (String type) throws ImportException
+  public Node newNode (String type) throws LoadException
   {
     Class<? extends Node> clazz = typeMap.get( type );
     clazz = clazz == null ? defaultClass : clazz;
@@ -47,11 +50,11 @@ public abstract class AbstractGraphFactory<G extends Graph> implements GraphFact
     }
     catch ( InstantiationException e )
     {
-      throw new ImportException( "Unable to create new instance for type '" + type + "'", e );
+      throw new LoadException( "Unable to create new instance for type '" + type + "'", e );
     }
     catch ( IllegalAccessException e )
     {
-      throw new ImportException( "Unable to create new instance for type '" + type + "'", e );
+      throw new LoadException( "Unable to create new instance for type '" + type + "'", e );
     }
   }
 }

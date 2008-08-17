@@ -24,10 +24,10 @@ import java.io.FilenameFilter;
 
 import org.hibernate.Session;
 
-import com.googlecode.sarasvati.GraphLoader;
 import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
+import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
