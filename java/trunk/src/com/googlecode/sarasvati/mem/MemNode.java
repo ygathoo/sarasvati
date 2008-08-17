@@ -23,11 +23,11 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GuardResponse;
-import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.guardlang.GuardLang;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
+import com.googlecode.sarasvati.load.LoadException;
 
 public class MemNode implements Node, Cloneable
 {
@@ -177,7 +177,7 @@ public class MemNode implements Node, Cloneable
   }
 
   @SuppressWarnings("unused")
-  public void loadCustom (Object custom) throws ImportException
+  public void loadCustom (Object custom) throws LoadException
   {
     // does nothing by default
   }

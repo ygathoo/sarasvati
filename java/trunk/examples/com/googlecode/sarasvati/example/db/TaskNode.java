@@ -28,12 +28,12 @@ import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
-import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.hib.HibNodeToken;
+import com.googlecode.sarasvati.load.LoadException;
 
 @Entity
 @DiscriminatorValue( "task" )
@@ -91,11 +91,11 @@ public class TaskNode extends HibNode
 
   @Override
   public void loadCustom (Session session, Object custom)
-    throws ImportException
+    throws LoadException
   {
     if ( custom == null || !(custom instanceof XmlTaskDef) )
     {
-      throw new ImportException( "Task node '" + getName() +
+      throw new LoadException( "Task node '" + getName() +
                                  "' in definition of '" + getGraph().getName() +
                                  "' contains no (or improperly specified) task-def element." );
     }

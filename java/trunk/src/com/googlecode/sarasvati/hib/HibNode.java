@@ -41,11 +41,11 @@ import org.hibernate.annotations.Type;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
-import com.googlecode.sarasvati.ImportException;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.guardlang.GuardLang;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
+import com.googlecode.sarasvati.load.LoadException;
 
 @Entity
 @Table (name="wf_node")
@@ -224,7 +224,7 @@ public class HibNode implements Node
 
   @SuppressWarnings("unused")
   public void loadCustom (Session session, Object custom)
-    throws ImportException
+    throws LoadException
   {
     // does nothing by default
   }

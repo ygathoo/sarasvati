@@ -27,11 +27,11 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.GraphLoader;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
+import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
 import com.googlecode.sarasvati.mem.MemGraphRepository;

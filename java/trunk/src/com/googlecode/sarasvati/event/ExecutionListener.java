@@ -16,20 +16,9 @@
 
     Copyright 2008 Paul Lorenz
 */
+package com.googlecode.sarasvati.event;
 
-package com.googlecode.sarasvati;
-
-public class ImportException extends Exception
+public interface ExecutionListener
 {
-  private static final long serialVersionUID = 1L;
-
-  public ImportException (String message, Throwable cause)
-  {
-    super( message, cause );
-  }
-
-  public ImportException( String message )
-  {
-    super( message );
-  }
+  void notify (ExecutionEvent event);
 }

@@ -16,9 +16,17 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.load;
 
 import java.util.List;
+
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.Process;
 
 public interface GraphFactory<G extends Graph>
 {
@@ -40,12 +48,12 @@ public interface GraphFactory<G extends Graph>
    *
    * @return The new Arc
    *
-   * @throws ImportException If the arc can not be created, or if it is passed invalid data.
+   * @throws LoadException If the arc can not be created, or if it is passed invalid data.
    */
-  Arc newArc (G graph, Node startNode, Node endNode, String name) throws ImportException;
+  Arc newArc (G graph, Node startNode, Node endNode, String name) throws LoadException;
 
   Node newNode (G graph, String name, String type, boolean isJoin, boolean isStart, String guard, Object custom)
-    throws ImportException;
+    throws LoadException;
 
   /**
    * Imports a node from an external graph into the given graph.

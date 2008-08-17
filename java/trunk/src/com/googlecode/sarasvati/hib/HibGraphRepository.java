@@ -23,7 +23,7 @@ import java.util.List;
 import org.hibernate.Query;
 import org.hibernate.Session;
 
-import com.googlecode.sarasvati.GraphRepository;
+import com.googlecode.sarasvati.load.GraphRepository;
 
 public class HibGraphRepository implements GraphRepository<HibGraph>
 {

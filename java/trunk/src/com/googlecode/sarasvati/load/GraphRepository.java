@@ -16,9 +16,11 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.load;
 
 import java.util.List;
+
+import com.googlecode.sarasvati.Graph;
 
 /**
  * The graph repository is an engine specific way of accessing instances of

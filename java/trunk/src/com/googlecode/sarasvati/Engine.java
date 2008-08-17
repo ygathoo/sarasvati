@@ -18,6 +18,9 @@
 */
 package com.googlecode.sarasvati;
 
+import com.googlecode.sarasvati.load.GraphFactory;
+import com.googlecode.sarasvati.load.GraphRepository;
+
 
 /**
  * An {@link Engine} executes a process. A {@link Graph} specifies

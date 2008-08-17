@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.googlecode.sarasvati.GraphRepository;
+import com.googlecode.sarasvati.load.GraphRepository;
 
 public class MemGraphRepository implements GraphRepository<MemGraph>
 {
