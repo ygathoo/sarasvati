@@ -18,30 +18,30 @@
 */
 package com.googlecode.sarasvati.event;
 
-public enum ExecutionEventType
+class ExecutionListenerWrapper implements ExecutionListener
 {
-  PROCESS_STARTED ( 2 ),
-  PROCESS_COMPLETED( 4 ),
-  PROCESS_CANCELED( 8 ),
+  protected ExecutionEventType eventType;
+  protected ExecutionListener listener;
 
-  NODE_TOKEN_CREATED( 16 ),
-  NODE_TOKEN_ACCEPTED( 32 ),
-  NODE_TOKEN_DISCARDED( 64 ),
-  NODE_TOKEN_SKIPPED( 128 ),
-  NODE_TOKEN_COMPLETED( 256 ),
-
-  ARC_TOKEN_CREATED( 512 ),
-  ARC_TOKEN_COMPLETED( 1024 );
-
-  private int eventType;
-
-  private ExecutionEventType (int eventType)
+  public ExecutionListenerWrapper(ExecutionEventType eventType, ExecutionListener listener)
   {
     this.eventType = eventType;
+    this.listener = listener;
   }
 
-  public int getEventType ()
+  public ExecutionEventType getEventType()
   {
     return eventType;
+  }
+
+  public ExecutionListener getListener()
+  {
+    return listener;
+  }
+
+  @Override
+  public void notify(ExecutionEvent event)
+  {
+    listener.notify( event );
   }
 }

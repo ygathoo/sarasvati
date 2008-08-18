@@ -29,6 +29,7 @@ import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 import com.googlecode.sarasvati.ProcessState;
+import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
 
 public class MemProcess implements Process
 {
@@ -42,6 +43,8 @@ public class MemProcess implements Process
   protected Env env = new MapEnv();
 
   protected NodeToken parentToken;
+
+  protected ExecutionEventDispatcher eventDispatcher = ExecutionEventDispatcher.newArrayListInstance();
 
   public MemProcess (Graph graph)
   {
@@ -140,5 +143,11 @@ public class MemProcess implements Process
   public synchronized long nextTokenId ()
   {
     return tokenCounter++;
+  }
+
+  @Override
+  public ExecutionEventDispatcher getEventDispatcher ()
+  {
+    return eventDispatcher;
   }
 }
