@@ -20,9 +20,16 @@
 package com.googlecode.sarasvati.mem;
 
 import com.googlecode.sarasvati.NonRecursiveEngine;
+import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.event.ExecutionEvent;
+import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
+import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.event.ExecutionListener;
 
 public class MemEngine extends NonRecursiveEngine
 {
+  protected static final ExecutionEventDispatcher globalEventDispatcher = ExecutionEventDispatcher.newCopyOnWriteListInstance();
+
   @Override
   public MemGraphFactory getFactory()
   {
@@ -33,5 +40,19 @@ public class MemEngine extends NonRecursiveEngine
   public MemGraphRepository getRepository()
   {
     return MemGraphRepository.INSTANCE;
+  }
+
+  @Override
+  public void fireEvent(ExecutionEvent event)
+  {
+    globalEventDispatcher.fireEvent( event );
+    event.getProcess().getEventDispatcher().fireEvent( event );
+  }
+
+  @Override
+  public void addExecutionListener(Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    ExecutionEventDispatcher eventDispatcher = process == null ? globalEventDispatcher : process.getEventDispatcher();
+    eventDispatcher.addExecutionListener( listener, eventTypes );
   }
 }

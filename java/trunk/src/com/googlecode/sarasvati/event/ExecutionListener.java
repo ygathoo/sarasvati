@@ -18,7 +18,24 @@
 */
 package com.googlecode.sarasvati.event;
 
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Process;
+
+/**
+ * Listeners may be registered for events happening on a single {@link Process} or
+ * all processes.
+ *
+ * @see Process#addExecutionListener(ExecutionListener, ExecutionEventType...)
+ *
+ * @author Paul Lorenz
+ */
 public interface ExecutionListener
 {
+  /**
+   * Invoked by the {@link Engine} when an event of a type that this
+   * listener has register for occurs.
+   *
+   * @param event The event which has just occurred.
+   */
   void notify (ExecutionEvent event);
 }

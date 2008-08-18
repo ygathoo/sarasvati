@@ -51,6 +51,7 @@ import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 import com.googlecode.sarasvati.ProcessState;
+import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
 
 @Entity
 @Table (name="wf_process")
@@ -72,6 +73,9 @@ public class HibProcess implements Process
   @Where (clause="complete_date is null")
   protected List<NodeToken>  nodeTokens;
 
+  @OneToMany (mappedBy="process", fetch=FetchType.LAZY)
+  protected List<HibProcessListener>  listeners;
+
   @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
   @JoinColumn (name = "parent_token_id", nullable=true)
   protected NodeToken parentToken;
@@ -90,6 +94,9 @@ public class HibProcess implements Process
 
   @Transient
   protected Env env = null;
+
+  @Transient
+  protected ExecutionEventDispatcher eventDispatcher = ExecutionEventDispatcher.newArrayListInstance();
 
   public HibProcess () { /* Default constructor for Hibernate */ }
 
@@ -143,6 +150,21 @@ public class HibProcess implements Process
   public void setNodeTokens( List<NodeToken> nodeTokens )
   {
     this.nodeTokens = nodeTokens;
+  }
+
+  public List<HibProcessListener> getListeners()
+  {
+    return listeners;
+  }
+
+  public void setListeners(List<HibProcessListener> listeners)
+  {
+    this.listeners = listeners;
+  }
+
+  public void setEnv(Env env)
+  {
+    this.env = env;
   }
 
   @Override
@@ -236,6 +258,12 @@ public class HibProcess implements Process
   public boolean hasActiveTokens ()
   {
     return !arcTokens.isEmpty() || !nodeTokens.isEmpty();
+  }
+
+  @Override
+  public ExecutionEventDispatcher getEventDispatcher()
+  {
+    return eventDispatcher;
   }
 
   @Override

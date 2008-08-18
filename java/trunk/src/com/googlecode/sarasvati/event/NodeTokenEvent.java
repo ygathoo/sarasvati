@@ -27,7 +27,32 @@ public class NodeTokenEvent extends ExecutionEvent
   protected NodeToken nodeToken;
   protected GuardResponse guardResponse;
 
-  public NodeTokenEvent (ExecutionEventType eventType, NodeToken nodeToken, GuardResponse guardResponse)
+  public static final NodeTokenEvent newCreatedEvent (NodeToken nodeToken)
+  {
+    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_CREATED, nodeToken, null );
+  }
+
+  public static final NodeTokenEvent newAcceptedEvent (NodeToken nodeToken, GuardResponse response)
+  {
+    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, response );
+  }
+
+  public static final NodeTokenEvent newDiscardedEvent (NodeToken nodeToken, GuardResponse response)
+  {
+    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken, response );
+  }
+
+  public static final NodeTokenEvent newSkippedEvent (NodeToken nodeToken, GuardResponse response)
+  {
+    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, response );
+  }
+
+  public static final NodeTokenEvent newCompletedEvent (NodeToken nodeToken)
+  {
+    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, null );
+  }
+
+  private NodeTokenEvent (ExecutionEventType eventType, NodeToken nodeToken, GuardResponse guardResponse)
   {
     super( eventType );
     this.nodeToken = nodeToken;

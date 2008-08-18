@@ -18,6 +18,9 @@
 */
 package com.googlecode.sarasvati;
 
+import com.googlecode.sarasvati.event.ExecutionEvent;
+import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphRepository;
 
@@ -25,7 +28,7 @@ import com.googlecode.sarasvati.load.GraphRepository;
 /**
  * An {@link Engine} executes a process. A {@link Graph} specifies
  * how it should be executed and a {@link Process} tracks the current state
- * of execution. But it is an Engine which create instances of {@link ArcToken},
+ * of execution. But it is an Engine which creates instances of {@link ArcToken},
  * {@link NodeToken} and {@link Process} and which invokes
  * {@link Node#guard(Engine, NodeToken)} and {@link Node#execute(Engine, NodeToken)}.
  *
@@ -59,49 +62,11 @@ public interface Engine
   void startProcess (Process process);
 
   /**
-   * Competes and cancels may be performed synchronously or asynchronously. If
-   * synchronous, {@link #finalizeComplete(Process)} and {@link #finalizeCancel(Process)}
-   * will be called directly by the engine. If asynchronous, {@link #doAsyncComplete(Process)}
-   * and {@link #doAsyncCancel(Process)} will be called. These methods should be overridden
-   * by subclasses. The subclass with then be responsible for calling the appropriate
-   * finalize method when ready.
-   * <br/>
-   * If this method returns false, the process will never enter the {@link ProcessState#PendingCancel}
-   * and {@link ProcessState#PendingCompletion} states.
-   * <br/>
-   *
-   * Returns false by default.
-   *
-   * @return True if complete and cancel should be performed asynchronously.
-   */
-  boolean isProcessEndAsynchronous ();
-
-  /**
    * Cancels the given process. The process state is set to {@link ProcessState#PendingCancel}.
    *
    * @param process The process to cancel
    */
   void cancelProcess (Process process);
-
-  /**
-   * Hook for subclasses to set up asynchronous completion if desired. The process will
-   * be in state {@link ProcessState#PendingCompletion}.
-  * <br/>
-   * Only invoked if {@link #isProcessEndAsynchronous()} returns true;
-
-   * @param process The process being completed.
-   */
-  void doAsyncComplete (Process process);
-
-  /**
-   * Hook for subclasses to set up asynchronous cancellation if desired. The process will
-   * be in state {@link ProcessState#PendingCancel}.
-   * <br/>
-   * Only invoked if {@link #isProcessEndAsynchronous()} returns true;
-   *
-   * @param process The process being canceled.
-   */
-  void doAsyncCancel (Process process);
 
   /**
    * Will set the state to {@link ProcessState#Completed} and perform whatever
@@ -148,7 +113,7 @@ public interface Engine
   void completeExecution (NodeToken token, String arcName);
 
   /**
-   * Returns an appropriate {@link GraphRepository} for this {@link Engine}. Subclases
+   * Returns an appropriate {@link GraphRepository} for this {@link Engine}. Subclasses
    * may override this to provide custom behavior.
    *
    * @return An appropriate {@link GraphRepository} for this {@link Engine}
@@ -162,4 +127,24 @@ public interface Engine
    * @return A {@link GraphFactory} which will generate the appropriate types for this {@link Engine}.
    */
   GraphFactory<? extends Graph> getFactory ();
+
+  /**
+   * This will send the given event to listeners who have registered for
+   * events on all processes and to listeners who have registered for events
+   * on the process that originated this event.
+   *
+   * @param event The event to send to all interested listeners.
+   */
+  void fireEvent (ExecutionEvent event);
+
+  /**
+   * Adds a listener for the given event types. If a process is given, then events
+   * will only be sent for that listener. If null is passed for the process, then
+   * the listener will receive notifications for all processes.
+   *
+   * @param process The process to add the listener for, or null for all processes
+   * @param listener The listener
+   * @param eventTypes The event types to be notified for.
+   */
+  void addExecutionListener (Process process, ExecutionListener listener, ExecutionEventType...eventTypes);
 }

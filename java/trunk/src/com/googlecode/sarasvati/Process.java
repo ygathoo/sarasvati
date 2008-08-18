@@ -20,6 +20,8 @@ package com.googlecode.sarasvati;
 
 import java.util.List;
 
+import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
+
 /**
  * A Process represents a currently executing workflow graph.
  *
@@ -134,4 +136,6 @@ public interface Process
    * @return If this is a nested process, this will return the parent {@link NodeToken}, and null otherwise.
    */
   NodeToken getParentToken ();
+
+  ExecutionEventDispatcher getEventDispatcher ();
 }

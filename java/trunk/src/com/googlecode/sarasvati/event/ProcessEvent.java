@@ -22,6 +22,21 @@ import com.googlecode.sarasvati.Process;
 
 public class ProcessEvent extends ExecutionEvent
 {
+  public static final ProcessEvent newStartedEvent (Process process)
+  {
+    return new ProcessEvent( ExecutionEventType.PROCESS_STARTED, process );
+  }
+
+  public static final ProcessEvent newCompletedEvent (Process process)
+  {
+    return new ProcessEvent( ExecutionEventType.PROCESS_COMPLETED, process );
+  }
+
+  public static final ProcessEvent newCanceledEvent (Process process)
+  {
+    return new ProcessEvent( ExecutionEventType.PROCESS_CANCELED, process );
+  }
+
   private Process process;
 
   public ProcessEvent (ExecutionEventType eventType, Process process)

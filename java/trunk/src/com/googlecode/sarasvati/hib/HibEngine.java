@@ -19,13 +19,22 @@
 
 package com.googlecode.sarasvati.hib;
 
+import java.util.List;
+
 import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.googlecode.sarasvati.NonRecursiveEngine;
+import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.event.ExecutionEvent;
+import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
+import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.event.ExecutionListener;
 
 public class HibEngine extends NonRecursiveEngine
 {
+  protected static final ExecutionEventDispatcher globalEventDispatcher = ExecutionEventDispatcher.newCopyOnWriteListInstance();
+
   protected Session session;
   protected HibGraphFactory factory;
   protected HibGraphRepository repository;
@@ -57,6 +66,46 @@ public class HibEngine extends NonRecursiveEngine
   public HibGraphFactory getFactory()
   {
     return factory;
+  }
+
+  @Override
+  public void fireEvent(ExecutionEvent event)
+  {
+    globalEventDispatcher.fireEvent( event );
+    event.getProcess().getEventDispatcher().fireEvent( event );
+  }
+
+  @Override
+  public void addExecutionListener(Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    if ( eventTypes == null || listener == null )
+    {
+      return;
+    }
+
+    ExecutionEventDispatcher eventDispatcher = process == null ? globalEventDispatcher : process.getEventDispatcher();
+
+    for ( ExecutionEventType eventType : eventTypes )
+    {
+      if ( eventType == null )
+      {
+        continue;
+      }
+
+      HibProcessListener hibListener = new HibProcessListener( listener.getClass().getName(), eventType, process );
+      session.save( hibListener );
+      eventDispatcher.addExecutionListener( listener, eventTypes );
+    }
+  }
+
+  public void initGlobalListeners ()
+  {
+    List<HibProcessListener> hibListeners = session.createQuery( "from HibProcessListener where process is null" ).list();
+
+    for ( HibProcessListener hibListener : hibListeners )
+    {
+
+    }
   }
 
   public static void addToConfiguration (AnnotationConfiguration config, boolean enableCaching)

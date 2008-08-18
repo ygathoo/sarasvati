@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import com.googlecode.sarasvati.event.ArcTokenEvent;
+import com.googlecode.sarasvati.event.NodeTokenEvent;
+import com.googlecode.sarasvati.event.ProcessEvent;
+
 /**
  *
  * @author Paul Lorenz
@@ -38,6 +42,7 @@ public abstract class BaseEngine implements Engine
   public void startProcess (Process process)
   {
     process.setState( ProcessState.Executing );
+    fireEvent( ProcessEvent.newStartedEvent( process ) );
 
     for (Node startNode : process.getGraph().getStartNodes() )
     {
@@ -51,33 +56,9 @@ public abstract class BaseEngine implements Engine
   @Override
   public void cancelProcess (Process process)
   {
-    if ( isProcessEndAsynchronous() )
-    {
-      process.setState( ProcessState.PendingCancel );
-      doAsyncCancel( process );
-    }
-    else
-    {
-      finalizeCancel( process );
-    }
-  }
-
-  @Override
-  public boolean isProcessEndAsynchronous()
-  {
-    return false;
-  }
-
-  @Override
-  public void doAsyncCancel(Process process)
-  {
-    // does nothing by default
-  }
-
-  @Override
-  public void doAsyncComplete(Process process)
-  {
-    // does nothing by default
+    process.setState( ProcessState.PendingCancel );
+    fireEvent( ProcessEvent.newCanceledEvent( process ) );
+    finalizeCancel( process );
   }
 
   @Override
@@ -139,9 +120,12 @@ public abstract class BaseEngine implements Engine
     {
       process.removeArcToken( token );
       token.markComplete( this );
+      fireEvent( ArcTokenEvent.newCompletedEvent( token ) );
     }
 
-    executeNode( process, getFactory().newNodeToken( process, targetNode, Arrays.asList( tokens ) ) );
+    NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, Arrays.asList( tokens ) );
+    fireEvent( NodeTokenEvent.newCreatedEvent( nodeToken ) );
+    executeNode( process, nodeToken );
   }
 
   protected void executeNode (Process process, NodeToken token)
@@ -153,15 +137,18 @@ public abstract class BaseEngine implements Engine
     {
       case AcceptToken :
         process.addNodeToken( token );
+        fireEvent( NodeTokenEvent.newAcceptedEvent( token, response ) );
         token.getNode().execute( this, token );
         break;
 
       case DiscardToken :
         token.markComplete( this );
+        fireEvent( NodeTokenEvent.newDiscardedEvent( token, response ) );
         break;
 
       case SkipNode :
         process.addNodeToken( token );
+        fireEvent( NodeTokenEvent.newSkippedEvent( token, response ) );
         completeExecution( token, response.getExitArcForSkip() );
         break;
     }
@@ -180,12 +167,15 @@ public abstract class BaseEngine implements Engine
 
     process.removeNodeToken( token );
     token.markComplete( this );
+    fireEvent( NodeTokenEvent.newCompletedEvent( token ) );
 
     token.getNode().completed( this, token, arcName );
 
     for ( Arc arc : outputArcs )
     {
-      executeArc( process, getFactory().newArcToken( process, arc, token ) );
+      ArcToken arcToken = getFactory().newArcToken( process, arc, token );
+      fireEvent( ArcTokenEvent.newCreatedEvent( arcToken ) );
+      executeArc( process, arcToken );
     }
 
     checkForCompletion( process );
@@ -195,15 +185,9 @@ public abstract class BaseEngine implements Engine
   {
     if ( !process.hasActiveTokens() )
     {
-      if ( isProcessEndAsynchronous() )
-      {
-        process.setState( ProcessState.PendingCompletion );
-        doAsyncComplete( process );
-      }
-      else
-      {
-        finalizeComplete( process );
-      }
+      process.setState( ProcessState.PendingCompletion );
+      fireEvent( ProcessEvent.newCompletedEvent( process ) );
+      finalizeComplete( process );
     }
   }
 }
