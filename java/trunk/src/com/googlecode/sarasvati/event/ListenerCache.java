@@ -29,8 +29,10 @@ public class ListenerCache
     return listener;
   }
 
-  public void ensureContainsListener (String type, ExecutionListener listener)
+  public void ensureContainsListenerType (ExecutionListener listener)
   {
+    String type = listener.getClass().getName();
+
     if ( !listenerCache.contains( type ) )
     {
       listenerCache.put( type, listener );
