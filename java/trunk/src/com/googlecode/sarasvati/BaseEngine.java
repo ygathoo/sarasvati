@@ -42,7 +42,7 @@ public abstract class BaseEngine implements Engine
   public void startProcess (Process process)
   {
     process.setState( ProcessState.Executing );
-    fireEvent( ProcessEvent.newStartedEvent( process ) );
+    fireEvent( ProcessEvent.newStartedEvent( this, process ) );
 
     for (Node startNode : process.getGraph().getStartNodes() )
     {
@@ -57,7 +57,7 @@ public abstract class BaseEngine implements Engine
   public void cancelProcess (Process process)
   {
     process.setState( ProcessState.PendingCancel );
-    fireEvent( ProcessEvent.newCanceledEvent( process ) );
+    fireEvent( ProcessEvent.newCanceledEvent( this, process ) );
     finalizeCancel( process );
   }
 
@@ -120,11 +120,11 @@ public abstract class BaseEngine implements Engine
     {
       process.removeArcToken( token );
       token.markComplete( this );
-      fireEvent( ArcTokenEvent.newCompletedEvent( token ) );
+      fireEvent( ArcTokenEvent.newCompletedEvent( this, token ) );
     }
 
     NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, Arrays.asList( tokens ) );
-    fireEvent( NodeTokenEvent.newCreatedEvent( nodeToken ) );
+    fireEvent( NodeTokenEvent.newCreatedEvent( this, nodeToken ) );
     executeNode( process, nodeToken );
   }
 
@@ -137,18 +137,18 @@ public abstract class BaseEngine implements Engine
     {
       case AcceptToken :
         process.addNodeToken( token );
-        fireEvent( NodeTokenEvent.newAcceptedEvent( token, response ) );
+        fireEvent( NodeTokenEvent.newAcceptedEvent( this, token, response ) );
         token.getNode().execute( this, token );
         break;
 
       case DiscardToken :
         token.markComplete( this );
-        fireEvent( NodeTokenEvent.newDiscardedEvent( token, response ) );
+        fireEvent( NodeTokenEvent.newDiscardedEvent( this, token, response ) );
         break;
 
       case SkipNode :
         process.addNodeToken( token );
-        fireEvent( NodeTokenEvent.newSkippedEvent( token, response ) );
+        fireEvent( NodeTokenEvent.newSkippedEvent( this, token, response ) );
         completeExecution( token, response.getExitArcForSkip() );
         break;
     }
@@ -167,14 +167,14 @@ public abstract class BaseEngine implements Engine
 
     process.removeNodeToken( token );
     token.markComplete( this );
-    fireEvent( NodeTokenEvent.newCompletedEvent( token ) );
+    fireEvent( NodeTokenEvent.newCompletedEvent( this, token ) );
 
     token.getNode().completed( this, token, arcName );
 
     for ( Arc arc : outputArcs )
     {
       ArcToken arcToken = getFactory().newArcToken( process, arc, token );
-      fireEvent( ArcTokenEvent.newCreatedEvent( arcToken ) );
+      fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
       executeArc( process, arcToken );
     }
 
@@ -186,7 +186,7 @@ public abstract class BaseEngine implements Engine
     if ( !process.hasActiveTokens() )
     {
       process.setState( ProcessState.PendingCompletion );
-      fireEvent( ProcessEvent.newCompletedEvent( process ) );
+      fireEvent( ProcessEvent.newCompletedEvent( this, process ) );
       finalizeComplete( process );
     }
   }

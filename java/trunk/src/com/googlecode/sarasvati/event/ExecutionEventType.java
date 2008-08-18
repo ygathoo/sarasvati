@@ -44,4 +44,26 @@ public enum ExecutionEventType
   {
     return eventType;
   }
+
+  public boolean isProcessEvent ()
+  {
+    return this == PROCESS_STARTED ||
+           this == PROCESS_COMPLETED ||
+           this == PROCESS_CANCELED;
+  }
+
+  public boolean isNodeTokenEvent ()
+  {
+    return this == NODE_TOKEN_ACCEPTED  ||
+           this == NODE_TOKEN_COMPLETED ||
+           this == NODE_TOKEN_ACCEPTED  ||
+           this == NODE_TOKEN_DISCARDED ||
+           this == NODE_TOKEN_SKIPPED;
+  }
+
+  public boolean isArcTokenEvent ()
+  {
+    return this == ARC_TOKEN_CREATED ||
+           this == ARC_TOKEN_COMPLETED;
+  }
 }

@@ -21,7 +21,7 @@ public class HibProcessListener
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long id;
 
-  protected String listener;
+  protected String type;
 
   @Column (name="event_type")
   protected ExecutionEventType eventType;
@@ -32,10 +32,10 @@ public class HibProcessListener
 
   protected HibProcessListener () { /* Default constructor for Hibernate */ }
 
-  public HibProcessListener (String listener, ExecutionEventType eventType, Process process)
+  public HibProcessListener (String type, ExecutionEventType eventType, Process process)
   {
     this.eventType = eventType;
-    this.listener = listener;
+    this.type = type;
     this.process = process;
   }
 
@@ -49,14 +49,14 @@ public class HibProcessListener
     this.id = id;
   }
 
-  public String getListener ()
+  public String getType ()
   {
-    return listener;
+    return type;
   }
 
-  public void setListener (String listener)
+  public void setType (String type)
   {
-    this.listener = listener;
+    this.type = type;
   }
 
   public ExecutionEventType getEventType ()

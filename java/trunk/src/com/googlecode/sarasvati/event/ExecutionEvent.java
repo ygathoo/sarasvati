@@ -19,17 +19,30 @@
 package com.googlecode.sarasvati.event;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 
 public abstract class ExecutionEvent
 {
+  private Engine             engine;
   private ExecutionEventType eventType;
 
-  public ExecutionEvent (ExecutionEventType eventType)
+  public ExecutionEvent (Engine engine, ExecutionEventType eventType)
   {
+    this.engine    = engine;
     this.eventType = eventType;
+  }
+
+  /**
+   * Returns the engine which generated this event
+   *
+   * @return The engine which generated this event
+   */
+  public Engine getEngine ()
+  {
+    return engine;
   }
 
   /**

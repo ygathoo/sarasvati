@@ -26,15 +26,17 @@ import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.googlecode.sarasvati.NonRecursiveEngine;
 import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.WorkflowException;
 import com.googlecode.sarasvati.event.ExecutionEvent;
-import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
+import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.event.ListenerCache;
 
 public class HibEngine extends NonRecursiveEngine
 {
-  protected static final ExecutionEventDispatcher globalEventDispatcher = ExecutionEventDispatcher.newCopyOnWriteListInstance();
+  protected static final ExecutionEventQueue globalEventDispatcher = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
   protected static final ListenerCache            listenerCache          = new ListenerCache();
 
   protected Session session;
@@ -74,7 +76,7 @@ public class HibEngine extends NonRecursiveEngine
   public void fireEvent(ExecutionEvent event)
   {
     globalEventDispatcher.fireEvent( event );
-    event.getProcess().getEventDispatcher().fireEvent( event );
+    event.getProcess().getEventQueue().fireEvent( event );
   }
 
   @Override
@@ -85,7 +87,7 @@ public class HibEngine extends NonRecursiveEngine
       return;
     }
 
-    ExecutionEventDispatcher eventDispatcher = process == null ? globalEventDispatcher : process.getEventDispatcher();
+    ExecutionEventQueue eventDispatcher = process == null ? globalEventDispatcher : process.getEventQueue();
 
     for ( ExecutionEventType eventType : eventTypes )
     {
@@ -96,7 +98,7 @@ public class HibEngine extends NonRecursiveEngine
 
       HibProcessListener hibListener = new HibProcessListener( listener.getClass().getName(), eventType, process );
       session.save( hibListener );
-      eventDispatcher.addExecutionListener( listener, eventTypes );
+      eventDispatcher.addListener( this, listener, eventTypes );
 
       listenerCache.ensureContainsListenerType( listener );
     }
@@ -109,13 +111,19 @@ public class HibEngine extends NonRecursiveEngine
     initFromDatabase( hibListeners, globalEventDispatcher );
   }
 
-  private void initFromDatabase (List<HibProcessListener> hibListeners, ExecutionEventDispatcher eventDispatcher)
+  private void initFromDatabase (List<HibProcessListener> hibListeners, ExecutionEventQueue eventDispatcher)
   {
     for ( HibProcessListener hibListener : hibListeners )
     {
-      ExecutionListener listener = listenerCache.getListener( hibListener.getListener() );
-      eventDispatcher.addExecutionListener(listener, hibListener.getEventType() );
+      ExecutionListener listener = getExecutionListenerInstance( hibListener.getType() );
+      eventDispatcher.addListener( this, listener, hibListener.getEventType() );
     }
+  }
+
+  @Override
+  public ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException
+  {
+    return listenerCache.getListener( type );
   }
 
   public static void addToConfiguration (AnnotationConfiguration config, boolean enableCaching)
