@@ -1,3 +1,8 @@
+-- Fix circular reference
+alter table wf_process drop constraint FK_process_parent
+go
+
+-- DROP EXISTING TABLES
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_task') drop table wf_task
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_task_state') drop table wf_task_state
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_task') drop table wf_node_task
@@ -6,14 +11,18 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_attr') drop table wf_to
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token_parent') drop table wf_node_token_parent
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc_token') drop table wf_arc_token
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token') drop table wf_node_token
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc') drop table wf_arc
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_ref') drop table wf_node_ref
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node') drop table wf_node
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_type') drop table wf_node_type
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_guard_action') drop table wf_guard_action
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_attr') drop table wf_process_attr
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process') drop table wf_process
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_state') drop table wf_process_state
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_graph') drop table wf_graph
 go
+
+-- CREATE NEW TABLES
 
 create table wf_graph
 (
@@ -30,12 +39,28 @@ ALTER TABLE wf_graph
     UNIQUE(name,version)
 go
 
+create table wf_process_state
+(
+  id          int          NOT NULL PRIMARY KEY,
+  description varchar(255) NOT NULL
+)
+go
+
+insert into wf_process_state values ( 0, 'Created' )
+insert into wf_process_state values ( 1, 'Executing' )
+insert into wf_process_state values ( 2, 'Pending Completion' )
+insert into wf_process_state values ( 3, 'Completed' )
+insert into wf_process_state values ( 4, 'Pending Cancel' )
+insert into wf_process_state values ( 5, 'Canceled' )
+go
+
 create table wf_process
 (
-  id          bigint       IDENTITY NOT NULL PRIMARY KEY,
-  graph_id    bigint                NOT NULL,
-  state       int                   NOT NULL,
-  create_date datetime              DEFAULT getDate() NOT NULL
+  id              bigint       IDENTITY NOT NULL PRIMARY KEY,
+  graph_id        bigint                NOT NULL,
+  state           int                   NOT NULL REFERENCES wf_process_state,
+  parent_token_id bigint                NULL,
+  create_date     datetime              DEFAULT getDate() NOT NULL
 ) with identity_gap = 10
 go
 
@@ -124,6 +149,12 @@ create table wf_node_token
   guard_action  int                NULL     REFERENCES wf_guard_action,
   complete_date datetime           NULL
 ) with identity_gap = 100
+go
+
+ALTER TABLE wf_process
+  ADD CONSTRAINT FK_process_parent
+    FOREIGN KEY (parent_token_id)
+      REFERENCES wf_node_token
 go
 
 create table wf_arc_token
