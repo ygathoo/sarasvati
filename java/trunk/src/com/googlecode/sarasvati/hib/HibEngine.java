@@ -30,10 +30,12 @@ import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
+import com.googlecode.sarasvati.event.ListenerCache;
 
 public class HibEngine extends NonRecursiveEngine
 {
   protected static final ExecutionEventDispatcher globalEventDispatcher = ExecutionEventDispatcher.newCopyOnWriteListInstance();
+  protected static final ListenerCache            listenerCache          = new ListenerCache();
 
   protected Session session;
   protected HibGraphFactory factory;
@@ -95,16 +97,24 @@ public class HibEngine extends NonRecursiveEngine
       HibProcessListener hibListener = new HibProcessListener( listener.getClass().getName(), eventType, process );
       session.save( hibListener );
       eventDispatcher.addExecutionListener( listener, eventTypes );
+
+      listenerCache.ensureContainsListenerType( listener );
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void initGlobalListeners ()
   {
     List<HibProcessListener> hibListeners = session.createQuery( "from HibProcessListener where process is null" ).list();
+    initFromDatabase( hibListeners, globalEventDispatcher );
+  }
 
+  private void initFromDatabase (List<HibProcessListener> hibListeners, ExecutionEventDispatcher eventDispatcher)
+  {
     for ( HibProcessListener hibListener : hibListeners )
     {
-
+      ExecutionListener listener = listenerCache.getListener( hibListener.getListener() );
+      eventDispatcher.addExecutionListener(listener, hibListener.getEventType() );
     }
   }
 
