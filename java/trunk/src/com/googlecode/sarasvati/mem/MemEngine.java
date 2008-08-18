@@ -21,14 +21,16 @@ package com.googlecode.sarasvati.mem;
 
 import com.googlecode.sarasvati.NonRecursiveEngine;
 import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.WorkflowException;
 import com.googlecode.sarasvati.event.ExecutionEvent;
-import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
+import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 
 public class MemEngine extends NonRecursiveEngine
 {
-  protected static final ExecutionEventDispatcher globalEventDispatcher = ExecutionEventDispatcher.newCopyOnWriteListInstance();
+  protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
 
   @Override
   public MemGraphFactory getFactory()
@@ -45,14 +47,20 @@ public class MemEngine extends NonRecursiveEngine
   @Override
   public void fireEvent(ExecutionEvent event)
   {
-    globalEventDispatcher.fireEvent( event );
-    event.getProcess().getEventDispatcher().fireEvent( event );
+    globalEventQueue.fireEvent( event );
+    event.getProcess().getEventQueue().fireEvent( event );
   }
 
   @Override
   public void addExecutionListener(Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
-    ExecutionEventDispatcher eventDispatcher = process == null ? globalEventDispatcher : process.getEventDispatcher();
-    eventDispatcher.addExecutionListener( listener, eventTypes );
+    ExecutionEventQueue eventQueue = process == null ? globalEventQueue : process.getEventQueue();
+    eventQueue.addListener( this, listener, eventTypes );
+  }
+
+  @Override
+  public ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException
+  {
+    return null;
   }
 }

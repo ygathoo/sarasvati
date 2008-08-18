@@ -22,26 +22,31 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-public class ExecutionEventDispatcher
+import com.googlecode.sarasvati.Engine;
+
+public class DefaultExecutionEventQueue implements ExecutionEventQueue
 {
-  private List<ExecutionListenerWrapper> listeners = new ArrayList<ExecutionListenerWrapper>();
+  private List<ExecutionListenerWrapper> listeners;
 
-  public static ExecutionEventDispatcher newArrayListInstance ()
+  public static ExecutionEventQueue newArrayListInstance ()
   {
-    return new ExecutionEventDispatcher( new ArrayList<ExecutionListenerWrapper>() );
+    return new DefaultExecutionEventQueue( new ArrayList<ExecutionListenerWrapper>() );
   }
 
-  public static ExecutionEventDispatcher newCopyOnWriteListInstance ()
+  public static ExecutionEventQueue newCopyOnWriteListInstance ()
   {
-    return new ExecutionEventDispatcher( new CopyOnWriteArrayList<ExecutionListenerWrapper>() );
+    return new DefaultExecutionEventQueue( new CopyOnWriteArrayList<ExecutionListenerWrapper>() );
   }
 
-  private ExecutionEventDispatcher(List<ExecutionListenerWrapper> listeners)
+  private DefaultExecutionEventQueue(List<ExecutionListenerWrapper> listeners)
   {
     this.listeners = listeners;
   }
 
-  public void addExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes)
+  /**
+   * @see com.googlecode.sarasvati.event.ExecutionEventQueue#addListener(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.event.ExecutionListener, com.googlecode.sarasvati.event.ExecutionEventType[])
+   */
+  public synchronized void addListener (Engine engine, ExecutionListener listener, ExecutionEventType...eventTypes)
   {
     if ( eventTypes == null || listener == null)
     {
@@ -57,6 +62,9 @@ public class ExecutionEventDispatcher
     }
   }
 
+  /**
+   * @see com.googlecode.sarasvati.event.ExecutionEventQueue#fireEvent(com.googlecode.sarasvati.event.ExecutionEvent)
+   */
   public void fireEvent (ExecutionEvent event)
   {
     for (ExecutionListenerWrapper wrapper : listeners )

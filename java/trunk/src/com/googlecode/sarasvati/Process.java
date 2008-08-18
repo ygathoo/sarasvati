@@ -20,7 +20,7 @@ package com.googlecode.sarasvati;
 
 import java.util.List;
 
-import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
+import com.googlecode.sarasvati.event.ExecutionEventQueue;
 
 /**
  * A Process represents a currently executing workflow graph.
@@ -137,5 +137,5 @@ public interface Process
    */
   NodeToken getParentToken ();
 
-  ExecutionEventDispatcher getEventDispatcher ();
+  ExecutionEventQueue getEventQueue ();
 }

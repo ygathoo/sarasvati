@@ -18,30 +18,31 @@
 */
 package com.googlecode.sarasvati.event;
 
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Process;
 
 public class ProcessEvent extends ExecutionEvent
 {
-  public static final ProcessEvent newStartedEvent (Process process)
+  public static final ProcessEvent newStartedEvent (Engine engine, Process process)
   {
-    return new ProcessEvent( ExecutionEventType.PROCESS_STARTED, process );
+    return new ProcessEvent( engine, ExecutionEventType.PROCESS_STARTED, process );
   }
 
-  public static final ProcessEvent newCompletedEvent (Process process)
+  public static final ProcessEvent newCompletedEvent (Engine engine, Process process)
   {
-    return new ProcessEvent( ExecutionEventType.PROCESS_COMPLETED, process );
+    return new ProcessEvent( engine, ExecutionEventType.PROCESS_COMPLETED, process );
   }
 
-  public static final ProcessEvent newCanceledEvent (Process process)
+  public static final ProcessEvent newCanceledEvent (Engine engine, Process process)
   {
-    return new ProcessEvent( ExecutionEventType.PROCESS_CANCELED, process );
+    return new ProcessEvent( engine, ExecutionEventType.PROCESS_CANCELED, process );
   }
 
   private Process process;
 
-  public ProcessEvent (ExecutionEventType eventType, Process process)
+  public ProcessEvent (Engine engine, ExecutionEventType eventType, Process process)
   {
-    super( eventType );
+    super( engine, eventType );
     this.process = process;
   }
 

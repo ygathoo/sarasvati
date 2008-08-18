@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.event;
 
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
@@ -27,34 +28,34 @@ public class NodeTokenEvent extends ExecutionEvent
   protected NodeToken nodeToken;
   protected GuardResponse guardResponse;
 
-  public static final NodeTokenEvent newCreatedEvent (NodeToken nodeToken)
+  public static final NodeTokenEvent newCreatedEvent (Engine engine, NodeToken nodeToken)
   {
-    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_CREATED, nodeToken, null );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_CREATED, nodeToken, null );
   }
 
-  public static final NodeTokenEvent newAcceptedEvent (NodeToken nodeToken, GuardResponse response)
+  public static final NodeTokenEvent newAcceptedEvent (Engine engine, NodeToken nodeToken, GuardResponse response)
   {
-    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, response );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, response );
   }
 
-  public static final NodeTokenEvent newDiscardedEvent (NodeToken nodeToken, GuardResponse response)
+  public static final NodeTokenEvent newDiscardedEvent (Engine engine, NodeToken nodeToken, GuardResponse response)
   {
-    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken, response );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken, response );
   }
 
-  public static final NodeTokenEvent newSkippedEvent (NodeToken nodeToken, GuardResponse response)
+  public static final NodeTokenEvent newSkippedEvent (Engine engine, NodeToken nodeToken, GuardResponse response)
   {
-    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, response );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, response );
   }
 
-  public static final NodeTokenEvent newCompletedEvent (NodeToken nodeToken)
+  public static final NodeTokenEvent newCompletedEvent (Engine engine, NodeToken nodeToken)
   {
-    return new NodeTokenEvent( ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, null );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, null );
   }
 
-  private NodeTokenEvent (ExecutionEventType eventType, NodeToken nodeToken, GuardResponse guardResponse)
+  private NodeTokenEvent (Engine engine, ExecutionEventType eventType, NodeToken nodeToken, GuardResponse guardResponse)
   {
-    super( eventType );
+    super( engine, eventType );
     this.nodeToken = nodeToken;
     this.guardResponse = guardResponse;
   }

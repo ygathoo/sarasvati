@@ -46,12 +46,17 @@ import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Where;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 import com.googlecode.sarasvati.ProcessState;
-import com.googlecode.sarasvati.event.ExecutionEventDispatcher;
+import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEvent;
+import com.googlecode.sarasvati.event.ExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.event.ExecutionListener;
 
 @Entity
 @Table (name="wf_process")
@@ -96,7 +101,36 @@ public class HibProcess implements Process
   protected Env env = null;
 
   @Transient
-  protected ExecutionEventDispatcher eventDispatcher = ExecutionEventDispatcher.newArrayListInstance();
+  protected ExecutionEventQueue eventQueue = new ExecutionEventQueue()
+  {
+    @Override
+    public void fireEvent (ExecutionEvent event)
+    {
+      initEventQueue( event.getEngine() );
+      eventQueue.fireEvent( event );
+    }
+
+    @Override
+    public void addListener (Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes)
+    {
+      initEventQueue( engine );
+      eventQueue.addListener( engine, listener, eventTypes );
+    }
+
+    private void initEventQueue (Engine engine)
+    {
+      ExecutionEventQueue newEventQueue = DefaultExecutionEventQueue.newArrayListInstance();
+
+      for ( HibProcessListener listener : getListeners() )
+      {
+        newEventQueue.addListener( engine,
+                                            engine.getExecutionListenerInstance( listener.getType() ),
+                                            listener.getEventType() );
+      }
+
+      eventQueue = newEventQueue;
+    }
+  };
 
   public HibProcess () { /* Default constructor for Hibernate */ }
 
@@ -261,9 +295,9 @@ public class HibProcess implements Process
   }
 
   @Override
-  public ExecutionEventDispatcher getEventDispatcher()
+  public ExecutionEventQueue getEventQueue()
   {
-    return eventDispatcher;
+    return eventQueue;
   }
 
   @Override

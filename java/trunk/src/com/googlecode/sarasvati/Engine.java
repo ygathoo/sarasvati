@@ -142,9 +142,26 @@ public interface Engine
    * will only be sent for that listener. If null is passed for the process, then
    * the listener will receive notifications for all processes.
    *
+   * <br/>
+   *
+   * {@link ExecutionListener} instances may be be reused and they may be serialized
+   * in some fashion. Therefore, they must be thread safe and they must have a
+   * default constructor.
+   *
+   *
    * @param process The process to add the listener for, or null for all processes
    * @param listener The listener
    * @param eventTypes The event types to be notified for.
    */
   void addExecutionListener (Process process, ExecutionListener listener, ExecutionEventType...eventTypes);
+
+  /**
+   * Engine implementations can cache instances of {@link ExecutionListener}.
+   *
+   * @param type The type of the execution listener. Probably a class name, but different implementations of
+   *             {@link Engine} may use a different scheme.
+   * @return The instance of {@link ExecutionListener} appropriate for this type
+   * @throws WorkflowException If an instance for the type cannot be found or created.
+   */
+  ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException;
 }
