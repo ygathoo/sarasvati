@@ -1,22 +1,23 @@
-drop table if exists wf_task;
-drop table if exists wf_task_state;
-drop table if exists wf_node_task;
+-- DROP EXISTING TABLES
+drop table if exists wf_task cascade;
+drop table if exists wf_task_state cascade;
+drop table if exists wf_node_task cascade;
+drop table if exists wf_token_string_attr cascade;
+drop table if exists wf_token_attr cascade;
+drop table if exists wf_process_attr cascade;
+drop table if exists wf_node_token_parent cascade;
+drop table if exists wf_arc_token cascade;
+drop table if exists wf_node_token cascade;
+drop table if exists wf_arc cascade;
+drop table if exists wf_node_ref cascade;
+drop table if exists wf_node cascade;
+drop table if exists wf_node_type cascade;
+drop table if exists wf_guard_action cascade;
+drop table if exists wf_process cascade;
+drop table if exists wf_process_state cascade;
+drop table if exists wf_graph cascade;
 
-drop table if exists wf_token_string_attr;
-
-drop table if exists wf_token_attr;
-drop table if exists wf_process_attr;
-drop table if exists wf_node_token_parent;
-drop table if exists wf_arc_token;
-drop table if exists wf_node_token;
-drop table if exists wf_arc;
-drop table if exists wf_node_ref;
-drop table if exists wf_node;
-drop table if exists wf_node_type;
-drop table if exists wf_guard_action;
-drop table if exists wf_process;
-drop table if exists wf_process_state;
-drop table if exists wf_graph;
+-- CREATE NEW TABLES
 
 create table wf_graph
 (
@@ -25,6 +26,10 @@ create table wf_graph
   version     int          NOT NULL,
   create_date timestamp    NOT NULL DEFAULT current_timestamp
 );
+
+ALTER TABLE wf_graph
+  ADD CONSTRAINT wf_graph_unique
+    UNIQUE(name,version);
 
 create table wf_process_state
 (
@@ -39,17 +44,13 @@ insert into wf_process_state values ( 3, 'Completed' );
 insert into wf_process_state values ( 4, 'Pending Cancel' );
 insert into wf_process_state values ( 5, 'Canceled' );
 
-
-ALTER TABLE wf_graph
-  ADD CONSTRAINT wf_graph_unique
-    UNIQUE(name,version);
-
 create table wf_process
 (
-  id          serial       NOT NULL PRIMARY KEY,
-  graph_id    int          NOT NULL,
-  state       int          NOT NULL REFERENCES wf_process_state,
-  create_date timestamp    NOT NULL DEFAULT current_timestamp
+  id              serial       NOT NULL PRIMARY KEY,
+  graph_id        int          NOT NULL,
+  state           int          NOT NULL REFERENCES wf_process_state,
+  parent_token_id int          NULL,
+  create_date     timestamp    NOT NULL DEFAULT current_timestamp
 );
 
 create table wf_process_attr
@@ -127,6 +128,11 @@ create table wf_node_token
   guard_action  int       NULL     REFERENCES wf_guard_action,
   complete_date timestamp NULL
 );
+
+ALTER TABLE wf_process
+  ADD CONSTRAINT FK_process_parent
+    FOREIGN KEY (parent_token_id)
+      REFERENCES wf_node_token;
 
 create table wf_arc_token
 (
