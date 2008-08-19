@@ -26,35 +26,27 @@ import com.googlecode.sarasvati.Node;
 
 public abstract class AbstractGraphFactory<G extends Graph> implements GraphFactory<G>
 {
-  protected Map<String, Class<? extends Node>> typeMap = new HashMap<String, Class<? extends Node>>();
-  protected Class<? extends Node> defaultClass;
+  protected Map<String, NodeFactory>        factoryMap = new HashMap<String, NodeFactory>();
+  protected DefaultNodeFactory defaultNodeFactory;
 
   public AbstractGraphFactory (Class<? extends Node> defaultClass)
   {
-    this.defaultClass = defaultClass;
+    this.defaultNodeFactory = new DefaultNodeFactory( defaultClass );
+  }
+
+  public NodeFactory getNodeFactory (String type)
+  {
+    NodeFactory nodeFactory = factoryMap.get( type );
+    return nodeFactory == null ? defaultNodeFactory : nodeFactory;
   }
 
   public void addType (String type, Class<? extends Node> clazz)
   {
-    typeMap.put( type, clazz );
+    defaultNodeFactory.addType( type, clazz );
   }
 
-  public Node newNode (String type) throws LoadException
+  public void addNodeFactory (String type, NodeFactory nodeFactory)
   {
-    Class<? extends Node> clazz = typeMap.get( type );
-    clazz = clazz == null ? defaultClass : clazz;
-
-    try
-    {
-      return clazz.newInstance();
-    }
-    catch ( InstantiationException e )
-    {
-      throw new LoadException( "Unable to create new instance for type '" + type + "'", e );
-    }
-    catch ( IllegalAccessException e )
-    {
-      throw new LoadException( "Unable to create new instance for type '" + type + "'", e );
-    }
+    factoryMap.put( type, nodeFactory );
   }
 }

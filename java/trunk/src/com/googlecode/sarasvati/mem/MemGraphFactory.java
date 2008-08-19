@@ -30,6 +30,7 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.NodeFactory;
 
 public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
 {
@@ -56,10 +57,11 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public Node newNode (MemGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard, Object custom)
+  public Node newNode (MemGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard, List<Object> customList)
     throws LoadException
   {
-    MemNode node = (MemNode)newNode( type );
+    NodeFactory nodeFactory = getNodeFactory( type );
+    MemNode node = (MemNode)nodeFactory.newNode( type );
     node.setGraph( graph );
     node.setName( name );
     node.setType( type );
@@ -67,7 +69,13 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
     node.setStart( isStart );
     node.setGuard( guard );
 
-    node.loadCustom( custom );
+    if ( customList != null )
+    {
+      for ( Object custom : customList )
+      {
+        nodeFactory.loadCustom( node, custom );
+      }
+    }
 
     graph.getNodes().add( node);
 

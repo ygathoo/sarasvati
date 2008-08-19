@@ -25,7 +25,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table (name = "wf_node_task")
-public class NodeTaskDetail
+public class TaskNodeDetail
 {
   @Id
   protected Long id;
@@ -82,9 +82,9 @@ public class NodeTaskDetail
       return true;
     if (obj == null)
       return false;
-    if (!(obj instanceof NodeTaskDetail))
+    if (!(obj instanceof TaskNodeDetail))
       return false;
-    final NodeTaskDetail other = (NodeTaskDetail) obj;
+    final TaskNodeDetail other = (TaskNodeDetail) obj;
     if (id == null)
     {
       if (other.id != null)

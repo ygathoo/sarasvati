@@ -18,11 +18,11 @@
 */
 package com.googlecode.sarasvati.example.db;
 
-import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
-import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
 
 import org.hibernate.Session;
 
@@ -37,38 +37,41 @@ import com.googlecode.sarasvati.load.LoadException;
 
 @Entity
 @DiscriminatorValue( "task" )
+@SecondaryTable( name="wf_node_task", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
 public class TaskNode extends HibNode
 {
-  @OneToOne (cascade = { CascadeType.REMOVE } )
-  @PrimaryKeyJoinColumn
-  protected NodeTaskDetail detail;
+  @Column (name="name", table="wf_node_task")
+  protected String taskName;
+
+  @Column (name="description", table="wf_node_task")
+  protected String taskDesc;
 
   public TaskNode() { /* Default constructor for Hibernate */ }
 
-  public NodeTaskDetail getDetail ()
-  {
-    return detail;
-  }
-
-  public void setDetail (NodeTaskDetail detail)
-  {
-    this.detail = detail;
-  }
-
   public String getTaskName ()
   {
-    return detail.getTaskName();
+    return taskName;
+  }
+
+  public void setTaskName (String taskName)
+  {
+    this.taskName = taskName;
   }
 
   public String getTaskDesc ()
   {
-    return detail.getTaskDesc();
+    return taskDesc;
+  }
+
+  public void setTaskDesc (String taskDesc)
+  {
+    this.taskDesc = taskDesc;
   }
 
   @Override
   public String getDisplayText ()
   {
-    return detail.getTaskName();
+    return getTaskName();
   }
 
   @Override
@@ -102,12 +105,7 @@ public class TaskNode extends HibNode
 
     XmlTaskDef taskDef = (XmlTaskDef)custom;
 
-    session.save( this );
-
-    detail = new NodeTaskDetail();
-    detail.setId( getId() );
-    detail.setTaskName( taskDef.getTaskName() );
-    detail.setTaskDesc( taskDef.getDescription().trim() );
-    session.save( detail );
+    setTaskName( taskDef.getTaskName() );
+    setTaskDesc( taskDef.getDescription().trim() );
   }
 }

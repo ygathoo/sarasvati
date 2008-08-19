@@ -16,9 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
+
 package com.googlecode.sarasvati.hib;
 
 import javax.persistence.Column;
@@ -227,6 +225,18 @@ public class HibNode implements Node
     throws LoadException
   {
     // does nothing by default
+  }
+
+  /**
+   * Called when this node should be persisted to the database. May be overridden
+   * by subclasses, but then the subclass must either call super.create(...) or
+   * call session.save( this ).
+   *
+   * @param session The hibernate session to use
+   */
+  public void create (Session session)
+  {
+    session.save( this );
   }
 
   @Override

@@ -52,7 +52,7 @@ public interface GraphFactory<G extends Graph>
    */
   Arc newArc (G graph, Node startNode, Node endNode, String name) throws LoadException;
 
-  Node newNode (G graph, String name, String type, boolean isJoin, boolean isStart, String guard, Object custom)
+  Node newNode (G graph, String name, String type, boolean isJoin, boolean isStart, String guard, List<Object> customList)
     throws LoadException;
 
   /**
