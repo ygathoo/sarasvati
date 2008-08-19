@@ -24,10 +24,14 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Random;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.example.LoggingExecutionListener;
 import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
@@ -35,7 +39,6 @@ import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
 import com.googlecode.sarasvati.mem.MemGraphRepository;
-import com.googlecode.sarasvati.mem.MemProcess;
 import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
@@ -70,28 +73,43 @@ public class MemConsole
       public boolean evaluate( Engine engine, NodeToken token )
       {
         System.out.println( "iter: " + token.getEnv().getLongAttribute( "iter" ) );
-        return token.getEnv().getLongAttribute( "iter" ) == 1000;
+        return token.getEnv().getLongAttribute( "iter" ) == 10;
       }
     });
 
+    Random rand = new Random();
 
     while ( true )
     {
       MemEngine engine = new MemEngine();
 
+      boolean doLogging = rand.nextBoolean();
+
       MemGraph graph = getGraph();
-      MemProcess process = (MemProcess)engine.startProcess( graph );
+      Process process = engine.getFactory().newProcess( graph );
+
+      if ( doLogging )
+      {
+        engine.addExecutionListener( process, new LoggingExecutionListener(), ExecutionEventType.values() );
+      }
+
+      engine.startProcess( process );
 
       runWorkflow( process );
+
+      if ( doLogging )
+      {
+        engine.removeExecutionListener( process, new LoggingExecutionListener() );
+      }
     }
   }
 
-  public static void runWorkflow (MemProcess process)
+  public static void runWorkflow (Process process)
   {
     while (true)
     {
       MemEngine engine = new MemEngine();
-      if ( !process.hasActiveTokens() )
+      if ( process.isComplete() )
       {
         System.out.println( "Workflow complete" );
         return;

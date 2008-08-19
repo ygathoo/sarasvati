@@ -33,29 +33,36 @@ public class MemEngine extends NonRecursiveEngine
   protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
 
   @Override
-  public MemGraphFactory getFactory()
+  public MemGraphFactory getFactory ()
   {
     return MemGraphFactory.INSTANCE;
   }
 
   @Override
-  public MemGraphRepository getRepository()
+  public MemGraphRepository getRepository ()
   {
     return MemGraphRepository.INSTANCE;
   }
 
   @Override
-  public void fireEvent(ExecutionEvent event)
+  public void fireEvent (ExecutionEvent event)
   {
     globalEventQueue.fireEvent( event );
     event.getProcess().getEventQueue().fireEvent( event );
   }
 
   @Override
-  public void addExecutionListener(Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void addExecutionListener (Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
     ExecutionEventQueue eventQueue = process == null ? globalEventQueue : process.getEventQueue();
     eventQueue.addListener( this, listener, eventTypes );
+  }
+
+  @Override
+  public void removeExecutionListener (Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    ExecutionEventQueue eventQueue = process == null ? globalEventQueue : process.getEventQueue();
+    eventQueue.removeListener( this, listener, eventTypes );
   }
 
   @Override

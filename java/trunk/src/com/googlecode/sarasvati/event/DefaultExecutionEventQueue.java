@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.event;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -60,6 +61,30 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
         listeners.add( new ExecutionListenerWrapper( eventType, listener ) );
       }
     }
+  }
+
+  @Override
+  public synchronized void removeListener (Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    if ( listener == null )
+    {
+      return;
+    }
+
+    List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
+
+    List<ExecutionListenerWrapper> toRemove = new ArrayList<ExecutionListenerWrapper>();
+
+    for ( ExecutionListenerWrapper wrapper : listeners )
+    {
+      if ( listener.getClass() == wrapper.listener.getClass() &&
+           ( eventTypes == null || eventTypes.length == 0 || types.contains( wrapper.getEventType() ) ) )
+      {
+        toRemove.add( wrapper );
+      }
+    }
+
+    listeners.removeAll( toRemove );
   }
 
   /**

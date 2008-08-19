@@ -92,4 +92,19 @@ public abstract class ExecutionEvent
   {
     return null;
   }
+
+  public boolean isProcessEvent ()
+  {
+    return eventType.isProcessEvent();
+  }
+
+  public boolean isNodeTokenEvent ()
+  {
+    return eventType.isNodeTokenEvent();
+  }
+
+  public boolean isArcTokenEvent ()
+  {
+    return eventType.isArcTokenEvent();
+  }
 }

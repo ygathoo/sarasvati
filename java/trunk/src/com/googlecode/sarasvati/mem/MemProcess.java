@@ -130,6 +130,12 @@ public class MemProcess implements Process
   }
 
   @Override
+  public boolean isComplete()
+  {
+    return state == ProcessState.PendingCompletion || state == ProcessState.Completed;
+  }
+
+  @Override
   public boolean isExecuting ()
   {
     return state == ProcessState.Executing;
