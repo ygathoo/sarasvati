@@ -27,7 +27,6 @@ import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.guardlang.GuardLang;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
-import com.googlecode.sarasvati.load.LoadException;
 
 public class MemNode implements Node, Cloneable
 {
@@ -174,12 +173,6 @@ public class MemNode implements Node, Cloneable
   public String getDisplayText ()
   {
     return name;
-  }
-
-  @SuppressWarnings("unused")
-  public void loadCustom (Object custom) throws LoadException
-  {
-    // does nothing by default
   }
 
   @Override

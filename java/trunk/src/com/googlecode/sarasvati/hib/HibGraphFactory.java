@@ -34,6 +34,7 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.NodeFactory;
 
 public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 {
@@ -63,10 +64,11 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   }
 
   @Override
-  public Node newNode (HibGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard, Object custom)
+  public Node newNode (HibGraph graph, String name, String type, boolean isJoin, boolean isStart, String guard, List<Object> customList)
     throws LoadException
   {
-    HibNode node = (HibNode)newNode( type );
+    NodeFactory nodeFactory = getNodeFactory( type );
+    HibNode node = (HibNode)nodeFactory.newNode( type );
     node.setGraph( graph );
     node.setName( name );
     node.setType( type );
@@ -74,9 +76,15 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     node.setStart( isStart );
     node.setGuard( guard );
 
-    node.loadCustom( session, custom );
+    if ( customList != null )
+    {
+      for ( Object custom : customList )
+      {
+        nodeFactory.loadCustom( node, custom );
+      }
+    }
 
-    session.save( node );
+    node.create( session );
 
     HibNodeRef nodeRef = new HibNodeRef( graph, node, "" );
     session.save( nodeRef );
