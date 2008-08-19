@@ -31,6 +31,8 @@ public interface ExecutionEventQueue
 {
   void addListener (Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes);
 
+  void removeListener (Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes);
+
   /**
    * Sends the event to the appropriate listeners.
    *

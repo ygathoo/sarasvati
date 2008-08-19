@@ -437,4 +437,10 @@ public class HibNodeToken implements NodeToken
     else if ( !id.equals( other.getId() ) ) return false;
     return true;
   }
+
+  @Override
+  public String toString()
+  {
+    return "[HibNodeToken id=" + id + " action=" + guardAction + "]";
+  }
 }

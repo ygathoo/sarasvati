@@ -156,6 +156,22 @@ public interface Engine
   void addExecutionListener (Process process, ExecutionListener listener, ExecutionEventType...eventTypes);
 
   /**
+   * Will remove the given listener. If a process is specified, it will be removed from that specific listener,
+   * otherwise it will be removed from the global listener set. If no event types are specified, the listener
+   * will be removed for all event types. Otherwise it will be removed for only the specified event types.
+   *
+   * <br/>
+   * The listener doesn't need to match exactly. All listeners of this type will be matched. What matches
+   * types is determined by the implementation, but usually it means same class.
+   *
+   *
+   * @param process The process to remove the listener from, or null to remove from the global listener set
+   * @param listener The type of listener to remove
+   * @param eventTypes The set of event types to remove the listener for, or none to remove for all
+   */
+  void removeExecutionListener (Process process, ExecutionListener listener, ExecutionEventType...eventTypes);
+
+  /**
    * Engine implementations can cache instances of {@link ExecutionListener}.
    *
    * @param type The type of the execution listener. Probably a class name, but different implementations of

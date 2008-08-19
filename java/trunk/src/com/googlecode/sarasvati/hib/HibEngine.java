@@ -19,6 +19,7 @@
 
 package com.googlecode.sarasvati.hib;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -27,8 +28,8 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import com.googlecode.sarasvati.NonRecursiveEngine;
 import com.googlecode.sarasvati.Process;
 import com.googlecode.sarasvati.WorkflowException;
-import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
@@ -36,8 +37,8 @@ import com.googlecode.sarasvati.event.ListenerCache;
 
 public class HibEngine extends NonRecursiveEngine
 {
-  protected static final ExecutionEventQueue globalEventDispatcher = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
-  protected static final ListenerCache            listenerCache          = new ListenerCache();
+  protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
+  protected static final ListenerCache       listenerCache    = new ListenerCache();
 
   protected Session session;
   protected HibGraphFactory factory;
@@ -75,7 +76,7 @@ public class HibEngine extends NonRecursiveEngine
   @Override
   public void fireEvent(ExecutionEvent event)
   {
-    globalEventDispatcher.fireEvent( event );
+    globalEventQueue.fireEvent( event );
     event.getProcess().getEventQueue().fireEvent( event );
   }
 
@@ -87,36 +88,41 @@ public class HibEngine extends NonRecursiveEngine
       return;
     }
 
-    ExecutionEventQueue eventDispatcher = process == null ? globalEventDispatcher : process.getEventQueue();
-
-    for ( ExecutionEventType eventType : eventTypes )
+    if ( process != null )
     {
-      if ( eventType == null )
+      for ( ExecutionEventType eventType : eventTypes )
       {
-        continue;
+        if ( eventType != null )
+        {
+          HibProcessListener hibListener = new HibProcessListener( listener.getClass().getName(), eventType, process );
+          session.save( hibListener );
+        }
       }
-
-      HibProcessListener hibListener = new HibProcessListener( listener.getClass().getName(), eventType, process );
-      session.save( hibListener );
-      eventDispatcher.addListener( this, listener, eventTypes );
-
-      listenerCache.ensureContainsListenerType( listener );
     }
+
+    ExecutionEventQueue eventQueue = process == null ? globalEventQueue : process.getEventQueue();
+    eventQueue.addListener( this, listener, eventTypes );
+    listenerCache.ensureContainsListenerType( listener );
   }
 
-  @SuppressWarnings("unchecked")
-  public void initGlobalListeners ()
+  @Override
+  public void removeExecutionListener(Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
-    List<HibProcessListener> hibListeners = session.createQuery( "from HibProcessListener where process is null" ).list();
-    initFromDatabase( hibListeners, globalEventDispatcher );
-  }
+    ExecutionEventQueue eventQueue = process == null ? globalEventQueue : process.getEventQueue();
+    eventQueue.removeListener( this, listener, eventTypes );
 
-  private void initFromDatabase (List<HibProcessListener> hibListeners, ExecutionEventQueue eventDispatcher)
-  {
-    for ( HibProcessListener hibListener : hibListeners )
+    if ( process != null )
     {
-      ExecutionListener listener = getExecutionListenerInstance( hibListener.getType() );
-      eventDispatcher.addListener( this, listener, hibListener.getEventType() );
+      List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
+
+      for ( HibProcessListener hibListener : ((HibProcess)process).getListeners() )
+      {
+        if ( process.equals( hibListener.getProcess() ) &&
+             (eventTypes == null || eventTypes.length == 0 || types.contains( hibListener.getEventType() ) ) )
+        {
+          session.delete( hibListener );
+        }
+      }
     }
   }
 
@@ -131,6 +137,7 @@ public class HibEngine extends NonRecursiveEngine
     config.addAnnotatedClass( HibArc.class );
     config.addAnnotatedClass( HibArcToken.class );
     config.addAnnotatedClass( HibGraph.class );
+    config.addAnnotatedClass( HibProcessListener.class );
     config.addAnnotatedClass( HibNode.class );
     config.addAnnotatedClass( HibNodeRef.class );
     config.addAnnotatedClass( HibNodeToken.class );

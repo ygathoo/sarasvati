@@ -110,6 +110,13 @@ public interface Process
   boolean isCanceled ();
 
   /**
+   * Returns true if the process state is either {@link ProcessState#PendingCompletion} or {@link ProcessState#Completed}
+   *
+   * @return True if the process state is either {@link ProcessState#PendingCompletion} or {@link ProcessState#Completed}
+   */
+  boolean isComplete ();
+
+  /**
    * Returns true if the process state is {@link ProcessState#Executing}
    *
    * @return True if the process state is {@link ProcessState#Executing}

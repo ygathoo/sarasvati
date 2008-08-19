@@ -50,7 +50,10 @@ public abstract class BaseEngine implements Engine
       executeNode( process, startToken );
     }
 
-    checkForCompletion( process );
+    if ( process.isExecuting() )
+    {
+      checkForCompletion( process );
+    }
   }
 
   @Override

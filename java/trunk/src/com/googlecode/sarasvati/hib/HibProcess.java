@@ -117,6 +117,13 @@ public class HibProcess implements Process
       eventQueue.addListener( engine, listener, eventTypes );
     }
 
+    @Override
+    public void removeListener(Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes)
+    {
+      initEventQueue( engine );
+      eventQueue.removeListener( engine, listener, eventTypes );
+    }
+
     private void initEventQueue (Engine engine)
     {
       ExecutionEventQueue newEventQueue = DefaultExecutionEventQueue.newArrayListInstance();
@@ -124,8 +131,8 @@ public class HibProcess implements Process
       for ( HibProcessListener listener : getListeners() )
       {
         newEventQueue.addListener( engine,
-                                            engine.getExecutionListenerInstance( listener.getType() ),
-                                            listener.getEventType() );
+                                   engine.getExecutionListenerInstance( listener.getType() ),
+                                   listener.getEventType() );
       }
 
       eventQueue = newEventQueue;
@@ -139,6 +146,7 @@ public class HibProcess implements Process
     this.graph = graph;
     this.arcTokens = new LinkedList<ArcToken>();
     this.nodeTokens = new LinkedList<NodeToken>();
+    this.listeners = new LinkedList<HibProcessListener>();
     this.state = ProcessState.Created;
     this.createDate = new Date();
     this.attrMap = new HashMap<String, String>();
@@ -280,6 +288,12 @@ public class HibProcess implements Process
   public boolean isCanceled ()
   {
     return state == ProcessState.PendingCancel || state == ProcessState.Canceled;
+  }
+
+  @Override
+  public boolean isComplete ()
+  {
+    return state == ProcessState.PendingCompletion || state == ProcessState.Completed;
   }
 
   @Override

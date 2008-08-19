@@ -1,8 +1,4 @@
 -- DROP EXISTING TABLES
-drop table if exists wf_task cascade;
-drop table if exists wf_task_state cascade;
-drop table if exists wf_node_task cascade;
-drop table if exists wf_token_string_attr cascade;
 drop table if exists wf_token_attr cascade;
 drop table if exists wf_process_attr cascade;
 drop table if exists wf_node_token_parent cascade;
@@ -13,6 +9,7 @@ drop table if exists wf_node_ref cascade;
 drop table if exists wf_node cascade;
 drop table if exists wf_node_type cascade;
 drop table if exists wf_guard_action cascade;
+drop table if exists wf_process_listener cascade;
 drop table if exists wf_process cascade;
 drop table if exists wf_process_state cascade;
 drop table if exists wf_graph cascade;
@@ -62,6 +59,18 @@ create table wf_process_attr
 
 ALTER TABLE wf_process_attr
   ADD PRIMARY KEY (process_id, name);
+
+create table wf_process_listener
+(
+  id              serial       NOT NULL PRIMARY KEY,
+  type            varchar(255) NOT NULL,
+  event_type      int          NOT NULL,
+  process_id      int          NOT NULL REFERENCES wf_process
+);
+
+ALTER TABLE wf_process_listener
+  ADD CONSTRAINT wf_listener_unique
+    UNIQUE(listener, event_type, process_id);
 
 create table wf_node_type
 (

@@ -22,6 +22,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Random;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -29,6 +30,8 @@ import org.hibernate.Transaction;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.example.LoggingExecutionListener;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.hib.HibEngine;
@@ -69,6 +72,8 @@ public class DbConsole
 
     TestSetup.init();
 
+    Random rand = new Random();
+
     while ( true )
     {
       Session session = TestSetup.openSession();
@@ -76,12 +81,25 @@ public class DbConsole
       HibEngine engine = new HibEngine( session );
 
       HibGraph graph = getGraph( engine );
+
+      boolean doLogging = rand.nextBoolean();
+
+      if ( doLogging )
+      {
+        engine.addExecutionListener( null, new LoggingExecutionListener(), ExecutionEventType.values() );
+      }
+
       HibProcess process = (HibProcess)engine.startProcess( graph );
       session.flush();
       t.commit();
       session.close();
 
       runWorkflow( process.getId() );
+
+      if ( doLogging )
+      {
+        engine.removeExecutionListener( null, new LoggingExecutionListener(), ExecutionEventType.values() );
+      }
     }
   }
 
@@ -95,7 +113,7 @@ public class DbConsole
       HibEngine engine = new HibEngine( session );
 
       HibProcess p = (HibProcess) session.load( HibProcess.class, processId );
-      if ( !p.hasActiveTokens() )
+      if ( p.isComplete() )
       {
         System.out.println( "Workflow complete" );
         return;
@@ -123,15 +141,30 @@ public class DbConsole
 
         try
         {
-          int line = Integer.parseInt( input );
-          if ( line > 0 && line <= tasks.size() )
+          if ( "log".equals( input ) )
           {
-            t = tasks.get( line - 1);
-            processTask( t, engine );
+            if ( p.getListeners().isEmpty() )
+            {
+              engine.addExecutionListener( p, new LoggingExecutionListener(), ExecutionEventType.values() );
+            }
+            else
+            {
+              engine.removeExecutionListener( p, new LoggingExecutionListener(), ExecutionEventType.values() );
+            }
+            break;
           }
           else
           {
-            System.out.println( "Please enter a valid number" );
+            int line = Integer.parseInt( input );
+            if ( line > 0 && line <= tasks.size() )
+            {
+              t = tasks.get( line - 1);
+              processTask( t, engine );
+            }
+            else
+            {
+              System.out.println( "Please enter a valid number" );
+            }
           }
         }
         catch( NumberFormatException nfe )
