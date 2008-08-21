@@ -52,4 +52,31 @@ public interface ArcToken extends Token
    * @return The parent NodeToken
    */
   NodeToken getParentToken ();
+
+  /**
+   * Return true if this arc token has been processed, false otherwise.
+   * Multiple arc tokens will be created at once, in the case where a
+   * node has multiple outgoing arcs. When first created, this method
+   * will return false. After the arc token has been executed, this method
+   * will return true. An executed arc token may not yet be completed. It
+   * may be waiting for other node tokens to arrive at the target node.
+   *
+   * <br/>
+   *
+   * Whether an ArcToken has been processed may be important in the case where
+   * an earlier arc token generates a NodeToken, which while executing a Node
+   * generates and exception and processing is halted. In this case, the
+   * unprocessed arc tokens can be found and processed.
+   *
+   * @return True if this arc token has not yet been processed.
+   */
+  boolean isExecuted ();
+
+  /**
+   * Marks this arc token executed.
+   *
+   * @see ArcToken#isExecuted()
+   * @param engine The engine processing this ArcToken
+   */
+  void markExecuted (Engine engine);
 }

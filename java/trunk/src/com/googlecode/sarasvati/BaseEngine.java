@@ -32,6 +32,8 @@ import com.googlecode.sarasvati.event.ProcessEvent;
  */
 public abstract class BaseEngine implements Engine
 {
+  protected boolean arcExecutionStarted = false;
+
   public Process startProcess (Graph graph)
   {
     Process process = getFactory().newProcess( graph );
@@ -84,6 +86,7 @@ public abstract class BaseEngine implements Engine
 
   private void executeArc (Process process, ArcToken token)
   {
+    token.markExecuted( this );
     if ( !token.getArc().getEndNode().isJoin() )
     {
       completeExecuteArc( process, token.getArc().getEndNode(), token );
@@ -178,15 +181,37 @@ public abstract class BaseEngine implements Engine
     {
       ArcToken arcToken = getFactory().newArcToken( process, arc, token );
       fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
-      executeArc( process, arcToken );
+      process.enqueueArcTokenForExecution( arcToken );
     }
 
-    checkForCompletion( process );
+    if ( !arcExecutionStarted )
+    {
+      executeQueuedArcTokens( process );
+    }
+  }
+
+  @Override
+  public void executeQueuedArcTokens (Process process)
+  {
+    arcExecutionStarted = true;
+
+    try
+    {
+      while ( !process.isArcTokenQueueEmpty() )
+      {
+        executeArc( process, process.dequeueArcTokenForExecution() );
+      }
+      checkForCompletion( process );
+    }
+    finally
+    {
+      arcExecutionStarted = false;
+    }
   }
 
   private void checkForCompletion (Process process)
   {
-    if ( !process.hasActiveTokens() )
+    if ( !process.hasActiveTokens() && process.isArcTokenQueueEmpty() )
     {
       process.setState( ProcessState.PendingCompletion );
       fireEvent( ProcessEvent.newCompletedEvent( this, process ) );

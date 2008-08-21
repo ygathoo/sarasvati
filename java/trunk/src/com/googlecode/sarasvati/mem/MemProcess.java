@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.mem;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Env;
@@ -40,6 +41,8 @@ public class MemProcess implements Process
   protected List<ArcToken> arcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> nodeTokens = new LinkedList<NodeToken>();
   protected ProcessState state;
+
+  protected Queue<ArcToken> executionQueue = new LinkedList<ArcToken>();
 
   protected Env env = new MapEnv();
 
@@ -109,6 +112,24 @@ public class MemProcess implements Process
   public void removeNodeToken (NodeToken token)
   {
     nodeTokens.remove( token );
+  }
+
+  @Override
+  public ArcToken dequeueArcTokenForExecution()
+  {
+    return executionQueue.remove();
+  }
+
+  @Override
+  public void enqueueArcTokenForExecution(ArcToken token)
+  {
+    executionQueue.add( token );
+  }
+
+  @Override
+  public boolean isArcTokenQueueEmpty()
+  {
+    return executionQueue.isEmpty();
   }
 
   @Override

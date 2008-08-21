@@ -113,6 +113,14 @@ public interface Engine
   void completeExecution (NodeToken token, String arcName);
 
   /**
+   * If this process has any {@link ArcToken}s queued for execution, this method
+   * will execute them.
+   *
+   * @param process The process whose queued arc tokens to queue
+   */
+  void executeQueuedArcTokens (Process process);
+
+  /**
    * Returns an appropriate {@link GraphRepository} for this {@link Engine}. Subclasses
    * may override this to provide custom behavior.
    *

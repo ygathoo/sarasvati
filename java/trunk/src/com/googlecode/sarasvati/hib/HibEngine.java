@@ -25,7 +25,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
 
-import com.googlecode.sarasvati.NonRecursiveEngine;
+import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.Process;
 import com.googlecode.sarasvati.WorkflowException;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
@@ -35,7 +35,7 @@ import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.event.ListenerCache;
 
-public class HibEngine extends NonRecursiveEngine
+public class HibEngine extends BaseEngine
 {
   protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
   protected static final ListenerCache       listenerCache    = new ListenerCache();

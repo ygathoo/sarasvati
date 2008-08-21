@@ -71,12 +71,16 @@ public class HibProcess implements Process
   protected HibGraph            graph;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
-  @Where (clause="complete_date is null")
+  @Where (clause="complete_date is null and executed=1")
   protected List<ArcToken>  arcTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
   protected List<NodeToken>  nodeTokens;
+
+  @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
+  @Where (clause="complete_date is null and executed=0")
+  protected List<ArcToken>  executionQueue;
 
   @OneToMany (mappedBy="process", fetch=FetchType.LAZY)
   protected List<HibProcessListener>  listeners;
@@ -146,6 +150,7 @@ public class HibProcess implements Process
     this.graph = graph;
     this.arcTokens = new LinkedList<ArcToken>();
     this.nodeTokens = new LinkedList<NodeToken>();
+    this.executionQueue = new LinkedList<ArcToken>();
     this.listeners = new LinkedList<HibProcessListener>();
     this.state = ProcessState.Created;
     this.createDate = new Date();
@@ -192,6 +197,34 @@ public class HibProcess implements Process
   public void setNodeTokens( List<NodeToken> nodeTokens )
   {
     this.nodeTokens = nodeTokens;
+  }
+
+  public List<ArcToken> getExecutionQueue()
+  {
+    return executionQueue;
+  }
+
+  public void setExecutionQueue(List<ArcToken> executionQueue)
+  {
+    this.executionQueue = executionQueue;
+  }
+
+  @Override
+  public ArcToken dequeueArcTokenForExecution()
+  {
+    return executionQueue.remove( 0 );
+  }
+
+  @Override
+  public void enqueueArcTokenForExecution(ArcToken token)
+  {
+    executionQueue.add( token );
+  }
+
+  @Override
+  public boolean isArcTokenQueueEmpty()
+  {
+    return executionQueue.isEmpty();
   }
 
   public List<HibProcessListener> getListeners()
