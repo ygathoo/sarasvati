@@ -30,12 +30,14 @@ public class MemArcToken implements ArcToken
   protected Arc arc;
   protected Process process;
   protected NodeToken parentToken;
+  protected boolean executed;
 
   public MemArcToken (Arc arc, Process process, NodeToken parentToken)
   {
     this.arc = arc;
     this.process = process;
     this.parentToken = parentToken;
+    this.executed = false;
   }
 
   @Override
@@ -60,5 +62,17 @@ public class MemArcToken implements ArcToken
   public void markComplete (Engine engine)
   {
     /* Does nothing */
+  }
+
+  @Override
+  public boolean isExecuted()
+  {
+    return executed;
+  }
+
+  @Override
+  public void markExecuted(Engine engine)
+  {
+    this.executed = true;
   }
 }

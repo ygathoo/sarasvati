@@ -66,6 +66,8 @@ public class HibArcToken implements ArcToken
   @Column (name="complete_date")
   protected Date    completeDate;
 
+  protected boolean executed;
+
   public HibArcToken () { /* Default constructor for hibernate */ }
 
   public HibArcToken (HibProcess process, HibArc arc, HibNodeToken parentToken)
@@ -74,6 +76,7 @@ public class HibArcToken implements ArcToken
     this.arc         = arc;
     this.parentToken = parentToken;
     this.createDate  = new Date();
+    this.executed = false;
   }
 
   public Long getId ()
@@ -141,6 +144,19 @@ public class HibArcToken implements ArcToken
   public void markComplete (Engine engine)
   {
     this.completeDate = new Date();
+  }
+
+
+  @Override
+  public boolean isExecuted ()
+  {
+    return executed;
+  }
+
+  @Override
+  public void markExecuted (Engine engine)
+  {
+    executed = true;
   }
 
   @Override

@@ -58,7 +58,10 @@ public interface Process
   List<? extends NodeToken> getNodeTokens ();
 
   /**
-   * Adds an ArcToken to the list of active ArcTokens.
+   * Adds an ArcToken to the list of active ArcTokens. Active ArcTokens
+   * have been executed, but are not complete. They are waiting
+   * for other ArcTokens to arrive at their target node (which will
+   * be a join node).
    *
    * @param token The token being added
    */
@@ -70,6 +73,27 @@ public interface Process
    * @param token The token being removed.
    */
   void removeArcToken (ArcToken token);
+
+  /**
+   * Adds an arc token to the execution queue
+   *
+   * @param token to enqueue
+   */
+  void enqueueArcTokenForExecution (ArcToken token);
+
+  /**
+   * Returns the next {@link ArcToken} to execute
+   *
+   * @return The next {@link ArcToken} to execute
+   */
+  ArcToken dequeueArcTokenForExecution ();
+
+  /**
+   * Return true if the arc token queue is empty, false otherwise
+   *
+   * @return True if the arc token queue is empty
+   */
+  boolean isArcTokenQueueEmpty ();
 
   /**
    * Adds a NodeToken to the list of active NodeTokens.

@@ -19,16 +19,16 @@
 
 package com.googlecode.sarasvati.mem;
 
-import com.googlecode.sarasvati.NonRecursiveEngine;
+import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.Process;
 import com.googlecode.sarasvati.WorkflowException;
-import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 
-public class MemEngine extends NonRecursiveEngine
+public class MemEngine extends BaseEngine
 {
   protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
 

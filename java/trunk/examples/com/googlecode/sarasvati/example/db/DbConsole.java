@@ -40,6 +40,8 @@ import com.googlecode.sarasvati.hib.HibProcess;
 
 public class DbConsole
 {
+  public static boolean log = false;
+
   public static void main (String[] args) throws Exception
   {
     PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
@@ -245,6 +247,21 @@ public class DbConsole
 
       System.out.print( "> " );
       String input = readLine();
+
+      if ( "log".equals( input ) )
+      {
+        log = !log;
+        if ( log )
+        {
+          engine.addExecutionListener( null, new LoggingExecutionListener(), ExecutionEventType.values() );
+        }
+        else
+        {
+          engine.removeExecutionListener( null, new LoggingExecutionListener() );
+        }
+        System.out.println( "Logging set to: " + log );
+        continue;
+      }
 
       try
       {

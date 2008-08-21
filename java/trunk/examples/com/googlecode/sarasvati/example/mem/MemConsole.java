@@ -24,7 +24,6 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Random;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
@@ -45,6 +44,8 @@ import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
 
 public class MemConsole
 {
+  public static boolean log = false;
+
   public static void main (String[] args) throws Exception
   {
     loadWorkflows();
@@ -73,34 +74,20 @@ public class MemConsole
       public boolean evaluate( Engine engine, NodeToken token )
       {
         System.out.println( "iter: " + token.getEnv().getLongAttribute( "iter" ) );
-        return token.getEnv().getLongAttribute( "iter" ) == 10;
+        return token.getEnv().getLongAttribute( "iter" ) == 1000;
       }
     });
-
-    Random rand = new Random();
 
     while ( true )
     {
       MemEngine engine = new MemEngine();
 
-      boolean doLogging = rand.nextBoolean();
-
       MemGraph graph = getGraph();
       Process process = engine.getFactory().newProcess( graph );
-
-      if ( doLogging )
-      {
-        engine.addExecutionListener( process, new LoggingExecutionListener(), ExecutionEventType.values() );
-      }
 
       engine.startProcess( process );
 
       runWorkflow( process );
-
-      if ( doLogging )
-      {
-        engine.removeExecutionListener( process, new LoggingExecutionListener() );
-      }
     }
   }
 
@@ -217,6 +204,24 @@ public class MemConsole
 
       System.out.print( "> " );
       String input = readLine();
+
+      if ( "log".equals( input ) )
+      {
+        MemEngine engine = new MemEngine();
+
+        if ( log )
+        {
+          engine.removeExecutionListener( null, new LoggingExecutionListener() );
+        }
+        else
+        {
+          engine.addExecutionListener( null, new LoggingExecutionListener(), ExecutionEventType.values() );
+        }
+
+        log = !log;
+        System.out.println( "Logging set to: " + log );
+        continue;
+      }
 
       try
       {
