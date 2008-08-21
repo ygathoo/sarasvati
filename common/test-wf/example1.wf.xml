@@ -11,46 +11,38 @@
     <arc to="2"/>
     <arc to="3"/>
 
-    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
-                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
-      <ex:task-name>Enter order</ex:task-name>
-      <ex:description>
-        Enter order and billing info
-      </ex:description>
-    </ex:task-def>
-
+    <taskName>Enter order</taskName>
+    <taskDesc>
+      Enter order and billing info
+    </taskDesc>
   </node>
 
   <node type="task" name="2">
     <arc to="4"/>
-    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
-                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
-      <ex:task-name>Bill Customer</ex:task-name>
-      <ex:description>
-        Bill the Customer
-      </ex:description>
-    </ex:task-def>
+
+    <taskName>Bill Customer</taskName>
+    <taskDesc>
+      Bill the Customer
+    </taskDesc>
+
   </node>
 
   <node type="task" name="3">
     <arc to="4"/>
-    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
-                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
-      <ex:task-name>Ship product</ex:task-name>
-      <ex:description>
-        Package and ship product
-      </ex:description>
-    </ex:task-def>
+
+    <taskName>Ship product</taskName>
+    <taskDesc>
+      Package and ship product
+    </taskDesc>
   </node>
 
   <node type="task" name="4" isJoin="true">
-    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
-                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
-      <ex:task-name>Market to Customer</ex:task-name>
-      <ex:description>
-        Send marketing material to customer
-      </ex:description>
-    </ex:task-def>
+
+    <taskName>Market to Customer</taskName>
+    <taskDesc>
+      Send marketing material to customer
+    </taskDesc>
+
   </node>
 
 </workflow>
