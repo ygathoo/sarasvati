@@ -1,6 +1,9 @@
 com.googlecode.sarasvati
+com.googlecode.sarasvati.event
 com.googlecode.sarasvati.guardlang
 com.googlecode.sarasvati.hib
+com.googlecode.sarasvati.load
+com.googlecode.sarasvati.load.properties
 com.googlecode.sarasvati.mem
 com.googlecode.sarasvati.util
 com.googlecode.sarasvati.xml
