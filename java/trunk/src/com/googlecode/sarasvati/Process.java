@@ -21,6 +21,7 @@ package com.googlecode.sarasvati;
 import java.util.List;
 
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
+import com.googlecode.sarasvati.load.GraphFactory;
 
 /**
  * A Process represents a currently executing workflow graph.
@@ -118,7 +119,7 @@ public interface Process
 
   /**
    * Sets the current {@link ProcessState}. The state should
-   * be set to {@link ProcessState#Created} by {@link Engine#newProcess(Graph)}.
+   * be set to {@link ProcessState#Created} by {@link GraphFactory#newProcess(Graph)}.
    * It should then be set to {@link ProcessState#Executing} by
    * {@link Engine#startProcess(Process)}.
    *
