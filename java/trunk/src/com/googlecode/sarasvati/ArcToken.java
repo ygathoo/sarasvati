@@ -73,7 +73,7 @@ public interface ArcToken extends Token
   boolean isExecuted ();
 
   /**
-   * Marks this arc token executed.
+   * Marks this arc token as executed.
    *
    * @see ArcToken#isExecuted()
    * @param engine The engine processing this ArcToken

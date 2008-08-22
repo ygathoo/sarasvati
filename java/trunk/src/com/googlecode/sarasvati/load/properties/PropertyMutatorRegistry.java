@@ -28,7 +28,21 @@ public class PropertyMutatorRegistry
 
   static
   {
+    mutatorMap.put( Boolean.TYPE, BooleanPropertyMutator.class );
+    mutatorMap.put( Boolean.class, BooleanPropertyMutator.class );
+
+    mutatorMap.put( Integer.TYPE, IntegerPropertyMutator.class );
+    mutatorMap.put( Integer.class, IntegerPropertyMutator.class );
+
+    mutatorMap.put( Long.TYPE, LongPropertyMutator.class );
+    mutatorMap.put( Long.class, LongPropertyMutator.class );
+
     mutatorMap.put( String.class, StringPropertyMutator.class );
+  }
+
+  public static void registerPropertyMutator (Class<?> targetClass, Class<?> mutatorClass)
+  {
+    mutatorMap.put( targetClass, mutatorClass );
   }
 
   public static PropertyMutator getMutator (PropertyDescriptor pd, Object obj, PropertyMutator defaultMutator)

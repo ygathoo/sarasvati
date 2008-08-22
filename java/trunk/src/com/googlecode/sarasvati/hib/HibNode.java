@@ -43,7 +43,6 @@ import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.guardlang.GuardLang;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
-import com.googlecode.sarasvati.load.LoadException;
 
 @Entity
 @Table (name="wf_node")
@@ -207,24 +206,6 @@ public class HibNode implements Node
   public void execute (Engine engine, NodeToken token)
   {
     engine.completeExecution( token, Arc.DEFAULT_ARC );
-  }
-
-  /**
-   * Does nothing by default. May be overridden by subclasses.
-   *
-   * @see com.googlecode.sarasvati.Node#completed(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.NodeToken, java.lang.String)
-   */
-  @Override
-  public void completed (Engine engine, NodeToken token, String arcName)
-  {
-    // does nothing by default
-  }
-
-  @SuppressWarnings("unused")
-  public void loadCustom (Session session, Object custom)
-    throws LoadException
-  {
-    // does nothing by default
   }
 
   /**

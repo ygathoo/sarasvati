@@ -143,18 +143,18 @@ public abstract class BaseEngine implements Engine
     {
       case AcceptToken :
         process.addNodeToken( token );
-        fireEvent( NodeTokenEvent.newAcceptedEvent( this, token, response ) );
+        fireEvent( NodeTokenEvent.newAcceptedEvent( this, token ) );
         token.getNode().execute( this, token );
         break;
 
       case DiscardToken :
         token.markComplete( this );
-        fireEvent( NodeTokenEvent.newDiscardedEvent( this, token, response ) );
+        fireEvent( NodeTokenEvent.newDiscardedEvent( this, token ) );
         break;
 
       case SkipNode :
         process.addNodeToken( token );
-        fireEvent( NodeTokenEvent.newSkippedEvent( this, token, response ) );
+        fireEvent( NodeTokenEvent.newSkippedEvent( this, token, response.getExitArcForSkip() ) );
         completeExecution( token, response.getExitArcForSkip() );
         break;
     }
@@ -169,15 +169,11 @@ public abstract class BaseEngine implements Engine
       return;
     }
 
-    List<? extends Arc> outputArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
-
     process.removeNodeToken( token );
     token.markComplete( this );
-    fireEvent( NodeTokenEvent.newCompletedEvent( this, token ) );
+    fireEvent( NodeTokenEvent.newCompletedEvent( this, token, arcName ) );
 
-    token.getNode().completed( this, token, arcName );
-
-    for ( Arc arc : outputArcs )
+    for ( Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
     {
       ArcToken arcToken = getFactory().newArcToken( process, arc, token );
       fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );

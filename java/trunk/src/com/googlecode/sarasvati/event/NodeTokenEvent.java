@@ -19,45 +19,44 @@
 package com.googlecode.sarasvati.event;
 
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 
 public class NodeTokenEvent extends ExecutionEvent
 {
   protected NodeToken nodeToken;
-  protected GuardResponse guardResponse;
+  protected String    exitArcsName;
 
   public static final NodeTokenEvent newCreatedEvent (Engine engine, NodeToken nodeToken)
   {
     return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_CREATED, nodeToken, null );
   }
 
-  public static final NodeTokenEvent newAcceptedEvent (Engine engine, NodeToken nodeToken, GuardResponse response)
+  public static final NodeTokenEvent newAcceptedEvent (Engine engine, NodeToken nodeToken)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, response );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, null );
   }
 
-  public static final NodeTokenEvent newDiscardedEvent (Engine engine, NodeToken nodeToken, GuardResponse response)
+  public static final NodeTokenEvent newDiscardedEvent (Engine engine, NodeToken nodeToken)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken, response );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken, null );
   }
 
-  public static final NodeTokenEvent newSkippedEvent (Engine engine, NodeToken nodeToken, GuardResponse response)
+  public static final NodeTokenEvent newSkippedEvent (Engine engine, NodeToken nodeToken, String exitArcsName)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, response );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, exitArcsName );
   }
 
-  public static final NodeTokenEvent newCompletedEvent (Engine engine, NodeToken nodeToken)
+  public static final NodeTokenEvent newCompletedEvent (Engine engine, NodeToken nodeToken, String exitArcsName)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, null );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, exitArcsName );
   }
 
-  private NodeTokenEvent (Engine engine, ExecutionEventType eventType, NodeToken nodeToken, GuardResponse guardResponse)
+  private NodeTokenEvent (Engine engine, ExecutionEventType eventType, NodeToken nodeToken, String exitArcsName)
   {
     super( engine, eventType );
     this.nodeToken = nodeToken;
-    this.guardResponse = guardResponse;
+    this.exitArcsName = exitArcsName;
   }
 
   @Override
@@ -67,9 +66,9 @@ public class NodeTokenEvent extends ExecutionEvent
   }
 
   @Override
-  public GuardResponse getGuardResponse()
+  public String getExitArcsName()
   {
-    return guardResponse;
+    return exitArcsName;
   }
 
   @Override

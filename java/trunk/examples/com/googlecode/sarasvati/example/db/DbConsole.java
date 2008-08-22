@@ -22,7 +22,6 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Random;
 
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -74,8 +73,6 @@ public class DbConsole
 
     TestSetup.init();
 
-    Random rand = new Random();
-
     while ( true )
     {
       Session session = TestSetup.openSession();
@@ -84,24 +81,12 @@ public class DbConsole
 
       HibGraph graph = getGraph( engine );
 
-      boolean doLogging = rand.nextBoolean();
-
-      if ( doLogging )
-      {
-        engine.addExecutionListener( null, new LoggingExecutionListener(), ExecutionEventType.values() );
-      }
-
       HibProcess process = (HibProcess)engine.startProcess( graph );
       session.flush();
       t.commit();
       session.close();
 
       runWorkflow( process.getId() );
-
-      if ( doLogging )
-      {
-        engine.removeExecutionListener( null, new LoggingExecutionListener(), ExecutionEventType.values() );
-      }
     }
   }
 
@@ -253,11 +238,11 @@ public class DbConsole
         log = !log;
         if ( log )
         {
-          engine.addExecutionListener( null, new LoggingExecutionListener(), ExecutionEventType.values() );
+          engine.addExecutionListener( new LoggingExecutionListener(), ExecutionEventType.values() );
         }
         else
         {
-          engine.removeExecutionListener( null, new LoggingExecutionListener() );
+          engine.removeExecutionListener( new LoggingExecutionListener() );
         }
         System.out.println( "Logging set to: " + log );
         continue;

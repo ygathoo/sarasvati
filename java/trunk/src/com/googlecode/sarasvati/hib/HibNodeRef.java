@@ -143,17 +143,6 @@ public class HibNodeRef implements Node
     node.execute( engine, token );
   }
 
-  /**
-   * Invokes completed on the contained {@link HibNode}.
-   *
-   * @see com.googlecode.sarasvati.Node#completed(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.NodeToken, java.lang.String)
-   */
-  @Override
-  public void completed (Engine engine, NodeToken token, String arcName)
-  {
-    node.completed( engine, token, arcName );
-  }
-
   @Override
   public String getDisplayText ()
   {

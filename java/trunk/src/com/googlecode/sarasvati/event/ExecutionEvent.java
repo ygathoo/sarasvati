@@ -20,7 +20,6 @@ package com.googlecode.sarasvati.event;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Process;
 
@@ -83,12 +82,14 @@ public abstract class ExecutionEvent
   }
 
   /**
-   * If this is a node token guard related event, this returns the {@link GuardResponse} returned by the
-   * guard and null otherwise.
+   * If this is either a node token event for either {@link ExecutionEventType#NODE_TOKEN_SKIPPED} or
+   * {@link ExecutionEventType#NODE_TOKEN_COMPLETED}, this will return the name of the arc (or arcs)
+   * on which execution will be proceeding.
    *
-   * @return The {@link GuardResponse}, if this event is related to a guard processing a NodeToken, null otherwise.
+   * @return The arc name on which execution will proceed if this event is related
+   *         to a node token skipped or node token completing event.
    */
-  public GuardResponse getGuardResponse ()
+  public String getExitArcsName ()
   {
     return null;
   }

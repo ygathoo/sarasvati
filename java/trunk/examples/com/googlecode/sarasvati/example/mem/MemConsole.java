@@ -37,7 +37,6 @@ import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
-import com.googlecode.sarasvati.mem.MemGraphRepository;
 import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
@@ -190,11 +189,13 @@ public class MemConsole
 
   public static MemGraph getGraph ()
   {
+    MemEngine engine = new MemEngine();
+
     MemGraph graph = null;
 
     while ( graph == null )
     {
-      List<MemGraph> graphs = MemGraphRepository.INSTANCE.getGraphs();
+      List<MemGraph> graphs = engine.getRepository().getGraphs();
 
       int count = 0;
       for ( MemGraph g : graphs )
@@ -207,15 +208,13 @@ public class MemConsole
 
       if ( "log".equals( input ) )
       {
-        MemEngine engine = new MemEngine();
-
         if ( log )
         {
-          engine.removeExecutionListener( null, new LoggingExecutionListener() );
+          engine.removeExecutionListener( new LoggingExecutionListener() );
         }
         else
         {
-          engine.addExecutionListener( null, new LoggingExecutionListener(), ExecutionEventType.values() );
+          engine.addExecutionListener( new LoggingExecutionListener(), ExecutionEventType.values() );
         }
 
         log = !log;
@@ -272,7 +271,7 @@ public class MemConsole
       String name = file.getName();
       name = name.substring( 0, name.length() - ".wf.xml".length() );
 
-      if ( MemGraphRepository.INSTANCE.getLatestGraph( name ) == null )
+      if ( engine.getRepository().getLatestGraph( name ) == null )
       {
         try
         {
