@@ -42,6 +42,8 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.Where;
 
@@ -67,26 +69,32 @@ public class HibProcess implements Process
   protected Long id;
 
   @ManyToOne (fetch=FetchType.EAGER)
+  @Cascade( CascadeType.LOCK )
   @JoinColumn( name="graph_id")
   protected HibGraph            graph;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null and executed=1")
+  @Cascade( CascadeType.LOCK )
   protected List<ArcToken>  arcTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
+  @Cascade( CascadeType.LOCK )
   protected List<NodeToken>  nodeTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null and executed=0")
+  @Cascade( CascadeType.LOCK )
   protected List<ArcToken>  executionQueue;
 
   @OneToMany (mappedBy="process", fetch=FetchType.LAZY)
+  @Cascade( CascadeType.LOCK )
   protected List<HibProcessListener>  listeners;
 
   @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
   @JoinColumn (name = "parent_token_id", nullable=true)
+  @Cascade( CascadeType.LOCK )
   protected NodeToken parentToken;
 
   @Column (name="create_date", updatable=false)

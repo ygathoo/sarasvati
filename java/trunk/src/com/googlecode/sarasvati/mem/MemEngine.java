@@ -52,17 +52,27 @@ public class MemEngine extends BaseEngine
   }
 
   @Override
+  public void addExecutionListener (ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    globalEventQueue.addListener( this, listener, eventTypes );
+  }
+
+  @Override
   public void addExecutionListener (Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
-    ExecutionEventQueue eventQueue = process == null ? globalEventQueue : process.getEventQueue();
-    eventQueue.addListener( this, listener, eventTypes );
+    process.getEventQueue().addListener( this, listener, eventTypes );
+  }
+
+  @Override
+  public void removeExecutionListener (ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    globalEventQueue.removeListener( this, listener, eventTypes );
   }
 
   @Override
   public void removeExecutionListener (Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
-    ExecutionEventQueue eventQueue = process == null ? globalEventQueue : process.getEventQueue();
-    eventQueue.removeListener( this, listener, eventTypes );
+    process.getEventQueue().removeListener( this, listener, eventTypes );
   }
 
   @Override

@@ -81,6 +81,18 @@ public class HibEngine extends BaseEngine
   }
 
   @Override
+  public void addExecutionListener(ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    if ( eventTypes == null || listener == null )
+    {
+      return;
+    }
+
+    globalEventQueue.addListener( this, listener, eventTypes );
+    listenerCache.ensureContainsListenerType( listener );
+  }
+
+  @Override
   public void addExecutionListener(Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
     if ( eventTypes == null || listener == null )
@@ -88,40 +100,38 @@ public class HibEngine extends BaseEngine
       return;
     }
 
-    if ( process != null )
+    for ( ExecutionEventType eventType : eventTypes )
     {
-      for ( ExecutionEventType eventType : eventTypes )
+      if ( eventType != null )
       {
-        if ( eventType != null )
-        {
-          HibProcessListener hibListener = new HibProcessListener( listener.getClass().getName(), eventType, process );
-          session.save( hibListener );
-        }
+        HibProcessListener hibListener = new HibProcessListener( listener.getClass().getName(), eventType, process );
+        session.save( hibListener );
       }
     }
 
-    ExecutionEventQueue eventQueue = process == null ? globalEventQueue : process.getEventQueue();
-    eventQueue.addListener( this, listener, eventTypes );
+    process.getEventQueue().addListener( this, listener, eventTypes );
     listenerCache.ensureContainsListenerType( listener );
+  }
+
+  @Override
+  public void removeExecutionListener(ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    globalEventQueue.removeListener( this, listener, eventTypes );
   }
 
   @Override
   public void removeExecutionListener(Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
-    ExecutionEventQueue eventQueue = process == null ? globalEventQueue : process.getEventQueue();
-    eventQueue.removeListener( this, listener, eventTypes );
+    process.getEventQueue().removeListener( this, listener, eventTypes );
 
-    if ( process != null )
+    List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
+
+    for ( HibProcessListener hibListener : ((HibProcess)process).getListeners() )
     {
-      List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
-
-      for ( HibProcessListener hibListener : ((HibProcess)process).getListeners() )
+      if ( process.equals( hibListener.getProcess() ) &&
+           (eventTypes == null || eventTypes.length == 0 || types.contains( hibListener.getEventType() ) ) )
       {
-        if ( process.equals( hibListener.getProcess() ) &&
-             (eventTypes == null || eventTypes.length == 0 || types.contains( hibListener.getEventType() ) ) )
-        {
-          session.delete( hibListener );
-        }
+        session.delete( hibListener );
       }
     }
   }

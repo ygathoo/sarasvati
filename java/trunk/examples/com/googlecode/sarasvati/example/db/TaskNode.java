@@ -92,8 +92,7 @@ public class TaskNode extends HibNode
     env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
   }
 
-  @Override
-  public void loadCustom (Session session, Object custom)
+  public void loadCustom (Object custom)
     throws LoadException
   {
     if ( custom == null || !(custom instanceof XmlTaskDef) )

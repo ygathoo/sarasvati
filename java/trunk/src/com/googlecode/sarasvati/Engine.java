@@ -146,9 +146,23 @@ public interface Engine
   void fireEvent (ExecutionEvent event);
 
   /**
-   * Adds a listener for the given event types. If a process is given, then events
-   * will only be sent for that listener. If null is passed for the process, then
-   * the listener will receive notifications for all processes.
+   * Adds a listener for the given event types for all processes. It is not added to
+   * each process individually, but rather added to a global set of listeners. Global
+   * generally means global for instances of a particular engine types.
+   *
+   * <br/>
+   *
+   * {@link ExecutionListener} instances may be be reused and they may be serialized
+   * in some fashion. Therefore, they must be thread safe and they must have a
+   * default constructor.
+   *
+   * @param listener The listener
+   * @param eventTypes The event types to be notified for.
+   */
+  void addExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+
+  /**
+   * Adds a listener for the given event types for the given process.
    *
    * <br/>
    *
@@ -164,8 +178,22 @@ public interface Engine
   void addExecutionListener (Process process, ExecutionListener listener, ExecutionEventType...eventTypes);
 
   /**
-   * Will remove the given listener. If a process is specified, it will be removed from that specific listener,
-   * otherwise it will be removed from the global listener set. If no event types are specified, the listener
+   * Will remove the given listener from the set of global listeners.If no event types are specified,
+   * the listener will be removed for all event types. Otherwise it will be removed for only the
+   * specified event types.
+   *
+   * <br/>
+   * The listener doesn't need to match exactly. All listeners of this type will be matched. What matches
+   * types is determined by the implementation, but usually it means same class.
+   *
+   *
+   * @param listener The type of listener to remove
+   * @param eventTypes The set of event types to remove the listener for, or none to remove for all
+   */
+  void removeExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+
+  /**
+   * Will remove the listener from the given proces. If no event types are specified, the listener
    * will be removed for all event types. Otherwise it will be removed for only the specified event types.
    *
    * <br/>

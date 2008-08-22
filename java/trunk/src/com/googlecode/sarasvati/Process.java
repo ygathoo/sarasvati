@@ -168,5 +168,11 @@ public interface Process
    */
   NodeToken getParentToken ();
 
+  /**
+   * Each process should have an event queue which manages the set of listeners for the process
+   * and handles firing events to those listeners.
+   *
+   * @return The event queue for this process.
+   */
   ExecutionEventQueue getEventQueue ();
 }
