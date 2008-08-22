@@ -67,6 +67,7 @@
         <include name="examples/**"/>
         <include name="lang/**"/>
         <include name="lib/*.txt"/>
+        <include name="README"/>
         <exclude name="**/.svn/**"/>
       </fileset>
     </copy>
