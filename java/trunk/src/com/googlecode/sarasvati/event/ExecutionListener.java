@@ -25,7 +25,8 @@ import com.googlecode.sarasvati.Process;
  * Listeners may be registered for events happening on a single {@link Process} or
  * all processes.
  *
- * @see Process#addExecutionListener(ExecutionListener, ExecutionEventType...)
+ * @see Engine#addExecutionListener(ExecutionListener, ExecutionEventType...)
+ * @see Engine#addExecutionListener(Process, ExecutionListener, ExecutionEventType...)
  *
  * @author Paul Lorenz
  */
