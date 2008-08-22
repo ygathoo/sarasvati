@@ -41,7 +41,7 @@ Graphs come with a set of common terms. To begin with, a graph is made up a set 
   * *Node* - An element of a graph. A node corresponds roughly to an action as defined [Workflow previously]. Nodes can be thought of as pieces of code, waiting to be executed when their turn comes.
     * Also known as: Vertex, Place
 
-  * *Arc* - A directed connection between two nodes. 'Directed' means that arcs have a start node and an end node. In same cases, an arc may have a label, or name. Named arcs are discussed in more detail later.
+  * *Arc* - A directed connection between two nodes. 'Directed' means that arcs have a start node and an end node. In same cases, an arc may have a label, or name.
     * Also know as: Edge, Transition
 
   * *Predecessor* - If two nodes are connected by an arc then the node at the beginning of the arc is the _predecessor_ of the node at the end of the arc. How nodes are connected by arcs defines the order of execution. Generally a node may not execute until at last one, potentially many or all, of its predecessors has executed. Nodes may have many arcs exiting and entering them.
@@ -82,7 +82,7 @@ There are various ways of handling this. For example, there may be a specific ty
 
 Assuming that the 'Hello World' node is a start node, execution would begin by creating a new *node token* at the 'Hello World' node.
 
-  * *Node Token* - A token situated at a node. Node tokens track the response of the node guard (see below). They may also have attributes. As we will see later, there are also arc tokens (which are situated on arcs). They are distinct because they serve different functions.
+  * *Node Token* - A token situated at a node. Node tokens track the response of the node guard (see below). They may also have attributes.
 
 The process would now look like:
 
