@@ -14,6 +14,7 @@
     * [#Single_Node Single Node]
     * [#Two_Nodes Two Nodes]
     * [#Split_and_Join_with_Wait_States Split and Join - With Wait States]
+    * [#Multithreading Multithreading]
     * [#Split_and_Join_without_Wait_States Split and Join - Without Wait States]
     * [#Flow_Control_with_Guards_using_Skip Flow Control with Guards using Skip]
     * [#Flow_Control_with_Guards_using_Discard Flow Control with Guards using Discard]
@@ -231,6 +232,16 @@ Once the _Grant_ task is finished, its node token will also be completed and the
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-9.jpg]
 
 The entire process can be viewed [ConceptsExampleSplitJoinOne here].
+
+[#Contents Back to Table of Contents]
+
+====Multithreading====
+----------------------
+As seen the previous example, a process may have multiple tokens active concurrently. Does this imply that each token executes in a separate thread? No. Concurrency here is like that of multiple programs running on a single chip. Each runs in turns, but may present the appearance of running simultaneously. 
+
+However, true multithreading can be done at the node level. Each node when executed, may hand off its work to a background thread. The node token will then enter a wait state, and other nodes may be executed. When the background task is complete, it may then complete the node token, allowing further execution.
+
+Note that only one thread may safely execute the process at any given time, and care must be taken to serialize access to the process itself.
 
 [#Contents Back to Table of Contents]
 
