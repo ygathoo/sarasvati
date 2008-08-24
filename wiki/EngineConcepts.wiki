@@ -19,7 +19,7 @@
     * [#Flow_Control_with_Guards_using_Discard Flow Control with Guards using Discard]
     * [#Flow_Control_with_Guards_using_Named_Arcs Flow Control with Guards using Named Arcs]
     * [#Flow_Control_from_Node_Completion_using_Named_Arcs Flow Control from Node Completion using Named Arcs]
-  * [#Nested_Processes_and_Graph_Composition Nested Processes and Graph Composition]
+  * [#Graph_Composition_and_Nested_Processes Graph Composition and Nested Processes]
     * [#Graph_Composition_Example_One Graph Composition Example One]
     * [#Graph_Composition_Example_Two Graph Composition Example Two]
   * [#Execution_Environment Execution Environment]
@@ -33,7 +33,7 @@ We begin with the some definitions, move on to features likely to be common acro
 
 ==Definitions==
 
-Graphs come with a set of common terms. To begin with, a graph is made up a set of things, hereafter refered to as *nodes* and a set of connections between _nodes_, know as *arcs*.
+Graphs come with a set of common terms. To begin with, a graph is made up a set of things, hereafter referred to as *nodes* and a set of connections between _nodes_, know as *arcs*.
 
   * *Graph* - Set of nodes, with set of arcs connecting the nodes. While graphs have a wider applicability, graph here is synonymous with process definition.
     * Also know as: Process Definition, Network, Workflow
@@ -372,27 +372,16 @@ The complete process can be seen [ConceptsExampleSelectArcOne here].
 
 [#Contents Back to Table of Contents]
 
-==Nested Processes and Graph Composition==
+==Graph Composition and Nested Processes==
 -------------------------------------------------------------------------
-There are times when process definitions have overlapping functionality, or where one process needs the functionality from a second process. There are various ways of handling this, including copy-and-paste. A cleaner solution involves *nested processes*.
+Much like any software, a set of process definitions can grow larger, more complex and more intertwined as time goes. One solution used in the broader software world is encapsulation. This involves pulling out common functionality and breaking up large pieces into smaller components. These same techniques can be used with a set of process definitions. Rather than using copy/paste, sections of process definitions that are common can be extracted. Large process definitions can be split out into smaller components.
 
-  * *Nested Process* - A node in an executing process may create a separate, new process (of the same or different process definition). This new process is known a nested process. The new process gets initialized with the process state of the containing process and the current token. When the nested process completes, the token in the containing process will be completed.
-    * Advantages
-      * The nested process will have it's own process state
-      * Processes may nested recursively
-      * Nested processes will always use the latest version process definition at the time the node is executed.
-    * Restrictions
-      * The interaction with the nested process must all be contained by a single node. The nested process will execute in isolation. The nodes in the nested process won't interact with the those of the containing process in any way. 
+Sarasvati supports two ways of doing encapsulation, each with it's own advantages and disadvantages. The first is *graph composition*, the second is *nested processes*. Both of these techniques allow complete process definitions and components that have been split out to be defined in separately. The difference lies in when they are composed.
 
+  * *Load-time composition* - Graph composition brings the disparate elements together at load time. The main definition being loaded may refer to other definitions. These definitions will be loaded as well and they will all be combined into a single definition. This single definition will execute as a normal process.
+  * *Run-time composition* - Nested processes use composition at runtime. The main definition will be loaded. When this definition is executed, a node may start a nested process. This nested process will execute and when completed, the main process will continue.
 
-There are several reasons in which nested processes can be useful:
-
-  # Extracting common functionality
-  # Make large process definitions easier to work with by componentizing them
-  # Having a new scope for process variables
-  # Recursive behavior
-
-The first two reasons differ from the second two, in that they are, in some sense, optional. Extracting common functionality and componentizing large process definitions are done for the software engineering reasons of reuse and encapsulation. However, the process definitions could be build as single large graph. For this reason, Sarasvati uses *graph composition* to handle these cases.
+Now that we have general idea of how graph composition and nested processes compare, let us investigate them in more detail.
 
   * *Graph composition* - The set of process definitions may be seen as a single, disconnected graph. A node may contain arcs to nodes in other process definitions. These arcs are referred to as *external arcs*. When the process definition is loaded, referenced external process definitions will be loaded as well. All the process definitions will be composed into a single, larger graph. The external arcs will become regular arcs. The same external processes definition may be embedded more than once. Each *external instance* of an external process definition will be given a unique identifier.
     * Advantages
@@ -408,7 +397,16 @@ The first two reasons differ from the second two, in that they are, in some sens
     * *Out Arc* - An arc which starts in the defining node and ends in a specified node
     * *In Arc* - An arc which starts in a specified and ends in the node in which it is defined.
 
-  * *External Instance* - A specific external process definition may be referenced multiple times. It may also be imported into the referring process definition multiple times, or just a single time. Each external arc specifies a specific instance of the external process definition. 
+  * *External Instance* - A specific external process definition may be referenced multiple times. It may also be imported into the referring process definition multiple times, or just a single time. Each external arc specifies a specific instance of the external process definition.
+
+  * *Nested Process* - A node in an executing process may create a separate, new process (of the same or different process definition). This new process is known a nested process. The new process gets initialized with the process state of the containing process and the current token. When the nested process completes, the token in the containing process will be completed.
+    * Advantages
+      * The nested process will have it's own process state
+      * Processes may nested recursively
+      * Nested processes will always use the latest version process definition at the time the node is executed.
+    * Restrictions
+      * The interaction with the nested process must all be contained by a single node. The nested process will execute in isolation. The nodes in the nested process won't interact with the those of the containing process in any way.
+
 
 [#Contents Back to Table of Contents]
 
@@ -419,13 +417,13 @@ Let's look at an examples of how this works in practice. Here is a small process
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals1.jpg]
 
-It only has two nodes. Notice that both nodes are join nodes, even though one node has no inputs and the other only has one. However, in the composed graph these nodes may have more inputs. 
+It only has two nodes. Notice that both nodes are join nodes, even though one node has no inputs and the other only has one. However, in the composed graph these nodes may have more inputs.
 
 Next is the process definition which will be using 'ext'.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals2.jpg]
 
-This process definition looks very different from previous examples. It isn't even fully connected. 
+This process definition looks very different from previous examples. It isn't even fully connected.
 
 Some things to note:
   * The external arcs are labeled with the process definition name, instance and node name that they are intended to link to.
@@ -440,7 +438,7 @@ When the graph is loaded, the composed version will look as follows:
 
 ====Graph Composition Example Two====
 -------------------------------------------------------------------------
-The previous example referenced only a single instance. Here as the example using two instances 'ext. 
+The previous example referenced only a single instance. Here as the example using two instances 'ext.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals4.jpg]
 
@@ -454,11 +452,11 @@ As you can see, we now have two copies of 'ext' embedded in the process definiti
 
 ==Execution Environment==
 -------------------------------------------------------------------------
-While executing your process definitions, it may be desirable to have some shared state or to send data between nodes via the tokens. Sarasvati supports both these things via the execution *environment*. Each process has an environment on which attributes/variables can be set. In addition, each token also has its own environment. 
+While executing your process definitions, it may be desirable to have some shared state or to send data between nodes via the tokens. Sarasvati supports both these things via the execution *environment*. Each process has an environment on which attributes/variables can be set. In addition, each token also has its own environment.
 
-  * *Environment* - A set of key/value attributes. 
+  * *Environment* - A set of key/value attributes.
 
-When using a memory backed engine, all environment attributes are stored in memory. However, when using a database backed engine, we may wish to persist only certain attributes. Also, storing objects in the database can be complicated, storing arbitrary objects in memory is easier than doing so in the database. By default, attributes are *persistent*, however, there is a separate set of variables which are *transient*. 
+When using a memory backed engine, all environment attributes are stored in memory. However, when using a database backed engine, we may wish to persist only certain attributes. Also, storing objects in the database can be complicated, storing arbitrary objects in memory is easier than doing so in the database. By default, attributes are *persistent*, however, there is a separate set of variables which are *transient*.
 
   * *Persistent Attributes* - These attributes will be stored for the lifetime of the process. There may be restriction on what can be (easily) stored a persistent attribute, since it may need to be stored in a database table.
 
@@ -466,13 +464,13 @@ When using a memory backed engine, all environment attributes are stored in memo
 
 ====Process Attributes====
 -------------------------------------------------------------------------
-If you want state that is accessible from anywhere during process execution, then attributes can be set on the process environment. These attributes are visible and mutable by all nodes. 
+If you want state that is accessible from anywhere during process execution, then attributes can be set on the process environment. These attributes are visible and mutable by all nodes.
 
 ====Token Attributes====
 -------------------------------------------------------------------------
 Each *node token* also has its own environment. Arc tokens do not have an environment, because they do not execute in the same way that node tokens do, and thus have no need for private state. Node tokens are initialized with the state of their *parent tokens*.
 
- * *Parent token* - Each node tokens has zero to many parents. 
+ * *Parent token* - Each node tokens has zero to many parents.
    * A node token on a start node has no parents. It will start with an empty environment.
    * A node token on a node with one incoming arc of a given name has a single parent. Its environment will be copied from the parent.
    * A node token on a join node may have multiple parents, one for each arc of the same name. In this case the environments of all the parents must be combined in some way. By default, each environment will be imported into that of the new node. So if more than one parent has an attribute with the same one, the last one imported will overwrite the previous values. This behavior may be overridden, but if this is a concern, then usually using process level attributes is advisable.
