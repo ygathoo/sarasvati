@@ -72,6 +72,7 @@ public class TestDbLoad
       try
       {
         wfLoader.loadWithDependencies( name, resolver );
+        System.out.println( "Loaded " + name );
       }
       catch ( Exception t )
       {

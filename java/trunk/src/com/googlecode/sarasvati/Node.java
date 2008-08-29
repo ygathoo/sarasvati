@@ -21,6 +21,8 @@
  */
 package com.googlecode.sarasvati;
 
+import com.googlecode.sarasvati.event.ExecutionListener;
+
 
 /**
  * A node corresponds to an action in a process definition.
@@ -28,23 +30,36 @@ package com.googlecode.sarasvati;
  * complete immediately, but enter a wait state. At some
  * point it will return and the process can then continue execution.
  *
+ * <br/>
+ *
  * Every node can have a guard associated with it. This guard
  * will determine if an incoming token is accepted (and the
  * node functionality executed), or discarded, or if the token
  * is passed through without executing the node.
  *
+ * <br/>
+ *
  * Every node may have multiple incoming arcs. If isJoin()
  * return true, then tokens coming in will wait for tokens
  * to be present on all arcs with the same label.
+ *
+ * <br/>
  *
  * Every node may also have multiple outgoing arcs. When
  * a node token is completed, it may pick which arcs to exit
  * on by passing an arc label. Every arc with the given label
  * will have an arc token places on it.
  *
+ * <br/>
+ *
+ * Node extends the {@link ExecutionListener} interface. This
+ * is so that listeners may call into the appropriate node
+ * on {@link NodeToken} related events, without having to
+ * worry about casting or proxies, etc.
+ *
  * @author Paul Lorenz
  */
-public interface Node
+public interface Node extends ExecutionListener
 {
   /**
    * Returns the node name. Every node must have a name which
