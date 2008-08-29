@@ -41,6 +41,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.guardlang.GuardLang;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 
@@ -206,6 +207,17 @@ public class HibNode implements Node
   public void execute (Engine engine, NodeToken token)
   {
     engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+
+  /**
+   * Does nothing by default. May be overridden by subclasses wishing to invoke
+   * node functionality from an event listener.
+   *
+   * @see com.googlecode.sarasvati.event.ExecutionListener#notify(com.googlecode.sarasvati.event.ExecutionEvent)
+   */
+  @Override
+  public void notify (ExecutionEvent event)
+  {
   }
 
   /**

@@ -35,6 +35,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.event.ExecutionEvent;
 
 @Entity
 @Table (name="wf_node_ref")
@@ -153,6 +154,12 @@ public class HibNodeRef implements Node
   public boolean isExternal ()
   {
     return !graph.equals( getNode().getGraph() );
+  }
+
+  @Override
+  public void notify (ExecutionEvent event)
+  {
+    node.notify( event );
   }
 
   @Override
