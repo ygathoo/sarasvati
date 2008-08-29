@@ -1,43 +1,54 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="subwf-tasks" version="1">
+<workflow name="subwf-tasks"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="../workflow.xsd">
 
-  <task name="sub1">
-    <task-name>Call Distributer</task-name>
-    <description>
-      This task should spawn tasks "Order Stuff" and "Request Status"
-    </description>
+  <node type="task" name="sub1">
 
     <arc to="sub2"/>
     <arc to="sub3"/>
-  </task>
 
-  <task name="sub2">
-    <task-name>Order Stuff</task-name>
-    <description>
+    <taskName>Call Distributer</taskName>
+    <taskDesc>
+      This task should spawn tasks "Order Stuff" and "Request Status"
+    </taskDesc>
+
+  </node>
+
+  <node type="task" name="sub2">
+
+    <arc to="sub4"/>
+
+    <taskName>Order Stuff</taskName>
+    <taskDesc>
       Order stuff now.
 
       Mark Complete shouldn't spawn until this and Request status are both complete.
-    </description>
-    <arc to="sub4"/>
-  </task>
+    </taskDesc>
 
-  <task name="sub3">
-    <task-name>Request Status</task-name>
-    <description>
+  </node>
+
+  <node type="task" name="sub3">
+
+    <arc to="sub4"/>
+
+    <taskName>Request Status</taskName>
+    <taskDesc>
       Get status on other orders.
 
       Mark Complete shouldn't spawn until this and Order Stuff are both complete.
-    </description>
-    <arc to="sub4"/>
-  </task>
+    </taskDesc>
 
-  <task name="sub4">
-    <task-name>Mark Complete</task-name>
-    <description>
+  </node>
+
+  <node type="task" name="sub4" isJoin="true">
+
+    <taskName>Mark Complete</taskName>
+    <taskDesc>
       Sign off in application in application.
-    </description>
-  </task>
+    </taskDesc>
+
+  </node>
 
 </workflow>
