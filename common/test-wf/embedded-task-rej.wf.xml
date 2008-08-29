@@ -12,13 +12,10 @@
     <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub1" type="out"/>
     <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub1" type="in" name="reject"/>
 
-    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
-                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
-      <ex:task-name>Enter order</ex:task-name>
-      <ex:description>
+    <taskName>Enter order</taskName>
+    <taskDesc>
         Enter order into system
-      </ex:description>
-    </ex:task-def>
+    </taskDesc>
 
   </node>
 

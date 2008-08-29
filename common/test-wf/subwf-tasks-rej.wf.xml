@@ -8,44 +8,34 @@
     <arc to="sub2"/>
     <arc to="sub3"/>
 
-    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
-                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
-
-      <ex:task-name>Call Distributer</ex:task-name>
-      <ex:description>
-        This task should spawn tasks "Order Stuff" and "Request Status"
-      </ex:description>
-    </ex:task-def>
+    <taskName>Call Distributer</taskName>
+    <taskDesc>
+      This task should spawn tasks "Order Stuff" and "Request Status"
+    </taskDesc>
 
   </node>
 
   <node name="sub2" type="task">
     <arc to="sub4"/>
 
-    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
-                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
-      <ex:task-name>Order Stuff</ex:task-name>
-      <ex:description>
-        Order stuff now.
+    <taskName>Order Stuff</taskName>
+    <taskDesc>
+      Order stuff now.
 
-        Mark Complete shouldn't spawn until this and Request status are both complete.
-      </ex:description>
-    </ex:task-def>
+      Mark Complete shouldn't spawn until this and Request status are both complete.
+    </taskDesc>
 
   </node>
 
   <node name="sub3" type="task">
     <arc to="sub4"/>
 
-    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
-                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
-      <ex:task-name>Request Status</ex:task-name>
-      <ex:description>
-        Get status on other orders.
+    <taskName>Request Status</taskName>
+    <taskDesc>
+      Get status on other orders.
 
-        Mark Complete shouldn't spawn until this and Order Stuff are both complete.
-      </ex:description>
-    </ex:task-def>
+      Mark Complete shouldn't spawn until this and Order Stuff are both complete.
+    </taskDesc>
 
   </node>
 
@@ -53,14 +43,10 @@
 
     <arc to="sub1" name="reject"/>
 
-    <ex:task-def xmlns:ex="http://sarasvati.googlecode.com/example/"
-                 ex:schemaLocation="/home/paul/workspace/wf-common/example.xsd">
-
-      <ex:task-name>Mark Complete</ex:task-name>
-      <ex:description>
-        Sign off in application in application.
-      </ex:description>
-    </ex:task-def>
+    <taskName>Mark Complete</taskName>
+    <taskDesc>
+      Sign off in application in application.
+    </taskDesc>
 
   </node>
 

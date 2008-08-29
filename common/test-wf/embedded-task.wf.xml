@@ -1,22 +1,22 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="embedded-task" version="1">
-  <start>
-    <arc to="1"/>
-  </start>
+<workflow name="embedded-task"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
 
-  <task name="1">
-    <task-name>Enter order</task-name>
-    <description>
+  <node type="task" name="1" isStart="true">
+
+    <externalArc external="subwf-tasks" version="1" instance="1" nodeName="sub1" type="out"/>
+
+    <taskName>Enter order</taskName>
+    <taskDesc>
       Enter order into system
-    </description>
+    </taskDesc>
 
-    <externalArc workflow="subwf-tasks" version="1" instance="1" nodeId="sub1" type="out"/>
-  </task>
+  </node>
 
   <node name="2">
-    <externalArc workflow="subwf-tasks" version="1" instance="1" nodeId="sub4" type="in"/>
+    <externalArc external="subwf-tasks" version="1" instance="1" nodeName="sub4" type="in"/>
   </node>
 
 </workflow>

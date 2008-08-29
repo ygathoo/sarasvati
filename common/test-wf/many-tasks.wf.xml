@@ -1,50 +1,52 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow id="many-tasks" version="1">
-  <start>
+<workflow name="many-tasks"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="../workflow.xsd">
+
+  <node name="start" isStart="true">
     <arc to="1"/>
     <arc to="2"/>
-  </start>
+  </node>
 
-  <task name="1">
-    <task-name>Hello</task-name>
-    <description>
+  <node type="task" name="1">
+    <taskName>Hello</taskName>
+    <taskDesc>
       Here is where one would say hello
-    </description>
+    </taskDesc>
 
     <arc to="3"/>
-  </task>
+  </node>
 
-  <task name="2">
-    <task-name>Shake</task-name>
-    <description>
+  <node type="task" name="2">
+    <taskName>Shake</taskName>
+    <taskDesc>
       Here is where you shake hands
-    </description>
+    </taskDesc>
     <arc to="3"/>
-  </task>
+  </node>
 
-  <task name="3">
-    <task-name>Introduce</task-name>
-    <description>
+  <node type="task" name="3" isJoin="true">
+    <taskName>Introduce</taskName>
+    <taskDesc>
       Here is where you give your name
-    </description>
+    </taskDesc>
     <arc to="4"/>
-  </task>
+  </node>
 
-  <task name="4">
-    <task-name>Pleasantry</task-name>
-    <description>
+  <node type="task" name="4">
+    <taskName>Pleasantry</taskName>
+    <taskDesc>
       Here is where you say something like, 'Nice to meet you'
-    </description>
+    </taskDesc>
     <arc to="5"/>
-  </task>
+  </node>
 
-  <task name="5">
-    <task-name>Converse</task-name>
-    <description>
+  <node type="task" name="5">
+    <taskName>Converse</taskName>
+    <taskDesc>
       Start a conversation
-    </description>
-  </task>
+    </taskDesc>
+  </node>
 
 </workflow>
