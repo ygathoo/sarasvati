@@ -36,7 +36,7 @@ public class TaskIcon implements Icon
   public static final int HEIGHT = 40;
 
   private static final Color darkBlue = new Color( 0, 0, 128 );
-  private static final Color cream    = new Color( 255, 255, 245 );
+  private static final Color cream    = new Color( 255, 255, 225 );
 
   protected Node node;
 
@@ -61,9 +61,9 @@ public class TaskIcon implements Icon
   public void paintIcon (Component c, Graphics g, int x, int y)
   {
     g.setColor( cream );
-    g.fillRoundRect( x, y, getIconWidth(), getIconHeight(), 10, 10 );
+    g.fillRoundRect( x, y, getIconWidth() - 1, getIconHeight() - 1, 10, 10 );
     g.setColor( darkBlue );
-    g.drawRoundRect( x, y, getIconWidth(), getIconHeight(), 10, 10 );
+    g.drawRoundRect( x, y, getIconWidth() - 1, getIconHeight() - 1, 10, 10 );
 
     g.setColor( Color.black );
     String taskName = node.getDisplayText();
