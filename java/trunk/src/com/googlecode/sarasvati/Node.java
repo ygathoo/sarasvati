@@ -59,7 +59,7 @@ import com.googlecode.sarasvati.event.ExecutionListener;
  *
  * @author Paul Lorenz
  */
-public interface Node extends ExecutionListener
+public interface Node extends Adaptable
 {
   /**
    * Returns the node name. Every node must have a name which

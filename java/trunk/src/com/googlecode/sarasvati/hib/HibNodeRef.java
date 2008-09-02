@@ -35,7 +35,6 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.event.ExecutionEvent;
 
 @Entity
 @Table (name="wf_node_ref")
@@ -157,9 +156,9 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public void notify (ExecutionEvent event)
+  public Object getAdaptor (Class<?> clazz)
   {
-    node.notify( event );
+    return node.getAdaptor (clazz);
   }
 
   @Override

@@ -19,7 +19,6 @@
 package com.googlecode.sarasvati.visual;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.util.List;
 
 import com.googlecode.sarasvati.Node;
@@ -39,20 +38,8 @@ public class GraphTreeNode
 
   public static GraphTreeNode newInstance (GraphTreeNode parent, Node nodeRef)
   {
-    if ( "start".equalsIgnoreCase( nodeRef.getType() ) )
-    {
-      return new StartGraphTreeNode( parent, nodeRef );
-    }
-    else if ( "task".equalsIgnoreCase( nodeRef.getType() ) )
-    {
-      return new TaskGraphTreeNode( parent, nodeRef );
-    }
-    else
-    {
-      return new GraphTreeNode( parent, nodeRef );
-    }
+    return new GraphTreeNode( parent, nodeRef );
   }
-
 
   public GraphTreeNode (GraphTreeNode parent, Node node)
   {
@@ -117,52 +104,8 @@ public class GraphTreeNode
     return originY;
   }
 
-  public void paintNode (Graphics g)
-  {
-    g.setColor( color );
-
-    int maxRadius = NodeDrawConfig.getMaxNodeRadius();
-    int offset = getOffset();
-    g.fillOval( originX - offset, originY - offset, maxRadius, maxRadius);
-  }
-
   public int getOffset ()
   {
     return NodeDrawConfig.getMaxNodeRadius() >> 1;
-  }
-
-  public Point getLeftAnchor ()
-  {
-    return new Point( originX - getOffset() - NodeDrawConfig.getAnchorSize(), originY );
-  }
-
-  public Point getRightAnchor ()
-  {
-    return new Point( originX + getOffset() + NodeDrawConfig.getAnchorSize(), originY );
-  }
-
-  public Point getTopAnchor ()
-  {
-    return new Point( originX, originY  + getOffset() + NodeDrawConfig.getAnchorSize());
-  }
-
-  public void paintLeftIncomingAnchor( Graphics g )
-  {
-    int size = NodeDrawConfig.getAnchorSize();
-    int base = originX - getOffset();
-
-    g.fillPolygon( new int[] { base    - size, base,    base    - size },
-                   new int[] { originY - size, originY, originY + size },
-                   3 );
-  }
-
-  public void paintRightIncomingAnchor( Graphics g )
-  {
-    int size = NodeDrawConfig.getAnchorSize();
-    int base = originX + getOffset();
-
-    g.fillPolygon( new int[] { base    + size, base,   base    + size },
-                   new int[] { originY - size, originY,originY + size },
-                   3 );
   }
 }

@@ -16,9 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
+
 package com.googlecode.sarasvati;
 
 /**
