@@ -76,6 +76,20 @@ ALTER TABLE wf_process_attr
   ADD PRIMARY KEY (process_id, name)
 go
 
+create table wf_process_listener
+(
+  id              bigint       IDENTITY NOT NULL PRIMARY KEY,
+  type            varchar(255)          NOT NULL,
+  event_type      int                   NOT NULL,
+  process_id      bigint                NOT NULL REFERENCES wf_process
+) with identity_gap = 10
+go
+
+ALTER TABLE wf_process_listener
+  ADD CONSTRAINT wf_listener_unique
+    UNIQUE(type, event_type, process_id)
+go
+    
 create table wf_node_type
 (
    id          varchar(255) NOT NULL PRIMARY KEY,
