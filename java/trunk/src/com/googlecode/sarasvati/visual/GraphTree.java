@@ -44,6 +44,14 @@ public class GraphTree
 
     List<Node> startNodes = (List<Node>)graph.getStartNodes();
 
+    for ( Node node : graph.getNodes() )
+    {
+      if ( graph.getInputArcs( node ).isEmpty() && !startNodes.contains( node ))
+      {
+        startNodes.add( node );
+      }
+    }
+
     if ( startNodes.isEmpty() )
     {
       List<? extends Node> nodeRefs = graph.getNodes();

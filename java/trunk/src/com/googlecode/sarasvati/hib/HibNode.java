@@ -209,7 +209,7 @@ public class HibNode implements Node
   }
 
   @Override
-  public Object getAdaptor(Class<?> clazz)
+  public <T> T getAdaptor(Class<T> clazz)
   {
     // does nothing by default
     return null;
