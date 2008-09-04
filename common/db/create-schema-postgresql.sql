@@ -149,7 +149,7 @@ create table wf_arc_token
   process_id      int       NOT NULL REFERENCES wf_process,
   arc_id          int       NOT NULL REFERENCES wf_arc,
   parent_token_id int       NOT NULL REFERENCES wf_node_token,
-  executed        boolean   NOT NULL,
+  executed        char(1)   NOT NULL,
   create_date     timestamp NOT NULL DEFAULT current_timestamp,
   complete_date   timestamp NULL
 );
