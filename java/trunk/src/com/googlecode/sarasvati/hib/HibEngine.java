@@ -164,6 +164,7 @@ public class HibEngine extends BaseEngine
     config.addAnnotatedClass( HibNodeRef.class );
     config.addAnnotatedClass( HibNodeToken.class );
     config.addAnnotatedClass( HibProcess.class );
+    config.addAnnotatedClass( WaitNode.class );
 
     if (enableCaching )
     {
