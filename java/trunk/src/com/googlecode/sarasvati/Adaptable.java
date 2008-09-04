@@ -34,5 +34,5 @@ public interface Adaptable
    * @param clazz The type of adaptor requested
    * @return An instance of the requested class, or null if the adaptor type is not supported
    */
-  Object getAdaptor (Class<?> clazz);
+  <T> T getAdaptor (Class<T> clazz);
 }

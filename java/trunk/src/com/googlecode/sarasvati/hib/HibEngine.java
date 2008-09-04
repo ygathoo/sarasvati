@@ -44,6 +44,16 @@ public class HibEngine extends BaseEngine
   protected HibGraphFactory factory;
   protected HibGraphRepository repository;
 
+  /**
+   * This constructor can be used in cases when the session will be set in later
+   * or when performing operations that don't require a session, such as adding
+   * global execution listeners.
+   */
+  public HibEngine ()
+  {
+    // Default constructor
+  }
+
   public HibEngine (Session session)
   {
     this.session = session;
@@ -59,6 +69,8 @@ public class HibEngine extends BaseEngine
   public void setSession (Session session)
   {
     this.session = session;
+    this.factory = new HibGraphFactory( session );
+    this.repository = new HibGraphRepository( session );
   }
 
   @Override
