@@ -17,6 +17,7 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node') drop table wf_node
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_type') drop table wf_node_type
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_guard_action') drop table wf_guard_action
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_attr') drop table wf_process_attr
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_listener') drop table wf_process_listener
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process') drop table wf_process
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_state') drop table wf_process_state
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_graph') drop table wf_graph
@@ -89,7 +90,7 @@ ALTER TABLE wf_process_listener
   ADD CONSTRAINT wf_listener_unique
     UNIQUE(type, event_type, process_id)
 go
-    
+
 create table wf_node_type
 (
    id          varchar(255) NOT NULL PRIMARY KEY,
@@ -177,6 +178,7 @@ create table wf_arc_token
   process_id      bigint             NOT NULL REFERENCES wf_process,
   arc_id          bigint             NOT NULL REFERENCES wf_arc,
   parent_token_id bigint             NOT NULL REFERENCES wf_node_token,
+  executed        char(1)            NOT NULL,
   create_date     datetime           DEFAULT getDate() NOT NULL,
   complete_date   datetime           NULL
 ) with identity_gap = 100

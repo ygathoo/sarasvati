@@ -74,7 +74,7 @@ public class HibProcess implements Process
   protected HibGraph            graph;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
-  @Where (clause="complete_date is null and executed=true")
+  @Where (clause="complete_date is null and executed='Y'")
   @Cascade( CascadeType.LOCK )
   protected List<ArcToken>  arcTokens;
 
@@ -84,7 +84,7 @@ public class HibProcess implements Process
   protected List<NodeToken>  nodeTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
-  @Where (clause="complete_date is null and executed=false")
+  @Where (clause="complete_date is null and executed='N'")
   @Cascade( CascadeType.LOCK )
   protected List<ArcToken>  executionQueue;
 
