@@ -21,7 +21,6 @@
  */
 package com.googlecode.sarasvati;
 
-import com.googlecode.sarasvati.event.ExecutionListener;
 
 
 /**
@@ -49,13 +48,6 @@ import com.googlecode.sarasvati.event.ExecutionListener;
  * a node token is completed, it may pick which arcs to exit
  * on by passing an arc label. Every arc with the given label
  * will have an arc token places on it.
- *
- * <br/>
- *
- * Node extends the {@link ExecutionListener} interface. This
- * is so that listeners may call into the appropriate node
- * on {@link NodeToken} related events, without having to
- * worry about casting or proxies, etc.
  *
  * @author Paul Lorenz
  */
