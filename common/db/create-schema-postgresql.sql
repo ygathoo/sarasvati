@@ -80,7 +80,7 @@ create table wf_node_type
 );
 
 insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' );
-insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'wait' )
+insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'wait' );
 insert into wf_node_type values ( 'task', 'Node which generates tasks', 'task' );
 insert into wf_node_type values ( 'init', 'Node which generates a random number and updates a counter', 'init' );
 insert into wf_node_type values ( 'dump', 'Node which indicates on stdout that it has been invoked', 'dump' );
