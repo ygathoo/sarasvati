@@ -23,13 +23,6 @@ Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' t
        Other   : Has it's own list of dependencies
        Version : 3.2.6, but may work with earlier versions.
 
-    * JUNG
-       Summary : Graph drawing library
-       License : BSD
-       Homepage: http://jung.sourceforge.net/
-       Other   : Uses Colt and Commons Collections (generics version)
-       Version : 2.0-alpha3
-
     * PostgreSQL JDBC Driver
        Summary : JDBC driver to connect to PostgreSQL
        License : BSD
