@@ -27,8 +27,6 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/dom4j.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/asm.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/cglib.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/collections-generic-4.01.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/colt-1.2.0.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/commons-collections-3.2.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/commons-logging.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/dom4j.jar"/>
@@ -38,8 +36,6 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-search-3.0.1.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-validator-3.0.0.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/jboss-j2ee.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/jung-2.0-alpha3.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/jung-2.0-alpha3-src.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/postgresql-8.3-603.jdbc4.jar"/>
       </resources>
     </copy>
