@@ -19,7 +19,7 @@
 
   </node>
 
-  <node name="2">
+  <node name="end">
     <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub4" type="in"/>
   </node>
 

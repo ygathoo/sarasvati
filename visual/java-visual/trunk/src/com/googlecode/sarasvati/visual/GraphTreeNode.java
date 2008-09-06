@@ -18,7 +18,6 @@
 */
 package com.googlecode.sarasvati.visual;
 
-import java.awt.Color;
 import java.util.List;
 
 import com.googlecode.sarasvati.Node;
@@ -33,8 +32,6 @@ public class GraphTreeNode
 
   protected int     originX;
   protected int     originY;
-
-  protected Color   color = new Color( 102, 152, 102 );
 
   public static GraphTreeNode newInstance (GraphTreeNode parent, Node nodeRef)
   {
@@ -85,12 +82,15 @@ public class GraphTreeNode
 
   public void recalculateOrigin ()
   {
-    originX = ((getDepth() + 1) * NodeDrawConfig.getNodeSpacing()) +
-              (getDepth() * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
+    int xBasis = NodeDrawConfig.isVertical() ? getIndex() : getDepth();
+    int yBasis = NodeDrawConfig.isVertical() ? getDepth() : getIndex();
+
+    originX = ((xBasis + 1) * NodeDrawConfig.getHorizontalNodeSpacing()) +
+              (xBasis * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
               NodeDrawConfig.getMaxNodeRadius();
 
-    originY = ((getIndex() + 1) * NodeDrawConfig.getNodeSpacing()) +
-              (getIndex() * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
+    originY = ((yBasis + 1) * NodeDrawConfig.getVerticalNodeSpacing()) +
+              (yBasis * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
               NodeDrawConfig.getMaxNodeRadius();
   }
 

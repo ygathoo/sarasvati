@@ -28,11 +28,10 @@ import org.netbeans.api.visual.anchor.AnchorFactory;
 import org.netbeans.api.visual.anchor.AnchorShape;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
-import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 
-public class GraphSceneImpl<N,E> extends GraphScene<N, E>
+public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
 {
   protected LayerWidget mainLayer = new LayerWidget( this );
   protected LayerWidget intrLayer = new LayerWidget( this );
@@ -50,7 +49,6 @@ public class GraphSceneImpl<N,E> extends GraphScene<N, E>
     addChild( connLayer );
 
     router = new ShortestPathRouterAdapter( this );
-    //router = new DirectRouter();
   }
 
   public LayerWidget getConnectionLayer ()
@@ -95,10 +93,7 @@ public class GraphSceneImpl<N,E> extends GraphScene<N, E>
     return widget;
   }
 
-  protected Widget widgetForNode (N node)
-  {
-    return new LabelWidget( this, node.toString() );
-  }
+  protected abstract Widget widgetForNode (N node);
 
   @Override
   protected void detachNodeWidget (N node, Widget widget)

@@ -21,6 +21,8 @@
  */
 package com.googlecode.sarasvati;
 
+import com.googlecode.sarasvati.adapter.Adaptable;
+
 
 
 /**
