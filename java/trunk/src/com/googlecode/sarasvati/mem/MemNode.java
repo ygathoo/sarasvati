@@ -25,6 +25,7 @@ import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.guardlang.GuardLang;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 
@@ -71,12 +72,17 @@ public class MemNode implements Node, Cloneable
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 
-  @Override
-  public <T> T getAdaptor(Class<T> clazz)
+  /**
+   * Will use the {@link NodeAdapterManager} to produce an adapter.
+   * Subclasses may override this behavior.
+   *
+   * @see Node#getAdaptor(Class)
+   */
+  @Override public <T> T getAdaptor (Class<T> clazz)
   {
-    // does nothing by default
-    return null;
+    return NodeAdapterManager.getAdaptor( this, clazz );
   }
+
 
   @Override
   public Graph getGraph ()

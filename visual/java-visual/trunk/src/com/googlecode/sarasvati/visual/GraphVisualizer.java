@@ -26,6 +26,7 @@ import java.awt.Point;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
@@ -41,12 +42,12 @@ import org.netbeans.api.visual.widget.Widget;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.adapter.Function;
+import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.visual.GraphTree;
-import com.googlecode.sarasvati.visual.GraphTreeNode;
 
-public class VisualGraphVisualizer
+public class GraphVisualizer
 {
   protected static Graph currentGraph = null;
   protected static SarasvatiScene scene = new SarasvatiScene();
@@ -55,6 +56,22 @@ public class VisualGraphVisualizer
   public static void main( String[] args ) throws Exception
   {
     TestSetup.init();
+
+    NodeAdapterManager.registerFactory( Component.class,
+        new Function<Node, Component>()
+        {
+          @Override
+          public Component apply (Node node)
+          {
+            if ( "task".equals( node.getType() ) )
+            {
+              //return new ComponentWidget( this, new TaskComponent( node ) );
+              return new JLabel( new TaskIcon( node ) );
+            }
+
+            return new JLabel( new DefaultNodeIcon( node ) );
+          }
+        });
 
     Session session = TestSetup.openSession();
     HibEngine engine = new HibEngine( session );
@@ -150,7 +167,7 @@ public class VisualGraphVisualizer
         {
           Widget widget = scene.findWidget( node );
           GraphTreeNode treeNode = graphTree.getTreeNode( node );
-          widget.setPreferredLocation( new Point( treeNode.getIndex() * 100 + 50, treeNode.getDepth() * 100 + 50 ) );
+          widget.setPreferredLocation( new Point( treeNode.getOriginX(), treeNode.getOriginY() ) );
         }
 
         scrollPane.setViewportView( scene.createView() );

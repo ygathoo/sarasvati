@@ -16,23 +16,24 @@
 
     Copyright 2008 Paul Lorenz
 */
-
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.adapter;
 
 /**
- * Interface for allowing optional extension.
+ * Generic interface for objects which take an argument and
+ * return a result.
  *
- * @author Paul
+ * @author Paul Lorenz
+ *
+ * @param <P> The parameter type
+ * @param <R> The result type
  */
-public interface Adaptable
+public interface Function<P,R>
 {
   /**
-   * An adaptor of the given class is requested. The implementing
-   * class may return an instance of the class, or null if the
-   * adaptor type is not supported.
+   * Applies this function to the parameter and returns a result.
    *
-   * @param clazz The type of adaptor requested
-   * @return An instance of the requested class, or null if the adaptor type is not supported
+   * @param param The parameter
+   * @return A result
    */
-  <T> T getAdaptor (Class<T> clazz);
+  R apply (P param);
 }

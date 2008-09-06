@@ -16,21 +16,31 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.adapter;
 
-import java.awt.Component;
+import java.util.HashMap;
+import java.util.Map;
 
-import org.netbeans.api.visual.widget.ComponentWidget;
-import org.netbeans.api.visual.widget.Widget;
-
-import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
 
-public class SarasvatiScene extends GraphSceneImpl<Node, Arc>
+public class NodeAdapterManager
 {
-  @Override
-  protected Widget widgetForNode (Node node)
+  protected static Map<Class<?>, Function<Node,?>> map = new HashMap<Class<?>, Function<Node,?>>();
+
+  public static <T> void registerFactory (Class<T> clazz, Function<Node,T> factory)
   {
-    return new ComponentWidget( this, node.getAdaptor( Component.class ) );
+    map.put( clazz, factory );
+  }
+
+  public static <T> void unregisterFactory (Class<T> clazz)
+  {
+    map.remove( clazz );
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> T getAdaptor (Node node, Class<T> clazz)
+  {
+    Function<Node,T> function = (Function<Node, T>) map.get( clazz );
+    return function == null ? null : function.apply( node );
   }
 }

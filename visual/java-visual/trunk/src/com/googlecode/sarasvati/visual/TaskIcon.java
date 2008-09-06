@@ -21,9 +21,11 @@
  */
 package com.googlecode.sarasvati.visual;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 
 import javax.swing.Icon;
 
@@ -31,11 +33,8 @@ import com.googlecode.sarasvati.Node;
 
 public class TaskIcon implements Icon
 {
-  public static final int WIDTH  = 60;
+  public static final int WIDTH  = 100;
   public static final int HEIGHT = 40;
-
-  private static final Color darkBlue = new Color( 0, 0, 128 );
-  private static final Color cream    = new Color( 255, 255, 225 );
 
   protected Node node;
 
@@ -59,17 +58,32 @@ public class TaskIcon implements Icon
   @Override
   public void paintIcon (Component c, Graphics g, int x, int y)
   {
-    g.setColor( cream );
-    g.fillRoundRect( x, y, getIconWidth() - 1, getIconHeight() - 1, 10, 10 );
-    g.setColor( darkBlue );
-    g.drawRoundRect( x, y, getIconWidth() - 1, getIconHeight() - 1, 10, 10 );
+    Graphics2D g2d = (Graphics2D)g;
+
+    g.setColor( NodeDrawConfig.NODE_BACKGROUND );
+    g.fillOval( x, y, WIDTH - 1, HEIGHT - 1 );
+    g.fillRoundRect( x, y, WIDTH - 1, HEIGHT - 1, 10, 10 );
+
+    float[] dashes = node.isJoin() ? new float[] { 10, 5 } : null;
+
+    int offset = 3;
+
+    BasicStroke stroke = new BasicStroke( offset, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, dashes, 0) ;
+    g2d.setStroke( stroke );
+
+    g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER: NodeDrawConfig.NODE_BORDER );
+
+    int width = WIDTH - ((offset << 1) + 1);
+    int height = HEIGHT - ((offset<< 1) + 1);
+
+    g.drawRoundRect( x + offset, y + offset, width, height, 10, 10 );
 
     g.setColor( Color.black );
     String taskName = node.getDisplayText();
 
     String[] lines = FontUtil.split( taskName );
 
-    int padding = 2;
+    int padding = 2 + offset;
     int startX = x + padding;
 
     int maxWidth = getIconWidth() - (padding << 1);
@@ -87,15 +101,15 @@ public class TaskIcon implements Icon
 
       int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[0], g ).getWidth() );
       int left = startX + ((maxWidth - strWidth) >> 1);
-      g.drawString( lines[0], left, y + (getIconHeight() >> 1) );
+      g.drawString( lines[0], left, y + (getIconHeight() - offset >> 1) );
 
       FontUtil.setSizedFont( g, lines[1], 11, maxWidth );
 
-      int height = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[1], g ).getHeight() );
+      int strHeight = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[1], g ).getHeight() );
       strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[1], g ).getWidth() );
       left = startX + ((maxWidth - strWidth) >> 1);
 
-      g.drawString( lines[1], left, y + (getIconHeight() >> 1) + (height + 1) );
+      g.drawString( lines[1], left, y + (getIconHeight() - offset >> 1) + (strHeight + 1) );
     }
   }
 }
