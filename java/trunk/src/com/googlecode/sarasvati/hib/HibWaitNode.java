@@ -33,7 +33,7 @@ import com.googlecode.sarasvati.NodeToken;
  */
 @Entity
 @DiscriminatorValue( "wait" )
-public class WaitNode extends HibNode
+public class HibWaitNode extends HibNode
 {
   @Override
   public void execute (Engine engine, NodeToken token)

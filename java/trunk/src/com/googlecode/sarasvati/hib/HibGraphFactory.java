@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Arc;
@@ -96,7 +97,9 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   @Override
   public HibArcToken newArcToken (Process process, Arc arc, NodeToken previousToken)
   {
-    HibArcToken token = new HibArcToken( (HibProcess)process, (HibArc)arc, (HibNodeToken)previousToken );
+    HibProcess hibProcess = (HibProcess)process;
+    Hibernate.initialize( hibProcess.getExecutionQueue() );
+    HibArcToken token = new HibArcToken( hibProcess, (HibArc)arc, (HibNodeToken)previousToken );
     session.save( token );
     return token;
   }
