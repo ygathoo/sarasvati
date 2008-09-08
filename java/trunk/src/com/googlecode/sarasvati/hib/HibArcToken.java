@@ -35,6 +35,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Type;
+
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 
@@ -66,6 +68,7 @@ public class HibArcToken implements ArcToken
   @Column (name="complete_date")
   protected Date    completeDate;
 
+  @Type (type="yes_no")
   protected boolean executed;
 
   public HibArcToken () { /* Default constructor for hibernate */ }
