@@ -18,7 +18,7 @@
 */
 package com.googlecode.sarasvati;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.load.GraphFactory;
@@ -45,18 +45,32 @@ public interface Process
   Env getEnv ();
 
   /**
+   * Returns the list of all NodeTokens.
+   *
+   * @return The list of all NodeTokens.
+   */
+  Collection<? extends NodeToken> getNodeTokens ();
+
+  /**
    * Returns the list of current ArcTokens.
    *
    * @return The list of current ArcTokens.
    */
-  List<? extends ArcToken> getArcTokens ();
+  Collection<? extends ArcToken> getActiveArcTokens ();
 
   /**
    * Returns the list of current NodeTokens.
    *
    * @return The list of current NodeTokens.
    */
-  List<? extends NodeToken> getNodeTokens ();
+  Collection<? extends NodeToken> getActiveNodeTokens ();
+
+  /**
+   * Adds a NodeToken to the list of all NodeTokens for this process.
+   *
+   * @param token The token being added
+   */
+  void addNodeToken (NodeToken token);
 
   /**
    * Adds an ArcToken to the list of active ArcTokens. Active ArcTokens
@@ -66,14 +80,14 @@ public interface Process
    *
    * @param token The token being added
    */
-  void addArcToken (ArcToken token);
+  void addActiveArcToken (ArcToken token);
 
   /**
    * Removes an ArcToken from the list of active ArcTokens.
    *
    * @param token The token being removed.
    */
-  void removeArcToken (ArcToken token);
+  void removeActiveArcToken (ArcToken token);
 
   /**
    * Adds an arc token to the execution queue
@@ -101,14 +115,14 @@ public interface Process
    *
    * @param token The token being added
    */
-  void addNodeToken (NodeToken token);
+  void addActiveNodeToken (NodeToken token);
 
   /**
    * Removes a NodeToken from the list of active NodeTokens.
    *
    * @param token The token being removed.
    */
-  void removeNodeToken (NodeToken token);
+  void removeActiveNodeToken (NodeToken token);
 
   /**
    * Returns the current {@link ProcessState}

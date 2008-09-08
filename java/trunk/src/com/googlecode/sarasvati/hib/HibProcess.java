@@ -23,9 +23,11 @@ package com.googlecode.sarasvati.hib;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -73,15 +75,19 @@ public class HibProcess implements Process
   @JoinColumn( name="graph_id")
   protected HibGraph            graph;
 
+  @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
+  @Cascade( CascadeType.LOCK )
+  protected Set<NodeToken> nodeTokens;
+
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null and executed='Y'")
   @Cascade( CascadeType.LOCK )
-  protected List<ArcToken>  arcTokens;
+  protected Set<ArcToken>  activeArcTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
   @Cascade( CascadeType.LOCK )
-  protected List<NodeToken>  nodeTokens;
+  protected Set<NodeToken> activeNodeTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null and executed='N'")
@@ -156,8 +162,9 @@ public class HibProcess implements Process
   public HibProcess (HibGraph graph)
   {
     this.graph = graph;
-    this.arcTokens = new LinkedList<ArcToken>();
-    this.nodeTokens = new LinkedList<NodeToken>();
+    this.nodeTokens = new HashSet<NodeToken>();
+    this.activeArcTokens = new HashSet<ArcToken>();
+    this.activeNodeTokens = new HashSet<NodeToken>();
     this.executionQueue = new LinkedList<ArcToken>();
     this.listeners = new LinkedList<HibProcessListener>();
     this.state = ProcessState.Created;
@@ -187,65 +194,76 @@ public class HibProcess implements Process
   }
 
   @Override
-  public List<ArcToken> getArcTokens ()
-  {
-    return arcTokens;
-  }
-
-  public void setArcTokens (List<ArcToken> arcTokens)
-  {
-    this.arcTokens = arcTokens;
-  }
-
-  public List<NodeToken> getNodeTokens()
+  public Set<NodeToken> getNodeTokens ()
   {
     return nodeTokens;
   }
 
-  public void setNodeTokens( List<NodeToken> nodeTokens )
+  public void setNodeTokens (Set<NodeToken> nodeTokens)
   {
     this.nodeTokens = nodeTokens;
   }
 
-  public List<ArcToken> getExecutionQueue()
+  @Override
+  public Set<ArcToken> getActiveArcTokens ()
+  {
+    return activeArcTokens;
+  }
+
+  public void setActiveArcTokens (Set<ArcToken> activeArcTokens)
+  {
+    this.activeArcTokens = activeArcTokens;
+  }
+
+  public Set<NodeToken> getActiveNodeTokens ()
+  {
+    return activeNodeTokens;
+  }
+
+  public void setActiveNodeTokens (Set<NodeToken> activeNodeTokens)
+  {
+    this.activeNodeTokens = activeNodeTokens;
+  }
+
+  public List<ArcToken> getExecutionQueue ()
   {
     return executionQueue;
   }
 
-  public void setExecutionQueue(List<ArcToken> executionQueue)
+  public void setExecutionQueue (List<ArcToken> executionQueue)
   {
     this.executionQueue = executionQueue;
   }
 
   @Override
-  public ArcToken dequeueArcTokenForExecution()
+  public ArcToken dequeueArcTokenForExecution ()
   {
     return executionQueue.remove( 0 );
   }
 
   @Override
-  public void enqueueArcTokenForExecution(ArcToken token)
+  public void enqueueArcTokenForExecution (ArcToken token)
   {
     executionQueue.add( token );
   }
 
   @Override
-  public boolean isArcTokenQueueEmpty()
+  public boolean isArcTokenQueueEmpty ()
   {
     return executionQueue.isEmpty();
   }
 
-  public List<HibProcessListener> getListeners()
+  public List<HibProcessListener> getListeners ()
   {
     return listeners;
   }
 
-  public void setListeners(List<HibProcessListener> listeners)
+  public void setListeners (List<HibProcessListener> listeners)
   {
     this.listeners = listeners;
   }
 
-  public void setEnv(Env env)
+  public void setEnv (Env env)
   {
     this.env = env;
   }
@@ -261,22 +279,22 @@ public class HibProcess implements Process
     this.parentToken = parentToken;
   }
 
-  public Date getCreateDate()
+  public Date getCreateDate ()
   {
     return createDate;
   }
 
-  public void setCreateDate( Date createDate )
+  public void setCreateDate (Date createDate)
   {
     this.createDate = createDate;
   }
 
-  public Map<String, String> getAttrMap()
+  public Map<String, String> getAttrMap ()
   {
     return attrMap;
   }
 
-  public void setAttrMap( Map<String, String> attrMap )
+  public void setAttrMap (Map<String, String> attrMap)
   {
     this.attrMap = attrMap;
   }
@@ -291,27 +309,33 @@ public class HibProcess implements Process
   }
 
   @Override
-  public void addArcToken (ArcToken token)
-  {
-    getArcTokens().add( token );
-  }
-
-  @Override
-  public void removeArcToken (ArcToken token)
-  {
-    getArcTokens().remove( token );
-  }
-
-  @Override
   public void addNodeToken (NodeToken token)
   {
-    getNodeTokens().add( token );
+    nodeTokens.add( token );
   }
 
   @Override
-  public void removeNodeToken (NodeToken token)
+  public void addActiveArcToken (ArcToken token)
   {
-    getNodeTokens().remove( token );
+    activeArcTokens.add( token );
+  }
+
+  @Override
+  public void removeActiveArcToken (ArcToken token)
+  {
+    activeArcTokens.remove( token );
+  }
+
+  @Override
+  public void addActiveNodeToken (NodeToken token)
+  {
+    activeNodeTokens.add( token );
+  }
+
+  @Override
+  public void removeActiveNodeToken (NodeToken token)
+  {
+    activeNodeTokens.remove( token );
   }
 
   @Override
@@ -346,11 +370,11 @@ public class HibProcess implements Process
   @Override
   public boolean hasActiveTokens ()
   {
-    return !arcTokens.isEmpty() || !nodeTokens.isEmpty();
+    return !activeArcTokens.isEmpty() || !activeNodeTokens.isEmpty();
   }
 
   @Override
-  public ExecutionEventQueue getEventQueue()
+  public ExecutionEventQueue getEventQueue ()
   {
     return eventQueue;
   }

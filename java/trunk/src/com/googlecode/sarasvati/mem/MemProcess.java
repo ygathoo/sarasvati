@@ -38,8 +38,13 @@ public class MemProcess implements Process
   protected long tokenCounter = 0;
 
   protected Graph graph;
+
   protected List<ArcToken> arcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> nodeTokens = new LinkedList<NodeToken>();
+
+  protected List<ArcToken> activeArcTokens = new LinkedList<ArcToken>();
+  protected List<NodeToken> activeNodeTokens = new LinkedList<NodeToken>();
+
   protected ProcessState state;
 
   protected Queue<ArcToken> executionQueue = new LinkedList<ArcToken>();
@@ -57,27 +62,39 @@ public class MemProcess implements Process
   }
 
   @Override
-  public void addArcToken (ArcToken token)
+  public void addActiveArcToken (ArcToken token)
   {
-    arcTokens.add( token );
+    activeArcTokens.add( token );
   }
 
   @Override
-  public void addNodeToken (NodeToken token)
+  public void addActiveNodeToken (NodeToken token)
   {
-    nodeTokens.add( token );
+    activeNodeTokens.add( token );
   }
 
   @Override
-  public List<? extends ArcToken> getArcTokens ()
-  {
-    return arcTokens;
-  }
-
-  @Override
-  public List<? extends NodeToken> getNodeTokens ()
+  public List<? extends NodeToken> getNodeTokens()
   {
     return nodeTokens;
+  }
+
+  @Override
+  public List<? extends ArcToken> getActiveArcTokens ()
+  {
+    return activeArcTokens;
+  }
+
+  @Override
+  public List<? extends NodeToken> getActiveNodeTokens ()
+  {
+    return activeNodeTokens;
+  }
+
+  @Override
+  public void addNodeToken(NodeToken token)
+  {
+    nodeTokens.add( token );
   }
 
   @Override
@@ -103,15 +120,15 @@ public class MemProcess implements Process
   }
 
   @Override
-  public void removeArcToken (ArcToken token)
+  public void removeActiveArcToken (ArcToken token)
   {
-    arcTokens.remove( token );
+    activeArcTokens.remove( token );
   }
 
   @Override
-  public void removeNodeToken (NodeToken token)
+  public void removeActiveNodeToken (NodeToken token)
   {
-    nodeTokens.remove( token );
+    activeNodeTokens.remove( token );
   }
 
   @Override
@@ -165,7 +182,7 @@ public class MemProcess implements Process
   @Override
   public boolean hasActiveTokens ()
   {
-    return !arcTokens.isEmpty() || !nodeTokens.isEmpty();
+    return !activeArcTokens.isEmpty() || !activeNodeTokens.isEmpty();
   }
 
   public synchronized long nextTokenId ()
