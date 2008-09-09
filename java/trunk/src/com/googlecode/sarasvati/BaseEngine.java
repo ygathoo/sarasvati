@@ -34,14 +34,14 @@ public abstract class BaseEngine implements Engine
 {
   protected boolean arcExecutionStarted = false;
 
-  public Process startProcess (Graph graph)
+  public GraphProcess startProcess (Graph graph)
   {
-    Process process = getFactory().newProcess( graph );
+    GraphProcess process = getFactory().newProcess( graph );
     startProcess( process );
     return process;
   }
 
-  public void startProcess (Process process)
+  public void startProcess (GraphProcess process)
   {
     process.setState( ProcessState.Executing );
     fireEvent( ProcessEvent.newStartedEvent( this, process ) );
@@ -60,7 +60,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void cancelProcess (Process process)
+  public void cancelProcess (GraphProcess process)
   {
     process.setState( ProcessState.PendingCancel );
     fireEvent( ProcessEvent.newCanceledEvent( this, process ) );
@@ -68,7 +68,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void finalizeComplete (Process process)
+  public void finalizeComplete (GraphProcess process)
   {
     process.setState( ProcessState.Completed );
 
@@ -80,12 +80,12 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void finalizeCancel (Process process)
+  public void finalizeCancel (GraphProcess process)
   {
     process.setState( ProcessState.Canceled );
   }
 
-  private void executeArc (Process process, ArcToken token)
+  private void executeArc (GraphProcess process, ArcToken token)
   {
     token.markExecuted( this );
     if ( !token.getArc().getEndNode().isJoin() )
@@ -121,7 +121,7 @@ public abstract class BaseEngine implements Engine
     }
   }
 
-  private void completeExecuteArc (Process process, Node targetNode, ArcToken ... tokens)
+  private void completeExecuteArc (GraphProcess process, Node targetNode, ArcToken ... tokens)
   {
     for ( ArcToken token : tokens )
     {
@@ -136,7 +136,7 @@ public abstract class BaseEngine implements Engine
     executeNode( process, nodeToken );
   }
 
-  protected void executeNode (Process process, NodeToken token)
+  protected void executeNode (GraphProcess process, NodeToken token)
   {
     GuardResponse response = token.getNode().guard( this, token );
     token.recordGuardAction( this, response.getGuardAction() );
@@ -164,7 +164,7 @@ public abstract class BaseEngine implements Engine
 
   public void completeExecution (NodeToken token, String arcName)
   {
-    Process process = token.getProcess();
+    GraphProcess process = token.getProcess();
 
     if ( !process.isExecuting() )
     {
@@ -189,7 +189,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void executeQueuedArcTokens (Process process)
+  public void executeQueuedArcTokens (GraphProcess process)
   {
     arcExecutionStarted = true;
 
@@ -207,7 +207,7 @@ public abstract class BaseEngine implements Engine
     }
   }
 
-  private void checkForCompletion (Process process)
+  private void checkForCompletion (GraphProcess process)
   {
     if ( !process.hasActiveTokens() && process.isArcTokenQueueEmpty() )
     {

@@ -43,7 +43,7 @@ public interface ArcToken extends Token
    *
    * @return The associated process
    */
-  Process getProcess ();
+  GraphProcess getProcess ();
 
   /**
    * Returns the node token which directly preceded this

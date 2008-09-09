@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.event;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 
 public class ArcTokenEvent extends ExecutionEvent
 {
@@ -49,7 +49,7 @@ public class ArcTokenEvent extends ExecutionEvent
   }
 
   @Override
-  public Process getProcess()
+  public GraphProcess getProcess()
   {
     return arcToken.getProcess();
   }

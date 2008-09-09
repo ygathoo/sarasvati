@@ -26,7 +26,7 @@ import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.googlecode.sarasvati.BaseEngine;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.WorkflowException;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEvent;
@@ -105,7 +105,7 @@ public class HibEngine extends BaseEngine
   }
 
   @Override
-  public void addExecutionListener(Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void addExecutionListener(GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
     if ( eventTypes == null || listener == null )
     {
@@ -132,13 +132,13 @@ public class HibEngine extends BaseEngine
   }
 
   @Override
-  public void removeExecutionListener(Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void removeExecutionListener(GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
     process.getEventQueue().removeListener( this, listener, eventTypes );
 
     List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
 
-    for ( HibProcessListener hibListener : ((HibProcess)process).getListeners() )
+    for ( HibProcessListener hibListener : ((HibGraphProcess)process).getListeners() )
     {
       if ( process.equals( hibListener.getProcess() ) &&
            (eventTypes == null || eventTypes.length == 0 || types.contains( hibListener.getEventType() ) ) )
@@ -163,7 +163,7 @@ public class HibEngine extends BaseEngine
     config.addAnnotatedClass( HibNode.class );
     config.addAnnotatedClass( HibNodeRef.class );
     config.addAnnotatedClass( HibNodeToken.class );
-    config.addAnnotatedClass( HibProcess.class );
+    config.addAnnotatedClass( HibGraphProcess.class );
     config.addAnnotatedClass( HibWaitNode.class );
 
     if (enableCaching )

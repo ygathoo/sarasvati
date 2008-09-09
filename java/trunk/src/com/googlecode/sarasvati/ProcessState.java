@@ -19,41 +19,41 @@
 package com.googlecode.sarasvati;
 
 /**
- * Contains the valid states that a {@link Process} may have.
+ * Contains the valid states that a {@link GraphProcess} may have.
  *
  * @author Paul Lorenz
  */
 public enum ProcessState
 {
   /**
-   * Process has been created, but has not yet been started. It contains no tokens.
+   * GraphProcess has been created, but has not yet been started. It contains no tokens.
    */
   Created,
 
   /**
-   * Process has been started and contains active tokens, either node tokens or arc tokens
+   * GraphProcess has been started and contains active tokens, either node tokens or arc tokens
    * or both.
    */
   Executing,
 
   /**
-   * Process has no active tokens and is in the process of being completed.
+   * GraphProcess has no active tokens and is in the process of being completed.
    */
   PendingCompletion,
 
   /**
-   * Process has been completed. It has no active tokens.
+   * GraphProcess has been completed. It has no active tokens.
    */
   Completed,
 
   /**
-   * Process has been scheduled for cancellation. It may have active tokens, but no further
+   * GraphProcess has been scheduled for cancellation. It may have active tokens, but no further
    * action will be taken with those tokens.
    */
   PendingCancel,
 
   /**
-   * Process has been canceled. It may have active tokens but no further action will be taken
+   * GraphProcess has been canceled. It may have active tokens but no further action will be taken
    * with those tokens.
    */
   Canceled

@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.hib;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.WorkflowException;
 
@@ -39,7 +39,7 @@ public class HibNestedProcessNode extends HibNode
                                    "Used by node " + getName() + " in graph " + getGraph().getName() );
     }
 
-    Process subProcess =  engine.getFactory().newNestedProcess( subGraph, token );
+    GraphProcess subProcess =  engine.getFactory().newNestedProcess( subGraph, token );
     subProcess.getEnv().importEnv( token.getFullEnv() );
     engine.startProcess( subProcess );
   }

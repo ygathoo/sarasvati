@@ -10,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 
 @Entity
@@ -26,13 +26,13 @@ public class HibProcessListener
   @Column (name="event_type")
   protected ExecutionEventType eventType;
 
-  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibProcess.class)
+  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibGraphProcess.class)
   @JoinColumn(name = "process_id")
-  protected Process process;
+  protected GraphProcess process;
 
   protected HibProcessListener () { /* Default constructor for Hibernate */ }
 
-  public HibProcessListener (String type, ExecutionEventType eventType, Process process)
+  public HibProcessListener (String type, ExecutionEventType eventType, GraphProcess process)
   {
     this.eventType = eventType;
     this.type = type;
@@ -69,12 +69,12 @@ public class HibProcessListener
     this.eventType = eventType;
   }
 
-  public Process getProcess ()
+  public GraphProcess getProcess ()
   {
     return process;
   }
 
-  public void setProcess (Process process)
+  public void setProcess (GraphProcess process)
   {
     this.process = process;
   }

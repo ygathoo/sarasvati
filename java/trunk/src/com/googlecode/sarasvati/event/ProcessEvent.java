@@ -19,35 +19,35 @@
 package com.googlecode.sarasvati.event;
 
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 
 public class ProcessEvent extends ExecutionEvent
 {
-  public static final ProcessEvent newStartedEvent (Engine engine, Process process)
+  public static final ProcessEvent newStartedEvent (Engine engine, GraphProcess process)
   {
     return new ProcessEvent( engine, ExecutionEventType.PROCESS_STARTED, process );
   }
 
-  public static final ProcessEvent newCompletedEvent (Engine engine, Process process)
+  public static final ProcessEvent newCompletedEvent (Engine engine, GraphProcess process)
   {
     return new ProcessEvent( engine, ExecutionEventType.PROCESS_COMPLETED, process );
   }
 
-  public static final ProcessEvent newCanceledEvent (Engine engine, Process process)
+  public static final ProcessEvent newCanceledEvent (Engine engine, GraphProcess process)
   {
     return new ProcessEvent( engine, ExecutionEventType.PROCESS_CANCELED, process );
   }
 
-  private Process process;
+  private GraphProcess process;
 
-  public ProcessEvent (Engine engine, ExecutionEventType eventType, Process process)
+  public ProcessEvent (Engine engine, ExecutionEventType eventType, GraphProcess process)
   {
     super( engine, eventType );
     this.process = process;
   }
 
   @Override
-  public Process getProcess ()
+  public GraphProcess getProcess ()
   {
     return process;
   }

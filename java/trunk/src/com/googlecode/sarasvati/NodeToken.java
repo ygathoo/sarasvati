@@ -18,6 +18,8 @@
 */
 package com.googlecode.sarasvati;
 
+import java.util.Date;
+
 /**
  * Node tokens point to nodes in the graph. Unlike arc tokens,
  * they may have attributes associated with them.
@@ -38,7 +40,7 @@ public interface NodeToken extends Token
    *
    * @return The associated process
    */
-  Process getProcess ();
+  GraphProcess getProcess ();
 
   /**
    * Returns the full environment. This will include variables set on the
@@ -49,8 +51,8 @@ public interface NodeToken extends Token
    * NOTE: Changes can only be made at the token level. Updates or removals
    *       will only be applied to the token attributes.
    *
-   * @return An {@link Env} containing variables from this token and from the {@link Process}
-   * @see Process#getEnv()
+   * @return An {@link Env} containing variables from this token and from the {@link GraphProcess}
+   * @see GraphProcess#getEnv()
    */
   Env getFullEnv ();
 
@@ -67,7 +69,7 @@ public interface NodeToken extends Token
    * method. recordGuardAction will be called by the engine to
    * record the result of the guard.
    *
-   * @param engine The {@link Engine} being used to execute the associated {@link Process}.
+   * @param engine The {@link Engine} being used to execute the associated {@link GraphProcess}.
    * @param action The {@link GuardAction} taken with this NodeToken.
    * @see Node#guard(Engine, NodeToken)
    */
@@ -82,4 +84,11 @@ public interface NodeToken extends Token
    *         null if the guard has not completed or been called.
    */
   GuardAction getGuardAction ();
+
+  /**
+   * Returns the date/time the node token was created.
+   *
+   * @return The date/time the node token was created.
+   */
+  Date getCreateDate ();
 }
