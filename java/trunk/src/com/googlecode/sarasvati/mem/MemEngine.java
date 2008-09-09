@@ -20,7 +20,7 @@
 package com.googlecode.sarasvati.mem;
 
 import com.googlecode.sarasvati.BaseEngine;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.WorkflowException;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEvent;
@@ -58,7 +58,7 @@ public class MemEngine extends BaseEngine
   }
 
   @Override
-  public void addExecutionListener (Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void addExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
     process.getEventQueue().addListener( this, listener, eventTypes );
   }
@@ -70,7 +70,7 @@ public class MemEngine extends BaseEngine
   }
 
   @Override
-  public void removeExecutionListener (Process process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void removeExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
     process.getEventQueue().removeListener( this, listener, eventTypes );
   }

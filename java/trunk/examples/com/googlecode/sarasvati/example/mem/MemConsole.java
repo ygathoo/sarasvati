@@ -28,7 +28,7 @@ import java.util.List;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
 import com.googlecode.sarasvati.example.XmlTaskDef;
@@ -82,7 +82,7 @@ public class MemConsole
       MemEngine engine = new MemEngine();
 
       MemGraph graph = getGraph();
-      Process process = engine.getFactory().newProcess( graph );
+      GraphProcess process = engine.getFactory().newProcess( graph );
 
       engine.startProcess( process );
 
@@ -90,7 +90,7 @@ public class MemConsole
     }
   }
 
-  public static void runWorkflow (Process process)
+  public static void runWorkflow (GraphProcess process)
   {
     while (true)
     {

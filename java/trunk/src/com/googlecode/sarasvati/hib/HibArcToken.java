@@ -50,7 +50,7 @@ public class HibArcToken implements ArcToken
 
   @ManyToOne (fetch = FetchType.EAGER)
   @JoinColumn (name = "process_id")
-  protected HibProcess process;
+  protected HibGraphProcess process;
 
   @ManyToOne (fetch = FetchType.EAGER)
   @JoinColumn (name = "arc_id")
@@ -73,7 +73,7 @@ public class HibArcToken implements ArcToken
 
   public HibArcToken () { /* Default constructor for hibernate */ }
 
-  public HibArcToken (HibProcess process, HibArc arc, HibNodeToken parentToken)
+  public HibArcToken (HibGraphProcess process, HibArc arc, HibNodeToken parentToken)
   {
     this.process     = process;
     this.arc         = arc;
@@ -92,12 +92,12 @@ public class HibArcToken implements ArcToken
     this.id = id;
   }
 
-  public HibProcess getProcess ()
+  public HibGraphProcess getProcess ()
   {
     return process;
   }
 
-  public void setProcess (HibProcess process)
+  public void setProcess (HibGraphProcess process)
   {
     this.process = process;
   }

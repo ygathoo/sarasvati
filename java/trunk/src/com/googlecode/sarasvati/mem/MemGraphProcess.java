@@ -28,12 +28,12 @@ import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
 
-public class MemProcess implements Process
+public class MemGraphProcess implements GraphProcess
 {
   protected long tokenCounter = 0;
 
@@ -55,7 +55,7 @@ public class MemProcess implements Process
 
   protected ExecutionEventQueue eventQueue = DefaultExecutionEventQueue.newArrayListInstance();
 
-  public MemProcess (Graph graph)
+  public MemGraphProcess (Graph graph)
   {
     this.graph = graph;
     this.state = ProcessState.Created;

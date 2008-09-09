@@ -35,7 +35,7 @@ import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
-import com.googlecode.sarasvati.hib.HibProcess;
+import com.googlecode.sarasvati.hib.HibGraphProcess;
 
 public class DbConsole
 {
@@ -81,7 +81,7 @@ public class DbConsole
 
       HibGraph graph = getGraph( engine );
 
-      HibProcess process = (HibProcess)engine.startProcess( graph );
+      HibGraphProcess process = (HibGraphProcess)engine.startProcess( graph );
       session.flush();
       t.commit();
       session.close();
@@ -99,7 +99,7 @@ public class DbConsole
       Transaction trans = session.beginTransaction();
       HibEngine engine = new HibEngine( session );
 
-      HibProcess p = (HibProcess) session.load( HibProcess.class, processId );
+      HibGraphProcess p = (HibGraphProcess) session.load( HibGraphProcess.class, processId );
       if ( p.isComplete() )
       {
         System.out.println( "Workflow complete" );

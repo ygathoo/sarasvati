@@ -109,7 +109,7 @@ public interface Env
 
   /**
    * Set a transient attribute of the environment. The attribute will
-   * only be in the environment as long as the associated {@link Process} or
+   * only be in the environment as long as the associated {@link GraphProcess} or
    * {@link NodeToken} instance is in memory. In other words, these
    * attributes will not be persisted to whatever the backing store
    * is.

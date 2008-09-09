@@ -24,11 +24,11 @@ import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.load.GraphFactory;
 
 /**
- * A Process represents a currently executing workflow graph.
+ * A GraphProcess represents a currently executing workflow graph.
  *
  * @author Paul Lorenz
  */
-public interface Process
+public interface GraphProcess
 {
   /**
    * Returns the graph being executed.

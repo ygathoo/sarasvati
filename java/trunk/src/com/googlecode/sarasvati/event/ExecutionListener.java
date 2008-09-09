@@ -19,14 +19,14 @@
 package com.googlecode.sarasvati.event;
 
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 
 /**
- * Listeners may be registered for events happening on a single {@link Process} or
+ * Listeners may be registered for events happening on a single {@link GraphProcess} or
  * all processes.
  *
  * @see Engine#addExecutionListener(ExecutionListener, ExecutionEventType...)
- * @see Engine#addExecutionListener(Process, ExecutionListener, ExecutionEventType...)
+ * @see Engine#addExecutionListener(GraphProcess, ExecutionListener, ExecutionEventType...)
  *
  * @author Paul Lorenz
  */

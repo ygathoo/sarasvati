@@ -22,7 +22,7 @@ package com.googlecode.sarasvati;
 /**
  * Arcs describe the relationships between Nodes. Arcs
  * are directed links between Nodes. During the execution
- * of a {@link Process}, arcs will determine in what order
+ * of a {@link GraphProcess}, arcs will determine in what order
  * tokens are generated in Nodes.
  *
  * Arc may be labeled with a name. The name can be used

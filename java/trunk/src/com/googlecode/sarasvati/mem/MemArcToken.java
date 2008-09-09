@@ -23,16 +23,16 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 
 public class MemArcToken implements ArcToken
 {
   protected Arc arc;
-  protected Process process;
+  protected GraphProcess process;
   protected NodeToken parentToken;
   protected boolean executed;
 
-  public MemArcToken (Arc arc, Process process, NodeToken parentToken)
+  public MemArcToken (Arc arc, GraphProcess process, NodeToken parentToken)
   {
     this.arc = arc;
     this.process = process;
@@ -47,7 +47,7 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public Process getProcess ()
+  public GraphProcess getProcess ()
   {
     return process;
   }

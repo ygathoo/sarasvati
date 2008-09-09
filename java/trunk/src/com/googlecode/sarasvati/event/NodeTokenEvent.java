@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.event;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 
 public class NodeTokenEvent extends ExecutionEvent
 {
@@ -72,7 +72,7 @@ public class NodeTokenEvent extends ExecutionEvent
   }
 
   @Override
-  public Process getProcess()
+  public GraphProcess getProcess()
   {
     return nodeToken.getProcess();
   }

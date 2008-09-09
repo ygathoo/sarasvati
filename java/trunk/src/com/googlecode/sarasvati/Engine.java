@@ -27,9 +27,9 @@ import com.googlecode.sarasvati.load.GraphRepository;
 
 /**
  * An {@link Engine} executes a process. A {@link Graph} specifies
- * how it should be executed and a {@link Process} tracks the current state
+ * how it should be executed and a {@link GraphProcess} tracks the current state
  * of execution. But it is an Engine which creates instances of {@link ArcToken},
- * {@link NodeToken} and {@link Process} and which invokes
+ * {@link NodeToken} and {@link GraphProcess} and which invokes
  * {@link Node#guard(Engine, NodeToken)} and {@link Node#execute(Engine, NodeToken)}.
  *
  * @author Paul Lorenz
@@ -37,16 +37,16 @@ import com.googlecode.sarasvati.load.GraphRepository;
 public interface Engine
 {
   /**
-   * Given a {@link Graph}, creates a new {@link Process} executing that graph.
+   * Given a {@link Graph}, creates a new {@link GraphProcess} executing that graph.
    * A {@link NodeToken} will be generated on each start nodes (determined by
    * {@link Graph#getStartNodes()}), and these NodeTokens will be executed.
    * If the graph does not contain Nodes which go into a wait state, the
-   * {@link Process} returned will be completed.
+   * {@link GraphProcess} returned will be completed.
    *
    * @param graph The {@link Graph} to execute.
-   * @return A {@link Process} executing the given {@link Graph}.
+   * @return A {@link GraphProcess} executing the given {@link Graph}.
    */
-  Process startProcess (Graph graph);
+  GraphProcess startProcess (Graph graph);
 
   /**
    * Sometimes it is desirable to separate process creation from
@@ -59,14 +59,14 @@ public interface Engine
    *
    * @param process The process on which to begin execution.
    */
-  void startProcess (Process process);
+  void startProcess (GraphProcess process);
 
   /**
    * Cancels the given process. The process state is set to {@link ProcessState#PendingCancel}.
    *
    * @param process The process to cancel
    */
-  void cancelProcess (Process process);
+  void cancelProcess (GraphProcess process);
 
   /**
    * Will set the state to {@link ProcessState#Completed} and perform whatever
@@ -77,7 +77,7 @@ public interface Engine
    *
    * @param process The process being completed.
    */
-  void finalizeComplete (Process process);
+  void finalizeComplete (GraphProcess process);
 
   /**
    * Will set the state to {@link ProcessState#Canceled} and perform whatever
@@ -85,7 +85,7 @@ public interface Engine
    *
    * @param process The process being canceled.
    */
-  void finalizeCancel (Process process);
+  void finalizeCancel (GraphProcess process);
 
   /**
    * Continues execution of a process in a wait state.
@@ -118,7 +118,7 @@ public interface Engine
    *
    * @param process The process whose queued arc tokens to queue
    */
-  void executeQueuedArcTokens (Process process);
+  void executeQueuedArcTokens (GraphProcess process);
 
   /**
    * Returns an appropriate {@link GraphRepository} for this {@link Engine}. Subclasses
@@ -175,7 +175,7 @@ public interface Engine
    * @param listener The listener
    * @param eventTypes The event types to be notified for.
    */
-  void addExecutionListener (Process process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  void addExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
 
   /**
    * Will remove the given listener from the set of global listeners.If no event types are specified,
@@ -205,7 +205,7 @@ public interface Engine
    * @param listener The type of listener to remove
    * @param eventTypes The set of event types to remove the listener for, or none to remove for all
    */
-  void removeExecutionListener (Process process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  void removeExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
 
   /**
    * Engine implementations can cache instances of {@link ExecutionListener}.

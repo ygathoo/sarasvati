@@ -61,7 +61,7 @@ public class HibNodeToken implements NodeToken
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "process_id")
-  protected HibProcess process;
+  protected HibGraphProcess process;
 
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "node_ref_id")
@@ -105,7 +105,7 @@ public class HibNodeToken implements NodeToken
 
   public HibNodeToken () { /* Default constructor for Hibernate */ }
 
-  public HibNodeToken (HibProcess process,
+  public HibNodeToken (HibGraphProcess process,
                        HibNodeRef nodeRef,
                        HibNodeToken attrSetToken,
                        Map<String,String> attrMap,
@@ -132,12 +132,12 @@ public class HibNodeToken implements NodeToken
     this.id = id;
   }
 
-  public HibProcess getProcess ()
+  public HibGraphProcess getProcess ()
   {
     return process;
   }
 
-  public void setProcess (HibProcess process)
+  public void setProcess (HibGraphProcess process)
   {
     this.process = process;
   }
@@ -195,6 +195,7 @@ public class HibNodeToken implements NodeToken
     this.parentTokens = parentTokens;
   }
 
+  @Override
   public Date getCreateDate ()
   {
     return createDate;

@@ -54,7 +54,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEvent;
@@ -64,7 +64,7 @@ import com.googlecode.sarasvati.event.ExecutionListener;
 
 @Entity
 @Table (name="wf_process")
-public class HibProcess implements Process
+public class HibGraphProcess implements GraphProcess
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -157,9 +157,9 @@ public class HibProcess implements Process
     }
   };
 
-  public HibProcess () { /* Default constructor for Hibernate */ }
+  public HibGraphProcess () { /* Default constructor for Hibernate */ }
 
-  public HibProcess (HibGraph graph)
+  public HibGraphProcess (HibGraph graph)
   {
     this.graph = graph;
     this.nodeTokens = new HashSet<NodeToken>();
@@ -393,8 +393,8 @@ public class HibProcess implements Process
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof HibProcess ) ) return false;
-    final HibProcess other = (HibProcess)obj;
+    if ( !( obj instanceof HibGraphProcess ) ) return false;
+    final HibGraphProcess other = (HibGraphProcess)obj;
     if ( id == null )
     {
       if ( other.getId() != null ) return false;

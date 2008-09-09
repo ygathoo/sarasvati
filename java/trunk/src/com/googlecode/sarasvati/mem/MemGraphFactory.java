@@ -27,7 +27,7 @@ import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
@@ -96,13 +96,13 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public ArcToken newArcToken (Process process, Arc arc, NodeToken parent)
+  public ArcToken newArcToken (GraphProcess process, Arc arc, NodeToken parent)
   {
     return new MemArcToken( arc, process, parent );
   }
 
   @Override
-  public NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
+  public NodeToken newNodeToken (GraphProcess process, Node node, List<ArcToken> parents)
   {
     MemNodeToken token = new MemNodeToken( node, process );
     Env env = token.getEnv();
@@ -116,15 +116,15 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public MemProcess newProcess (Graph graph)
+  public MemGraphProcess newProcess (Graph graph)
   {
-    return new MemProcess( graph );
+    return new MemGraphProcess( graph );
   }
 
   @Override
-  public Process newNestedProcess (Graph graph, NodeToken parentToken)
+  public GraphProcess newNestedProcess (Graph graph, NodeToken parentToken)
   {
-    MemProcess process = newProcess( graph );
+    MemGraphProcess process = newProcess( graph );
     process.setParentToken( parentToken );
     return process;
   }

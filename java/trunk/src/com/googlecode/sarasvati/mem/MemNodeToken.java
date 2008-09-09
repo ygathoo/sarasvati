@@ -19,6 +19,7 @@
 
 package com.googlecode.sarasvati.mem;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -29,23 +30,24 @@ import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NestedEnv;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 
 public class MemNodeToken implements NodeToken
 {
   protected Node node;
-  protected Process process;
+  protected GraphProcess process;
   protected GuardAction guardAction;
-
+  protected Date createDate;
   protected Map<String, String> attributes = new HashMap<String, String>();
 
   protected Env env = new MapEnv();
   protected Env fullEnv = null;
 
-  public MemNodeToken (Node node, Process process)
+  public MemNodeToken (Node node, GraphProcess process)
   {
     this.node = node;
     this.process = process;
+    this.createDate = new Date();
   }
 
   @Override
@@ -55,7 +57,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public Process getProcess ()
+  public GraphProcess getProcess ()
   {
     return process;
   }
@@ -64,6 +66,13 @@ public class MemNodeToken implements NodeToken
   public GuardAction getGuardAction ()
   {
     return guardAction;
+  }
+
+
+  @Override
+  public Date getCreateDate()
+  {
+    return createDate;
   }
 
   @Override

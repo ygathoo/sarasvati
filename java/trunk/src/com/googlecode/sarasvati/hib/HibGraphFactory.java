@@ -32,7 +32,7 @@ import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
@@ -95,9 +95,9 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   }
 
   @Override
-  public HibArcToken newArcToken (Process process, Arc arc, NodeToken previousToken)
+  public HibArcToken newArcToken (GraphProcess process, Arc arc, NodeToken previousToken)
   {
-    HibProcess hibProcess = (HibProcess)process;
+    HibGraphProcess hibProcess = (HibGraphProcess)process;
     Hibernate.initialize( hibProcess.getExecutionQueue() );
     HibArcToken token = new HibArcToken( hibProcess, (HibArc)arc, (HibNodeToken)previousToken );
     session.save( token );
@@ -121,7 +121,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 
   @SuppressWarnings("unchecked")
   @Override
-  public HibNodeToken newNodeToken (Process process, Node node, List<ArcToken> parents)
+  public HibNodeToken newNodeToken (GraphProcess process, Node node, List<ArcToken> parents)
   {
     // Here we setup the token attributes for the new node
     // If the node has no predecessors, it will have no attributes
@@ -166,23 +166,23 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
       }
     }
 
-    HibNodeToken token = new HibNodeToken( (HibProcess)process, (HibNodeRef)node, attrSetToken, attrMap, hibParents, transientAttributes);
+    HibNodeToken token = new HibNodeToken( (HibGraphProcess)process, (HibNodeRef)node, attrSetToken, attrMap, hibParents, transientAttributes);
     session.save( token );
     return token;
   }
 
   @Override
-  public HibProcess newProcess (Graph graph)
+  public HibGraphProcess newProcess (Graph graph)
   {
-    HibProcess process = new HibProcess( (HibGraph)graph);
+    HibGraphProcess process = new HibGraphProcess( (HibGraph)graph);
     session.save(  process );
     return process;
   }
 
   @Override
-  public Process newNestedProcess (Graph graph, NodeToken parentToken)
+  public GraphProcess newNestedProcess (Graph graph, NodeToken parentToken)
   {
-    HibProcess process = new HibProcess( (HibGraph)graph);
+    HibGraphProcess process = new HibGraphProcess( (HibGraph)graph);
     process.setParentToken( parentToken );
     session.save(  process );
     return process;

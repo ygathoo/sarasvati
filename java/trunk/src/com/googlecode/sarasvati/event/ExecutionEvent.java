@@ -21,7 +21,7 @@ package com.googlecode.sarasvati.event;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 
 public abstract class ExecutionEvent
 {
@@ -59,7 +59,7 @@ public abstract class ExecutionEvent
    *
    * @return The process the event has occurred on.
    */
-  public abstract Process getProcess ();
+  public abstract GraphProcess getProcess ();
 
   /**
    * If this is a node token related event, this returns the related node token and null otherwise.

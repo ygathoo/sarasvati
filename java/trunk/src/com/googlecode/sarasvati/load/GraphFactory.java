@@ -26,7 +26,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Process;
+import com.googlecode.sarasvati.GraphProcess;
 
 public interface GraphFactory<G extends Graph>
 {
@@ -67,47 +67,47 @@ public interface GraphFactory<G extends Graph>
   Node importNode (G graph, Node node, String instanceName);
 
   /**
-   * Generates a new {@link Process} for the given {@link Graph}. Execution
+   * Generates a new {@link GraphProcess} for the given {@link Graph}. Execution
    * of the process is not started by this method.
    *
    * The method will be used by {@link Engine#startProcess(Graph)}.
    *
-   * @param graph The {@link Graph} the Process will be executing.
-   * @return A new {@link Process}
+   * @param graph The {@link Graph} the GraphProcess will be executing.
+   * @return A new {@link GraphProcess}
    */
-  Process newProcess (Graph graph);
+  GraphProcess newProcess (Graph graph);
 
   /**
-   * Generates a new {@link Process} for the given {@link Graph}. Execution
+   * Generates a new {@link GraphProcess} for the given {@link Graph}. Execution
    * of the process is not started by this method. This method is specfically
    * for created a new nested process.
    *
-   * @param graph The {@link Graph} the Process will be executing.
+   * @param graph The {@link Graph} the GraphProcess will be executing.
    * @param parentToken The {@link NodeToken} whose execution is causing this
    *                    nested process to be created.
-   * @return A new {@link Process}
+   * @return A new {@link GraphProcess}
    */
-  Process newNestedProcess (Graph graph, NodeToken parentToken);
+  GraphProcess newNestedProcess (Graph graph, NodeToken parentToken);
 
   /**
-   * Generates a new {@link NodeToken} for the given {@link Process}, pointing
+   * Generates a new {@link NodeToken} for the given {@link GraphProcess}, pointing
    * to the given {@link Node}.
    *
-   * @param process The {@link Process} which the new {@link NodeToken} will belong to
+   * @param process The {@link GraphProcess} which the new {@link NodeToken} will belong to
    * @param node    The {@link Node} the new {@link NodeToken} is being placed on
    * @param parents The list of ArcTokens which preceded this {@link NodeToken}
    * @return        A new {@link NodeToken}
    */
-  NodeToken newNodeToken (Process process, Node node, List<ArcToken> parents);
+  NodeToken newNodeToken (GraphProcess process, Node node, List<ArcToken> parents);
 
   /**
-   * Generates a new {@link ArcToken} for the given {@link Process}, pointing
+   * Generates a new {@link ArcToken} for the given {@link GraphProcess}, pointing
    * to the given {@link Arc}.
    *
-   * @param process The {@link Process} which the new ArcToken will belong to
+   * @param process The {@link GraphProcess} which the new ArcToken will belong to
    * @param arc     The {@link Arc} the new ArcToken is being placed on
    * @param parent  The {@link NodeToken} which preceded this {@link ArcToken}.
    * @return A new {@link ArcToken}
    */
-  ArcToken newArcToken (Process process, Arc arc, NodeToken parent);
+  ArcToken newArcToken (GraphProcess process, Arc arc, NodeToken parent);
 }
