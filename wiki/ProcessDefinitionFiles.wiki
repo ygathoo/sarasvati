@@ -1,0 +1,23 @@
+#summary File format for Process Definitions
+
+= Introduction =
+Sarasvati uses an XML file format for process definitions. These files can be loaded into in-memory graph structures and executed, or they can be loaded first into a database, and from there loaded and executed.
+
+= Getting Started =
+
+The process definition file format is defined by an XSD, which can [http://code.google.com/p/sarasvati/source/browse/common/workflow.xsd available to view in the project SVN].
+
+The simplest possible process definition look like:
+
+{{{
+<?xml version="1.0"?>
+
+<workflow name="simplest"
+          xmlns="http://sarasvati.googlecode.com/workflow/"
+          schemaLocation="../workflow.xsd">
+
+  <node name="start" isStart="true">
+  </node>
+
+</workflow>
+}}}
