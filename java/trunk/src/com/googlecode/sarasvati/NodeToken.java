@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Node tokens point to nodes in the graph. Unlike arc tokens,
@@ -41,6 +42,15 @@ public interface NodeToken extends Token
    * @return The associated process
    */
   GraphProcess getProcess ();
+
+  /**
+   * Returns the list of arc tokens which were involved in creating this NodeToken. If this
+   * node was the (or one of the) initial tokens created on the start nodes, this list
+   * will be empty.
+   *
+   * @return The list of arc tokens which were involved in creating this NodeToken.
+   */
+  List<ArcToken> getParentTokens ();
 
   /**
    * Returns the full environment. This will include variables set on the

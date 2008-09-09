@@ -45,6 +45,7 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.CollectionOfElements;
 
+import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.GuardAction;
@@ -77,11 +78,11 @@ public class HibNodeToken implements NodeToken
   @Column( name="value")
   protected Map<String, String> attrMap;
 
-  @ManyToMany (fetch=FetchType.LAZY, cascade= {CascadeType.ALL})
+  @ManyToMany (fetch=FetchType.LAZY, targetEntity=HibArcToken.class, cascade= {CascadeType.ALL})
   @JoinTable( name = "wf_node_token_parent",
               joinColumns = @JoinColumn(name = "node_token_id"),
               inverseJoinColumns = @JoinColumn(name = "arc_token_id") )
-  protected List<HibArcToken> parentTokens;
+  protected List<ArcToken> parentTokens;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column (name="create_date", updatable = false)
@@ -109,7 +110,7 @@ public class HibNodeToken implements NodeToken
                        HibNodeRef nodeRef,
                        HibNodeToken attrSetToken,
                        Map<String,String> attrMap,
-                       List<HibArcToken> parentTokens,
+                       List<ArcToken> parentTokens,
                        Map<String,Object> transientAttributes)
   {
     this.process      = process;
@@ -185,12 +186,13 @@ public class HibNodeToken implements NodeToken
     this.attrMap = attrMap;
   }
 
-  public List<HibArcToken> getParentTokens ()
+  @Override
+  public List<ArcToken> getParentTokens ()
   {
     return parentTokens;
   }
 
-  public void setParentTokens (List<HibArcToken> parentTokens)
+  public void setParentTokens (List<ArcToken> parentTokens)
   {
     this.parentTokens = parentTokens;
   }
