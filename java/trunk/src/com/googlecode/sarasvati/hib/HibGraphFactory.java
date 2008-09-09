@@ -166,7 +166,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
       }
     }
 
-    HibNodeToken token = new HibNodeToken( (HibGraphProcess)process, (HibNodeRef)node, attrSetToken, attrMap, hibParents, transientAttributes);
+    HibNodeToken token = new HibNodeToken( (HibGraphProcess)process, (HibNodeRef)node, attrSetToken, attrMap, parents, transientAttributes);
     session.save( token );
     return token;
   }
