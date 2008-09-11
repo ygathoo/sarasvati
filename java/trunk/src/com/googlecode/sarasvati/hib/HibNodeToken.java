@@ -208,6 +208,7 @@ public class HibNodeToken implements NodeToken
     this.createDate = createDate;
   }
 
+  @Override
   public Date getCompleteDate ()
   {
     return completeDate;
@@ -216,6 +217,12 @@ public class HibNodeToken implements NodeToken
   public void setCompleteDate (Date completeDate)
   {
     this.completeDate = completeDate;
+  }
+
+  @Override
+  public boolean isComplete ()
+  {
+    return completeDate != null;
   }
 
   @Override

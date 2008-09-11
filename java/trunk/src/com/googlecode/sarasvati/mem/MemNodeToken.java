@@ -41,6 +41,8 @@ public class MemNodeToken implements NodeToken
   protected GuardAction guardAction;
   protected List<ArcToken> parentTokens;
   protected Date createDate;
+  protected Date completeDate;
+
   protected Map<String, String> attributes = new HashMap<String, String>();
 
   protected Env env = new MapEnv();
@@ -91,9 +93,21 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
+  public boolean isComplete ()
+  {
+    return completeDate != null;
+  }
+
+  @Override
   public void markComplete (Engine engine)
   {
-    /** Does nothing */
+    completeDate = new Date();
+  }
+
+  @Override
+  public Date getCompleteDate ()
+  {
+    return completeDate;
   }
 
   @Override

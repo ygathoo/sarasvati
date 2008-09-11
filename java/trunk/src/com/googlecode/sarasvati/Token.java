@@ -34,6 +34,13 @@ package com.googlecode.sarasvati;
 public interface Token
 {
   /**
+   * Returns true if this token has been completed, false otherwise.
+   *
+   * @return True if this token has been completed
+   */
+  boolean isComplete ();
+
+  /**
    * Marks this token as being complete, in the sense that it no longer
    * represents an active part of the process. Once a token is marked
    * complete, it is generally only of historical interest.

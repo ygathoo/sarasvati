@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati.mem;
 
+import java.util.Date;
+
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
@@ -31,6 +33,7 @@ public class MemArcToken implements ArcToken
   protected GraphProcess process;
   protected NodeToken parentToken;
   protected boolean executed;
+  protected Date completeDate;
 
   public MemArcToken (Arc arc, GraphProcess process, NodeToken parentToken)
   {
@@ -59,9 +62,15 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
+  public boolean isComplete ()
+  {
+    return completeDate != null;
+  }
+
+  @Override
   public void markComplete (Engine engine)
   {
-    /* Does nothing */
+    this.completeDate = new Date();
   }
 
   @Override
