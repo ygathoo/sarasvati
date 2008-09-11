@@ -52,10 +52,24 @@ public class GraphVisualizer
   protected static Graph currentGraph = null;
   protected static SarasvatiScene scene = new SarasvatiScene();
 
-  @SuppressWarnings("serial")
-  public static void main( String[] args ) throws Exception
+  public static void main (String[] args) throws Exception
+  {
+    new GraphVisualizer().run();
+  }
+
+  public void init () throws Exception
   {
     TestSetup.init();
+  }
+
+  public Session getSession  ()
+  {
+    return TestSetup.openSession();
+  }
+
+  public void run () throws Exception
+  {
+    init ();
 
     NodeAdapterManager.registerFactory( Component.class,
         new Function<Node, Component>()
@@ -65,7 +79,6 @@ public class GraphVisualizer
           {
             if ( "task".equals( node.getType() ) )
             {
-              //return new ComponentWidget( this, new TaskComponent( node ) );
               return new JLabel( new TaskIcon( node ) );
             }
 
@@ -73,7 +86,7 @@ public class GraphVisualizer
           }
         });
 
-    Session session = TestSetup.openSession();
+    Session session = getSession();
     HibEngine engine = new HibEngine( session );
 
     JFrame frame = new JFrame( "Workflow Visualizer" );
@@ -91,6 +104,8 @@ public class GraphVisualizer
 
     ListCellRenderer cellRenderer = new DefaultListCellRenderer()
     {
+      private static final long serialVersionUID = 1L;
+
       @Override
       public Component getListCellRendererComponent( JList list, Object value,
                                                      int index, boolean isSelected,
