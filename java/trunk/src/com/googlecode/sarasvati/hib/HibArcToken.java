@@ -144,6 +144,12 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
+  public boolean isComplete ()
+  {
+    return completeDate != null;
+  }
+
+  @Override
   public void markComplete (Engine engine)
   {
     this.completeDate = new Date();

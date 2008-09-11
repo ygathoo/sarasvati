@@ -101,4 +101,11 @@ public interface NodeToken extends Token
    * @return The date/time the node token was created.
    */
   Date getCreateDate ();
+
+  /**
+   * Returns the date/time the node token was completed
+   *
+   * @return The date/time the node token was completed.
+   */
+  Date getCompleteDate ();
 }

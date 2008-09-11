@@ -173,7 +173,13 @@ public abstract class BaseEngine implements Engine
 
     process.removeActiveNodeToken( token );
     token.markComplete( this );
-    fireEvent( NodeTokenEvent.newCompletedEvent( this, token, arcName ) );
+
+    // If the node was skipped, we already sent a 'skipped' event and don't want to
+    // send another 'completed' event.
+    if ( token.getGuardAction() != GuardAction.SkipNode )
+    {
+      fireEvent( NodeTokenEvent.newCompletedEvent( this, token, arcName ) );
+    }
 
     for ( Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
     {
