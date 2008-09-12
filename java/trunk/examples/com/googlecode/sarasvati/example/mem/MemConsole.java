@@ -27,11 +27,10 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
-import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.load.GraphLoader;
@@ -245,7 +244,7 @@ public class MemConsole
 
   public static void loadWorkflows () throws Exception
   {
-    XmlLoader xmlLoader = new XmlLoader( XmlTaskDef.class );
+    XmlLoader xmlLoader = new XmlLoader();
     MemEngine engine = new MemEngine();
 
     engine.getFactory().addType( "task", TaskNode.class );

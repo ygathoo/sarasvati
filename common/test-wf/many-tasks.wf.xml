@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
 
-<process-definition name="many-tasks" xmlns="http://sarasvati.googlecode.com/ProcessDefinition/">
+<sv:process-definition name="many-tasks"
+                       xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition"
+                       xmlns:example="http://sarasvati.googlecode.com/Example">
 
   <node name="start" isStart="true">
     <arc to="1"/>
@@ -8,43 +10,52 @@
   </node>
 
   <node type="task" name="1">
-    <taskName>Hello</taskName>
-    <taskDesc>
-      Here is where one would say hello
-    </taskDesc>
-
     <arc to="3"/>
+
+    <example:taskName>Hello</example:taskName>
+    <example:taskDesc>
+      Here is where one would say hello
+    </example:taskDesc>
+
   </node>
 
   <node type="task" name="2">
-    <taskName>Shake</taskName>
-    <taskDesc>
-      Here is where you shake hands
-    </taskDesc>
+
     <arc to="3"/>
+
+    <example:taskName>Shake</example:taskName>
+    <example:taskDesc>
+      Here is where you shake hands
+    </example:taskDesc>
+
   </node>
 
   <node type="task" name="3" isJoin="true">
-    <taskName>Introduce</taskName>
-    <taskDesc>
-      Here is where you give your name
-    </taskDesc>
+
     <arc to="4"/>
+
+    <example:taskName>Introduce</example:taskName>
+    <example:taskDesc>
+      Here is where you give your name
+    </example:taskDesc>
+
   </node>
 
   <node type="task" name="4">
-    <taskName>Pleasantry</taskName>
-    <taskDesc>
-      Here is where you say something like, 'Nice to meet you'
-    </taskDesc>
     <arc to="5"/>
+
+    <example:taskName>Pleasantry</example:taskName>
+    <example:taskDesc>
+      Here is where you say something like, 'Nice to meet you'
+    </example:taskDesc>
+
   </node>
 
   <node type="task" name="5">
-    <taskName>Converse</taskName>
-    <taskDesc>
+    <example:taskName>Converse</example:taskName>
+    <example:taskDesc>
       Start a conversation
-    </taskDesc>
+    </example:taskDesc>
   </node>
 
-</process-definition>
+</sv:process-definition>

@@ -55,7 +55,7 @@ public class FontUtil
     {
       String cur = lines[i];
       String tmp1 = fst + " " + cur;
-      String tmp2 = cur + " " + snd;
+      String tmp2 = concat( lines, i, " " );
 
       if ( tmp1.length() < tmp2.length() )
       {
@@ -64,9 +64,24 @@ public class FontUtil
       else
       {
         snd = tmp2;
+        break;
       }
     }
 
     return new String[] { fst, snd };
+  }
+  
+  public static String concat (String[] str, int start, String middle)
+  {
+    StringBuilder buf = new StringBuilder();
+    for ( int i = start; i < str.length; i++ )
+    {
+      buf.append( str[i] );
+      if ( i != str.length - 1 )
+      {
+        buf.append( middle );
+      }
+    }
+    return buf.toString();
   }
 }

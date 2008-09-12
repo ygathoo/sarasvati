@@ -28,14 +28,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement (name="process-definition",namespace="http://sarasvati.googlecode.com/ProcessDefinition/")
+@XmlRootElement (name="process-definition")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlProcessDefinition
 {
   @XmlAttribute (name="name", required=true)
   protected String name;
 
-  @XmlElement (name="node", namespace="http://sarasvati.googlecode.com/ProcessDefinition/")
+  @XmlElement (name="node")
   protected List<XmlNode> nodes = new ArrayList<XmlNode>();
 
   public String getName ()

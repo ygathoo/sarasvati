@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<process-definition name="denser" xmlns="http://sarasvati.googlecode.com/ProcessDefinition/">
+<sv:process-definition name="denser" xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="start" isStart="true">
     <arc to="1"/>
@@ -109,4 +109,4 @@
     <arc to="12"/>
   </node>
 
-</process-definition>
+</sv:process-definition>

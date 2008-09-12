@@ -1,20 +1,22 @@
 <?xml version="1.0"?>
 
-<process-definition name="embedded-task" xmlns="http://sarasvati.googlecode.com/ProcessDefinition/">
+<sv:process-definition name="embedded-task"
+                       xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition"
+                       xmlns:example="http://sarasvati.googlecode.com/Example">
 
   <node type="task" name="1" isStart="true">
 
-    <externalArc external="subwf-tasks" version="1" instance="1" nodeName="sub1" type="out"/>
+    <externalArc external="subwf-tasks" instance="1" nodeName="sub1" type="out"/>
 
-    <taskName>Enter order</taskName>
-    <taskDesc>
+    <example:taskName>Enter order</example:taskName>
+    <example:taskDesc>
       Enter order into system
-    </taskDesc>
+    </example:taskDesc>
 
   </node>
 
   <node name="end">
-    <externalArc external="subwf-tasks" version="1" instance="1" nodeName="sub4" type="in"/>
+    <externalArc external="subwf-tasks" instance="1" nodeName="sub4" type="in"/>
   </node>
 
-</process-definition>
+</sv:process-definition>

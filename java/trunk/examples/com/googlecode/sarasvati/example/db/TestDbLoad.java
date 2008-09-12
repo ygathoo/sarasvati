@@ -24,7 +24,6 @@ import java.io.FilenameFilter;
 
 import org.hibernate.Session;
 
-import com.googlecode.sarasvati.example.XmlTaskDef;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.load.GraphLoader;
@@ -42,7 +41,7 @@ public class TestDbLoad
     sess.beginTransaction();
 
     HibEngine engine = new HibEngine( sess );
-    XmlLoader xmlLoader = new XmlLoader( XmlTaskDef.class );
+    XmlLoader xmlLoader = new XmlLoader();
 
     engine.getFactory().addType( "task", TaskNode.class );
     engine.getFactory().addType( "init", InitNode.class );
@@ -78,6 +77,7 @@ public class TestDbLoad
       {
         System.out.println( "Failed to load: " + name + "  because: " + t.getMessage() );
         t.printStackTrace();
+        return;
       }
     }
 

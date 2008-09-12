@@ -43,7 +43,7 @@ public class DOMToObjectLoadHelper
       throw new LoadException( "Could not introspect obj " + obj, ie );
     }
 
-    String name = elem.getTagName();
+    String name = elem.getLocalName();
 
     PropertyDescriptor attr = null;
 

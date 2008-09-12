@@ -1,39 +1,41 @@
 <?xml version="1.0"?>
 
-<process-definition name="subwf-tasks-rej" xmlns="http://sarasvati.googlecode.com/ProcessDefinition/">
+<sv:process-definition name="subwf-tasks-rej"
+                       xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition"
+                       xmlns:example="http://sarasvati.googlecode.com/Example">
 
   <node name="sub1" type="task">
     <arc to="sub2"/>
     <arc to="sub3"/>
 
-    <taskName>Call Distributer</taskName>
-    <taskDesc>
+    <example:taskName>Call Distributer</example:taskName>
+    <example:taskDesc>
       This task should spawn tasks "Order Stuff" and "Request Status"
-    </taskDesc>
+    </example:taskDesc>
 
   </node>
 
   <node name="sub2" type="task">
     <arc to="sub4"/>
 
-    <taskName>Order Stuff</taskName>
-    <taskDesc>
+    <example:taskName>Order Stuff</example:taskName>
+    <example:taskDesc>
       Order stuff now.
 
       Mark Complete shouldn't spawn until this and Request status are both complete.
-    </taskDesc>
+    </example:taskDesc>
 
   </node>
 
   <node name="sub3" type="task">
     <arc to="sub4"/>
 
-    <taskName>Request Status</taskName>
-    <taskDesc>
+    <example:taskName>Request Status</example:taskName>
+    <example:taskDesc>
       Get status on other orders.
 
       Mark Complete shouldn't spawn until this and Order Stuff are both complete.
-    </taskDesc>
+    </example:taskDesc>
 
   </node>
 
@@ -41,11 +43,11 @@
 
     <arc to="sub1" name="reject"/>
 
-    <taskName>Mark Complete</taskName>
-    <taskDesc>
+    <example:taskName>Mark Complete</example:taskName>
+    <example:taskDesc>
       Sign off in application in application.
-    </taskDesc>
+    </example:taskDesc>
 
   </node>
 
-</process-definition>
+</sv:process-definition>
