@@ -169,7 +169,7 @@ public abstract class BaseEngine implements Engine
   {
     GraphProcess process = token.getProcess();
 
-    if ( !process.isExecuting() )
+    if ( !process.isExecuting() || token.isComplete() )
     {
       return;
     }

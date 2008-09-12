@@ -74,8 +74,18 @@ public class HibGraphRepository implements GraphRepository<HibGraph>
     return (HibGraphProcess)session.load( HibGraphProcess.class, processId );
   }
 
+  public HibGraphProcess findProcess (long processId)
+  {
+    return (HibGraphProcess)session.get( HibGraphProcess.class, processId );
+  }
+
   public HibNodeToken loadNodeToken (long tokenId)
   {
     return (HibNodeToken)session.load( HibNodeToken.class, tokenId );
+  }
+
+  public HibNodeToken findNodeToken (long tokenId)
+  {
+    return (HibNodeToken)session.get( HibNodeToken.class, tokenId );
   }
 }
