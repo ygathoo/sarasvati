@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 
-<process-definition name="not-random-guard"
-          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
-          schemaLocation="/home/paul/workspace/wf-common/ProcessDefinition.xsd">
+<process-definition name="not-random-guard" xmlns="http://sarasvati.googlecode.com/ProcessDefinition/">
 
   <node type="node" name="start" isStart="true">
     <arc to="first-node"/>

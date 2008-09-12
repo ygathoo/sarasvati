@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 
-<process-definition name="two-deep"
-          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
-          schemaLocation="/home/paul/workspace/wf-common/ProcessDefinition.xsd">
+<process-definition name="two-deep" xmlns="http://sarasvati.googlecode.com/ProcessDefinition/">
 
   <node name="two-deep.1">
     <externalArc external="one-node" instance="1" nodeName="one-node.1" type="out"/>

@@ -1,8 +1,6 @@
 <?xml version="1.0"?>
 
-<process-definition name="subwf-tasks-rej"
-          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
-          schemaLocation="../ProcessDefinition.xsd">
+<process-definition name="subwf-tasks-rej" xmlns="http://sarasvati.googlecode.com/ProcessDefinition/">
 
   <node name="sub1" type="task">
     <arc to="sub2"/>
