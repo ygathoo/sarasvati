@@ -19,9 +19,25 @@
 
 package com.googlecode.sarasvati.xml;
 
+import java.io.File;
+
 import javax.xml.bind.JAXBException;
 
-public interface XmlWorkflowResolver
+public class DefaultFileXmlProcessDefinitionResolver implements XmlProcessDefinitionResolver
 {
-  XmlProcessDefinition resolve (String name) throws JAXBException;
+  protected File basePath;
+  protected XmlLoader loader;
+
+  public DefaultFileXmlProcessDefinitionResolver (XmlLoader loader, File basePath)
+  {
+    this.basePath = basePath;
+    this.loader = loader;
+  }
+
+  @Override
+  public XmlProcessDefinition resolve (String name) throws JAXBException
+  {
+    File defFile = new File( basePath, name + ".wf.xml" );
+    return loader.loadProcessDefinition( defFile );
+  }
 }

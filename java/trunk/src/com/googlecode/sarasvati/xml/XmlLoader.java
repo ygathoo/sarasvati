@@ -106,22 +106,22 @@ public class XmlLoader
     return u;
   }
 
-  public XmlProcessDefinition loadWorkflow (File file) throws JAXBException
+  public XmlProcessDefinition loadProcessDefinition (File file) throws JAXBException
   {
     return (XmlProcessDefinition)getUnmarshaller().unmarshal( file );
   }
 
-  public XmlProcessDefinition loadWorkflow (InputStream in) throws JAXBException
+  public XmlProcessDefinition loadProcessDefinition (InputStream in) throws JAXBException
   {
     return (XmlProcessDefinition)getUnmarshaller().unmarshal( in );
   }
 
-  public XmlProcessDefinition loadWorkflow (Reader in) throws JAXBException
+  public XmlProcessDefinition loadProcessDefinition (Reader in) throws JAXBException
   {
     return (XmlProcessDefinition)getUnmarshaller().unmarshal( in );
   }
 
-  public XmlProcessDefinition loadWorkflow (InputSource in) throws JAXBException
+  public XmlProcessDefinition loadProcessDefinition (InputSource in) throws JAXBException
   {
     return (XmlProcessDefinition)getUnmarshaller().unmarshal( in );
   }
