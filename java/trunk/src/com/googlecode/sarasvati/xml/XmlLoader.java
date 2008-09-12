@@ -48,21 +48,17 @@ public class XmlLoader
     loadSchema();
   }
 
-  public XmlLoader (Class<?>...classes) throws JAXBException, LoadException
+  public XmlLoader (String...extraPackages) throws JAXBException, LoadException
   {
-    Class<?>[] baseClasses = { XmlProcessDefinition.class };
+    String packages = "com.googlecode.sarasvati.xml";
 
-    if ( classes == null )
+    if ( extraPackages != null )
     {
-      this.context = JAXBContext.newInstance( baseClasses );
+      for ( String p : extraPackages )
+      packages += ":" + p;
     }
-    else
-    {
-      Class<?>[] xmlClasses = new Class[classes.length + baseClasses.length];
-      System.arraycopy( baseClasses, 0, xmlClasses, 0, baseClasses.length );
-      System.arraycopy( classes, 0, xmlClasses, baseClasses.length, classes.length );
-      this.context = JAXBContext.newInstance( xmlClasses );
-    }
+
+    this.context = JAXBContext.newInstance( packages );
     loadSchema();
   }
 
@@ -87,7 +83,7 @@ public class XmlLoader
     }
     catch (SAXException se)
     {
-      throw new LoadException( "Failed to load schema" );
+      throw new LoadException( "Failed to load schema", se );
     }
     finally
     {

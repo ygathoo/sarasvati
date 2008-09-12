@@ -27,9 +27,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement (name="node", namespace="http://sarasvati.googlecode.com/ProcessDefinition/")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlNode
 {
@@ -45,13 +43,13 @@ public class XmlNode
   @XmlAttribute (name="isStart", required=false)
   protected Boolean start;
 
-  @XmlElement (name="guard", namespace="http://sarasvati.googlecode.com/ProcessDefinition/", required=false)
+  @XmlElement (name="guard", required=false)
   protected String guard;
 
-  @XmlElement (name="arc",namespace="http://sarasvati.googlecode.com/ProcessDefinition/", required=false)
+  @XmlElement (name="arc", required=false)
   protected List<XmlArc> arcs = new ArrayList<XmlArc>();
 
-  @XmlElement (name="externalArc", namespace="http://sarasvati.googlecode.com/ProcessDefinition/", required=false)
+  @XmlElement (name="externalArc", required=false)
   protected List<XmlExternalArc> externalArcs = new ArrayList<XmlExternalArc>();
 
   @XmlAnyElement (lax=true)

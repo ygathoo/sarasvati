@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<process-definition name="three-deep" xmlns="http://sarasvati.googlecode.com/ProcessDefinition/">
+<sv:process-definition name="three-deep" xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="start" isStart="true">
     <arc to="three-deep.1"/>
@@ -14,4 +14,4 @@
     <externalArc external="two-deep" instance="1" nodeName="two-deep.2" type="in"/>
   </node>
 
-</process-definition>
+</sv:process-definition>
