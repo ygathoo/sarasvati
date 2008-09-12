@@ -36,9 +36,9 @@ import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
-import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
+import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
-import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
+import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
 public class MemConsole
 {
@@ -254,7 +254,7 @@ public class MemConsole
     GraphLoader<MemGraph> wfLoader = new GraphLoader<MemGraph>( engine.getFactory(), engine.getRepository() );
 
     File basePath = new File( "/home/paul/workspace/wf-common/test-wf/" );
-    XmlWorkflowResolver resolver = new DefaultFileXmlWorkflowResolver(xmlLoader, basePath );
+    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver(xmlLoader, basePath );
 
     FilenameFilter filter = new FilenameFilter()
     {

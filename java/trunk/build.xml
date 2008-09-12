@@ -1,6 +1,6 @@
 <project name="sarasvati">
 
-  <property name="version" value="1.0.0-alpha2"/>
+  <property name="version" value="1.0.0-alpha3"/>
 
   <property name="dist.dir" value="dist"/>
   <property name="build.dir" value="${dist.dir}/build"/>
@@ -54,7 +54,15 @@
 
   <target name="dist" depends="compile">
     <mkdir dir="${archive.base}"/>
+
+    <copy todir="${build.dir}/com/googlecode/sarasvati">
+      <fileset dir="common">
+        <include name="ProcessDefinition.xsd"/>
+      </fileset>
+    </copy>
+
     <jar basedir="${build.dir}" destfile="${archive.base}/${release.name}.jar"/>
+
     <copy todir="${archive.base}">
       <fileset dir=".">
         <include name="build.xml"/>

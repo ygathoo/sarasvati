@@ -35,7 +35,7 @@ import com.googlecode.sarasvati.xml.XmlExternalArc;
 import com.googlecode.sarasvati.xml.XmlExternalArcType;
 import com.googlecode.sarasvati.xml.XmlNode;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
-import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
+import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
 /**
  * Given a {@link GraphFactory} to construct the {@link Graph} parts and
@@ -208,13 +208,13 @@ public class GraphLoader<G extends Graph>
     importExternalArcs( xmlDef );
   }
 
-  public void loadWithDependencies (String name, XmlWorkflowResolver resolver)
+  public void loadWithDependencies (String name, XmlProcessDefinitionResolver resolver)
     throws JAXBException, LoadException
   {
     loadWithDependencies( name, resolver, new ArrayList<String>() );
   }
 
-  private void loadWithDependencies (String name, XmlWorkflowResolver resolver, List<String> stack)
+  private void loadWithDependencies (String name, XmlProcessDefinitionResolver resolver, List<String> stack)
       throws JAXBException, LoadException
   {
     stack.add( name );

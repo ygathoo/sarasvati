@@ -27,9 +27,9 @@ import org.hibernate.Session;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.load.GraphLoader;
-import com.googlecode.sarasvati.xml.DefaultFileXmlWorkflowResolver;
+import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
-import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
+import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
 public class TestDbLoad
 {
@@ -52,7 +52,7 @@ public class TestDbLoad
 
     File baseDir = new File( "/home/paul/workspace/wf-common/test-wf/" );
 
-    XmlWorkflowResolver resolver = new DefaultFileXmlWorkflowResolver( xmlLoader, baseDir );
+    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
 
     FilenameFilter filter = new FilenameFilter()
     {
