@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<workflow name="random-guard"
-          xmlns="http://sarasvati.googlecode.com/workflow/"
-          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
+<process-definition name="random-guard"
+          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
+          schemaLocation="/home/paul/workspace/wf-common/ProcessDefinition.xsd">
 
   <node type="node" name="start" isStart="true">
     <arc to="first-node"/>
@@ -47,4 +47,4 @@
   </node>
 
   <node name="last-node"/>
-</workflow>
+</process-definition>

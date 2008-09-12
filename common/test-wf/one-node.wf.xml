@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 
-<workflow name="one-node"
-          xmlns="http://sarasvati.googlecode.com/workflow/"
-          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
+<process-definition name="one-node"
+          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
+          schemaLocation="/home/paul/workspace/wf-common/ProcessDefinition.xsd">
   <node name="start" isStart="true">
     <arc to="one-node.1"/>
   </node>
 
   <node name="one-node.1" isJoin="true"/>
-</workflow>
+</process-definition>

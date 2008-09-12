@@ -34,6 +34,7 @@ public abstract class BaseEngine implements Engine
 {
   protected boolean arcExecutionStarted = false;
 
+  @Override
   public GraphProcess startProcess (Graph graph)
   {
     GraphProcess process = getFactory().newProcess( graph );
@@ -41,6 +42,7 @@ public abstract class BaseEngine implements Engine
     return process;
   }
 
+  @Override
   public void startProcess (GraphProcess process)
   {
     process.setState( ProcessState.Executing );
@@ -87,7 +89,7 @@ public abstract class BaseEngine implements Engine
 
   private void executeArc (GraphProcess process, ArcToken token)
   {
-    token.markExecuted( this );
+    token.markProcessed( this );
     if ( !token.getArc().getEndNode().isJoin() )
     {
       completeExecuteArc( process, token.getArc().getEndNode(), token );
@@ -162,7 +164,8 @@ public abstract class BaseEngine implements Engine
     }
   }
 
-  public void completeExecution (NodeToken token, String arcName)
+  @Override
+  public void completeAsynchronous (NodeToken token, String arcName)
   {
     GraphProcess process = token.getProcess();
 
@@ -187,6 +190,19 @@ public abstract class BaseEngine implements Engine
       fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
       process.enqueueArcTokenForExecution( arcToken );
     }
+  }
+
+  @Override
+  public void completeExecution (NodeToken token, String arcName)
+  {
+    GraphProcess process = token.getProcess();
+
+    if ( !process.isExecuting() )
+    {
+      return;
+    }
+
+    completeAsynchronous( token, arcName );
 
     if ( !arcExecutionStarted )
     {

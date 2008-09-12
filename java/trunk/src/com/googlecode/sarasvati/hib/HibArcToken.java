@@ -69,7 +69,7 @@ public class HibArcToken implements ArcToken
   protected Date    completeDate;
 
   @Type (type="yes_no")
-  protected boolean executed;
+  protected boolean pending;
 
   public HibArcToken () { /* Default constructor for hibernate */ }
 
@@ -79,7 +79,7 @@ public class HibArcToken implements ArcToken
     this.arc         = arc;
     this.parentToken = parentToken;
     this.createDate  = new Date();
-    this.executed = false;
+    this.pending     = true;
   }
 
   public Long getId ()
@@ -157,15 +157,15 @@ public class HibArcToken implements ArcToken
 
 
   @Override
-  public boolean isExecuted ()
+  public boolean isPending ()
   {
-    return executed;
+    return pending;
   }
 
   @Override
-  public void markExecuted (Engine engine)
+  public void markProcessed (Engine engine)
   {
-    executed = true;
+    pending = false;
   }
 
   @Override

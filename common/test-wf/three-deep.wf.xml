@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<workflow name="three-deep"
-          xmlns="http://sarasvati.googlecode.com/workflow/"
-          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
+<process-definition name="three-deep"
+          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
+          schemaLocation="/home/paul/workspace/wf-common/ProcessDefinition.xsd">
 
   <node name="start" isStart="true">
     <arc to="three-deep.1"/>
@@ -16,4 +16,4 @@
     <externalArc external="two-deep" instance="1" nodeName="two-deep.2" type="in"/>
   </node>
 
-</workflow>
+</process-definition>

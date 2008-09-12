@@ -28,14 +28,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement (name="workflow",namespace="http://sarasvati.googlecode.com/workflow/")
+@XmlRootElement (name="process-definition",namespace="http://sarasvati.googlecode.com/ProcessDefinition/")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlWorkflow
+public class XmlProcessDefinition
 {
   @XmlAttribute (name="name", required=true)
   protected String name;
 
-  @XmlElement (name="node", namespace="http://sarasvati.googlecode.com/workflow/")
+  @XmlElement (name="node", namespace="http://sarasvati.googlecode.com/ProcessDefinition/")
   protected List<XmlNode> nodes = new ArrayList<XmlNode>();
 
   public String getName ()

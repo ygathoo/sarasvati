@@ -1,10 +1,10 @@
 <?xml version="1.0"?>
 
-<workflow name="simplest"
-          xmlns="http://sarasvati.googlecode.com/workflow/"
-          schemaLocation="../workflow.xsd">
+<process-definition name="simplest"
+          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
+          schemaLocation="../ProcessDefinition.xsd">
 
   <node name="start" isStart="true">
   </node>
 
-</workflow>
+</process-definition>

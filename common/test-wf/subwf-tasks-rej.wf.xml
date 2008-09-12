@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<workflow name="subwf-tasks-rej"
-          xmlns="http://sarasvati.googlecode.com/workflow/"
-          schemaLocation="../workflow.xsd">
+<process-definition name="subwf-tasks-rej"
+          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
+          schemaLocation="../ProcessDefinition.xsd">
 
   <node name="sub1" type="task">
     <arc to="sub2"/>
@@ -50,4 +50,4 @@
 
   </node>
 
-</workflow>
+</process-definition>
