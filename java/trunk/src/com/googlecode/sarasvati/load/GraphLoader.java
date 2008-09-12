@@ -34,7 +34,7 @@ import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
 import com.googlecode.sarasvati.xml.XmlExternalArcType;
 import com.googlecode.sarasvati.xml.XmlNode;
-import com.googlecode.sarasvati.xml.XmlWorkflow;
+import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 import com.googlecode.sarasvati.xml.XmlWorkflowResolver;
 
 /**
@@ -66,7 +66,7 @@ public class GraphLoader<G extends Graph>
     return graph;
   }
 
-  protected void importNodes (XmlWorkflow xmlDef)
+  protected void importNodes (XmlProcessDefinition xmlDef)
     throws LoadException
   {
     for ( XmlNode xmlNode : xmlDef.getNodes() )
@@ -90,7 +90,7 @@ public class GraphLoader<G extends Graph>
     }
   }
 
-  protected void importArcs (XmlWorkflow xmlDef) throws LoadException
+  protected void importArcs (XmlProcessDefinition xmlDef) throws LoadException
   {
     for (XmlNode xmlNode : xmlDef.getNodes())
     {
@@ -127,7 +127,7 @@ public class GraphLoader<G extends Graph>
     return instance.get( externalArc.getNodeName() );
   }
 
-  protected void importExternalArcs (XmlWorkflow xmlDef) throws LoadException
+  protected void importExternalArcs (XmlProcessDefinition xmlDef) throws LoadException
   {
     for ( XmlNode xmlNode : xmlDef.getNodes() )
     {
@@ -191,7 +191,7 @@ public class GraphLoader<G extends Graph>
     return nodeMap;
   }
 
-  public void loadDefinition (XmlWorkflow xmlDef)
+  public void loadDefinition (XmlProcessDefinition xmlDef)
     throws LoadException
   {
     instanceCache = new HashMap<String, Map<String,Node>>();
@@ -218,7 +218,7 @@ public class GraphLoader<G extends Graph>
       throws JAXBException, LoadException
   {
     stack.add( name );
-    XmlWorkflow xmlDef = resolver.resolve( name );
+    XmlProcessDefinition xmlDef = resolver.resolve( name );
 
     for ( XmlNode node : xmlDef.getNodes() )
     {

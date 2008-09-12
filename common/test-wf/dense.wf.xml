@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<workflow name="dense"
-          xmlns="http://sarasvati.googlecode.com/workflow/"
-          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
+<process-definition name="dense"
+          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
+          schemaLocation="/home/paul/workspace/wf-common/ProcessDefinition.xsd">
 
   <node name="start" isStart="true">
     <arc to="1"/>
@@ -79,4 +79,4 @@
   <node name="12">
   </node>
 
-</workflow>
+</process-definition>

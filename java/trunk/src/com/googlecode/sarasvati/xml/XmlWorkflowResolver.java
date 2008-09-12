@@ -23,5 +23,5 @@ import javax.xml.bind.JAXBException;
 
 public interface XmlWorkflowResolver
 {
-  XmlWorkflow resolve (String name) throws JAXBException;
+  XmlProcessDefinition resolve (String name) throws JAXBException;
 }

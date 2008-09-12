@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <schema xmlns="http://www.w3.org/2001/XMLSchema"
-        xmlns:s="http://sarasvati.googlecode.com/workflow/"
-        targetNamespace="http://sarasvati.googlecode.com/workflow/">
+        xmlns:s="http://sarasvati.googlecode.com/ProcessDefinition/"
+        targetNamespace="http://sarasvati.googlecode.com/ProcessDefinition/">
 
-    <element name="workflow" type="s:Workflow"></element>
+    <element name="process-definition" type="s:ProcessDefinition"></element>
 
-    <complexType name="Workflow">
+    <complexType name="ProcessDefinition">
       <annotation>
-        <documentation></documentation>
+        <documentation>
+          A process definition consists of a unique name and a set of nodes.
+          The nodes are connected via arcs.
+        </documentation>
       </annotation>
       <sequence>
         <element name="node" type="s:Node" minOccurs="1"
@@ -114,7 +117,9 @@
         </annotation></attribute>
       <attribute name="name" type="string" use="optional" default="" >
         <annotation>
-          <documentation>The arc name</documentation>
+          <documentation>
+            The arc name.
+          </documentation>
         </annotation></attribute>
       <attribute name="type" type="s:ExternalArcType"
         use="required">

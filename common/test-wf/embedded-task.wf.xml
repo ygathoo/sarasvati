@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<workflow name="embedded-task"
-          xmlns="http://sarasvati.googlecode.com/workflow/"
-          schemaLocation="/home/paul/workspace/wf-common/workflow.xsd">
+<process-definition name="embedded-task"
+          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
+          schemaLocation="/home/paul/workspace/wf-common/ProcessDefinition.xsd">
 
   <node type="task" name="1" isStart="true">
 
@@ -19,4 +19,4 @@
     <externalArc external="subwf-tasks" version="1" instance="1" nodeName="sub4" type="in"/>
   </node>
 
-</workflow>
+</process-definition>

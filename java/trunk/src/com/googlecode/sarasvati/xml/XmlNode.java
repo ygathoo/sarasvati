@@ -45,13 +45,13 @@ public class XmlNode
   @XmlAttribute (name="isStart", required=false)
   protected Boolean start;
 
-  @XmlElement (name="guard", namespace="http://sarasvati.googlecode.com/workflow/", required=false)
+  @XmlElement (name="guard", namespace="http://sarasvati.googlecode.com/ProcessDefinition/", required=false)
   protected String guard;
 
-  @XmlElement (name="arc",namespace="http://sarasvati.googlecode.com/workflow/", required=false)
+  @XmlElement (name="arc",namespace="http://sarasvati.googlecode.com/ProcessDefinition/", required=false)
   protected List<XmlArc> arcs = new ArrayList<XmlArc>();
 
-  @XmlElement (name="externalArc", namespace="http://sarasvati.googlecode.com/workflow/", required=false)
+  @XmlElement (name="externalArc", namespace="http://sarasvati.googlecode.com/ProcessDefinition/", required=false)
   protected List<XmlExternalArc> externalArcs = new ArrayList<XmlExternalArc>();
 
   @XmlAnyElement (lax=true)

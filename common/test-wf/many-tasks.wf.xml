@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 
-<workflow name="many-tasks"
-          xmlns="http://sarasvati.googlecode.com/workflow/"
-          schemaLocation="../workflow.xsd">
+<process-definition name="many-tasks"
+          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
+          schemaLocation="../ProcessDefinition.xsd">
 
   <node name="start" isStart="true">
     <arc to="1"/>
@@ -49,4 +49,4 @@
     </taskDesc>
   </node>
 
-</workflow>
+</process-definition>

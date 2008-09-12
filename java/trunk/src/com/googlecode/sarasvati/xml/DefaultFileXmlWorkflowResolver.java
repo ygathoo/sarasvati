@@ -35,7 +35,7 @@ public class DefaultFileXmlWorkflowResolver implements XmlWorkflowResolver
   }
 
   @Override
-  public XmlWorkflow resolve (String name) throws JAXBException
+  public XmlProcessDefinition resolve (String name) throws JAXBException
   {
     File defFile = new File( basePath, name + ".wf.xml" );
     return loader.loadWorkflow( defFile );

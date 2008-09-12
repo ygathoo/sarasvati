@@ -52,9 +52,9 @@ import org.hibernate.annotations.Where;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEvent;
@@ -80,7 +80,7 @@ public class HibGraphProcess implements GraphProcess
   protected Set<NodeToken> nodeTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
-  @Where (clause="complete_date is null and executed='Y'")
+  @Where (clause="complete_date is null and pending='N'")
   @Cascade( CascadeType.LOCK )
   protected Set<ArcToken>  activeArcTokens;
 
@@ -90,7 +90,7 @@ public class HibGraphProcess implements GraphProcess
   protected Set<NodeToken> activeNodeTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
-  @Where (clause="complete_date is null and executed='N'")
+  @Where (clause="complete_date is null and pending='Y'")
   @Cascade( CascadeType.LOCK )
   protected List<ArcToken>  executionQueue;
 

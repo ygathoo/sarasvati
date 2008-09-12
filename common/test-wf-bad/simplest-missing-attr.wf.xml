@@ -1,7 +1,8 @@
 <?xml version="1.0"?>
-<!DOCTYPE workflow SYSTEM "wf.dtd">
 
-<workflow version="1">
-  <start>
-  </start>
-</workflow>
+<process-definition name="test-bad"
+          xmlns="http://sarasvati.googlecode.com/ProcessDefinition/"
+          schemaLocation="/home/paul/workspace/wf-common/ProcessDefinition.xsd">
+  <node name="test">
+  </node>
+</process-definition>

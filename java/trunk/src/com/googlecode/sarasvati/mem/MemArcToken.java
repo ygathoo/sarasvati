@@ -24,15 +24,15 @@ import java.util.Date;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
 
 public class MemArcToken implements ArcToken
 {
   protected Arc arc;
   protected GraphProcess process;
   protected NodeToken parentToken;
-  protected boolean executed;
+  protected boolean pending;
   protected Date completeDate;
 
   public MemArcToken (Arc arc, GraphProcess process, NodeToken parentToken)
@@ -40,7 +40,7 @@ public class MemArcToken implements ArcToken
     this.arc = arc;
     this.process = process;
     this.parentToken = parentToken;
-    this.executed = false;
+    this.pending = true;
   }
 
   @Override
@@ -74,14 +74,14 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public boolean isExecuted()
+  public boolean isPending ()
   {
-    return executed;
+    return pending;
   }
 
   @Override
-  public void markExecuted(Engine engine)
+  public void markProcessed (Engine engine)
   {
-    this.executed = true;
+    this.pending = false;
   }
 }

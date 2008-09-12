@@ -40,7 +40,7 @@ public class XmlLoader
 
   public XmlLoader (Class<?>...classes) throws JAXBException
   {
-    Class<?>[] baseClasses = { XmlWorkflow.class };
+    Class<?>[] baseClasses = { XmlProcessDefinition.class };
 
     if ( classes == null )
     {
@@ -62,23 +62,23 @@ public class XmlLoader
     return u;
   }
 
-  public XmlWorkflow loadWorkflow (File file) throws JAXBException
+  public XmlProcessDefinition loadWorkflow (File file) throws JAXBException
   {
-    return (XmlWorkflow)getUnmarshaller().unmarshal( file );
+    return (XmlProcessDefinition)getUnmarshaller().unmarshal( file );
   }
 
-  public XmlWorkflow loadWorkflow (InputStream in) throws JAXBException
+  public XmlProcessDefinition loadWorkflow (InputStream in) throws JAXBException
   {
-    return (XmlWorkflow)getUnmarshaller().unmarshal( in );
+    return (XmlProcessDefinition)getUnmarshaller().unmarshal( in );
   }
 
-  public XmlWorkflow loadWorkflow (Reader in) throws JAXBException
+  public XmlProcessDefinition loadWorkflow (Reader in) throws JAXBException
   {
-    return (XmlWorkflow)getUnmarshaller().unmarshal( in );
+    return (XmlProcessDefinition)getUnmarshaller().unmarshal( in );
   }
 
-  public XmlWorkflow loadWorkflow (InputSource in) throws JAXBException
+  public XmlProcessDefinition loadWorkflow (InputSource in) throws JAXBException
   {
-    return (XmlWorkflow)getUnmarshaller().unmarshal( in );
+    return (XmlProcessDefinition)getUnmarshaller().unmarshal( in );
   }
 }

@@ -178,7 +178,7 @@ create table wf_arc_token
   process_id      bigint             NOT NULL REFERENCES wf_process,
   arc_id          bigint             NOT NULL REFERENCES wf_arc,
   parent_token_id bigint             NOT NULL REFERENCES wf_node_token,
-  executed        char(1)            NOT NULL,
+  pending         char(1)            NOT NULL,
   create_date     datetime           DEFAULT getDate() NOT NULL,
   complete_date   datetime           NULL
 ) with identity_gap = 100
