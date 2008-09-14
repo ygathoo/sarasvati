@@ -70,7 +70,6 @@ public class ProcessTree
     }
   }
 
-  @SuppressWarnings("unchecked")
   public ProcessTree (GraphProcess process)
   {
     List<NodeToken> tokenList = new ArrayList<NodeToken>( process.getNodeTokens() );
@@ -93,7 +92,7 @@ public class ProcessTree
     {
       for ( ArcToken parent : token.getParentTokens() )
       {
-        nodeMap.get(  parent.getParentToken() ).addChild( parent );
+        nodeMap.get( parent.getParentToken() ).addChild( parent );
       }
     }
 
