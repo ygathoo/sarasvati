@@ -1,13 +1,24 @@
 #summary A concise mathematical description of the Sarasvati model
 
+== The Model ==
 A Sarasvati executable graph is defined as directed graph, with a token mapping of node and arc tokens over that graph.
 
-*S* = { *N*, *A*, *T,,N,,*, *T,,A,,*}.
+Formally, a Sarasvati graph execution *S* is defined as
+
+*S* = {*N*, *A*, *T,,N,,*, *T,,A,,*}.
 
 where 
 
   * *N* is the set of nodes in the graph
   * *A* is the set of arcs in the graph
+  * *T,,N,,* is the set of active node tokens
+  * *T,,A,,* is the set of active arc tokens
   * Every arc *a* in *A* is defined as ( *n,,start,,*, *n,,end,,*, *name* ) where *n,,start,,*, *n,,end,,* are elements of *N* and the arc goes from *n,,start,,* to *n,,end,,*. *name* is a non-unique identifier, used to group arcs into sets. 
   * For a given node *n* belonging to *N* and arc identifier *i*, every arc *a* with *a,,start,,* = *n* and *name* = *i* belongs to *n,,out(i),,*. This is the set of outgoing arcs from *n* with identifier *i*.
   * For a given node *n* belonging to *N* and arc identifier *i*, every arc *a* with *a,,end,,* = *n* and *name* = *i* belongs to *n,,in(i),,*. This is the set of incoming arcs to *n* with identifier *i*.
+  * A node token *nt* belonging to *T,,N,,* is defined as {*n*}, where *n* is a member of *N*.
+  * An arc token *at* belonging to *T,,A,,* is defined as {*a*} where *a* is a member of *A*.
+
+== Changing State ==
+
+An execution procedes from state *S,,n,,* to state *S,,n+1,,* when a node token (element of *T,,N,,*) is completed.
