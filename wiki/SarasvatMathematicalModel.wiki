@@ -1,0 +1,11 @@
+#summary A concise mathematical description of the Sarasvati model
+
+A Sarasvati executable graph is defined as directed graph, with a token mapping of node and arc tokens over that graph.
+
+*S* = { *N*, *A*, *T,,N,,*, *T,,A,,*}.
+
+where 
+
+  * *N* is the set of nodes in the graph
+  * *A* is the set of arcs in the graph
+    * Every arc *a* in *A* is defined as ( *n,,1,,*, *n,,2,,*,  ) where *n,,1,,*, *n,,2,,* are elements of *N* and the arc goes from *n,,1,,* to *n,,2,,*.
