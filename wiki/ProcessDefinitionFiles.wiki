@@ -37,7 +37,7 @@ The root element of every process Sarasvati definition must be `process-definiti
   <node name="start" isStart="true"/>
 }}}
 
-Every process definition must have at least one node` defined. Every node must have a name unique to that file. Any node may have the `isStart` attribute set. If not specified it will default to false. Note that the `node` element is not prefxied with `sv:` because the namespace has already been established by the root element.
+Every process definition must have at least one `node` element defined. Every node must have a name unique to that file. Any node may have the `isStart` attribute set. If not specified it will default to false. Note that the `node` element is not prefxied with `sv:` because the namespace has already been established by the root element.
 
 {{{
 </sv:process-definition>
