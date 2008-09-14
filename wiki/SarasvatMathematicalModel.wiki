@@ -8,4 +8,6 @@ where
 
   * *N* is the set of nodes in the graph
   * *A* is the set of arcs in the graph
-    * Every arc *a* in *A* is defined as ( *n,,1,,*, *n,,2,,*,  ) where *n,,1,,*, *n,,2,,* are elements of *N* and the arc goes from *n,,1,,* to *n,,2,,*.
+  * Every arc *a* in *A* is defined as ( *n,,start,,*, *n,,end,,*, *name* ) where *n,,start,,*, *n,,end,,* are elements of *N* and the arc goes from *n,,start,,* to *n,,end,,*. *name* is a non-unique identifier, used to group arcs into sets. 
+  * For a given node *n* belonging to *N* and arc identifier *i*, every arc *a* with *a,,start,,* = *n* and *name* = *i* belongs to *n,,out(i),,*. This is the set of outgoing arcs from *n* with identifier *i*.
+  * For a given node *n* belonging to *N* and arc identifier *i*, every arc *a* with *a,,end,,* = *n* and *name* = *i* belongs to *n,,in(i),,*. This is the set of incoming arcs to *n* with identifier *i*.
