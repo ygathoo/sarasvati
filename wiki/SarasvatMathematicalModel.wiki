@@ -10,21 +10,35 @@ Formally, a Sarasvati graph execution *S* is defined as
 where 
 
   * *N* is the set of nodes in the graph
+    * Every node *n* in *N* may be either a join node, or a non-join node.
+    * The function _isjoin_( *n* ) indicates a check of this property
   * *A* is the set of arcs in the graph
   * *T,,N,,* is the set of active node tokens
   * *T,,A,,* is the set of active arc tokens
+
+in addition
+
   * Every arc *a* in *A* is defined as ( *n,,start,,*, *n,,end,,*, *name* ) where *n,,start,,*, *n,,end,,* are elements of *N* and the arc goes from *n,,start,,* to *n,,end,,*. *name* is a non-unique identifier, used to group arcs into sets. 
-  * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,start,,* = *n* and *name* = *ident* belongs to *n,,out(ident),,*. This is the set of outgoing arcs from *n* with identifier *ident*.
-  * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,end,,* = *n* and *name* = *ident* belongs to *n,,in(ident),,*. This is the set of incoming arcs to *n* with identifier *ident*.
+  * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,start,,* = *n* and *name* = *ident* belongs to *n,,out(ident),,*. 
+    * This corresponds to the set of outgoing arcs from *n* with identifier *ident*.
+  * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,end,,* = *n* and *name* = *ident* belongs to *n,,in(ident),,*. 
+    * This corresponds to the set of incoming arcs to *n* with identifier *ident*.
   * A node token *t,,n,,* belonging to *T,,N,,* is defined as {*n*}, where *n* is a member of *N*.
   * An arc token *t,,a,,* belonging to *T,,A,,* is defined as {*a*} where *a* is a member of *A*.
 
 == Changing State ==
 
-An execution procedes from state *S,,i,,* to state *S,,i+1,,* when a node token (element of *T,,N,,*) is completed.
+An execution proceeds from state *S,,i,,* to state *S,,i+1,,* when a node token (element of *T,,N,,*) is completed.
 
-*S,,i,,* = *N*, *A*, *T,,N,,(i)*, *T,,A,,(i)
+*S,,i,,* = (*N*, *A*, *T,,N,,(i)*, *T,,A,,(i))
 
-Node token completion is a function, _*complete*_( *S,,i,,*, *t,,n,,*, *ident* ) = *S,,i+1,,*
+Node token completion also depends on arc token completion. 
 
-In *S,,i+1,,*, *N* and *A* remain unchanged. *T,,N,,(i)*= *T
+_*completeArc*_( *S,,i,,*, *t,,a,,* ) = 
+
+  if _isjoin_( *a,,start,,* ) then
+    
+
+Node token completion is a function, _*completeNode*_( *S,,i,,*, *t,,n,,*, *ident* ) = *S,,i+1,,*
+
+*S,,i+1,,* = (*N*, *A*, *T,,N,,(i)* - *t,,n,,*, *T,,A,,(i)* + *n,,out(ident),,*)
