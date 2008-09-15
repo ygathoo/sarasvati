@@ -14,11 +14,13 @@ where
   * *T,,N,,* is the set of active node tokens
   * *T,,A,,* is the set of active arc tokens
   * Every arc *a* in *A* is defined as ( *n,,start,,*, *n,,end,,*, *name* ) where *n,,start,,*, *n,,end,,* are elements of *N* and the arc goes from *n,,start,,* to *n,,end,,*. *name* is a non-unique identifier, used to group arcs into sets. 
-  * For a given node *n* belonging to *N* and arc identifier *i*, every arc *a* with *a,,start,,* = *n* and *name* = *i* belongs to *n,,out(i),,*. This is the set of outgoing arcs from *n* with identifier *i*.
-  * For a given node *n* belonging to *N* and arc identifier *i*, every arc *a* with *a,,end,,* = *n* and *name* = *i* belongs to *n,,in(i),,*. This is the set of incoming arcs to *n* with identifier *i*.
-  * A node token *nt* belonging to *T,,N,,* is defined as {*n*}, where *n* is a member of *N*.
-  * An arc token *at* belonging to *T,,A,,* is defined as {*a*} where *a* is a member of *A*.
+  * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,start,,* = *n* and *name* = *ident* belongs to *n,,out(ident),,*. This is the set of outgoing arcs from *n* with identifier *ident*.
+  * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,end,,* = *n* and *name* = *ident* belongs to *n,,in(ident),,*. This is the set of incoming arcs to *n* with identifier *ident*.
+  * A node token *t,,n,,* belonging to *T,,N,,* is defined as {*n*}, where *n* is a member of *N*.
+  * An arc token *t,,a,,* belonging to *T,,A,,* is defined as {*a*} where *a* is a member of *A*.
 
 == Changing State ==
 
-An execution procedes from state *S,,n,,* to state *S,,n+1,,* when a node token (element of *T,,N,,*) is completed.
+An execution procedes from state *S,,i,,* to state *S,,i+1,,* when a node token (element of *T,,N,,*) is completed.
+
+Node token completion is a function, _*complete*_( *S,,i,,*, *t,,n,,*, *ident* ) = *S,,i+1,,*
