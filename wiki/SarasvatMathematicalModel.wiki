@@ -23,4 +23,8 @@ where
 
 An execution procedes from state *S,,i,,* to state *S,,i+1,,* when a node token (element of *T,,N,,*) is completed.
 
+*S,,i,,* = *N*, *A*, *T,,N,,(i)*, *T,,A,,(i)
+
 Node token completion is a function, _*complete*_( *S,,i,,*, *t,,n,,*, *ident* ) = *S,,i+1,,*
+
+In *S,,i+1,,*, *N* and *A* remain unchanged. *T,,N,,(i)*= *T
