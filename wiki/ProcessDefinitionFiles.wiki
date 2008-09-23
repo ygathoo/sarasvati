@@ -52,7 +52,7 @@ So, what does the node `start` do? Every node may optionally define a type, via 
 
 === Two Node Example ===
 
-Here is an example with two linked nodes.
+Here is an example with three linked nodes.
 
 {{{
 <?xml version="1.0"?>
@@ -60,11 +60,11 @@ Here is an example with two linked nodes.
 <process-definition name="example2" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="one" isStart="true">
-    <arc to="two"/>
+    <arc to="three"/>
   </node>
 
   <node name="two" isStart="true">
-    <arc to="two"/>
+    <arc to="three"/>
   </node>
 
   <node name="three" isJoin="true"/>
@@ -72,4 +72,16 @@ Here is an example with two linked nodes.
 </process-definition>
 }}}
 
-There are
+There are two start nodes which both connect to the node named `three`. Arcs are declared using the `arc` element.
+
+{{{
+  <node ...>
+    <arc to="three"/>
+  </node>
+}}}
+
+Every `arc` must have a `to` attribute, which should correspond to the `name` of a node in the same process definition file. 
+
+Arcs may optionally have a `name` attribute.
+
+Note that the node with name `three` has the `isJoin` attribute set to true. This declares the node to be a join node. Node `three` will not execute until both nodes `one` and `two` have completed.
