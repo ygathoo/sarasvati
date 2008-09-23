@@ -3,20 +3,23 @@
 = Introduction =
 Sarasvati uses an XML file format for process definitions. These files can be loaded into in-memory graph structures and executed, or they can be loaded first into a database, and from there loaded and executed.
 
-= Getting Started =
+= Sarasvati File Format =
 
+=== The XML Schema Definition ===
 The process definition file format is defined by an XSD, which can [http://code.google.com/p/sarasvati/source/browse/common/ProcessDefinition.xsd available to view in the project SVN].
+
+=== One Node Example ===
 
 The simplest process definition looks like:
 
 {{{
 <?xml version="1.0"?>
 
-<sv:process-definition name="simplest" xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="simplest" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="start" isStart="true"/>
 
-</sv:process-definition>
+</process-definition>
 }}}
 
 So, line by line:
@@ -28,21 +31,45 @@ So, line by line:
 This is the header which every XML file should have, indicating the version of the XML specification it follows.
 
 {{{
-<sv:process-definition name="simplest" xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="example1" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 }}}
 
-The root element of every process Sarasvati definition must be `process-definition`. It has a required `name` element. Every process definition must have a unique name. It also indicates an XML namespace, of `"http://sarasvati.googlecode.com/ProcessDefinition"` and ties it to `sv`. This is why the opening and closing tags are `sv:process-definition`.
+The root element of every process Sarasvati definition must be `process-definition`. It has a required `name` element. Every process definition must have a unique name. It also indicates an XML namespace, of `"http://sarasvati.googlecode.com/ProcessDefinition"`.
 
 {{{
-  <node name="start" isStart="true"/>
+  <node name="one" isStart="true"/>
 }}}
 
-Every process definition must have at least one `node` element defined. Every node must have a name unique to that file. Any node may have the `isStart` attribute set. If not specified it will default to false. Note that the `node` element is not prefxied with `sv:` because the namespace has already been established by the root element.
+Every process definition must have at least one `node` element defined. Every node must have a name _unique to that file_. Any node may have the `isStart` attribute set. If not specified it will default to false. Note that the `node` element is not prefxied with `sv:` because the namespace has already been established by the root element.
 
 {{{
-</sv:process-definition>
+</process-definition>
 }}}
 
 Here, the root element is closed and the process definition is complete.
 
-So, what does the node `start` do? Every node may optionally define a type, via the `type` attribute. If no type is specified, the node type defaults to `node`. This default type just completes the node token and exists via the default arc.
+So, what does the node `start` do? Every node may optionally define a type, via the `type` attribute. If no type is specified, the node type defaults to `node`. This default type just completes the node token and exits via the default arc.
+
+=== Two Node Example ===
+
+Here is an example with two linked nodes.
+
+{{{
+<?xml version="1.0"?>
+
+<process-definition name="example2" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="one" isStart="true">
+    <arc to="two"/>
+  </node>
+
+  <node name="two" isStart="true">
+    <arc to="two"/>
+  </node>
+
+  <node name="three" isJoin="true"/>
+
+</process-definition>
+}}}
+
+There are
