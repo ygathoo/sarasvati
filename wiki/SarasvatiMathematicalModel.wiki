@@ -11,14 +11,14 @@ where
 
   * *N* is the set of nodes in the graph
     * Every node *n* in *N* may be either a join node, or a non-join node.
-    * The function _isjoin_( *n* ) indicates a check of this property
+    * The function _isjoin_ maps *N* to the set of boolean values, indicating whether or not the node is a join or not.
   * *A* is the set of arcs in the graph
   * *T,,N,,* is the set of active node tokens
   * *T,,A,,* is the set of active arc tokens
 
 in addition
 
-  * Every arc *a* in *A* is defined as ( *n,,start,,*, *n,,end,,*, *name* ) where *n,,start,,*, *n,,end,,* are elements of *N* and the arc goes from *n,,start,,* to *n,,end,,*. *name* is a non-unique identifier, used to group arcs into sets. 
+  * Every arc *a* in *A* is defined as the tuple ( *n,,start,,*, *n,,end,,*, *name* ) where *n,,start,,*, *n,,end,,* are elements of *N* and the arc goes from *n,,start,,* to *n,,end,,*. *name* is a non-unique identifier, used to group arcs into sets. 
   * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,start,,* = *n* and *name* = *ident* belongs to *n,,out(ident),,*. 
     * This corresponds to the set of outgoing arcs from *n* with identifier *ident*.
   * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,end,,* = *n* and *name* = *ident* belongs to *n,,in(ident),,*. 
