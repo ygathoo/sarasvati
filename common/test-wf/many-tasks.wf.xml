@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<sv:process-definition name="many-tasks"
-                       xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition"
+<process-definition name="many-tasks"
+                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
                        xmlns:example="http://sarasvati.googlecode.com/Example">
 
   <node name="start" isStart="true">
@@ -58,4 +58,4 @@
     </example:taskDesc>
   </node>
 
-</sv:process-definition>
+</process-definition>

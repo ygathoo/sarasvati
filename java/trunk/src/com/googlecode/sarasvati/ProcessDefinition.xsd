@@ -2,7 +2,8 @@
 
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
            xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
- targetNamespace="http://sarasvati.googlecode.com/ProcessDefinition">
+ targetNamespace="http://sarasvati.googlecode.com/ProcessDefinition"
+ elementFormDefault="qualified">
 
     <xs:element name="process-definition">
       <xs:complexType>

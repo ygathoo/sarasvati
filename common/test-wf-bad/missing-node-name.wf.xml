@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<sv:process-definition name="test-bad" xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="test-bad" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
   <node>
   </node>
-</sv:process-definition>
+</process-definition>
