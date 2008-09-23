@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<sv:process-definition name="example1"
-                       xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition"
+<process-definition name="example1"
+                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
                        xmlns:example="http://sarasvati.googlecode.com/Example">
 
   <node name="start" isStart="true">
@@ -46,4 +46,4 @@
 
   </node>
 
-</sv:process-definition>
+</process-definition>

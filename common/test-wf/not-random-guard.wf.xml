@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<sv:process-definition name="not-random-guard" xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="not-random-guard" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node type="node" name="start" isStart="true">
     <arc to="first-node"/>
@@ -45,4 +45,4 @@
   </node>
 
   <node name="last-node"/>
-</sv:process-definition>
+</process-definition>

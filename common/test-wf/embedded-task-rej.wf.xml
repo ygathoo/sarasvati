@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<sv:process-definition name="embedded-task-rej"
-                       xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition"
+<process-definition name="embedded-task-rej"
+                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
                        xmlns:example="http://sarasvati.googlecode.com/Example">
 
   <node name="start" isStart="true">
@@ -23,4 +23,4 @@
     <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub4" type="in"/>
   </node>
 
-</sv:process-definition>
+</process-definition>

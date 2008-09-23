@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
-<sv:process-definition name="subwf-tasks-rej"
-                       xmlns:sv="http://sarasvati.googlecode.com/ProcessDefinition"
+<process-definition name="subwf-tasks-rej"
+                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
                        xmlns:example="http://sarasvati.googlecode.com/Example">
 
   <node name="sub1" type="task">
@@ -50,4 +50,4 @@
 
   </node>
 
-</sv:process-definition>
+</process-definition>
