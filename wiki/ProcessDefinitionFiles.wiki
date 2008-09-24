@@ -50,14 +50,34 @@ Here, the root element is closed and the process definition is complete.
 
 So, what does the node `start` do? Every node may optionally define a type, via the `type` attribute. If no type is specified, the node type defaults to `node`. This default type just completes the node token and exits via the default arc.
 
-=== Two Node Example ===
+=== Introducing Arcs ===
 
-Here is an example with three linked nodes.
+The following example contains three nodes.
 
 {{{
 <?xml version="1.0"?>
 
 <process-definition name="example2" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="one" isStart="true">
+    <arc to="two"/>
+    <arc to="three"/>
+  </node>
+
+  <node name="two"/>
+  <node name="three"/>
+
+</process-definition>
+}}}
+
+To indicate an arc, an `arc` element is added to the start node. The `to` attribute indicates the name of the target node. The node with the name must exist in the same process definition file.
+
+=== Join Nodes ===
+
+{{{
+<?xml version="1.0"?>
+
+<process-definition name="example3" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="one" isStart="true">
     <arc to="three"/>
@@ -72,16 +92,6 @@ Here is an example with three linked nodes.
 </process-definition>
 }}}
 
-There are two start nodes which both connect to the node named `three`. Arcs are declared using the `arc` element.
-
-{{{
-  <node ...>
-    <arc to="three"/>
-  </node>
-}}}
-
-Every `arc` must have a `to` attribute, which should correspond to the `name` of a node in the same process definition file. 
-
-Arcs may optionally have a `name` attribute.
+There are two start nodes which both connect to the node named `three`. 
 
 Note that the node with name `three` has the `isJoin` attribute set to true. This declares the node to be a join node. Node `three` will not execute until both nodes `one` and `two` have completed.
