@@ -5,10 +5,10 @@ Sarasvati uses an XML file format for process definitions. These files can be lo
 
 = Sarasvati File Format =
 
-=== The XML Schema Definition ===
+===The XML Schema Definition ==
 The process definition file format is defined by an XSD, which can [http://code.google.com/p/sarasvati/source/browse/common/ProcessDefinition.xsd available to view in the project SVN].
 
-=== One Node Example ===
+== One Node Example ==
 
 The simplest process definition would be a single node. Graphically, it would look like:
 
@@ -40,11 +40,33 @@ This is the header which every XML file should have, indicating the version of t
 
 The root element of every process Sarasvati definition must be `process-definition`. It has a required `name` element. Every process definition must have a unique name. It also indicates an XML namespace, of `"http://sarasvati.googlecode.com/ProcessDefinition"`.
 
+  * *process-definition* - The root element.
+    * Required attributes
+      * *name* - The unique name for this process definition. 
+    * Nested elements
+      * *node* - Every process definition must have at least one node. 
+
 {{{
   <node name="node-one" isStart="true"/>
 }}}
 
-Every process definition must have at least one `node` element defined. Every node must have a name _unique to that file_. Any node may have the `isStart` attribute set. If not specified it will default to false. Note that the `node` element is not prefxied with `sv:` because the namespace has already been established by the root element.
+Every process definition must have at least one `node` element defined. Every node must have a name _unique to that file_. Any node may have the `isStart` attribute set. If not specified it will default to false. 
+
+  * *node* - The node element defines a node in a process definition
+    * Required attributes
+      * *name* - The node name. Must be unique to this process definition file.
+    * Optional attributes
+      * *type* - The node type. Determines the node behavior. Defaults to `node`. 
+        * Build in types
+          * `node` - Nodes of this type will complete out on the default arc when they are executed. The node type can be useful if a synchronization point is needed. It can also be used as a choice, with a guard which skips to selected arcs.
+          * `wait` - Nodes if this type will enter a wait state when executed. They will continue when completed by external logic. This can be useful when you need to wait on an external event, and no other logic is required.
+      * *isStart* - Specifies whether a node will be presented with a token when the process is started. Defaults to false.
+      * *isJoin* - If true, the node will wait for arc tokens on all arcs with a given name before executing. If false, the node will fire whenever any single arc token arrives.
+    * Nested elements
+      * *guard* - Nodes may optionally have a guard element.
+      * *arc*   - Nodes may have zero to many arcs, pointing to other nodes in the same process definition file.
+      * *externalArc* - Nodes may have zero to many external arcs, pointing to or from nodes in other process definitions.
+
 
 {{{
 </process-definition>
