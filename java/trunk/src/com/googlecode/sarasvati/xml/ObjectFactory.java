@@ -9,6 +9,8 @@ package com.googlecode.sarasvati.xml;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
+import com.googlecode.sarasvati.Arc;
+
 /**
  * This object contains factory methods for each
  * Java content interface and Java element interface
@@ -33,6 +35,7 @@ public class ObjectFactory
    */
   public ObjectFactory ()
   {
+    // default constructor
   }
 
   /**
