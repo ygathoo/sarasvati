@@ -10,14 +10,18 @@ The process definition file format is defined by an XSD, which can [http://code.
 
 === One Node Example ===
 
-The simplest process definition looks like:
+The simplest process definition would be a single node. Graphically, it would look like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/pdfiles/example1.jpg]
+
+The corresponding XML process definition would look like:
 
 {{{
 <?xml version="1.0"?>
 
 <process-definition name="simplest" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node name="start" isStart="true"/>
+  <node name="node-one" isStart="true"/>
 
 </process-definition>
 }}}
@@ -37,7 +41,7 @@ This is the header which every XML file should have, indicating the version of t
 The root element of every process Sarasvati definition must be `process-definition`. It has a required `name` element. Every process definition must have a unique name. It also indicates an XML namespace, of `"http://sarasvati.googlecode.com/ProcessDefinition"`.
 
 {{{
-  <node name="one" isStart="true"/>
+  <node name="node-one" isStart="true"/>
 }}}
 
 Every process definition must have at least one `node` element defined. Every node must have a name _unique to that file_. Any node may have the `isStart` attribute set. If not specified it will default to false. Note that the `node` element is not prefxied with `sv:` because the namespace has already been established by the root element.
@@ -54,18 +58,20 @@ So, what does the node `start` do? Every node may optionally define a type, via 
 
 The following example contains three nodes.
 
+[http://sarasvati.googlecode.com/svn/wiki/images/pdfiles/example2.jpg]
+
 {{{
 <?xml version="1.0"?>
 
 <process-definition name="example2" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node name="one" isStart="true">
-    <arc to="two"/>
-    <arc to="three"/>
+  <node name="node-one" isStart="true">
+    <arc to="node-two"/>
+    <arc to="node-three"/>
   </node>
 
-  <node name="two"/>
-  <node name="three"/>
+  <node name="node-two"/>
+  <node name="node-three"/>
 
 </process-definition>
 }}}
@@ -74,24 +80,24 @@ To indicate an arc, an `arc` element is added to the start node. The `to` attrib
 
 === Join Nodes ===
 
+Here is an example with two start nodes. They both have arcs to `node-three`, which is a join node. It will only execute once both `node-one` and `node-two` have completed.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/pdfiles/example3.jpg]
+
 {{{
 <?xml version="1.0"?>
 
 <process-definition name="example3" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node name="one" isStart="true">
-    <arc to="three"/>
+  <node name="node-one" isStart="true">
+    <arc to="node-three"/>
   </node>
 
-  <node name="two" isStart="true">
-    <arc to="three"/>
+  <node name="node-two" isStart="true">
+    <arc to="node-three"/>
   </node>
 
-  <node name="three" isJoin="true"/>
+  <node name="node-three" isJoin="true"/>
 
 </process-definition>
 }}}
-
-There are two start nodes which both connect to the node named `three`. 
-
-Note that the node with name `three` has the `isJoin` attribute set to true. This declares the node to be a join node. Node `three` will not execute until both nodes `one` and `two` have completed.
