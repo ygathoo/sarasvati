@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<process-definition name="script-test" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="start" type="script" isStart="true">
+    <arc to="next"/>
+
+    <script type="js">
+      <![CDATA[
+        println( "Hello" );
+        println( "token: " + token );
+
+        engine.completeExecution( token, null );
+      ]]>
+    </script>
+  </node>
+
+  <node name="next" type="script" isJoin="true">
+    <script type="js">
+      <![CDATA[
+        println( "Hello from node: " + token.node.name );
+        println( "token: " + token );
+      ]]>
+    </script>
+  </node>
+
+
+</process-definition>

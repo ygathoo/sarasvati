@@ -25,9 +25,9 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
@@ -39,6 +39,9 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   public MemGraphFactory ()
   {
     super( MemNode.class );
+    this.defaultNodeFactory.addType( "wait", MemWaitNode.class );
+    this.defaultNodeFactory.addType( "script", MemScriptNode.class );
+    this.defaultNodeFactory.addType( "nested", MemNestedProcessNode.class );
   }
 
   @Override

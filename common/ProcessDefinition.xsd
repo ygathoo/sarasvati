@@ -49,6 +49,17 @@
         <xs:element name="guard" type="Guard" minOccurs="0" maxOccurs="1" />
         <xs:element name="arc" type="Arc" minOccurs="0" maxOccurs="unbounded" />
         <xs:element name="externalArc" type="ExternalArc" minOccurs="0" maxOccurs="unbounded" />
+
+        <xs:element name="script" minOccurs="0" maxOccurs="1">
+          <xs:complexType>
+            <xs:simpleContent>
+              <xs:extension base="xs:string">
+                <xs:attribute name="type" type="xs:string" use="optional"/>
+              </xs:extension>
+            </xs:simpleContent>
+          </xs:complexType>
+        </xs:element>
+
         <xs:any namespace="##other" minOccurs="0" maxOccurs="unbounded" processContents="lax"/>
       </xs:sequence>
 

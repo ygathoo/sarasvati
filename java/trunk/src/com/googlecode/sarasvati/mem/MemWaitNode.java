@@ -16,10 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.hib;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+package com.googlecode.sarasvati.mem;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
@@ -31,9 +28,7 @@ import com.googlecode.sarasvati.NodeToken;
  *
  * @author Paul Lorenz
  */
-@Entity
-@DiscriminatorValue( "wait" )
-public class HibWaitNode extends HibNode
+public class MemWaitNode extends MemNode
 {
   @Override
   public void execute (Engine engine, NodeToken token)
