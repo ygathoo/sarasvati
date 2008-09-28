@@ -16,46 +16,12 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.mem;
+package com.googlecode.sarasvati.script;
 
-import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.script.ScriptRunnerFactory;
 
-public class MemScriptNode extends MemNode
+public interface ScriptRunner
 {
-  protected String script;
-  protected String scriptType;
-
-  public String getScript ()
-  {
-    return script;
-  }
-
-  public void setScript (String script)
-  {
-    this.script = script;
-  }
-
-  public String getScriptType ()
-  {
-    return scriptType;
-  }
-
-  public void setScriptType (String scriptType)
-  {
-    this.scriptType = scriptType;
-  }
-
-  @Override
-  public void execute (Engine engine, NodeToken token)
-  {
-    ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, script, scriptType );
-
-    if ( !token.isComplete() )
-    {
-      engine.completeExecution( token, Arc.DEFAULT_ARC );
-    }
-  }
+  void executeScript (Engine engine, NodeToken token, String script, String scriptType);
 }
