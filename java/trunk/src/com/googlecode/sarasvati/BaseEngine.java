@@ -25,6 +25,7 @@ import java.util.List;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
 import com.googlecode.sarasvati.event.ProcessEvent;
+import com.googlecode.sarasvati.script.ScriptEnv;
 
 /**
  *
@@ -237,5 +238,12 @@ public abstract class BaseEngine implements Engine
       fireEvent( ProcessEvent.newCompletedEvent( this, process ) );
       finalizeComplete( process );
     }
+  }
+
+  @Override
+  public void setupScriptEnv (ScriptEnv env, NodeToken token)
+  {
+    env.addVariable( "engine", this );
+    env.addVariable( "token", token );
   }
 }

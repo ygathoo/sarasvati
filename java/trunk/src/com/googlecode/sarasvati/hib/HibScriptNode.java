@@ -16,14 +16,19 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.mem;
+package com.googlecode.sarasvati.hib;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.script.ScriptRunnerFactory;
 
-public class MemScriptNode extends MemNode
+@Entity
+@DiscriminatorValue( "script" )
+public class HibScriptNode extends HibNode
 {
   protected String script;
   protected String scriptType;

@@ -23,6 +23,7 @@ import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphRepository;
+import com.googlecode.sarasvati.script.ScriptEnv;
 
 
 /**
@@ -227,4 +228,18 @@ public interface Engine
    * @throws WorkflowException If an instance for the type cannot be found or created.
    */
   ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException;
+
+  /**
+   * Adds whatever variables of interest to the script environment. May be overridden
+   * by subclasses. By default this will setup two variables:
+   * <br/>
+   * <ul>
+   *    <li> engine - This engine
+   *    <li> token  - The given NodeToken
+   * </ul>
+   *
+   * @param env The script environment to add variables to
+   * @param token The NodeToken which is currently being executed
+   */
+  void setupScriptEnv (ScriptEnv env, NodeToken token);
 }
