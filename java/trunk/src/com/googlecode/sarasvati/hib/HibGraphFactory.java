@@ -30,9 +30,9 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
@@ -45,6 +45,10 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   {
     super( HibNode.class );
     this.session = session;
+
+    this.defaultNodeFactory.addType( "wait",   HibWaitNode.class );
+    this.defaultNodeFactory.addType( "script", HibScriptNode.class );
+    this.defaultNodeFactory.addType( "nested", HibNestedProcessNode.class );
   }
 
   @Override

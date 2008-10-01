@@ -31,7 +31,22 @@ public class ScriptRunnerFactory
     }
     catch (Exception e)
     {
+      System.out.println( "Java 6 script environment not found." );
       // Not running in java 6 environment
+    }
+
+    if (scriptRunner == null )
+    {
+      try
+      {
+        Class.forName( "org.apache.bsf.BSFManager" );
+        scriptRunner = (ScriptRunner)Class.forName( "com.googlecode.sarasvati.script.BSFScriptRunner" ).newInstance();
+      }
+      catch (Exception e)
+      {
+        System.out.println( "Apache BSF script environment not found." );
+        // Not running in java 6 environment
+      }
     }
   }
 

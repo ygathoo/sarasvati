@@ -7,8 +7,8 @@
 
     <script type="js">
       <![CDATA[
-        println( "Hello" );
-        println( "token: " + token );
+        java.lang.System.out.println( "Hello" );
+        java.lang.System.out.println( "token: " + token );
 
         engine.completeExecution( token, null );
       ]]>
@@ -18,8 +18,8 @@
   <node name="next" type="script" isJoin="true">
     <script type="js">
       <![CDATA[
-        println( "Hello from node: " + token.node.name );
-        println( "token: " + token );
+        java.lang.System.out.println( "Hello from node: " + token.node.name );
+        java.lang.System.out.println( "token: " + token );
       ]]>
     </script>
   </node>

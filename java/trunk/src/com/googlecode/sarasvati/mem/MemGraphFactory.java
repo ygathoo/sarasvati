@@ -39,7 +39,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   public MemGraphFactory ()
   {
     super( MemNode.class );
-    this.defaultNodeFactory.addType( "wait", MemWaitNode.class );
+    this.defaultNodeFactory.addType( "wait",   MemWaitNode.class );
     this.defaultNodeFactory.addType( "script", MemScriptNode.class );
     this.defaultNodeFactory.addType( "nested", MemNestedProcessNode.class );
   }

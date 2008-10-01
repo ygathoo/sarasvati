@@ -125,4 +125,10 @@ public class MemNodeToken implements NodeToken
   {
     return env;
   }
+
+  @Override
+  public String toString()
+  {
+    return "[MemNodeToken node=" + (node == null ? null : node.getName()) + " hashCode=" + hashCode() + "]";
+  }
 }
