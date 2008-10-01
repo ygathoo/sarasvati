@@ -6,6 +6,7 @@ drop table if exists wf_arc_token cascade;
 drop table if exists wf_node_token cascade;
 drop table if exists wf_arc cascade;
 drop table if exists wf_node_ref cascade;
+drop table if exists wf_node_script cascade;
 drop table if exists wf_node cascade;
 drop table if exists wf_node_type cascade;
 drop table if exists wf_guard_action cascade;
@@ -81,6 +82,8 @@ create table wf_node_type
 
 insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' );
 insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'wait' );
+insert into wf_node_type values ( 'script', 'Node which executes a script', 'script' );
+
 insert into wf_node_type values ( 'task', 'Node which generates tasks', 'task' );
 insert into wf_node_type values ( 'init', 'Node which generates a random number and updates a counter', 'init' );
 insert into wf_node_type values ( 'dump', 'Node which indicates on stdout that it has been invoked', 'dump' );
@@ -99,6 +102,13 @@ create table wf_node
 ALTER TABLE wf_node
   ADD CONSTRAINT wf_node_unique
     UNIQUE(graph_id, name);
+
+create table wf_node_script
+(
+  id          int         NOT NULL PRIMARY KEY REFERENCES wf_node,
+  script      text        NOT NULL,
+  script_type varchar(20) NOT NULL
+);
 
 create table wf_node_ref
 (

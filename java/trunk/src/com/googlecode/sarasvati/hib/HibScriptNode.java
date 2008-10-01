@@ -18,8 +18,13 @@
 */
 package com.googlecode.sarasvati.hib;
 
+import javax.persistence.Column;
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
+
+import org.hibernate.annotations.FetchMode;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
@@ -28,9 +33,14 @@ import com.googlecode.sarasvati.script.ScriptRunnerFactory;
 
 @Entity
 @DiscriminatorValue( "script" )
+@SecondaryTable(name="wf_node_script", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
+@org.hibernate.annotations.Table(appliesTo="wf_node_script",fetch=FetchMode.SELECT, optional=false)
 public class HibScriptNode extends HibNode
 {
+  @Column (name="script", table="wf_node_script")
   protected String script;
+
+  @Column (name="script_type", table="wf_node_script")
   protected String scriptType;
 
   public String getScript ()

@@ -18,7 +18,12 @@
 */
 package com.googlecode.sarasvati.script;
 
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
+
 import javax.script.ScriptEngine;
+import javax.script.ScriptEngineFactory;
 import javax.script.ScriptEngineManager;
 import javax.script.ScriptException;
 
@@ -28,6 +33,17 @@ import com.googlecode.sarasvati.WorkflowException;
 
 public class JavaSixScriptRunner implements ScriptRunner
 {
+  public Collection<String> getSupportedTypes()
+  {
+    Set<String> types = new HashSet<String>();
+    for ( ScriptEngineFactory factory : new ScriptEngineManager().getEngineFactories() )
+    {
+      types.addAll( factory.getExtensions() );
+    }
+
+    return types;
+  }
+
   @Override
   public void executeScript(Engine engine, NodeToken token, String script, String scriptType)
   {
@@ -55,4 +71,6 @@ public class JavaSixScriptRunner implements ScriptRunner
                                    "Script content: " + script, se );
     }
   }
+
+
 }

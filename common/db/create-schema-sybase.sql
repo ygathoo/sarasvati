@@ -123,6 +123,14 @@ ALTER TABLE wf_node
     UNIQUE(graph_id, name)
 go
 
+create table wf_node_script
+(
+  id          bigint       NOT NULL PRIMARY KEY REFERENCES wf_node,
+  script      varchar(512) NOT NULL,
+  script_type varchar(20)  NOT NULL
+)
+go
+
 create table wf_node_ref
 (
   id        bigint       IDENTITY NOT NULL PRIMARY KEY,
