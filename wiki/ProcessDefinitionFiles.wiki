@@ -86,6 +86,18 @@ The following example contains three nodes.
 
 To indicate an arc, an `arc` element is added to the start node. The `to` attribute indicates the name of the target node. The node with the name must exist in the same process definition file.
 
+===Element `arc`===
+---------------------
+  * *Usage* - An `arc` element declares an arc from the enclosing node to the node with the name specified in the `to` attribute.
+
+|| *Attribute Name* || *Usage* || *Required?* || *Default* ||
+|| to || Specifies the name of the node this arc goes to || Yes || N/A ||
+|| name || Specifies the arc name. This name need not be unique. || No || null ||
+
+  * *Nested elements*:
+    * An arc may not contain any nested elements.
+
+
 === Join Nodes ===
 
 Here is an example with two start nodes. They both have arcs to `node-three`, which is a join node. It will only execute once both `node-one` and `node-two` have completed.
