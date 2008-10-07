@@ -40,6 +40,15 @@ Every process definition must have at least one `node` element defined. Every no
   * *arc*   - Nodes may have zero to many arcs, pointing to other nodes in the same process definition file.
   * *externalArc* - Nodes may have zero to many external arcs, pointing to or from nodes in other process definitions.
 
+===Element `guard`===
+A node may contain a GuardLang statement, which will be executed as the node's guard.
+
+====Attributes====
+The `guard` element has no attributes
+
+====Nested Elements====
+The `guard` element may not contain any nested elements. 
+
 ===One Node Example===
 With just `process-definition` and `node` a simple process definition can be built.
 
