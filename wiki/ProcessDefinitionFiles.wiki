@@ -129,3 +129,19 @@ Here is an example with two start nodes. They both have arcs to `node-three`, wh
 
 </process-definition>
 }}}
+
+Now that we've seen how to create links between nodes in the same process definition, let us examine how to create links to nodes in external process definitions.
+
+===Element `externalArc`===
+An `externaArc` element declares an arc from the enclosing node to the external node with the name specified in the `nodeName` attribute
+
+====Attributes====
+|| *Attribute Name* || *Usage* || *Required?* || *Default* ||
+|| external || Specifies the name of the external process definition this arc goes to || Yes || N/A ||
+|| instance || Specifies the specific instance of the external process definition this arc goes to. All external arcs with the same values `external` and `instance` will go to the same set of nodes. || Yes || N/A ||
+|| nodeName || Specifies the name of the node this arc goes to || Yes || N/A ||
+|| name || Specifies the external arc name. This name need not be unique. || No || null ||
+|| type || Indicates if the containing node is at the beginning or end of the arc. Valid values are `out` and `in`. If `out` is specified, the containing node is the start node of the arc, otherwise it is the end. || Yes || N/A ||
+
+====Nested elements===
+An external arc may not contain any nested elements.
