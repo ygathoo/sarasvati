@@ -37,6 +37,8 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-validator-3.0.0.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/jboss-j2ee.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/postgresql-8.3-603.jdbc4.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/bsf-2.4.0.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/rhino-1.6R7.jar"/>
       </resources>
     </copy>
     <delete file="${fetch.indicator}"/>
