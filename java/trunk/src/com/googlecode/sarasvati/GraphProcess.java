@@ -135,7 +135,7 @@ public interface GraphProcess
    * Sets the current {@link ProcessState}. The state should
    * be set to {@link ProcessState#Created} by {@link GraphFactory#newProcess(Graph)}.
    * It should then be set to {@link ProcessState#Executing} by
-   * {@link Engine#startProcess(Process)}.
+   * {@link Engine#startProcess(GraphProcess)}
    *
    * @param state The new {@link ProcessState}
    */
