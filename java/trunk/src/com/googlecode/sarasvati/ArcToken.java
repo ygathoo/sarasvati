@@ -75,7 +75,7 @@ public interface ArcToken extends Token
   /**
    * Marks this arc token as processed.
    *
-   * @see Token#isPending()
+   * @see ArcToken#isPending()
    * @param engine The engine processing this Token
    */
   void markProcessed (Engine engine);

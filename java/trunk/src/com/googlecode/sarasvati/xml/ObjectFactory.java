@@ -9,12 +9,10 @@ package com.googlecode.sarasvati.xml;
 
 import javax.xml.bind.annotation.XmlRegistry;
 
-import com.googlecode.sarasvati.Arc;
-
 /**
  * This object contains factory methods for each
  * Java content interface and Java element interface
- * generated in the com.googlecode.sarasvati.xml2 package.
+ * generated in the com.googlecode.sarasvati.xml package.
  * <p>An ObjectFactory allows you to programatically
  * construct new instances of the Java representation
  * for XML content. The Java representation of XML
@@ -30,7 +28,7 @@ public class ObjectFactory
 {
 
   /**
-   * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.googlecode.sarasvati.xml2
+   * Create a new ObjectFactory that can be used to create new instances of schema derived classes for package: com.googlecode.sarasvati.xml
    *
    */
   public ObjectFactory ()
@@ -39,8 +37,7 @@ public class ObjectFactory
   }
 
   /**
-   * Create an instance of {@link ExternalArc }
-   *
+   * Create an instance of {@link XmlExternalArc }
    */
   public XmlExternalArc createExternalArc ()
   {
@@ -48,8 +45,7 @@ public class ObjectFactory
   }
 
   /**
-   * Create an instance of {@link Arc }
-   *
+   * Create an instance of {@link XmlArc }
    */
   public XmlArc createArc ()
   {
@@ -57,8 +53,7 @@ public class ObjectFactory
   }
 
   /**
-   * Create an instance of {@link Node }
-   *
+   * Create an instance of {@link XmlNode }
    */
   public XmlNode createNode ()
   {
@@ -66,7 +61,7 @@ public class ObjectFactory
   }
 
   /**
-   * Create an instance of {@link ProcessDefinition }
+   * Create an instance of {@link XmlProcessDefinition }
    *
    */
   public XmlProcessDefinition createProcessDefinition ()
