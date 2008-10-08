@@ -13,6 +13,7 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc_token') drop table wf_arc
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token') drop table wf_node_token
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc') drop table wf_arc
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_ref') drop table wf_node_ref
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_script') drop table wf_node_script
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node') drop table wf_node
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_type') drop table wf_node_type
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_guard_action') drop table wf_guard_action
@@ -101,6 +102,8 @@ go
 
 insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' )
 insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'wait' )
+insert into wf_node_type values ( 'script', 'Node which executes a script', 'script' )
+
 insert into wf_node_type values ( 'task', 'Node which generates tasks', 'task' )
 insert into wf_node_type values ( 'init', 'Node which generates a random number and updates a counter', 'init' )
 insert into wf_node_type values ( 'dump', 'Node which indicates on stdout that it has been invoked', 'dump' )
