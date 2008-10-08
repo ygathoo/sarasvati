@@ -21,13 +21,12 @@ package com.googlecode.sarasvati.visual;
 import java.util.List;
 
 import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.NodeToken;
 
 public class ProcessTreeNode
 {
   protected ProcessTreeNode parent;
 
-  protected NodeToken token;
+  protected NodeTokenWrapper tokenWrapper;
   protected Node      node;
   protected int       depth;
   protected int       index;
@@ -35,14 +34,14 @@ public class ProcessTreeNode
   protected int       originX;
   protected int       originY;
 
-  public static ProcessTreeNode newInstance (ProcessTreeNode parent, NodeToken token, Node nodeRef)
+  public static ProcessTreeNode newInstance (ProcessTreeNode parent, NodeTokenWrapper tokenWrapper, Node nodeRef)
   {
-    return new ProcessTreeNode( parent, token, nodeRef );
+    return new ProcessTreeNode( parent, tokenWrapper, nodeRef );
   }
 
-  public ProcessTreeNode (ProcessTreeNode parent, NodeToken token, Node node)
+  public ProcessTreeNode (ProcessTreeNode parent, NodeTokenWrapper tokenWrapper, Node node)
   {
-    this.token = token;
+    this.tokenWrapper = tokenWrapper;
     this.node = node;
     this.parent = parent;
 
@@ -59,6 +58,11 @@ public class ProcessTreeNode
   public Node getNode ()
   {
     return node;
+  }
+
+  public NodeTokenWrapper getTokenWrapper ()
+  {
+    return tokenWrapper;
   }
 
   public int getDepth ()

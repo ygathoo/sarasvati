@@ -27,7 +27,6 @@ import java.util.Map;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.hib.HibNodeRef;
 
 public class GraphTree
 {
@@ -65,10 +64,9 @@ public class GraphTree
 
     for ( Node node : startNodes )
     {
-      HibNodeRef nodeRef = (HibNodeRef)node;
-      GraphTreeNode treeNode = GraphTreeNode.newInstance( root, nodeRef );
+      GraphTreeNode treeNode = GraphTreeNode.newInstance( root, node );
 
-      nodeMap.put( nodeRef, treeNode );
+      nodeMap.put( node, treeNode );
       treeNode.addToLayer( nextLayer );
     }
 

@@ -36,39 +36,7 @@ public class ProcessTree
 
   protected GraphTreeNode root = new GraphTreeNode( null, null );
 
-  protected List<List<GraphTreeNode>> layers = new LinkedList<List<GraphTreeNode>>();
-
-  private static class NodeTokenWrapper
-  {
-    private NodeToken token;
-    private List<ArcToken> children;
-
-    public NodeTokenWrapper (NodeToken token)
-    {
-      this.token = token;
-      this.children = new LinkedList<ArcToken>();
-    }
-
-    public NodeToken getToken ()
-    {
-      return token;
-    }
-
-    public List<ArcToken> getParents ()
-    {
-      return token.getParentTokens();
-    }
-
-    public List<ArcToken> getChildren ()
-    {
-      return children;
-    }
-
-    public void addChild (ArcToken child)
-    {
-      children.add( child );
-    }
-  }
+  protected List<List<ProcessTreeNode>> layers = new LinkedList<List<ProcessTreeNode>>();
 
   public ProcessTree (GraphProcess process)
   {
@@ -98,7 +66,25 @@ public class ProcessTree
 
     List<ProcessTreeNode> nextLayer = new LinkedList<ProcessTreeNode>();
 
+    for ( NodeTokenWrapper wrapper : nodeMap.values() )
+    {
+      if ( wrapper.getParents().isEmpty() && wrapper.getToken().getNode().isStart() )
+      {
+        ProcessTreeNode.newInstance( null, wrapper, wrapper.getToken().getNode() ).addToLayer( nextLayer );
+      }
+    }
 
+    while ( !nextLayer.isEmpty() )
+    {
+      layers.add( nextLayer );
+      List<ProcessTreeNode> prevLayer = nextLayer;
+      nextLayer = new LinkedList<ProcessTreeNode>();
+
+      for ( ProcessTreeNode node : prevLayer )
+      {
+        // for ( Arcnode.getTokenWrapper().getChildren() )
+      }
+    }
   }
 
 //  public GraphTreeNode getTreeNode (Node node)
@@ -111,12 +97,12 @@ public class ProcessTree
     return layers.size();
   }
 
-  public List<GraphTreeNode> getLayer (int index)
+  public List<ProcessTreeNode> getLayer (int index)
   {
     return layers.get( index );
   }
 
-  public List<List<GraphTreeNode>> getLayers ()
+  public List<List<ProcessTreeNode>> getLayers ()
   {
     return layers;
   }
