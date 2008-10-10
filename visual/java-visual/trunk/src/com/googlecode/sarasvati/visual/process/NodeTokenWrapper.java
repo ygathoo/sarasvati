@@ -1,7 +1,7 @@
 /**
  * Created on Oct 8, 2008
  */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.process;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -12,12 +12,12 @@ import com.googlecode.sarasvati.NodeToken;
 class NodeTokenWrapper
 {
   private NodeToken token;
-  private List<ArcToken> children;
+  private List<ArcTokenWrapper> children;
 
   public NodeTokenWrapper (NodeToken token)
   {
     this.token = token;
-    this.children = new LinkedList<ArcToken>();
+    this.children = new LinkedList<ArcTokenWrapper>();
   }
 
   public NodeToken getToken ()
@@ -30,12 +30,12 @@ class NodeTokenWrapper
     return token.getParentTokens();
   }
 
-  public List<ArcToken> getChildren ()
+  public List<ArcTokenWrapper> getChildren ()
   {
     return children;
   }
 
-  public void addChild (ArcToken child)
+  public void addChild (ArcTokenWrapper child)
   {
     children.add( child );
   }
