@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.process;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,8 +33,6 @@ import com.googlecode.sarasvati.NodeToken;
 public class ProcessTree
 {
   protected Map<NodeToken, NodeTokenWrapper> nodeMap = new HashMap<NodeToken, NodeTokenWrapper>();
-
-  protected GraphTreeNode root = new GraphTreeNode( null, null );
 
   protected List<List<ProcessTreeNode>> layers = new LinkedList<List<ProcessTreeNode>>();
 
@@ -60,8 +58,22 @@ public class ProcessTree
     {
       for ( ArcToken parent : token.getParentTokens() )
       {
-        nodeMap.get( parent.getParentToken() ).addChild( parent );
+        ArcTokenWrapper arcTokenWrapper =
+          new ArcTokenWrapper( parent,
+                               nodeMap.get( parent.getParentToken() ),
+                               nodeMap.get( token ) );
+        nodeMap.get( parent.getParentToken() ).addChild( arcTokenWrapper );
       }
+    }
+
+    // active tokens won't have been processed in the previous step
+    for ( ArcToken arcToken : process.getActiveArcTokens() )
+    {
+      ArcTokenWrapper arcTokenWrapper =
+        new ArcTokenWrapper( arcToken,
+                             nodeMap.get( arcToken.getParentToken() ),
+                             null );
+      nodeMap.get( arcToken.getParentToken() ).addChild( arcTokenWrapper );
     }
 
     List<ProcessTreeNode> nextLayer = new LinkedList<ProcessTreeNode>();
@@ -82,7 +94,10 @@ public class ProcessTree
 
       for ( ProcessTreeNode node : prevLayer )
       {
-        // for ( Arcnode.getTokenWrapper().getChildren() )
+        for ( ArcTokenWrapper wrapper : node.getTokenWrapper().getChildren() )
+        {
+          
+        }
       }
     }
   }

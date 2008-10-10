@@ -16,11 +16,12 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.process;
 
 import java.util.List;
 
 import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.visual.NodeDrawConfig;
 
 public class ProcessTreeNode
 {

@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.graph;
 
 import java.util.ArrayList;
 import java.util.HashMap;

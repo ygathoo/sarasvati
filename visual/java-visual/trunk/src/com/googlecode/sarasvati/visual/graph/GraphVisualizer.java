@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.graph;
 
 import java.awt.Color;
 import java.awt.Component;
@@ -46,6 +46,9 @@ import com.googlecode.sarasvati.adapter.Function;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
+import com.googlecode.sarasvati.visual.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.SarasvatiScene;
+import com.googlecode.sarasvati.visual.TaskIcon;
 
 public class GraphVisualizer
 {
