@@ -145,3 +145,64 @@ An `externaArc` element declares an arc from the enclosing node to the external 
 
 ====Nested elements===
 An external arc may not contain any nested elements.
+
+=== External Arc Example One ===
+To examine external arcs, we'll need at least two process definitions.
+
+The first will be referenced from the second, and is simple.
+
+{{{
+<?xml version="1.0"?>
+
+<process-definition name="ext" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="A" isJoin="true">
+    <arc to="B"/>
+  </node>
+
+  <node name="B" isJoin="true"/>
+
+</process-definition>
+}}}
+
+It looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals1.jpg]
+
+The graph which contains external arcs going to 'ext', is below.
+
+{{{
+<?xml version="1.0"?>
+
+<process-definition name="example4" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="P" isStart="true">
+    <externalArc external="ext" instance="1" nodeName="A" type="out"/>
+  </node>
+
+  <node name="Q" isStart="true">
+    <externalArc external="ext" instance="1" nodeName="A" type="out"/>
+  </node>
+
+  <node name="R" isStart="true">
+    <externalArc external="ext" instance="1" nodeName="B" type="out"/>
+  </node>
+
+  <node name="X">
+    <arc to="Z"/>
+    <externalArc external="ext" instance="1" nodeName="A" type="in"/>
+  </node>
+
+  <node name="Y">
+    <arc to="Z"/>
+    <externalArc external="ext" instance="1" nodeName="B" type="in"/>
+  </node>
+
+  <node name="Z" isJoin="true"/>
+
+</process-definition>
+}}}
+
+It looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals2.jpg]
