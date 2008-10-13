@@ -18,9 +18,6 @@
 */
 package com.googlecode.sarasvati.visual.process;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,6 +25,7 @@ import java.util.Map;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 
 public class ProcessTree
@@ -38,23 +36,12 @@ public class ProcessTree
 
   public ProcessTree (GraphProcess process)
   {
-    List<NodeToken> tokenList = new ArrayList<NodeToken>( process.getNodeTokens() );
-
-    Collections.sort( tokenList, new Comparator<NodeToken>()
-    {
-      @Override
-      public int compare( NodeToken o1, NodeToken o2 )
-      {
-        return o1.getCreateDate().compareTo( o2.getCreateDate() );
-      }
-    });
-
-    for ( NodeToken token : tokenList )
+    for ( NodeToken token : process.getNodeTokens() )
     {
       nodeMap.put( token, new NodeTokenWrapper( token ) );
     }
 
-    for ( NodeToken token : tokenList )
+    for ( NodeToken token : nodeMap.keySet() )
     {
       for ( ArcToken parent : token.getParentTokens() )
       {
@@ -86,17 +73,39 @@ public class ProcessTree
       }
     }
 
+    for ( ProcessTreeNode node : nextLayer )
+    {
+      nodeMap.remove( node.getTokenWrapper().getToken() );
+    }
+
     while ( !nextLayer.isEmpty() )
     {
       layers.add( nextLayer );
       List<ProcessTreeNode> prevLayer = nextLayer;
       nextLayer = new LinkedList<ProcessTreeNode>();
 
-      for ( ProcessTreeNode node : prevLayer )
+      for ( ProcessTreeNode treeNode : prevLayer )
       {
-        for ( ArcTokenWrapper wrapper : node.getTokenWrapper().getChildren() )
+        if ( treeNode.getTokenWrapper() != null )
         {
-          
+          nodeMap.remove( treeNode.getTokenWrapper().getToken() );
+
+          for ( ArcTokenWrapper wrapper : treeNode.getTokenWrapper().getChildren() )
+          {
+            if ( wrapper.getChild() == null )
+            {
+              Node node = wrapper.getToken().getArc().getEndNode();
+              ProcessTreeNode.newInstance( treeNode, null, node).addToLayer( nextLayer );
+            }
+            else
+            {
+              ProcessTreeNode.newInstance( treeNode, wrapper.getChild(), null ).addToLayer( nextLayer );
+            }
+          }
+        }
+        else
+        {
+
         }
       }
     }
