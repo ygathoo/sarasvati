@@ -32,8 +32,6 @@ public class GraphTree
 {
   protected Map<Node, GraphTreeNode> nodeMap = new HashMap<Node, GraphTreeNode>();
 
-  protected GraphTreeNode root = new GraphTreeNode( null, null );
-
   protected List<List<GraphTreeNode>> layers = new LinkedList<List<GraphTreeNode>>();
 
   @SuppressWarnings("unchecked")
@@ -64,13 +62,15 @@ public class GraphTree
 
     for ( Node node : startNodes )
     {
-      GraphTreeNode treeNode = GraphTreeNode.newInstance( root, node );
+      GraphTreeNode treeNode = new GraphTreeNode( 0, node );
 
       nodeMap.put( node, treeNode );
       treeNode.addToLayer( nextLayer );
     }
 
     List<GraphTreeNode> layer = null;
+
+    int depth = 1;
 
     while ( !nextLayer.isEmpty() )
     {
@@ -89,12 +89,13 @@ public class GraphTree
 
           if (targetTreeNode == null)
           {
-            targetTreeNode = GraphTreeNode.newInstance( treeNode, target );
+            targetTreeNode = new GraphTreeNode( depth, target );
             nodeMap.put( target, targetTreeNode );
             targetTreeNode.addToLayer( nextLayer );
           }
         }
       }
+      depth++;
     }
   }
 

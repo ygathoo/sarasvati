@@ -20,14 +20,14 @@ package com.googlecode.sarasvati.visual.process;
 
 import java.util.List;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visual.NodeDrawConfig;
 
 public class ProcessTreeNode
 {
-  protected ProcessTreeNode parent;
-
-  protected NodeTokenWrapper tokenWrapper;
+  protected NodeToken token;
   protected Node      node;
   protected int       depth;
   protected int       index;
@@ -35,40 +35,46 @@ public class ProcessTreeNode
   protected int       originX;
   protected int       originY;
 
-  public static ProcessTreeNode newInstance (ProcessTreeNode parent, NodeTokenWrapper tokenWrapper, Node nodeRef)
+  private List<ProcessTreeArc> children;
+
+  public ProcessTreeNode (Node node)
   {
-    return new ProcessTreeNode( parent, tokenWrapper, nodeRef );
+    this.node = node;
   }
 
-  public ProcessTreeNode (ProcessTreeNode parent, NodeTokenWrapper tokenWrapper, Node node)
+  public ProcessTreeNode (NodeToken token)
   {
-    this.tokenWrapper = tokenWrapper;
-    this.node = node;
-    this.parent = parent;
-
-    if ( parent != null )
-    {
-      this.depth = parent.getDepth() + 1;
-    }
-    else
-    {
-      depth = -1;
-    }
+    this.token = token;
   }
 
   public Node getNode ()
   {
-    return node;
+    return token == null ? node : token.getNode();
   }
 
-  public NodeTokenWrapper getTokenWrapper ()
+  public NodeToken getToken ()
   {
-    return tokenWrapper;
+    return token;
+  }
+
+  public List<ProcessTreeArc> getChildren ()
+  {
+    return children;
+  }
+
+  public void addChild (ProcessTreeArc child)
+  {
+    children.add( child );
   }
 
   public int getDepth ()
   {
     return depth;
+  }
+
+  public void setDepth (int depth)
+  {
+    this.depth = depth;
   }
 
   public int getIndex()
@@ -86,6 +92,24 @@ public class ProcessTreeNode
     this.index = layer.size();
     layer.add( this );
     recalculateOrigin();
+  }
+
+  public boolean isStartTokenNode ()
+  {
+    return token != null && token.getParentTokens().isEmpty() && token.getNode().isStart();
+  }
+
+  public boolean isTokenOnArc (Arc arc)
+  {
+    for (ProcessTreeArc ptArc : children )
+    {
+      if ( ptArc.getArc().equals( arc ) && ptArc.getToken() != null )
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public void recalculateOrigin ()
