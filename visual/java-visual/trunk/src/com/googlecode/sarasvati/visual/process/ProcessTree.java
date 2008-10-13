@@ -18,65 +18,104 @@
 */
 package com.googlecode.sarasvati.visual.process;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 
 public class ProcessTree
 {
-  protected Map<NodeToken, NodeTokenWrapper> nodeMap = new HashMap<NodeToken, NodeTokenWrapper>();
+  protected Map<NodeToken, ProcessTreeNode> nodeTokenMap = new HashMap<NodeToken, ProcessTreeNode>();
 
   protected List<List<ProcessTreeNode>> layers = new LinkedList<List<ProcessTreeNode>>();
 
+  /*
+   * 1. Find start node tokens
+   * 2. Add start node tokens to first layer
+   * 3. For each layer: for each element in the layer
+   *   a. If it's a node token, process all arc token children
+   *   b. If it's a node, process all arc children
+   */
   public ProcessTree (GraphProcess process)
   {
+    Graph graph = process.getGraph();
+
     for ( NodeToken token : process.getNodeTokens() )
     {
-      nodeMap.put( token, new NodeTokenWrapper( token ) );
+      nodeTokenMap.put( token, new ProcessTreeNode( token ) );
     }
 
-    for ( NodeToken token : nodeMap.keySet() )
+    List<NodeToken> sortedTokenList = new ArrayList<NodeToken>( process.getNodeTokens() );
+
+    Collections.sort( sortedTokenList, new Comparator<NodeToken>()
+    {
+      @Override
+      public int compare( NodeToken o1, NodeToken o2 )
+      {
+        return o1.getCreateDate().compareTo( o2.getCreateDate() );
+      }
+    });
+
+    for ( NodeToken token : nodeTokenMap.keySet() )
     {
       for ( ArcToken parent : token.getParentTokens() )
       {
-        ArcTokenWrapper arcTokenWrapper =
-          new ArcTokenWrapper( parent,
-                               nodeMap.get( parent.getParentToken() ),
-                               nodeMap.get( token ) );
-        nodeMap.get( parent.getParentToken() ).addChild( arcTokenWrapper );
+        ProcessTreeArc processTreeArc =
+          new ProcessTreeArc( parent,
+                               nodeTokenMap.get( parent.getParentToken() ),
+                               nodeTokenMap.get( token ) );
+        nodeTokenMap.get( parent.getParentToken() ).addChild( processTreeArc );
       }
     }
 
     // active tokens won't have been processed in the previous step
     for ( ArcToken arcToken : process.getActiveArcTokens() )
     {
-      ArcTokenWrapper arcTokenWrapper =
-        new ArcTokenWrapper( arcToken,
-                             nodeMap.get( arcToken.getParentToken() ),
+      ProcessTreeArc arcTokenWrapper =
+        new ProcessTreeArc( arcToken,
+                             nodeTokenMap.get( arcToken.getParentToken() ),
                              null );
-      nodeMap.get( arcToken.getParentToken() ).addChild( arcTokenWrapper );
+      nodeTokenMap.get( arcToken.getParentToken() ).addChild( arcTokenWrapper );
+    }
+
+    List<ProcessTreeNode> queue = new LinkedList<ProcessTreeNode>();
+
+    for ( ProcessTreeNode ptNode : nodeTokenMap.values() )
+    {
+      for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
+      {
+        if ( !ptNode.isTokenOnArc( arc ) )
+        {
+          ProcessTreeArc arcTokenWrapper =
+            new ProcessTreeArc( arc,
+                                nodeTokenMap.get( ptNode ),
+                                null );
+          ptNode.addChild( arcTokenWrapper );
+        }
+      }
     }
 
     List<ProcessTreeNode> nextLayer = new LinkedList<ProcessTreeNode>();
 
-    for ( NodeTokenWrapper wrapper : nodeMap.values() )
+    for ( ProcessTreeNode ptNode : nodeTokenMap.values() )
     {
-      if ( wrapper.getParents().isEmpty() && wrapper.getToken().getNode().isStart() )
+      if ( ptNode.isStartTokenNode() )
       {
-        ProcessTreeNode.newInstance( null, wrapper, wrapper.getToken().getNode() ).addToLayer( nextLayer );
+        ptNode.addToLayer( nextLayer );
+        ptNode.setDepth( 0 );
       }
     }
 
-    for ( ProcessTreeNode node : nextLayer )
-    {
-      nodeMap.remove( node.getTokenWrapper().getToken() );
-    }
+    int depth = 1;
 
     while ( !nextLayer.isEmpty() )
     {
@@ -86,28 +125,13 @@ public class ProcessTree
 
       for ( ProcessTreeNode treeNode : prevLayer )
       {
-        if ( treeNode.getTokenWrapper() != null )
+        for ( ProcessTreeArc wrapper : treeNode.getChildren() )
         {
-          nodeMap.remove( treeNode.getTokenWrapper().getToken() );
-
-          for ( ArcTokenWrapper wrapper : treeNode.getTokenWrapper().getChildren() )
-          {
-            if ( wrapper.getChild() == null )
-            {
-              Node node = wrapper.getToken().getArc().getEndNode();
-              ProcessTreeNode.newInstance( treeNode, null, node).addToLayer( nextLayer );
-            }
-            else
-            {
-              ProcessTreeNode.newInstance( treeNode, wrapper.getChild(), null ).addToLayer( nextLayer );
-            }
-          }
-        }
-        else
-        {
-
+          wrapper.getChild().addToLayer( nextLayer );
+          wrapper.getChild().setDepth( depth );
         }
       }
+      depth++;
     }
   }
 

@@ -25,8 +25,6 @@ import com.googlecode.sarasvati.visual.NodeDrawConfig;
 
 public class GraphTreeNode
 {
-  protected GraphTreeNode parent;
-
   protected Node    node;
   protected int     depth;
   protected int     index;
@@ -34,24 +32,10 @@ public class GraphTreeNode
   protected int     originX;
   protected int     originY;
 
-  public static GraphTreeNode newInstance (GraphTreeNode parent, Node nodeRef)
-  {
-    return new GraphTreeNode( parent, nodeRef );
-  }
-
-  public GraphTreeNode (GraphTreeNode parent, Node node)
+  public GraphTreeNode (int depth, Node node)
   {
     this.node = node;
-    this.parent = parent;
-
-    if ( parent != null )
-    {
-      this.depth = parent.getDepth() + 1;
-    }
-    else
-    {
-      depth = -1;
-    }
+    this.depth = depth;
   }
 
   public Node getNode ()
