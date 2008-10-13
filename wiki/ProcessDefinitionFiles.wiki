@@ -149,7 +149,7 @@ An external arc may not contain any nested elements.
 === External Arc Example One ===
 To examine external arcs, we'll need at least two process definitions.
 
-The first will be referenced from the second, and is simple.
+This example is from the EngineConcepts section.
 
 {{{
 <?xml version="1.0"?>
@@ -206,3 +206,7 @@ The graph which contains external arcs going to 'ext', is below.
 It looks like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals2.jpg]
+
+When the process definition is loaded into memory, it will look like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals3.jpg]
