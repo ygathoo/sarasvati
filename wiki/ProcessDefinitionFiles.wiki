@@ -181,11 +181,11 @@ The graph which contains external arcs going to 'ext', is below.
   </node>
 
   <node name="Q" isStart="true">
-    <externalArc external="ext" instance="1" nodeName="A" type="out"/>
+    <externalArc external="ext" instance="2" nodeName="A" type="out"/>
   </node>
 
   <node name="R" isStart="true">
-    <externalArc external="ext" instance="1" nodeName="B" type="out"/>
+    <externalArc external="ext" instance="2" nodeName="B" type="out"/>
   </node>
 
   <node name="X">
@@ -195,7 +195,7 @@ The graph which contains external arcs going to 'ext', is below.
 
   <node name="Y">
     <arc to="Z"/>
-    <externalArc external="ext" instance="1" nodeName="B" type="in"/>
+    <externalArc external="ext" instance="2" nodeName="B" type="in"/>
   </node>
 
   <node name="Z" isJoin="true"/>
@@ -205,8 +205,8 @@ The graph which contains external arcs going to 'ext', is below.
 
 It looks like:
 
-[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals2.jpg]
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals4.jpg]
 
 When the process definition is loaded into memory, it will look like:
 
-[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals3.jpg]
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals5.jpg]
