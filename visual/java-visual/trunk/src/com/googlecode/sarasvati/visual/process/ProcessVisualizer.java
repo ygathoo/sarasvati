@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.visual.process;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -46,15 +47,14 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraphProcess;
+import com.googlecode.sarasvati.visual.NodeDrawConfig;
 
 public class ProcessVisualizer
 {
-  protected static GraphProcess   currentProcess = null;
+  protected static HibGraphProcess   currentProcess = null;
   protected static SarasvatiProcessScene scene = new SarasvatiProcessScene();
 
   final JScrollPane scrollPane = new JScrollPane();
-
-  protected Color darkGreen = new Color( 0, 128, 0 );
 
   public static void main (String[] args) throws Exception
   {
@@ -139,7 +139,7 @@ public class ProcessVisualizer
           return;
         }
 
-        final GraphProcess graphProcess = (GraphProcess)graphList.getSelectedValue();
+        final HibGraphProcess graphProcess = (HibGraphProcess)graphList.getSelectedValue();
 
         if ( ( graphProcess == null && currentProcess == null ) ||
              ( graphProcess != null && graphProcess.equals( currentProcess ) ) )
@@ -173,10 +173,17 @@ public class ProcessVisualizer
               {
                 if ( currentProcess != null )
                 {
+                  Integer currentVersion = currentProcess.getVersion();
                   session.clear();
                   session.refresh( currentProcess );
+
+                  if ( currentVersion != null &&
+                       currentProcess.getVersion() != null &&
+                       currentVersion.intValue() !=  currentProcess.getVersion().intValue() )
+                  {
+                    setProcess( currentProcess );
+                  }
                 }
-                setProcess( currentProcess );
               }
             });
           }
@@ -189,7 +196,7 @@ public class ProcessVisualizer
     }.run();
   }
 
-  public synchronized void setProcess (final GraphProcess graphProcess)
+  public synchronized void setProcess (final HibGraphProcess graphProcess)
   {
     currentProcess = graphProcess;
 
@@ -210,12 +217,6 @@ public class ProcessVisualizer
       widget.setPreferredLocation( new Point( node.getOriginX(), node.getOriginY() ) );
     }
 
-//    for ( Node node : scene.getNodes() )
-//    {
-//      scene.removeNodeWithEdges( node );
-//    }
-
-
     for ( ProcessTreeNode node : nodes )
     {
       for ( ProcessTreeArc ptArc : node.getChildren() )
@@ -229,13 +230,14 @@ public class ProcessVisualizer
         ArcToken token =  ptArc.getToken();
         if ( token != null )
         {
+          w.setStroke( new BasicStroke( 3 ) );
           if ( token.isComplete() )
           {
-            w.setLineColor( darkGreen );
+            w.setLineColor( NodeDrawConfig.NODE_BG_COMPLETED );
           }
           else
           {
-            w.setLineColor( Color.YELLOW );
+            w.setLineColor( NodeDrawConfig.NODE_BG_ACTIVE );
           }
         }
       }

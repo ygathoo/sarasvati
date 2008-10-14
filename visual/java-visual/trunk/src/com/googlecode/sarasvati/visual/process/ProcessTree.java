@@ -44,21 +44,106 @@ public class ProcessTree
 
   protected List<ProcessTreeNode> queue = new LinkedList<ProcessTreeNode>();
 
-  protected ProcessTreeNode getProcessTreeNode (Node node)
+  private static class ParentTree
   {
+    protected List<List<NodeToken>> tree = new LinkedList<List<NodeToken>>();
+
+    public ParentTree (NodeToken token)
+    {
+      Set<NodeToken> processed = new HashSet<NodeToken>();
+
+      List<NodeToken> nextLayer = new LinkedList<NodeToken>();
+      nextLayer.add( token );
+
+      while ( !nextLayer.isEmpty() )
+      {
+        tree.add( nextLayer );
+        List<NodeToken> prevLayer = nextLayer;
+        nextLayer = new LinkedList<NodeToken>();
+
+        for ( NodeToken ancestor : prevLayer )
+        {
+          for ( ArcToken arcToken : ancestor.getParentTokens() )
+          {
+            if ( !processed.contains( arcToken.getParentToken() ) )
+            {
+              nextLayer.add( arcToken.getParentToken() );
+              processed.add( arcToken.getParentToken() );
+            }
+          }
+        }
+      }
+
+      tree.remove( 0 );
+    }
+
+    public int getDistance (ParentTree other)
+    {
+      int localDepth = 0;
+      for ( List<NodeToken> localLayer : tree )
+      {
+        int otherDepth = 0;
+        for ( List<NodeToken> otherLayer : other.tree )
+        {
+          if ( !Collections.disjoint( localLayer, otherLayer ) )
+          {
+            return localDepth + otherDepth;
+          }
+          otherDepth++;
+        }
+        localDepth++;
+      }
+      return Integer.MAX_VALUE;
+    }
+  }
+
+  protected ProcessTreeNode getProcessTreeNode (ProcessTreeNode parent, Node node)
+  {
+    NodeToken parentToken = parent.getParentToken();
+
+    NodeToken current = null;
+    int currentDistance = 0;
+    ParentTree parentTree = null;
     for ( NodeToken token : sortedTokenList )
     {
-      if (token.getNode().equals( node ) )
+      if ( token.getNode().equals( node ) )
       {
-        return nodeTokenMap.get( token );
+        if ( current == null )
+        {
+          current = token;
+        }
+        else
+        {
+          if ( parentTree == null )
+          {
+            parentTree = new ParentTree( parentToken );
+            currentDistance = parentTree.getDistance( new ParentTree( current ) );
+          }
+          int distance = parentTree.getDistance( new ParentTree( token ) );
+          if ( distance < currentDistance )
+          {
+            current = token;
+            currentDistance = distance;
+          }
+        }
       }
     }
 
+    if ( current != null )
+    {
+      return nodeTokenMap.get( current );
+    }
+
+    return getNonTokenProcessTreeNode( parent, node );
+  }
+
+  public ProcessTreeNode getNonTokenProcessTreeNode (ProcessTreeNode parent, Node node)
+  {
     ProcessTreeNode endNode = nodeMap.get( node );
 
     if ( endNode == null )
     {
-      endNode = new ProcessTreeNode( node );
+      endNode = new ProcessTreeNode( parent, node );
       nodeMap.put( node, endNode );
       queue.add( endNode );
     }
@@ -89,7 +174,7 @@ public class ProcessTree
       @Override
       public int compare( NodeToken o1, NodeToken o2 )
       {
-        return o2.getCreateDate().compareTo( o1.getCreateDate() );
+        return o1.getCreateDate().compareTo( o2.getCreateDate() );
       }
     });
 
@@ -105,58 +190,30 @@ public class ProcessTree
       }
     }
 
-    // active tokens won't have been processed in the previous step
-    for ( ArcToken arcToken : process.getActiveArcTokens() )
-    {
-      ProcessTreeArc arcTokenWrapper =
-        new ProcessTreeArc( arcToken,
-                            nodeTokenMap.get( arcToken.getParentToken() ),
-                            getProcessTreeNode( arcToken.getArc().getEndNode() ) );
-      nodeTokenMap.get( arcToken.getParentToken() ).addChild( arcTokenWrapper );
-    }
+    // We want to set position for all nodes with node tokens first
+    // Later we'll go back and add in the rest of the nodes
+    List<ProcessTreeNode> firstLayer = new LinkedList<ProcessTreeNode>();
+    List<List<ProcessTreeNode>> layers = new LinkedList<List<ProcessTreeNode>>();
 
-    // Process all arcs which don't have arc tokens on them
-    for ( ProcessTreeNode ptNode : nodeTokenMap.values() )
-    {
-      for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
-      {
-        if ( !ptNode.isTokenOnArc( arc ) )
-        {
-          ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, getProcessTreeNode( arc.getEndNode() ) );
-          ptNode.addChild( arcTokenWrapper );
-        }
-      }
-    }
-
-    // Process all nodes without tokens entries in queue
-    while ( !queue.isEmpty() )
-    {
-      ProcessTreeNode ptNode = queue.remove( 0 );
-      for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
-      {
-        ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, getProcessTreeNode( arc.getEndNode() ) );
-        ptNode.addChild( arcTokenWrapper );
-      }
-    }
-
-    List<ProcessTreeNode> nextLayer = new LinkedList<ProcessTreeNode>();
     Set<ProcessTreeNode> processed = new HashSet<ProcessTreeNode>();
-
 
     for ( ProcessTreeNode ptNode : nodeTokenMap.values() )
     {
       if ( ptNode.isStartTokenNode() )
       {
         ptNode.setDepth( 0 );
-        ptNode.addToLayer( nextLayer );
+        ptNode.addToLayer( firstLayer );
         processed.add( ptNode );
       }
     }
 
     int depth = 1;
 
+    List<ProcessTreeNode> nextLayer = firstLayer;
+
     while ( !nextLayer.isEmpty() )
     {
+      layers.add( nextLayer );
       List<ProcessTreeNode> prevLayer = nextLayer;
       nextLayer = new LinkedList<ProcessTreeNode>();
 
@@ -168,6 +225,75 @@ public class ProcessTree
           {
             ptArc.getChild().setDepth( depth );
             ptArc.getChild().addToLayer( nextLayer );
+            processed.add( ptArc.getChild() );
+          }
+        }
+      }
+      depth++;
+    }
+
+    // active tokens won't have been processed in the previous step
+    for ( ArcToken arcToken : process.getActiveArcTokens() )
+    {
+      ProcessTreeNode parent = nodeTokenMap.get( arcToken.getParentToken() );
+      ProcessTreeArc ptArc =
+        new ProcessTreeArc( arcToken, parent,
+                            getNonTokenProcessTreeNode( parent, arcToken.getArc().getEndNode() ) );
+      nodeTokenMap.get( arcToken.getParentToken() ).addChild( ptArc );
+    }
+
+    // Process all arcs which don't have arc tokens on them
+    for ( ProcessTreeNode ptNode : nodeTokenMap.values() )
+    {
+      for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
+      {
+        if ( !ptNode.isTokenOnArc( arc ) )
+        {
+          // If the node has an active token, we don't want to point to any nodes with tokens on them
+          ProcessTreeNode child = ptNode.getToken().isComplete() ?
+                                    getProcessTreeNode( ptNode, arc.getEndNode() ) :
+                                    getNonTokenProcessTreeNode( ptNode, arc.getEndNode() );
+          ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, child );
+          ptNode.addChild( arcTokenWrapper );
+        }
+      }
+    }
+
+    // Process all nodes without tokens entries in queue
+    while ( !queue.isEmpty() )
+    {
+      ProcessTreeNode ptNode = queue.remove( 0 );
+      for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
+      {
+        ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, getProcessTreeNode( ptNode, arc.getEndNode() ) );
+        ptNode.addChild( arcTokenWrapper );
+      }
+    }
+
+
+    processed.clear();
+    processed.addAll( firstLayer );
+
+    // set positioning for nodes that haven't been handled yet
+    nextLayer = firstLayer;
+    depth = 1;
+
+    while ( !nextLayer.isEmpty() )
+    {
+      List<ProcessTreeNode> prevLayer = nextLayer;
+      nextLayer = layers.size() > depth ? layers.get( depth ) : new LinkedList<ProcessTreeNode>();
+
+      for ( ProcessTreeNode treeNode : prevLayer )
+      {
+        for ( ProcessTreeArc ptArc : treeNode.getChildren() )
+        {
+          if ( !processed.contains( ptArc.getChild() ) )
+          {
+            if ( ptArc.getChild().getDepth() == 0 )
+            {
+              ptArc.getChild().setDepth( depth );
+              ptArc.getChild().addToLayer( nextLayer );
+            }
             processed.add( ptArc.getChild() );
           }
         }

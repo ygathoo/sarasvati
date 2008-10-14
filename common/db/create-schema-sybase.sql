@@ -62,7 +62,8 @@ create table wf_process
   graph_id        bigint                NOT NULL,
   state           int                   NOT NULL REFERENCES wf_process_state,
   parent_token_id bigint                NULL,
-  create_date     datetime              DEFAULT getDate() NOT NULL
+  create_date     datetime              DEFAULT getDate() NOT NULL,
+  version         int                   NOT NULL
 ) with identity_gap = 10
 go
 

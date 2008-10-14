@@ -43,6 +43,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
@@ -75,6 +76,20 @@ public class HibGraphProcess implements GraphProcess
   @JoinColumn( name="graph_id")
   protected HibGraph            graph;
 
+  protected ProcessState state;
+
+  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
+  @JoinColumn (name = "parent_token_id", nullable=true)
+  @Cascade( CascadeType.LOCK )
+  protected NodeToken parentToken;
+
+  @Column (name="create_date", updatable=false)
+  @Temporal (TemporalType.TIMESTAMP)
+  protected Date createDate;
+
+  @Version
+  protected Integer version;
+
   @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
   @Cascade( CascadeType.LOCK )
   protected Set<NodeToken> nodeTokens;
@@ -98,22 +113,11 @@ public class HibGraphProcess implements GraphProcess
   @Cascade( CascadeType.LOCK )
   protected List<HibProcessListener>  listeners;
 
-  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
-  @JoinColumn (name = "parent_token_id", nullable=true)
-  @Cascade( CascadeType.LOCK )
-  protected NodeToken parentToken;
-
-  @Column (name="create_date", updatable=false)
-  @Temporal (TemporalType.TIMESTAMP)
-  protected Date createDate;
-
   @CollectionOfElements
   @JoinTable( name="wf_process_attr", joinColumns={@JoinColumn( name="process_id")})
   @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
   @Column( name="value")
   protected Map<String, String> attrMap;
-
-  protected ProcessState state;
 
   @Transient
   protected Env env = null;
@@ -287,6 +291,16 @@ public class HibGraphProcess implements GraphProcess
   public void setCreateDate (Date createDate)
   {
     this.createDate = createDate;
+  }
+
+  public Integer getVersion ()
+  {
+    return version;
+  }
+
+  public void setVersion (Integer version)
+  {
+    this.version = version;
   }
 
   public Map<String, String> getAttrMap ()
