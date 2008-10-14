@@ -16,47 +16,49 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual.graph;
+package com.googlecode.sarasvati.visual.process;
 
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JSplitPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.hibernate.Session;
+import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Widget;
 
-import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.adapter.Function;
-import com.googlecode.sarasvati.adapter.NodeAdapterManager;
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.visual.DefaultNodeIcon;
-import com.googlecode.sarasvati.visual.TaskIcon;
+import com.googlecode.sarasvati.hib.HibGraphProcess;
 
-public class GraphVisualizer
+public class ProcessVisualizer
 {
-  protected static Graph currentGraph = null;
-  protected static SarasvatiGraphScene scene = new SarasvatiGraphScene();
+  protected static GraphProcess   currentProcess = null;
+  protected static SarasvatiProcessScene scene = new SarasvatiProcessScene();
+
+  final JScrollPane scrollPane = new JScrollPane();
+
+  protected Color darkGreen = new Color( 0, 128, 0 );
 
   public static void main (String[] args) throws Exception
   {
-    new GraphVisualizer().run();
+    new ProcessVisualizer().run();
   }
 
   public void init () throws Exception
@@ -69,27 +71,15 @@ public class GraphVisualizer
     return TestSetup.openSession();
   }
 
+  @SuppressWarnings("unchecked")
   public void run () throws Exception
   {
     init ();
 
-    NodeAdapterManager.registerFactory( Component.class,
-        new Function<Node, Component>()
-        {
-          @Override
-          public Component apply (Node node)
-          {
-            if ( "task".equals( node.getType() ) )
-            {
-              return new JLabel( new TaskIcon( node, null ) );
-            }
-
-            return new JLabel( new DefaultNodeIcon( node, null ) );
-          }
-        });
-
-    Session session = getSession();
+    final Session session = getSession();
     HibEngine engine = new HibEngine( session );
+
+    List<GraphProcess> process = engine.getSession().createQuery( "from HibGraphProcess order by graph, createDate" ).list();
 
     JFrame frame = new JFrame( "Workflow Visualizer" );
     frame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
@@ -99,9 +89,9 @@ public class GraphVisualizer
     frame.getContentPane().add( splitPane );
 
     DefaultListModel listModel = new DefaultListModel();
-    for ( Graph g : engine.getRepository().getGraphs() )
+    for ( GraphProcess p : process )
     {
-      listModel.addElement( g );
+      listModel.addElement( p );
     }
 
     ListCellRenderer cellRenderer = new DefaultListCellRenderer()
@@ -115,9 +105,9 @@ public class GraphVisualizer
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 
-        Graph g = (Graph)value;
+        HibGraphProcess p = (HibGraphProcess)value;
 
-        setText( g.getName() + "." + g.getVersion() + "  " );
+        setText( p.getGraph().getName() + "-" + p.getId() + "  " );
         return this;
       }
     };
@@ -132,7 +122,6 @@ public class GraphVisualizer
 
     splitPane.add( listScrollPane );
 
-    final JScrollPane scrollPane = new JScrollPane();
     scrollPane.setViewportView( scene.createView() );
     scrollPane.setHorizontalScrollBarPolicy( ScrollPaneConstants.HORIZONTAL_SCROLLBAR_AS_NEEDED );
     scrollPane.setVerticalScrollBarPolicy( ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED );
@@ -150,48 +139,109 @@ public class GraphVisualizer
           return;
         }
 
-        final Graph g = (Graph)graphList.getSelectedValue();
+        final GraphProcess graphProcess = (GraphProcess)graphList.getSelectedValue();
 
-        if ( ( g == null && currentGraph == null ) ||
-             ( g != null && g.equals( currentGraph ) ) )
+        if ( ( graphProcess == null && currentProcess == null ) ||
+             ( graphProcess != null && graphProcess.equals( currentProcess ) ) )
         {
           return;
         }
 
-        currentGraph = g;
-        scene = new SarasvatiGraphScene();
-
-        for ( Node node : scene.getNodes() )
-        {
-          scene.removeNodeWithEdges( node );
-        }
-
-        for ( Node ref : currentGraph.getNodes() )
-        {
-          scene.addNode( ref );
-        }
-
-        for ( Arc arc : currentGraph.getArcs() )
-        {
-          scene.addEdge( arc );
-          scene.setEdgeSource( arc, arc.getStartNode() );
-          scene.setEdgeTarget( arc, arc.getEndNode() );
-        }
-
-        GraphTree graphTree = new GraphTree( g );
-
-        for ( Node node : currentGraph.getNodes() )
-        {
-          Widget widget = scene.findWidget( node );
-          GraphTreeNode treeNode = graphTree.getTreeNode( node );
-          widget.setPreferredLocation( new Point( treeNode.getOriginX(), treeNode.getOriginY() ) );
-        }
-
-        scrollPane.setViewportView( scene.createView() );
-        scrollPane.repaint();
+        session.refresh( graphProcess );
+        setProcess( graphProcess );
       }
     } );
 
     frame.setVisible( true );
+
+    new Thread()
+    {
+      @Override public void run ()
+      {
+        while ( true )
+        {
+          try
+          {
+            synchronized( this )
+            {
+              wait( 1000 );
+            }
+
+            SwingUtilities.invokeLater( new Runnable()
+            {
+              @Override public void run()
+              {
+                if ( currentProcess != null )
+                {
+                  session.clear();
+                  session.refresh( currentProcess );
+                }
+                setProcess( currentProcess );
+              }
+            });
+          }
+          catch( InterruptedException ie )
+          {
+            return;
+          }
+        }
+      }
+    }.run();
+  }
+
+  public synchronized void setProcess (final GraphProcess graphProcess)
+  {
+    currentProcess = graphProcess;
+
+    if ( graphProcess == null )
+    {
+      return;
+    }
+
+    scene = new SarasvatiProcessScene();
+
+    ProcessTree pt = new ProcessTree( currentProcess );
+    Iterable<ProcessTreeNode> nodes = pt.getProcessTreeNodes();
+
+    for ( ProcessTreeNode node : nodes )
+    {
+      scene.addNode( node );
+      Widget widget = scene.findWidget( node );
+      widget.setPreferredLocation( new Point( node.getOriginX(), node.getOriginY() ) );
+    }
+
+//    for ( Node node : scene.getNodes() )
+//    {
+//      scene.removeNodeWithEdges( node );
+//    }
+
+
+    for ( ProcessTreeNode node : nodes )
+    {
+      for ( ProcessTreeArc ptArc : node.getChildren() )
+      {
+        scene.addEdge( ptArc );
+        scene.setEdgeSource( ptArc, ptArc.getParent() );
+        scene.setEdgeTarget( ptArc, ptArc.getChild() );
+
+        ConnectionWidget w = (ConnectionWidget)scene.findWidget( ptArc );
+
+        ArcToken token =  ptArc.getToken();
+        if ( token != null )
+        {
+          if ( token.isComplete() )
+          {
+            w.setLineColor( darkGreen );
+          }
+          else
+          {
+            w.setLineColor( Color.YELLOW );
+          }
+        }
+      }
+    }
+
+    scrollPane.setViewportView( scene.createView() );
+    scrollPane.repaint();
   }
 }

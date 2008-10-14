@@ -16,26 +16,22 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.example.db;
+package com.googlecode.sarasvati.visual.graph;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import java.awt.Component;
+
+import org.netbeans.api.visual.widget.ComponentWidget;
+import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.example.ExampleUtil;
-import com.googlecode.sarasvati.hib.HibNode;
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.visual.GraphSceneImpl;
 
-@Entity
-@DiscriminatorValue( "dump" )
-public class DumpNode extends HibNode
+public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  protected Widget widgetForNode (Node node)
   {
-    ExampleUtil.waitFor( 750 );
-    System.out.println( "Accepted into: " + getName() );
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    return new ComponentWidget( this, node.getAdaptor( Component.class ) );
   }
 }

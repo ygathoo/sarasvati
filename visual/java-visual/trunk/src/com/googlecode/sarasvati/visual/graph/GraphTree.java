@@ -32,8 +32,6 @@ public class GraphTree
 {
   protected Map<Node, GraphTreeNode> nodeMap = new HashMap<Node, GraphTreeNode>();
 
-  protected List<List<GraphTreeNode>> layers = new LinkedList<List<GraphTreeNode>>();
-
   @SuppressWarnings("unchecked")
   public GraphTree (Graph graph)
   {
@@ -74,7 +72,6 @@ public class GraphTree
 
     while ( !nextLayer.isEmpty() )
     {
-      layers.add( nextLayer );
       layer = nextLayer;
       nextLayer = new LinkedList<GraphTreeNode>();
 
@@ -102,25 +99,5 @@ public class GraphTree
   public GraphTreeNode getTreeNode (Node node)
   {
     return nodeMap.get( node );
-  }
-
-  public int getLayerCount ()
-  {
-    return layers.size();
-  }
-
-  public List<GraphTreeNode> getLayer (int index)
-  {
-    return layers.get( index );
-  }
-
-  public List<List<GraphTreeNode>> getLayers ()
-  {
-    return layers;
-  }
-
-  public Iterable<GraphTreeNode> getGraphTreeNodes ()
-  {
-    return nodeMap.values();
   }
 }

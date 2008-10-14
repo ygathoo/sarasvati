@@ -30,6 +30,7 @@ import java.awt.Graphics2D;
 import javax.swing.Icon;
 
 import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.NodeToken;
 
 public class TaskIcon implements Icon
 {
@@ -37,10 +38,12 @@ public class TaskIcon implements Icon
   public static final int HEIGHT = 40;
 
   protected Node node;
+  protected NodeToken token;
 
-  public TaskIcon( Node node )
+  public TaskIcon (Node node, NodeToken token)
   {
     this.node = node;
+    this.token = token;
   }
 
   @Override
@@ -60,7 +63,7 @@ public class TaskIcon implements Icon
   {
     Graphics2D g2d = (Graphics2D)g;
 
-    g.setColor( NodeDrawConfig.NODE_BACKGROUND );
+    g.setColor( NodeDrawConfig.getColor( token ) );
     g.fillOval( x, y, WIDTH - 1, HEIGHT - 1 );
     g.fillRoundRect( x, y, WIDTH - 1, HEIGHT - 1, 10, 10 );
 

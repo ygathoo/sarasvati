@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.visual.process;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
@@ -35,7 +36,7 @@ public class ProcessTreeNode
   protected int       originX;
   protected int       originY;
 
-  private List<ProcessTreeArc> children;
+  private List<ProcessTreeArc> children = new LinkedList<ProcessTreeArc>();
 
   public ProcessTreeNode (Node node)
   {
