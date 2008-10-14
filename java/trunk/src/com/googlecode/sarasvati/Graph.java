@@ -16,15 +16,12 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
 package com.googlecode.sarasvati;
 
 import java.util.List;
 
 /**
- * A WfGraph is graph corresponding to a process definition. It has a set of
+ * A Graph corresps to a process definition. It has a set of
  * Nodes, which correspond to actions that need to be taken for the process
  * to complete. It also has a set of Arcs which define the relationships
  * between the Nodes.

@@ -16,14 +16,9 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
 package com.googlecode.sarasvati;
 
 import com.googlecode.sarasvati.adapter.Adaptable;
-
-
 
 /**
  * A node corresponds to an action in a process definition.
@@ -154,7 +149,7 @@ public interface Node extends Adaptable
    * @param engine The {@link Engine} which is performing the execution.
    * @param token The {@link NodeToken} which is currently executing in this node.
    */
-  void execute(Engine engine, NodeToken token);
+  void execute (Engine engine, NodeToken token);
 
   /**
    * Returns the text to display when being displayed visually
