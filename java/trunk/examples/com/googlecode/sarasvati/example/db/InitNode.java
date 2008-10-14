@@ -27,6 +27,7 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.example.ExampleUtil;
 import com.googlecode.sarasvati.hib.HibNode;
 
 @Entity
@@ -47,6 +48,9 @@ public class InitNode extends HibNode
 
     env.setLongAttribute( "iter", ++iter );
     env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
+
+    ExampleUtil.waitFor( 750 );
+
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }

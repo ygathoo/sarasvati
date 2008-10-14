@@ -23,6 +23,9 @@ package com.googlecode.sarasvati.visual;
 
 import java.awt.Color;
 
+import com.googlecode.sarasvati.GuardAction;
+import com.googlecode.sarasvati.NodeToken;
+
 public class NodeDrawConfig
 {
   private static int maxNodeRadius = 50;
@@ -34,6 +37,32 @@ public class NodeDrawConfig
   public static final Color NODE_BORDER       = Color.black; // new Color( 0, 0, 200 );
 
   public static final Color NODE_BACKGROUND   = new Color( 255, 255, 225 );
+  //public static final Color NODE_BG_ACTIVE    = new Color( 102, 153, 51 );
+  public static final Color NODE_BG_ACTIVE    = new Color( 0, 153, 255 );
+  public static final Color NODE_BG_DISCARDED = new Color( 153, 102, 51 );
+  public static final Color NODE_BG_SKIPPED   = new Color( 204, 204, 204 );
+  //public static final Color NODE_BG_COMPLETED = new Color( 0, 51, 0 );
+  public static final Color NODE_BG_COMPLETED = new Color( 51, 102, 51 );
+
+  public static Color getColor (NodeToken token)
+  {
+    if ( token == null )
+    {
+      return NodeDrawConfig.NODE_BACKGROUND;
+    }
+
+    if ( token.getGuardAction() == GuardAction.AcceptToken )
+    {
+      return token.isComplete() ?  NodeDrawConfig.NODE_BG_COMPLETED : NodeDrawConfig.NODE_BG_ACTIVE;
+    }
+
+    if ( token.getGuardAction() == GuardAction.DiscardToken )
+    {
+      return NodeDrawConfig.NODE_BG_DISCARDED;
+    }
+
+    return NodeDrawConfig.NODE_BG_SKIPPED;
+  }
 
   public static int getMaxNodeRadius ()
   {
