@@ -48,7 +48,8 @@ create table wf_process
   graph_id        int          NOT NULL,
   state           int          NOT NULL REFERENCES wf_process_state,
   parent_token_id int          NULL,
-  create_date     timestamp    NOT NULL DEFAULT current_timestamp
+  create_date     timestamp    NOT NULL DEFAULT current_timestamp,
+  version         int          NOT NULL
 );
 
 create table wf_process_attr

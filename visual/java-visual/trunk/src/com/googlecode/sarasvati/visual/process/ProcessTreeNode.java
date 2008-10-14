@@ -28,6 +28,8 @@ import com.googlecode.sarasvati.visual.NodeDrawConfig;
 
 public class ProcessTreeNode
 {
+  protected ProcessTreeNode parent;
+
   protected NodeToken token;
   protected Node      node;
   protected int       depth;
@@ -38,14 +40,39 @@ public class ProcessTreeNode
 
   private List<ProcessTreeArc> children = new LinkedList<ProcessTreeArc>();
 
-  public ProcessTreeNode (Node node)
+  public ProcessTreeNode (ProcessTreeNode parent, Node node)
   {
+    this.parent = parent;
     this.node = node;
   }
 
   public ProcessTreeNode (NodeToken token)
   {
     this.token = token;
+  }
+
+  public ProcessTreeNode getParent ()
+  {
+    return parent;
+  }
+
+  public NodeToken getParentToken ()
+  {
+    ProcessTreeNode current = parent;
+
+    while ( current != null )
+    {
+      if ( current.getToken() == null )
+      {
+        current = current.getParent();
+      }
+      else
+      {
+        return current.getToken();
+      }
+    }
+
+    return token;
   }
 
   public Node getNode ()
