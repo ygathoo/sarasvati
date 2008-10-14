@@ -210,3 +210,47 @@ It looks like:
 When the process definition is loaded into memory, it will look like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals5.jpg]
+
+==Java API===
+The process definition file format also supports custom elements and attributes, but before we discuss that, the API needs to be introduced.
+
+At the top is the `Graph` interface.
+
+{{{
+package com.googlecode.sarasvati;
+
+public interface Graph
+{
+  String getName ();
+  int getVersion ();
+  List<? extends Arc> getArcs ();
+  List<? extends Arc> getInputArcs (Node node);
+  List<? extends Arc> getInputArcs (Node node, String arcName);
+  List<? extends Arc> getOutputArcs (Node node);
+  List<? extends Arc> getOutputArcs (Node node, String arcName);
+  List<? extends Node> getStartNodes ();
+  List<? extends Node> getNodes ();
+}
+}}}
+
+A `Graph` contains instances of `Node` and `Arc`.
+
+`Node` has the following API:
+
+{{{
+package com.googlecode.sarasvati;
+public interface Node extends Adaptable
+{
+  String getName ();
+  String getType ();
+  boolean isJoin ();
+  boolean isStart ();
+  String getGuard ();
+  Graph getGraph ();
+  boolean isExternal ();
+  GuardResponse guard (Engine engine, NodeToken token);
+  void execute (Engine engine, NodeToken token);
+}
+}}}
+
+To provide custom behavior to your nodes, you will override the `execute` method.
