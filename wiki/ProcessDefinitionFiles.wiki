@@ -214,6 +214,7 @@ When the process definition is loaded into memory, it will look like:
 ==Java API===
 The process definition file format also supports custom elements and attributes, but before we discuss that, the API needs to be introduced.
 
+
 At the top is the `Graph` interface.
 
 {{{
@@ -254,3 +255,64 @@ public interface Node extends Adaptable
 }}}
 
 To provide custom behavior to your nodes, you will override the `execute` method.
+
+Sarasvati currently provides two implementations of the base API, one memory backed one and one database backed, implemented using Hibernate. Other backends could be implemented using,for example, pure JDBC or some other persistence mechanism. 
+
+If using the memory backed implementation, nodes should extend `com.googlecode.sarasvati.mem.MemNode`. If using the hibernate backend, nodes should subclass `com.googlecode.sarasvati.hib.HibNode`.
+
+A simple example of each, would be for a node that just printed out "Hello, World". We start with the process definition.
+
+{{{
+<?xml version="1.0"?>
+
+<process-definition name="simplest" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="hello" type="helloWord" isStart="true"/>
+
+</process-definition>
+}}}  
+
+If using the memory implementation, the subclass would look like:
+
+{{{
+package com.googlecode.sarasvati.example.mem;
+
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.mem.MemNode;
+
+public class HelloNode extends MemNode
+{
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    System.out.println( "Hello, world!" );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+}}}
+
+The hibernate version would look like:
+
+{{{
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.hib.HibNode;
+
+@Entity
+@DiscriminatorValue( "helloWorld" )
+public class HelloNode extends HibNode
+{
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    System.out.println( "Hello, World!" );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+}}}
