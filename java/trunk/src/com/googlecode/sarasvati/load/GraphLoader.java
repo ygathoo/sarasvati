@@ -19,6 +19,7 @@
 
 package com.googlecode.sarasvati.load;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,6 +34,7 @@ import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
 import com.googlecode.sarasvati.xml.XmlExternalArcType;
+import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlNode;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
@@ -242,8 +244,20 @@ public class GraphLoader<G extends Graph>
     loadDefinition( xmlDef );
   }
 
-  public boolean isLoaded(String name)
+  public boolean isLoaded (String name)
   {
     return null != repository.getLatestGraph( name );
+  }
+
+  public void load (String fileName) throws LoadException, JAXBException
+  {
+    load( new File( fileName ) );
+  }
+
+  public void load (File file) throws LoadException, JAXBException
+  {
+    XmlLoader xmlLoader = new XmlLoader();
+    XmlProcessDefinition xmlDef = xmlLoader.loadProcessDefinition( file );
+    loadDefinition( xmlDef );
   }
 }

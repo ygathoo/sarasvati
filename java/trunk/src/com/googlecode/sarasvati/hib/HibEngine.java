@@ -34,6 +34,7 @@ import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.event.ListenerCache;
+import com.googlecode.sarasvati.load.GraphLoader;
 
 public class HibEngine extends BaseEngine
 {
@@ -83,6 +84,12 @@ public class HibEngine extends BaseEngine
   public HibGraphFactory getFactory()
   {
     return factory;
+  }
+
+  @Override
+  public GraphLoader<HibGraph> getLoader()
+  {
+    return new GraphLoader<HibGraph>( factory, repository );
   }
 
   @Override

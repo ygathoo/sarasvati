@@ -246,4 +246,10 @@ public abstract class BaseEngine implements Engine
     env.addVariable( "engine", this );
     env.addVariable( "token", token );
   }
+
+  @Override
+  public void addNodeType(String type, Class<? extends Node> nodeClass)
+  {
+    getFactory().addType(type, nodeClass);
+  }
 }

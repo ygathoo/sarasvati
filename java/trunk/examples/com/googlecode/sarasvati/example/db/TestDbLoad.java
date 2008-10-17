@@ -43,12 +43,11 @@ public class TestDbLoad
     HibEngine engine = new HibEngine( sess );
     XmlLoader xmlLoader = new XmlLoader();
 
-    engine.getFactory().addType( "task", TaskNode.class );
-    engine.getFactory().addType( "init", InitNode.class );
-    engine.getFactory().addType( "dump", DumpNode.class );
+    engine.addNodeType( "task", TaskNode.class );
+    engine.addNodeType( "init", InitNode.class );
+    engine.addNodeType( "dump", DumpNode.class );
 
-    GraphLoader<HibGraph> wfLoader = new GraphLoader<HibGraph>( engine.getFactory(),
-                                                                engine.getRepository() );
+    GraphLoader<HibGraph> wfLoader = engine.getLoader();
 
     File baseDir = new File( "/home/paul/workspace/wf-common/test-wf/" );
 
