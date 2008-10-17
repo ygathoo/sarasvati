@@ -380,7 +380,7 @@ Here are the steps in code for the memory backed implementation.
     engine.getLoader().load( "/path/to/hello-world.wf.xml" );
 
     // Get the graph from the GraphRepository
-    MemGraph graph = engine.getRepository().getLatestGraph( "hello-world" );
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
 
     // start a graph process
     GraphProcess process = engine.startProcess( graph );
@@ -400,8 +400,10 @@ Here are the steps in code for the hibernate backed implementation. It assumes t
     engine.getLoader().load( "/path/to/hello-world.wf.xml" );
 
     // Get the graph from the GraphRepository
-    HibGraph graph = engine.getRepository().getLatestGraph( "hello-world" );
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
 
     // start a graph process
     GraphProcess process = engine.startProcess( graph );
 }}}
+
+The call to `startProcess` will create tokens on the start nodes and will continue executing the process until it completes or enters a wait state.
