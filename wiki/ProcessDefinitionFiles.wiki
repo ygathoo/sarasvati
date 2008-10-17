@@ -360,8 +360,16 @@ The behaviour column ties the type to a discriminator specified on the subclass.
 ==== Example One: Loading and Running====
 Now we can load the process into memory, or into the database. This is done using a GraphLoader, which can be retrieved from the appropriate engine. Before loading the process definition, you will need to tell the engine about your custom node types.
 
+The steps are
+  # Create an engine of the appropriate type
+  # Register custom node types
+  # Load the process definition from XML file
+  # Get the loaded graph from the graph repository associated with the engine
+  # Start a new GraphProcess using the graph
+
+Here are the steps in code for the memory backed implementation.
+
 {{{
-    // Create new MemEngine
     MemEngine engine = new MemEngine();
 
     // Tell engine about our custom node type
@@ -373,6 +381,26 @@ Now we can load the process into memory, or into the database. This is done usin
 
     // Get the graph from the GraphRepository
     MemGraph graph = engine.getRepository().getLatestGraph( "hello-world" );
+
+    // start a graph process
+    GraphProcess process = engine.startProcess( graph );
+}}}
+
+Here are the steps in code for the hibernate backed implementation. It assumes that you have a means of creating a hibernate Session object.
+
+{{{
+    Session session = ...; // get hibernate session
+    HibEngine engine = new HibEngine( session );
+
+    // Tell engine about our custom node type
+    engine.addNodeType( "helloWorld", HelloNode.class );
+
+    // Load the process definition (this can throw LoadException or JAXBException
+    // The graph will be stored in the GraphRepository for this engine
+    engine.getLoader().load( "/path/to/hello-world.wf.xml" );
+
+    // Get the graph from the GraphRepository
+    HibGraph graph = engine.getRepository().getLatestGraph( "hello-world" );
 
     // start a graph process
     GraphProcess process = engine.startProcess( graph );
