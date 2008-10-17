@@ -27,6 +27,7 @@ import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
+import com.googlecode.sarasvati.load.GraphLoader;
 
 public class MemEngine extends BaseEngine
 {
@@ -42,6 +43,12 @@ public class MemEngine extends BaseEngine
   public MemGraphRepository getRepository ()
   {
     return MemGraphRepository.INSTANCE;
+  }
+
+  @Override
+  public GraphLoader<MemGraph> getLoader()
+  {
+    return new GraphLoader<MemGraph>( MemGraphFactory.INSTANCE, MemGraphRepository.INSTANCE );
   }
 
   @Override

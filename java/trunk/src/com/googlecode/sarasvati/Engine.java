@@ -22,6 +22,7 @@ import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.GraphFactory;
+import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.GraphRepository;
 import com.googlecode.sarasvati.script.ScriptEnv;
 
@@ -147,6 +148,24 @@ public interface Engine
    * @return A {@link GraphFactory} which will generate the appropriate types for this {@link Engine}.
    */
   GraphFactory<? extends Graph> getFactory ();
+
+  /**
+   * Returns an appropriate {@link GraphLoader} for this {@link Engine}. Subclasses
+   * may override this provide customer behavior.
+   *
+   * @return A {@link GraphLoader} which, by default, will use the factory and repository from this engine.
+   */
+  GraphLoader<? extends Graph> getLoader ();
+
+  /**
+   * Adds the type to the {@link GraphFactory} for this engine. Specifies
+   * what class will be used for a given node type, when loading process
+   * definitions from XML file.
+   *
+   * @param type The type identifier, as used in the process definition file
+   * @param nodeClass The node class which will be instantiated for this type
+   */
+  void addNodeType (String type, Class<? extends Node> nodeClass );
 
   /**
    * This will send the given event to listeners who have registered for

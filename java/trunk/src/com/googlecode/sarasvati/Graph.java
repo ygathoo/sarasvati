@@ -21,7 +21,7 @@ package com.googlecode.sarasvati;
 import java.util.List;
 
 /**
- * A Graph corresps to a process definition. It has a set of
+ * A Graph corresponds to a process definition. It has a set of
  * Nodes, which correspond to actions that need to be taken for the process
  * to complete. It also has a set of Arcs which define the relationships
  * between the Nodes.

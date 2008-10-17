@@ -79,12 +79,7 @@ public class MemConsole
     while ( true )
     {
       MemEngine engine = new MemEngine();
-
-      MemGraph graph = getGraph();
-      GraphProcess process = engine.getFactory().newProcess( graph );
-
-      engine.startProcess( process );
-
+      GraphProcess process = engine.startProcess( getGraph() );
       runWorkflow( process );
     }
   }
@@ -247,14 +242,14 @@ public class MemConsole
     XmlLoader xmlLoader = new XmlLoader();
     MemEngine engine = new MemEngine();
 
-    engine.getFactory().addType( "task", TaskNode.class );
-    engine.getFactory().addType( "init", InitNode.class );
-    engine.getFactory().addType( "dump", DumpNode.class );
+    engine.addNodeType( "task", TaskNode.class );
+    engine.addNodeType( "init", InitNode.class );
+    engine.addNodeType( "dump", DumpNode.class );
 
-    GraphLoader<MemGraph> wfLoader = new GraphLoader<MemGraph>( engine.getFactory(), engine.getRepository() );
+    GraphLoader<MemGraph> wfLoader = engine.getLoader();
 
     File basePath = new File( "/home/paul/workspace/wf-common/test-wf/" );
-    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver(xmlLoader, basePath );
+    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, basePath );
 
     FilenameFilter filter = new FilenameFilter()
     {

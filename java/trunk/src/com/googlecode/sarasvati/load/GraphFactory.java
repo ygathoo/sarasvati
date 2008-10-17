@@ -24,9 +24,9 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.GraphProcess;
 
 public interface GraphFactory<G extends Graph>
 {
@@ -52,6 +52,21 @@ public interface GraphFactory<G extends Graph>
    */
   Arc newArc (G graph, Node startNode, Node endNode, String name) throws LoadException;
 
+  /**
+   * Creates a new {@link Node}.
+   *
+   * @param graph The graph which the node is part of
+   * @param name  The node name
+   * @param type  The node type
+   * @param isJoin Indicates whether the node is join node
+   * @param isStart Indicates whether the node is a start node
+   * @param guard  The node guard
+   * @param customList A list of custom attributes from the xml file. May be empty or null.
+   *
+   * @return The new Node
+   *
+   * @throws LoadException If an error occurs while load, such as incorrect custom data is given.
+   */
   Node newNode (G graph, String name, String type, boolean isJoin, boolean isStart, String guard, List<Object> customList)
     throws LoadException;
 
@@ -110,4 +125,14 @@ public interface GraphFactory<G extends Graph>
    * @return A new {@link ArcToken}
    */
   ArcToken newArcToken (GraphProcess process, Arc arc, NodeToken parent);
+
+  /**
+   * Adds the type to the {@link GraphFactory} for this engine. Specifies
+   * what class will be used for a given node type, when loading process
+   * definitions from XML file.
+   *
+   * @param type The type identifier, as used in the process definition file
+   * @param nodeClass The node class which will be instantiated for this type
+   */
+  void addType (String type, Class<? extends Node> nodeClass );
 }
