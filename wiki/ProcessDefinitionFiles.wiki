@@ -214,8 +214,36 @@ When the process definition is loaded into memory, it will look like:
 ==Java API===
 The process definition file format also supports custom elements and attributes, but before we discuss that, the API needs to be introduced.
 
+The main interface for interacting with process definitions and processes is Engine:
 
-At the top is the `Graph` interface.
+{{{
+package com.googlecode.sarasvati;
+
+public interface Engine
+{
+  GraphProcess startProcess (Graph graph);
+  void startProcess (GraphProcess process);
+  void cancelProcess (GraphProcess process);
+  void finalizeComplete (GraphProcess process);
+  void finalizeCancel (GraphProcess process);
+  void completeExecution (NodeToken token, String arcName);
+  void completeAsynchronous (NodeToken token, String arcName );
+  void executeQueuedArcTokens (GraphProcess process);
+  GraphRepository<? extends Graph> getRepository ();
+  GraphFactory<? extends Graph> getFactory ();
+  GraphLoader<? extends Graph> getLoader ();
+  void addNodeType (String type, Class<? extends Node> nodeClass );
+  void fireEvent (ExecutionEvent event);
+  void addExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+  void addExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  void removeExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+  void removeExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException;
+  void setupScriptEnv (ScriptEnv env, NodeToken token);
+}
+}}}
+
+Process definitions are stored in classes implementing the `Graph` interface.
 
 {{{
 package com.googlecode.sarasvati;
@@ -236,7 +264,7 @@ public interface Graph
 
 A `Graph` contains instances of `Node` and `Arc`.
 
-`Node` has the following API:
+`Node` is where the developer can provide custom functionality, and has the following API:
 
 {{{
 package com.googlecode.sarasvati;
@@ -268,7 +296,7 @@ A simple example of each, would be for a node that just printed out "Hello, Worl
 {{{
 <?xml version="1.0"?>
 
-<process-definition name="simplest" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="hello-world" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="hello" type="helloWord" isStart="true"/>
 
@@ -329,5 +357,23 @@ The hibernate version would also require an insert into the `wf_node_type` table
 
 The behaviour column ties the type to a discriminator specified on the subclass. This allows having multiple types with the same implementation class, if that was desired.
 
-==== Example One: Loading ====
-Now we can load the process into memory, or into the database. This is done using the 
+==== Example One: Loading and Running====
+Now we can load the process into memory, or into the database. This is done using a GraphLoader, which can be retrieved from the appropriate engine. Before loading the process definition, you will need to tell the engine about your custom node types.
+
+{{{
+    // Create new MemEngine
+    MemEngine engine = new MemEngine();
+
+    // Tell engine about our custom node type
+    engine.addNodeType( "helloWorld", HelloNode.class );
+
+    // Load the process definition (this can throw LoadException or JAXBException
+    // The graph will be stored in the GraphRepository for this engine
+    engine.getLoader().load( "/path/to/hello-world.wf.xml" );
+
+    // Get the graph from the GraphRepository
+    MemGraph graph = engine.getRepository().getLatestGraph( "hello-world" );
+
+    // start a graph process
+    GraphProcess process = engine.startProcess( graph );
+}}}
