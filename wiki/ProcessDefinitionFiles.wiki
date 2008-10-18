@@ -407,3 +407,144 @@ Here are the steps in code for the hibernate backed implementation. It assumes t
 }}}
 
 The call to `startProcess` will create tokens on the start nodes and will continue executing the process until it completes or enters a wait state.
+
+===Custom Attributes===
+Often, custom nodes will need some information with which to do their work. Sarasvati supports this in two ways.
+
+The schema for process definition files has an <xs:any> element at the end of the node definition. Custom elements may be added here. These can be automatically mapped to properties on custom nodes.
+
+For example, given the following custom node:
+
+{{{
+public class CustomNode extends MemNode
+{
+  String custom;
+
+  public String getCustom ()
+  {
+    return custom;
+  }
+
+  public void setCustom (String custom)
+  {
+    this.custom = custom;
+  }
+
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    // do something ...
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+}}}
+
+The following process definition would load the value 'test' into the 'custom' property.
+
+{{{
+<?xml version="1.0"?>
+
+<process-definition name="example1"
+                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
+                       xmlns:example="http://sarasvati.googlecode.com/Example">
+
+  <node name="test" type="custom" isStart="true">
+    <arc to="1"/>
+
+    <example:custom>test</example>
+  </node>
+
+}}}
+
+There several things to note with custom elements.
+
+  * Custom elements must be in their own XML namespace.
+  * Non-string properties on custom node types are supported. 
+    * Support for primitive types such as boolean, byte, char, short, int, long, float, double as well as their corresponding object types is built in.
+    * Support for non-primitive types can be added
+      * Subclass com.googlecode.sarasvati.load.properties.BasePropertyMutator
+      * Register new mutator with com.googlecode.sarasvati.load.properties.PropertyMutatorRegistry#registerPropertyMutator
+
+Nested objects are supported. For example:
+
+{{{
+  <example:task>
+    <name>test</name>
+  </example>
+}}}
+
+Here this would invoke `getTask().setName( ... )` on the custom node.
+
+Attributes are also supported. How they are mapped is based on the contents of the element the attribute is on. If the element has child elements, the attribute will get mapped as a child property. If the element is itself a property, the attribute name will be combined with the element name to get the property name.
+
+{{{
+  <example:task user="pat">
+    <name>test</name>
+  </example>
+}}}
+
+This would map the `name` element value to `getTask().setName( ... )` and the `user` attribute to `getTask().setUser( ... )`.
+
+However, the following would be mapped differently:
+
+{{{
+  <example:task user="pat">
+    test
+  </example>
+}}}
+
+This would map the text in the `task` element  to `setTask( ... )` and the `user` attribute to `setTaskUser( ... )`. 
+
+==== Example Two: Process Definition ====
+
+{{{
+<?xml version="1.0"?>
+
+<process-definition name="example1"
+                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
+                       xmlns:example="http://sarasvati.googlecode.com/Example">
+
+  <node name="start" isStart="true">
+    <arc to="1"/>
+  </node>
+
+  <node name="1" type="task">
+    <arc to="2"/>
+    <arc to="3"/>
+
+    <example:taskName>Enter order</example:taskName>
+    <example:taskDesc>
+      Enter order and billing info
+    </example:taskDesc>
+  </node>
+
+  <node type="task" name="2">
+    <arc to="4"/>
+
+    <example:taskName>Bill Customer</example:taskName>
+    <example:taskDesc>
+      Bill the Customer
+    </example:taskDesc>
+
+  </node>
+
+  <node type="task" name="3">
+    <arc to="4"/>
+
+    <example:taskName>Ship product</example:taskName>
+    <example:taskDesc>
+      Package and ship product
+    </example:taskDesc>
+  </node>
+
+  <node type="task" name="4" isJoin="true">
+
+    <example:taskName>Market to Customer</example:taskName>
+    <example:taskDesc>
+      Send marketing material to customer
+    </example:taskDesc>
+
+  </node>
+
+</process-definition>
+}}}
