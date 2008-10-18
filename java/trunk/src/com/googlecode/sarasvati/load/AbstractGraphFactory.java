@@ -26,8 +26,8 @@ import com.googlecode.sarasvati.Node;
 
 public abstract class AbstractGraphFactory<G extends Graph> implements GraphFactory<G>
 {
-  protected Map<String, NodeFactory>        factoryMap = new HashMap<String, NodeFactory>();
-  protected DefaultNodeFactory defaultNodeFactory;
+  protected Map<String, NodeFactory>  factoryMap = new HashMap<String, NodeFactory>();
+  protected DefaultNodeFactory        defaultNodeFactory;
 
   public AbstractGraphFactory (Class<? extends Node> defaultClass)
   {
@@ -40,11 +40,13 @@ public abstract class AbstractGraphFactory<G extends Graph> implements GraphFact
     return nodeFactory == null ? defaultNodeFactory : nodeFactory;
   }
 
+  @Override
   public void addType (String type, Class<? extends Node> clazz)
   {
     defaultNodeFactory.addType( type, clazz );
   }
 
+  @Override
   public void addNodeFactory (String type, NodeFactory nodeFactory)
   {
     factoryMap.put( type, nodeFactory );

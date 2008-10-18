@@ -135,4 +135,12 @@ public interface GraphFactory<G extends Graph>
    * @param nodeClass The node class which will be instantiated for this type
    */
   void addType (String type, Class<? extends Node> nodeClass );
+
+  /**
+   * Allows custom loading logic to be used to create nodes of a specific type.
+   *
+   * @param type The node type, as used in the process definition XML file
+   * @param nodeFactory The factory used to create nodes of this type
+   */
+  void addNodeFactory (String type, NodeFactory nodeFactory);
 }

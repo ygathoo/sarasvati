@@ -18,8 +18,8 @@
 */
 package com.googlecode.sarasvati.example.mem;
 
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.mem.MemNode;
 
 public class Task
 {
@@ -30,9 +30,7 @@ public class Task
 
   protected TaskState state;
 
-  public Task() { /* Default constructor for Hibernate */ }
-
-  public Task( NodeToken nodeToken, String name, String description, TaskState state )
+  public Task (NodeToken nodeToken, String name, String description, TaskState state)
   {
     this.nodeToken = nodeToken;
     this.name = name;
@@ -40,39 +38,39 @@ public class Task
     this.state = state;
   }
 
-  public NodeToken getNodeToken()
+  public NodeToken getNodeToken ()
   {
     return nodeToken;
   }
 
-  public void setNodeToken( NodeToken nodeToken )
+  public void setNodeToken (NodeToken nodeToken)
   {
     this.nodeToken = nodeToken;
   }
 
-  public String getName()
+  public String getName ()
   {
     return name;
   }
 
-  public String getDescription()
+  public String getDescription ()
   {
     return description;
   }
 
-  public TaskState getState()
+  public TaskState getState ()
   {
     return state;
   }
 
-  public void setState( TaskState state )
+  public void setState (TaskState state )
   {
     this.state = state;
   }
 
   public boolean isRejectable ()
   {
-    MemNode node = (MemNode)getNodeToken().getNode();
+    Node node = getNodeToken().getNode();
     return !node.getGraph().getOutputArcs( node, "reject" ).isEmpty();
   }
 }
