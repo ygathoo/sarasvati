@@ -21,8 +21,6 @@ package com.googlecode.sarasvati.example.mem;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.example.XmlTaskDef;
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.mem.MemNode;
 
 public class TaskNode extends MemNode
@@ -61,20 +59,5 @@ public class TaskNode extends MemNode
 
     env = token.getProcess().getEnv();
     env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
-  }
-
-  public void loadCustom (Object custom) throws LoadException
-  {
-    if ( custom == null || !(custom instanceof XmlTaskDef) )
-    {
-      throw new LoadException( "Task node '" + getName() +
-                                 "' in definition of '" + getGraph().getName() +
-                                 "' contains no (or improperly specified) task-def element." );
-    }
-
-    XmlTaskDef taskDef = (XmlTaskDef)custom;
-
-    taskName = taskDef.getTaskName();
-    taskDesc = taskDef.getDescription();
   }
 }

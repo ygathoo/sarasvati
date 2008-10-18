@@ -50,7 +50,6 @@ public class TestSetup
     config.addAnnotatedClass( TaskNode.class );
     config.addAnnotatedClass( Task.class );
     config.addAnnotatedClass( TaskState.class );
-    config.addAnnotatedClass( TaskNodeDetail.class );
     config.addAnnotatedClass( InitNode.class );
     config.addAnnotatedClass( DumpNode.class );
 

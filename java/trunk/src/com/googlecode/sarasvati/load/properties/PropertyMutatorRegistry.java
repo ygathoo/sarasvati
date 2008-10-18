@@ -31,11 +31,26 @@ public class PropertyMutatorRegistry
     mutatorMap.put( Boolean.TYPE, BooleanPropertyMutator.class );
     mutatorMap.put( Boolean.class, BooleanPropertyMutator.class );
 
+    mutatorMap.put( Byte.TYPE, BytePropertyMutator.class );
+    mutatorMap.put( Byte.class, BytePropertyMutator.class );
+
+    mutatorMap.put( Character.TYPE, CharPropertyMutator.class );
+    mutatorMap.put( Character.class, CharPropertyMutator.class );
+
+    mutatorMap.put( Short.TYPE, ShortPropertyMutator.class );
+    mutatorMap.put( Short.class, ShortPropertyMutator.class );
+
     mutatorMap.put( Integer.TYPE, IntegerPropertyMutator.class );
     mutatorMap.put( Integer.class, IntegerPropertyMutator.class );
 
     mutatorMap.put( Long.TYPE, LongPropertyMutator.class );
     mutatorMap.put( Long.class, LongPropertyMutator.class );
+
+    mutatorMap.put( Float.TYPE, FloatPropertyMutator.class );
+    mutatorMap.put( Float.class, FloatPropertyMutator.class );
+
+    mutatorMap.put( Double.TYPE, DoublePropertyMutator.class );
+    mutatorMap.put( Double.class, DoublePropertyMutator.class );
 
     mutatorMap.put( String.class, StringPropertyMutator.class );
   }
