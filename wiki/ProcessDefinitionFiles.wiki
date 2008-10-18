@@ -314,10 +314,8 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.mem.MemNode;
 
-public class HelloNode extends MemNode
-{
-  @Override
-  public void execute (Engine engine, NodeToken token)
+public class HelloNode extends MemNode {
+  @Override public void execute (Engine engine, NodeToken token)
   {
     System.out.println( "Hello, world!" );
     engine.completeExecution( token, Arc.DEFAULT_ARC );
@@ -340,9 +338,7 @@ import com.googlecode.sarasvati.hib.HibNode;
 @DiscriminatorValue( "helloWorld" )
 public class HelloNode extends HibNode
 {
-  @Override
-  public void execute (Engine engine, NodeToken token)
-  {
+  @Override public void execute (Engine engine, NodeToken token) {
     System.out.println( "Hello, World!" );
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
@@ -416,30 +412,25 @@ The schema for process definition files has an <xs:any> element at the end of th
 For example, given the following custom node:
 
 {{{
-public class CustomNode extends MemNode
-{
+public class CustomNode extends MemNode {
   String custom;
 
-  public String getCustom ()
-  {
+  public String getCustom () {
     return custom;
   }
 
-  public void setCustom (String custom)
-  {
+  public void setCustom (String custom) {
     this.custom = custom;
   }
 
-  @Override
-  public void execute (Engine engine, NodeToken token)
-  {
+  @Override public void execute (Engine engine, NodeToken token) {
     // do something ...
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }
 }}}
 
-The following process definition would load the value 'test' into the 'custom' property.
+The following process definition would load the value `test` into the `custom` property.
 
 {{{
 <?xml version="1.0"?>
@@ -497,6 +488,8 @@ This would map the text in the `task` element  to `setTask( ... )` and the `user
 
 ==== Example Two: Process Definition ====
 
+Here we examine a more complicated example, which uses custom attributes.
+
 {{{
 <?xml version="1.0"?>
 
@@ -504,47 +497,203 @@ This would map the text in the `task` element  to `setTask( ... )` and the `user
                        xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
                        xmlns:example="http://sarasvati.googlecode.com/Example">
 
-  <node name="start" isStart="true">
-    <arc to="1"/>
-  </node>
-
-  <node name="1" type="task">
-    <arc to="2"/>
-    <arc to="3"/>
+  <node name="enterOrder" type="task" isStart="true">
+    <arc to="verifyOrder"/>
 
     <example:taskName>Enter order</example:taskName>
-    <example:taskDesc>
-      Enter order and billing info
-    </example:taskDesc>
+    <example:taskDesc>Enter order and billing info</example:taskDesc>
   </node>
 
-  <node type="task" name="2">
-    <arc to="4"/>
+  <node name="verifyOrder" type="task" isStart="true">
+    <arc to="enterOrder" name="reject"/>
+    <arc to="billCustomer"/>
+    <arc to="shipProduct"/>
+
+    <example:taskName>Verify Order</example:taskName>
+    <example:taskDesc>Ensure order is consistent and product is in stock</example:taskDesc>
+  </node>
+
+  <node type="task" name="billCustomer">
+    <arc to="market"/>
 
     <example:taskName>Bill Customer</example:taskName>
-    <example:taskDesc>
-      Bill the Customer
-    </example:taskDesc>
-
+    <example:taskDesc>Create invoice and send it to customer</example:taskDesc>
   </node>
 
-  <node type="task" name="3">
-    <arc to="4"/>
+  <node type="task" name="shipProduct">
+    <arc to="market"/>
 
     <example:taskName>Ship product</example:taskName>
-    <example:taskDesc>
-      Package and ship product
-    </example:taskDesc>
+    <example:taskDesc>Package and ship product</example:taskDesc>
   </node>
 
-  <node type="task" name="4" isJoin="true">
-
+  <node type="task" name="market" isJoin="true">
     <example:taskName>Market to Customer</example:taskName>
-    <example:taskDesc>
-      Send marketing material to customer
-    </example:taskDesc>
-
+    <example:taskDesc>Send marketing material to customer</example:taskDesc>
   </node>
 
 </process-definition>
+}}}
+
+==== Example Two: Node implementation ====
+
+We will need a couple of classes to represent tasks and their state. First we look at the memory based implementation.
+
+First we have an enum for task states.
+{{{
+public enum TaskState {
+  Open,
+  Completed,
+  Rejected
+}
+}}}
+
+Next is the `Task` class.
+
+{{{
+public class Task {
+  protected NodeToken nodeToken;
+  protected String name;
+  protected String description;
+  protected TaskState state;
+
+  public Task (NodeToken nodeToken, String name, String description, TaskState state) {
+    this.nodeToken = nodeToken;
+    this.name = name;
+    this.description = description;
+    this.state = state;
+  }
+
+  public NodeToken getNodeToken () {
+    return nodeToken;
+  }
+
+  public void setNodeToken (NodeToken nodeToken) {
+    this.nodeToken = nodeToken;
+  }
+
+  public String getName () {
+    return name;
+  }
+
+  public String getDescription () {
+    return description;
+  }
+
+  public TaskState getState () {
+    return state;
+  }
+
+  public void setState (TaskState state ) {
+    this.state = state;
+  }
+
+  public boolean isRejectable () {
+    Node node = getNodeToken().getNode();
+    return !node.getGraph().getOutputArcs( node, "reject" ).isEmpty();
+  }
+}
+}}}
+
+In our simple example, we need some way of tracking which tasks have been created. 
+
+{{{
+public class TaskList {
+  protected static List<Task> tasks = new LinkedList<Task>();
+
+  public static List<Task> getTasks () {
+    return tasks;
+  }
+}
+}}}
+
+Finally, the custom node for generating tasks
+
+{{{
+public class TaskNode extends MemNode {
+  protected String taskName;
+  protected String taskDesc;
+
+  public String getTaskName () {
+    return taskName;
+  }
+
+  public void setTaskName (String taskName) {
+    this.taskName = taskName;
+  }
+
+  public String getTaskDesc () {
+    return taskDesc;
+  }
+
+  public void setTaskDesc (String taskDesc) {
+    this.taskDesc = taskDesc;
+  }
+
+  @Override public void execute (Engine engine, NodeToken token) {
+    Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );
+    TaskList.getTasks().add( newTask );
+  }
+}
+}}}
+
+When a task node is executed, it will create new `Task` instance and add to a task list. A task can be completed or rejected as seen in the following code snippet:
+
+{{{
+      Task t = ...;
+
+      if ( isCompletion )
+      {
+        t.setState( TaskState.Completed );
+        engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
+      }
+      else if ( isReject && t.isRejectable() )
+      {
+        t.setState( TaskState.Rejected );
+        engine.completeExecution( t.getNodeToken(), "reject" );
+      }
+}}}
+
+The primary difference with the database/Hibernate version, is that the node and tasks will require database backing. Let us look at the `TaskNode` class.
+
+{{{
+@Entity
+@DiscriminatorValue( "task" )
+@SecondaryTable( name="wf_node_task", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
+public class TaskNode extends HibNode
+{
+  @Column (name="name", table="wf_node_task")
+  protected String taskName;
+
+  @Column (name="description", table="wf_node_task")
+  protected String taskDesc;
+
+  public TaskNode() { /* Default constructor for Hibernate */ }
+
+  public String getTaskName () {
+    return taskName;
+  }
+
+  public void setTaskName (String taskName) {
+    this.taskName = taskName;
+  }
+
+  public String getTaskDesc () {
+    return taskDesc;
+  }
+
+  public void setTaskDesc (String taskDesc) {
+    this.taskDesc = taskDesc;
+  }
+
+  @Override public void execute (Engine engine, NodeToken token) {
+    HibEngine hibEngine = (HibEngine)engine;
+
+    Session session = hibEngine.getSession();
+
+    TaskState open = (TaskState)session.load( TaskState.class, 0 );
+    Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), open );
+    session.save( newTask );
+  }
+}
 }}}
