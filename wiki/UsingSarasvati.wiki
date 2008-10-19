@@ -1,5 +1,7 @@
 #summary Using Sarasvati
 
+[Engine Concepts <-- Prev: Core Concepts]
+
 = Introduction =
 Using Sarasvati usually involves writing process definition files along with custom node types. Sarasvati uses an XML file format for process definitions. These files can be loaded into in-memory graph structures and executed, or they can be loaded first into a database, and from there loaded and executed.
 
@@ -714,3 +716,5 @@ public class TaskNode extends HibNode
   }
 }
 }}}
+
+[Engine Concepts <-- Prev: Core Concepts]
