@@ -1,7 +1,9 @@
-#summary File format for Process Definitions
+#summary Using Sarasvati
 
 = Introduction =
-Sarasvati uses an XML file format for process definitions. These files can be loaded into in-memory graph structures and executed, or they can be loaded first into a database, and from there loaded and executed.
+Using Sarasvati usually involves writing process definition files along with custom node types. Sarasvati uses an XML file format for process definitions. These files can be loaded into in-memory graph structures and executed, or they can be loaded first into a database, and from there loaded and executed.
+
+We first introduce the file format, then explain how to implement custom behavior and interact with the Sarasvati engine.
 
 = Sarasvati File Format =
 
@@ -485,6 +487,21 @@ However, the following would be mapped differently:
 }}}
 
 This would map the text in the `task` element  to `setTask( ... )` and the `user` attribute to `setTaskUser( ... )`. 
+
+====Custom Loader====
+You may also provide custom loading via a subclass of `NodeFactory`. It has the following interface:
+
+{{{
+public interface NodeFactory
+{
+  Node newNode (String type) throws LoadException;
+  void loadCustom (Node node, Object custom) throws LoadException;
+}
+}}}
+
+The custom data may be null, or a single object or list of objects. The object or objects will either be elements of `org.w3c.dom.Element` or, if you have a JAXB mapping for your custom XML, JAXB objects.
+
+Instances of `NodeFactory` may be registered on `GraphLoader`.
 
 ==== Example Two: Process Definition ====
 
