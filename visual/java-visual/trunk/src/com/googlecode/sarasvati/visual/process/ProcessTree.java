@@ -180,13 +180,13 @@ public class ProcessTree
 
     for ( NodeToken token : nodeTokenMap.keySet() )
     {
-      for ( ArcToken parent : token.getParentTokens() )
+      ProcessTreeNode childNode  = nodeTokenMap.get( token );
+      for ( ArcToken parentArc : token.getParentTokens() )
       {
-        ProcessTreeArc processTreeArc =
-          new ProcessTreeArc( parent,
-                              nodeTokenMap.get( parent.getParentToken() ),
-                              nodeTokenMap.get( token ) );
-        nodeTokenMap.get( parent.getParentToken() ).addChild( processTreeArc );
+        ProcessTreeNode parentNode = nodeTokenMap.get( parentArc.getParentToken() );
+        ProcessTreeArc processTreeArc = new ProcessTreeArc( parentArc, parentNode, childNode );
+        parentNode.addChild( processTreeArc );
+        childNode.addParent( parentNode );
       }
     }
 
@@ -235,11 +235,11 @@ public class ProcessTree
     // active tokens won't have been processed in the previous step
     for ( ArcToken arcToken : process.getActiveArcTokens() )
     {
-      ProcessTreeNode parent = nodeTokenMap.get( arcToken.getParentToken() );
-      ProcessTreeArc ptArc =
-        new ProcessTreeArc( arcToken, parent,
-                            getNonTokenProcessTreeNode( parent, arcToken.getArc().getEndNode() ) );
-      nodeTokenMap.get( arcToken.getParentToken() ).addChild( ptArc );
+      ProcessTreeNode parentNode = nodeTokenMap.get( arcToken.getParentToken() );
+      ProcessTreeNode childNode  = getNonTokenProcessTreeNode( parentNode, arcToken.getArc().getEndNode() );
+      ProcessTreeArc ptArc = new ProcessTreeArc( arcToken, parentNode, childNode );
+      parentNode.addChild( ptArc );
+      childNode.addParent( parentNode );
     }
 
     // Process all arcs which don't have arc tokens on them
@@ -255,6 +255,7 @@ public class ProcessTree
                                     getNonTokenProcessTreeNode( ptNode, arc.getEndNode() );
           ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, child );
           ptNode.addChild( arcTokenWrapper );
+          child.addParent( ptNode );
         }
       }
     }
@@ -265,8 +266,10 @@ public class ProcessTree
       ProcessTreeNode ptNode = queue.remove( 0 );
       for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
       {
-        ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, getProcessTreeNode( ptNode, arc.getEndNode() ) );
+        ProcessTreeNode child = getProcessTreeNode( ptNode, arc.getEndNode() );
+        ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, child );
         ptNode.addChild( arcTokenWrapper );
+        child.addParent( ptNode );
       }
     }
 
@@ -287,7 +290,8 @@ public class ProcessTree
       {
         for ( ProcessTreeArc ptArc : treeNode.getChildren() )
         {
-          if ( !processed.contains( ptArc.getChild() ) )
+          if ( !processed.contains( ptArc.getChild() ) &&
+               (!treeNode.isCompletedNodeToken() || !ptArc.getChild().hasNonCompleteNodeTokenParent() ) )
           {
             if ( ptArc.getChild().getDepth() == 0 )
             {

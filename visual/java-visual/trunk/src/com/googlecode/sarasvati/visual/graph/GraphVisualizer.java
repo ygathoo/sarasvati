@@ -22,6 +22,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 
 import javax.swing.DefaultListCellRenderer;
@@ -34,7 +36,6 @@ import javax.swing.JSplitPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -76,7 +77,7 @@ public class GraphVisualizer
     init ();
 
     NodeAdapterManager.registerFactory( Component.class,
-        new Function<Node, Component>()
+        new Function<Component, Node>()
         {
           @Override
           public Component apply (Node node)
@@ -190,23 +191,63 @@ public class GraphVisualizer
         }
 
         scrollPane.setViewportView( scene.createView() );
+        scene.revalidate();
         scrollPane.repaint();
 
-        SwingUtilities.invokeLater( new Runnable()
+        final Function<String,Widget> hrefMapper = new Function<String,Widget>()
         {
           @Override
-          public void run()
+          public String apply (Widget widget)
           {
-            try
+            Object o = scene.findObject( widget );
+
+            if ( o instanceof Node )
             {
-              scene.export( "/home/paul/tmp/" + g.getName() + ".png", null );
+              Node node = (Node)o;
+              return "href=\"javascript:alert( '" + node.getName() + "' );\"";
             }
-            catch (IOException ioe)
-            {
-              ioe.printStackTrace();
-            }
+
+            return "nohref";
           }
-        });
+        };
+
+        final Function<String,Widget> titleMapper = new Function<String,Widget>()
+        {
+          @Override
+          public String apply (Widget widget)
+          {
+            Object o = scene.findObject( widget );
+
+            if ( o instanceof Node )
+            {
+              Node node = (Node)o;
+
+              return node.getGuard() == null || node.getGuard().length() == 0 ? "" :
+                       "title=\"" + node.getGuard() + "\"";
+            }
+
+            return "";
+          }
+        };
+
+        try
+        {
+          StringBuilder buf = new StringBuilder();
+          buf.append( "<html><head><title>test</title></head><body>\n" );
+          buf.append( "<map name=\"graphMap\">\n" );
+          scene.export( "/home/paul/tmp/" + g.getName() + ".png", buf, hrefMapper, titleMapper );
+          buf.append( "</map>\n" );
+          buf.append( "<image style=\"border:none\" src=\"/home/paul/tmp/image.gif\" usemap=\"#graphMap\"/>" );
+          buf.append( "</body></html>" );
+
+          BufferedWriter out = new BufferedWriter( new FileWriter( "/home/paul/tmp/graph.html" ) );
+          out.write( buf.toString() );
+          out.close();
+        }
+        catch (IOException ioe)
+        {
+          ioe.printStackTrace();
+        }
       }
     });
 

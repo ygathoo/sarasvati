@@ -24,10 +24,10 @@ package com.googlecode.sarasvati.adapter;
  *
  * @author Paul Lorenz
  *
- * @param <P> The parameter type
  * @param <R> The result type
+ * @param <P> The parameter type
  */
-public interface Function<P,R>
+public interface Function<R,P>
 {
   /**
    * Applies this function to the parameter and returns a result.

@@ -35,21 +35,26 @@ public class NodeDrawConfig
    * GREEN: dark faded yellow:  153, 153, 0
    * ORANGE: dark hard orange:  204, 102, 0
    */
-  private static int maxNodeRadius = 50;
-  private static int verticalNodeSpacing   = 20;
-  private static int horizontalNodeSpacing = 70;
+  private static int maxNodeRadius = 20;
+  private static int verticalNodeSpacing   = 50;
+  private static int horizontalNodeSpacing = 100;
   private static boolean vertical = true;
 
-  public static final Color START_NODE_BORDER = new Color( 0, 128, 0 );
+  //public static final Color START_NODE_BORDER = new Color( 153, 0, 51 );
+  //public static final Color START_NODE_BORDER = new Color( 153, 153, 0 );
   public static final Color NODE_BORDER       = Color.black; // new Color( 0, 0, 200 );
 
-  public static final Color NODE_BACKGROUND   = new Color( 255, 255, 225 );
+  //public static final Color NODE_BACKGROUND   = new Color( 255, 255, 225 );
+  public static final Color NODE_BACKGROUND   = new Color( 153, 153, 153 );
   //public static final Color NODE_BG_ACTIVE    = new Color( 102, 153, 51 );
-  public static final Color NODE_BG_ACTIVE    = new Color( 0, 153, 255 );
-  public static final Color NODE_BG_DISCARDED = new Color( 153, 102, 51 );
-  public static final Color NODE_BG_SKIPPED   = new Color( 204, 204, 204 );
+  //public static final Color NODE_BG_ACTIVE    = new Color( 0, 153, 255 );
+  public static final Color NODE_BG_ACTIVE    = new Color( 153, 153, 0 );
+  //public static final Color NODE_BG_DISCARDED = new Color( 153, 102, 51 );
+  public static final Color NODE_BG_DISCARDED = new Color( 204, 102, 0 ); // ORANGE
+  public static final Color NODE_BG_SKIPPED   = new Color( 204, 102, 0 );
   //public static final Color NODE_BG_COMPLETED = new Color( 0, 51, 0 );
-  public static final Color NODE_BG_COMPLETED = new Color( 51, 102, 51 );
+  //public static final Color NODE_BG_COMPLETED = new Color( 51, 102, 51 );
+  public static final Color NODE_BG_COMPLETED = new Color( 0, 153, 204 );
 
   public static Color getColor (NodeToken token)
   {

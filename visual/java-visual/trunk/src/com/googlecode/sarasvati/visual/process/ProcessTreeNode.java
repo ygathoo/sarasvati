@@ -39,11 +39,17 @@ public class ProcessTreeNode
   protected int       originY;
 
   private List<ProcessTreeArc> children = new LinkedList<ProcessTreeArc>();
+  private List<ProcessTreeNode> parents  = new LinkedList<ProcessTreeNode>();
 
   public ProcessTreeNode (ProcessTreeNode parent, Node node)
   {
     this.parent = parent;
     this.node = node;
+  }
+
+  public void addParent (ProcessTreeNode parentNode)
+  {
+    parents.add( parentNode );
   }
 
   public ProcessTreeNode (NodeToken token)
@@ -137,6 +143,23 @@ public class ProcessTreeNode
       }
     }
 
+    return false;
+  }
+
+  public boolean isCompletedNodeToken ()
+  {
+    return token != null && token.isComplete();
+  }
+
+  public boolean hasNonCompleteNodeTokenParent ()
+  {
+    for ( ProcessTreeNode currentParent : parents )
+    {
+      if ( !currentParent.isCompletedNodeToken() )
+      {
+        return true;
+      }
+    }
     return false;
   }
 

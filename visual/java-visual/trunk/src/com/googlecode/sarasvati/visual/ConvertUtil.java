@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.visual;
 
 import java.awt.Point;
+import java.awt.Polygon;
 import java.awt.Rectangle;
 
 public class ConvertUtil
@@ -41,5 +42,23 @@ public class ConvertUtil
   public static Point swtToAwt (org.eclipse.draw2d.geometry.Point point)
   {
     return new Point( point.x, point.y );
+  }
+
+  public static void appendPolygon (Polygon poly, StringBuilder buf)
+  {
+    if ( poly.npoints > 0 )
+    {
+      buf.append( poly.xpoints[0] );
+      buf.append( "," );
+      buf.append( poly.ypoints[1] );
+    }
+
+    for ( int i = 0; i < poly.npoints; i++ )
+    {
+      buf.append( ", " );
+      buf.append( poly.xpoints[i] );
+      buf.append( "," );
+      buf.append( poly.ypoints[i] );
+    }
   }
 }
