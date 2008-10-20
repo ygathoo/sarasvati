@@ -28,6 +28,13 @@ import com.googlecode.sarasvati.NodeToken;
 
 public class NodeDrawConfig
 {
+  /**
+   * RED, dark pink red:        153, 0, 51
+   * BLUE: dark cyan azure:     0, 153, 204
+   * YELLOW: light hard yellow: 255, 255, 51
+   * GREEN: dark faded yellow:  153, 153, 0
+   * ORANGE: dark hard orange:  204, 102, 0
+   */
   private static int maxNodeRadius = 50;
   private static int verticalNodeSpacing   = 20;
   private static int horizontalNodeSpacing = 70;

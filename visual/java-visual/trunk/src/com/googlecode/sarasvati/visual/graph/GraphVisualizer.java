@@ -22,6 +22,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.io.IOException;
 
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
@@ -33,6 +34,7 @@ import javax.swing.JSplitPane;
 import javax.swing.ListCellRenderer;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -189,8 +191,24 @@ public class GraphVisualizer
 
         scrollPane.setViewportView( scene.createView() );
         scrollPane.repaint();
+
+        SwingUtilities.invokeLater( new Runnable()
+        {
+          @Override
+          public void run()
+          {
+            try
+            {
+              scene.export( "/home/paul/tmp/" + g.getName() + ".png", null );
+            }
+            catch (IOException ioe)
+            {
+              ioe.printStackTrace();
+            }
+          }
+        });
       }
-    } );
+    });
 
     frame.setVisible( true );
   }

@@ -19,7 +19,16 @@
 package com.googlecode.sarasvati.visual.graph;
 
 import java.awt.Component;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
+import javax.imageio.ImageIO;
+
+import org.netbeans.api.visual.export.SceneExporter;
+import org.netbeans.api.visual.export.SceneExporter.ImageType;
+import org.netbeans.api.visual.export.SceneExporter.ZoomType;
 import org.netbeans.api.visual.widget.ComponentWidget;
 import org.netbeans.api.visual.widget.Widget;
 
@@ -33,5 +42,24 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
   protected Widget widgetForNode (Node node)
   {
     return new ComponentWidget( this, node.getAdaptor( Component.class ) );
+  }
+
+  public void export (String imageFile, StringBuilder map) throws IOException
+  {
+    Rectangle bounds = getScene().getPreferredBounds();
+    BufferedImage image = new BufferedImage( bounds.width, bounds.height, BufferedImage.TYPE_4BYTE_ABGR );
+
+    paint( image.createGraphics() );
+    ImageIO.write( image, "gif", new File( "/home/paul/tmp/image.gif" ) );
+    SceneExporter.createImageMap( getScene(),
+                                  new File( imageFile),
+                                  ImageType.PNG,
+                                  ZoomType.ACTUAL_SIZE,
+                                  false,
+                                  false,
+                                  100,
+                                  this.getView().getWidth(),
+                                  this.getView().getHeight(),
+                                  0 );
   }
 }
