@@ -25,9 +25,9 @@ import com.googlecode.sarasvati.Node;
 
 public class NodeAdapterManager
 {
-  protected static Map<Class<?>, Function<Node,?>> map = new HashMap<Class<?>, Function<Node,?>>();
+  protected static Map<Class<?>, Function<?, Node>> map = new HashMap<Class<?>, Function<?, Node>>();
 
-  public static <T> void registerFactory (Class<T> clazz, Function<Node,T> factory)
+  public static <T> void registerFactory (Class<T> clazz, Function<T, Node> factory)
   {
     map.put( clazz, factory );
   }
@@ -40,7 +40,7 @@ public class NodeAdapterManager
   @SuppressWarnings("unchecked")
   public static <T> T getAdaptor (Node node, Class<T> clazz)
   {
-    Function<Node,T> function = (Function<Node, T>) map.get( clazz );
+    Function<T, Node> function = (Function<T, Node>) map.get( clazz );
     return function == null ? null : function.apply( node );
   }
 }

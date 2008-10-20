@@ -14,7 +14,7 @@ import com.googlecode.sarasvati.NodeToken;
 public class DefaultNodeIcon implements Icon
 {
   public static final int WIDTH  = 100;
-  public static final int HEIGHT = 40;
+  public static final int HEIGHT = NodeDrawConfig.getMaxNodeRadius() << 1;
 
   protected Node node;
   protected NodeToken token;
@@ -45,13 +45,14 @@ public class DefaultNodeIcon implements Icon
     g.setColor( NodeDrawConfig.getColor( token ) );
     g.fillOval( x, y, WIDTH - 1, HEIGHT - 1 );
 
-    g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER : NodeDrawConfig.NODE_BORDER);
+    //g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER : NodeDrawConfig.NODE_BORDER);
+    g.setColor( NodeDrawConfig.NODE_BORDER);
 
     float[] dashes = node.isJoin() ? new float[] { 10, 5 } : null;
 
-    int offset = 3;
+    int offset = 1;
 
-    BasicStroke stroke = new BasicStroke( offset, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, dashes, 0) ;
+    BasicStroke stroke = new BasicStroke( 3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, dashes, 0) ;
     g2d.setStroke( stroke );
 
     int width = WIDTH - ((offset << 1) + 1);
@@ -60,7 +61,7 @@ public class DefaultNodeIcon implements Icon
     g.drawOval( x + offset, y + offset, width, height);
     offset += 3;
 
-    g.setColor( Color.black );
+    g.setColor( Color.white );
 
     int padding = 2 + offset;
     int startX = x + padding;

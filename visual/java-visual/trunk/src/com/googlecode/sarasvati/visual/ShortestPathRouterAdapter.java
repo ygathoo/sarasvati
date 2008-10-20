@@ -77,7 +77,7 @@ public class ShortestPathRouterAdapter implements Router
   }
 
   @Override
-  public List<Point> routeConnection(ConnectionWidget conn)
+  public List<Point> routeConnection (ConnectionWidget conn)
   {
     PathTrackingConnectionWidget pathTrackingCW = (PathTrackingConnectionWidget)conn;
     pathTrackingCW.ensurePathCurrent();
@@ -92,7 +92,7 @@ public class ShortestPathRouterAdapter implements Router
     return pathTrackingCW.getRoute();
   }
 
-  public void redrawConnections ( Widget source )
+  public void redrawConnections (Widget source)
   {
     for ( Widget widget : scene.getConnectionLayer().getChildren() )
     {
@@ -133,7 +133,7 @@ public class ShortestPathRouterAdapter implements Router
     }
 
     @Override
-    public void revalidateDependency()
+    public void revalidateDependency ()
     {
       if (bounds == null )
       {

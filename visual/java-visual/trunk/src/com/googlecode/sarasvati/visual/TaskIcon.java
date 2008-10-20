@@ -35,7 +35,7 @@ import com.googlecode.sarasvati.NodeToken;
 public class TaskIcon implements Icon
 {
   public static final int WIDTH  = 100;
-  public static final int HEIGHT = 40;
+  public static final int HEIGHT = NodeDrawConfig.getMaxNodeRadius() << 1;
 
   protected Node node;
   protected NodeToken token;
@@ -69,19 +69,20 @@ public class TaskIcon implements Icon
 
     float[] dashes = node.isJoin() ? new float[] { 10, 5 } : null;
 
-    int offset = 3;
+    int offset = 1;
 
-    BasicStroke stroke = new BasicStroke( offset, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, dashes, 0) ;
+    BasicStroke stroke = new BasicStroke( 3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, dashes, 0) ;
     g2d.setStroke( stroke );
 
-    g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER: NodeDrawConfig.NODE_BORDER );
+    //g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER: NodeDrawConfig.NODE_BORDER );
+    g.setColor( NodeDrawConfig.NODE_BORDER );
 
     int width = WIDTH - ((offset << 1) + 1);
     int height = HEIGHT - ((offset<< 1) + 1);
 
     g.drawRoundRect( x + offset, y + offset, width, height, 10, 10 );
 
-    g.setColor( Color.black );
+    g.setColor( Color.white );
     String taskName = node.getDisplayText();
 
     String[] lines = FontUtil.split( taskName );
