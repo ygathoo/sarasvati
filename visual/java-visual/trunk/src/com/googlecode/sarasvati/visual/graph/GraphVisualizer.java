@@ -155,8 +155,7 @@ public class GraphVisualizer
 
         final Graph g = (Graph)graphList.getSelectedValue();
 
-        if ( ( g == null && currentGraph == null ) ||
-             ( g != null && g.equals( currentGraph ) ) )
+        if ( g != null && g.equals( currentGraph ) )
         {
           return;
         }
@@ -164,9 +163,11 @@ public class GraphVisualizer
         currentGraph = g;
         scene = new SarasvatiGraphScene();
 
-        for ( Node node : scene.getNodes() )
+        if ( g == null )
         {
-          scene.removeNodeWithEdges( node );
+          scrollPane.setViewportView( scene.createView() );
+          scrollPane.repaint();
+          return;
         }
 
         for ( Node ref : currentGraph.getNodes() )
@@ -190,8 +191,8 @@ public class GraphVisualizer
           widget.setPreferredLocation( new Point( treeNode.getOriginX(), treeNode.getOriginY() ) );
         }
 
-        scrollPane.setViewportView( scene.createView() );
         scene.revalidate();
+        scrollPane.setViewportView( scene.createView() );
         scrollPane.repaint();
 
         final Function<String,Widget> hrefMapper = new Function<String,Widget>()
