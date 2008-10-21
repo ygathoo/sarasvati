@@ -24,7 +24,6 @@ import javax.persistence.Entity;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.example.ExampleUtil;
 import com.googlecode.sarasvati.hib.HibNode;
 
 @Entity
@@ -34,7 +33,7 @@ public class DumpNode extends HibNode
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    ExampleUtil.waitFor( 750 );
+    //ExampleUtil.waitFor( 750 );
     System.out.println( "Accepted into: " + getName() );
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }

@@ -141,13 +141,16 @@ public class ProcessVisualizer
 
         final HibGraphProcess graphProcess = (HibGraphProcess)graphList.getSelectedValue();
 
-        if ( ( graphProcess == null && currentProcess == null ) ||
-             ( graphProcess != null && graphProcess.equals( currentProcess ) ) )
+        if ( graphProcess != null && graphProcess.equals( currentProcess ) )
         {
           return;
         }
 
-        session.refresh( graphProcess );
+        if ( graphProcess != null )
+        {
+          session.refresh( graphProcess );
+        }
+
         setProcess( graphProcess );
       }
     } );
@@ -199,13 +202,14 @@ public class ProcessVisualizer
   public synchronized void setProcess (final HibGraphProcess graphProcess)
   {
     currentProcess = graphProcess;
+    scene = new SarasvatiProcessScene();
 
     if ( graphProcess == null )
     {
+      scrollPane.setViewportView( scene.createView() );
+      scene.repaint();
       return;
     }
-
-    scene = new SarasvatiProcessScene();
 
     ProcessTree pt = new ProcessTree( currentProcess );
     Iterable<ProcessTreeNode> nodes = pt.getProcessTreeNodes();
@@ -243,6 +247,7 @@ public class ProcessVisualizer
       }
     }
 
+    scene.revalidate();
     scrollPane.setViewportView( scene.createView() );
     scrollPane.repaint();
   }
