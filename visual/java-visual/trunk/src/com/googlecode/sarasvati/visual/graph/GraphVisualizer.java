@@ -22,10 +22,13 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import javax.imageio.ImageIO;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -236,12 +239,14 @@ public class GraphVisualizer
           StringBuilder buf = new StringBuilder();
           buf.append( "<html><head><title>test</title></head><body>\n" );
           buf.append( "<map name=\"graphMap\">\n" );
-          scene.export( "/home/paul/tmp/" + g.getName() + ".png", buf, hrefMapper, titleMapper );
+          BufferedImage image = scene.export( buf, hrefMapper, titleMapper );
+          ImageIO.write( image, "gif", new File( "/home/paul/tmp/" + g.getName() + ".gif" ) );
+          image.flush();
           buf.append( "</map>\n" );
-          buf.append( "<image style=\"border:none\" src=\"/home/paul/tmp/image.gif\" usemap=\"#graphMap\"/>" );
+          buf.append( "<image style=\"border:none\" src=\"/home/paul/tmp/" + g.getName() + ".gif\" usemap=\"#graphMap\"/>" );
           buf.append( "</body></html>" );
 
-          BufferedWriter out = new BufferedWriter( new FileWriter( "/home/paul/tmp/graph.html" ) );
+          BufferedWriter out = new BufferedWriter( new FileWriter( "/home/paul/tmp/" + g.getName() + ".html" ) );
           out.write( buf.toString() );
           out.close();
         }

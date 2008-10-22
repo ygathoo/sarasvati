@@ -18,7 +18,13 @@
 */
 package com.googlecode.sarasvati.visual;
 
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.netbeans.api.visual.action.ActionFactory;
@@ -26,10 +32,16 @@ import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.anchor.AnchorFactory;
 import org.netbeans.api.visual.anchor.AnchorShape;
+import org.netbeans.api.visual.export.WidgetPolygonalCoordinates;
+import org.netbeans.api.visual.export.SceneExporter.ImageType;
+import org.netbeans.api.visual.export.SceneExporter.ZoomType;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modules.visual.export.Scene2Image;
+
+import com.googlecode.sarasvati.adapter.Function;
 
 public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
 {
@@ -101,5 +113,33 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
     super.detachNodeWidget( node, widget );
     router.removeNodeWidget( widget );
     anchorMap.remove( node );
+  }
+
+  public BufferedImage export (StringBuilder buf, Function<String, Widget> hrefMapper, Function<String, Widget> titleMapper )
+    throws IOException
+  {
+    Rectangle bounds = getScene().getPreferredBounds();
+    BufferedImage image = new BufferedImage( bounds.width, bounds.height, BufferedImage.TYPE_4BYTE_ABGR );
+
+    Graphics2D g = image.createGraphics();
+    g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+    paint( g );
+
+    Scene2Image s = new Scene2Image( getScene(), null );
+    s.createImage( ImageType.PNG,ZoomType.ACTUAL_SIZE, false, false, 100, getView().getWidth(), getView().getHeight(), true  );
+    List<WidgetPolygonalCoordinates> coords = s.getSceneImageMapCoordinates(  0 );
+
+    for ( WidgetPolygonalCoordinates coord : coords )
+    {
+      buf.append( "<area shape=\"poly\" coords=\"" );
+      ConvertUtil.appendPolygon( coord.getPolygon(), buf );
+      buf.append( "\" " );
+      buf.append( hrefMapper.apply( coord.getWidget() ) );
+      buf.append( " " );
+      buf.append( titleMapper.apply( coord.getWidget() ) );
+      buf.append( ">\n" );
+    }
+
+    return image;
   }
 }
