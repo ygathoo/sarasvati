@@ -57,6 +57,7 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
         Widget widget = findWidget( node );
         GraphTreeNode treeNode = graphTree.getTreeNode( node );
         widget.setPreferredLocation( new Point( treeNode.getOriginX(), treeNode.getOriginY() ) );
+        widget.resolveBounds( new Point( treeNode.getOriginX(), treeNode.getOriginY() ), null );
       }
 
       revalidate();
@@ -76,6 +77,15 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
   @Override
   protected Widget widgetForNode (Node node)
   {
-    return new ComponentWidget( this, node.getAdaptor( Component.class ) );
+    Component c = node.getAdaptor( Component.class );
+
+    if ( c == null )
+    {
+      throw new IllegalArgumentException( "No component found for node: " + node +
+                                          ". You should configure one with NodeAdapterManager.registerFactory " +
+                                          "and by subclassing your Node implemenations." );
+    }
+
+    return new ComponentWidget( this, c );
   }
 }

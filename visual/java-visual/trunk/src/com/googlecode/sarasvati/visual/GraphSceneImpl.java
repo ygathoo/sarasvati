@@ -40,6 +40,7 @@ import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
 import org.netbeans.modules.visual.export.Scene2Image;
+import org.netbeans.modules.visual.layout.AbsoluteLayout;
 
 import com.googlecode.sarasvati.adapter.Function;
 
@@ -118,6 +119,9 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   public BufferedImage export (StringBuilder buf, Function<String, Widget> hrefMapper, Function<String, Widget> titleMapper )
     throws IOException
   {
+    getScene().setLayout( new AbsoluteLayout() );
+    getScene().revalidate();
+
     Rectangle bounds = getScene().getPreferredBounds(); // new Rectangle( 0, 0, 800, 600 );
     BufferedImage image = new BufferedImage( bounds.width, bounds.height, BufferedImage.TYPE_4BYTE_ABGR );
 
