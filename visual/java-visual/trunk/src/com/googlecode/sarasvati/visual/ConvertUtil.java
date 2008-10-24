@@ -18,30 +18,31 @@
 */
 package com.googlecode.sarasvati.visual;
 
-import java.awt.Point;
 import java.awt.Polygon;
-import java.awt.Rectangle;
+
+import org.eclipse.draw2d.geometry.Point;
+import org.eclipse.draw2d.geometry.Rectangle;
 
 public class ConvertUtil
 {
-  public static org.eclipse.draw2d.geometry.Rectangle awtToSwt (Rectangle r)
+  public static Rectangle awtToSwt (java.awt.Rectangle r)
   {
-    return r == null ? null : new org.eclipse.draw2d.geometry.Rectangle( r.x, r.y, r.width, r.height );
+    return r == null ? null : new Rectangle( r.x, r.y, r.width, r.height );
   }
 
-  public static org.eclipse.draw2d.geometry.Point awtToSwt (Point point)
-  {
-    return new org.eclipse.draw2d.geometry.Point( point.x, point.y );
-  }
-
-  public static Rectangle swtToAwt (org.eclipse.draw2d.geometry.Rectangle r)
-  {
-    return new Rectangle( r.x, r.y, r.width, r.height );
-  }
-
-  public static Point swtToAwt (org.eclipse.draw2d.geometry.Point point)
+  public static Point awtToSwt (java.awt.Point point)
   {
     return new Point( point.x, point.y );
+  }
+
+  public static java.awt.Rectangle swtToAwt (Rectangle r)
+  {
+    return new java.awt.Rectangle( r.x, r.y, r.width, r.height );
+  }
+
+  public static java.awt.Point swtToAwt (Point point)
+  {
+    return new java.awt.Point( point.x, point.y );
   }
 
   public static void appendPolygon (Polygon poly, StringBuilder buf)

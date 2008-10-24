@@ -18,11 +18,9 @@
 */
 package com.googlecode.sarasvati.visual.process;
 
-import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.util.List;
 
 import javax.swing.DefaultListCellRenderer;
@@ -39,20 +37,16 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.hibernate.Session;
-import org.netbeans.api.visual.widget.ConnectionWidget;
-import org.netbeans.api.visual.widget.Widget;
 
-import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraphProcess;
-import com.googlecode.sarasvati.visual.NodeDrawConfig;
 
 public class ProcessVisualizer
 {
   protected static HibGraphProcess   currentProcess = null;
-  protected static SarasvatiProcessScene scene = new SarasvatiProcessScene();
+  protected static SarasvatiProcessScene scene = new SarasvatiProcessScene( null );
 
   final JScrollPane scrollPane = new JScrollPane();
 
@@ -202,53 +196,9 @@ public class ProcessVisualizer
   public synchronized void setProcess (final HibGraphProcess graphProcess)
   {
     currentProcess = graphProcess;
-    scene = new SarasvatiProcessScene();
+    scene = new SarasvatiProcessScene( currentProcess );
 
-    if ( graphProcess == null )
-    {
-      scrollPane.setViewportView( scene.createView() );
-      scene.repaint();
-      return;
-    }
-
-    ProcessTree pt = new ProcessTree( currentProcess );
-    Iterable<ProcessTreeNode> nodes = pt.getProcessTreeNodes();
-
-    for ( ProcessTreeNode node : nodes )
-    {
-      scene.addNode( node );
-      Widget widget = scene.findWidget( node );
-      widget.setPreferredLocation( new Point( node.getOriginX(), node.getOriginY() ) );
-    }
-
-    for ( ProcessTreeNode node : nodes )
-    {
-      for ( ProcessTreeArc ptArc : node.getChildren() )
-      {
-        scene.addEdge( ptArc );
-        scene.setEdgeSource( ptArc, ptArc.getParent() );
-        scene.setEdgeTarget( ptArc, ptArc.getChild() );
-
-        ConnectionWidget w = (ConnectionWidget)scene.findWidget( ptArc );
-
-        ArcToken token =  ptArc.getToken();
-        if ( token != null )
-        {
-          w.setStroke( new BasicStroke( 3 ) );
-          if ( token.isComplete() )
-          {
-            w.setLineColor( NodeDrawConfig.NODE_BG_COMPLETED );
-          }
-          else
-          {
-            w.setLineColor( NodeDrawConfig.NODE_BG_ACTIVE );
-          }
-        }
-      }
-    }
-
-    scene.revalidate();
     scrollPane.setViewportView( scene.createView() );
-    scrollPane.repaint();
+    scene.repaint();
   }
 }

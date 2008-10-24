@@ -118,7 +118,7 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   public BufferedImage export (StringBuilder buf, Function<String, Widget> hrefMapper, Function<String, Widget> titleMapper )
     throws IOException
   {
-    Rectangle bounds = getScene().getPreferredBounds();
+    Rectangle bounds = getScene().getPreferredBounds(); // new Rectangle( 0, 0, 800, 600 );
     BufferedImage image = new BufferedImage( bounds.width, bounds.height, BufferedImage.TYPE_4BYTE_ABGR );
 
     Graphics2D g = image.createGraphics();
@@ -126,17 +126,36 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
     paint( g );
 
     Scene2Image s = new Scene2Image( getScene(), null );
-    s.createImage( ImageType.PNG,ZoomType.ACTUAL_SIZE, false, false, 100, getView().getWidth(), getView().getHeight(), true  );
+    s.createImage( ImageType.PNG,ZoomType.ACTUAL_SIZE, false, false, 100, bounds.width, bounds.height, true  );
     List<WidgetPolygonalCoordinates> coords = s.getSceneImageMapCoordinates(  0 );
 
     for ( WidgetPolygonalCoordinates coord : coords )
     {
       buf.append( "<area shape=\"poly\" coords=\"" );
       ConvertUtil.appendPolygon( coord.getPolygon(), buf );
-      buf.append( "\" " );
-      buf.append( hrefMapper.apply( coord.getWidget() ) );
-      buf.append( " " );
-      buf.append( titleMapper.apply( coord.getWidget() ) );
+
+      String result = hrefMapper.apply( coord.getWidget() );
+
+      if ( result != null && result.length() == 0 )
+      {
+        buf.append( " href=\"" );
+        buf.append( result );
+        buf.append( "\" " );
+      }
+      else
+      {
+        buf.append( " nohref " );
+      }
+
+      result = titleMapper.apply( coord.getWidget() );
+
+      if ( result != null && result.length() == 0 )
+      {
+        buf.append( "title=\"");
+        buf.append( titleMapper.apply( coord.getWidget() ) );
+        buf.append( "\"" );
+      }
+
       buf.append( ">\n" );
     }
 
