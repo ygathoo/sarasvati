@@ -18,17 +18,73 @@
 */
 package com.googlecode.sarasvati.visual.process;
 
+import java.awt.BasicStroke;
+import java.awt.Point;
+
 import javax.swing.JLabel;
 
 import org.netbeans.api.visual.widget.ComponentWidget;
+import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.visual.DefaultNodeIcon;
 import com.googlecode.sarasvati.visual.GraphSceneImpl;
+import com.googlecode.sarasvati.visual.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.TaskIcon;
 
 public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, ProcessTreeArc>
 {
+  protected GraphProcess process;
+  protected ProcessTree processTree;
+
+  public SarasvatiProcessScene (GraphProcess process)
+  {
+    this.process = process;
+
+    if ( process != null )
+    {
+      ProcessTree pt = new ProcessTree( process );
+      Iterable<ProcessTreeNode> nodes = pt.getProcessTreeNodes();
+
+      for ( ProcessTreeNode node : nodes )
+      {
+        addNode( node );
+        Widget widget = findWidget( node );
+        widget.setPreferredLocation( new Point( node.getOriginX(), node.getOriginY() ) );
+      }
+
+      for ( ProcessTreeNode node : nodes )
+      {
+        for ( ProcessTreeArc ptArc : node.getChildren() )
+        {
+          addEdge( ptArc );
+          setEdgeSource( ptArc, ptArc.getParent() );
+          setEdgeTarget( ptArc, ptArc.getChild() );
+
+          ConnectionWidget w = (ConnectionWidget)findWidget( ptArc );
+
+          ArcToken token =  ptArc.getToken();
+          if ( token != null )
+          {
+            w.setStroke( new BasicStroke( 3 ) );
+            if ( token.isComplete() )
+            {
+              w.setLineColor( NodeDrawConfig.NODE_BG_COMPLETED );
+            }
+            else
+            {
+              w.setLineColor( NodeDrawConfig.NODE_BG_ACTIVE );
+            }
+          }
+        }
+      }
+    }
+
+    revalidate();
+  }
+
   @Override
   protected Widget widgetForNode (ProcessTreeNode ptNode)
   {

@@ -19,16 +19,60 @@
 package com.googlecode.sarasvati.visual.graph;
 
 import java.awt.Component;
+import java.awt.Point;
 
 import org.netbeans.api.visual.widget.ComponentWidget;
 import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.visual.GraphSceneImpl;
 
 public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
 {
+  protected Graph graph;
+  protected GraphTree graphTree;
+
+  public SarasvatiGraphScene (Graph graph)
+  {
+    if ( graph != null )
+    {
+      for ( Node ref : graph.getNodes() )
+      {
+        addNode( ref );
+      }
+
+      for ( Arc arc : graph.getArcs() )
+      {
+        addEdge( arc );
+        setEdgeSource( arc, arc.getStartNode() );
+        setEdgeTarget( arc, arc.getEndNode() );
+      }
+
+      graphTree = new GraphTree( graph );
+
+      for ( Node node : graph.getNodes() )
+      {
+        Widget widget = findWidget( node );
+        GraphTreeNode treeNode = graphTree.getTreeNode( node );
+        widget.setPreferredLocation( new Point( treeNode.getOriginX(), treeNode.getOriginY() ) );
+      }
+
+      revalidate();
+    }
+  }
+
+  public Graph getGraph ()
+  {
+    return graph;
+  }
+
+  public GraphTree getGraphTree ()
+  {
+    return graphTree;
+  }
+
   @Override
   protected Widget widgetForNode (Node node)
   {

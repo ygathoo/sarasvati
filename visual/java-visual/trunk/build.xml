@@ -1,12 +1,12 @@
-<project name="sarasvati">
+<project name="sarasvati-visual">
 
   <property name="version" value="1.0.0-beta2"/>
 
   <property name="dist.dir" value="dist"/>
   <property name="build.dir" value="${dist.dir}/build"/>
 
-  <property name="dist.name" value="sarasvati-java-${version}"/>
-  <property name="release.name" value="sarasvati-${version}"/>
+  <property name="dist.name" value="sarasvati-java-visual-${version}"/>
+  <property name="release.name" value="sarasvati-visual-${version}"/>
 
   <property name="archive.base" value="${dist.dir}/${dist.name}"/>
   <property name="fetch.indicator" value="lib/.fetchlibs"/>
@@ -15,6 +15,10 @@
     <fileset dir="lib/">
       <include name="*.jar"/>
     </fileset>
+    <fileset dir="../wf-java/lib/">
+      <include name="*.jar"/>
+    </fileset>
+    <pathelement path="../wf-java/classes"/>
   </path>
 
   <available file="${fetch.indicator}" property="libs.notfetched"/>
@@ -56,12 +60,6 @@
   <target name="dist" depends="compile">
     <mkdir dir="${archive.base}"/>
 
-    <copy todir="${build.dir}/com/googlecode/sarasvati">
-      <fileset dir="common">
-        <include name="ProcessDefinition.xsd"/>
-      </fileset>
-    </copy>
-
     <jar basedir="${build.dir}" destfile="${archive.base}/${release.name}.jar"/>
 
     <copy todir="${archive.base}">
@@ -69,8 +67,6 @@
         <include name="build.xml"/>
         <include name="src/**"/>
         <include name="doc/**"/>
-        <include name="examples/**"/>
-        <include name="lang/**"/>
         <include name="lib/*.txt"/>
         <include name="README"/>
         <exclude name="**/.svn/**"/>
@@ -79,18 +75,11 @@
 
     <copy todir="${archive.base}">
       <fileset dir=".">
-        <include name="common/db/**"/>
         <include name="common/*.license"/>
-        <include name="common/*.xsd"/>
-        <include name="common/test-wf/embedded-task-rej.wf.xml"/>
-        <include name="common/test-wf/example1.wf.xml"/>
-        <include name="common/test-wf/not-random-guard.wf.xml"/>
-        <include name="common/test-wf/one-node.wf.xml"/>
-        <include name="common/test-wf/random-guard.wf.xml"/>
-        <include name="common/test-wf/subwf-tasks-rej.wf.xml"/>
       </fileset>
     </copy>
 
+    <mkdir dir="${archive.base}/lib"/>
     <touch file="${archive.base}/${fetch.indicator}"/>
 
     <zip destfile="${archive.base}.zip" basedir="${dist.dir}" compress="true" level="9">

@@ -21,7 +21,6 @@ package com.googlecode.sarasvati.visual.graph;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -45,7 +44,6 @@ import javax.swing.event.ListSelectionListener;
 import org.hibernate.Session;
 import org.netbeans.api.visual.widget.Widget;
 
-import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.adapter.Function;
@@ -58,7 +56,7 @@ import com.googlecode.sarasvati.visual.TaskIcon;
 public class GraphVisualizer
 {
   protected static Graph currentGraph = null;
-  protected static SarasvatiGraphScene scene = new SarasvatiGraphScene();
+  protected static SarasvatiGraphScene scene = new SarasvatiGraphScene( null );
 
   public static void main (String[] args) throws Exception
   {
@@ -164,39 +162,15 @@ public class GraphVisualizer
         }
 
         currentGraph = g;
-        scene = new SarasvatiGraphScene();
+        scene = new SarasvatiGraphScene( currentGraph );
+
+        scrollPane.setViewportView( scene.createView() );
+        scrollPane.repaint();
 
         if ( g == null )
         {
-          scrollPane.setViewportView( scene.createView() );
-          scrollPane.repaint();
           return;
         }
-
-        for ( Node ref : currentGraph.getNodes() )
-        {
-          scene.addNode( ref );
-        }
-
-        for ( Arc arc : currentGraph.getArcs() )
-        {
-          scene.addEdge( arc );
-          scene.setEdgeSource( arc, arc.getStartNode() );
-          scene.setEdgeTarget( arc, arc.getEndNode() );
-        }
-
-        GraphTree graphTree = new GraphTree( g );
-
-        for ( Node node : currentGraph.getNodes() )
-        {
-          Widget widget = scene.findWidget( node );
-          GraphTreeNode treeNode = graphTree.getTreeNode( node );
-          widget.setPreferredLocation( new Point( treeNode.getOriginX(), treeNode.getOriginY() ) );
-        }
-
-        scene.revalidate();
-        scrollPane.setViewportView( scene.createView() );
-        scrollPane.repaint();
 
         final Function<String,Widget> hrefMapper = new Function<String,Widget>()
         {
@@ -208,10 +182,10 @@ public class GraphVisualizer
             if ( o instanceof Node )
             {
               Node node = (Node)o;
-              return "href=\"javascript:alert( '" + node.getName() + "' );\"";
+              return "javascript:alert( '" + node.getName() + "' );";
             }
 
-            return "nohref";
+            return null;
           }
         };
 
@@ -226,8 +200,7 @@ public class GraphVisualizer
             {
               Node node = (Node)o;
 
-              return node.getGuard() == null || node.getGuard().length() == 0 ? "" :
-                       "title=\"" + node.getGuard() + "\"";
+              return node.getGuard() == null || node.getGuard().length() == 0 ? null : node.getGuard();
             }
 
             return "";
