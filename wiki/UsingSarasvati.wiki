@@ -28,14 +28,14 @@ This is the root element. It has a required `name` element. Every process defini
 
 ===Element `node`===
 --------------------------------------------------
-Every process definition must have at least one `node` element defined. Every node must have a name _unique to that file_. Any node may have the `isStart` attribute set. If not specified it will default to false. 
+Nodes in a process definition are defined by the `node` element. Every node must have a name _unique to that file_. 
 
 *Attributes*
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| name || Specifies the name for this node. Name must be unique in this process definition. || Yes || N/A ||
+|| name || Specifies the name for this node. The name must be unique within this process definition. || Yes || N/A ||
 || type || The node type. Determines the node behavior. || No || `node` ||
 || isStart || Specifies whether a node will be presented with a token when the process is started. || No || false ||
-|| isJoin || If true, the node will wait for arc tokens on all arcs with a given name before executing. If false, the node will fire whenever any single arc token arrives. || No || false ||
+|| isJoin || If true, the node will wait for arc tokens on all arcs with a given name before executing. If false, the node will execute as soon as an arc token arrives. || No || false ||
 
 *Built in Node Types*
     * `node` - Nodes of this type will complete out on the default arc when they are executed. The node type can be useful if a synchronization point is needed. It can also be used as a choice, with a guard which skips to selected arcs.
@@ -44,18 +44,13 @@ Every process definition must have at least one `node` element defined. Every no
 
 *Nested Elements*
   * *guard* - Nodes may optionally have a guard element.
-  * *arc*   - Nodes may have zero to many arcs, pointing to other nodes in the same process definition file.
+  * *arc*   - Nodes may have zero to many arcs, pointing to other nodes in the same process definition.
   * *externalArc* - Nodes may have zero to many external arcs, pointing to or from nodes in other process definitions.
+  * _custom_ - Node may have additional elements at the bottom. How the data from these custom elements is loaded, is explained in the section on custom node attributes below.
 
 ===Element `guard`===
 --------------------------------------------------
-A node may contain a GuardLang statement, which will be executed as the node's guard.
-
-*Attributes*
-The `guard` element has no attributes
-
-*Nested Elements*
-The `guard` element may not contain any nested elements. 
+A node may contain a GuardLang statement, which will be executed as the node's guard. The guard element has no attributes and may contain no nested elements.
 
 ===One Node Example===
 With just `process-definition` and `node` a simple process definition can be built.
@@ -80,15 +75,12 @@ While there can be many nodes declared in a process definition, we have as yet, 
 
 ===Element `arc`===
 --------------------------------------------------
-An `arc` element declares an arc from the enclosing node to the node with the name specified in the `to` attribute.
+An `arc` element declares an arc from the enclosing node to the node with the name specified in the `to` attribute. An arc has no nested elements.
 
 *Attributes*
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
 || to || Specifies the name of the node this arc goes to || Yes || N/A ||
 || name || Specifies the arc name. This name need not be unique. || No || null ||
-
-*Nested elements*
-An arc may not contain any nested elements.
 
 ===Arc Example One===
 
@@ -143,18 +135,15 @@ Now that we've seen how to create links between nodes in the same process defini
 
 ===Element `externalArc`===
 --------------------------------------------------
-An `externaArc` element declares an arc from the enclosing node to the external node with the name specified in the `nodeName` attribute
+An `externalArc` element declares an arc from the enclosing node to the external node with the name specified in the `nodeName` attribute. External arc elements may not contain nested elements.
 
 *Attributes*
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| external || Specifies the name of the external process definition this arc goes to || Yes || N/A ||
-|| instance || Specifies the specific instance of the external process definition this arc goes to. All external arcs with the same values `external` and `instance` will go to the same set of nodes. || Yes || N/A ||
-|| nodeName || Specifies the name of the node this arc goes to || Yes || N/A ||
+|| external || Specifies the name of the external process definition this arc goes to. || Yes || N/A ||
+|| instance || Specifies the specific instance of the external process definition this arc goes to. All external arcs with the same values for `external` and `instance` will go to the same set of nodes. || Yes || N/A ||
+|| nodeName || Specifies the name of the node this arc goes to. || Yes || N/A ||
 || name || Specifies the external arc name. This name need not be unique. || No || null ||
 || type || Indicates if the containing node is at the beginning or end of the arc. Valid values are `out` and `in`. If `out` is specified, the containing node is the start node of the arc, otherwise it is the end. || Yes || N/A ||
-
-*Nested elements*
-An external arc may not contain any nested elements.
 
 === External Arc Example One ===
 To examine external arcs, we'll need at least two process definitions.
@@ -200,6 +189,7 @@ The graph which contains external arcs going to 'ext', is below.
 
   <node name="X">
     <arc to="Z"/>
+
     <externalArc external="ext" instance="1" nodeName="A" type="in"/>
   </node>
 
@@ -224,7 +214,8 @@ When the process definition is loaded into memory, it will look like:
 ==Java API===
 The process definition file format also supports custom elements and attributes, but before we discuss that, the API needs to be introduced.
 
-The main interface for interacting with process definitions and processes is Engine:
+===Interfaces===
+The main interface for interacting with process definitions and processes is `Engine`:
 
 {{{
 package com.googlecode.sarasvati;
@@ -292,9 +283,20 @@ public interface Node extends Adaptable
 }
 }}}
 
-To provide custom behavior to your nodes, you will override the `execute` method.
+===Flow of Execution===
+When the engine determines that a node is ready to execute, it will follow this flow:
 
-Sarasvati currently provides two implementations of the base API, one memory backed one and one database backed, implemented using Hibernate. Other backends could be implemented using,for example, pure JDBC or some other persistence mechanism. 
+  # Generate a `NodeToken` pointing to that node. 
+  # Execute the `guard` function on the node. This will return a `GuardResponse`.
+    * The `GuardResponse` contains a `GuardAction`, which is an enum having values `AcceptToken`, `DiscardToken` and `SkipNode`. 
+  # If the action is `AcceptToken`, the `execute` method will be called. The process will not continue until the `Engine#completeExecution` method is invoked. It must be invoked with the name of the arcs on which to generate `ArcToken`s.
+  # If the action is `DiscardToken`, the token is marked complete and no further execution will take place from this set of tokens.
+  # If the action is `SkipNode`, `Engine.completeExecution` will be called with the arc name contained in the `GuardResponse`.
+
+===Custom logic for Node Execution===
+To provide custom behavior to your nodes, you will override the `Node#execute` method.
+
+Sarasvati currently provides two implementations of the base API, one memory backed and one database backed, implemented using Hibernate. Other backends could be implemented using,for example, pure JDBC or some other persistence mechanism. 
 
 If using the memory backed implementation, nodes should extend `com.googlecode.sarasvati.mem.MemNode`. If using the hibernate backend, nodes should subclass `com.googlecode.sarasvati.hib.HibNode`.
 
@@ -355,7 +357,7 @@ public class HelloNode extends HibNode
 }
 }}}
 
-The hibernate version would also require an insert into the `wf_node_type` table, with type, description and behavour. 
+The hibernate version would also require an insert into the `wf_node_type` table, with type, description and behaviour. 
 
 {{{
  insert into wf_node_type (id, description, behaviour) values ( 'helloWorld', 'Says hello to the world', 'helloWorld' )
@@ -364,7 +366,7 @@ The hibernate version would also require an insert into the `wf_node_type` table
 The behaviour column ties the type to a discriminator specified on the subclass. This allows having multiple types with the same implementation class, if that was desired.
 
 ==== Example One: Loading and Running====
-Now we can load the process into memory, or into the database. This is done using a GraphLoader, which can be retrieved from the appropriate engine. Before loading the process definition, you will need to tell the engine about your custom node types.
+Now we can load the process into memory, or into the database. This is done using a `GraphLoader`, which can be retrieved from the appropriate engine. Before loading the process definition, you will need to tell the engine about your custom node types.
 
 The steps are
   # Create an engine of the appropriate type
@@ -528,6 +530,7 @@ Here we examine a more complicated example, which uses custom attributes.
     <example:taskName>Enter order</example:taskName>
     <example:taskDesc>Enter order and billing info</example:taskDesc>
   </node>
+
 
   <node name="verifyOrder" type="task" isStart="true">
     <arc to="enterOrder" name="reject"/>
