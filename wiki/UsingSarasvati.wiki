@@ -302,11 +302,12 @@ When the engine determines that a node is ready to execute, it will follow this 
   # If the action is `SkipNode`, `Engine.completeExecution` will be called with the arc name contained in the `GuardResponse`.
 
 ===Custom logic for Node Execution===
-To provide custom behavior to your nodes, you will override the `Node#execute` method.
+To provide custom behavior to your nodes, you will override the `execute` method on `Node`. Sarasvati currently provides two implementations of the base API, one memory backed and one database backed, implemented using Hibernate. Other implementations could be made using,for example, pure JDBC or some other persistence mechanism. There are two base classes for nodes.
 
-Sarasvati currently provides two implementations of the base API, one memory backed and one database backed, implemented using Hibernate. Other backends could be implemented using,for example, pure JDBC or some other persistence mechanism. 
+  * `com.googlecode.sarasvati.mem.MemNode`
+  * `com.googlecode.sarasvati.hib.HibNode`
 
-If using the memory backed implementation, nodes should extend `com.googlecode.sarasvati.mem.MemNode`. If using the hibernate backend, nodes should subclass `com.googlecode.sarasvati.hib.HibNode`.
+If using the memory backed implementation, `MemNode` should be extended. If using the hibernate backend, nodes should subclass `HibNode`.
 
 === Example One ====
 
