@@ -310,8 +310,7 @@ To provide custom behavior to your nodes, you will override the `execute` method
 If using the memory backed implementation, `MemNode` should be extended. If using the hibernate backend, nodes should subclass `HibNode`.
 
 === Example One ====
-
-A simple example of each, would be for a node that just printed out "Hello, World". We start with the process definition.
+To demonstrate use of each implementation, we start with a node that just prints out "Hello, World". We start with the process definition.
 
 ==== Example One: Process Definition ===
 {{{
