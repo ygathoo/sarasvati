@@ -17,11 +17,14 @@ We'll explore the sarasvati file format, starting with the root element and work
 
 ===Element `process-definition`===
 --------------------------------------------------
-This is the root element. It has a required `name` element. Every process definition must have a unique name. It should also indicate the XML namespace, that being `"http://sarasvati.googlecode.com/ProcessDefinition"`.
+This is the root element. It has a required `name` element. Every process definition must have a unique name. It should also indicate the XML namespace, that being:
+{{{
+  http://sarasvati.googlecode.com/ProcessDefinition
+}}}
 
 *Attributes*
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| `name` || Specifies the unique name for this process definition || Yes || N/A ||
+|| `name` || Specifies the unique name for this process definition. || Yes || N/A ||
 
 *Nested Elements*
   * *node* - Every `process-definition` must have a least one `node` defined.
@@ -65,7 +68,7 @@ The corresponding XML process definition would look like:
 <?xml version="1.0"?>
 
 <process-definition name="simplest" 
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="node-one" isStart="true"/>
 
@@ -80,7 +83,7 @@ An `arc` element declares an arc from the enclosing node to the node with the na
 
 ====Attributes====
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| `to` || Specifies the name of the node this arc goes to || Yes || N/A ||
+|| `to` || Specifies the name of the node this arc goes to. || Yes || N/A ||
 || `name` || Specifies the arc name. This name need not be unique. || No || null ||
 
 ===Arc Example One===
@@ -93,7 +96,7 @@ The following example contains three nodes.
 <?xml version="1.0"?>
 
 <process-definition name="example2" 
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="node-one" isStart="true">
     <arc to="node-two"/>
