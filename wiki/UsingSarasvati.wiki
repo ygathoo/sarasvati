@@ -64,7 +64,8 @@ The corresponding XML process definition would look like:
 {{{
 <?xml version="1.0"?>
 
-<process-definition name="simplest" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="simplest" 
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="node-one" isStart="true"/>
 
@@ -91,7 +92,8 @@ The following example contains three nodes.
 {{{
 <?xml version="1.0"?>
 
-<process-definition name="example2" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="example2" 
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="node-one" isStart="true">
     <arc to="node-two"/>
@@ -116,7 +118,8 @@ Here is an example with two start nodes. They both have arcs to `node-three`, wh
 {{{
 <?xml version="1.0"?>
 
-<process-definition name="example3" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="example3" 
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="node-one" isStart="true">
     <arc to="node-three"/>
@@ -153,7 +156,8 @@ This example is from the EngineConcepts section.
 {{{
 <?xml version="1.0"?>
 
-<process-definition name="ext" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="ext" 
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="A" isJoin="true">
     <arc to="B"/>
@@ -173,7 +177,8 @@ The graph which contains external arcs going to 'ext', is below.
 {{{
 <?xml version="1.0"?>
 
-<process-definition name="example4" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="example4" 
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="P" isStart="true">
     <externalArc external="ext" instance="1" nodeName="A" type="out"/>
@@ -308,7 +313,8 @@ A simple example of each, would be for a node that just printed out "Hello, Worl
 {{{
 <?xml version="1.0"?>
 
-<process-definition name="hello-world" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="hello-world" 
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="hello" type="helloWord" isStart="true"/>
 
@@ -448,8 +454,8 @@ The following process definition would load the value `test` into the `custom` p
 <?xml version="1.0"?>
 
 <process-definition name="example1"
-                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
-                       xmlns:example="http://sarasvati.googlecode.com/Example">
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
+                    xmlns:example="http://sarasvati.googlecode.com/Example">
 
   <node name="test" type="custom" isStart="true">
     <arc to="1"/>
@@ -521,8 +527,8 @@ Here we examine a more complicated example, which uses custom attributes.
 <?xml version="1.0"?>
 
 <process-definition name="example1"
-                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
-                       xmlns:example="http://sarasvati.googlecode.com/Example">
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
+                    xmlns:example="http://sarasvati.googlecode.com/Example">
 
   <node name="enterOrder" type="task" isStart="true">
     <arc to="verifyOrder"/>
