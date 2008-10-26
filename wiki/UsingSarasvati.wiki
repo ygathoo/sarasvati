@@ -48,6 +48,7 @@ Every process definition must have at least one `node` element defined. Every no
   * *externalArc* - Nodes may have zero to many external arcs, pointing to or from nodes in other process definitions.
 
 ===Element `guard`===
+--------------------------------------------------
 A node may contain a GuardLang statement, which will be executed as the node's guard.
 
 *Attributes*
@@ -78,7 +79,7 @@ The corresponding XML process definition would look like:
 While there can be many nodes declared in a process definition, we have as yet, not defined a way of linking them together.
 
 ===Element `arc`===
-
+--------------------------------------------------
 An `arc` element declares an arc from the enclosing node to the node with the name specified in the `to` attribute.
 
 *Attributes*
@@ -141,6 +142,7 @@ Here is an example with two start nodes. They both have arcs to `node-three`, wh
 Now that we've seen how to create links between nodes in the same process definition, let us examine how to create links to nodes in external process definitions.
 
 ===Element `externalArc`===
+--------------------------------------------------
 An `externaArc` element declares an arc from the enclosing node to the external node with the name specified in the `nodeName` attribute
 
 *Attributes*
