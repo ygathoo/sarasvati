@@ -10,7 +10,7 @@ We first introduce the file format, then explain how to implement custom behavio
 
 = Sarasvati File Format =
 
-===The XML Schema Definition ==
+===The XML Schema Definition ===
 The process definition file format is defined by an XSD, which is [http://code.google.com/p/sarasvati/source/browse/common/ProcessDefinition.xsd available to view in the project SVN].
 
 We'll explore the sarasvati file format, starting with the root element and working from there, with examples interspersed.
