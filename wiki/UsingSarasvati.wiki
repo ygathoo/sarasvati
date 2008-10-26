@@ -30,19 +30,19 @@ This is the root element. It has a required `name` element. Every process defini
 --------------------------------------------------
 Nodes in a process definition are defined by the `node` element. Every node must have a name _unique to that file_. 
 
-*Attributes*
+====Attributes====
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
 || `name` || Specifies the name for this node. The name must be unique within this process definition. || Yes || N/A ||
 || `type` || The node type. Determines the node behavior. || No || `node` ||
 || `isStart` || Specifies whether a node will be presented with a token when the process is started. || No || false ||
 || `isJoin` || If true, the node will wait for arc tokens on all arcs with a given name before executing. If false, the node will execute as soon as an arc token arrives. || No || false ||
 
-*Built in Node Types*
+====Built in Node Types====
     * `node` - Nodes of this type will complete out on the default arc when they are executed. The node type can be useful if a synchronization point is needed. It can also be used as a choice, with a guard which skips to selected arcs.
     * `wait` - Nodes if this type will enter a wait state when executed. They will continue when completed by external logic. This can be useful when you need to wait on an external event, and no other logic is required.
     * `script` - Requires a `script` element which will contain a script to execute when the node is executed.
 
-*Nested Elements*
+====Nested Elements====
   * *guard* - Nodes may optionally have a guard element.
   * *arc*   - Nodes may have zero to many arcs, pointing to other nodes in the same process definition.
   * *externalArc* - Nodes may have zero to many external arcs, pointing to or from nodes in other process definitions.
@@ -77,7 +77,7 @@ While there can be many nodes declared in a process definition, we have as yet, 
 --------------------------------------------------
 An `arc` element declares an arc from the enclosing node to the node with the name specified in the `to` attribute. An arc has no nested elements.
 
-*Attributes*
+====Attributes====
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
 || `to` || Specifies the name of the node this arc goes to || Yes || N/A ||
 || `name` || Specifies the arc name. This name need not be unique. || No || null ||
@@ -137,7 +137,7 @@ Now that we've seen how to create links between nodes in the same process defini
 --------------------------------------------------
 An `externalArc` element declares an arc from the enclosing node to the external node with the name specified in the `nodeName` attribute. External arc elements may not contain nested elements.
 
-*Attributes*
+====Attributes====
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
 || `external` || Specifies the name of the external process definition this arc goes to. || Yes || N/A ||
 || `instance` || Specifies the specific instance of the external process definition this arc goes to. All external arcs with the same values for `external` and `instance` will go to the same set of nodes. || Yes || N/A ||
