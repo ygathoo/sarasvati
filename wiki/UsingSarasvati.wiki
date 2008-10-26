@@ -21,7 +21,7 @@ This is the root element. It has a required `name` element. Every process defini
 
 *Attributes*
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| name || Specifies the unique name for this process definition || Yes || N/A ||
+|| `name` || Specifies the unique name for this process definition || Yes || N/A ||
 
 *Nested Elements*
   * *node* - Every `process-definition` must have a least one `node` defined.
@@ -32,10 +32,10 @@ Nodes in a process definition are defined by the `node` element. Every node must
 
 *Attributes*
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| name || Specifies the name for this node. The name must be unique within this process definition. || Yes || N/A ||
-|| type || The node type. Determines the node behavior. || No || `node` ||
-|| isStart || Specifies whether a node will be presented with a token when the process is started. || No || false ||
-|| isJoin || If true, the node will wait for arc tokens on all arcs with a given name before executing. If false, the node will execute as soon as an arc token arrives. || No || false ||
+|| `name` || Specifies the name for this node. The name must be unique within this process definition. || Yes || N/A ||
+|| `type` || The node type. Determines the node behavior. || No || `node` ||
+|| `isStart` || Specifies whether a node will be presented with a token when the process is started. || No || false ||
+|| `isJoin` || If true, the node will wait for arc tokens on all arcs with a given name before executing. If false, the node will execute as soon as an arc token arrives. || No || false ||
 
 *Built in Node Types*
     * `node` - Nodes of this type will complete out on the default arc when they are executed. The node type can be useful if a synchronization point is needed. It can also be used as a choice, with a guard which skips to selected arcs.
@@ -79,8 +79,8 @@ An `arc` element declares an arc from the enclosing node to the node with the na
 
 *Attributes*
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| to || Specifies the name of the node this arc goes to || Yes || N/A ||
-|| name || Specifies the arc name. This name need not be unique. || No || null ||
+|| `to` || Specifies the name of the node this arc goes to || Yes || N/A ||
+|| `name` || Specifies the arc name. This name need not be unique. || No || null ||
 
 ===Arc Example One===
 
@@ -139,11 +139,11 @@ An `externalArc` element declares an arc from the enclosing node to the external
 
 *Attributes*
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| external || Specifies the name of the external process definition this arc goes to. || Yes || N/A ||
-|| instance || Specifies the specific instance of the external process definition this arc goes to. All external arcs with the same values for `external` and `instance` will go to the same set of nodes. || Yes || N/A ||
-|| nodeName || Specifies the name of the node this arc goes to. || Yes || N/A ||
-|| name || Specifies the external arc name. This name need not be unique. || No || null ||
-|| type || Indicates if the containing node is at the beginning or end of the arc. Valid values are `out` and `in`. If `out` is specified, the containing node is the start node of the arc, otherwise it is the end. || Yes || N/A ||
+|| `external` || Specifies the name of the external process definition this arc goes to. || Yes || N/A ||
+|| `instance` || Specifies the specific instance of the external process definition this arc goes to. All external arcs with the same values for `external` and `instance` will go to the same set of nodes. || Yes || N/A ||
+|| `nodeName` || Specifies the name of the node this arc goes to. || Yes || N/A ||
+|| `name` || Specifies the external arc name. This name need not be unique. || No || null ||
+|| `type` || Indicates if the containing node is at the beginning or end of the arc. Valid values are `out` and `in`. If `out` is specified, the containing node is the start node of the arc, otherwise it is the end. || Yes || N/A ||
 
 === External Arc Example One ===
 To examine external arcs, we'll need at least two process definitions.
