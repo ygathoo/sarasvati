@@ -13,20 +13,20 @@ We first introduce the file format, then explain how to implement custom behavio
 ===The XML Schema Definition ===
 The process definition file format is defined by an XSD, which is [http://code.google.com/p/sarasvati/source/browse/common/ProcessDefinition.xsd available to view in the project SVN].
 
-We'll explore the sarasvati file format, starting with the root element and working from there, with examples interspersed.
+We'll explore the Sarasvati file format, starting with the root element and working from there, with examples interspersed.
 
 ===Element `process-definition`===
 --------------------------------------------------
-This is the root element. It has a required `name` element. Every process definition must have a unique name. It should also indicate the XML namespace, that being:
+This is the root element. It should indicate the XML namespace, that being:
 {{{
   http://sarasvati.googlecode.com/ProcessDefinition
 }}}
 
-*Attributes*
+====Attributes====
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| `name` || Specifies the unique name for this process definition. || Yes || N/A ||
+|| `name` || The unique name for this process definition. || Yes || N/A ||
 
-*Nested Elements*
+====Nested Elements====
   * *node* - Every `process-definition` must have a least one `node` defined.
 
 ===Element `node`===
@@ -35,13 +35,13 @@ Nodes in a process definition are defined by the `node` element. Every node must
 
 ====Attributes====
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| `name` || Specifies the name for this node. The name must be unique within this process definition. || Yes || N/A ||
+|| `name` || The name for this node. The name must be unique within this process definition. || Yes || N/A ||
 || `type` || The node type. Determines the node behavior. || No || `node` ||
 || `isStart` || Specifies whether a node will be presented with a token when the process is started. || No || false ||
 || `isJoin` || If true, the node will wait for arc tokens on all arcs with a given name before executing. If false, the node will execute as soon as an arc token arrives. || No || false ||
 
 ====Built in Node Types====
-    * `node` - Nodes of this type will complete out on the default arc when they are executed. The node type can be useful if a synchronization point is needed. It can also be used as a choice, with a guard which skips to selected arcs.
+    * `node` - Nodes of this type will complete out on the default arc when they are executed. The node type can be useful if a synchronization point is needed. It can also be used as a choice mechanism, by specifying a guard which skips to selected arcs.
     * `wait` - Nodes if this type will enter a wait state when executed. They will continue when completed by external logic. This can be useful when you need to wait on an external event, and no other logic is required.
     * `script` - Requires a `script` element which will contain a script to execute when the node is executed.
 
@@ -455,7 +455,6 @@ The following process definition would load the value `test` into the `custom` p
 
 {{{
 <?xml version="1.0"?>
-
 <process-definition name="example1"
                     xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
                     xmlns:example="http://sarasvati.googlecode.com/Example">
@@ -518,7 +517,7 @@ public interface NodeFactory
 }
 }}}
 
-The custom data may be null, or a single object or list of objects. The object or objects will either be elements of `org.w3c.dom.Element` or, if you have a JAXB mapping for your custom XML, JAXB objects.
+The custom data may be null, a single object, or a list of objects. The object or objects will either be elements of `org.w3c.dom.Element` or JAXB objects, if you have a JAXB mapping for your custom XML.
 
 Instances of `NodeFactory` may be registered on `GraphLoader`.
 
