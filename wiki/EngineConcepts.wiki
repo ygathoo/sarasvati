@@ -28,7 +28,7 @@
     * [#Token_Attributes Token Attributes]
 
 ==Introduction==
-Graph based workflow/bpm engines are common. There are some general concepts which apply to most of them, but they also vary greatly in how some features are implemented, such as concurrency, synchronization and external references (these terms are defined below).
+Graph based workflow/business process management engines are common. They have areas of commonality, but they also vary greatly in concept and implementation. For example, there are differences in how concurrency and synchronization are modeled and in how modularity and re-use are promoted.
 
 We begin with the some definitions, move on to features likely to be common across most engines, then explain Sarasvati specifics.
 
@@ -237,7 +237,7 @@ The entire process can be viewed [ConceptsExampleSplitJoinOne here].
 
 ====Multithreading====
 ----------------------
-As seen the previous example, a process may have multiple tokens active concurrently. Does this imply that each token executes in a separate thread? No. Concurrency here is like that of multiple programs running on a single chip. Each runs in turns, but may present the appearance of running simultaneously. 
+As seen the previous example, a process may have multiple tokens active concurrently. Does this imply that each token executes in a separate thread? No. Concurrency here is like that of multiple programs running on a single chip. Each runs in turns, but may present the appearance of running simultaneously.
 
 However, true multithreading can be done at the node level. Each node when executed, may hand off its work to a background thread. The node token will then enter a wait state, and other nodes may be executed. When the background task is complete, it may then complete the node token, allowing further execution.
 
