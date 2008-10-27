@@ -65,6 +65,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   {
     NodeFactory nodeFactory = getNodeFactory( type );
     MemNode node = (MemNode)nodeFactory.newNode( type );
+    node.initId();
     node.setGraph( graph );
     node.setName( name );
     node.setType( type );

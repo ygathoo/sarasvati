@@ -18,11 +18,12 @@
 */
 package com.googlecode.sarasvati.visual;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,14 +34,10 @@ import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.anchor.AnchorFactory;
 import org.netbeans.api.visual.anchor.AnchorShape;
 import org.netbeans.api.visual.export.WidgetPolygonalCoordinates;
-import org.netbeans.api.visual.export.SceneExporter.ImageType;
-import org.netbeans.api.visual.export.SceneExporter.ZoomType;
 import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
-import org.netbeans.modules.visual.export.Scene2Image;
-import org.netbeans.modules.visual.layout.AbsoluteLayout;
 
 import com.googlecode.sarasvati.adapter.Function;
 
@@ -116,31 +113,40 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
     anchorMap.remove( node );
   }
 
-  public BufferedImage export (StringBuilder buf, Function<String, Widget> hrefMapper, Function<String, Widget> titleMapper )
-    throws IOException
+  public void setupForExportOnHeadless ()
   {
-    getScene().setLayout( new AbsoluteLayout() );
-    getScene().revalidate();
+    mainLayer.resolveBounds( new Point( 0, 0 ), null );
+    connLayer.resolveBounds( new Point( 0, 0 ), null );
+    intrLayer.resolveBounds( new Point( 0, 0 ), null );
+  }
 
-    Rectangle bounds = getScene().getPreferredBounds(); // new Rectangle( 0, 0, 800, 600 );
-    BufferedImage image = new BufferedImage( bounds.width, bounds.height, BufferedImage.TYPE_4BYTE_ABGR );
+  public BufferedImage export (StringBuilder buf, Function<String, Widget> hrefMapper, Function<String, Widget> titleMapper )
+  {
+    Rectangle bounds = getScene().getPreferredBounds();
+    BufferedImage image = new BufferedImage( bounds.width + NodeDrawConfig.getHorizontalNodeSpacing(),
+                                             bounds.height + 20,
+                                             BufferedImage.TYPE_4BYTE_ABGR );
 
     Graphics2D g = image.createGraphics();
+    g.setColor( Color.white );
+    g.fillRect( 0, 0, image.getWidth(), image.getHeight() );
     g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-    paint( g );
 
-    Scene2Image s = new Scene2Image( getScene(), null );
-    s.createImage( ImageType.PNG,ZoomType.ACTUAL_SIZE, false, false, 100, bounds.width, bounds.height, true  );
+    getScene().validate( g );
+    getScene().paint( g );
+
+    SvScene2Image s = new SvScene2Image( getScene() );
+
     List<WidgetPolygonalCoordinates> coords = s.getSceneImageMapCoordinates(  0 );
 
     for ( WidgetPolygonalCoordinates coord : coords )
     {
       buf.append( "<area shape=\"poly\" coords=\"" );
       ConvertUtil.appendPolygon( coord.getPolygon(), buf );
-
+      buf.append( "\" " );
       String result = hrefMapper.apply( coord.getWidget() );
 
-      if ( result != null && result.length() == 0 )
+      if ( result != null && result.length() != 0 )
       {
         buf.append( " href=\"" );
         buf.append( result );
@@ -153,7 +159,7 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
 
       result = titleMapper.apply( coord.getWidget() );
 
-      if ( result != null && result.length() == 0 )
+      if ( result != null && result.length() != 0 )
       {
         buf.append( "title=\"");
         buf.append( titleMapper.apply( coord.getWidget() ) );
@@ -162,6 +168,8 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
 
       buf.append( ">\n" );
     }
+
+    System.out.println( buf.toString() );
 
     return image;
   }

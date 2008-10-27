@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati.mem;
 
+import java.util.concurrent.atomic.AtomicLong;
+
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
@@ -31,8 +33,11 @@ import com.googlecode.sarasvati.guardlang.PredicateRepository;
 
 public class MemNode implements Node, Cloneable
 {
+  protected static AtomicLong idGenerator = new AtomicLong();
+
   protected Graph graph;
 
+  protected long    id;
   protected String  name;
   protected String  type;
   protected boolean isJoin;
@@ -46,24 +51,14 @@ public class MemNode implements Node, Cloneable
     /* Default constructor */
   }
 
-  public MemNode (Graph graph, String name, String type, boolean isJoin, boolean isStart, String guard)
+  public Long getId ()
   {
-    this.graph = graph;
-    this.name = name;
-    this.type = type;
-    this.isJoin = isJoin;
-    this.isStart = isStart;
-    this.guard = guard;
+    return id;
   }
 
-  public MemNode (MemNode node)
+  public void initId ()
   {
-    this.graph = node.getGraph ();
-    this.name = node.getName();
-    this.type = node.getType();
-    this.isJoin = node.isJoin();
-    this.isStart = node.isStart();
-    this.guard = node.getGuard();
+    this.id = idGenerator.incrementAndGet();
   }
 
   @Override
