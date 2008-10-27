@@ -51,6 +51,14 @@ import com.googlecode.sarasvati.adapter.Adaptable;
 public interface Node extends Adaptable
 {
   /**
+   * Returns the node's unique id. The id must be unique to the Graph, but may be
+   * globally unique.
+   *
+   * @returns The node's unique id.
+   */
+  Long getId ();
+
+  /**
    * Returns the node name. Every node must have a name which
    * is unique in it's process definition;
    *

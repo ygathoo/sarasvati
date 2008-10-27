@@ -33,9 +33,17 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
 {
   protected Graph graph;
   protected GraphTree graphTree;
+  boolean showSelfArcs;
 
   public SarasvatiGraphScene (Graph graph)
   {
+    this( graph, false );
+  }
+
+  public SarasvatiGraphScene (Graph graph, boolean showSelfArcs)
+  {
+    this.showSelfArcs = showSelfArcs;
+
     if ( graph != null )
     {
       for ( Node ref : graph.getNodes() )
@@ -45,9 +53,12 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
 
       for ( Arc arc : graph.getArcs() )
       {
-        addEdge( arc );
-        setEdgeSource( arc, arc.getStartNode() );
-        setEdgeTarget( arc, arc.getEndNode() );
+        if ( showSelfArcs || !arc.getStartNode().equals( arc.getEndNode() ) )
+        {
+          addEdge( arc );
+          setEdgeSource( arc, arc.getStartNode() );
+          setEdgeTarget( arc, arc.getEndNode() );
+        }
       }
 
       graphTree = new GraphTree( graph );
@@ -58,6 +69,15 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
         GraphTreeNode treeNode = graphTree.getTreeNode( node );
         widget.setPreferredLocation( new Point( treeNode.getOriginX(), treeNode.getOriginY() ) );
         widget.resolveBounds( new Point( treeNode.getOriginX(), treeNode.getOriginY() ), null );
+      }
+
+      for ( Arc arc : graph.getArcs() )
+      {
+        Widget widget = findWidget( arc );
+        if ( widget != null )
+        {
+          widget.resolveBounds( null, null );
+        }
       }
 
       revalidate();

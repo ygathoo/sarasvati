@@ -69,6 +69,16 @@ public class HibGraphRepository implements GraphRepository<HibGraph>
        .uniqueResult();
   }
 
+  public HibGraph loadGraph (long graphId)
+  {
+    return (HibGraph)session.load( HibGraph.class, graphId );
+  }
+
+  public HibGraph findGraph (long graphId)
+  {
+    return (HibGraph)session.get( HibGraph.class, graphId );
+  }
+
   public HibGraphProcess loadProcess (long processId)
   {
     return (HibGraphProcess)session.load( HibGraphProcess.class, processId );

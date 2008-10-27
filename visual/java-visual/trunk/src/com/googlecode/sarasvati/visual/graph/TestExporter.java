@@ -1,8 +1,13 @@
 package com.googlecode.sarasvati.visual.graph;
 
 import java.awt.Component;
+import java.awt.image.BufferedImage;
+import java.io.File;
 
+import javax.imageio.ImageIO;
+import javax.swing.Icon;
 import javax.swing.JLabel;
+import javax.swing.JPanel;
 
 import org.hibernate.Session;
 import org.netbeans.api.visual.widget.Widget;
@@ -26,12 +31,19 @@ public class TestExporter
           @Override
           public Component apply (Node node)
           {
+            Icon icon = null;
             if ( "task".equals( node.getType() ) )
             {
-              return new JLabel( new TaskIcon( node, null ) );
+              icon = new TaskIcon( node, null );
+            }
+            else
+            {
+              icon = new DefaultNodeIcon( node, null );
             }
 
-            return new JLabel( new DefaultNodeIcon( node, null ) );
+            JLabel label = new JLabel( icon );
+            label.setSize( icon.getIconWidth(), icon.getIconHeight() );
+            return label;
           }
         });
 
@@ -41,7 +53,10 @@ public class TestExporter
 
     Graph graph = engine.getRepository().getLatestGraph( "embedded-task-rej" );
 
-    SarasvatiGraphScene graphScene = new SarasvatiGraphScene( graph );
+    JPanel panel = new JPanel();
+    panel.addNotify();
+
+    SarasvatiGraphScene graphScene = new SarasvatiGraphScene( graph, false );
 
     Function<String, Widget> mapper = new Function<String, Widget>()
     {
@@ -52,6 +67,11 @@ public class TestExporter
       }
     };
 
-    graphScene.export( new StringBuilder(), mapper, mapper );
+    panel.validate();
+
+    graphScene.setupForExportOnHeadless();
+    BufferedImage image = graphScene.export( new StringBuilder(), mapper, mapper );
+    ImageIO.write( image, "gif", new File( "/home/paul/tmp/image.gif" ) );
+    image.flush();
   }
 }
