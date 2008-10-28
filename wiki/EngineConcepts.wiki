@@ -323,7 +323,7 @@ The process now looks like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts4-4.jpg]
 
-The node token has been discarded, and execution has continued from the completion of _Request_ where an arc token has been generated on the lower outgoing arc. Execution will now continue as normal.
+The node token has been discarded, and execution has continued from the completion of _Request_ where an arc token has been generated on the lower outgoing arc. Execution will now continue.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts4-5.jpg]
 
@@ -377,7 +377,7 @@ If we again specify _two_, then an arc token will be generated on that arc.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts6-2.jpg]
 
-From there, execution will continue normally.
+From there, execution will continue.
 
 The complete process can be seen [ConceptsExampleSelectArcOne here].
 
@@ -389,7 +389,7 @@ Much like any software, a set of process definitions can grow larger, more compl
 
 Sarasvati supports two ways of doing encapsulation, each with it's own advantages and disadvantages. The first is *graph composition*, the second is *nested processes*. Both of these techniques allow complete process definitions and components that have been split out to be defined in separately. The difference lies in when they are composed.
 
-  * *Load-time composition* - Graph composition brings the disparate elements together at load time. The main definition being loaded may refer to other definitions. These definitions will be loaded as well and they will all be combined into a single definition. This single definition will execute as a normal process.
+  * *Load-time composition* - Graph composition brings the disparate elements together at load time. The main definition being loaded may refer to other definitions. These definitions will be loaded as well and they will all be combined into a single definition. This single definition will execute as if it had been defined in a single file.
   * *Run-time composition* - Nested processes use composition at runtime. The main definition will be loaded. When this definition is executed, a node may start a nested process. This nested process will execute and when completed, the main process will continue.
 
 Now that we have general idea of how graph composition and nested processes compare, let us investigate them in more detail.
@@ -484,6 +484,6 @@ Each *node token* also has its own environment. Arc tokens do not have an enviro
  * *Parent token* - Each node tokens has zero to many parents.
    * A node token on a start node has no parents. It will start with an empty environment.
    * A node token on a node with one incoming arc of a given name has a single parent. Its environment will be copied from the parent.
-   * A node token on a join node may have multiple parents, one for each arc of the same name. In this case the environments of all the parents must be combined in some way. By default, each environment will be imported into that of the new node. So if more than one parent has an attribute with the same one, the last one imported will overwrite the previous values. This behavior may be overridden, but if this is a concern, then usually using process level attributes is advisable.
+   * A node token on a join node may have multiple parents, one for each arc of the same name. In this case the environments of all the parents must be combined in some way. By default, each environment will be imported into that of the new node. So if more than one parent has an attribute with the same one, the last one imported will overwrite the previous values. This behavior may be overridden, but if this is a concern, then using process level attributes may be advisable.
 
 [#Contents Back to Table of Contents]
