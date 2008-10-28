@@ -666,7 +666,7 @@ public class TaskNode extends MemNode {
 }
 }}}
 
-When a task node is executed, it will create new `Task` instance and add to a task list. A task can be completed or rejected as seen in the following code snippet:
+When a task node is executed, it will create new `Task` instance and add it to a task list. A task can be completed or rejected as seen in the following code snippet:
 
 {{{
       Task t = ...;
