@@ -54,7 +54,7 @@ public interface Node extends Adaptable
    * Returns the node's unique id. The id must be unique to the Graph, but may be
    * globally unique.
    *
-   * @returns The node's unique id.
+   * @return The node's unique id.
    */
   Long getId ();
 
