@@ -42,7 +42,7 @@ Nodes in a process definition are defined by the `node` element. Every node must
 
 ====Built in Node Types====
     * `node` - Nodes of this type will complete out on the default arc when they are executed. The node type can be useful if a synchronization point is needed. It can also be used as a choice mechanism, by specifying a guard which skips to selected arcs.
-    * `wait` - Nodes if this type will enter a wait state when executed. They will continue when completed by external logic. This can be useful when you need to wait on an external event, and no other logic is required.
+    * `wait` - Nodes of this type will enter a wait state when executed. They will continue when completed by external logic. This can be useful when you need to wait on an external event, and no other logic is required.
     * `script` - Requires a `script` element which will contain a script to execute when the node is executed.
 
 ====Nested Elements====
@@ -78,7 +78,7 @@ While there can be many nodes declared in a process definition, we have as yet, 
 
 ===Element `arc`===
 --------------------------------------------------
-An `arc` element declares an arc from the enclosing node to the node with the name specified in the `to` attribute. An arc has no nested elements.
+An `arc` element declares an arc from the enclosing node to the node with the name specified in the `to` attribute. An arc is allowed no nested elements.
 
 ====Attributes====
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
