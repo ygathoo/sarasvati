@@ -1,0 +1,43 @@
+#summary Description of GuardLang DSL
+
+= GuardLang =
+
+Sarasvati includes a domain specific language (DSL) for defining guards. The GuardLang program consists of a single statement, which must take one of the following two forms:
+
+{{{
+  STMT = if ( predicate (or predicate)* (and predicate)* )
+         then STMT else STMT
+  STMT = Accept | Discard | Skip | Skip <symbol>
+}}}
+
+A `predicate` is a string identifier, which the runtime ties to a function which returns a boolean value. The function may have access to the current process environment. The statement result can be mapped directly to a `GuardResponse`. The advantage of using this DSL for defining node guards, is that it can help users understand process behaviour. Given a library of predicates that are named with user comprehension in mind, GuardLang statements should be understandable by users with a minimum of technical understanding and training.
+
+For example, a process for order fulfillment may include a set of steps for orders with regular shipping and a different set of steps for priority shipping. Priority shipping will be given to customers who have requested for a specific order, or for certain high volume customers. A set of predicates could be defined.
+
+  * `Order.isPriority`
+  * `Customer.isHighVolume`
+
+The node making the decision of which steps to take, might be defined as follows:
+
+{{{
+  <node name="isPriority">
+   <guard>
+     if (Order.isPriority or Customer.isHighVolume)
+       then SKIP priority
+       else SKIP regular
+    </guard>
+
+    <arc name="regular" to="regularShipping"/>
+    <arc name="priority" to="priorityShipping"/>
+  </node>
+}}}
+
+This GuardLang statement could be presented directly to the users. Or, if the SKIP naming was deemed to confusing, it could be parsed and restated as:
+
+{{{
+  if order is priority or customer is high volume
+     then do priority
+     else do regular
+}}}
+
+This, or course, relies on appropriate naming of predicates and arcs. Assuming that predicates are side-effect free (which they should be, of course), then they can also be evaluated at any time. This would allow the system to display the current values for each of the predicates used in a guard.
