@@ -35,7 +35,7 @@ Nodes in a process definition are defined by the `node` element. Every node must
 
 ====Attributes====
 || *Attribute Name* || *Usage* || *Required?* || *Default* ||
-|| `name` || The name for this node. The name must be unique within this process definition. || Yes || N/A ||
+|| `name` || The name of this node. The name must be unique within this process definition. || Yes || N/A ||
 || `type` || The node type. Determines the node behavior. || No || `node` ||
 || `isStart` || Specifies whether a node will be presented with a token when the process is started. || No || false ||
 || `isJoin` || If true, the node will wait for arc tokens on all arcs with a given name before executing. If false, the node will execute as soon as an arc token arrives. || No || false ||
@@ -107,7 +107,7 @@ The following example contains three nodes.
 </process-definition>
 }}}
 
-To indicate an arc, an `arc` element is added to the start node. The `to` attribute indicates the name of the target node. The node with the name must exist in the same process definition file.
+To indicate an arc, an `arc` element is added to the start node. The `to` attribute indicates the name of the target node. A node with that name must exist in the same process definition file.
 
 
 === Arc Example Two ===
@@ -297,7 +297,7 @@ When the engine determines that a node is ready to execute, it will follow this 
   # If the action is `SkipNode`, `Engine.completeExecution` will be called with the arc name contained in the `GuardResponse`.
 
 ===Custom logic for Node Execution===
-To provide custom behavior to your nodes, you will override the `execute` method on `Node`. Sarasvati currently provides two implementations of the base API, one memory backed and one database backed, implemented using Hibernate. Other implementations could be made using,for example, pure JDBC or some other persistence mechanism. There are two base classes for nodes.
+To provide custom behavior to your nodes, you will override the `execute` method on `Node`. Sarasvati currently provides two implementations of the base API, one memory backed and one database backed, implemented using Hibernate. Other implementations could be made using, for example, pure JDBC or some other persistence mechanism. There are two base classes for nodes.
 
   * `com.googlecode.sarasvati.mem.MemNode`
   * `com.googlecode.sarasvati.hib.HibNode`
@@ -397,7 +397,7 @@ Here are the steps in code for the memory backed implementation.
     GraphProcess process = engine.startProcess( graph );
 }}}
 
-Here are the steps in code for the hibernate backed implementation. It assumes that you have a means of creating a hibernate Session object.
+Here are the steps in code for the hibernate backed implementation. It assumes that you have a means of creating a hibernate `Session` object.
 
 {{{
     Session session = ...; // get hibernate session
@@ -458,7 +458,7 @@ The following process definition would load the value `test` into the `custom` p
 
     <example:custom>test</example>
   </node>
-
+</process-definition>
 }}}
 
 There several things to note with custom elements.
@@ -478,7 +478,7 @@ Nested objects are supported. For example:
   </example>
 }}}
 
-Here this would invoke `getTask().setName( ... )` on the custom node.
+The loader would invoke `getTask().setName( ... )` on the custom node.
 
 Attributes are also supported. How they are mapped is based on the contents of the element the attribute is on. If the element has child elements, the attribute will get mapped as a child property. If the element is itself a property, the attribute name will be combined with the element name to get the property name.
 
@@ -570,11 +570,7 @@ We will need a couple of classes to represent tasks and their state. First we lo
 
 First we have an enum for task states.
 {{{
-public enum TaskState {
-  Open,
-  Completed,
-  Rejected
-}
+public enum TaskState { Open, Completed, Rejected }
 }}}
 
 Next is the `Task` class.
