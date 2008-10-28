@@ -34,20 +34,20 @@ We begin with the some definitions, move on to features likely to be common acro
 
 ==Definitions==
 
-Graphs come with a set of common terms. To begin with, a graph is made up a set of things, hereafter referred to as *nodes* and a set of connections between _nodes_, know as *arcs*.
+Graphs come with a set of common terms. To begin with, a graph is made up of a set of things, hereafter referred to as *nodes* and a set of connections between _nodes_, know as *arcs*.
 
-  * *Graph* - Set of nodes, with set of arcs connecting the nodes. While graphs have a wider applicability, graph here is synonymous with process definition.
+  * *Graph* - A set of nodes, with a set of arcs connecting the nodes. While graphs have a wider applicability, graph here is synonymous with process definition.
     * Also know as: Process Definition, Network, Workflow
 
   * *Node* - An element of a graph. A node corresponds roughly to an action as defined [Workflow previously]. Nodes can be thought of as pieces of code, waiting to be executed when their turn comes.
     * Also known as: Vertex, Place
 
-  * *Arc* - A directed connection between two nodes. 'Directed' means that arcs have a start node and an end node. In same cases, an arc may have a label, or name.
+  * *Arc* - A directed connection between two nodes. _Directed_ means that arcs have a start node and an end node. In some cases, an arc may have a label, or name.
     * Also know as: Edge, Transition
 
-  * *Predecessor* - If two nodes are connected by an arc then the node at the beginning of the arc is the _predecessor_ of the node at the end of the arc. How nodes are connected by arcs defines the order of execution. Generally a node may not execute until at last one, potentially many or all, of its predecessors has executed. Nodes may have many arcs exiting and entering them.
+  * *Predecessor* - If two nodes are connected by an arc then the node at the beginning of the arc is the _predecessor_ of the node at the end of the arc. How nodes are connected by arcs defines the order of execution. Generally a node may not execute until at least one, potentially many or all, of its predecessors have executed. Nodes may have many arcs exiting and entering them.
 
-These definitions cover the parts of a process definition. However, they don't cover how that process definition is actually executed. When a process definition gets executed, it is called a *process*. Somehow, a process must track which nodes are being executed. This is generally accomplished by placing markers on the active nodes. These markers are generally called *tokens*.
+These definitions cover the parts of a process definition. However, they don't cover how that process definition is actually executed. When a process definition gets executed, the execution is called a *process*. Somehow, a process must track which nodes are being executed. This is generally accomplished by placing markers called *token* on the active nodes.
 
   * *Process* - An executing process definition. A process definition may have have zero, one or many processes executing at any given time.
     * Also known as: Case, Instance, Workflow
@@ -85,15 +85,15 @@ Assuming that the 'Hello World' node is a start node, execution would begin by c
 
   * *Node Token* - A token situated at a node. Node tokens track the response of the node guard (see below). They may also have attributes.
 
-The process would now look like:
+With the addition of the node token, the process would now look like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts1-1.jpg]
 
 As you can see, the node now has an active node token stationed on it.
 
-At this point the node has not yet been executed. Before it can be though, its *guard* would need to be invoked.
+At this point the node has not yet been executed. Before it can be, its *guard* would need to be invoked.
 
-  * *Node Guard* - Nodes have functionality associated with them, which will be executed when a node token is accepted into the node. However, before a node is executed, its guard will be executed. The guard will is allowed one of three responses:
+  * *Node Guard* - Nodes have functionality associated with them, which will be executed when a node token is accepted into the node. However, before a node is executed, its guard will be executed. The guard is allowed one of three responses:
     * *Accept* - The node will be executed.
     * *Discard* - The node token will be marked as discarded and the node will not be executed.
     * *Skip*    - The node will _not_ be executed, however, processing will continue as if the node had completed execution normally.
@@ -132,7 +132,7 @@ When the node token on _Hello_ is completed, an *arc token* will be generated on
 
 Since the arc on which the arc token is situated goes into a *non-join node*, a node token will be created on _World_ immediately.
 
-  * *Non-join node* - A node which is activated whenever an arc token arrives on an incoming node. Activated means the incoming arc token is completed and an active node token is created. This stands in contrast to a *join node*, where active arc tokens must exist on all incoming arcs with the same name. This will be explored in more detail below.
+  * *Non-join node* - A node which is activated whenever an arc token arrives on an incoming node. Activated means the incoming arc token is completed and an active node token is created. This stands in contrast to a *join node*, where active arc tokens must exist on all incoming arcs with the same name.
 
 The process now looks like:
 
@@ -166,7 +166,7 @@ This a simplified system, since it does not allow approvals to be denied.
 
 There is more than one way that this process could be executed.
 
-  * If the approvals are granted by people, the nodes will almost certainly executed asynchronously. This means that when a token arrives at _Approval 1_, the node will generate a notification to the user who is to do the approval. The token will then enter a *wait state*. Execution may continue elsewhere in the process, but this token will wait until the user enters the system and grants approval.
+  * If the approvals are granted by people, the nodes will almost certainly be executed asynchronously. This means that when a token arrives at _Approval 1_, the node will generate a notification to the user who is to do the approval. The token will then enter a *wait state*. Execution may continue elsewhere in the process, but this token will wait until the user enters the system and grants approval.
   * If approvals are done by software which does a check and then returns immediately the tokens will not have enter a *wait state*, but may continue immediately.
 
   * *Wait State* - When a token enters a node and the node is executed, it may choose not to immediately continue process execution at the end of the node method. In this case the token will remain in the node until it is complete asynchronously. While the token is waiting to be completed, it is considered to be in a wait state.
@@ -189,10 +189,10 @@ Some things to note:
   * Most arcs have no name specified. They are considered to have the 'default' name.
   * Usually when completing a node token, the default arc name will be given.
   * Each arc will have an arc token placed on it in turn. No specific order is guaranteed
-  * When an arc token is place on a node, it will continue on to its end node immediately and see if the node can be executed.
+  * When an arc token is placed on an arc, it will continue on to its end node immediately and see if the node can be executed.
 
 
-So, now the node token on _Request_ has been completed and arc tokens will be generated on the outgoing arcs. First a node token will be generated on the upper arc (though order of arc execution is not guaranteed).
+So now the node token on _Request_ has been completed and arc tokens will be generated on the outgoing arcs. First a node token will be generated on the upper arc (though order of arc execution is not guaranteed).
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts3-2.jpg]
 
@@ -349,7 +349,7 @@ In this variant, a _Select_ node has been inserted after _Request_. This node ha
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts5.jpg]
 
-It starts normally. Let us pick it up as _Select_ has a node token generated on it, and its guard is invoked.
+Let us pick it up after process started, as _Select_ has a node token generated on it, and its guard is invoked.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts5-3.jpg]
 
@@ -373,7 +373,7 @@ Instead of using the guard on the _Select_ node, the _Request_ node will specify
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts6-1.jpg]
 
-If we again, specify _two_, the an arc token will be generated on that arc.
+If we again specify _two_, then an arc token will be generated on that arc.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts6-2.jpg]
 
@@ -406,9 +406,9 @@ Now that we have general idea of how graph composition and nested processes comp
 
   * *External Arc* - An arc which has an endpoint in an external process definition. While normal arcs are always specified as originating in the node where they are defined (aka *out arcs*), it is not possible to add arcs to an external process. Therefore external arcs may either be *in arcs* or *out arcs*. Note that external arcs may be *named* just like regular arcs.
     * *Out Arc* - An arc which starts in the defining node and ends in a specified node
-    * *In Arc* - An arc which starts in a specified and ends in the node in which it is defined.
+    * *In Arc* - An arc which starts in a specified node and ends in the node in which it is defined.
 
-  * *External Instance* - A specific external process definition may be referenced multiple times. It may also be imported into the referring process definition multiple times, or just a single time. Each external arc specifies a specific instance of the external process definition.
+  * *External Instance* - A specific external process definition may be referenced multiple times. It may also be imported into the referring process definition multiple times, or just a single time. Each external arc names a specific instance of the external process definition.
 
   * *Nested Process* - A node in an executing process may create a separate, new process (of the same or different process definition). This new process is known a nested process. The new process gets initialized with the process state of the containing process and the current token. When the nested process completes, the token in the containing process will be completed.
     * Advantages
@@ -424,13 +424,13 @@ Now that we have general idea of how graph composition and nested processes comp
 ====Graph Composition Example One====
 -------------------------------------------------------------------------
 
-Let's look at an examples of how this works in practice. Here is a small process definition which we want to embed. This process definition will be named 'ext'.
+Let's look at an examples of how this works in practice. Here is a small process definition which we want to embed. This process definition will be named _ext_.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals1.jpg]
 
 It only has two nodes. Notice that both nodes are join nodes, even though one node has no inputs and the other only has one. However, in the composed graph these nodes may have more inputs.
 
-Next is the process definition which will be using 'ext'.
+Next is the process definition which will be using _ext_.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals2.jpg]
 
@@ -438,7 +438,7 @@ This process definition looks very different from previous examples. It isn't ev
 
 Some things to note:
   * The external arcs are labeled with the process definition name, instance and node name that they are intended to link to.
-  * In this case, all the arcs are connecting to the same instance of 'ext', instance 1.
+  * In this case, all the arcs are connecting to the same instance of _ext_, instance 1.
   * Both in and out external arcs may connect to any node in the target external. They are not limited to just start nodes, for example.
 
 When the graph is loaded, the composed version will look as follows:
@@ -449,7 +449,7 @@ When the graph is loaded, the composed version will look as follows:
 
 ====Graph Composition Example Two====
 -------------------------------------------------------------------------
-The previous example referenced only a single instance. Here as the example using two instances 'ext.
+The previous example referenced only a single instance. Here is the example using two instances 'ext.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals4.jpg]
 
@@ -457,7 +457,7 @@ When it is loaded, the composed graph looks like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals5.jpg]
 
-As you can see, we now have two copies of 'ext' embedded in the process definition. One copy will be made for each unique instance referenced. A process definition can have references to any number of different external definitions and each external process definition can be imported any number of times.
+As you can see, we now have two copies of _ext_ embedded in the process definition. One copy will be made for each unique instance referenced. A process definition can have references to any number of different external definitions and each external process definition can be imported any number of times.
 
 [#Contents Back to Table of Contents]
 
