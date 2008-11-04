@@ -25,6 +25,8 @@ import java.util.List;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
 import com.googlecode.sarasvati.event.ProcessEvent;
+import com.googlecode.sarasvati.guardlang.GuardEnv;
+import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.script.ScriptEnv;
 
 /**
@@ -251,5 +253,11 @@ public abstract class BaseEngine implements Engine
   public void addNodeType(String type, Class<? extends Node> nodeClass)
   {
     getFactory().addType(type, nodeClass);
+  }
+
+  @Override
+  public GuardEnv newGuardEnv (NodeToken token)
+  {
+    return PredicateRepository.newGuardEnv( this, token );
   }
 }

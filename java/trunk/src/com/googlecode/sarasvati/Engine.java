@@ -21,6 +21,7 @@ package com.googlecode.sarasvati;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
+import com.googlecode.sarasvati.guardlang.GuardEnv;
 import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.GraphRepository;
@@ -261,4 +262,13 @@ public interface Engine
    * @param token The NodeToken which is currently being executed
    */
   void setupScriptEnv (ScriptEnv env, NodeToken token);
+
+  /**
+   * Creates a {@link GuardEnv} to be used to evaluate a GuardLang statement
+   * related to the given {@link NodeToken}.
+   *
+   * @param token The token which will provide some of the state for the GuardEnv
+   * @return A GuardEnv for this engine and the given NodeToken.
+   */
+  GuardEnv newGuardEnv (NodeToken token);
 }
