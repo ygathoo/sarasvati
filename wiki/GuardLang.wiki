@@ -5,9 +5,19 @@
 Sarasvati includes a domain specific language (DSL) for defining guards. The GuardLang program consists of a single statement, which must take one of the following two forms:
 
 {{{
-  STMT = if ( predicate (or predicate)* (and predicate)* )
-         then STMT else STMT
+  STMT = if EXPR
+           then STMT 
+           else STMT
   STMT = Accept | Discard | Skip | Skip <symbol>
+}}}
+
+Expressions may take any of the following forms:
+
+{{{
+  EXPR = predicate 
+  EXPR = EXPR and EXPR
+  EXPR = EXPR or EXPR
+  EXPR = ( EXPR )
 }}}
 
 A `predicate` is a string identifier, which the runtime ties to a function which returns a boolean value. The function may have access to the current process environment. The statement result can be mapped directly to a `GuardResponse`. The advantage of using this DSL for defining node guards, is that it can help users understand process behaviour. Given a library of predicates that are named with user comprehension in mind, GuardLang statements should be understandable by users with a minimum of technical understanding and training.
@@ -41,3 +51,60 @@ This GuardLang statement could be presented directly to the users. Or, if the SK
 }}}
 
 This, or course, relies on appropriate naming of predicates and arcs. Assuming that predicates are side-effect free (which they should be, of course), then they can also be evaluated at any time. This would allow the system to display the current values for each of the predicates used in a guard.
+
+== GuardLang API ==
+There are two parts to the API.
+  * Defining predicates
+  * Evaluating statements
+
+To define a predicate, implement the `GuardLangPredicate` interface. For example, here is a predicate which returns true if is a weekend:
+
+{{{
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
+
+public class IsWeekendPredicate implements GuardLangPredicate
+{
+  @Override
+  public boolean evaluate (Engine engine, NodeToken token)
+  {
+    Calendar cal = Calendar.getInstance();
+    int day = cal.get( Calendar.DAY_OF_WEEK );
+    return day == Calendar.SATURDAY || 
+           day == Calendar.SUNDAY;
+  }
+}
+}}}
+
+This predicate can be registered with the `PredicateRepository`, from which a `GuardEnv` can be produced. This in turn, can be passed to the `GuardLang.eval` method.
+
+{{{
+import java.util.Calendar;
+
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.guardlang.GuardLang;
+import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
+import com.googlecode.sarasvati.guardlang.PredicateRepository;
+import com.googlecode.sarasvati.mem.MemEngine;
+
+public class IsWeekendPredicate implements GuardLangPredicate
+{
+  @Override
+  public boolean evaluate (Engine engine, NodeToken token)
+  {
+    // impl from above
+  }
+  
+  public static void main (String[] args)
+  {
+    PredicateRepository.addPredicate( "isWeekend", new IsWeekendPredicate() );
+    String stmt = "if isWeekend then Accept else Skip";
+    GuardResponse response = GuardLang.eval(  stmt, PredicateRepository.newGuardEnv( new MemEngine(), null ) ); 
+    System.out.println( response );
+  }
+}
+
+}}}
