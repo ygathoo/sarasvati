@@ -53,6 +53,15 @@ public interface NodeToken extends Token
   List<ArcToken> getParentTokens ();
 
   /**
+   * Returns the list of ArcTokens whic have this token as their parent. If this NodeToken
+   * has not yet been completed, or no arcs match the selected arc name when the node was
+   * completed, the list will be empty.
+   *
+   * @return The list of ArcTokens which have this token as their parent
+   */
+  List<ArcToken> getChildTokens ();
+
+  /**
    * Returns the full environment. This will include variables set on the
    * token as well as variables set on the process. If a variable with the
    * same name exists in both the token and process environments, the token
