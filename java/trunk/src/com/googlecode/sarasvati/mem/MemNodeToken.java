@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.mem;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -40,6 +41,7 @@ public class MemNodeToken implements NodeToken
   protected GraphProcess process;
   protected GuardAction guardAction;
   protected List<ArcToken> parentTokens;
+  protected List<ArcToken> childTokens;
   protected Date createDate;
   protected Date completeDate;
 
@@ -53,6 +55,7 @@ public class MemNodeToken implements NodeToken
     this.node = node;
     this.process = process;
     this.parentTokens = parentTokens;
+    this.childTokens = new LinkedList<ArcToken>();
     this.createDate = new Date();
   }
 
@@ -78,6 +81,12 @@ public class MemNodeToken implements NodeToken
   public List<ArcToken> getParentTokens()
   {
     return parentTokens;
+  }
+
+  @Override
+  public List<ArcToken> getChildTokens()
+  {
+    return childTokens;
   }
 
   @Override

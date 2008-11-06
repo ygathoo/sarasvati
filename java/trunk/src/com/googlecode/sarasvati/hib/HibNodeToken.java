@@ -24,6 +24,7 @@ package com.googlecode.sarasvati.hib;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -38,6 +39,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -78,11 +80,14 @@ public class HibNodeToken implements NodeToken
   @Column( name="value")
   protected Map<String, String> attrMap;
 
-  @ManyToMany (fetch=FetchType.LAZY, targetEntity=HibArcToken.class, cascade= {CascadeType.ALL})
+  @ManyToMany( fetch=FetchType.LAZY, targetEntity=HibArcToken.class, cascade= {CascadeType.ALL} )
   @JoinTable( name = "wf_node_token_parent",
               joinColumns = @JoinColumn(name = "node_token_id"),
               inverseJoinColumns = @JoinColumn(name = "arc_token_id") )
   protected List<ArcToken> parentTokens;
+
+  @OneToMany( mappedBy="parentToken", fetch=FetchType.LAZY )
+  protected List<ArcToken> childTokens;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column (name="create_date", updatable = false)
@@ -118,6 +123,7 @@ public class HibNodeToken implements NodeToken
     this.attrSetToken = attrMap.isEmpty() ? attrSetToken : this;
     this.attrMap      = attrMap;
     this.parentTokens = parentTokens;
+    this.childTokens  = new LinkedList<ArcToken>();
     this.createDate   = new Date();
 
     this.transientAttributes = transientAttributes;
@@ -195,6 +201,17 @@ public class HibNodeToken implements NodeToken
   public void setParentTokens (List<ArcToken> parentTokens)
   {
     this.parentTokens = parentTokens;
+  }
+
+  @Override
+  public List<ArcToken> getChildTokens()
+  {
+    return childTokens;
+  }
+
+  public void setChildTokens (List<ArcToken> childTokens)
+  {
+    this.childTokens = childTokens;
   }
 
   @Override

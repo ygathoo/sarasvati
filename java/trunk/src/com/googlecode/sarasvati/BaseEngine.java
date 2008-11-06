@@ -20,7 +20,9 @@ package com.googlecode.sarasvati;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
@@ -190,6 +192,7 @@ public abstract class BaseEngine implements Engine
     for ( Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
     {
       ArcToken arcToken = getFactory().newArcToken( process, arc, token );
+      token.getChildTokens().add(  arcToken );
       fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
       process.enqueueArcTokenForExecution( arcToken );
     }
@@ -253,6 +256,21 @@ public abstract class BaseEngine implements Engine
   public void addNodeType(String type, Class<? extends Node> nodeClass)
   {
     getFactory().addType(type, nodeClass);
+  }
+
+  public void backup (NodeToken token)
+  {
+    Set<NodeToken> tokens = new HashSet<NodeToken>();
+    tokens.add( token );
+
+    for ( ArcToken arcToken : token.getParentTokens() )
+    {
+      NodeToken parentNodeToken = arcToken.getParentToken();
+      if ( parentNodeToken.getChildTokens().size() == 1 )
+      {
+
+      }
+    }
   }
 
   @Override
