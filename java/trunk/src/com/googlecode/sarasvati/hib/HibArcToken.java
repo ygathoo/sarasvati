@@ -23,6 +23,7 @@ package com.googlecode.sarasvati.hib;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,6 +31,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -39,6 +41,7 @@ import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
 
 @Entity
 @Table (name="wf_arc_token")
@@ -56,9 +59,15 @@ public class HibArcToken implements ArcToken
   @JoinColumn (name = "arc_id")
   protected HibArc     arc;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
   @JoinColumn (name = "parent_token_id", nullable=false)
-  protected HibNodeToken parentToken;
+  protected NodeToken parentToken;
+
+  @ManyToOne( fetch=FetchType.LAZY, targetEntity=HibNodeToken.class, cascade=CascadeType.ALL)
+  @JoinTable( name = "wf_node_token_parent",
+              joinColumns = @JoinColumn(name = "arc_token_id"),
+              inverseJoinColumns = @JoinColumn(name = "node_token_id") )
+  protected NodeToken childToken;
 
   @Temporal(TemporalType.TIMESTAMP)
   @Column (name="create_date", updatable = false)
@@ -113,14 +122,24 @@ public class HibArcToken implements ArcToken
     this.arc = arc;
   }
 
-  public HibNodeToken getParentToken ()
+  public NodeToken getParentToken ()
   {
     return parentToken;
   }
 
-  public void setPreviousToken (HibNodeToken parentToken)
+  public void setParentToken (NodeToken parentToken)
   {
     this.parentToken = parentToken;
+  }
+
+  public NodeToken getChildToken()
+  {
+    return childToken;
+  }
+
+  public void setChildToken(NodeToken childToken)
+  {
+    this.childToken = childToken;
   }
 
   public Date getCreateDate ()
@@ -150,11 +169,11 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public void markComplete (Engine engine)
+  public void markComplete (Engine engine, NodeToken token)
   {
     this.completeDate = new Date();
+    this.childToken = token;
   }
-
 
   @Override
   public boolean isPending ()

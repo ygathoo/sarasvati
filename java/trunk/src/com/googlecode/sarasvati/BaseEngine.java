@@ -21,6 +21,7 @@ package com.googlecode.sarasvati;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -130,16 +131,17 @@ public abstract class BaseEngine implements Engine
 
   private void completeExecuteArc (GraphProcess process, Node targetNode, ArcToken ... tokens)
   {
-    for ( ArcToken token : tokens )
-    {
-      process.removeActiveArcToken( token );
-      token.markComplete( this );
-      fireEvent( ArcTokenEvent.newCompletedEvent( this, token ) );
-    }
-
     NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, Arrays.asList( tokens ) );
     process.addNodeToken( nodeToken );
     fireEvent( NodeTokenEvent.newCreatedEvent( this, nodeToken ) );
+
+    for ( ArcToken token : tokens )
+    {
+      process.removeActiveArcToken( token );
+      token.markComplete( this, nodeToken );
+      fireEvent( ArcTokenEvent.newCompletedEvent( this, token ) );
+    }
+
     executeNode( process, nodeToken );
   }
 
@@ -258,17 +260,32 @@ public abstract class BaseEngine implements Engine
     getFactory().addType(type, nodeClass);
   }
 
-  public void backup (NodeToken token)
+  public void backtrack (NodeToken token)
   {
-    Set<NodeToken> tokens = new HashSet<NodeToken>();
-    tokens.add( token );
+    Set<NodeToken> leaves = new HashSet<NodeToken>();
+    Set<NodeToken> processed = new HashSet<NodeToken>();
+    List<NodeToken> queue = new LinkedList<NodeToken>();
 
-    for ( ArcToken arcToken : token.getParentTokens() )
+    queue.add( token );
+
+    while ( !queue.isEmpty() )
     {
-      NodeToken parentNodeToken = arcToken.getParentToken();
-      if ( parentNodeToken.getChildTokens().size() == 1 )
+      NodeToken current = queue.remove( 0 );
+      if ( processed.contains( current ) )
       {
+        continue;
+      }
+      processed.add( current );
 
+      if ( !current.getNode().isBacktrackable( current ) )
+      {
+        throw new WorkflowException( "Can not backtrack node" );
+      }
+
+      for ( ArcToken childArcToken : current.getChildTokens() )
+      {
+        NodeToken child = childArcToken.getChildToken();
+        (child.getChildTokens().isEmpty() ? leaves : queue).add( child );
       }
     }
   }

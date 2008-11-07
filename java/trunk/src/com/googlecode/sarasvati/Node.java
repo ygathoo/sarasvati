@@ -125,6 +125,23 @@ public interface Node extends Adaptable
   boolean isExternal ();
 
   /**
+   * Returns true if the specific execution of this Node by the given
+   * NodeToken can be backtracked.
+   *
+   * @param token
+   * @return True if the node can be backtracked, false otherwise.
+   */
+  boolean isBacktrackable (NodeToken token);
+
+  /**
+   * Does whatever work is necessary to backtrack this execution. For example,
+   * a task node may send a notification that the task has been backtracked.
+   *
+   * @param token The specific token being backtracked.
+   */
+  void backtrack (NodeToken token);
+
+  /**
    * When a NodeToken is created, the associated Node will not
    * automatically be executed. First, the guard function is called,
    * which will indicate which action should be taken. The possible

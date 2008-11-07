@@ -54,6 +54,14 @@ public interface ArcToken extends Token
   NodeToken getParentToken ();
 
   /**
+   * Returns the node token which was generated from
+   * this arc token.
+   *
+   * @return The child NodeToken
+   */
+  NodeToken getChildToken ();
+
+  /**
    * Return true if this arc token requires processing, false otherwise.
    * Multiple arc tokens will be created at once, in the case where a
    * node has multiple outgoing arcs. When first created, this method
@@ -79,4 +87,14 @@ public interface ArcToken extends Token
    * @param engine The engine processing this Token
    */
   void markProcessed (Engine engine);
+
+  /**
+   * Marks this token as being complete, in the sense that it no longer
+   * represents an active part of the process. Once a token is marked
+   * complete, it is generally only of historical interest.
+   *
+   * @param engine The Engine completing this arc token
+   * @param token The node token generated from this arc token
+   */
+  void markComplete (Engine engine, NodeToken token);
 }

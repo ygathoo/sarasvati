@@ -32,6 +32,7 @@ public class MemArcToken implements ArcToken
   protected Arc arc;
   protected GraphProcess process;
   protected NodeToken parentToken;
+  protected NodeToken childToken;
   protected boolean pending;
   protected Date completeDate;
 
@@ -62,15 +63,22 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
+  public NodeToken getChildToken()
+  {
+    return childToken;
+  }
+
+  @Override
   public boolean isComplete ()
   {
     return completeDate != null;
   }
 
   @Override
-  public void markComplete (Engine engine)
+  public void markComplete (Engine engine, NodeToken token)
   {
     this.completeDate = new Date();
+    this.childToken = token;
   }
 
   @Override
