@@ -185,6 +185,27 @@ public class HibNode implements Node
     return false;
   }
 
+  /**
+   * Does nothing by default. Can be overridden by subclasses.
+   * @see Node#backtrack(NodeToken)
+   */
+  @Override
+  public void backtrack (NodeToken token)
+  {
+    // does nothing by default. Can be overridden by subclasses.
+  }
+
+  /**
+   * Returns true. Can be overridden by subclasses.
+   *
+   * @see Node#isBacktrackable(NodeToken)
+   */
+  @Override
+  public boolean isBacktrackable (NodeToken token)
+  {
+    return true;
+  }
+
   @Override
   public GuardResponse guard (Engine engine, NodeToken token)
   {

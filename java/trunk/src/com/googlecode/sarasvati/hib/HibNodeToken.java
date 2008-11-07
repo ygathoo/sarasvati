@@ -37,7 +37,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -80,13 +79,10 @@ public class HibNodeToken implements NodeToken
   @Column( name="value")
   protected Map<String, String> attrMap;
 
-  @ManyToMany( fetch=FetchType.LAZY, targetEntity=HibArcToken.class, cascade= {CascadeType.ALL} )
-  @JoinTable( name = "wf_node_token_parent",
-              joinColumns = @JoinColumn(name = "node_token_id"),
-              inverseJoinColumns = @JoinColumn(name = "arc_token_id") )
+  @OneToMany( fetch=FetchType.LAZY, targetEntity=HibArcToken.class, cascade= {CascadeType.ALL}, mappedBy="childToken" )
   protected List<ArcToken> parentTokens;
 
-  @OneToMany( mappedBy="parentToken", fetch=FetchType.LAZY )
+  @OneToMany( mappedBy="parentToken", targetEntity=HibArcToken.class, fetch=FetchType.LAZY )
   protected List<ArcToken> childTokens;
 
   @Temporal(TemporalType.TIMESTAMP)

@@ -142,7 +142,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 
     for ( HibArcToken arcToken : hibParents )
     {
-      HibNodeToken parent = arcToken.getParentToken();
+      HibNodeToken parent = (HibNodeToken)arcToken.getParentToken();
 
       if ( parent.getAttrSetToken() == null )
       {

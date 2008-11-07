@@ -132,6 +132,18 @@ public class HibNodeRef implements Node
   }
 
   @Override
+  public void backtrack (NodeToken token)
+  {
+    node.backtrack( token );
+  }
+
+  @Override
+  public boolean isBacktrackable(NodeToken token)
+  {
+    return node.isBacktrackable( token );
+  }
+
+  @Override
   public GuardResponse guard (Engine engine, NodeToken token)
   {
     return node.guard( engine, token );

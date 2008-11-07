@@ -117,4 +117,11 @@ public interface NodeToken extends Token
    * @return The date/time the node token was completed.
    */
   Date getCompleteDate ();
+
+  /**
+   * Marks this token as being complete, in the sense that it no longer
+   * represents an active part of the process. Once a token is marked
+   * complete, it is generally only of historical interest.
+   */
+  void markComplete (Engine engine);
 }
