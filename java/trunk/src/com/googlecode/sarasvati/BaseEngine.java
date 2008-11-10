@@ -271,21 +271,44 @@ public abstract class BaseEngine implements Engine
     while ( !queue.isEmpty() )
     {
       NodeToken current = queue.remove( 0 );
-      if ( processed.contains( current ) )
+      if ( !processed.contains( current ) )
       {
-        continue;
-      }
-      processed.add( current );
+        processed.add( current );
 
-      if ( !current.getNode().isBacktrackable( current ) )
+        if ( !current.getNode().isBacktrackable( current ) )
+        {
+          throw new WorkflowException( "Can not backtrack node" );
+        }
+
+        for ( ArcToken childArcToken : current.getChildTokens() )
+        {
+          NodeToken child = childArcToken.getChildToken();
+          (child.getChildTokens().isEmpty() ? leaves : queue).add( child );
+        }
+      }
+    }
+
+    queue.addAll( leaves );
+
+    while ( !queue.isEmpty() )
+    {
+      NodeToken current = queue.remove( 0 );
+      current.getNode().backtrack(  current );
+
+      if ( !current.isComplete() )
       {
-        throw new WorkflowException( "Can not backtrack node" );
+        current.markComplete( this );
       }
 
-      for ( ArcToken childArcToken : current.getChildTokens() )
+
+
+      for ( ArcToken arcToken : current.getParentTokens() )
       {
-        NodeToken child = childArcToken.getChildToken();
-        (child.getChildTokens().isEmpty() ? leaves : queue).add( child );
+        NodeToken parent = arcToken.getParentToken();
+        if ( processed.contains( parent ) )
+        {
+          queue.add( parent );
+        }
       }
     }
   }
