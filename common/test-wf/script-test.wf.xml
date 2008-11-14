@@ -5,23 +5,27 @@
   <node name="start" type="script" isStart="true">
     <arc to="next"/>
 
-    <script type="js">
-      <![CDATA[
-        java.lang.System.out.println( "Hello" );
-        java.lang.System.out.println( "token: " + token );
+    <custom>
+      <script type="js">
+        <![CDATA[
+          java.lang.System.out.println( "Hello" );
+          java.lang.System.out.println( "token: " + token );
 
-        engine.completeExecution( token, null );
-      ]]>
-    </script>
+          engine.completeExecution( token, null );
+        ]]>
+      </script>
+    </custom>
   </node>
 
   <node name="next" type="script" isJoin="true">
-    <script type="js">
-      <![CDATA[
-        java.lang.System.out.println( "Hello from node: " + token.node.name );
-        java.lang.System.out.println( "token: " + token );
-      ]]>
-    </script>
+    <custom>
+      <script type="js">
+        <![CDATA[
+          java.lang.System.out.println( "Hello from node: " + token.node.name );
+          java.lang.System.out.println( "token: " + token );
+        ]]>
+      </script>
+    </custom>
   </node>
 
 

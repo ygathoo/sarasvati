@@ -16,9 +16,6 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
 package com.googlecode.sarasvati.hib;
 
 import java.util.Collections;
@@ -249,7 +246,7 @@ public class HibNodeToken implements NodeToken
   {
     if ( fullEnv == null )
     {
-      fullEnv = new NestedEnv( env, process.getEnv() );
+      fullEnv = new NestedEnv( getEnv(), process.getEnv() );
     }
     return fullEnv;
   }

@@ -24,7 +24,6 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAnyElement;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -52,8 +51,8 @@ public class XmlNode
   @XmlElement (name="externalArc", required=false)
   protected List<XmlExternalArc> externalArcs = new ArrayList<XmlExternalArc>();
 
-  @XmlAnyElement (lax=true)
-  protected List<Object> custom;
+  @XmlElement (name="custom")
+  protected XmlCustom custom;
 
   public String getName()
   {
@@ -135,12 +134,12 @@ public class XmlNode
     this.externalArcs = externalArcs;
   }
 
-  public List<Object> getCustom ()
+  public XmlCustom getCustom ()
   {
     return custom;
   }
 
-  public void setCustom (List<Object> custom)
+  public void setCustom (XmlCustom custom)
   {
     this.custom = custom;
   }

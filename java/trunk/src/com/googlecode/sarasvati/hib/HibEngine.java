@@ -173,6 +173,8 @@ public class HibEngine extends BaseEngine
     config.addAnnotatedClass( HibGraphProcess.class );
     config.addAnnotatedClass( HibWaitNode.class );
     config.addAnnotatedClass( HibScriptNode.class );
+    config.addAnnotatedClass( HibPropertyNode.class );
+    config.addAnnotatedClass( HibNestedProcessNode.class );
 
     if (enableCaching )
     {

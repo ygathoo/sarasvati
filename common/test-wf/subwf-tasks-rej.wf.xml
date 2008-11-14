@@ -1,53 +1,55 @@
 <?xml version="1.0"?>
 
 <process-definition name="subwf-tasks-rej"
-                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
-                       xmlns:example="http://sarasvati.googlecode.com/Example">
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="sub1" type="task">
     <arc to="sub2"/>
     <arc to="sub3"/>
 
-    <example:taskName>Call Distributer</example:taskName>
-    <example:taskDesc>
-      This task should spawn tasks "Order Stuff" and "Request Status"
-    </example:taskDesc>
-
+    <custom>
+      <taskName>Call Distributer</taskName>
+      <taskDesc>
+        This task should spawn tasks "Order Stuff" and "Request Status"
+      </taskDesc>
+    </custom>
   </node>
 
   <node name="sub2" type="task">
     <arc to="sub4"/>
 
-    <example:taskName>Order Stuff</example:taskName>
-    <example:taskDesc>
-      Order stuff now.
+    <custom>
+      <taskName>Order Stuff</taskName>
+      <taskDesc>
+        Order stuff now.
 
-      Mark Complete shouldn't spawn until this and Request status are both complete.
-    </example:taskDesc>
-
+        Mark Complete shouldn't spawn until this and Request status are both complete.
+      </taskDesc>
+    </custom>
   </node>
 
   <node name="sub3" type="task">
     <arc to="sub4"/>
 
-    <example:taskName>Request Status</example:taskName>
-    <example:taskDesc>
-      Get status on other orders.
+    <custom>
+      <taskName>Request Status</taskName>
+      <taskDesc>
+        Get status on other orders.
 
-      Mark Complete shouldn't spawn until this and Order Stuff are both complete.
-    </example:taskDesc>
-
+        Mark Complete shouldn't spawn until this and Order Stuff are both complete.
+      </taskDesc>
+    </custom>
   </node>
 
   <node name="sub4" type="task" isJoin="true">
-
     <arc to="sub1" name="reject"/>
 
-    <example:taskName>Mark Complete</example:taskName>
-    <example:taskDesc>
-      Sign off in application in application.
-    </example:taskDesc>
-
+    <custom>
+      <taskName>Mark Complete</taskName>
+      <taskDesc>
+        Sign off in application in application.
+      </taskDesc>
+    </custom>
   </node>
 
 </process-definition>

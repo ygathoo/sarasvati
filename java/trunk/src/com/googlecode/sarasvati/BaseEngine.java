@@ -51,6 +51,9 @@ public abstract class BaseEngine implements Engine
   @Override
   public void startProcess (GraphProcess process)
   {
+    boolean savedArcExecutionStarted = arcExecutionStarted;
+    arcExecutionStarted = false;
+
     process.setState( ProcessState.Executing );
     fireEvent( ProcessEvent.newStartedEvent( this, process ) );
 
@@ -65,6 +68,8 @@ public abstract class BaseEngine implements Engine
     {
       checkForCompletion( process );
     }
+
+    arcExecutionStarted = savedArcExecutionStarted;
   }
 
   @Override
@@ -83,7 +88,10 @@ public abstract class BaseEngine implements Engine
     NodeToken parentToken = process.getParentToken();
     if ( parentToken != null )
     {
+      boolean savedArcExecutionStarted = this.arcExecutionStarted;
+      this.arcExecutionStarted = false;
       completeExecution( parentToken, Arc.DEFAULT_ARC );
+      arcExecutionStarted = savedArcExecutionStarted;
     }
   }
 

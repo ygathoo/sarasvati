@@ -28,6 +28,16 @@ public class MemNestedProcessNode extends MemNode
 {
   protected String graphName;
 
+  public String getGraphName()
+  {
+    return graphName;
+  }
+
+  public void setGraphName(String graphName)
+  {
+    this.graphName = graphName;
+  }
+
   @Override
   public void execute (Engine engine, NodeToken token)
   {

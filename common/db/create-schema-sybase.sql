@@ -13,6 +13,7 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc_token') drop table wf_arc
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token') drop table wf_node_token
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc') drop table wf_arc
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_ref') drop table wf_node_ref
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_attr') drop table wf_node_attr
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_script') drop table wf_node_script
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node') drop table wf_node
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_type') drop table wf_node_type
@@ -125,6 +126,18 @@ go
 ALTER TABLE wf_node
   ADD CONSTRAINT wf_node_unique
     UNIQUE(graph_id, name)
+go
+
+create table wf_node_attr
+(
+  node_id  bigint       NOT NULL REFERENCES wf_node,
+  name     varchar(255) NOT NULL,
+  value    varchar(255) NOT NULL
+)
+go
+
+ALTER TABLE wf_node_attr
+  ADD PRIMARY KEY (node_id, name)
 go
 
 create table wf_node_script
