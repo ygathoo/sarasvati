@@ -18,19 +18,33 @@
 */
 package com.googlecode.sarasvati.hib;
 
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.WorkflowException;
 
-public class HibNestedProcessNode extends HibNode
+@Entity
+@DiscriminatorValue( "nested" )
+public class HibNestedProcessNode extends HibPropertyNode
 {
-  protected String graphName;
+  public String getGraphName ()
+  {
+    return getProperty( "graphName" );
+  }
+
+  public void setGraphName (String graphName)
+  {
+    setProperty( "graphName", graphName );
+  }
 
   @Override
   public void execute (Engine engine, NodeToken token)
   {
+    String graphName = getGraphName();
     Graph subGraph = engine.getRepository().getLatestGraph( graphName );
 
     if ( subGraph == null )

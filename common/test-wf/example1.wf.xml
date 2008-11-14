@@ -1,8 +1,7 @@
 <?xml version="1.0"?>
 
 <process-definition name="example1"
-                       xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
-                       xmlns:example="http://sarasvati.googlecode.com/Example">
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="start" isStart="true">
     <arc to="1"/>
@@ -12,37 +11,44 @@
     <arc to="2"/>
     <arc to="3"/>
 
-    <example:taskName>Enter order</example:taskName>
-    <example:taskDesc>
-      Enter order and billing info
-    </example:taskDesc>
+    <custom>
+      <taskName>Enter order</taskName>
+      <taskDesc>
+        Enter order and billing info
+      </taskDesc>
+    </custom>
   </node>
 
   <node type="task" name="2">
     <arc to="4"/>
 
-    <example:taskName>Bill Customer</example:taskName>
-    <example:taskDesc>
-      Bill the Customer
-    </example:taskDesc>
-
+    <custom>
+      <taskName>Bill Customer</taskName>
+      <taskDesc>
+        Bill the Customer
+      </taskDesc>
+    </custom>
   </node>
 
   <node type="task" name="3">
     <arc to="4"/>
 
-    <example:taskName>Ship product</example:taskName>
-    <example:taskDesc>
-      Package and ship product
-    </example:taskDesc>
+    <custom>
+      <taskName>Ship product</taskName>
+      <taskDesc>
+        Package and ship product
+      </taskDesc>
+    </custom>
   </node>
 
   <node type="task" name="4" isJoin="true">
 
-    <example:taskName>Market to Customer</example:taskName>
-    <example:taskDesc>
-      Send marketing material to customer
-    </example:taskDesc>
+    <custom>
+      <taskName>Market to Customer</taskName>
+      <taskDesc>
+        Send marketing material to customer
+      </taskDesc>
+    </custom>
 
   </node>
 

@@ -74,31 +74,6 @@ public class HibNode implements Node
 
   public HibNode () { /* Default constructor for Hibernate */ }
 
-  public HibNode (HibGraph graph,
-                  String name,
-                  String type,
-                  boolean join,
-                  boolean start,
-                  String guard)
-  {
-    this.graph = graph;
-    this.name  = name;
-    this.type  = type;
-    this.join  = join;
-    this.start = start;
-    this.guard = guard;
-  }
-
-  public HibNode (HibNode other)
-  {
-    this.graph = other.graph;
-    this.name  = other.name;
-    this.type  = other.type;
-    this.join  = other.join;
-    this.start = other.start;
-    this.guard = other.guard;
-  }
-
   public Long getId ()
   {
     return id;

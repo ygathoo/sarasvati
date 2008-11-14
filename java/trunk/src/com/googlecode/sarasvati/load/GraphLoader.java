@@ -82,12 +82,14 @@ public class GraphLoader<G extends Graph>
 
       String type = xmlNode.getType();
 
+      List<Object> customData = xmlNode.getCustom() == null ? null : xmlNode.getCustom().getCustom();
+
       Node newNode = factory.newNode( graph, nodeName,
                                       type == null ? "node" : type,
                                       xmlNode.isJoin(),
                                       xmlNode.isStart(),
                                       xmlNode.getGuard(),
-                                      xmlNode.getCustom() );
+                                      customData );
       nodeCache.put( nodeName, newNode );
     }
   }

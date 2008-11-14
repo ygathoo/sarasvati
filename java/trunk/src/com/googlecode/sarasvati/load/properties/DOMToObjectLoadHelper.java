@@ -30,6 +30,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.util.SvUtil;
 
 public class DOMToObjectLoadHelper
 {
@@ -56,8 +57,11 @@ public class DOMToObjectLoadHelper
     if ( !hasElementChildren )
     {
       String value = node.getTextContent();
-      value = value == null ? null : value.trim();
-      editor.setFromText( value );
+
+      if ( !SvUtil.isBlankOrNull( value ) )
+      {
+        editor.setFromText( value.trim() );
+      }
     }
 
     NamedNodeMap attrs = node.getAttributes();

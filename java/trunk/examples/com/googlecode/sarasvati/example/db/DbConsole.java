@@ -108,9 +108,15 @@ public class DbConsole
 
       List<Task> tasks =
         session
-          .createQuery( "from Task where nodeToken.process = ? order by state" )
-          .setEntity( 0, p )
+          .createQuery( "from Task where nodeToken.process = :p order by state" )
+          .setEntity( "p", p )
           .list();
+
+      tasks.addAll(
+        session
+          .createQuery( "from Task where nodeToken.process.parentToken.process = :p order by state" )
+          .setEntity( "p", p )
+          .list() );
 
       Task t = null;
 
