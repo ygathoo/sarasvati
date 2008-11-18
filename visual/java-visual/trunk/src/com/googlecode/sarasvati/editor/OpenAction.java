@@ -1,4 +1,4 @@
-package com.googlecode.sarasvati.visual.graph.editor;
+package com.googlecode.sarasvati.editor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -13,9 +13,9 @@ public class OpenAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  protected ProcessDefinitionEditor editor;
+  protected GraphEditor editor;
 
-  public OpenAction (ProcessDefinitionEditor editor)
+  public OpenAction (GraphEditor editor)
   {
     super( "Open" );
     this.editor = editor;

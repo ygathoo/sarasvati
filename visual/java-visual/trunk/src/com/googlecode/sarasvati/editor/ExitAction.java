@@ -1,4 +1,4 @@
-package com.googlecode.sarasvati.visual.graph.editor;
+package com.googlecode.sarasvati.editor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -11,9 +11,9 @@ public class ExitAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  protected ProcessDefinitionEditor editor;
+  protected GraphEditor editor;
 
-  public ExitAction (ProcessDefinitionEditor editor)
+  public ExitAction (GraphEditor editor)
   {
     super( "Exit" );
     this.editor = editor;
