@@ -1,4 +1,4 @@
-package com.googlecode.sarasvati.visual.graph.editor;
+package com.googlecode.sarasvati.editor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -7,13 +7,13 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-public class NewProcessDefinitionAction extends AbstractAction
+public class NewGraphAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  protected ProcessDefinitionEditor editor;
+  protected GraphEditor editor;
 
-  public NewProcessDefinitionAction (ProcessDefinitionEditor editor)
+  public NewGraphAction (GraphEditor editor)
   {
     super( "New Process Definition" );
     this.editor = editor;

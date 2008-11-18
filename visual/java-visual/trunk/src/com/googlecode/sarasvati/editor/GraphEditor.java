@@ -1,4 +1,4 @@
-package com.googlecode.sarasvati.visual.graph.editor;
+package com.googlecode.sarasvati.editor;
 
 import java.awt.event.KeyEvent;
 
@@ -11,7 +11,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 
-public class ProcessDefinitionEditor
+public class GraphEditor
 {
   protected JFrame      mainWindow;
   protected JTabbedPane tabPane;
@@ -42,7 +42,7 @@ public class ProcessDefinitionEditor
     JMenu fileMenu = new JMenu( "File" );
     fileMenu.setMnemonic( KeyEvent.VK_F );
 
-    fileMenu.add( new JMenuItem( new NewProcessDefinitionAction( this ) ) );
+    fileMenu.add( new JMenuItem( new NewGraphAction( this ) ) );
     fileMenu.add( new JMenuItem( new OpenAction( this ) ) );
     fileMenu.add( new JMenuItem( new ExitAction( this ) ) );
 
@@ -71,7 +71,7 @@ public class ProcessDefinitionEditor
           System.out.println( "Nimbus not supported on your JRE" );
         }
 
-        new ProcessDefinitionEditor().setup();
+        new GraphEditor().setup();
       }
     });
   }
