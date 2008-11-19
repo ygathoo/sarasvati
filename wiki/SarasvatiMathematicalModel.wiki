@@ -1,5 +1,34 @@
 #summary A concise mathematical description of the Sarasvati model
 
+== Concise Natural Language Description ==
+
+  * A graph is made up of nodes and arcs.
+  * Nodes have the following properties
+    * A subset of nodes are join nodes
+    * A subset of nodes are start nodes
+    * A guard function, which given a node token, returns one of Accept, Discard or Skip.
+    * An execute function.
+  * Arcs have the following properties 
+    * start node
+    * end node
+    * non-unique label
+  * A graph is executed by means of a process. A process tracks the current state of execution by means of node tokens, which exist on nodes, and arc tokens, which exist on arcs.
+
+Graph execution has the following operations
+  * NodeTokenAccept - A node token is generated on the node and the guard is called.
+    * Accept: Executes the node
+    * Discard: Marks the node token as discard
+    * Skip: Skip includes an arc label. This calls NodeTokenComplete with the given arc label
+  * NodeTokenComplete 
+    * requires an arc label as parameter
+    * generates an arc token every outgoing node from the given node with that label and calls ArcTokenComplete on that arc token.
+  * ArcTokenComplete
+    * If the end node of the arc is a join node, an arc token must exist on all other arcs coming into the same end node which share a label with the current arc. If this condition is met, one arc token on each of the arcs is marked complete and a node token is created on the arc's end node. NodeTokenAccept is called on the new node token.
+    * If the end node of the arc is not a join node, the arc token is immediately marked complete, a new node token is generated on the end node of the arc and NodeTokenAccept is called on the new node token.
+
+A graph is execution begins by placing a node token on every start node, and call the node accept operation on each of these node tokens.
+
+
 == The Model ==
 A Sarasvati executable graph is defined as directed graph, with a token mapping of node and arc tokens over that graph.
 
