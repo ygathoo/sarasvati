@@ -6,7 +6,6 @@ import java.awt.event.KeyEvent;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 public class OpenAction extends AbstractAction
@@ -32,7 +31,7 @@ public class OpenAction extends AbstractAction
 
     if ( retVal == JFileChooser.APPROVE_OPTION )
     {
-      JOptionPane.showMessageDialog( editor.getMainWindow(), "Selected: " + fileChooser.getSelectedFile().getName() );
+      editor.openProcessDefinition( fileChooser.getSelectedFile() );
     }
   }
 }

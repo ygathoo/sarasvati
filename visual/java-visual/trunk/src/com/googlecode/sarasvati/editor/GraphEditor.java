@@ -1,20 +1,38 @@
 package com.googlecode.sarasvati.editor;
 
+import java.awt.Dimension;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
+import javax.xml.bind.JAXBException;
+
+import com.googlecode.sarasvati.editor.model.EditorArc;
+import com.googlecode.sarasvati.editor.model.EditorGraph;
+import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
+import com.googlecode.sarasvati.editor.model.EditorGraphMember;
+import com.googlecode.sarasvati.editor.model.EditorScene;
+import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.xml.XmlLoader;
+import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class GraphEditor
 {
+  protected XmlLoader   xmlLoader;
   protected JFrame      mainWindow;
   protected JTabbedPane tabPane;
+
+  public GraphEditor () throws JAXBException, LoadException
+  {
+    xmlLoader = new XmlLoader();
+  }
 
   public JFrame getMainWindow ()
   {
@@ -25,7 +43,7 @@ public class GraphEditor
   {
     mainWindow = new JFrame( "Sarasvati Graph Editor" );
     mainWindow.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
-    mainWindow.setSize( 800, 600 );
+    mainWindow.setMinimumSize( new Dimension( 800, 600 ) );
     mainWindow.setJMenuBar( createMenu() );
     mainWindow.setVisible( true );
 
@@ -56,22 +74,45 @@ public class GraphEditor
     tabPane.addTab( "Untitled", scrollPane );
   }
 
-  public static void main( String[] args )
+  public void openProcessDefinition (File processDefinitionFile)
   {
+    try
+    {
+      XmlProcessDefinition xmlProcDef = xmlLoader.loadProcessDefinition(  processDefinitionFile );
+      EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef );
+      EditorScene scene = new EditorScene();
+
+      for ( EditorGraphMember member : graph.getMembers().values() )
+      {
+        scene.addNode( member );
+      }
+
+      for ( EditorArc arc : graph.getArcs() )
+      {
+        scene.addEdge( arc );
+        scene.setEdgeSource(  arc, arc.getStart() );
+        scene.setEdgeTarget( arc, arc.getEnd() );
+      }
+
+      JScrollPane scrollPane = new JScrollPane();
+      scrollPane.setViewportView( scene.createView() );
+      tabPane.addTab( graph.getName(), scrollPane );
+      tabPane.setSelectedComponent( scrollPane );
+    }
+    catch (Exception e)
+    {
+      JOptionPane.showMessageDialog( mainWindow, e.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE );
+    }
+  }
+
+  public static void main( String[] args ) throws Exception
+  {
+    final GraphEditor graphEditor = new GraphEditor();
     SwingUtilities.invokeLater( new Runnable()
     {
       @Override public void run()
       {
-        try
-        {
-          UIManager.setLookAndFeel("com.sun.java.swing.plaf.nimbus.NimbusLookAndFeel");
-        }
-        catch ( Exception e )
-        {
-          System.out.println( "Nimbus not supported on your JRE" );
-        }
-
-        new GraphEditor().setup();
+        graphEditor.setup();
       }
     });
   }
