@@ -1,21 +1,11 @@
 package com.googlecode.sarasvati.editor.model;
 
-public class EditorNode
+public class EditorNode extends EditorGraphMember
 {
-  protected String  name;
   protected String  type;
   protected boolean isStart;
   protected boolean isJoin;
-
-  public String getName()
-  {
-    return name;
-  }
-
-  public void setName(String name)
-  {
-    this.name = name;
-  }
+  protected String  guard;
 
   public String getType()
   {
@@ -45,5 +35,15 @@ public class EditorNode
   public void setJoin(boolean isJoin)
   {
     this.isJoin = isJoin;
+  }
+
+  public String getGuard()
+  {
+    return guard;
+  }
+
+  public void setGuard( String guard )
+  {
+    this.guard = guard;
   }
 }

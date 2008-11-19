@@ -1,14 +1,15 @@
 package com.googlecode.sarasvati.editor.model;
 
+import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.visual.GraphSceneImpl;
 
-public class EditorScene extends GraphSceneImpl<EditorNode, EditorArc>
+public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 {
   @Override
-  protected Widget widgetForNode (EditorNode node)
+  protected Widget widgetForNode (EditorGraphMember node)
   {
-    return null;
+    return new LabelWidget( this, node.getName() );
   }
 }
