@@ -3,51 +3,70 @@
 == Concise Natural Language Description ==
 
   * A graph is made up of nodes and arcs.
+  * A subset of nodes are join nodes
+  * A subset of nodes are start nodes
   * Nodes have the following properties
-    * A subset of nodes are join nodes
-    * A subset of nodes are start nodes
     * A guard function, which given a node token, returns one of Accept, Discard or Skip.
     * An execute function.
   * Arcs have the following properties 
     * start node
     * end node
     * non-unique label
-  * A graph is executed by means of a process. A process tracks the current state of execution by means of node tokens, which exist on nodes, and arc tokens, which exist on arcs.
+  * A graph is executed by means of a process. A process tracks the current state of execution using node tokens, which exist on nodes, and arc tokens, which exist on arcs.
 
 Graph execution has the following operations
-  * NodeTokenAccept - A node token is generated on the node and the guard is called.
-    * Accept: Executes the node
-    * Discard: Marks the node token as discard
-    * Skip: Skip includes an arc label. This calls NodeTokenComplete with the given arc label
-  * NodeTokenComplete 
-    * requires an arc label as parameter
-    * generates an arc token every outgoing node from the given node with that label and calls ArcTokenComplete on that arc token.
-  * ArcTokenComplete
-    * If the end node of the arc is a join node, an arc token must exist on all other arcs coming into the same end node which share a label with the current arc. If this condition is met, one arc token on each of the arcs is marked complete and a node token is created on the arc's end node. NodeTokenAccept is called on the new node token.
-    * If the end node of the arc is not a join node, the arc token is immediately marked complete, a new node token is generated on the end node of the arc and NodeTokenAccept is called on the new node token.
-
-A graph is execution begins by placing a node token on every start node, and call the node accept operation on each of these node tokens.
+  * AcceptNodeToken 
+    * Parameteters: node token
+    * Performed on a newly generated node token.
+    * Executes the guard associated with the node
+    * If the guard returns Accept: Executes the node
+    * If the guard returns Discard: Marks the node token as discard
+    * If the guard returns Skip: Skip includes an arc label. This performs CompleteNodeToken with the given arc label
+  * CompleteNodeToken
+    * Parameters: node token, label
+    * Generates an arc token every outgoing node from the given node with that label
+    * ProcessArcToken is performed on each arc token generated
+  * ProcessArcToken
+    * Parameters: arc token
+    * If the end node of the arc is a join node
+      * An arc token must exist on all other arcs coming into the same end node which share a label with the current arc. If this condition is met, one arc token on each of the arcs is marked complete and a node token is created on the arc's end node. NodeTokenAccept is called on the new node token.
+    * If the end node of the arc is not a join node, the arc token is immediately marked complete, a new node token is generated on the end node of the arc and AcceptNodeToken is performed on the new node token.
+  * StartProcess
+    * Parameters: process
+    * A graph is execution begins by placing a node token on every start node, and calls the AcceptNodeToken operation on each of these node tokens.
 
 
 == The Model ==
 A Sarasvati executable graph is defined as directed graph, with a token mapping of node and arc tokens over that graph.
 
+A Sarasvati graph is defined as 
+
+*G* = ( *N*, *N,,j,,*, *N,,s,,*, *A*, *L* )
+
+  * *N* is the set of nodes in the graph
+  * *N,,j,,* is the set of join nodes in the graph. *N,,j,,* ⊂ *N*.
+  * *N,,s,,* is the set of start nodes in the graph. *N,,s,,* ⊂ *N*.
+  * *A* is the set of arcs in the graph
+  * *L* is the set of labels used in the graph
+
+An arc *a* ∈ *A* is a tuple ( *a,,start,,*, *a,,end,,*, *l* ) where
+
+  * *a,,start,,* ∈ *N*
+  * *a,,end,,* ∈ *N*
+  * *l* ∈ *L*
+
 Formally, a Sarasvati graph execution *S* is defined as
 
-*S* = {*N*, *A*, *T,,N,,*, *T,,A,,*}.
+*S* = ( *G*, *T*, *R* )
 
 where 
 
-  * *N* is the set of nodes in the graph
-    * Every node *n* in *N* may be either a join node, or a non-join node.
-    * The function _isjoin_ maps *N* to the set of boolean values, indicating whether or not the node is a join or not.
-  * *A* is the set of arcs in the graph
-  * *T,,N,,* is the set of active node tokens
-  * *T,,A,,* is the set of active arc tokens
+  * *G* is the graph being executed
+  * *T* is the set of active node tokens
+  * *R* is the set of active arc tokens
 
 in addition
 
-  * Every arc *a* in *A* is defined as the tuple ( *n,,start,,*, *n,,end,,*, *name* ) where *n,,start,,*, *n,,end,,* are elements of *N* and the arc goes from *n,,start,,* to *n,,end,,*. *name* is a non-unique identifier, used to group arcs into sets. 
   * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,start,,* = *n* and *name* = *ident* belongs to *n,,out(ident),,*. 
     * This corresponds to the set of outgoing arcs from *n* with identifier *ident*.
   * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,end,,* = *n* and *name* = *ident* belongs to *n,,in(ident),,*. 
