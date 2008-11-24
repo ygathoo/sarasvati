@@ -15,12 +15,15 @@
   * A graph is executed by means of a process. A process tracks the current state of execution using node tokens, which exist on nodes, and arc tokens, which exist on arcs.
 
 Graph execution has the following operations
+  * StartProcess
+    * Parameters: process
+    * A graph is execution begins by placing a node token on every start node, and performs the AcceptNodeToken operation on each of these node tokens.
   * AcceptNodeToken 
-    * Parameteters: node token
+    * Parameters: node token
     * Performed on a newly generated node token.
     * Executes the guard associated with the node
     * If the guard returns Accept: Executes the node
-    * If the guard returns Discard: Marks the node token as discard
+    * If the guard returns Discard: Marks the node token as discarded
     * If the guard returns Skip: Skip includes an arc label. This performs CompleteNodeToken with the given arc label
   * CompleteNodeToken
     * Parameters: node token, label
@@ -31,10 +34,6 @@ Graph execution has the following operations
     * If the end node of the arc is a join node
       * An arc token must exist on all other arcs coming into the same end node which share a label with the current arc. If this condition is met, one arc token on each of the arcs is marked complete and a node token is created on the arc's end node. NodeTokenAccept is called on the new node token.
     * If the end node of the arc is not a join node, the arc token is immediately marked complete, a new node token is generated on the end node of the arc and AcceptNodeToken is performed on the new node token.
-  * StartProcess
-    * Parameters: process
-    * A graph is execution begins by placing a node token on every start node, and calls the AcceptNodeToken operation on each of these node tokens.
-
 
 == The Model ==
 A Sarasvati executable graph is defined as directed graph, with a token mapping of node and arc tokens over that graph.
