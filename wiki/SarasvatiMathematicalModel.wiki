@@ -38,15 +38,29 @@ Graph execution has the following operations
 == The Model ==
 A Sarasvati executable graph is defined as directed graph, with a token mapping of node and arc tokens over that graph.
 
+=== Graph Definition ===
+
 A Sarasvati graph is defined as 
 
-*G* = ( *N*, *N,,j,,*, *N,,s,,*, *A*, *L* )
+*G* = ( *N*, *N,,j,,*, *N,,s,,*, *A*, *F,,g,,*, *F,,e,,*, *L* )
 
   * *N* is the set of nodes in the graph
   * *N,,j,,* is the set of join nodes in the graph. *N,,j,,* ⊂ *N*.
   * *N,,s,,* is the set of start nodes in the graph. *N,,s,,* ⊂ *N*.
   * *A* is the set of arcs in the graph
+  * *F,,g,,* is the set of guard functions used by the graph.
+    * Every guard function returns a tuple ( *r*, *l* )
+    * *r* ∈ { _Accept_, _Discard_, _Skip_ }
+    * *l* ∈ *L* ∪ { {} }
+    * if *r* ≠ _Skip_ then *l* = {}
+  * *F,,e,,* is the set of node execution functions used by the graph.
+    * Every node execution function accepts the current process state and returns either the same process state, or a new process state.
   * *L* is the set of labels used in the graph
+
+Every node *n* ∈ *N* is a tuple ( *f,,g,,*, *f,,e,,* ) where
+
+  * *f,,g,,* ∈ *F,,g,,*
+  * *f,,e,,* ∈ *F,,e,,*
 
 An arc *a* ∈ *A* is a tuple ( *a,,start,,*, *a,,end,,*, *l* ) where
 
@@ -54,15 +68,66 @@ An arc *a* ∈ *A* is a tuple ( *a,,start,,*, *a,,end,,*, *l* ) where
   * *a,,end,,* ∈ *N*
   * *l* ∈ *L*
 
-Formally, a Sarasvati graph execution *S* is defined as
+=== Process Definition ===
 
-*S* = ( *G*, *T*, *R* )
+Formally, a Sarasvati graph execution *S* (also known as a process) is defined as
+
+*S* = ( *G*, *T*, *R*, *P*, *Q*, *i* )
 
 where 
 
   * *G* is the graph being executed
   * *T* is the set of active node tokens
   * *R* is the set of active arc tokens
+  * *P* is the set of unprocessed node tokens
+  * *Q* is the set of unprocessed arc tokens
+  * *i* is the current state counter
+
+A node token is defined as a tuple (*n*, *i*) where 
+
+  * *n* ∈ *N*
+  * *i* corresponds to the process state counter at the time the node token is created
+
+A node token is defined as a tuple (*a*, *i*) where 
+
+  * *a* ∈ *A*
+  * *i* corresponds to the process state counter at the time the node token is created
+
+=== Process State Changes ===
+There are a set of operations which are performed to advance the state of a process.
+
+  * _startProcess_
+  * _processPendingNodeTokens_
+  * _acceptNodeToken_
+  * _completeNodeToken_
+  * _completeArcToken_
+
+====Initial State====
+
+Every process has the same basic state, through the referenced graph may, of course, be different.
+
+S,,0,, = (G, {}, {}, {}, {}, 0)
+
+====startProcess====
+The _startProcess_ operation will create node tokens for each start node.
+
+_startProcess_( S,,0,,) = S,,1,, = (G, {}, {}, { (*n*, 1) | *n* ∈ *N,,s,,* }, {}, 1)
+
+====processPending====
+The _processPending_ operation will pull tokens out of their pending queues and process them, until the queues are empty.
+
+for S,,i,, = ( G, T,,i,,, R,,i,,, P,,i,,, Q,,i,,, i )
+
+_processPending_( S,,i,,) = 
+  # Select t = (n = (f,,g,,, f,,n,,),_int_) ∈ P,,i,,
+  # Get the result (r,l) of the guard function f,,g,,
+  # if r = _Accept_
+    # S,,i+1,, = ( G, T,,i,,, ∪ t, R,,i,,, P,,i,, - t, Q,,i,,, i+1)
+    # return acceptNodeToken(S,,i+1,,, t)
+  #
+
+
+
 
 in addition
 
@@ -72,20 +137,3 @@ in addition
     * This corresponds to the set of incoming arcs to *n* with identifier *ident*.
   * A node token *t,,n,,* belonging to *T,,N,,* is defined as {*n*}, where *n* is a member of *N*.
   * An arc token *t,,a,,* belonging to *T,,A,,* is defined as {*a*} where *a* is a member of *A*.
-
-== Changing State ==
-
-An execution proceeds from state *S,,i,,* to state *S,,i+1,,* when a node token (element of *T,,N,,*) is completed.
-
-*S,,i,,* = (*N*, *A*, *T,,N,,(i)*, *T,,A,,(i))
-
-Node token completion also depends on arc token completion. 
-
-_*completeArc*_( *S,,i,,*, *t,,a,,* ) = 
-
-  if _isjoin_( *a,,start,,* ) then
-    
-
-Node token completion is a function, _*completeNode*_( *S,,i,,*, *t,,n,,*, *ident* ) = *S,,i+1,,*
-
-*S,,i+1,,* = (*N*, *A*, *T,,N,,(i)* - *t,,n,,*, *T,,A,,(i)* + *n,,out(ident),,*)
