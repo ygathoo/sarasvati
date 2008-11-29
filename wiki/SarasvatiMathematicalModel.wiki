@@ -54,7 +54,7 @@ A Sarasvati graph is defined as
     * *l* ∈ *L* ∪ { {} }
     * if *r* ≠ _Skip_ then *l* = {}
   * *F,,e,,* is the set of node execution functions used by the graph.
-    * Every node execution function accepts the current process state and returns either the same process state, or a new process state.
+    * Every node execution function accepts the node token which triggered the execution as well as the current process state. The function returns either the same process state, or a new process state.
   * *L* is the set of labels used in the graph
 
 Every node *n* ∈ *N* is a tuple ( *f,,g,,*, *f,,e,,* ) where
@@ -98,7 +98,6 @@ There are a set of operations which are performed to advance the state of a proc
 
   * _startProcess_
   * _processPendingNodeTokens_
-  * _acceptNodeToken_
   * _completeNodeToken_
   * _completeArcToken_
 
@@ -119,12 +118,34 @@ The _processPending_ operation will pull tokens out of their pending queues and 
 for S,,i,, = ( G, T,,i,,, R,,i,,, P,,i,,, Q,,i,,, i )
 
 _processPending_( S,,i,,) = 
-  # Select t = (n = (f,,g,,, f,,n,,),_int_) ∈ P,,i,,
+  # Select t = (n = (f,,g,,, f,,n,,),_id_) ∈ P,,i,,
   # Get the result (r,l) of the guard function f,,g,,
   # if r = _Accept_
-    # S,,i+1,, = ( G, T,,i,,, ∪ t, R,,i,,, P,,i,, - t, Q,,i,,, i+1)
-    # return acceptNodeToken(S,,i+1,,, t)
-  #
+    # S,,i+1,, = ( G, T,,i,, ∪ t, R,,i,,, P,,i,, - t, Q,,i,,, i+1)
+    # return f,,n,,(S,,i+1,,, t)
+  # if r = _Discard_
+    # S,,i+1,, = ( G, T,,i,,, R,,i,,, P,,i,, - t, Q,,i,,, i+1)
+    # return S,,i+1,,
+  # if r = _Skip_
+    # S,,i+1,, = ( G, T,,i,, ∪ t, R,,i,,, P,,i,, - t, Q,,i,,, i+1)
+    # return completeNodeToken( S,,i+1,,, t, l)
+
+====completeNodeToken====
+The complete node token operation works with a given node token. It requires that an arc label is specified and will generate arc tokens on all outgoing arcs which have that label.
+
+for S,,i,, = ( G, T,,i,,, R,,i,,, P,,i,,, Q,,i,,, i )
+
+_completeNodeToken_( S,,i,,, t, selectedLabel ) =
+  # t = (n, _id_) ∈ T,,i,,
+  # Generate the set of arc tokens.
+    # O = { (a, i) | a = (n,,start,,, n,,end,,, l) ∈ A, n = n,,start,,, selectedLabel = l)
+  # S,,i+1,, = ( G, T,,i,, - t, R,,i,,, P,,i,,, Q,,i,, ∪ O, i+1)
+  # return S,,i+1
+
+
+
+
+
 
 
 
