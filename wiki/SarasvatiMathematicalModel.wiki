@@ -67,6 +67,10 @@ An arc *a* ∈ *A* is a tuple ( *a,,start,,*, *a,,end,,*, *l* ) where
   * *a,,start,,* ∈ *N*
   * *a,,end,,* ∈ *N*
   * *l* ∈ *L*
+  * For convenience the following functions map an arc to the members of its defining tuple.
+    * The function _start_( *a* ) = *a,,start,,*
+    * The function _end_( *a* ) = *a,,end,,*
+    * The function _label_( *a* ) = *l*
 
 === Process Definition ===
 
@@ -83,23 +87,29 @@ where
   * *Q* is the set of unprocessed arc tokens
   * *i* is the current state counter
 
-A node token is defined as a tuple (*n*, *i*) where 
+A node token *t* ∈ *T* ∪ *P* is defined as a tuple (*n*, *i*) where 
 
   * *n* ∈ *N*
   * *i* corresponds to the process state counter at the time the node token is created
+  * For convenience the following function maps an node token to the node in its defining tuple.
+    * The function _node_( *t* ) = *n*
 
-A node token is defined as a tuple (*a*, *i*) where 
+
+An arc token *t* ∈ *R* ∪ *Q* is defined as a tuple (*a*, *i*) where 
 
   * *a* ∈ *A*
   * *i* corresponds to the process state counter at the time the node token is created
+  * For convenience the following function maps an arc token to the arc in its defining tuple.
+    * The function _arc_( *t* ) = *a*
+
 
 === Process State Changes ===
 There are a set of operations which are performed to advance the state of a process.
 
   * _startProcess_
-  * _processPendingNodeTokens_
+  * _processNodeTokens_
+  * _processArcTokens_
   * _completeNodeToken_
-  * _completeArcToken_
 
 ====Initial State====
 
@@ -108,53 +118,65 @@ Every process has the same basic state, through the referenced graph may, of cou
 S,,0,, = (G, {}, {}, {}, {}, 0)
 
 ====startProcess====
-The _startProcess_ operation will create node tokens for each start node.
+This operation creates node tokens for each start node. The new tokens are placed in the 'pending' node token set. The _processNodeTokens_ operation will then be invoked on the new process state.
 
-_startProcess_( S,,0,,) = S,,1,, = (G, {}, {}, { (*n*, 1) | *n* ∈ *N,,s,,* }, {}, 1)
+_startProcess_( S,,0,, ) = 
+  # S,,1,, = (G, {}, {}, { (*n*, 1) | *n* ∈ *N,,s,,* }, {}, 1)
+  # return _processNodeTokens_( S,,1,, )
 
-====processPending====
-The _processPending_ operation will pull tokens out of their pending queues and process them, until the queues are empty.
+====processNodeTokens====
+This operation will pull node tokens out of the pending queue and process them, until the queues are empty. Note that the result of _processNodeTokens_( S,,i,,) may be S,,i+1,, but it also may be S,,i+n,, where n is a number greater than 1. This is because _processNodeTokens_ may invoke other operations, which will also change the process state. Thus the result is denoted as S,,j,,, where j > i.
 
 for S,,i,, = ( G, T,,i,,, R,,i,,, P,,i,,, Q,,i,,, i )
 
-_processPending_( S,,i,,) = 
-  # Select t = (n = (f,,g,,, f,,n,,),_id_) ∈ P,,i,,
-  # Get the result (r,l) of the guard function f,,g,,
+S,,j,, = _processNodeTokens_( S,,i,,) = 
+  # Select t ∈ P,,i,,
+  # _node_(t) = n = (f,,g,,, f,,n,,)
+  # Get the result (r, l) of the guard function f,,g,,
   # if r = _Accept_
-    # S,,i+1,, = ( G, T,,i,, ∪ t, R,,i,,, P,,i,, - t, Q,,i,,, i+1)
+    # S,,i+1,, = ( G, T,,i,, ∪ t, R,,i,,, P,,i,, - { t }, Q,,i,,, i+1)
     # return f,,n,,(S,,i+1,,, t)
   # if r = _Discard_
-    # S,,i+1,, = ( G, T,,i,,, R,,i,,, P,,i,, - t, Q,,i,,, i+1)
+    # S,,i+1,, = ( G, T,,i,,, R,,i,,, P,,i,, - { t }, Q,,i,,, i+1)
     # return S,,i+1,,
   # if r = _Skip_
-    # S,,i+1,, = ( G, T,,i,, ∪ t, R,,i,,, P,,i,, - t, Q,,i,,, i+1)
-    # return completeNodeToken( S,,i+1,,, t, l)
+    # S,,i+1,, = ( G, T,,i,, ∪ {t}, R,,i,,, P,,i,, - { t }, Q,,i,,, i+1)
+    # return _completeNodeToken_( S,,i+1,,, t, l)
+
+if P,,j,, ≠ {} then perform _processNodeTokens_( S,,j,, )
 
 ====completeNodeToken====
-The complete node token operation works with a given node token. It requires that an arc label is specified and will generate arc tokens on all outgoing arcs which have that label.
+This operation works with a given node token. It requires that an arc label is specified and will generate arc tokens on all outgoing arcs which have that label.
 
 for S,,i,, = ( G, T,,i,,, R,,i,,, P,,i,,, Q,,i,,, i )
 
-_completeNodeToken_( S,,i,,, t, selectedLabel ) =
-  # t = (n, _id_) ∈ T,,i,,
+_completeNodeToken_( S,,i,,, t, l ) =
+  # t ∈ T,,i,,
   # Generate the set of arc tokens.
-    # O = { (a, i) | a = (n,,start,,, n,,end,,, l) ∈ A, n = n,,start,,, selectedLabel = l)
-  # S,,i+1,, = ( G, T,,i,, - t, R,,i,,, P,,i,,, Q,,i,, ∪ O, i+1)
-  # return S,,i+1
+    # O = { (a, i) | a ∈ A, _node_( t ) = _start_( a ), _label_( a ) = l }
+  # S,,i+1,, = ( G, T,,i,, - { t }, R,,i,,, P,,i,,, Q,,i,, ∪ O, i+1)
+  # return _processArcTokens_( S,,i+1,, )
 
+====processArcTokens====
+This operation attempts to complete arc tokens in the pending queue. It will repeat until the pending queue is empty.
 
+for S,,i,, = ( G, T,,i,,, R,,i,,, P,,i,,, Q,,i,,, i )
 
+S,,j,, = _processArcTokens_( S,,i,,) = 
+  # Select t = ∈ Q,,i,,
+  # currentArc = _arc_( t )
+  # targetNode = _end_( currentArc )
+  # if targetNode ∈ N,,j,,
+    # First, move the token from the pending set to the active set
+    # S,,i+1,, = ( G, T,,i,,, R,,i,, ∪ { t }, P,,i,,, Q,,i,, - { t }, i + 1 }
+    # Determine the set of input arcs I to targetNode which share the label _label_( currentArc ). I = { a | a ∈ A, targetNode = _end_( a ), _label_( a ) = _label( currentArc ) }
+    # Determine if ∀a ∈ I, ∃t such that t ∈ R,,i+1,, and _arc_( t ) ∈ I
+      # If no, targetNode can not execute yet and we return S,,i+1,,
+      # If yes, build a set J such that J = { t | t ∈ R,,i+1,,, _arc_( t ) ∈ I and ∀t,,1,,, t,,2,, ∈ J where t,,1,, ≠ t,,2,,, _arc_( t,,1,, ) ≠ _arc_( t,,2,,). In other words, find a single arc token for arc in the set I.    
+      # S,,2,, = ( G, T,,i+1,,, R,,i+1,, - J, P,,i+1,, ∪ { (targetNode, i), Q,,i+1,,, i + 2 }
+      # return _processNodeTokens( S,,i+2,, )
+  # if targetNode ∉ N,,j,,
+    # S,,i + 1,, = ( G, T,,i,,, R,,i,,, P,,i,, ∪ { (targetNode, i) }, Q,,i,, - { t }, i + i)
+    # return _processNodeTokens( S,,i+1,, )
 
-
-
-
-
-
-in addition
-
-  * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,start,,* = *n* and *name* = *ident* belongs to *n,,out(ident),,*. 
-    * This corresponds to the set of outgoing arcs from *n* with identifier *ident*.
-  * For a given node *n* belonging to *N* and arc identifier *ident*, every arc *a* with *a,,end,,* = *n* and *name* = *ident* belongs to *n,,in(ident),,*. 
-    * This corresponds to the set of incoming arcs to *n* with identifier *ident*.
-  * A node token *t,,n,,* belonging to *T,,N,,* is defined as {*n*}, where *n* is a member of *N*.
-  * An arc token *t,,a,,* belonging to *T,,A,,* is defined as {*a*} where *a* is a member of *A*.
+if P,,j,, ≠ {} then perform _processArcTokens_( S,,j,, )
