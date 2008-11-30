@@ -167,16 +167,15 @@ S,,j,, = _processArcTokens_( S,,i,,) =
   # currentArc = _arc_( t )
   # targetNode = _end_( currentArc )
   # if targetNode ∈ N,,j,,
-    # First, move the token from the pending set to the active set
-    # S,,i+1,, = ( G, T,,i,,, R,,i,, ∪ { t }, P,,i,,, Q,,i,, - { t }, i + 1 }
-    # Determine the set of input arcs I to targetNode which share the label _label_( currentArc ). I = { a | a ∈ A, targetNode = _end_( a ), _label_( a ) = _label( currentArc ) }
+    # First, move the token from the pending set to the active set. S,,i+1,, = ( G, T,,i,,, R,,i,, ∪ { t }, P,,i,,, Q,,i,, - { t }, i + 1 }
+    # Determine the set of input arcs I to targetNode which share the label _label_( currentArc ). I = { a | a ∈ A, targetNode = _end_( a ), _label_( a ) = _label_( currentArc ) }
     # Determine if ∀a ∈ I, ∃t such that t ∈ R,,i+1,, and _arc_( t ) ∈ I
       # If no, targetNode can not execute yet and we return S,,i+1,,
       # If yes, build a set J such that J = { t | t ∈ R,,i+1,,, _arc_( t ) ∈ I and ∀t,,1,,, t,,2,, ∈ J where t,,1,, ≠ t,,2,,, _arc_( t,,1,, ) ≠ _arc_( t,,2,,). In other words, find a single arc token for arc in the set I.    
-      # S,,2,, = ( G, T,,i+1,,, R,,i+1,, - J, P,,i+1,, ∪ { (targetNode, i), Q,,i+1,,, i + 2 }
-      # return _processNodeTokens( S,,i+2,, )
+      # S,,i+2,, = ( G, T,,i+1,,, R,,i+1,, - J, P,,i+1,, ∪ { (targetNode, i), Q,,i+1,,, i + 2 }
+      # return _processNodeTokens_( S,,i+2,, )
   # if targetNode ∉ N,,j,,
     # S,,i + 1,, = ( G, T,,i,,, R,,i,,, P,,i,, ∪ { (targetNode, i) }, Q,,i,, - { t }, i + i)
-    # return _processNodeTokens( S,,i+1,, )
+    # return _processNodeTokens_( S,,i+1,, )
 
 if P,,j,, ≠ {} then perform _processArcTokens_( S,,j,, )
