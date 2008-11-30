@@ -17,8 +17,8 @@
 Graph execution has the following operations
   * StartProcess
     * Parameters: process
-    * A graph is execution begins by placing a node token on every start node, and performs the AcceptNodeToken operation on each of these node tokens.
-  * AcceptNodeToken 
+    * A graph is execution begins by placing a node token on every start node, and performs the ProcessNodeToken operation on each of these node tokens.
+  * ProcessNodeToken 
     * Parameters: node token
     * Performed on a newly generated node token.
     * Executes the guard associated with the node
@@ -32,8 +32,8 @@ Graph execution has the following operations
   * ProcessArcToken
     * Parameters: arc token
     * If the end node of the arc is a join node
-      * An arc token must exist on all other arcs coming into the same end node which share a label with the current arc. If this condition is met, one arc token on each of the arcs is marked complete and a node token is created on the arc's end node. NodeTokenAccept is called on the new node token.
-    * If the end node of the arc is not a join node, the arc token is immediately marked complete, a new node token is generated on the end node of the arc and AcceptNodeToken is performed on the new node token.
+      * An arc token must exist on all other arcs coming into the same end node which share a label with the current arc. If this condition is met, one arc token on each of the arcs is marked complete and a node token is created on the arc's end node. ProcessNodeToken is called on the new node token.
+    * If the end node of the arc is not a join node, the arc token is immediately marked complete, a new node token is generated on the end node of the arc and ProcessNodeToken is performed on the new node token.
 
 == The Model ==
 A Sarasvati executable graph is defined as directed graph, with a token mapping of node and arc tokens over that graph.
