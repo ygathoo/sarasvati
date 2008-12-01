@@ -1,4 +1,4 @@
-// $ANTLR 3.1.1 src/com/googlecode/sarasvati/predicate/Predicate.g 2008-11-30 12:28:22
+// $ANTLR 3.1.1 src/com/googlecode/sarasvati/predicate/Predicate.g 2008-11-30 19:10:43
 
 package com.googlecode.sarasvati.predicate;
 
@@ -9,32 +9,37 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class PredicateLexer extends Lexer {
-    public static final int T__28=28;
-    public static final int T__27=27;
-    public static final int LETTER=19;
+    public static final int WEEK=19;
+    public static final int LETTER=24;
     public static final int ELSE=6;
-    public static final int MULTI_COMMENT=26;
-    public static final int NUMBER=17;
-    public static final int WHITESPACE=24;
-    public static final int NOW=13;
-    public static final int BEFORE=15;
+    public static final int MULTI_COMMENT=31;
+    public static final int NUMBER=22;
+    public static final int WHITESPACE=29;
+    public static final int BEFORE=14;
+    public static final int DAY=15;
     public static final int NOT=9;
-    public static final int AFTER=14;
+    public static final int AFTER=13;
+    public static final int ID=21;
     public static final int AND=8;
-    public static final int ID=16;
+    public static final int HOUR=17;
     public static final int EOF=-1;
     public static final int ACCEPT=10;
     public static final int IF=4;
     public static final int SKIP=12;
+    public static final int DAYS=16;
+    public static final int T__32=32;
+    public static final int T__33=33;
+    public static final int WEEKS=20;
     public static final int THEN=5;
     public static final int DISCARD=11;
-    public static final int NEWLINE=23;
+    public static final int NEWLINE=28;
     public static final int OR=7;
-    public static final int SINGLE_COMMENT=25;
-    public static final int DIGIT=20;
-    public static final int LOWER=21;
-    public static final int UPPER=22;
-    public static final int STRING=18;
+    public static final int SINGLE_COMMENT=30;
+    public static final int DIGIT=25;
+    public static final int LOWER=26;
+    public static final int HOURS=18;
+    public static final int UPPER=27;
+    public static final int STRING=23;
 
     // delegates
     // delegators
@@ -238,34 +243,13 @@ public class PredicateLexer extends Lexer {
     }
     // $ANTLR end "SKIP"
 
-    // $ANTLR start "NOW"
-    public final void mNOW() throws RecognitionException {
-        try {
-            int _type = NOW;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:16:5: ( 'now' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:16:7: 'now'
-            {
-            match("now"); 
-
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "NOW"
-
     // $ANTLR start "AFTER"
     public final void mAFTER() throws RecognitionException {
         try {
             int _type = AFTER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:17:7: ( 'after' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:17:9: 'after'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:16:7: ( 'after' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:16:9: 'after'
             {
             match("after"); 
 
@@ -285,8 +269,8 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = BEFORE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:18:8: ( 'before' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:18:10: 'before'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:17:8: ( 'before' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:17:10: 'before'
             {
             match("before"); 
 
@@ -301,13 +285,139 @@ public class PredicateLexer extends Lexer {
     }
     // $ANTLR end "BEFORE"
 
-    // $ANTLR start "T__27"
-    public final void mT__27() throws RecognitionException {
+    // $ANTLR start "DAY"
+    public final void mDAY() throws RecognitionException {
         try {
-            int _type = T__27;
+            int _type = DAY;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:19:7: ( '(' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:19:9: '('
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:18:5: ( 'day' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:18:7: 'day'
+            {
+            match("day"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "DAY"
+
+    // $ANTLR start "DAYS"
+    public final void mDAYS() throws RecognitionException {
+        try {
+            int _type = DAYS;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:19:6: ( 'days' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:19:8: 'days'
+            {
+            match("days"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "DAYS"
+
+    // $ANTLR start "HOUR"
+    public final void mHOUR() throws RecognitionException {
+        try {
+            int _type = HOUR;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:20:6: ( 'hour' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:20:8: 'hour'
+            {
+            match("hour"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "HOUR"
+
+    // $ANTLR start "HOURS"
+    public final void mHOURS() throws RecognitionException {
+        try {
+            int _type = HOURS;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:21:7: ( 'hours' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:21:9: 'hours'
+            {
+            match("hours"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "HOURS"
+
+    // $ANTLR start "WEEK"
+    public final void mWEEK() throws RecognitionException {
+        try {
+            int _type = WEEK;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:22:6: ( 'week' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:22:8: 'week'
+            {
+            match("week"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "WEEK"
+
+    // $ANTLR start "WEEKS"
+    public final void mWEEKS() throws RecognitionException {
+        try {
+            int _type = WEEKS;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:23:7: ( 'weeks' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:23:9: 'weeks'
+            {
+            match("weeks"); 
+
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
+    // $ANTLR end "WEEKS"
+
+    // $ANTLR start "T__32"
+    public final void mT__32() throws RecognitionException {
+        try {
+            int _type = T__32;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:24:7: ( '(' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:24:9: '('
             {
             match('('); 
 
@@ -319,15 +429,15 @@ public class PredicateLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "T__27"
+    // $ANTLR end "T__32"
 
-    // $ANTLR start "T__28"
-    public final void mT__28() throws RecognitionException {
+    // $ANTLR start "T__33"
+    public final void mT__33() throws RecognitionException {
         try {
-            int _type = T__28;
+            int _type = T__33;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:20:7: ( ')' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:20:9: ')'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:25:7: ( ')' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:25:9: ')'
             {
             match(')'); 
 
@@ -339,18 +449,18 @@ public class PredicateLexer extends Lexer {
         finally {
         }
     }
-    // $ANTLR end "T__28"
+    // $ANTLR end "T__33"
 
     // $ANTLR start "STRING"
     public final void mSTRING() throws RecognitionException {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:88:10: ( '\"' ( '\\\\\\\"' | ~ ( '\"' ) )* '\"' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:88:13: '\"' ( '\\\\\\\"' | ~ ( '\"' ) )* '\"'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:95:10: ( '\"' ( '\\\\\\\"' | ~ ( '\"' ) )* '\"' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:95:13: '\"' ( '\\\\\\\"' | ~ ( '\"' ) )* '\"'
             {
             match('\"'); 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:88:17: ( '\\\\\\\"' | ~ ( '\"' ) )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:95:17: ( '\\\\\\\"' | ~ ( '\"' ) )*
             loop1:
             do {
                 int alt1=3;
@@ -384,7 +494,7 @@ public class PredicateLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:88:19: '\\\\\\\"'
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:95:19: '\\\\\\\"'
             	    {
             	    match("\\\""); 
 
@@ -392,7 +502,7 @@ public class PredicateLexer extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:88:28: ~ ( '\"' )
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:95:28: ~ ( '\"' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -429,11 +539,11 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:91:10: ( LETTER ( LETTER | DIGIT | '.' )* )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:91:13: LETTER ( LETTER | DIGIT | '.' )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:98:10: ( LETTER ( LETTER | DIGIT | '.' )* )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:98:13: LETTER ( LETTER | DIGIT | '.' )*
             {
             mLETTER(); 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:91:20: ( LETTER | DIGIT | '.' )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:98:20: ( LETTER | DIGIT | '.' )*
             loop2:
             do {
                 int alt2=2;
@@ -482,24 +592,42 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = NUMBER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:94:10: ( ( DIGIT )+ )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:94:13: ( DIGIT )+
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:101:10: ( ( '-' )? ( DIGIT )+ )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:101:13: ( '-' )? ( DIGIT )+
             {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:94:13: ( DIGIT )+
-            int cnt3=0;
-            loop3:
-            do {
-                int alt3=2;
-                int LA3_0 = input.LA(1);
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:101:13: ( '-' )?
+            int alt3=2;
+            int LA3_0 = input.LA(1);
 
-                if ( ((LA3_0>='0' && LA3_0<='9')) ) {
-                    alt3=1;
+            if ( (LA3_0=='-') ) {
+                alt3=1;
+            }
+            switch (alt3) {
+                case 1 :
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:101:13: '-'
+                    {
+                    match('-'); 
+
+                    }
+                    break;
+
+            }
+
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:101:18: ( DIGIT )+
+            int cnt4=0;
+            loop4:
+            do {
+                int alt4=2;
+                int LA4_0 = input.LA(1);
+
+                if ( ((LA4_0>='0' && LA4_0<='9')) ) {
+                    alt4=1;
                 }
 
 
-                switch (alt3) {
+                switch (alt4) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:94:13: DIGIT
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:101:18: DIGIT
             	    {
             	    mDIGIT(); 
 
@@ -507,12 +635,12 @@ public class PredicateLexer extends Lexer {
             	    break;
 
             	default :
-            	    if ( cnt3 >= 1 ) break loop3;
+            	    if ( cnt4 >= 1 ) break loop4;
                         EarlyExitException eee =
-                            new EarlyExitException(3, input);
+                            new EarlyExitException(4, input);
                         throw eee;
                 }
-                cnt3++;
+                cnt4++;
             } while (true);
 
 
@@ -529,7 +657,7 @@ public class PredicateLexer extends Lexer {
     // $ANTLR start "LETTER"
     public final void mLETTER() throws RecognitionException {
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:98:10: ( LOWER | UPPER )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:105:10: ( LOWER | UPPER )
             // src/com/googlecode/sarasvati/predicate/Predicate.g:
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
@@ -553,8 +681,8 @@ public class PredicateLexer extends Lexer {
     // $ANTLR start "LOWER"
     public final void mLOWER() throws RecognitionException {
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:102:10: ( 'a' .. 'z' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:102:12: 'a' .. 'z'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:109:10: ( 'a' .. 'z' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:109:12: 'a' .. 'z'
             {
             matchRange('a','z'); 
 
@@ -569,8 +697,8 @@ public class PredicateLexer extends Lexer {
     // $ANTLR start "UPPER"
     public final void mUPPER() throws RecognitionException {
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:106:10: ( 'A' .. 'Z' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:106:12: 'A' .. 'Z'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:113:10: ( 'A' .. 'Z' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:113:12: 'A' .. 'Z'
             {
             matchRange('A','Z'); 
 
@@ -585,8 +713,8 @@ public class PredicateLexer extends Lexer {
     // $ANTLR start "DIGIT"
     public final void mDIGIT() throws RecognitionException {
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:110:10: ( '0' .. '9' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:110:12: '0' .. '9'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:117:10: ( '0' .. '9' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:117:12: '0' .. '9'
             {
             matchRange('0','9'); 
 
@@ -603,35 +731,35 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = NEWLINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:113:10: ( ( ( '\\r' )? '\\n' )+ )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:113:14: ( ( '\\r' )? '\\n' )+
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:120:10: ( ( ( '\\r' )? '\\n' )+ )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:120:14: ( ( '\\r' )? '\\n' )+
             {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:113:14: ( ( '\\r' )? '\\n' )+
-            int cnt5=0;
-            loop5:
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:120:14: ( ( '\\r' )? '\\n' )+
+            int cnt6=0;
+            loop6:
             do {
-                int alt5=2;
-                int LA5_0 = input.LA(1);
+                int alt6=2;
+                int LA6_0 = input.LA(1);
 
-                if ( (LA5_0=='\n'||LA5_0=='\r') ) {
-                    alt5=1;
+                if ( (LA6_0=='\n'||LA6_0=='\r') ) {
+                    alt6=1;
                 }
 
 
-                switch (alt5) {
+                switch (alt6) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:113:15: ( '\\r' )? '\\n'
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:120:15: ( '\\r' )? '\\n'
             	    {
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:113:15: ( '\\r' )?
-            	    int alt4=2;
-            	    int LA4_0 = input.LA(1);
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:120:15: ( '\\r' )?
+            	    int alt5=2;
+            	    int LA5_0 = input.LA(1);
 
-            	    if ( (LA4_0=='\r') ) {
-            	        alt4=1;
+            	    if ( (LA5_0=='\r') ) {
+            	        alt5=1;
             	    }
-            	    switch (alt4) {
+            	    switch (alt5) {
             	        case 1 :
-            	            // src/com/googlecode/sarasvati/predicate/Predicate.g:113:15: '\\r'
+            	            // src/com/googlecode/sarasvati/predicate/Predicate.g:120:15: '\\r'
             	            {
             	            match('\r'); 
 
@@ -641,64 +769,6 @@ public class PredicateLexer extends Lexer {
             	    }
 
             	    match('\n'); 
-
-            	    }
-            	    break;
-
-            	default :
-            	    if ( cnt5 >= 1 ) break loop5;
-                        EarlyExitException eee =
-                            new EarlyExitException(5, input);
-                        throw eee;
-                }
-                cnt5++;
-            } while (true);
-
-             _channel=HIDDEN; 
-
-            }
-
-            state.type = _type;
-            state.channel = _channel;
-        }
-        finally {
-        }
-    }
-    // $ANTLR end "NEWLINE"
-
-    // $ANTLR start "WHITESPACE"
-    public final void mWHITESPACE() throws RecognitionException {
-        try {
-            int _type = WHITESPACE;
-            int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:117:10: ( ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+ )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:117:12: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
-            {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:117:12: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
-            int cnt6=0;
-            loop6:
-            do {
-                int alt6=2;
-                int LA6_0 = input.LA(1);
-
-                if ( ((LA6_0>='\t' && LA6_0<='\n')||(LA6_0>='\f' && LA6_0<='\r')||LA6_0==' ') ) {
-                    alt6=1;
-                }
-
-
-                switch (alt6) {
-            	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:
-            	    {
-            	    if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||(input.LA(1)>='\f' && input.LA(1)<='\r')||input.LA(1)==' ' ) {
-            	        input.consume();
-
-            	    }
-            	    else {
-            	        MismatchedSetException mse = new MismatchedSetException(null,input);
-            	        recover(mse);
-            	        throw mse;}
-
 
             	    }
             	    break;
@@ -722,6 +792,64 @@ public class PredicateLexer extends Lexer {
         finally {
         }
     }
+    // $ANTLR end "NEWLINE"
+
+    // $ANTLR start "WHITESPACE"
+    public final void mWHITESPACE() throws RecognitionException {
+        try {
+            int _type = WHITESPACE;
+            int _channel = DEFAULT_TOKEN_CHANNEL;
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:124:10: ( ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+ )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:124:12: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
+            {
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:124:12: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
+            int cnt7=0;
+            loop7:
+            do {
+                int alt7=2;
+                int LA7_0 = input.LA(1);
+
+                if ( ((LA7_0>='\t' && LA7_0<='\n')||(LA7_0>='\f' && LA7_0<='\r')||LA7_0==' ') ) {
+                    alt7=1;
+                }
+
+
+                switch (alt7) {
+            	case 1 :
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:
+            	    {
+            	    if ( (input.LA(1)>='\t' && input.LA(1)<='\n')||(input.LA(1)>='\f' && input.LA(1)<='\r')||input.LA(1)==' ' ) {
+            	        input.consume();
+
+            	    }
+            	    else {
+            	        MismatchedSetException mse = new MismatchedSetException(null,input);
+            	        recover(mse);
+            	        throw mse;}
+
+
+            	    }
+            	    break;
+
+            	default :
+            	    if ( cnt7 >= 1 ) break loop7;
+                        EarlyExitException eee =
+                            new EarlyExitException(7, input);
+                        throw eee;
+                }
+                cnt7++;
+            } while (true);
+
+             _channel=HIDDEN; 
+
+            }
+
+            state.type = _type;
+            state.channel = _channel;
+        }
+        finally {
+        }
+    }
     // $ANTLR end "WHITESPACE"
 
     // $ANTLR start "SINGLE_COMMENT"
@@ -729,25 +857,25 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = SINGLE_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:121:10: ( '//' (~ ( '\\r' | '\\n' ) )* NEWLINE )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:121:12: '//' (~ ( '\\r' | '\\n' ) )* NEWLINE
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:128:10: ( '//' (~ ( '\\r' | '\\n' ) )* NEWLINE )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:128:12: '//' (~ ( '\\r' | '\\n' ) )* NEWLINE
             {
             match("//"); 
 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:121:17: (~ ( '\\r' | '\\n' ) )*
-            loop7:
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:128:17: (~ ( '\\r' | '\\n' ) )*
+            loop8:
             do {
-                int alt7=2;
-                int LA7_0 = input.LA(1);
+                int alt8=2;
+                int LA8_0 = input.LA(1);
 
-                if ( ((LA7_0>='\u0000' && LA7_0<='\t')||(LA7_0>='\u000B' && LA7_0<='\f')||(LA7_0>='\u000E' && LA7_0<='\uFFFF')) ) {
-                    alt7=1;
+                if ( ((LA8_0>='\u0000' && LA8_0<='\t')||(LA8_0>='\u000B' && LA8_0<='\f')||(LA8_0>='\u000E' && LA8_0<='\uFFFF')) ) {
+                    alt8=1;
                 }
 
 
-                switch (alt7) {
+                switch (alt8) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:121:17: ~ ( '\\r' | '\\n' )
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:128:17: ~ ( '\\r' | '\\n' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -763,7 +891,7 @@ public class PredicateLexer extends Lexer {
             	    break;
 
             	default :
-            	    break loop7;
+            	    break loop8;
                 }
             } while (true);
 
@@ -785,37 +913,37 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = MULTI_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:125:10: ( '/*' ( . )* '*/' ( NEWLINE )? )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:125:12: '/*' ( . )* '*/' ( NEWLINE )?
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:132:10: ( '/*' ( . )* '*/' ( NEWLINE )? )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:132:12: '/*' ( . )* '*/' ( NEWLINE )?
             {
             match("/*"); 
 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:125:17: ( . )*
-            loop8:
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:132:17: ( . )*
+            loop9:
             do {
-                int alt8=2;
-                int LA8_0 = input.LA(1);
+                int alt9=2;
+                int LA9_0 = input.LA(1);
 
-                if ( (LA8_0=='*') ) {
-                    int LA8_1 = input.LA(2);
+                if ( (LA9_0=='*') ) {
+                    int LA9_1 = input.LA(2);
 
-                    if ( (LA8_1=='/') ) {
-                        alt8=2;
+                    if ( (LA9_1=='/') ) {
+                        alt9=2;
                     }
-                    else if ( ((LA8_1>='\u0000' && LA8_1<='.')||(LA8_1>='0' && LA8_1<='\uFFFF')) ) {
-                        alt8=1;
+                    else if ( ((LA9_1>='\u0000' && LA9_1<='.')||(LA9_1>='0' && LA9_1<='\uFFFF')) ) {
+                        alt9=1;
                     }
 
 
                 }
-                else if ( ((LA8_0>='\u0000' && LA8_0<=')')||(LA8_0>='+' && LA8_0<='\uFFFF')) ) {
-                    alt8=1;
+                else if ( ((LA9_0>='\u0000' && LA9_0<=')')||(LA9_0>='+' && LA9_0<='\uFFFF')) ) {
+                    alt9=1;
                 }
 
 
-                switch (alt8) {
+                switch (alt9) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:125:17: .
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:132:17: .
             	    {
             	    matchAny(); 
 
@@ -823,22 +951,22 @@ public class PredicateLexer extends Lexer {
             	    break;
 
             	default :
-            	    break loop8;
+            	    break loop9;
                 }
             } while (true);
 
             match("*/"); 
 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:125:25: ( NEWLINE )?
-            int alt9=2;
-            int LA9_0 = input.LA(1);
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:132:25: ( NEWLINE )?
+            int alt10=2;
+            int LA10_0 = input.LA(1);
 
-            if ( (LA9_0=='\n'||LA9_0=='\r') ) {
-                alt9=1;
+            if ( (LA10_0=='\n'||LA10_0=='\r') ) {
+                alt10=1;
             }
-            switch (alt9) {
+            switch (alt10) {
                 case 1 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:125:25: NEWLINE
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:132:25: NEWLINE
                     {
                     mNEWLINE(); 
 
@@ -860,10 +988,10 @@ public class PredicateLexer extends Lexer {
     // $ANTLR end "MULTI_COMMENT"
 
     public void mTokens() throws RecognitionException {
-        // src/com/googlecode/sarasvati/predicate/Predicate.g:1:8: ( IF | THEN | ELSE | OR | AND | NOT | ACCEPT | DISCARD | SKIP | NOW | AFTER | BEFORE | T__27 | T__28 | STRING | ID | NUMBER | NEWLINE | WHITESPACE | SINGLE_COMMENT | MULTI_COMMENT )
-        int alt10=21;
-        alt10 = dfa10.predict(input);
-        switch (alt10) {
+        // src/com/googlecode/sarasvati/predicate/Predicate.g:1:8: ( IF | THEN | ELSE | OR | AND | NOT | ACCEPT | DISCARD | SKIP | AFTER | BEFORE | DAY | DAYS | HOUR | HOURS | WEEK | WEEKS | T__32 | T__33 | STRING | ID | NUMBER | NEWLINE | WHITESPACE | SINGLE_COMMENT | MULTI_COMMENT )
+        int alt11=26;
+        alt11 = dfa11.predict(input);
+        switch (alt11) {
             case 1 :
                 // src/com/googlecode/sarasvati/predicate/Predicate.g:1:10: IF
                 {
@@ -928,84 +1056,119 @@ public class PredicateLexer extends Lexer {
                 }
                 break;
             case 10 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:54: NOW
-                {
-                mNOW(); 
-
-                }
-                break;
-            case 11 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:58: AFTER
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:54: AFTER
                 {
                 mAFTER(); 
 
                 }
                 break;
-            case 12 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:64: BEFORE
+            case 11 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:60: BEFORE
                 {
                 mBEFORE(); 
 
                 }
                 break;
-            case 13 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:71: T__27
+            case 12 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:67: DAY
                 {
-                mT__27(); 
+                mDAY(); 
+
+                }
+                break;
+            case 13 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:71: DAYS
+                {
+                mDAYS(); 
 
                 }
                 break;
             case 14 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:77: T__28
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:76: HOUR
                 {
-                mT__28(); 
+                mHOUR(); 
 
                 }
                 break;
             case 15 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:83: STRING
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:81: HOURS
+                {
+                mHOURS(); 
+
+                }
+                break;
+            case 16 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:87: WEEK
+                {
+                mWEEK(); 
+
+                }
+                break;
+            case 17 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:92: WEEKS
+                {
+                mWEEKS(); 
+
+                }
+                break;
+            case 18 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:98: T__32
+                {
+                mT__32(); 
+
+                }
+                break;
+            case 19 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:104: T__33
+                {
+                mT__33(); 
+
+                }
+                break;
+            case 20 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:110: STRING
                 {
                 mSTRING(); 
 
                 }
                 break;
-            case 16 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:90: ID
+            case 21 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:117: ID
                 {
                 mID(); 
 
                 }
                 break;
-            case 17 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:93: NUMBER
+            case 22 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:120: NUMBER
                 {
                 mNUMBER(); 
 
                 }
                 break;
-            case 18 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:100: NEWLINE
+            case 23 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:127: NEWLINE
                 {
                 mNEWLINE(); 
 
                 }
                 break;
-            case 19 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:108: WHITESPACE
+            case 24 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:135: WHITESPACE
                 {
                 mWHITESPACE(); 
 
                 }
                 break;
-            case 20 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:119: SINGLE_COMMENT
+            case 25 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:146: SINGLE_COMMENT
                 {
                 mSINGLE_COMMENT(); 
 
                 }
                 break;
-            case 21 :
-                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:134: MULTI_COMMENT
+            case 26 :
+                // src/com/googlecode/sarasvati/predicate/Predicate.g:1:161: MULTI_COMMENT
                 {
                 mMULTI_COMMENT(); 
 
@@ -1017,142 +1180,165 @@ public class PredicateLexer extends Lexer {
     }
 
 
-    protected DFA10 dfa10 = new DFA10(this);
-    static final String DFA10_eotS =
-        "\1\uffff\12\16\5\uffff\1\22\1\37\2\uffff\1\42\2\16\1\45\7\16\4\uffff"+
-        "\2\16\1\uffff\1\60\1\16\1\62\1\63\4\16\1\70\1\71\1\uffff\1\16\2"+
-        "\uffff\2\16\1\75\1\16\2\uffff\1\77\2\16\1\uffff\1\16\1\uffff\1\103"+
-        "\1\16\1\105\1\uffff\1\106\2\uffff";
-    static final String DFA10_eofS =
-        "\107\uffff";
-    static final String DFA10_minS =
+    protected DFA11 dfa11 = new DFA11(this);
+    static final String DFA11_eotS =
+        "\1\uffff\15\21\5\uffff\1\25\1\45\2\uffff\1\50\2\21\1\53\12\21\4"+
+        "\uffff\2\21\1\uffff\1\70\1\21\1\72\4\21\1\100\2\21\1\103\1\104\1"+
+        "\uffff\1\21\1\uffff\2\21\1\110\1\21\1\112\1\uffff\1\114\1\116\2"+
+        "\uffff\1\117\2\21\1\uffff\1\21\1\uffff\1\123\1\uffff\1\124\2\uffff"+
+        "\1\125\1\21\1\127\3\uffff\1\130\2\uffff";
+    static final String DFA11_eofS =
+        "\131\uffff";
+    static final String DFA11_minS =
         "\1\11\1\146\1\150\1\154\1\162\1\146\1\157\1\143\1\151\1\153\1\145"+
-        "\5\uffff\1\12\1\11\1\uffff\1\52\1\56\1\145\1\163\1\56\1\144\2\164"+
-        "\1\143\1\163\1\151\1\146\4\uffff\1\156\1\145\1\uffff\1\56\1\145"+
-        "\2\56\1\145\1\143\1\160\1\157\2\56\1\uffff\1\162\2\uffff\1\160\1"+
-        "\141\1\56\1\162\2\uffff\1\56\1\164\1\162\1\uffff\1\145\1\uffff\1"+
-        "\56\1\144\1\56\1\uffff\1\56\2\uffff";
-    static final String DFA10_maxS =
+        "\1\141\1\157\1\145\5\uffff\1\12\1\11\1\uffff\1\52\1\56\1\145\1\163"+
+        "\1\56\1\144\2\164\1\143\1\163\1\151\1\146\1\171\1\165\1\145\4\uffff"+
+        "\1\156\1\145\1\uffff\1\56\1\145\1\56\1\145\1\143\1\160\1\157\1\56"+
+        "\1\162\1\153\2\56\1\uffff\1\162\1\uffff\1\160\1\141\1\56\1\162\1"+
+        "\56\1\uffff\2\56\2\uffff\1\56\1\164\1\162\1\uffff\1\145\1\uffff"+
+        "\1\56\1\uffff\1\56\2\uffff\1\56\1\144\1\56\3\uffff\1\56\2\uffff";
+    static final String DFA11_maxS =
         "\1\172\1\146\1\150\1\154\1\162\1\156\1\157\1\143\1\151\1\153\1\145"+
-        "\5\uffff\1\12\1\40\1\uffff\1\57\1\172\1\145\1\163\1\172\1\144\1"+
-        "\164\1\167\1\143\1\163\1\151\1\146\4\uffff\1\156\1\145\1\uffff\1"+
-        "\172\1\145\2\172\1\145\1\143\1\160\1\157\2\172\1\uffff\1\162\2\uffff"+
-        "\1\160\1\141\1\172\1\162\2\uffff\1\172\1\164\1\162\1\uffff\1\145"+
-        "\1\uffff\1\172\1\144\1\172\1\uffff\1\172\2\uffff";
-    static final String DFA10_acceptS =
-        "\13\uffff\1\15\1\16\1\17\1\20\1\21\2\uffff\1\23\14\uffff\1\22\1"+
-        "\24\1\25\1\1\2\uffff\1\4\12\uffff\1\5\1\uffff\1\6\1\12\4\uffff\1"+
-        "\2\1\3\3\uffff\1\11\1\uffff\1\13\3\uffff\1\7\1\uffff\1\14\1\10";
-    static final String DFA10_specialS =
-        "\107\uffff}>";
-    static final String[] DFA10_transitionS = {
-            "\1\22\1\21\1\uffff\1\22\1\20\22\uffff\1\22\1\uffff\1\15\5\uffff"+
-            "\1\13\1\14\5\uffff\1\23\12\17\7\uffff\1\7\2\16\1\10\16\16\1"+
-            "\11\7\16\6\uffff\1\5\1\12\2\16\1\3\3\16\1\1\4\16\1\6\1\4\4\16"+
-            "\1\2\6\16",
-            "\1\24",
-            "\1\25",
-            "\1\26",
+        "\1\141\1\157\1\145\5\uffff\1\12\1\40\1\uffff\1\57\1\172\1\145\1"+
+        "\163\1\172\1\144\2\164\1\143\1\163\1\151\1\146\1\171\1\165\1\145"+
+        "\4\uffff\1\156\1\145\1\uffff\1\172\1\145\1\172\1\145\1\143\1\160"+
+        "\1\157\1\172\1\162\1\153\2\172\1\uffff\1\162\1\uffff\1\160\1\141"+
+        "\1\172\1\162\1\172\1\uffff\2\172\2\uffff\1\172\1\164\1\162\1\uffff"+
+        "\1\145\1\uffff\1\172\1\uffff\1\172\2\uffff\1\172\1\144\1\172\3\uffff"+
+        "\1\172\2\uffff";
+    static final String DFA11_acceptS =
+        "\16\uffff\1\22\1\23\1\24\1\25\1\26\2\uffff\1\30\17\uffff\1\27\1"+
+        "\31\1\32\1\1\2\uffff\1\4\14\uffff\1\5\1\uffff\1\6\5\uffff\1\14\2"+
+        "\uffff\1\2\1\3\3\uffff\1\11\1\uffff\1\15\1\uffff\1\16\1\uffff\1"+
+        "\20\1\12\3\uffff\1\17\1\21\1\7\1\uffff\1\13\1\10";
+    static final String DFA11_specialS =
+        "\131\uffff}>";
+    static final String[] DFA11_transitionS = {
+            "\1\25\1\24\1\uffff\1\25\1\23\22\uffff\1\25\1\uffff\1\20\5\uffff"+
+            "\1\16\1\17\3\uffff\1\22\1\uffff\1\26\12\22\7\uffff\1\7\2\21"+
+            "\1\10\16\21\1\11\7\21\6\uffff\1\5\1\12\1\21\1\13\1\3\2\21\1"+
+            "\14\1\1\4\21\1\6\1\4\4\21\1\2\2\21\1\15\3\21",
             "\1\27",
-            "\1\31\7\uffff\1\30",
+            "\1\30",
+            "\1\31",
             "\1\32",
-            "\1\33",
-            "\1\34",
+            "\1\34\7\uffff\1\33",
             "\1\35",
             "\1\36",
-            "",
-            "",
-            "",
-            "",
-            "",
-            "\1\21",
-            "\1\22\1\21\1\uffff\1\22\1\20\22\uffff\1\22",
-            "",
-            "\1\41\4\uffff\1\40",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
+            "\1\37",
+            "\1\40",
+            "\1\41",
+            "\1\42",
             "\1\43",
             "\1\44",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
-            "\1\46",
-            "\1\47",
-            "\1\50\2\uffff\1\51",
+            "",
+            "",
+            "",
+            "",
+            "",
+            "\1\24",
+            "\1\25\1\24\1\uffff\1\25\1\23\22\uffff\1\25",
+            "",
+            "\1\47\4\uffff\1\46",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "\1\51",
             "\1\52",
-            "\1\53",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
             "\1\54",
             "\1\55",
-            "",
-            "",
-            "",
-            "",
             "\1\56",
             "\1\57",
-            "",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
+            "\1\60",
             "\1\61",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
+            "\1\62",
+            "\1\63",
             "\1\64",
             "\1\65",
+            "",
+            "",
+            "",
+            "",
             "\1\66",
             "\1\67",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
             "",
-            "\1\72",
-            "",
-            "",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "\1\71",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
             "\1\73",
             "\1\74",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
+            "\1\75",
             "\1\76",
-            "",
-            "",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
-            "\1\100",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\22\21\1\77\7\21",
             "\1\101",
-            "",
             "\1\102",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
             "",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
-            "\1\104",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
+            "\1\105",
             "",
-            "\1\16\1\uffff\12\16\7\uffff\32\16\6\uffff\32\16",
+            "\1\106",
+            "\1\107",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "\1\111",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\22\21\1\113\7\21",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\22\21\1\115\7\21",
+            "",
+            "",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "\1\120",
+            "\1\121",
+            "",
+            "\1\122",
+            "",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "",
+            "",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "\1\126",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
+            "",
+            "",
+            "",
+            "\1\21\1\uffff\12\21\7\uffff\32\21\6\uffff\32\21",
             "",
             ""
     };
 
-    static final short[] DFA10_eot = DFA.unpackEncodedString(DFA10_eotS);
-    static final short[] DFA10_eof = DFA.unpackEncodedString(DFA10_eofS);
-    static final char[] DFA10_min = DFA.unpackEncodedStringToUnsignedChars(DFA10_minS);
-    static final char[] DFA10_max = DFA.unpackEncodedStringToUnsignedChars(DFA10_maxS);
-    static final short[] DFA10_accept = DFA.unpackEncodedString(DFA10_acceptS);
-    static final short[] DFA10_special = DFA.unpackEncodedString(DFA10_specialS);
-    static final short[][] DFA10_transition;
+    static final short[] DFA11_eot = DFA.unpackEncodedString(DFA11_eotS);
+    static final short[] DFA11_eof = DFA.unpackEncodedString(DFA11_eofS);
+    static final char[] DFA11_min = DFA.unpackEncodedStringToUnsignedChars(DFA11_minS);
+    static final char[] DFA11_max = DFA.unpackEncodedStringToUnsignedChars(DFA11_maxS);
+    static final short[] DFA11_accept = DFA.unpackEncodedString(DFA11_acceptS);
+    static final short[] DFA11_special = DFA.unpackEncodedString(DFA11_specialS);
+    static final short[][] DFA11_transition;
 
     static {
-        int numStates = DFA10_transitionS.length;
-        DFA10_transition = new short[numStates][];
+        int numStates = DFA11_transitionS.length;
+        DFA11_transition = new short[numStates][];
         for (int i=0; i<numStates; i++) {
-            DFA10_transition[i] = DFA.unpackEncodedString(DFA10_transitionS[i]);
+            DFA11_transition[i] = DFA.unpackEncodedString(DFA11_transitionS[i]);
         }
     }
 
-    class DFA10 extends DFA {
+    class DFA11 extends DFA {
 
-        public DFA10(BaseRecognizer recognizer) {
+        public DFA11(BaseRecognizer recognizer) {
             this.recognizer = recognizer;
-            this.decisionNumber = 10;
-            this.eot = DFA10_eot;
-            this.eof = DFA10_eof;
-            this.min = DFA10_min;
-            this.max = DFA10_max;
-            this.accept = DFA10_accept;
-            this.special = DFA10_special;
-            this.transition = DFA10_transition;
+            this.decisionNumber = 11;
+            this.eot = DFA11_eot;
+            this.eof = DFA11_eof;
+            this.min = DFA11_min;
+            this.max = DFA11_max;
+            this.accept = DFA11_accept;
+            this.special = DFA11_special;
+            this.transition = DFA11_transition;
         }
         public String getDescription() {
-            return "1:1: Tokens : ( IF | THEN | ELSE | OR | AND | NOT | ACCEPT | DISCARD | SKIP | NOW | AFTER | BEFORE | T__27 | T__28 | STRING | ID | NUMBER | NEWLINE | WHITESPACE | SINGLE_COMMENT | MULTI_COMMENT );";
+            return "1:1: Tokens : ( IF | THEN | ELSE | OR | AND | NOT | ACCEPT | DISCARD | SKIP | AFTER | BEFORE | DAY | DAYS | HOUR | HOURS | WEEK | WEEKS | T__32 | T__33 | STRING | ID | NUMBER | NEWLINE | WHITESPACE | SINGLE_COMMENT | MULTI_COMMENT );";
         }
     }
  

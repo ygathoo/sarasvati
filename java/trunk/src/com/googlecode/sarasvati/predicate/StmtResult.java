@@ -6,8 +6,9 @@ import com.googlecode.sarasvati.GuardResponse;
 
 public interface StmtResult
 {
+  Object getResult ();
   String getString ();
-  int getInt ();
+  Integer getInt ();
   Date getDate ();
   GuardResponse getGuardResponse ();
 

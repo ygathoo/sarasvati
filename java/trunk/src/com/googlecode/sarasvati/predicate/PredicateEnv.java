@@ -4,11 +4,9 @@ import java.util.Date;
 
 public interface PredicateEnv
 {
-  boolean evalPredicate (String predicate);
+  boolean evalPredicate (String predicateName);
 
-  Date evalDate (String namedDate);
+  Date evalDate (String dateName);
 
-  Date evalNow ();
-
-  Date eval (int units, int amt, Date date);
+  Date evalRelative (Date date, int offset, int unit);
 }

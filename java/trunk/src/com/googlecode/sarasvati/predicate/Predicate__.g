@@ -13,59 +13,64 @@ NOT : 'not' ;
 ACCEPT : 'Accept' ;
 DISCARD : 'Discard' ;
 SKIP : 'Skip' ;
-NOW : 'now' ;
 AFTER : 'after' ;
 BEFORE : 'before' ;
-T__27 : '(' ;
-T__28 : ')' ;
+DAY : 'day' ;
+DAYS : 'days' ;
+HOUR : 'hour' ;
+HOURS : 'hours' ;
+WEEK : 'week' ;
+WEEKS : 'weeks' ;
+T__32 : '(' ;
+T__33 : ')' ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 88
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 95
 STRING   :  '"' ( '\\\"' | ~( '"' ) )* '"'
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 91
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 98
 ID       :  LETTER ( LETTER | DIGIT | '.' )*
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 94
-NUMBER   :  DIGIT+
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 101
+NUMBER   :  '-'? DIGIT+
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 97
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 104
 fragment LETTER
          : LOWER | UPPER
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 101
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 108
 fragment LOWER
          : 'a'..'z'
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 105
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 112
 fragment UPPER
          : 'A'..'Z'
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 109
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 116
 fragment DIGIT
          : '0'..'9'
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 113
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 120
 NEWLINE  :   ('\r'? '\n')+ { $channel=HIDDEN; }
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 116
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 123
 WHITESPACE
          : ( '\t' | ' ' | '\r' | '\n'| '\u000C' )+ { $channel=HIDDEN; }
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 120
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 127
 SINGLE_COMMENT
          : '//' ~('\r' | '\n')* NEWLINE { $channel=HIDDEN; }
          ;
 
-// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 124
+// $ANTLR src "src/com/googlecode/sarasvati/predicate/Predicate.g" 131
 MULTI_COMMENT options { greedy = false; }
          : '/*' .* '*/' NEWLINE? { $channel=HIDDEN; }
          ;

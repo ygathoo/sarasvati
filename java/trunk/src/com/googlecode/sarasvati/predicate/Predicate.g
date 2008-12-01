@@ -6,18 +6,23 @@ options {
 }
 
 tokens {
-  IF  =  'if';
-  THEN  =  'then';
-  ELSE  =  'else';
-  OR  =  'or';
-  AND  =  'and';
-  NOT  =  'not';
-  ACCEPT  =   'Accept';
-  DISCARD =   'Discard';
-  SKIP  =   'Skip';
-  NOW     =   'now';
-  AFTER   =   'after';
+  IF      =  'if';
+  THEN    =  'then';
+  ELSE    =  'else';
+  OR      =  'or';
+  AND     =  'and';
+  NOT     =  'not';
+  ACCEPT  =  'Accept';
+  DISCARD =  'Discard';
+  SKIP    =  'Skip';
+  AFTER   =  'after';
   BEFORE  =  'before';
+  DAY     =  'day';
+  DAYS    =  'days';
+  HOUR    =  'hour';
+  HOURS   =  'hours';
+  WEEK    =  'week';
+  WEEKS   =  'weeks';
 }
 
 @header {
@@ -36,8 +41,8 @@ program returns [PredicateStmt value]
          ;
 
 stmt returns [PredicateStmt value]
-         :  IF^ e=orExpr THEN! ifStmt=stmt ELSE! elseStmt=stmt {$value = new PredicateIf( $e.value, $ifStmt.value, $elseStmt.value ); }
-         |  result -> result
+         :  IF^ e=orExpr THEN! ifStmt=stmt ELSE! elseStmt=stmt {$value = new PredicateStmtIf( $e.value, $ifStmt.value, $elseStmt.value ); }
+         |  result { $value = $result.value; }
          ;
 
 orExpr returns [PredicateExpr value]
@@ -58,20 +63,22 @@ expr returns [PredicateExpr value]
          |  '('! orExpr ')'! { $value = $orExpr.value; }
          ;
 
-result   :  guardResult
-         |  NUMBER
-         |  ID
-         |  STRING
-         |  dateResult
+result returns [PredicateStmt value]
+         :  guardResult { $value = new PredicateStmtResult( $guardResult.value ); }
+         |  NUMBER      { $value = new PredicateStmtResult( Integer.parseInt( $NUMBER.text ) ); }
+         |  ID          { $value = new PredicateStmtResult( $ID.text ); }
+         |  STRING      { $value = new PredicateStmtResult( $STRING.text ); }
+         |  dateResult  { $value = $dateResult.value; }
          ;
 
-dateResult
-         :  '('! dateSpec ')'!
+dateResult returns [PredicateStmt value]
+         :  '('! dateSpec ')'! { $value = $dateSpec.value; }
          ;
 
-dateSpec :  NOW
-         |  ID
-         |  NUMBER (BEFORE|AFTER) ID
+dateSpec returns [PredicateStmt value]
+         :  ID { $value = new PredicateStmtDateSymbol( $ID.text ); }
+         |  NUMBER unit=(HOUR|HOURS|DAY|DAYS|WEEK|WEEKS) type=(BEFORE|AFTER) ID
+            { $value = new PredicateStmtRelativeDate( -Integer.parseInt( $NUMBER.text ), $unit.text, $type.text, $ID.text ); }
          ;
 
 guardResult returns [GuardResponse value]
@@ -91,7 +98,7 @@ STRING   :  '"' ( '\\\"' | ~( '"' ) )* '"'
 ID       :  LETTER ( LETTER | DIGIT | '.' )*
          ;
 
-NUMBER   :  DIGIT+
+NUMBER   :  '-'? DIGIT+
          ;
 
 fragment LETTER

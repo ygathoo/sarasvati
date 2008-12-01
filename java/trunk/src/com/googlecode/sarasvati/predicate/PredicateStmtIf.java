@@ -1,12 +1,12 @@
 package com.googlecode.sarasvati.predicate;
 
-public class PredicateIf implements PredicateStmt
+public class PredicateStmtIf implements PredicateStmt
 {
   protected PredicateExpr expr;
   protected PredicateStmt ifStmt;
   protected PredicateStmt elseStmt;
 
-  public PredicateIf (PredicateExpr expr, PredicateStmt ifStmt, PredicateStmt elseStmt)
+  public PredicateStmtIf (PredicateExpr expr, PredicateStmt ifStmt, PredicateStmt elseStmt)
   {
     this.expr = expr;
     this.ifStmt = ifStmt;
@@ -14,7 +14,7 @@ public class PredicateIf implements PredicateStmt
   }
 
   @Override
-  public StmtResult eval (PredicateEnv env)
+  public Object eval (PredicateEnv env)
   {
     return expr.eval( env ) ? ifStmt.eval( env ) : elseStmt.eval( env );
   }
