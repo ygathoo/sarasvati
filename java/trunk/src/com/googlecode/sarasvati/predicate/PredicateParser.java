@@ -1,9 +1,10 @@
-// $ANTLR 3.1.1 src/com/googlecode/sarasvati/predicate/Predicate.g 2008-11-30 19:10:42
+// $ANTLR 3.1.1 src/com/googlecode/sarasvati/predicate/Predicate.g 2008-11-30 19:42:12
 
 package com.googlecode.sarasvati.predicate;
 
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.SkipNodeGuardResponse;
+import com.googlecode.sarasvati.util.SvUtil;
 
 
 import org.antlr.runtime.*;
@@ -82,7 +83,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "program"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:39:1: program returns [PredicateStmt value] : stmt EOF ;
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:40:1: program returns [PredicateStmt value] : stmt EOF ;
     public final PredicateParser.program_return program() throws RecognitionException {
         PredicateParser.program_return retval = new PredicateParser.program_return();
         retval.start = input.LT(1);
@@ -96,8 +97,8 @@ public class PredicateParser extends Parser {
         CommonTree EOF2_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:40:10: ( stmt EOF )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:40:13: stmt EOF
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:41:10: ( stmt EOF )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:41:13: stmt EOF
             {
             root_0 = (CommonTree)adaptor.nil();
 
@@ -140,7 +141,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "stmt"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:43:1: stmt returns [PredicateStmt value] : ( IF e= orExpr THEN ifStmt= stmt ELSE elseStmt= stmt | result );
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:44:1: stmt returns [PredicateStmt value] : ( IF e= orExpr THEN ifStmt= stmt ELSE elseStmt= stmt | result );
     public final PredicateParser.stmt_return stmt() throws RecognitionException {
         PredicateParser.stmt_return retval = new PredicateParser.stmt_return();
         retval.start = input.LT(1);
@@ -164,7 +165,7 @@ public class PredicateParser extends Parser {
         CommonTree ELSE5_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:44:10: ( IF e= orExpr THEN ifStmt= stmt ELSE elseStmt= stmt | result )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:45:10: ( IF e= orExpr THEN ifStmt= stmt ELSE elseStmt= stmt | result )
             int alt1=2;
             int LA1_0 = input.LA(1);
 
@@ -182,7 +183,7 @@ public class PredicateParser extends Parser {
             }
             switch (alt1) {
                 case 1 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:44:13: IF e= orExpr THEN ifStmt= stmt ELSE elseStmt= stmt
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:45:13: IF e= orExpr THEN ifStmt= stmt ELSE elseStmt= stmt
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -215,7 +216,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:45:13: result
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:46:13: result
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -256,7 +257,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "orExpr"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:48:1: orExpr returns [PredicateExpr value] : left= andExpr ( OR right= andExpr )* ;
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:49:1: orExpr returns [PredicateExpr value] : left= andExpr ( OR right= andExpr )* ;
     public final PredicateParser.orExpr_return orExpr() throws RecognitionException {
         PredicateParser.orExpr_return retval = new PredicateParser.orExpr_return();
         retval.start = input.LT(1);
@@ -272,8 +273,8 @@ public class PredicateParser extends Parser {
         CommonTree OR7_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:49:10: (left= andExpr ( OR right= andExpr )* )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:49:13: left= andExpr ( OR right= andExpr )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:50:10: (left= andExpr ( OR right= andExpr )* )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:50:13: left= andExpr ( OR right= andExpr )*
             {
             root_0 = (CommonTree)adaptor.nil();
 
@@ -284,7 +285,7 @@ public class PredicateParser extends Parser {
 
             adaptor.addChild(root_0, left.getTree());
              retval.value = (left!=null?left.value:null); 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:49:52: ( OR right= andExpr )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:50:52: ( OR right= andExpr )*
             loop2:
             do {
                 int alt2=2;
@@ -297,7 +298,7 @@ public class PredicateParser extends Parser {
 
                 switch (alt2) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:49:54: OR right= andExpr
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:50:54: OR right= andExpr
             	    {
             	    OR7=(Token)match(input,OR,FOLLOW_OR_in_orExpr396); 
             	    OR7_tree = (CommonTree)adaptor.create(OR7);
@@ -347,7 +348,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "andExpr"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:52:1: andExpr returns [PredicateExpr value] : left= notExpr ( AND right= notExpr )* ;
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:53:1: andExpr returns [PredicateExpr value] : left= notExpr ( AND right= notExpr )* ;
     public final PredicateParser.andExpr_return andExpr() throws RecognitionException {
         PredicateParser.andExpr_return retval = new PredicateParser.andExpr_return();
         retval.start = input.LT(1);
@@ -363,8 +364,8 @@ public class PredicateParser extends Parser {
         CommonTree AND8_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:53:10: (left= notExpr ( AND right= notExpr )* )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:53:13: left= notExpr ( AND right= notExpr )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:54:10: (left= notExpr ( AND right= notExpr )* )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:54:13: left= notExpr ( AND right= notExpr )*
             {
             root_0 = (CommonTree)adaptor.nil();
 
@@ -375,7 +376,7 @@ public class PredicateParser extends Parser {
 
             adaptor.addChild(root_0, left.getTree());
              retval.value = (left!=null?left.value:null); 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:53:52: ( AND right= notExpr )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:54:52: ( AND right= notExpr )*
             loop3:
             do {
                 int alt3=2;
@@ -388,7 +389,7 @@ public class PredicateParser extends Parser {
 
                 switch (alt3) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:53:54: AND right= notExpr
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:54:54: AND right= notExpr
             	    {
             	    AND8=(Token)match(input,AND,FOLLOW_AND_in_andExpr446); 
             	    AND8_tree = (CommonTree)adaptor.create(AND8);
@@ -438,7 +439,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "notExpr"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:56:1: notExpr returns [PredicateExpr value] : ( NOT expr | expr );
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:57:1: notExpr returns [PredicateExpr value] : ( NOT expr | expr );
     public final PredicateParser.notExpr_return notExpr() throws RecognitionException {
         PredicateParser.notExpr_return retval = new PredicateParser.notExpr_return();
         retval.start = input.LT(1);
@@ -454,7 +455,7 @@ public class PredicateParser extends Parser {
         CommonTree NOT9_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:57:10: ( NOT expr | expr )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:58:10: ( NOT expr | expr )
             int alt4=2;
             int LA4_0 = input.LA(1);
 
@@ -472,7 +473,7 @@ public class PredicateParser extends Parser {
             }
             switch (alt4) {
                 case 1 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:57:13: NOT expr
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:58:13: NOT expr
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -491,7 +492,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:58:13: expr
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:59:13: expr
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -532,7 +533,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "expr"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:61:1: expr returns [PredicateExpr value] : ( ID | '(' orExpr ')' );
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:62:1: expr returns [PredicateExpr value] : ( ID | '(' orExpr ')' );
     public final PredicateParser.expr_return expr() throws RecognitionException {
         PredicateParser.expr_return retval = new PredicateParser.expr_return();
         retval.start = input.LT(1);
@@ -550,7 +551,7 @@ public class PredicateParser extends Parser {
         CommonTree char_literal15_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:62:10: ( ID | '(' orExpr ')' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:63:10: ( ID | '(' orExpr ')' )
             int alt5=2;
             int LA5_0 = input.LA(1);
 
@@ -568,7 +569,7 @@ public class PredicateParser extends Parser {
             }
             switch (alt5) {
                 case 1 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:62:13: ID
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:63:13: ID
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -581,7 +582,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:63:13: '(' orExpr ')'
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:64:13: '(' orExpr ')'
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -624,7 +625,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "result"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:66:1: result returns [PredicateStmt value] : ( guardResult | NUMBER | ID | STRING | dateResult );
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:67:1: result returns [PredicateStmt value] : ( guardResult | NUMBER | ID | STRING | dateResult );
     public final PredicateParser.result_return result() throws RecognitionException {
         PredicateParser.result_return retval = new PredicateParser.result_return();
         retval.start = input.LT(1);
@@ -644,7 +645,7 @@ public class PredicateParser extends Parser {
         CommonTree STRING19_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:67:10: ( guardResult | NUMBER | ID | STRING | dateResult )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:68:10: ( guardResult | NUMBER | ID | STRING | dateResult )
             int alt6=5;
             switch ( input.LA(1) ) {
             case ACCEPT:
@@ -683,7 +684,7 @@ public class PredicateParser extends Parser {
 
             switch (alt6) {
                 case 1 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:67:13: guardResult
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:68:13: guardResult
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -698,7 +699,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:68:13: NUMBER
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:69:13: NUMBER
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -711,7 +712,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:69:13: ID
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:70:13: ID
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -724,7 +725,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:70:13: STRING
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:71:13: STRING
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -732,12 +733,12 @@ public class PredicateParser extends Parser {
                     STRING19_tree = (CommonTree)adaptor.create(STRING19);
                     adaptor.addChild(root_0, STRING19_tree);
 
-                     retval.value = new PredicateStmtResult( (STRING19!=null?STRING19.getText():null) ); 
+                     retval.value = new PredicateStmtResult( SvUtil.normalizeQuotedString( (STRING19!=null?STRING19.getText():null) ) ); 
 
                     }
                     break;
                 case 5 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:71:13: dateResult
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:72:13: dateResult
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -778,7 +779,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "dateResult"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:74:1: dateResult returns [PredicateStmt value] : '(' dateSpec ')' ;
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:75:1: dateResult returns [PredicateStmt value] : '(' dateSpec ')' ;
     public final PredicateParser.dateResult_return dateResult() throws RecognitionException {
         PredicateParser.dateResult_return retval = new PredicateParser.dateResult_return();
         retval.start = input.LT(1);
@@ -794,8 +795,8 @@ public class PredicateParser extends Parser {
         CommonTree char_literal23_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:75:10: ( '(' dateSpec ')' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:75:13: '(' dateSpec ')'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:76:10: ( '(' dateSpec ')' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:76:13: '(' dateSpec ')'
             {
             root_0 = (CommonTree)adaptor.nil();
 
@@ -836,7 +837,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "dateSpec"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:78:1: dateSpec returns [PredicateStmt value] : ( ID | NUMBER unit= ( HOUR | HOURS | DAY | DAYS | WEEK | WEEKS ) type= ( BEFORE | AFTER ) ID );
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:79:1: dateSpec returns [PredicateStmt value] : ( ID | NUMBER unit= ( HOUR | HOURS | DAY | DAYS | WEEK | WEEKS ) type= ( BEFORE | AFTER ) ID );
     public final PredicateParser.dateSpec_return dateSpec() throws RecognitionException {
         PredicateParser.dateSpec_return retval = new PredicateParser.dateSpec_return();
         retval.start = input.LT(1);
@@ -856,7 +857,7 @@ public class PredicateParser extends Parser {
         CommonTree ID26_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:79:10: ( ID | NUMBER unit= ( HOUR | HOURS | DAY | DAYS | WEEK | WEEKS ) type= ( BEFORE | AFTER ) ID )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:80:10: ( ID | NUMBER unit= ( HOUR | HOURS | DAY | DAYS | WEEK | WEEKS ) type= ( BEFORE | AFTER ) ID )
             int alt7=2;
             int LA7_0 = input.LA(1);
 
@@ -874,7 +875,7 @@ public class PredicateParser extends Parser {
             }
             switch (alt7) {
                 case 1 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:79:13: ID
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:80:13: ID
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -887,7 +888,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:80:13: NUMBER unit= ( HOUR | HOURS | DAY | DAYS | WEEK | WEEKS ) type= ( BEFORE | AFTER ) ID
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:81:13: NUMBER unit= ( HOUR | HOURS | DAY | DAYS | WEEK | WEEKS ) type= ( BEFORE | AFTER ) ID
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -921,7 +922,7 @@ public class PredicateParser extends Parser {
                     ID26_tree = (CommonTree)adaptor.create(ID26);
                     adaptor.addChild(root_0, ID26_tree);
 
-                     retval.value = new PredicateStmtRelativeDate( -Integer.parseInt( (NUMBER25!=null?NUMBER25.getText():null) ), (unit!=null?unit.getText():null), (type!=null?type.getText():null), (ID26!=null?ID26.getText():null) ); 
+                     retval.value = new PredicateStmtRelativeDate( Integer.parseInt( (NUMBER25!=null?NUMBER25.getText():null) ), (unit!=null?unit.getText():null), (type!=null?type.getText():null), (ID26!=null?ID26.getText():null) ); 
 
                     }
                     break;
@@ -952,7 +953,7 @@ public class PredicateParser extends Parser {
     };
 
     // $ANTLR start "guardResult"
-    // src/com/googlecode/sarasvati/predicate/Predicate.g:84:1: guardResult returns [GuardResponse value] : ( ACCEPT | DISCARD | SKIP ID | SKIP );
+    // src/com/googlecode/sarasvati/predicate/Predicate.g:85:1: guardResult returns [GuardResponse value] : ( ACCEPT | DISCARD | SKIP ID | SKIP );
     public final PredicateParser.guardResult_return guardResult() throws RecognitionException {
         PredicateParser.guardResult_return retval = new PredicateParser.guardResult_return();
         retval.start = input.LT(1);
@@ -972,7 +973,7 @@ public class PredicateParser extends Parser {
         CommonTree SKIP31_tree=null;
 
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:85:10: ( ACCEPT | DISCARD | SKIP ID | SKIP )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:86:10: ( ACCEPT | DISCARD | SKIP ID | SKIP )
             int alt8=4;
             switch ( input.LA(1) ) {
             case ACCEPT:
@@ -1012,7 +1013,7 @@ public class PredicateParser extends Parser {
 
             switch (alt8) {
                 case 1 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:85:13: ACCEPT
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:86:13: ACCEPT
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -1025,7 +1026,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 2 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:86:13: DISCARD
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:87:13: DISCARD
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -1038,7 +1039,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 3 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:87:13: SKIP ID
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:88:13: SKIP ID
                     {
                     root_0 = (CommonTree)adaptor.nil();
 
@@ -1055,7 +1056,7 @@ public class PredicateParser extends Parser {
                     }
                     break;
                 case 4 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:88:13: SKIP
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:89:13: SKIP
                     {
                     root_0 = (CommonTree)adaptor.nil();
 

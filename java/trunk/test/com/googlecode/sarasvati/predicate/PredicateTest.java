@@ -62,7 +62,7 @@ public class PredicateTest
   public static void main(String[] args) throws Exception
   {
     String[] tests = { "if a or b then (1 week after now) else Discard",
-                       "\"Hello there!\"",
+                       "\"Hello \\\"there!\"",
                        "foo",
                        "50",
                        "(5 hours before now)" };

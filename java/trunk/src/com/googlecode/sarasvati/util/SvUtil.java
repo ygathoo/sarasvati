@@ -15,4 +15,27 @@ public class SvUtil
   {
     return str == null || str.trim().equals( "" );
   }
+
+  public static String normalizeQuotedString (String string)
+  {
+    if ( string == null )
+    {
+      return null;
+    }
+
+    StringBuilder buf = new StringBuilder( string.substring( 1, string.length() - 2 ) );
+
+    for ( int i = 0; i < buf.length(); i++ )
+    {
+      if ( i != buf.length() - 1 &&
+          buf.charAt( i ) == '\\' &&
+          buf.charAt( i + 1 ) == '"' )
+      {
+        buf.deleteCharAt( i );
+        i--;
+      }
+    }
+
+    return buf.toString();
+  }
 }

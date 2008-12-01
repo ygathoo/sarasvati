@@ -30,6 +30,7 @@ package com.googlecode.sarasvati.predicate;
 
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.SkipNodeGuardResponse;
+import com.googlecode.sarasvati.util.SvUtil;
 }
 
 @lexer::header {
@@ -67,7 +68,7 @@ result returns [PredicateStmt value]
          :  guardResult { $value = new PredicateStmtResult( $guardResult.value ); }
          |  NUMBER      { $value = new PredicateStmtResult( Integer.parseInt( $NUMBER.text ) ); }
          |  ID          { $value = new PredicateStmtResult( $ID.text ); }
-         |  STRING      { $value = new PredicateStmtResult( $STRING.text ); }
+         |  STRING      { $value = new PredicateStmtResult( SvUtil.normalizeQuotedString( $STRING.text ) ); }
          |  dateResult  { $value = $dateResult.value; }
          ;
 
@@ -78,7 +79,7 @@ dateResult returns [PredicateStmt value]
 dateSpec returns [PredicateStmt value]
          :  ID { $value = new PredicateStmtDateSymbol( $ID.text ); }
          |  NUMBER unit=(HOUR|HOURS|DAY|DAYS|WEEK|WEEKS) type=(BEFORE|AFTER) ID
-            { $value = new PredicateStmtRelativeDate( -Integer.parseInt( $NUMBER.text ), $unit.text, $type.text, $ID.text ); }
+            { $value = new PredicateStmtRelativeDate( Integer.parseInt( $NUMBER.text ), $unit.text, $type.text, $ID.text ); }
          ;
 
 guardResult returns [GuardResponse value]

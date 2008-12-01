@@ -1,4 +1,4 @@
-// $ANTLR 3.1.1 src/com/googlecode/sarasvati/predicate/Predicate.g 2008-11-30 19:10:43
+// $ANTLR 3.1.1 src/com/googlecode/sarasvati/predicate/Predicate.g 2008-11-30 19:42:13
 
 package com.googlecode.sarasvati.predicate;
 
@@ -456,11 +456,11 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = STRING;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:95:10: ( '\"' ( '\\\\\\\"' | ~ ( '\"' ) )* '\"' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:95:13: '\"' ( '\\\\\\\"' | ~ ( '\"' ) )* '\"'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:96:10: ( '\"' ( '\\\\\\\"' | ~ ( '\"' ) )* '\"' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:96:13: '\"' ( '\\\\\\\"' | ~ ( '\"' ) )* '\"'
             {
             match('\"'); 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:95:17: ( '\\\\\\\"' | ~ ( '\"' ) )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:96:17: ( '\\\\\\\"' | ~ ( '\"' ) )*
             loop1:
             do {
                 int alt1=3;
@@ -494,7 +494,7 @@ public class PredicateLexer extends Lexer {
 
                 switch (alt1) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:95:19: '\\\\\\\"'
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:96:19: '\\\\\\\"'
             	    {
             	    match("\\\""); 
 
@@ -502,7 +502,7 @@ public class PredicateLexer extends Lexer {
             	    }
             	    break;
             	case 2 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:95:28: ~ ( '\"' )
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:96:28: ~ ( '\"' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='!')||(input.LA(1)>='#' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -539,11 +539,11 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = ID;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:98:10: ( LETTER ( LETTER | DIGIT | '.' )* )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:98:13: LETTER ( LETTER | DIGIT | '.' )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:99:10: ( LETTER ( LETTER | DIGIT | '.' )* )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:99:13: LETTER ( LETTER | DIGIT | '.' )*
             {
             mLETTER(); 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:98:20: ( LETTER | DIGIT | '.' )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:99:20: ( LETTER | DIGIT | '.' )*
             loop2:
             do {
                 int alt2=2;
@@ -592,10 +592,10 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = NUMBER;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:101:10: ( ( '-' )? ( DIGIT )+ )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:101:13: ( '-' )? ( DIGIT )+
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:102:10: ( ( '-' )? ( DIGIT )+ )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:102:13: ( '-' )? ( DIGIT )+
             {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:101:13: ( '-' )?
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:102:13: ( '-' )?
             int alt3=2;
             int LA3_0 = input.LA(1);
 
@@ -604,7 +604,7 @@ public class PredicateLexer extends Lexer {
             }
             switch (alt3) {
                 case 1 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:101:13: '-'
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:102:13: '-'
                     {
                     match('-'); 
 
@@ -613,7 +613,7 @@ public class PredicateLexer extends Lexer {
 
             }
 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:101:18: ( DIGIT )+
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:102:18: ( DIGIT )+
             int cnt4=0;
             loop4:
             do {
@@ -627,7 +627,7 @@ public class PredicateLexer extends Lexer {
 
                 switch (alt4) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:101:18: DIGIT
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:102:18: DIGIT
             	    {
             	    mDIGIT(); 
 
@@ -657,7 +657,7 @@ public class PredicateLexer extends Lexer {
     // $ANTLR start "LETTER"
     public final void mLETTER() throws RecognitionException {
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:105:10: ( LOWER | UPPER )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:106:10: ( LOWER | UPPER )
             // src/com/googlecode/sarasvati/predicate/Predicate.g:
             {
             if ( (input.LA(1)>='A' && input.LA(1)<='Z')||(input.LA(1)>='a' && input.LA(1)<='z') ) {
@@ -681,8 +681,8 @@ public class PredicateLexer extends Lexer {
     // $ANTLR start "LOWER"
     public final void mLOWER() throws RecognitionException {
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:109:10: ( 'a' .. 'z' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:109:12: 'a' .. 'z'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:110:10: ( 'a' .. 'z' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:110:12: 'a' .. 'z'
             {
             matchRange('a','z'); 
 
@@ -697,8 +697,8 @@ public class PredicateLexer extends Lexer {
     // $ANTLR start "UPPER"
     public final void mUPPER() throws RecognitionException {
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:113:10: ( 'A' .. 'Z' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:113:12: 'A' .. 'Z'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:114:10: ( 'A' .. 'Z' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:114:12: 'A' .. 'Z'
             {
             matchRange('A','Z'); 
 
@@ -713,8 +713,8 @@ public class PredicateLexer extends Lexer {
     // $ANTLR start "DIGIT"
     public final void mDIGIT() throws RecognitionException {
         try {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:117:10: ( '0' .. '9' )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:117:12: '0' .. '9'
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:118:10: ( '0' .. '9' )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:118:12: '0' .. '9'
             {
             matchRange('0','9'); 
 
@@ -731,10 +731,10 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = NEWLINE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:120:10: ( ( ( '\\r' )? '\\n' )+ )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:120:14: ( ( '\\r' )? '\\n' )+
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:121:10: ( ( ( '\\r' )? '\\n' )+ )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:121:14: ( ( '\\r' )? '\\n' )+
             {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:120:14: ( ( '\\r' )? '\\n' )+
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:121:14: ( ( '\\r' )? '\\n' )+
             int cnt6=0;
             loop6:
             do {
@@ -748,9 +748,9 @@ public class PredicateLexer extends Lexer {
 
                 switch (alt6) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:120:15: ( '\\r' )? '\\n'
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:121:15: ( '\\r' )? '\\n'
             	    {
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:120:15: ( '\\r' )?
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:121:15: ( '\\r' )?
             	    int alt5=2;
             	    int LA5_0 = input.LA(1);
 
@@ -759,7 +759,7 @@ public class PredicateLexer extends Lexer {
             	    }
             	    switch (alt5) {
             	        case 1 :
-            	            // src/com/googlecode/sarasvati/predicate/Predicate.g:120:15: '\\r'
+            	            // src/com/googlecode/sarasvati/predicate/Predicate.g:121:15: '\\r'
             	            {
             	            match('\r'); 
 
@@ -799,10 +799,10 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = WHITESPACE;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:124:10: ( ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+ )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:124:12: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:125:10: ( ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+ )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:125:12: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
             {
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:124:12: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:125:12: ( '\\t' | ' ' | '\\r' | '\\n' | '\\u000C' )+
             int cnt7=0;
             loop7:
             do {
@@ -857,12 +857,12 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = SINGLE_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:128:10: ( '//' (~ ( '\\r' | '\\n' ) )* NEWLINE )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:128:12: '//' (~ ( '\\r' | '\\n' ) )* NEWLINE
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:129:10: ( '//' (~ ( '\\r' | '\\n' ) )* NEWLINE )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:129:12: '//' (~ ( '\\r' | '\\n' ) )* NEWLINE
             {
             match("//"); 
 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:128:17: (~ ( '\\r' | '\\n' ) )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:129:17: (~ ( '\\r' | '\\n' ) )*
             loop8:
             do {
                 int alt8=2;
@@ -875,7 +875,7 @@ public class PredicateLexer extends Lexer {
 
                 switch (alt8) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:128:17: ~ ( '\\r' | '\\n' )
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:129:17: ~ ( '\\r' | '\\n' )
             	    {
             	    if ( (input.LA(1)>='\u0000' && input.LA(1)<='\t')||(input.LA(1)>='\u000B' && input.LA(1)<='\f')||(input.LA(1)>='\u000E' && input.LA(1)<='\uFFFF') ) {
             	        input.consume();
@@ -913,12 +913,12 @@ public class PredicateLexer extends Lexer {
         try {
             int _type = MULTI_COMMENT;
             int _channel = DEFAULT_TOKEN_CHANNEL;
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:132:10: ( '/*' ( . )* '*/' ( NEWLINE )? )
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:132:12: '/*' ( . )* '*/' ( NEWLINE )?
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:133:10: ( '/*' ( . )* '*/' ( NEWLINE )? )
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:133:12: '/*' ( . )* '*/' ( NEWLINE )?
             {
             match("/*"); 
 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:132:17: ( . )*
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:133:17: ( . )*
             loop9:
             do {
                 int alt9=2;
@@ -943,7 +943,7 @@ public class PredicateLexer extends Lexer {
 
                 switch (alt9) {
             	case 1 :
-            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:132:17: .
+            	    // src/com/googlecode/sarasvati/predicate/Predicate.g:133:17: .
             	    {
             	    matchAny(); 
 
@@ -957,7 +957,7 @@ public class PredicateLexer extends Lexer {
 
             match("*/"); 
 
-            // src/com/googlecode/sarasvati/predicate/Predicate.g:132:25: ( NEWLINE )?
+            // src/com/googlecode/sarasvati/predicate/Predicate.g:133:25: ( NEWLINE )?
             int alt10=2;
             int LA10_0 = input.LA(1);
 
@@ -966,7 +966,7 @@ public class PredicateLexer extends Lexer {
             }
             switch (alt10) {
                 case 1 :
-                    // src/com/googlecode/sarasvati/predicate/Predicate.g:132:25: NEWLINE
+                    // src/com/googlecode/sarasvati/predicate/Predicate.g:133:25: NEWLINE
                     {
                     mNEWLINE(); 
 
