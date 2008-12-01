@@ -29,7 +29,7 @@ public class PredicateStmtRelativeDate implements PredicateStmt
 
     if ( "before".equals( type ) )
     {
-      offset = -offset;
+      this.offset = -offset;
     }
 
     this.unit = unitMapping.get( unitName );
