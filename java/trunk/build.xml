@@ -1,5 +1,7 @@
 <project name="sarasvati">
 
+  <taskdef name="antlr3" classname="org.apache.tools.ant.antlr.ANTLR3"/>
+
   <property name="version" value="1.0.0-beta2"/>
 
   <property name="dist.dir" value="dist"/>
@@ -44,6 +46,24 @@
     <delete file="${fetch.indicator}"/>
   </target>
 
+  <target name="buildLang">
+    <mkdir dir="${build.dir}/lang/com/googlecode/sarasvati/predicate/lang"/>
+    <mkdir dir="${build.dir}/lang"/>
+
+    <antlr3 target="lang/Predicate.g" dir="lang" outputdirectory="${build.dir}/lang/com/googlecode/sarasvati/predicate/lang"/>
+
+    <javac srcdir="${build.dir}/lang" destdir="${build.dir}/lang" source="1.5" target="1.5" debug="true">
+      <include name="**/*.java" />
+      <classpath refid="classpath"/>
+      <sourcepath path="src"/>
+    </javac>
+
+    <jar basedir="${build.dir}/lang" destfile="lib/predicate.jar">
+      <include name="**/lang/PredicateParser*.class"/>
+      <include name="**/lang/PredicateLexer*.class"/>
+      <include name="**/lang/Predicate.tokens"/>
+    </jar>
+  </target>
 
   <target name="compile" depends="fetchlibs">
     <mkdir dir="${build.dir}" />

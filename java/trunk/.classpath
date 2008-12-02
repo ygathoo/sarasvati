@@ -7,7 +7,6 @@
 	<classpathentry exported="true" kind="lib" path="lib/ejb3-persistence.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hibernate-validator-3.0.0.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/postgresql-8.3-603.jdbc4.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/antlr-2.7.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/asm.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cglib.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging.jar"/>
@@ -19,6 +18,8 @@
 	<classpathentry exported="true" kind="lib" path="lib/commons-collections-3.2.jar"/>
 	<classpathentry kind="lib" path="lib/bsf-2.4.0.jar"/>
 	<classpathentry kind="lib" path="lib/rhino-1.6R7.jar"/>
-	<classpathentry kind="lib" path="lib/antlr-3.1.1-runtime.jar"/>
+	<classpathentry kind="lib" path="lib/antlr3-ant.jar"/>
+	<classpathentry kind="lib" path="lib/antlr-3.1.1.jar"/>
+	<classpathentry kind="lib" path="lib/predicate.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

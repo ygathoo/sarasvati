@@ -42,7 +42,6 @@ import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
-import com.googlecode.sarasvati.guardlang.GuardLang;
 
 @Entity
 @Table (name="wf_node")
@@ -184,12 +183,7 @@ public class HibNode implements Node
   @Override
   public GuardResponse guard (Engine engine, NodeToken token)
   {
-    if ( guard == null || guard.trim().length() == 0 )
-    {
-      return GuardResponse.ACCEPT_TOKEN_RESPONSE;
-    }
-
-    return GuardLang.eval( guard, engine.newGuardEnv( token ) );
+    return engine.evaluateGuard( token, guard );
   }
 
   @Override

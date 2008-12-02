@@ -271,4 +271,18 @@ public interface Engine
    * @return A GuardEnv for this engine and the given NodeToken.
    */
   GuardEnv newGuardEnv (NodeToken token);
+
+  /**
+   * Nodes, by default, will pass off guard evaluation to the Engine. This allows
+   * engine subclasses to easily override the default behavior and use a rules
+   * engine or scripting language for guards.
+   *
+   * @param token The NodeToken for which the guard is being evaluated.
+   * @param guard The guard statement to be evaluated. Maybe blank or null, which
+   *              by convention should cause {@link GuardResponse#ACCEPT_TOKEN_RESPONSE}
+   *              to be returned.
+   *
+   * @return The response based on the guard.
+   */
+  GuardResponse evaluateGuard (NodeToken token, String guard);
 }
