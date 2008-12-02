@@ -26,15 +26,19 @@ tokens {
 }
 
 @header {
-package com.googlecode.sarasvati.predicate;
+package com.googlecode.sarasvati.predicate.lang;
 
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.SkipNodeGuardResponse;
 import com.googlecode.sarasvati.util.SvUtil;
+import com.googlecode.sarasvati.predicate.*;
+
 }
 
 @lexer::header {
-package com.googlecode.sarasvati.predicate;
+package com.googlecode.sarasvati.predicate.lang;
+
+import com.googlecode.sarasvati.predicate.*;
 }
 
 program returns [PredicateStmt value]

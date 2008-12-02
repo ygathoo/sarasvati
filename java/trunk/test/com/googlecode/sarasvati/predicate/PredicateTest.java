@@ -6,6 +6,9 @@ import java.util.Date;
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 
+import com.googlecode.sarasvati.predicate.lang.PredicateLexer;
+import com.googlecode.sarasvati.predicate.lang.PredicateParser;
+
 public class PredicateTest
 {
   public static void eval (String testStmt) throws Exception

@@ -29,6 +29,7 @@ import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
 import com.googlecode.sarasvati.event.ProcessEvent;
 import com.googlecode.sarasvati.guardlang.GuardEnv;
+import com.googlecode.sarasvati.guardlang.GuardLang;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.script.ScriptEnv;
 
@@ -325,5 +326,16 @@ public abstract class BaseEngine implements Engine
   public GuardEnv newGuardEnv (NodeToken token)
   {
     return PredicateRepository.newGuardEnv( this, token );
+  }
+
+  @Override
+  public GuardResponse evaluateGuard (NodeToken token, String guard)
+  {
+    if ( guard == null || guard.trim().length() == 0 )
+    {
+      return GuardResponse.ACCEPT_TOKEN_RESPONSE;
+    }
+
+    return GuardLang.eval( guard, newGuardEnv( token ) );
   }
 }
