@@ -2,7 +2,7 @@
 
 <process-definition name="random-guard" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node type="node" name="start" isStart="true">
+  <node type="async" name="start" isStart="true">
     <arc to="first-node"/>
   </node>
 
@@ -21,7 +21,7 @@
     <arc to="join"/>
   </node>
 
-  <node name="join" isJoin="false">
+  <node type="async" name="join" isJoin="false">
     <arc to="dump3"/>
     <arc to="dump4"/>
   </node>
@@ -36,7 +36,7 @@
     <arc to="leave-decision"/>
   </node>
 
-  <node name="leave-decision" isJoin="true">
+  <node type="async" name="leave-decision" isJoin="true">
     <guard>IF isTenthIteration THEN Skip exit ELSE Skip beginning</guard>
 
     <arc to="last-node" name="exit"/>
@@ -44,5 +44,5 @@
 
   </node>
 
-  <node name="last-node"/>
+  <node type="async" name="last-node"/>
 </process-definition>
