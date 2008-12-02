@@ -18,36 +18,21 @@
 */
 package com.googlecode.sarasvati.example.db;
 
-import java.util.Random;
-
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.hib.HibNode;
 
 @Entity
-@DiscriminatorValue( "init" )
-public class InitNode extends HibNode
+@DiscriminatorValue( "async" )
+public class AsyncNode extends HibNode
 {
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    long iter = 0;
-
-    Env env = token.getEnv();
-
-    if ( env.hasAttribute( "iter" ) )
-    {
-      iter = env.getLongAttribute( "iter" );
-    }
-
-    env.setLongAttribute( "iter", ++iter );
-    env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
-
     engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
   }
 }

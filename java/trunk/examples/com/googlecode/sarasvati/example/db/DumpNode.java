@@ -33,8 +33,7 @@ public class DumpNode extends HibNode
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    //ExampleUtil.waitFor( 750 );
     System.out.println( "Accepted into: " + getName() );
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
   }
 }

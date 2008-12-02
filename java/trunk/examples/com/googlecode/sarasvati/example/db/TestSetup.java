@@ -52,6 +52,7 @@ public class TestSetup
     config.addAnnotatedClass( TaskState.class );
     config.addAnnotatedClass( InitNode.class );
     config.addAnnotatedClass( DumpNode.class );
+    config.addAnnotatedClass( AsyncNode.class );
 
     sessionFactory = config.buildSessionFactory();
   }

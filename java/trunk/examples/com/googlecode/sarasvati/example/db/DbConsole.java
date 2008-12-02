@@ -30,6 +30,7 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.example.ExampleUtil;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
 import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
 import com.googlecode.sarasvati.guardlang.PredicateRepository;
@@ -99,7 +100,22 @@ public class DbConsole
       Transaction trans = session.beginTransaction();
       HibEngine engine = new HibEngine( session );
 
-      HibGraphProcess p = (HibGraphProcess) session.load( HibGraphProcess.class, processId );
+      HibGraphProcess p = engine.getRepository().loadProcess( processId );
+
+      while ( !p.getExecutionQueue().isEmpty() )
+      {
+        trans.commit();
+        session.close();
+        session = TestSetup.openSession();
+        trans = session.beginTransaction();
+        engine = new HibEngine( session );
+
+        p = engine.getRepository().loadProcess( processId );
+
+        ExampleUtil.waitFor( 1000 );
+        engine.executeQueuedArcTokens( p );
+      }
+
       if ( p.isComplete() )
       {
         System.out.println( "Workflow complete" );
