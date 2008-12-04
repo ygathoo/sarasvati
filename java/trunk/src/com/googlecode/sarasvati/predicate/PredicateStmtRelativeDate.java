@@ -5,6 +5,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.googlecode.sarasvati.predicate.visitor.PredicateVisitor;
+
 public class PredicateStmtRelativeDate implements PredicateStmt
 {
   private static Map<String, Integer> unitMapping = new HashMap<String, Integer>();
@@ -21,7 +23,7 @@ public class PredicateStmtRelativeDate implements PredicateStmt
 
   protected int offset;
   protected int unit;
-  protected String symbol;
+  protected PredicateStmtDateSymbol dateSymbolExpr;
 
   public PredicateStmtRelativeDate (int offset, String unitName, String type, String symbol)
   {
@@ -33,13 +35,35 @@ public class PredicateStmtRelativeDate implements PredicateStmt
     }
 
     this.unit = unitMapping.get( unitName );
-    this.symbol = symbol;
+    this.dateSymbolExpr = new PredicateStmtDateSymbol( symbol );
+  }
+
+  public int getOffset ()
+  {
+    return offset;
+  }
+
+  public int getUnit ()
+  {
+    return unit;
+  }
+
+  public PredicateStmtDateSymbol getDateSymbolExpr ()
+  {
+    return dateSymbolExpr;
   }
 
   @Override
   public Date eval (PredicateEnv env)
   {
-    Date baseDate = env.evalDate( symbol );
+    Date baseDate = dateSymbolExpr.eval( env );
     return env.evalRelative( baseDate, offset, unit );
+  }
+
+  @Override
+  public void traverse (PredicateVisitor visitor)
+  {
+    visitor.visit( this );
+    dateSymbolExpr.traverse( visitor );
   }
 }
