@@ -31,11 +31,11 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
-import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
-import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
+import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
+import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
@@ -48,28 +48,30 @@ public class MemConsole
   {
     loadWorkflows();
 
-    PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
+    DefaultRubricFunctionRepository repository = DefaultRubricFunctionRepository.getGlobalInstance();
+
+    repository.registerPredicate( "isRandOdd", new RubricPredicate()
     {
       @Override
-      public boolean evaluate( Engine engine, NodeToken token )
+      public boolean eval( Engine engine, NodeToken token )
       {
         return token.getEnv().getLongAttribute( "rand" ) % 2 == 1;
       }
     });
 
-    PredicateRepository.addPredicate( "isRandEven", new GuardLangPredicate()
+    repository.registerPredicate( "isRandEven", new RubricPredicate()
     {
       @Override
-      public boolean evaluate( Engine engine, NodeToken token )
+      public boolean eval( Engine engine, NodeToken token )
       {
         return token.getEnv().getLongAttribute( "rand" ) % 2 == 0;
       }
     });
 
-    PredicateRepository.addPredicate( "isTenthIteration", new GuardLangPredicate()
+    repository.registerPredicate( "isTenthIteration", new RubricPredicate()
     {
       @Override
-      public boolean evaluate( Engine engine, NodeToken token )
+      public boolean eval( Engine engine, NodeToken token )
       {
         System.out.println( "iter: " + token.getEnv().getLongAttribute( "iter" ) );
         return token.getEnv().getLongAttribute( "iter" ) == 1000;

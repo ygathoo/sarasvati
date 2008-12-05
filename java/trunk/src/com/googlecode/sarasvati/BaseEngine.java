@@ -25,12 +25,15 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import org.antlr.runtime.RecognitionException;
+
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
 import com.googlecode.sarasvati.event.ProcessEvent;
-import com.googlecode.sarasvati.guardlang.GuardEnv;
-import com.googlecode.sarasvati.guardlang.GuardLang;
-import com.googlecode.sarasvati.guardlang.PredicateRepository;
+import com.googlecode.sarasvati.rubric.RubricInterpreter;
+import com.googlecode.sarasvati.rubric.env.DefaultRubricEnv;
+import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
+import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.script.ScriptEnv;
 
 /**
@@ -323,9 +326,9 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public GuardEnv newGuardEnv (NodeToken token)
+  public RubricEnv newRubricEnv (NodeToken token)
   {
-    return PredicateRepository.newGuardEnv( this, token );
+    return new DefaultRubricEnv( this, token, DefaultRubricFunctionRepository.getGlobalInstance() );
   }
 
   @Override
@@ -336,6 +339,13 @@ public abstract class BaseEngine implements Engine
       return GuardResponse.ACCEPT_TOKEN_RESPONSE;
     }
 
-    return GuardLang.eval( guard, newGuardEnv( token ) );
+    try
+    {
+      return (GuardResponse) RubricInterpreter.eval( guard, newRubricEnv( token ) );
+    }
+    catch ( RecognitionException re )
+    {
+      throw new WorkflowException( "Failed to evaluate guard", re );
+    }
   }
 }

@@ -47,10 +47,10 @@
   </target>
 
   <target name="buildLang">
-    <mkdir dir="${build.dir}/lang/com/googlecode/sarasvati/predicate/lang"/>
+    <mkdir dir="${build.dir}/lang/com/googlecode/sarasvati/rubric/lang"/>
     <mkdir dir="${build.dir}/lang"/>
 
-    <antlr3 target="lang/Predicate.g" dir="lang" outputdirectory="${build.dir}/lang/com/googlecode/sarasvati/predicate/lang"/>
+    <antlr3 target="lang/Rubric.g" dir="lang" outputdirectory="${build.dir}/lang/com/googlecode/sarasvati/rubric/lang"/>
 
     <javac srcdir="${build.dir}/lang" destdir="${build.dir}/lang" source="1.5" target="1.5" debug="true">
       <include name="**/*.java" />
@@ -58,10 +58,10 @@
       <sourcepath path="src"/>
     </javac>
 
-    <jar basedir="${build.dir}/lang" destfile="lib/predicate.jar">
-      <include name="**/lang/PredicateParser*.class"/>
-      <include name="**/lang/PredicateLexer*.class"/>
-      <include name="**/lang/Predicate.tokens"/>
+    <jar basedir="${build.dir}/lang" destfile="lib/rubric.jar">
+      <include name="**/lang/RubricParser*.class"/>
+      <include name="**/lang/RubricLexer*.class"/>
+      <include name="**/lang/Rubric.tokens"/>
     </jar>
   </target>
 
