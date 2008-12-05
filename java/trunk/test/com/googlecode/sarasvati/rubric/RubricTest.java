@@ -7,8 +7,8 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
+import com.googlecode.sarasvati.rubric.lang.ErrorReportingRubricParser;
 import com.googlecode.sarasvati.rubric.lang.RubricLexer;
-import com.googlecode.sarasvati.rubric.lang.RubricParser;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 
 public class RubricTest
@@ -18,9 +18,14 @@ public class RubricTest
     RubricLexer lexer = new RubricLexer( new ANTLRStringStream( testStmt ) );
 
     CommonTokenStream stream = new CommonTokenStream( lexer );
-    RubricParser parser = new RubricParser( stream );
+    ErrorReportingRubricParser parser = new ErrorReportingRubricParser( stream );
 
     RubricStmt stmt = parser.program().value;
+
+    if ( parser.getError() != null )
+    {
+      throw parser.getError();
+    }
 
     RubricEnv env = new RubricEnv()
     {
