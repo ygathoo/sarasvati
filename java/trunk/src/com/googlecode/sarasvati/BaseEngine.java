@@ -337,6 +337,6 @@ public abstract class BaseEngine implements Engine
       return GuardResponse.ACCEPT_TOKEN_RESPONSE;
     }
 
-    return (GuardResponse) RubricInterpreter.eval( guard, newRubricEnv( token ) );
+    return (GuardResponse) RubricInterpreter.compile( guard ).eval( newRubricEnv( token ) );
   }
 }

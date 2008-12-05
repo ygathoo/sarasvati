@@ -1,11 +1,14 @@
 com.googlecode.sarasvati
 com.googlecode.sarasvati.adapter
 com.googlecode.sarasvati.event
-com.googlecode.sarasvati.guardlang
 com.googlecode.sarasvati.hib
 com.googlecode.sarasvati.load
 com.googlecode.sarasvati.load.properties
 com.googlecode.sarasvati.mem
+com.googlecode.sarasvati.rubric
+com.googlecode.sarasvati.rubric.env
+com.googlecode.sarasvati.rubric.lang
+com.googlecode.sarasvati.rubric.visitor
 com.googlecode.sarasvati.script
 com.googlecode.sarasvati.util
 com.googlecode.sarasvati.xml
