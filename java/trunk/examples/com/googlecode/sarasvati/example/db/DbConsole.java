@@ -32,11 +32,11 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.example.ExampleUtil;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
-import com.googlecode.sarasvati.guardlang.GuardLangPredicate;
-import com.googlecode.sarasvati.guardlang.PredicateRepository;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.hib.HibGraphProcess;
+import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
+import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 
 public class DbConsole
 {
@@ -44,33 +44,34 @@ public class DbConsole
 
   public static void main (String[] args) throws Exception
   {
-    PredicateRepository.addPredicate( "isRandOdd", new GuardLangPredicate()
+    DefaultRubricFunctionRepository repository = DefaultRubricFunctionRepository.getGlobalInstance();
+
+    repository.registerPredicate( "isRandOdd", new RubricPredicate()
     {
       @Override
-      public boolean evaluate( Engine engine, NodeToken token )
+      public boolean eval( Engine engine, NodeToken token )
       {
         return token.getEnv().getLongAttribute( "rand" ) % 2 == 1;
       }
     });
 
-    PredicateRepository.addPredicate( "isRandEven", new GuardLangPredicate()
+    repository.registerPredicate( "isRandEven", new RubricPredicate()
     {
       @Override
-      public boolean evaluate( Engine engine, NodeToken token )
+      public boolean eval( Engine engine, NodeToken token )
       {
         return token.getEnv().getLongAttribute( "rand" ) % 2 == 0;
       }
     });
 
-    PredicateRepository.addPredicate( "isTenthIteration", new GuardLangPredicate()
+    repository.registerPredicate( "isTenthIteration", new RubricPredicate()
     {
       @Override
-      public boolean evaluate( Engine engine, NodeToken token )
+      public boolean eval( Engine engine, NodeToken token )
       {
         return token.getEnv().getLongAttribute( "iter" ) == 10;
       }
     });
-
 
     TestSetup.init();
 

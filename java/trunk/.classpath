@@ -20,6 +20,6 @@
 	<classpathentry kind="lib" path="lib/rhino-1.6R7.jar"/>
 	<classpathentry kind="lib" path="lib/antlr3-ant.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-3.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/predicate.jar"/>
+	<classpathentry kind="lib" path="lib/rubric.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

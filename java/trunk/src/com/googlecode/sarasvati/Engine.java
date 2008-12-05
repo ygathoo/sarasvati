@@ -21,10 +21,10 @@ package com.googlecode.sarasvati;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
-import com.googlecode.sarasvati.guardlang.GuardEnv;
 import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.GraphRepository;
+import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.script.ScriptEnv;
 
 
@@ -264,13 +264,13 @@ public interface Engine
   void setupScriptEnv (ScriptEnv env, NodeToken token);
 
   /**
-   * Creates a {@link GuardEnv} to be used to evaluate a GuardLang statement
-   * related to the given {@link NodeToken}.
+   * Creates a {@link RubricEnv} to be used to evaluate a Rubric statement
+   * defining a guard for the given {@link NodeToken}.
    *
-   * @param token The token which will provide some of the state for the GuardEnv
-   * @return A GuardEnv for this engine and the given NodeToken.
+   * @param token The token which will provide some of the state for the RubricEnv
+   * @return A RubricEnv for this engine and the given NodeToken.
    */
-  GuardEnv newGuardEnv (NodeToken token);
+  RubricEnv newRubricEnv (NodeToken token);
 
   /**
    * Nodes, by default, will pass off guard evaluation to the Engine. This allows
