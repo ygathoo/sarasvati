@@ -27,10 +27,42 @@ import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.lang.ErrorReportingRubricParser;
 import com.googlecode.sarasvati.rubric.lang.RubricLexer;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
+import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
+/**
+ * Rubric is a simple rules language. It as the following grammer
+ *
+ * <pre>
+ * STMT = 'if' EXPR 'then' STMT 'else' STMT
+ *      | Accept | Discard | Skip | Skip ARCNAME
+ *      | unquoteStringWithNoSpaces
+ *      | "quoted string"
+ *      | '(' dateFunction ')'
+ *      | '(' NUMBER (hour|hours|day|days|week|weeks) (before|after) dateFunction ')'
+ *
+ * EXPR = predicate
+ *      | predicate 'or' EXPR
+ *      | predicate 'and' EXPR
+ *      | 'not' EXPR
+ *      | '(' EXPR ')'
+ * </pre>
+ *
+ * @author Paul Lorenz
+ */
 public class RubricInterpreter
 {
-  public static RubricStmt compile (String rubricStatement)
+  /**
+   * Takes a Rubric program and returns a compiled version in the form of
+   * an Abstract Syntax Tree (AST). The AST can be executed/evaluated with
+   * a call to {@link RubricStmt#eval(RubricEnv)} or the AST can be traversed
+   * using a {@link RubricVisitor} with call to
+   * {@link RubricStmt#traverse(RubricVisitor)}.
+   *
+   * @param rubricStatement A String containing a Rubric program
+   * @throws RubricException Thrown if the program is not valid.
+   * @return A RubricStmt, which is the root of the compiled AST.
+   */
+  public static RubricStmt compile (String rubricStatement) throws RubricException
   {
     RubricLexer lexer = new RubricLexer( new ANTLRStringStream( rubricStatement ) );
 
@@ -55,11 +87,5 @@ public class RubricInterpreter
       re.printStackTrace();
       return null;
     }
-  }
-
-  public static Object eval (String rubricStatement, RubricEnv env)
-  {
-    RubricStmt stmt = compile( rubricStatement );
-    return stmt.eval(  env );
   }
 }
