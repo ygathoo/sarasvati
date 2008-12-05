@@ -25,8 +25,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
-import org.antlr.runtime.RecognitionException;
-
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
 import com.googlecode.sarasvati.event.ProcessEvent;
@@ -339,13 +337,6 @@ public abstract class BaseEngine implements Engine
       return GuardResponse.ACCEPT_TOKEN_RESPONSE;
     }
 
-    try
-    {
-      return (GuardResponse) RubricInterpreter.eval( guard, newRubricEnv( token ) );
-    }
-    catch ( RecognitionException re )
-    {
-      throw new WorkflowException( "Failed to evaluate guard", re );
-    }
+    return (GuardResponse) RubricInterpreter.eval( guard, newRubricEnv( token ) );
   }
 }

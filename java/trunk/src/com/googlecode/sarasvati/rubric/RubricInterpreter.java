@@ -24,23 +24,40 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
+import com.googlecode.sarasvati.rubric.lang.ErrorReportingRubricParser;
 import com.googlecode.sarasvati.rubric.lang.RubricLexer;
-import com.googlecode.sarasvati.rubric.lang.RubricParser;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 
 public class RubricInterpreter
 {
-  public static RubricStmt compile (String rubricStatement) throws RecognitionException
+  public static RubricStmt compile (String rubricStatement)
   {
     RubricLexer lexer = new RubricLexer( new ANTLRStringStream( rubricStatement ) );
 
     CommonTokenStream stream = new CommonTokenStream( lexer );
-    RubricParser parser = new RubricParser( stream );
+    ErrorReportingRubricParser parser = new ErrorReportingRubricParser( stream );
 
-    return parser.program().value;
+    try
+    {
+      RubricStmt stmt = parser.program().value;
+      RubricException e = parser.getError();
+      if ( e != null )
+      {
+        throw e;
+      }
+
+      return stmt;
+    }
+    catch ( RecognitionException re )
+    {
+      // this should never happen, as the parser is configured to not throw exceptions.
+      System.err.println( "Received unexpected recognition exception" );
+      re.printStackTrace();
+      return null;
+    }
   }
 
-  public static Object eval (String rubricStatement, RubricEnv env) throws RecognitionException
+  public static Object eval (String rubricStatement, RubricEnv env)
   {
     RubricStmt stmt = compile( rubricStatement );
     return stmt.eval(  env );
