@@ -30,7 +30,7 @@ import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
 /**
- * Rubric is a simple rules language. It as the following grammer
+ * Rubric is a simple rules language. It has the following grammar:
  *
  * <pre>
  * STMT = 'if' EXPR 'then' STMT 'else' STMT
