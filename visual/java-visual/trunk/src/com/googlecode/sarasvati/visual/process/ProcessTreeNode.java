@@ -155,7 +155,7 @@ public class ProcessTreeNode
   {
     for ( ProcessTreeNode currentParent : parents )
     {
-      if ( !currentParent.isCompletedNodeToken() )
+      if ( currentParent.getToken() != null && !currentParent.getToken().isComplete() )
       {
         return true;
       }

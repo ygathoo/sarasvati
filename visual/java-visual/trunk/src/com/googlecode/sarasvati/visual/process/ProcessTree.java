@@ -273,7 +273,6 @@ public class ProcessTree
       }
     }
 
-
     processed.clear();
     processed.addAll( firstLayer );
 
@@ -291,7 +290,7 @@ public class ProcessTree
         for ( ProcessTreeArc ptArc : treeNode.getChildren() )
         {
           if ( !processed.contains( ptArc.getChild() ) &&
-               (!treeNode.isCompletedNodeToken() || !ptArc.getChild().hasNonCompleteNodeTokenParent() ) )
+               !(treeNode.isCompletedNodeToken() && ptArc.getChild().hasNonCompleteNodeTokenParent() ) )
           {
             if ( ptArc.getChild().getDepth() == 0 )
             {

@@ -103,7 +103,7 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
     {
       throw new IllegalArgumentException( "No component found for node: " + node +
                                           ". You should configure one with NodeAdapterManager.registerFactory " +
-                                          "and by subclassing your Node implemenations." );
+                                          "or by subclassing your Node implemenations." );
     }
 
     return new ComponentWidget( this, c );
