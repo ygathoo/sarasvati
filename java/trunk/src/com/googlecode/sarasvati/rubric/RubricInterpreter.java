@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati.rubric;
 
+import java.util.Date;
+
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -35,16 +37,44 @@ import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
  * <pre>
  * STMT = 'if' EXPR 'then' STMT 'else' STMT
  *      | Accept | Discard | Skip | Skip ARCNAME
- *      | unquoteStringWithNoSpaces
+ *      | ID
  *      | "quoted string"
- *      | '(' dateFunction ')'
- *      | '(' NUMBER (hour|hours|day|days|week|weeks) (before|after) dateFunction ')'
+ *      | '(' DATEFUNCTION ')'
+ *      | '(' NUMBER (hour|hours|day|days|week|weeks) (before|after) DATEFUNCTION ')'
  *
- * EXPR = predicate
- *      | predicate 'or' EXPR
- *      | predicate 'and' EXPR
+ * EXPR = PREDICATE
+ *      | PREDICATE 'or' EXPR
+ *      | PREDICATE 'and' EXPR
  *      | 'not' EXPR
  *      | '(' EXPR ')'
+ *
+ * PREDICATE = ID
+ * DATEFUNCTION = ID
+ * ID = (letter)(letter|digit|'.')*  // letter followed by 0 to many letters, digits or dots
+ *
+ * </pre>
+ *
+ * A predicate used in an expression is evaluated with the help of a
+ * {@link RubricEnv}. Specifically, the method {@link RubricEnv#evalPredicate(String)}
+ * is called to evaluated a predicate.
+ *
+ * <p>
+ *
+ * Date functions work much the same way, except they are evaluated used the
+ * {@link RubricEnv#evalDateFunction(String)} method which returns a {@link Date}.
+ *
+ * <p>
+ *
+ * A Rubric statement used in a guard might look something like
+ *
+ * <pre>
+ * if Order.isExpedite then Accept else Skip
+ * </pre>
+ *
+ * A Rubric statement used in generating a task due date might look like
+ *
+ * <pre>
+ *   if Order.isExpedite then (2 days before standardInterval) else (standardInterval)
  * </pre>
  *
  * @author Paul Lorenz
