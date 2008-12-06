@@ -181,12 +181,6 @@ public class MemNode implements Node, Cloneable
   }
 
   @Override
-  public String getDisplayText ()
-  {
-    return name;
-  }
-
-  @Override
   public MemNode clone ()
   {
     try
