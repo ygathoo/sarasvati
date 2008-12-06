@@ -187,17 +187,10 @@ public class HibNode implements Node
   }
 
   @Override
-  public String getDisplayText ()
-  {
-    return name;
-  }
-
-  @Override
   public void execute (Engine engine, NodeToken token)
   {
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
-
 
   /**
    * Will use the {@link NodeAdapterManager} to produce an adapter.

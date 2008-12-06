@@ -156,12 +156,6 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public String getDisplayText ()
-  {
-    return node.getDisplayText();
-  }
-
-  @Override
   public boolean isExternal ()
   {
     return !graph.equals( getNode().getGraph() );
@@ -202,11 +196,5 @@ public class HibNodeRef implements Node
     }
     else if ( !id.equals( other.getId() ) ) return false;
     return true;
-  }
-
-  @Override
-  public String toString ()
-  {
-    return getDisplayText();
   }
 }

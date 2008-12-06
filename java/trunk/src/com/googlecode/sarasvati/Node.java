@@ -175,11 +175,4 @@ public interface Node extends Adaptable
    * @param token The {@link NodeToken} which is currently executing in this node.
    */
   void execute (Engine engine, NodeToken token);
-
-  /**
-   * Returns the text to display when being displayed visually
-   *
-   * @return The text to display when being presented visually
-   */
-  String getDisplayText ();
 }

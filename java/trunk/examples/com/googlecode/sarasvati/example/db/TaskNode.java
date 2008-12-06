@@ -66,10 +66,15 @@ public class TaskNode extends HibNode
     this.taskDesc = taskDesc;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
-  public String getDisplayText ()
+  public <T> T getAdaptor (Class<T> clazz)
   {
-    return getTaskName();
+    if ( String.class == clazz )
+    {
+      return (T)getTaskName();
+    }
+    return super.getAdaptor( clazz );
   }
 
   @Override
