@@ -1,4 +1,4 @@
-package com.googlecode.sarasvati.visual.graph;
+package com.googlecode.sarasvati.visual.test;
 
 import java.awt.Component;
 import java.awt.image.BufferedImage;
@@ -18,8 +18,9 @@ import com.googlecode.sarasvati.adapter.Function;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.visual.DefaultNodeIcon;
-import com.googlecode.sarasvati.visual.TaskIcon;
+import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
+import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
 public class TestExporter
 {

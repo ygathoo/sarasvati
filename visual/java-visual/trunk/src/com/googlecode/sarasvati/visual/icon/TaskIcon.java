@@ -19,7 +19,7 @@
 /**
  * Created on May 16, 2008
  */
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.icon;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -31,6 +31,8 @@ import javax.swing.Icon;
 
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.visual.FontUtil;
+import com.googlecode.sarasvati.visual.NodeDrawConfig;
 
 public class TaskIcon implements Icon
 {
@@ -83,7 +85,7 @@ public class TaskIcon implements Icon
     g.drawRoundRect( x + offset, y + offset, width, height, 10, 10 );
 
     g.setColor( Color.white );
-    String taskName = node.getDisplayText();
+    String taskName = node.getAdaptor( String.class );
 
     String[] lines = FontUtil.split( taskName );
 

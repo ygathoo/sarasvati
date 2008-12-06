@@ -29,10 +29,10 @@ import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.visual.DefaultNodeIcon;
 import com.googlecode.sarasvati.visual.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.NodeDrawConfig;
-import com.googlecode.sarasvati.visual.TaskIcon;
+import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
 public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, ProcessTreeArc>
 {

@@ -21,13 +21,7 @@ package com.googlecode.sarasvati.visual.graph;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.image.BufferedImage;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
@@ -42,7 +36,6 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import org.hibernate.Session;
-import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
@@ -50,8 +43,8 @@ import com.googlecode.sarasvati.adapter.Function;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.visual.DefaultNodeIcon;
-import com.googlecode.sarasvati.visual.TaskIcon;
+import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
 public class GraphVisualizer
 {
@@ -80,15 +73,20 @@ public class GraphVisualizer
     NodeAdapterManager.registerFactory( Component.class,
         new Function<Component, Node>()
         {
-          @Override
-          public Component apply (Node node)
+          @Override public Component apply (Node node)
           {
-            if ( "task".equals( node.getType() ) )
-            {
-              return new JLabel( new TaskIcon( node, null ) );
-            }
+            return "task".equals( node.getType() ) ?
+              new JLabel( new TaskIcon( node, null ) ) :
+              new JLabel( new DefaultNodeIcon( node, null ) );
+          }
+        });
 
-            return new JLabel( new DefaultNodeIcon( node, null ) );
+    NodeAdapterManager.registerFactory( String.class,
+        new Function<String,Node>()
+        {
+          @Override public String apply (Node node)
+          {
+            return node.getName();
           }
         });
 
@@ -166,67 +164,6 @@ public class GraphVisualizer
 
         scrollPane.setViewportView( scene.createView() );
         scrollPane.repaint();
-
-        if ( g == null )
-        {
-          return;
-        }
-
-        final Function<String,Widget> hrefMapper = new Function<String,Widget>()
-        {
-          @Override
-          public String apply (Widget widget)
-          {
-            Object o = scene.findObject( widget );
-
-            if ( o instanceof Node )
-            {
-              Node node = (Node)o;
-              return "javascript:alert( '" + node.getName() + "' );";
-            }
-
-            return null;
-          }
-        };
-
-        final Function<String,Widget> titleMapper = new Function<String,Widget>()
-        {
-          @Override
-          public String apply (Widget widget)
-          {
-            Object o = scene.findObject( widget );
-
-            if ( o instanceof Node )
-            {
-              Node node = (Node)o;
-
-              return node.getGuard() == null || node.getGuard().length() == 0 ? null : node.getGuard();
-            }
-
-            return "";
-          }
-        };
-
-        try
-        {
-          StringBuilder buf = new StringBuilder();
-          buf.append( "<html><head><title>test</title></head><body>\n" );
-          buf.append( "<map name=\"graphMap\">\n" );
-          BufferedImage image = scene.export( buf, hrefMapper, titleMapper );
-          ImageIO.write( image, "gif", new File( "/home/paul/tmp/" + g.getName() + ".gif" ) );
-          image.flush();
-          buf.append( "</map>\n" );
-          buf.append( "<image style=\"border:none\" src=\"/home/paul/tmp/" + g.getName() + ".gif\" usemap=\"#graphMap\"/>" );
-          buf.append( "</body></html>" );
-
-          BufferedWriter out = new BufferedWriter( new FileWriter( "/home/paul/tmp/" + g.getName() + ".html" ) );
-          out.write( buf.toString() );
-          out.close();
-        }
-        catch (IOException ioe)
-        {
-          ioe.printStackTrace();
-        }
       }
     });
 

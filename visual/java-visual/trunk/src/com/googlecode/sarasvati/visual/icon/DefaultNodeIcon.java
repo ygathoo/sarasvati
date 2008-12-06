@@ -1,4 +1,4 @@
-package com.googlecode.sarasvati.visual;
+package com.googlecode.sarasvati.visual.icon;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -10,6 +10,8 @@ import javax.swing.Icon;
 
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.visual.FontUtil;
+import com.googlecode.sarasvati.visual.NodeDrawConfig;
 
 public class DefaultNodeIcon implements Icon
 {
