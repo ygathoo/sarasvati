@@ -37,7 +37,7 @@ import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
  * <pre>
  * STMT = 'if' EXPR 'then' STMT 'else' STMT
  *      | Accept | Discard | Skip | Skip ARCNAME
- *      | ID
+ *      | digit
  *      | "quoted string"
  *      | '(' DATEFUNCTION ')'
  *      | '(' NUMBER (hour|hours|day|days|week|weeks) (before|after) DATEFUNCTION ')'

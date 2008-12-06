@@ -15,7 +15,7 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
-*/
+ */
 
 package com.googlecode.sarasvati.rubric.env;
 
@@ -27,8 +27,8 @@ import com.googlecode.sarasvati.NodeToken;
 
 public class DefaultRubricEnv implements RubricEnv
 {
-  protected Engine             engine;
-  protected NodeToken          token;
+  protected Engine                   engine;
+  protected NodeToken                token;
   protected RubricFunctionRepository functionRepository;
 
   public DefaultRubricEnv (Engine engine, NodeToken token, RubricFunctionRepository functionRepository)
@@ -51,7 +51,7 @@ public class DefaultRubricEnv implements RubricEnv
   }
 
   @Override
-  public Date evalRelative (Date date, int offset, int unit)
+  public Date evalRelativeDate (Date date, int offset, int unit)
   {
     Calendar cal = Calendar.getInstance();
     cal.setTime( date );

@@ -30,7 +30,7 @@ public class RubricTest
     RubricEnv env = new RubricEnv()
     {
       @Override
-      public Date evalRelative (Date date, int offset, int unit)
+      public Date evalRelativeDate (Date date, int offset, int unit)
       {
         Calendar cal = Calendar.getInstance();
         cal.setTime( date );
@@ -74,7 +74,7 @@ public class RubricTest
   {
     String[] tests = { "if a or b then (1 week after now) else Discard",
                        "\"Hello \\\"there!\"",
-                       "foo",
+                       "\"foo\"",
                        "50",
                        "(5 hours before now)",
                        "if test1 or test2 then if test3 and not test4 then Accept else Skip else Skip reject",
