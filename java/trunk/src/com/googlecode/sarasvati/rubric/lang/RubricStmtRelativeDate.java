@@ -77,7 +77,7 @@ public class RubricStmtRelativeDate implements RubricStmt
   public Date eval (RubricEnv env)
   {
     Date baseDate = dateSymbolExpr.eval( env );
-    return env.evalRelative( baseDate, offset, unit );
+    return env.evalRelativeDate( baseDate, offset, unit );
   }
 
   @Override

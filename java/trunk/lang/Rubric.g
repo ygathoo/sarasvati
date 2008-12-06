@@ -104,7 +104,6 @@ expr returns [RubricExpr value]
 result returns [RubricStmt value]
          :  guardResult { $value = new RubricStmtResult( $guardResult.value ); }
          |  NUMBER      { $value = new RubricStmtResult( Integer.parseInt( $NUMBER.text ) ); }
-         |  ID          { $value = new RubricStmtResult( $ID.text ); }
          |  STRING      { $value = new RubricStmtResult( SvUtil.normalizeQuotedString( $STRING.text ) ); }
          |  dateResult  { $value = $dateResult.value; }
          ;
