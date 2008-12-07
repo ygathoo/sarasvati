@@ -37,9 +37,9 @@ public class EditorGraph
     members.put( member.getName(), member );
   }
 
-  public boolean hasMember (String name)
+  public boolean hasMember (String memberName)
   {
-    return members.containsKey( name );
+    return members.containsKey( memberName );
   }
 
   public List<EditorArc> getArcs()
