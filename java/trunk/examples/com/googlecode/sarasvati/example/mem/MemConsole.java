@@ -30,6 +30,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
@@ -247,6 +248,7 @@ public class MemConsole
     engine.addNodeType( "task", TaskNode.class );
     engine.addNodeType( "init", InitNode.class );
     engine.addNodeType( "dump", DumpNode.class );
+    engine.addNodeType( "customTest", CustomTestNode.class );
 
     GraphLoader<MemGraph> wfLoader = engine.getLoader();
 

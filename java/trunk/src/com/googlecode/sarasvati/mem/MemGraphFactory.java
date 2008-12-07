@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
@@ -64,7 +65,20 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
     throws LoadException
   {
     NodeFactory nodeFactory = getNodeFactory( type );
-    MemNode node = (MemNode)nodeFactory.newNode( type );
+
+    Node newNode = nodeFactory.newNode( type );
+
+    MemNode node = null;
+
+    if ( newNode instanceof CustomNode )
+    {
+      node = new MemCustomNode( (CustomNode)newNode );
+    }
+    else
+    {
+      node = (MemNode)newNode;
+    }
+
     node.initId();
     node.setGraph( graph );
     node.setName( name );
@@ -77,11 +91,11 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
     {
       for ( Object custom : customList )
       {
-        nodeFactory.loadCustom( node, custom );
+        nodeFactory.loadCustom( newNode, custom );
       }
     }
 
-    graph.getNodes().add( node);
+    graph.getNodes().add( node );
 
     return node;
   }
