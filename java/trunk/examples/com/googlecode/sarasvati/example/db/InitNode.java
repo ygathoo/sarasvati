@@ -48,6 +48,13 @@ public class InitNode extends HibNode
     env.setLongAttribute( "iter", ++iter );
     env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
 
-    engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
+    if ( token.getProcess().getParentToken() != null )
+    {
+      engine.completeExecution( token, Arc.DEFAULT_ARC );
+    }
+    else
+    {
+      engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
+    }
   }
 }

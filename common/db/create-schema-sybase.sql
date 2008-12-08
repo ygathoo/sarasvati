@@ -105,6 +105,8 @@ go
 insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' )
 insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'wait' )
 insert into wf_node_type values ( 'script', 'Node which executes a script', 'script' )
+insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'nested' );
+insert into wf_node_type values ( 'custom', 'Supertype for user custom node types', 'custom' );
 
 insert into wf_node_type values ( 'task', 'Node which generates tasks', 'task' )
 insert into wf_node_type values ( 'init', 'Node which generates a random number and updates a counter', 'init' )

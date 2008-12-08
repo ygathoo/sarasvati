@@ -33,6 +33,8 @@ public class MemEngine extends BaseEngine
 {
   protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
 
+  protected MemEngine parentEngine = null;
+
   @Override
   public MemGraphFactory getFactory ()
   {
@@ -86,5 +88,23 @@ public class MemEngine extends BaseEngine
   public ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException
   {
     return null;
+  }
+
+  @Override
+  public MemEngine newEngine (boolean forNested)
+  {
+    MemEngine engine = new MemEngine ();
+
+    if ( forNested )
+    {
+      engine.parentEngine = this;
+    }
+    return engine;
+  }
+
+  @Override
+  public MemEngine getParentEngine ()
+  {
+    return parentEngine;
   }
 }

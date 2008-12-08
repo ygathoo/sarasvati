@@ -86,6 +86,7 @@ insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs
 insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'wait' );
 insert into wf_node_type values ( 'script', 'Node which executes a script', 'script' );
 insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'nested' );
+insert into wf_node_type values ( 'custom', 'Supertype for user custom node types', 'custom' );
 
 create table wf_node
 (

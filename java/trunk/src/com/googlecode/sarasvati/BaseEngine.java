@@ -41,6 +41,7 @@ import com.googlecode.sarasvati.script.ScriptEnv;
 public abstract class BaseEngine implements Engine
 {
   protected boolean arcExecutionStarted = false;
+  protected List<ArcToken> asyncQueue = new LinkedList<ArcToken>();
 
   @Override
   public GraphProcess startProcess (Graph graph)
@@ -53,25 +54,29 @@ public abstract class BaseEngine implements Engine
   @Override
   public void startProcess (GraphProcess process)
   {
-    boolean savedArcExecutionStarted = arcExecutionStarted;
-    arcExecutionStarted = false;
-
     process.setState( ProcessState.Executing );
     fireEvent( ProcessEvent.newStartedEvent( this, process ) );
 
-    for ( Node startNode : process.getGraph().getStartNodes() )
+    arcExecutionStarted = true;
+
+    try
     {
-      NodeToken startToken = getFactory().newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
-      process.addNodeToken( startToken );
-      executeNode( process, startToken );
+      for ( Node startNode : process.getGraph().getStartNodes() )
+      {
+        NodeToken startToken = getFactory().newNodeToken( process, startNode, new ArrayList<ArcToken>(0) );
+        process.addNodeToken( startToken );
+        executeNode( process, startToken );
+      }
+    }
+    finally
+    {
+      executeQueuedArcTokens( process );
     }
 
     if ( process.isExecuting() )
     {
       checkForCompletion( process );
     }
-
-    arcExecutionStarted = savedArcExecutionStarted;
   }
 
   @Override
@@ -90,10 +95,8 @@ public abstract class BaseEngine implements Engine
     NodeToken parentToken = process.getParentToken();
     if ( parentToken != null )
     {
-      boolean savedArcExecutionStarted = this.arcExecutionStarted;
-      this.arcExecutionStarted = false;
-      completeExecution( parentToken, Arc.DEFAULT_ARC );
-      arcExecutionStarted = savedArcExecutionStarted;
+      Engine engine = getParentEngine() == null ? newEngine( false ) : getParentEngine();
+      engine.completeExecution( parentToken, Arc.DEFAULT_ARC );
     }
   }
 
@@ -184,6 +187,11 @@ public abstract class BaseEngine implements Engine
   @Override
   public void completeAsynchronous (NodeToken token, String arcName)
   {
+    completeNodeToken( token, arcName, true );
+  }
+
+  protected void completeNodeToken (NodeToken token, String arcName, boolean asynchronous)
+  {
     GraphProcess process = token.getProcess();
 
     if ( !process.isExecuting() || token.isComplete() )
@@ -206,7 +214,15 @@ public abstract class BaseEngine implements Engine
       ArcToken arcToken = getFactory().newArcToken( process, arc, token );
       token.getChildTokens().add(  arcToken );
       fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
-      process.enqueueArcTokenForExecution( arcToken );
+
+      if ( asynchronous && arcExecutionStarted )
+      {
+        asyncQueue.add( arcToken );
+      }
+      else
+      {
+        process.enqueueArcTokenForExecution( arcToken );
+      }
     }
   }
 
@@ -220,7 +236,7 @@ public abstract class BaseEngine implements Engine
       return;
     }
 
-    completeAsynchronous( token, arcName );
+    completeNodeToken( token, arcName, false );
 
     if ( !arcExecutionStarted )
     {
@@ -244,12 +260,17 @@ public abstract class BaseEngine implements Engine
     finally
     {
       arcExecutionStarted = false;
+
+      while ( !asyncQueue.isEmpty() )
+      {
+        process.enqueueArcTokenForExecution( asyncQueue.remove( 0 ) );
+      }
     }
   }
 
   private void checkForCompletion (GraphProcess process)
   {
-    if ( !process.hasActiveTokens() && process.isArcTokenQueueEmpty() )
+    if ( !process.hasActiveTokens() && process.isArcTokenQueueEmpty() && asyncQueue.isEmpty() )
     {
       process.setState( ProcessState.PendingCompletion );
       fireEvent( ProcessEvent.newCompletedEvent( this, process ) );
@@ -309,8 +330,6 @@ public abstract class BaseEngine implements Engine
       {
         current.markComplete( this );
       }
-
-
 
       for ( ArcToken arcToken : current.getParentTokens() )
       {

@@ -22,6 +22,9 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -34,9 +37,16 @@ import com.googlecode.sarasvati.util.SvUtil;
 
 public class DOMToObjectLoadHelper
 {
-  public static void setBeanValues (Object obj, Node node) throws LoadException
+  public static Map<String, String> setBeanValues (Object obj, Node node) throws LoadException
   {
-    PropertyMutator editor = getMutatorForNode( obj, node.getLocalName() );
+    Map<String, String> beanProperties = new HashMap<String, String>();
+    setBeanValues( obj, node, null, beanProperties );
+    return beanProperties;
+  }
+
+  public static void setBeanValues (Object obj, Node node, String name, Map<String, String> beanProperties) throws LoadException
+  {
+    PropertyMutator editor = getMutatorForProperty( obj, node.getLocalName() );
 
     Object currentValue = editor.getCurrentValue();
 
@@ -49,7 +59,9 @@ public class DOMToObjectLoadHelper
       Object child = list.item( i );
       if ( child instanceof Element )
       {
-        setBeanValues( currentValue, (Element)child );
+        Element elemChild = (Element)child;
+        String childName = getChildName( name, node.getLocalName() );
+        setBeanValues( currentValue, elemChild, childName, beanProperties );
         hasElementChildren = true;
       }
     }
@@ -61,6 +73,7 @@ public class DOMToObjectLoadHelper
       if ( !SvUtil.isBlankOrNull( value ) )
       {
         editor.setFromText( value.trim() );
+        beanProperties.put( getChildName( name, node.getLocalName() ), value );
       }
     }
 
@@ -78,7 +91,8 @@ public class DOMToObjectLoadHelper
 
       if ( hasElementChildren )
       {
-        setBeanValues( currentValue, attribute );
+        String childName = getChildName( name, attrName );
+        setBeanValues( currentValue, attribute, childName, beanProperties );
       }
       else
       {
@@ -89,12 +103,19 @@ public class DOMToObjectLoadHelper
         // we want to set the 'foo' property to 'some stuff' and
         // set the fooBar property to 'test'
         String propertyName = node.getLocalName() + Character.toUpperCase( attrName.charAt( 0 ) ) + attrName.substring( 1 );
-        getMutatorForNode( obj, propertyName ).setFromText( attribute.getNodeValue() );
+        String value = attribute.getNodeValue();
+        getMutatorForProperty( obj, propertyName ).setFromText( value );
+        beanProperties.put( getChildName( name, propertyName ), value );
       }
     }
   }
 
-  public static PropertyMutator getMutatorForNode (Object obj, String name) throws LoadException
+  private static String getChildName (String prefix, String name)
+  {
+    return prefix == null ? name : prefix + "." + name;
+  }
+
+  public static PropertyMutator getMutatorForProperty (Object obj, String name) throws LoadException
   {
     BeanInfo beanInfo = null;
 
@@ -124,5 +145,20 @@ public class DOMToObjectLoadHelper
     }
 
     return PropertyMutatorRegistry.getMutator( attr, obj, new BasePropertyMutator() );
+  }
+
+  public static void setValues (Object obj, Map<String, String> values) throws LoadException
+  {
+    for (Entry<String, String> entry : values.entrySet() )
+    {
+      PropertyMutator mutator = null;
+      Object target = obj;
+      for ( String prop : entry.getKey().split( "\\." ) )
+      {
+        mutator = getMutatorForProperty( target, prop );
+        target = mutator.getCurrentValue();
+      }
+      mutator.setFromText( entry.getValue() );
+    }
   }
 }

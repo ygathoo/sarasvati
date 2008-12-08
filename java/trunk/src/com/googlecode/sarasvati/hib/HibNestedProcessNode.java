@@ -53,8 +53,8 @@ public class HibNestedProcessNode extends HibPropertyNode
                                    "Used by node " + getName() + " in graph " + getGraph().getName() );
     }
 
-    GraphProcess subProcess =  engine.getFactory().newNestedProcess( subGraph, token );
+    GraphProcess subProcess = engine.getFactory().newNestedProcess( subGraph, token );
     subProcess.getEnv().importEnv( token.getFullEnv() );
-    engine.startProcess( subProcess );
+    engine.newEngine( true ).startProcess( subProcess );
   }
 }

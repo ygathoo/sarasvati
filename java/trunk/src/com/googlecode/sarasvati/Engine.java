@@ -285,4 +285,25 @@ public interface Engine
    * @return The response based on the guard.
    */
   GuardResponse evaluateGuard (NodeToken token, String guard);
+
+  /**
+   * Since an Engine can have state specific to the currently executing process,
+   * there are times we want to create a new engine (such as when executing a
+   * nested process). If this engine is being created to execute a nested process,
+   * the forNested flag should be set to true, so that we track the current engine
+   * as the parent.
+   *
+   * @param forNested Indicates whether this new engine is being created to track
+   *        execution of a nested process.
+   * @return A copy of the current engine which can be used to execute a nested process
+   */
+  Engine newEngine (boolean forNested);
+
+  /**
+   * If this engine was created to execute a nested process, it will remember the engine
+   * which created it.
+   *
+   * @return The parent engine.
+   */
+  Engine getParentEngine ();
 }

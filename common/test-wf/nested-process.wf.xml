@@ -15,7 +15,7 @@
     <arc to="3"/>
 
     <custom>
-      <graph name="random-guard"/>
+      <graph name="not-random-guard"/>
     </custom>
   </node>
 
@@ -40,7 +40,7 @@
   <node type="nested" name="5">
     <arc to="6"/>
     <custom>
-      <graph name="random-guard"/>
+      <graph name="not-random-guard"/>
     </custom>
   </node>
 
@@ -60,7 +60,7 @@
 
   <node type="nested" name="8">
     <custom>
-      <graph name="random-guard"/>
+      <graph name="not-random-guard"/>
     </custom>
   </node>
 

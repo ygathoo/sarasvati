@@ -25,6 +25,7 @@ import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.postgresql.Driver;
 
+import com.googlecode.sarasvati.hib.HibCustomNodeWrapper;
 import com.googlecode.sarasvati.hib.HibEngine;
 
 public class TestSetup
@@ -53,6 +54,7 @@ public class TestSetup
     config.addAnnotatedClass( InitNode.class );
     config.addAnnotatedClass( DumpNode.class );
     config.addAnnotatedClass( AsyncNode.class );
+    config.addAnnotatedClass( HibCustomNodeWrapper.class );
 
     sessionFactory = config.buildSessionFactory();
   }

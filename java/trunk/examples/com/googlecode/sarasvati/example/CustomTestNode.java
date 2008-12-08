@@ -25,8 +25,51 @@ import com.googlecode.sarasvati.NodeToken;
 
 public class CustomTestNode extends CustomNode
 {
+  public static class CustomInner
+  {
+    protected String valueType;
+    protected String value;
+    protected String test;
+
+    public String getValueType ()
+    {
+      return valueType;
+    }
+
+    public void setValueType (String valueType)
+    {
+      this.valueType = valueType;
+    }
+
+    public String getValue ()
+    {
+      return value;
+    }
+
+    public void setValue (String value)
+    {
+      this.value = value;
+    }
+
+    public String getTest ()
+    {
+      return test;
+    }
+
+    public void setTest (String test)
+    {
+      this.test = test;
+    }
+  }
+
   protected int    size;
   protected String label;
+  protected CustomInner inner;
+
+  public CustomTestNode ()
+  {
+    this.inner = new CustomInner();
+  }
 
   public int getSize ()
   {
@@ -46,6 +89,16 @@ public class CustomTestNode extends CustomNode
   public void setLabel (String label)
   {
     this.label = label;
+  }
+
+  public CustomInner getInner ()
+  {
+    return inner;
+  }
+
+  public void setInner (CustomInner inner)
+  {
+    this.inner = inner;
   }
 
   @Override

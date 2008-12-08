@@ -21,23 +21,47 @@ package com.googlecode.sarasvati.hib;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.CustomNodeWrapper;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.NodeFactory;
+import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
 @Entity
 @DiscriminatorValue( "custom" )
 public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeWrapper
 {
+  @Transient
   protected CustomNode customNode;
 
   public HibCustomNodeWrapper () { /* Default constructor for Hibernate */ }
 
-  public CustomNode getCustomNode ()
+  public HibCustomNodeWrapper (CustomNode customNode)
   {
+    this.customNode = customNode;
+  }
+
+  public CustomNode getCustomNode (Engine engine)
+  {
+    if ( customNode == null )
+    {
+      try
+      {
+        NodeFactory factory = engine.getFactory().getNodeFactory( getType() );
+        customNode = (CustomNode)factory.newNode( getType() );
+        DOMToObjectLoadHelper.setValues( customNode, attrMap );
+      }
+      catch ( LoadException le )
+      {
+        throw new WorkflowException( "Unabled to create CustomNode of type: " + getType(), le );
+      }
+    }
     return customNode;
   }
 
@@ -56,6 +80,6 @@ public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeW
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    getCustomNode().execute( engine, token );
+    getCustomNode( engine ).execute( engine, token );
   }
 }

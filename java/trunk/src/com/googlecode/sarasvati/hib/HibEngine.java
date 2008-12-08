@@ -26,6 +26,7 @@ import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.googlecode.sarasvati.BaseEngine;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.WorkflowException;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
@@ -41,6 +42,7 @@ public class HibEngine extends BaseEngine
   protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
   protected static final ListenerCache       listenerCache    = new ListenerCache();
 
+  protected HibEngine parentEngine;
   protected Session session;
   protected HibGraphFactory factory;
   protected HibGraphRepository repository;
@@ -159,6 +161,29 @@ public class HibEngine extends BaseEngine
   public ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException
   {
     return listenerCache.getListener( type );
+  }
+
+  @Override
+  public HibEngine newEngine (boolean forNested)
+  {
+    HibEngine engine = new HibEngine();
+
+    engine.session = session;
+    engine.factory = factory;
+    engine.repository = repository;
+
+    if ( forNested )
+    {
+      engine.parentEngine = this;
+    }
+
+    return engine;
+  }
+
+  @Override
+  public Engine getParentEngine ()
+  {
+    return parentEngine;
   }
 
   public static void addToConfiguration (AnnotationConfiguration config, boolean enableCaching)
