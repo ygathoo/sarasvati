@@ -37,12 +37,12 @@ public class HibPropertyNode extends HibNode
   @Column( name="value")
   protected Map<String, String> attrMap;
 
-  protected String getProperty (String key)
+  public String getProperty (String key)
   {
     return attrMap == null ? null : attrMap.get( key );
   }
 
-  protected void setProperty (String key, String value)
+  public void setProperty (String key, String value)
   {
     if ( attrMap == null )
     {

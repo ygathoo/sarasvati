@@ -17,32 +17,28 @@
     Copyright 2008 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.mem;
+package com.googlecode.sarasvati.hib;
+
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
 import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.CustomNodeWrapper;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.NodeWrapper;
 
-public class MemCustomNode extends MemNode implements NodeWrapper
+@Entity
+@DiscriminatorValue( "custom" )
+public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeWrapper
 {
   protected CustomNode customNode;
 
-  public MemCustomNode (CustomNode customNode)
-  {
-    this.customNode = customNode;
-  }
+  public HibCustomNodeWrapper () { /* Default constructor for Hibernate */ }
 
   public CustomNode getCustomNode ()
   {
     return customNode;
-  }
-
-  @Override
-  public void execute (Engine engine, NodeToken token)
-  {
-    customNode.execute( engine, token );
   }
 
   @Override
@@ -55,5 +51,11 @@ public class MemCustomNode extends MemNode implements NodeWrapper
   public <T> T getDefaultAdaptor (Class<T> clazz)
   {
     return super.getAdaptor( clazz );
+  }
+
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    getCustomNode().execute( engine, token );
   }
 }

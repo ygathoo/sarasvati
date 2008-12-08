@@ -21,9 +21,9 @@ package com.googlecode.sarasvati;
 
 public abstract class CustomNode implements Node
 {
-  protected NodeWrapper nodeWrapper;
+  protected CustomNodeWrapper nodeWrapper;
 
-  public void setNodeWrapper (NodeWrapper nodeWrapper)
+  public void setNodeWrapper (CustomNodeWrapper nodeWrapper)
   {
     this.nodeWrapper = nodeWrapper;
   }
@@ -86,7 +86,7 @@ public abstract class CustomNode implements Node
    *
    * <p>
    *
-   * IMPORTANT NOTE: Do not call {@link NodeWrapper#backtrack(NodeToken)} as that
+   * IMPORTANT NOTE: Do not call {@link CustomNodeWrapper#backtrack(NodeToken)} as that
    * will just call your isBacktrackable method again, resulting in an recursive call,
    * which will exit when your VM runs out of stack space.
    *
@@ -102,7 +102,7 @@ public abstract class CustomNode implements Node
    *
    * <p>
    *
-   * IMPORTANT NOTE: Do not call {@link NodeWrapper#isBacktrackable(NodeToken)} as that
+   * IMPORTANT NOTE: Do not call {@link CustomNodeWrapper#isBacktrackable(NodeToken)} as that
    * will just call your isBacktrackable method again, resulting in an recursive call,
    * which will exit when your VM runs out of stack space.
    *
@@ -114,12 +114,12 @@ public abstract class CustomNode implements Node
   }
 
   /**
-   * Default implementation calls {@link NodeWrapper#getDefaultAdaptor(Class)}.
+   * Default implementation calls {@link CustomNodeWrapper#getDefaultAdaptor(Class)}.
    * May be overridden by subclasses.
    *
    * <p>
    *
-   * IMPORTANT NOTE: Do not call {@link NodeWrapper#getAdaptor(Class)} as that
+   * IMPORTANT NOTE: Do not call {@link CustomNodeWrapper#getAdaptor(Class)} as that
    * will just call your getAdapter method again, resulting in an recursive call,
    * which will exit when your VM runs out of stack space.
    *
@@ -131,12 +131,12 @@ public abstract class CustomNode implements Node
   }
 
   /**
-   * Default implementation calls {@link NodeWrapper#defaultGuard(Engine, NodeToken)}.
+   * Default implementation calls {@link CustomNodeWrapper#defaultGuard(Engine, NodeToken)}.
    * May be overridden by subclasses.
    *
    * <p>
    *
-   * IMPORTANT NOTE: Do not call {@link NodeWrapper#guard(Engine, NodeToken)} as that
+   * IMPORTANT NOTE: Do not call {@link CustomNodeWrapper#guard(Engine, NodeToken)} as that
    * will just call your guard method again, resulting in an recursive call,
    * which will exit when your VM runs out of stack space.
    *

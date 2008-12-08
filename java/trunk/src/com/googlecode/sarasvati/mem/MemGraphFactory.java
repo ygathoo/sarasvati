@@ -72,7 +72,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
 
     if ( newNode instanceof CustomNode )
     {
-      node = new MemCustomNode( (CustomNode)newNode );
+      node = new MemCustomNodeWrapper( (CustomNode)newNode );
     }
     else
     {
