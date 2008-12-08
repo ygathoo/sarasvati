@@ -143,4 +143,15 @@ public interface GraphFactory<G extends Graph>
    * @param nodeFactory The factory used to create nodes of this type
    */
   void addNodeFactory (String type, NodeFactory nodeFactory);
+
+  /**
+   * Returns the {@link NodeFactory} for the given node type. If no factory has
+   * been specified (via {@link GraphFactory#addNodeFactory(String, NodeFactory)}),
+   * a default factory may be returned.
+   *
+   * @param type The node type
+   * @return A node factory for the given type. If no factory has been specified
+   *         for the given type, a default node factory may be returned.
+   */
+  NodeFactory getNodeFactory (String type);
 }

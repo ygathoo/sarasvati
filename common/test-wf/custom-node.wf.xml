@@ -6,6 +6,11 @@
     <custom>
       <size>1</size>
       <label>test - label</label>
+
+      <inner>
+        <value type="foo">bar</value>
+        <test>baz</test>
+      </inner>
     </custom>
   </node>
 

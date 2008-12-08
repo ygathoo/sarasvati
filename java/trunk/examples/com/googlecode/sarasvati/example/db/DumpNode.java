@@ -34,6 +34,14 @@ public class DumpNode extends HibNode
   public void execute (Engine engine, NodeToken token)
   {
     System.out.println( "Accepted into: " + getName() );
-    engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
+
+    if ( token.getProcess().getParentToken() != null )
+    {
+      engine.completeExecution( token, Arc.DEFAULT_ARC );
+    }
+    else
+    {
+      engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
+    }
   }
 }

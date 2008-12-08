@@ -19,8 +19,15 @@
 
 package com.googlecode.sarasvati;
 
+import com.googlecode.sarasvati.hib.HibNode;
+import com.googlecode.sarasvati.mem.MemNode;
+
 /**
- *
+ * This interface represents a Node which will provide an adapter
+ * for instances of {@link CustomNode}, bridging the gap between
+ * a backend specific {@link Node} implementation, such as
+ * {@link HibNode} or {@link MemNode}, and the backend agnostic
+ * {@link CustomNode}.
  *
  * @author Paul Lorenz
  */
@@ -29,9 +36,10 @@ public interface CustomNodeWrapper extends Node
   /**
    * Returns the {@link CustomNode} being wrapped.
    *
+   * @param The current engine, which may be required to load the CustomNode
    * @return The {@link CustomNode} being wrapped.
    */
-  CustomNode getCustomNode ();
+  CustomNode getCustomNode (Engine engine);
 
   /**
    * Returns the default adapter for the current Engine.

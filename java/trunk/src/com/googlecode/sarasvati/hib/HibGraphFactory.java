@@ -28,6 +28,7 @@ import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
@@ -73,7 +74,21 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     throws LoadException
   {
     NodeFactory nodeFactory = getNodeFactory( type );
-    HibNode node = (HibNode)nodeFactory.newNode( type );
+    Node newNode = nodeFactory.newNode( type );
+
+    HibNode node = null;
+    HibCustomNodeWrapper customNodeWrapper = null;
+
+    if ( newNode instanceof CustomNode )
+    {
+      customNodeWrapper = new HibCustomNodeWrapper( (CustomNode)newNode );
+      node = customNodeWrapper;
+    }
+    else
+    {
+      node = (HibNode)newNode;
+    }
+
     node.setGraph( graph );
     node.setName( name );
     node.setType( type );
@@ -85,7 +100,18 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     {
       for ( Object custom : customList )
       {
-        nodeFactory.loadCustom( node, custom );
+        Map<String, String> customProps = nodeFactory.loadCustom( newNode, custom );
+
+        // If this is a custom node, we need save the properties in the CustomNodeWrapper
+        // as well as in the CustomNode, so that they can be set back in when the CustomNode
+        // is re-created, after being loaded from the database
+        if ( customNodeWrapper != null )
+        {
+          for ( Map.Entry<String,String> entry : customProps.entrySet() )
+          {
+            customNodeWrapper.setProperty( entry.getKey(), entry.getValue() );
+          }
+        }
       }
     }
 

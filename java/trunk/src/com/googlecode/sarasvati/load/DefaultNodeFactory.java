@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.load;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -42,16 +43,16 @@ public class DefaultNodeFactory implements NodeFactory
   }
 
   @Override
-  public void loadCustom (Node node, Object custom) throws LoadException
+  public Map<String, String> loadCustom (Node node, Object custom) throws LoadException
   {
     if ( custom == null )
     {
-      return;
+      return Collections.emptyMap();
     }
 
     if ( custom instanceof Element )
     {
-      DOMToObjectLoadHelper.setBeanValues( node, (Element)custom );
+      return DOMToObjectLoadHelper.setBeanValues( node, (Element)custom );
     }
     else
     {

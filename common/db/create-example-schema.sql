@@ -32,3 +32,4 @@ insert into wf_node_type values ( 'task', 'Node which generates tasks', 'task' )
 insert into wf_node_type values ( 'init', 'Node which generates a random number and updates a counter', 'init' );
 insert into wf_node_type values ( 'dump', 'Node which indicates on stdout that it has been invoked', 'dump' );
 insert into wf_node_type values ( 'async', 'Node which completes asynchronously', 'async' );
+insert into wf_node_type values ( 'customTest', 'Custom node test type', 'custom' );

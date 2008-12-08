@@ -18,6 +18,9 @@
 */
 package com.googlecode.sarasvati.load;
 
+import java.util.Map;
+
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Node;
 
 public interface NodeFactory
@@ -31,12 +34,24 @@ public interface NodeFactory
   Node newNode (String type) throws LoadException;
 
   /**
-   * Loads the custom data into the node
+   * Loads the custom data into the node. Returns a map of the data loaded, keyed
+   * by bean property name. So if the the node has a property foo, which in turn
+   * has a property bar, which was set to 1, then the map will contain an entry
+   *
+   * <pre>
+   *   foo.bar=1
+   * </pre>
+   *
+   * This may be used to store the data for nodes of type {@link CustomNode}.
    *
    * @param node The node to set the data in
    * @param custom The custom data from the XML file
    *
+   * @return A map of bean properties set. This may be used
+   *         if the node is a {@link CustomNode}
+   *
+   *
    * @throws LoadException If custom data is incorrect.
    */
-  void loadCustom (Node node, Object custom) throws LoadException;
+  Map<String,String> loadCustom (Node node, Object custom) throws LoadException;
 }

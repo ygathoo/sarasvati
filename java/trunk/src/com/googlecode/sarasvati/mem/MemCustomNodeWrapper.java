@@ -34,7 +34,7 @@ public class MemCustomNodeWrapper extends MemNode implements CustomNodeWrapper
     this.customNode = customNode;
   }
 
-  public CustomNode getCustomNode ()
+  public CustomNode getCustomNode (Engine engine)
   {
     return customNode;
   }
@@ -42,7 +42,7 @@ public class MemCustomNodeWrapper extends MemNode implements CustomNodeWrapper
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    customNode.execute( engine, token );
+    getCustomNode( engine ).execute( engine, token );
   }
 
   @Override

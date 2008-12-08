@@ -24,6 +24,7 @@ import java.io.FilenameFilter;
 
 import org.hibernate.Session;
 
+import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.load.GraphLoader;
@@ -46,6 +47,7 @@ public class TestDbLoad
     engine.addNodeType( "task", TaskNode.class );
     engine.addNodeType( "init", InitNode.class );
     engine.addNodeType( "dump", DumpNode.class );
+    engine.addNodeType( "customTest", CustomTestNode.class );
 
     GraphLoader<HibGraph> wfLoader = engine.getLoader();
 

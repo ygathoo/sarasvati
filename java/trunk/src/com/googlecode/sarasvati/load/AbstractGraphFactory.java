@@ -34,6 +34,7 @@ public abstract class AbstractGraphFactory<G extends Graph> implements GraphFact
     this.defaultNodeFactory = new DefaultNodeFactory( defaultClass );
   }
 
+  @Override
   public NodeFactory getNodeFactory (String type)
   {
     NodeFactory nodeFactory = factoryMap.get( type );
