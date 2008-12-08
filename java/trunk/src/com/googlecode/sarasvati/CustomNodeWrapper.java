@@ -24,9 +24,33 @@ package com.googlecode.sarasvati;
  *
  * @author Paul Lorenz
  */
-public interface NodeWrapper extends Node
+public interface CustomNodeWrapper extends Node
 {
+  /**
+   * Returns the {@link CustomNode} being wrapped.
+   *
+   * @return The {@link CustomNode} being wrapped.
+   */
+  CustomNode getCustomNode ();
+
+  /**
+   * Returns the default adapter for the current Engine.
+   *
+   * @param <T> The adapter
+   * @param clazz The adapter type being requested.
+   *
+   * @return An adapter of the type being requested or null, if none is available.
+   */
   <T> T getDefaultAdaptor (Class<T> clazz);
 
+  /**
+   * Evaluates the guard using the default strategy for the given
+   * Node/Engine combination.
+   *
+   * @param engine The engine executing the current process
+   * @param token The token which triggered the guard evaluation.
+   *
+   * @return A GuardResponse based on the guard defined for the Node.
+   */
   GuardResponse defaultGuard (Engine engine, NodeToken token);
 }
