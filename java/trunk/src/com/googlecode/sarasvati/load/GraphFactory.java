@@ -138,11 +138,15 @@ public interface GraphFactory<G extends Graph>
   void addType (String type, Class<? extends Node> nodeClass );
 
   /**
+   * Adds the type to the {@link GraphFactory} for this engine. Specifies
+   * what class will be used for a given node type, when loading process
+   * definitions from XML file.
+   * <p>
    * Adds a class for a custom node type globally, for all GraphFactory instances.
    * Only custom types can have global instances, since they are backend agnostic.
    *
-   * @param type The node type
-   * @param nodeClass The node class
+   * @param type The type identifier, as used in the process definition file
+   * @param nodeClass The custom node class which will be instantiated for this type
    */
   void addGlobalCustomType (String type, Class<? extends CustomNode> nodeClass);
 

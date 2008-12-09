@@ -291,6 +291,12 @@ public abstract class BaseEngine implements Engine
     getFactory().addType(type, nodeClass);
   }
 
+  @Override
+  public void addGlobalCustomNodeType (String type, Class<? extends CustomNode> nodeClass)
+  {
+    getFactory().addGlobalCustomType( type, nodeClass );
+  }
+
   public void backtrack (NodeToken token)
   {
     Set<NodeToken> leaves = new HashSet<NodeToken>();
