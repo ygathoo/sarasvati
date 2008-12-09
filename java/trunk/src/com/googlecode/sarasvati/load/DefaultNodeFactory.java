@@ -24,11 +24,19 @@ import java.util.Map;
 
 import org.w3c.dom.Element;
 
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
 public class DefaultNodeFactory implements NodeFactory
 {
+  protected static Map<String, Class<? extends CustomNode>> globalCustomTypeMap = new HashMap<String, Class<? extends CustomNode>>();
+
+  public static void addGlobalCustomType (String type, Class<? extends CustomNode> clazz)
+  {
+    globalCustomTypeMap.put( type, clazz );
+  }
+
   protected Map<String, Class<? extends Node>> typeMap = new HashMap<String, Class<? extends Node>>();
   protected Class<? extends Node> defaultClass;
 
@@ -65,7 +73,16 @@ public class DefaultNodeFactory implements NodeFactory
   public Node newNode (String type) throws LoadException
   {
     Class<? extends Node> clazz = typeMap.get( type );
-    clazz = clazz == null ? defaultClass : clazz;
+
+    if ( clazz == null )
+    {
+      clazz = globalCustomTypeMap.get( type );
+    }
+
+    if ( clazz == null )
+    {
+      clazz = defaultClass;
+    }
 
     try
     {

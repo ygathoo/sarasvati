@@ -19,6 +19,7 @@
 
 package com.googlecode.sarasvati.example;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
@@ -106,5 +107,10 @@ public class CustomTestNode extends CustomNode
   {
     System.out.println( "Size: " + size );
     System.out.println( "Label: " + label );
+    System.out.println( "Inner value type:" + inner.getValueType() );
+    System.out.println( "Inner value:" + inner.getValue() );
+    System.out.println( "Inner test:" + inner.getTest() );
+
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }

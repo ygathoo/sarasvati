@@ -30,11 +30,13 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.ExampleUtil;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.hib.HibGraphProcess;
+import com.googlecode.sarasvati.load.DefaultNodeFactory;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 
@@ -74,6 +76,8 @@ public class DbConsole
     });
 
     TestSetup.init();
+
+    DefaultNodeFactory.addGlobalCustomType( "customTest", CustomTestNode.class );
 
     while ( true )
     {

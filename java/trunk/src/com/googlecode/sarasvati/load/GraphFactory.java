@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
@@ -135,6 +136,15 @@ public interface GraphFactory<G extends Graph>
    * @param nodeClass The node class which will be instantiated for this type
    */
   void addType (String type, Class<? extends Node> nodeClass );
+
+  /**
+   * Adds a class for a custom node type globally, for all GraphFactory instances.
+   * Only custom types can have global instances, since they are backend agnostic.
+   *
+   * @param type The node type
+   * @param nodeClass The node class
+   */
+  void addGlobalCustomType (String type, Class<? extends CustomNode> nodeClass);
 
   /**
    * Allows custom loading logic to be used to create nodes of a specific type.

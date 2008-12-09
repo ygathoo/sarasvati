@@ -107,10 +107,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
         // is re-created, after being loaded from the database
         if ( customNodeWrapper != null )
         {
-          for ( Map.Entry<String,String> entry : customProps.entrySet() )
-          {
-            customNodeWrapper.setProperty( entry.getKey(), entry.getValue() );
-          }
+          customNodeWrapper.importProperties( customProps );
         }
       }
     }
