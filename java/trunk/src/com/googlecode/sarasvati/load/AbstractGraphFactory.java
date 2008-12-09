@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.load;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 
@@ -45,6 +46,12 @@ public abstract class AbstractGraphFactory<G extends Graph> implements GraphFact
   public void addType (String type, Class<? extends Node> clazz)
   {
     defaultNodeFactory.addType( type, clazz );
+  }
+
+  @Override
+  public void addGlobalCustomType (String type, Class<? extends CustomNode> nodeClass)
+  {
+    DefaultNodeFactory.addGlobalCustomType( type, nodeClass );
   }
 
   @Override

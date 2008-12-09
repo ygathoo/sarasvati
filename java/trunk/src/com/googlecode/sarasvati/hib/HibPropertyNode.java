@@ -20,6 +20,7 @@ package com.googlecode.sarasvati.hib;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -49,5 +50,16 @@ public class HibPropertyNode extends HibNode
       attrMap = new HashMap<String,String>();
     }
     attrMap.put( key, value );
+  }
+
+  public void importProperties (Map<String, String> properties)
+  {
+    if ( properties != null )
+    {
+      for ( Entry<String,String> entry : properties.entrySet() )
+      {
+        setProperty( entry.getKey(), entry.getValue() );
+      }
+    }
   }
 }
