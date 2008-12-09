@@ -24,7 +24,17 @@ Sarasvati includes a domain specific language (DSL) for defining guards. A Rubri
 
 }}}
 
-A `predicate` is a string identifier, which the runtime ties to a function which returns a boolean value. The function may have access to the current process environment. The statement result can be mapped directly to a `GuardResponse`. The advantage of using this DSL for defining node guards, is that it can help users understand process behaviour. Given a library of predicates that are named with user comprehension in mind, GuardLang statements should be understandable by users with a minimum of technical understanding and training.
+A `predicate` is a string identifier, which the runtime ties to a function which returns a boolean value. The function may have access to the current process environment. 
+
+The statement result can be any of the following:
+
+  * A `GuardResponse`
+  * A String
+  * A number
+  * A date function
+  * An offset to a date function
+
+Guards should, of course, always return instances of `GuardResponse`. The advantage of using this DSL for defining node guards, is that it can help users understand process behaviour. Given a library of predicates that are named with user comprehension in mind, Rubric statements should be understandable by users with a minimum of technical understanding and training.
 
 For example, a process for order fulfillment may include a set of steps for orders with regular shipping and a different set of steps for priority shipping. Priority shipping will be given to customers who have requested for a specific order, or for certain high volume customers. A set of predicates could be defined.
 
@@ -81,7 +91,11 @@ public class IsWeekendPredicate implements RubricPredicate
 }
 }}}
 
-This predicate can be registered with the `RubricFunctionRepository`, which be used to construct a `RubricEnv`. This in turn, can be passed to the `GuardLang.eval` method.
+This predicate can be registered with the `RubricFunctionRepository`, which be used to construct a `RubricEnv`. 
+
+The `RubricInterpreter` will take Rubric statements and compile them to a `RubricStmt`. Passing a `RubricEnv` to the `RubricStmt.eval` method will turn evaluation results.
+
+If using Rubric for guards, the Engine will handle most of these details for you. The default implementation uses `DefaultRubricEnv` and the global instance of `DefaultRubricFunctionRepository`. However,this can be overridden by subclassing the appropriate instance of Engine and overriding the `newRubricEnv` method.
 
 {{{
 package com.googlecode.sarasvati.rubric;
@@ -121,5 +135,18 @@ public class IsWeekendPredicate implements RubricPredicate
   }
 }
 
-
 }}}
+
+==Date Function==
+Date functions are similar to predicates. They are functions which return dates instead of booleans. They can implement the `RubricDateFunction` interface and be stored in a `RubricFunctionRepository`.
+
+The `RubricEnv` interface also defines a method 
+
+{{{
+  Date evalRelativeDate (Date date, int offset, int unit);
+}}}
+
+The `DefaultRubricEnv` uses Calendar to implement this, however subclasses can override this to provide offset rules specific to business requirements.
+
+==Other Uses==
+Rubric can be used as (very) simple rules engine. For example, it could be used to specify the attributes of a task in a process definition.
