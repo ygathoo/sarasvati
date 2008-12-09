@@ -42,7 +42,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 {
   private Session session;
 
-  HibGraphFactory(Session session)
+  HibGraphFactory (Session session)
   {
     super( HibNode.class );
     this.session = session;
