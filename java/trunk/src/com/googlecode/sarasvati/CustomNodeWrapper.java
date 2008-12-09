@@ -36,7 +36,7 @@ public interface CustomNodeWrapper extends Node
   /**
    * Returns the {@link CustomNode} being wrapped.
    *
-   * @param The current engine, which may be required to load the CustomNode
+   * @param engine The current engine, which may be required to load the CustomNode
    * @return The {@link CustomNode} being wrapped.
    */
   CustomNode getCustomNode (Engine engine);

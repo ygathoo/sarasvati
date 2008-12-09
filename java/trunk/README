@@ -20,7 +20,7 @@ Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' t
        Summary : Object relational mapping
        License : LPGL
        Homepage: http://hibernate.org
-       Other   : Has it's own list of dependencies
+       Other   : Has its own list of dependencies
        Version : 3.2.6, but may work with earlier versions.
 
     * PostgreSQL JDBC Driver
@@ -28,11 +28,11 @@ Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' t
        License : BSD
        Homepage: http://jdbc.postgresql.org/
 
-    * Jay
-       Summary : Java Yacc replacement (parser generator)
-       License : Unknown, free to download
-       Homepage: http://www.cs.rit.edu/~ats/projects/lp/doc/jay/package-summary.html
-       Other   : Not a source dependency. Used to generate GuardLang parser.
+    * ANTLR
+       Summary : Java parser generator
+       License : BSD
+       Homepage: http://antlr.org
+       Other   : Used to generate Rubric parser/lexer. Only antlr-3.1.1-runtime.jar is required at runtime
 
     * BSF
        Summary : Bean Scripting Framework
