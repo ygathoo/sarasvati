@@ -299,12 +299,13 @@ When the engine determines that a node is ready to execute, it will follow this 
   # If the action is `SkipNode`, `Engine.completeExecution` will be called with the arc name contained in the `GuardResponse`.
 
 ===Custom logic for Node Execution===
-To provide custom behavior to your nodes, you will override the `execute` method on `Node`. Sarasvati currently provides two implementations of the base API, one memory backed and one database backed, implemented using Hibernate. Other implementations could be made using, for example, pure JDBC or some other persistence mechanism. There are two base classes for nodes.
+To provide custom behavior to your nodes, you will override the `execute` method on `Node`. Sarasvati currently provides two implementations of the base API, one memory backed and one database backed, implemented using Hibernate. Other implementations could be made using, for example, pure JDBC or some other persistence mechanism. There are three base classes for nodes.
 
   * `com.googlecode.sarasvati.mem.MemNode`
   * `com.googlecode.sarasvati.hib.HibNode`
+  * `com.googlecode.sarasvati.CustomNode`
 
-If using the memory backed implementation, `MemNode` should be extended. If using the hibernate backend, nodes should subclass `HibNode`.
+If using only the memory backed implementation, `MemNode` should be extended. If using only the hibernate backend, nodes should subclass `HibNode`. `CustomNode` can be used with either or both backends. In to store custom attributes in the database, it uses a key/value pair table. `CustomNode` can only be used if the database mapping doesn't need to be explicitly defined.
 
 === Example One ====
 To demonstrate use of each implementation, we start with a node that just prints out "Hello, World". We start with the process definition.
@@ -370,6 +371,31 @@ The hibernate version would also require an insert into the `wf_node_type` table
 
 The behaviour column ties the type to a discriminator specified on the subclass. This allows having multiple types with the same implementation class, if that was desired.
 
+The backend independent version would look like:
+
+{{{
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+
+public class HelloNode extends CustomNode
+{
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    System.out.println( "Hello, World!" );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+}}}
+
+For use with the hibernate backend, a row would still need to be added to the `wf_node_type` table.
+
+{{{
+ insert into wf_node_type (id, description, behaviour) values ( 'helloWorld', 'Says hello to the world', 'custom' )
+}}}
+
 ==== Example One: Loading and Running====
 Now we can load the process into memory, or into the database. This is done using a `GraphLoader`, which can be retrieved from the appropriate engine. Before loading the process definition, you will need to tell the engine about your custom node types.
 
@@ -419,25 +445,50 @@ Here are the steps in code for the hibernate backed implementation. It assumes t
     GraphProcess process = engine.startProcess( graph );
 }}}
 
+Here are the steps in code using the backend independent custom type with `MemEngine`.
+
+{{{
+    MemEngine engine = new MemEngine();
+
+    // We can either register the type with the Engine or with the DefaultNodeFactory
+    // directly.
+    // Either tell the engine about our custom node type
+    engine.addGlobalCustomNodeType( "helloWorld", HelloNode.class );
+
+    // or tell the DefaultNodeFactory about the node type directly
+    DefaultNodeFactory.addGlobalCustomType( "helloWorld", HelloNode.class );
+
+    // Load the process definition (this can throw LoadException or JAXBException
+    // The graph will be stored in the GraphRepository for this engine
+    engine.getLoader().load( "/path/to/hello-world.wf.xml" );
+
+    // Get the graph from the GraphRepository
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
+
+    // start a graph process
+    GraphProcess process = engine.startProcess( graph );
+}}}
+
+
 The call to `startProcess` will create tokens on the start nodes and will continue executing the process until it completes or enters a wait state.
 
 ===Custom Attributes===
 Often, custom nodes will need some information with which to do their work. Sarasvati supports this in two ways.
 
-The schema for process definition files has an <xs:any> element at the end of the node definition. Custom elements may be added here. These can be automatically mapped to properties on custom nodes.
+The schema for process definition files has a <custom> element which contains an <xs:any> element at the end of the node definition. Custom elements may be added here. These can be automatically mapped to properties on custom nodes.
 
 For example, given the following custom node:
 
 {{{
 public class CustomNode extends MemNode {
-  String custom;
+  String foo;
 
-  public String getCustom () {
-    return custom;
+  public String getFoo () {
+    return foo;
   }
 
-  public void setCustom (String custom) {
-    this.custom = custom;
+  public void setFoo (String foo) {
+    this.foo = foo;
   }
 
   @Override public void execute (Engine engine, NodeToken token) {
@@ -452,20 +503,21 @@ The following process definition would load the value `test` into the `custom` p
 {{{
 <?xml version="1.0"?>
 <process-definition name="example1"
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
-                    xmlns:example="http://sarasvati.googlecode.com/Example">
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="test" type="custom" isStart="true">
     <arc to="1"/>
 
-    <example:custom>test</example>
+    <custom>
+      <foo>test</foo>
+    </custom>
   </node>
 </process-definition>
 }}}
 
 There several things to note with custom elements.
 
-  * Custom elements must be in their own XML namespace.
+  * All custom elements must be contained within the <custom> tag.
   * Non-string properties on custom node types are supported.
     * Support for primitive types such as boolean, byte, char, short, int, long, float, double as well as their corresponding object types is built in.
     * Support for non-primitive types can be added
@@ -475,9 +527,11 @@ There several things to note with custom elements.
 Nested objects are supported. For example:
 
 {{{
-  <example:task>
-    <name>test</name>
-  </example>
+  <custom>
+    <task>
+      <name>test</name>
+    </task>
+  </custom>
 }}}
 
 The loader would invoke `getTask().setName( ... )` on the custom node.
@@ -485,9 +539,11 @@ The loader would invoke `getTask().setName( ... )` on the custom node.
 Attributes are also supported. How they are mapped is based on the contents of the element the attribute is on. If the element has child elements, the attribute will get mapped as a child property. If the element is itself a property, the attribute name will be combined with the element name to get the property name.
 
 {{{
-  <example:task user="pat">
-    <name>test</name>
-  </example>
+  <custom>
+    <task user="pat">
+      <name>test</name>
+    </task>
+  </custom>
 }}}
 
 This would map the `name` element value to `getTask().setName( ... )` and the `user` attribute to `getTask().setUser( ... )`.
@@ -495,9 +551,11 @@ This would map the `name` element value to `getTask().setName( ... )` and the `u
 However, the following would be mapped differently:
 
 {{{
-  <example:task user="pat">
-    test
-  </example>
+  <custom>
+    <task user="pat">
+      test
+    </task>
+  </custom>
 }}}
 
 This would map the text in the `task` element  to `setTask( ... )` and the `user` attribute to `setTaskUser( ... )`.
@@ -523,44 +581,57 @@ Here we examine a more complicated example, which uses custom attributes.
 
 {{{
 <?xml version="1.0"?>
+
 <process-definition name="example1"
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition"
-                    xmlns:example="http://sarasvati.googlecode.com/Example">
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node name="enterOrder" type="task" isStart="true">
-    <arc to="verifyOrder"/>
-
-    <example:taskName>Enter order</example:taskName>
-    <example:taskDesc>Enter order and billing info</example:taskDesc>
+  <node name="start" isStart="true">
+    <arc to="1"/>
   </node>
 
+  <node name="1" type="task">
+    <arc to="2"/>
+    <arc to="3"/>
 
-  <node name="verifyOrder" type="task" isStart="true">
-    <arc to="enterOrder" name="reject"/>
-    <arc to="billCustomer"/>
-    <arc to="shipProduct"/>
-
-    <example:taskName>Verify Order</example:taskName>
-    <example:taskDesc>Ensure order is consistent and product is in stock</example:taskDesc>
+    <custom>
+      <taskName>Enter order</taskName>
+      <taskDesc>
+        Enter order and billing info
+      </taskDesc>
+    </custom>
   </node>
 
-  <node type="task" name="billCustomer">
-    <arc to="market"/>
+  <node type="task" name="2">
+    <arc to="4"/>
 
-    <example:taskName>Bill Customer</example:taskName>
-    <example:taskDesc>Create invoice and send it to customer</example:taskDesc>
+    <custom>
+      <taskName>Bill Customer</taskName>
+      <taskDesc>
+        Bill the Customer
+      </taskDesc>
+    </custom>
   </node>
 
-  <node type="task" name="shipProduct">
-    <arc to="market"/>
+  <node type="task" name="3">
+    <arc to="4"/>
 
-    <example:taskName>Ship product</example:taskName>
-    <example:taskDesc>Package and ship product</example:taskDesc>
+    <custom>
+      <taskName>Ship product</taskName>
+      <taskDesc>
+        Package and ship product
+      </taskDesc>
+    </custom>
   </node>
 
-  <node type="task" name="market" isJoin="true">
-    <example:taskName>Market to Customer</example:taskName>
-    <example:taskDesc>Send marketing material to customer</example:taskDesc>
+  <node type="task" name="4" isJoin="true">
+
+    <custom>
+      <taskName>Market to Customer</taskName>
+      <taskDesc>
+        Send marketing material to customer
+      </taskDesc>
+    </custom>
+
   </node>
 
 </process-definition>
