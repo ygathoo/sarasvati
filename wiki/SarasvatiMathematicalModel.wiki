@@ -35,7 +35,7 @@ Graph execution has the following operations
       * An arc token must exist on all other arcs coming into the same end node which share a label with the current arc. If this condition is met, one arc token on each of the arcs is marked complete and a node token is created on the arc's end node. ProcessNodeToken is called on the new node token.
     * If the end node of the arc is not a join node, the arc token is immediately marked complete, a new node token is generated on the end node of the arc and ProcessNodeToken is performed on the new node token.
 
-== The Model ==
+== Mathematical Model ==
 A Sarasvati executable graph is defined as directed graph, with a token mapping of node and arc tokens over that graph.
 
 === Graph Definition ===
