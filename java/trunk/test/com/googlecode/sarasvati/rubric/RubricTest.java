@@ -3,34 +3,21 @@ package com.googlecode.sarasvati.rubric;
 import java.util.Calendar;
 import java.util.Date;
 
-import org.antlr.runtime.ANTLRStringStream;
-import org.antlr.runtime.CommonTokenStream;
-
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
-import com.googlecode.sarasvati.rubric.lang.ErrorReportingRubricParser;
-import com.googlecode.sarasvati.rubric.lang.RubricLexer;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
+import com.googlecode.sarasvati.rubric.lang.RubricStmtRelativeDate;
+import com.googlecode.sarasvati.rubric.visitor.RubricVisitorAdaptor;
 
 public class RubricTest
 {
   public static void eval (String testStmt) throws Exception
   {
-    RubricLexer lexer = new RubricLexer( new ANTLRStringStream( testStmt ) );
-
-    CommonTokenStream stream = new CommonTokenStream( lexer );
-    ErrorReportingRubricParser parser = new ErrorReportingRubricParser( stream );
-
-    RubricStmt stmt = parser.program().value;
-
-    if ( parser.getError() != null )
-    {
-      throw parser.getError();
-    }
+    RubricStmt stmt = RubricInterpreter.compile( testStmt );
 
     RubricEnv env = new RubricEnv()
     {
       @Override
-      public Date evalRelativeDate (Date date, int offset, int unit)
+      public Date evalRelativeDate (Date date, boolean business, int offset, int unit)
       {
         Calendar cal = Calendar.getInstance();
         cal.setTime( date );
@@ -72,6 +59,16 @@ public class RubricTest
 
   public static void main(String[] args) throws Exception
   {
+    RubricStmt stmt = RubricInterpreter.compile( "(1 business day after now)" );
+    stmt.traverse( new RubricVisitorAdaptor()
+    {
+      @Override
+      public void visit (RubricStmtRelativeDate relativeDateStmt)
+      {
+        System.out.println( relativeDateStmt );
+      }
+    } );
+
     String[] tests = { "if a or b then (1 week after now) else Discard",
                        "\"Hello \\\"there!\"",
                        "\"foo\"",

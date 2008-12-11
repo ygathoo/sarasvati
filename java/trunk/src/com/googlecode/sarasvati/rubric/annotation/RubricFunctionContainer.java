@@ -26,8 +26,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * RubricPredicate can be used to annotate methods you wish to use as
- * predicate functions. You will still need a way to find these methods and
+ * RubricFunctionContainer can be used to annotate classes
+ * containing functions you wish to use with Rubric. You
+ * will still need a way to find these methods and
  * register them with a function repository.
  *
  * @author Paul Lorenz
@@ -35,7 +36,6 @@ import java.lang.annotation.Target;
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-public @interface RubricPredicate
+public @interface RubricFunctionContainer
 {
-  String name();
 }

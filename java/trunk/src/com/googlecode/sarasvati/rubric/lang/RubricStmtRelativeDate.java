@@ -23,6 +23,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
@@ -43,9 +44,10 @@ public class RubricStmtRelativeDate implements RubricStmt
 
   protected int offset;
   protected int unit;
+  protected boolean business;
   protected RubricStmtDateSymbol dateSymbolExpr;
 
-  public RubricStmtRelativeDate (int offset, String unitName, String type, String symbol)
+  public RubricStmtRelativeDate (int offset, boolean business, String unitName, String type, String symbol)
   {
     this.offset = offset;
 
@@ -55,6 +57,7 @@ public class RubricStmtRelativeDate implements RubricStmt
     }
 
     this.unit = unitMapping.get( unitName );
+    this.business = business;
     this.dateSymbolExpr = new RubricStmtDateSymbol( symbol );
   }
 
@@ -68,6 +71,11 @@ public class RubricStmtRelativeDate implements RubricStmt
     return unit;
   }
 
+  public boolean isBusiness ()
+  {
+    return business;
+  }
+
   public RubricStmtDateSymbol getDateSymbolExpr ()
   {
     return dateSymbolExpr;
@@ -77,7 +85,7 @@ public class RubricStmtRelativeDate implements RubricStmt
   public Date eval (RubricEnv env)
   {
     Date baseDate = dateSymbolExpr.eval( env );
-    return env.evalRelativeDate( baseDate, offset, unit );
+    return env.evalRelativeDate( baseDate, business, offset, unit );
   }
 
   @Override
@@ -85,5 +93,22 @@ public class RubricStmtRelativeDate implements RubricStmt
   {
     visitor.visit( this );
     dateSymbolExpr.traverse( visitor );
+  }
+
+  @Override
+  public String toString ()
+  {
+    String unitDesc = "?";
+
+    for ( Entry<String, Integer> entry : unitMapping.entrySet() )
+    {
+      if ( entry.getValue().equals( unit ) )
+      {
+        unitDesc = entry.getKey();
+        break;
+      }
+    }
+
+    return offset + " " + (business ? " business " : "" ) + unitDesc + ( offset > 0 ? " after " : " before " ) + dateSymbolExpr.getSymbol();
   }
 }
