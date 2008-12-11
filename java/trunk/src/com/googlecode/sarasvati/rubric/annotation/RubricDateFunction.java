@@ -25,6 +25,13 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * RubricDateFunction can be used to annotate methods you wish to use as
+ * date functions. You will still need a way to find these methods and
+ * register them with a function repository.
+ *
+ * @author Paul Lorenz
+ */
 @Target(ElementType.METHOD)
 @Retention(RetentionPolicy.RUNTIME)
 @Documented

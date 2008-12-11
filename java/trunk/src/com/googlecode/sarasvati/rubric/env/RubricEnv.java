@@ -65,11 +65,13 @@ public interface RubricEnv
    * business rules into account.
    *
    * @param date The date to calculate the offset from
+   * @param business Indicates whether the calculation should takes busines days/hours etc
+   *                 into account.
    * @param offset The amount of the offset.
    * @param unit The unit of the offset. These map the units defined in {@link Calendar},
    *             such as {@link Calendar#DATE} or {@link Calendar#WEEK_OF_YEAR}.
    *
    * @return The offset relative to the given date.
    */
-  Date evalRelativeDate (Date date, int offset, int unit);
+  Date evalRelativeDate (Date date, boolean business, int offset, int unit);
 }

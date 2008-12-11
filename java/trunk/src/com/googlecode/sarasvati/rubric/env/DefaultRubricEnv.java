@@ -25,6 +25,14 @@ import java.util.Date;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
 
+/**
+ * Basic RubricEnv implementation which uses a {@link RubricFunctionRepository}
+ * as a source for predicate and date function and which uses Calendar to do
+ * relative date evaluations. Business days/hours are not handled differently
+ * then regular relative dates.
+ *
+ * @author Paul Lorenz
+ */
 public class DefaultRubricEnv implements RubricEnv
 {
   protected Engine                   engine;
@@ -51,7 +59,7 @@ public class DefaultRubricEnv implements RubricEnv
   }
 
   @Override
-  public Date evalRelativeDate (Date date, int offset, int unit)
+  public Date evalRelativeDate (Date date, boolean business, int offset, int unit)
   {
     Calendar cal = Calendar.getInstance();
     cal.setTime( date );

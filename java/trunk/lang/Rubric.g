@@ -6,17 +6,18 @@ options {
 }
 
 tokens {
-  ACCEPT  =  'Accept';
-  DISCARD =  'Discard';
-  SKIP    =  'Skip';
-  AFTER   =  'after';
-  BEFORE  =  'before';
-  DAY     =  'day';
-  DAYS    =  'days';
-  HOUR    =  'hour';
-  HOURS   =  'hours';
-  WEEK    =  'week';
-  WEEKS   =  'weeks';
+  ACCEPT   =  'Accept';
+  DISCARD  =  'Discard';
+  SKIP     =  'Skip';
+  AFTER    =  'after';
+  BEFORE   =  'before';
+  DAY      =  'day';
+  DAYS     =  'days';
+  HOUR     =  'hour';
+  HOURS    =  'hours';
+  WEEK     =  'week';
+  WEEKS    =  'weeks';
+  BUSINESS =  'business';
 }
 
 @header {
@@ -113,9 +114,12 @@ dateResult returns [RubricStmt value]
          ;
 
 dateSpec returns [RubricStmt value]
+@init {
+  boolean business = false;
+}
          :  ID { $value = new RubricStmtDateSymbol( $ID.text ); }
-         |  NUMBER unit=(HOUR|HOURS|DAY|DAYS|WEEK|WEEKS) type=(BEFORE|AFTER) ID
-            { $value = new RubricStmtRelativeDate( Integer.parseInt( $NUMBER.text ), $unit.text, $type.text, $ID.text ); }
+         |  NUMBER ( BUSINESS { business = true; } )? unit=(HOUR|HOURS|DAY|DAYS|WEEK|WEEKS) type=(BEFORE|AFTER) ID
+            { $value = new RubricStmtRelativeDate( Integer.parseInt( $NUMBER.text ), business, $unit.text, $type.text, $ID.text ); }
          ;
 
 guardResult returns [GuardResponse value]
