@@ -37,5 +37,5 @@ import java.lang.annotation.Target;
 @Documented
 public @interface RubricPredicate
 {
-  String name();
+  String value();
 }

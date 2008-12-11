@@ -37,5 +37,5 @@ import java.lang.annotation.Target;
 @Documented
 public @interface RubricDateFunction
 {
-  String name();
+  String value();
 }
