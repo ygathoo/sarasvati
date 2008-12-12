@@ -23,7 +23,7 @@ public class SvUtil
       return null;
     }
 
-    StringBuilder buf = new StringBuilder( string.substring( 1, string.length() - 2 ) );
+    StringBuilder buf = new StringBuilder( string.substring( 1, string.length() - 1 ) );
 
     for ( int i = 0; i < buf.length(); i++ )
     {
