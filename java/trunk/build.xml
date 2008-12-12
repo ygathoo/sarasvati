@@ -75,8 +75,16 @@
     </javac>
   </target>
 
-  <target name="dist" depends="compile">
+  <target name="dist" depends="compile, buildLang">
     <mkdir dir="${archive.base}"/>
+
+    <copy todir="${build.dir}">
+      <fileset dir="${build.dir}/lang">
+        <include name="**/lang/RubricParser*.class"/>
+        <include name="**/lang/RubricLexer*.class"/>
+        <include name="**/lang/Rubric.tokens"/>
+      </fileset>
+    </copy>
 
     <copy todir="${build.dir}/com/googlecode/sarasvati">
       <fileset dir="common">
@@ -84,7 +92,7 @@
       </fileset>
     </copy>
 
-    <jar basedir="${build.dir}" destfile="${archive.base}/${release.name}.jar"/>
+    <jar basedir="${build.dir}" excludes="lang/**" destfile="${archive.base}/${release.name}.jar"/>
 
     <copy todir="${archive.base}">
       <fileset dir=".">
@@ -94,7 +102,6 @@
         <include name="examples/**"/>
         <include name="lang/**"/>
         <include name="lib/*.txt"/>
-        <include name="lib/rubric.jar"/>
         <include name="README"/>
         <exclude name="**/.svn/**"/>
       </fileset>
