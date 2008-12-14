@@ -46,6 +46,7 @@ import org.hibernate.annotations.CollectionOfElements;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NestedEnv;
 import com.googlecode.sarasvati.NodeToken;
@@ -93,6 +94,9 @@ public class HibNodeToken implements NodeToken
   @Column (name="guard_action")
   protected GuardAction guardAction;
 
+  @Column (name="execution_type")
+  protected ExecutionType executionType;
+
   @Transient
   protected Map<String,Object> transientAttributes = new HashMap<String, Object>();
 
@@ -107,17 +111,19 @@ public class HibNodeToken implements NodeToken
   public HibNodeToken (HibGraphProcess process,
                        HibNodeRef nodeRef,
                        HibNodeToken attrSetToken,
+                       ExecutionType executionType,
                        Map<String,String> attrMap,
                        List<ArcToken> parentTokens,
                        Map<String,Object> transientAttributes)
   {
-    this.process      = process;
-    this.nodeRef      = nodeRef;
-    this.attrSetToken = attrMap.isEmpty() ? attrSetToken : this;
-    this.attrMap      = attrMap;
-    this.parentTokens = parentTokens;
-    this.childTokens  = new LinkedList<ArcToken>();
-    this.createDate   = new Date();
+    this.process       = process;
+    this.nodeRef       = nodeRef;
+    this.executionType = executionType;
+    this.attrSetToken  = attrMap.isEmpty() ? attrSetToken : this;
+    this.attrMap       = attrMap;
+    this.parentTokens  = parentTokens;
+    this.childTokens   = new LinkedList<ArcToken>();
+    this.createDate    = new Date();
 
     this.transientAttributes = transientAttributes;
   }
@@ -239,6 +245,18 @@ public class HibNodeToken implements NodeToken
   public void markComplete (Engine engine)
   {
     this.completeDate = new Date();
+  }
+
+  @Override
+  public ExecutionType getExecutionType ()
+  {
+    return executionType;
+  }
+
+  @Override
+  public void setExecutionType (ExecutionType executionType)
+  {
+    this.executionType = executionType;
   }
 
   @Override
@@ -438,8 +456,7 @@ public class HibNodeToken implements NodeToken
   {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ( ( id == null )
-        ? 0 : id.hashCode() );
+    result = prime * result + ( ( id == null ) ? 0 : id.hashCode() );
     return result;
   }
 

@@ -30,6 +30,7 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
@@ -122,11 +123,11 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   }
 
   @Override
-  public HibArcToken newArcToken (GraphProcess process, Arc arc, NodeToken previousToken)
+  public HibArcToken newArcToken (GraphProcess process, Arc arc, ExecutionType executionType, NodeToken previousToken)
   {
     HibGraphProcess hibProcess = (HibGraphProcess)process;
     Hibernate.initialize( hibProcess.getExecutionQueue() );
-    HibArcToken token = new HibArcToken( hibProcess, (HibArc)arc, (HibNodeToken)previousToken );
+    HibArcToken token = new HibArcToken( hibProcess, (HibArc)arc, executionType, (HibNodeToken)previousToken );
     session.save( token );
     return token;
   }
@@ -148,7 +149,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 
   @SuppressWarnings("unchecked")
   @Override
-  public HibNodeToken newNodeToken (GraphProcess process, Node node, List<ArcToken> parents)
+  public HibNodeToken newNodeToken (GraphProcess process, Node node, ExecutionType executionType, List<ArcToken> parents)
   {
     // Here we setup the token attributes for the new node
     // If the node has no predecessors, it will have no attributes
@@ -193,7 +194,13 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
       }
     }
 
-    HibNodeToken token = new HibNodeToken( (HibGraphProcess)process, (HibNodeRef)node, attrSetToken, attrMap, parents, transientAttributes);
+    HibNodeToken token = new HibNodeToken( (HibGraphProcess)process,
+                                           (HibNodeRef)node,
+                                           attrSetToken,
+                                           executionType,
+                                           attrMap,
+                                           parents,
+                                           transientAttributes);
     session.save( token );
     return token;
   }

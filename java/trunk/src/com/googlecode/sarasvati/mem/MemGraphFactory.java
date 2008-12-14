@@ -25,6 +25,7 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
@@ -114,15 +115,15 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public ArcToken newArcToken (GraphProcess process, Arc arc, NodeToken parent)
+  public ArcToken newArcToken (GraphProcess process, Arc arc, ExecutionType executionType, NodeToken parent)
   {
-    return new MemArcToken( arc, process, parent );
+    return new MemArcToken( arc, process, executionType, parent );
   }
 
   @Override
-  public NodeToken newNodeToken (GraphProcess process, Node node, List<ArcToken> parents)
+  public NodeToken newNodeToken (GraphProcess process, Node node, ExecutionType executionType, List<ArcToken> parents)
   {
-    MemNodeToken token = new MemNodeToken( node, process, parents );
+    MemNodeToken token = new MemNodeToken( node, process, executionType, parents );
     Env env = token.getEnv();
 
     for ( ArcToken t : parents )

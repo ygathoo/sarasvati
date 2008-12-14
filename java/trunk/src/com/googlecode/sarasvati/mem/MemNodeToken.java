@@ -28,6 +28,7 @@ import java.util.Map;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.MapEnv;
@@ -44,17 +45,19 @@ public class MemNodeToken implements NodeToken
   protected List<ArcToken> childTokens;
   protected Date createDate;
   protected Date completeDate;
+  protected ExecutionType executionType;
 
   protected Map<String, String> attributes = new HashMap<String, String>();
 
   protected Env env = new MapEnv();
   protected Env fullEnv = null;
 
-  public MemNodeToken (Node node, GraphProcess process, List<ArcToken> parentTokens)
+  public MemNodeToken (Node node, GraphProcess process, ExecutionType executionType, List<ArcToken> parentTokens)
   {
     this.node = node;
     this.process = process;
     this.parentTokens = parentTokens;
+    this.executionType = executionType;;
     this.childTokens = new LinkedList<ArcToken>();
     this.createDate = new Date();
   }
@@ -135,6 +138,17 @@ public class MemNodeToken implements NodeToken
     return env;
   }
 
+  @Override
+  public ExecutionType getExecutionType ()
+  {
+    return executionType;
+  }
+
+  @Override
+  public void setExecutionType (ExecutionType executionType)
+  {
+    this.executionType = executionType;
+  }
   @Override
   public String toString()
   {

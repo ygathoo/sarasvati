@@ -41,6 +41,7 @@ import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.NodeToken;
 
 @Entity
@@ -78,17 +79,22 @@ public class HibArcToken implements ArcToken
   protected Date    completeDate;
 
   @Type (type="yes_no")
+  @Column( name="pending")
   protected boolean pending;
+
+  @Column (name="execution_type")
+  protected ExecutionType executionType;
 
   public HibArcToken () { /* Default constructor for hibernate */ }
 
-  public HibArcToken (HibGraphProcess process, HibArc arc, HibNodeToken parentToken)
+  public HibArcToken (HibGraphProcess process, HibArc arc, ExecutionType executionType, HibNodeToken parentToken)
   {
-    this.process     = process;
-    this.arc         = arc;
-    this.parentToken = parentToken;
-    this.createDate  = new Date();
-    this.pending     = true;
+    this.process       = process;
+    this.arc           = arc;
+    this.executionType = executionType;
+    this.parentToken   = parentToken;
+    this.createDate    = new Date();
+    this.pending       = true;
   }
 
   public Long getId ()
@@ -185,6 +191,18 @@ public class HibArcToken implements ArcToken
   public void markProcessed (Engine engine)
   {
     pending = false;
+  }
+
+  @Override
+  public ExecutionType getExecutionType ()
+  {
+    return executionType;
+  }
+
+  @Override
+  public void setExecutionType (ExecutionType executionType)
+  {
+    this.executionType = executionType;
   }
 
   @Override

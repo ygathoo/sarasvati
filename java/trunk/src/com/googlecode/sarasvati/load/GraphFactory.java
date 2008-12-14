@@ -24,6 +24,7 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
@@ -111,10 +112,11 @@ public interface GraphFactory<G extends Graph>
    *
    * @param process The {@link GraphProcess} which the new {@link NodeToken} will belong to
    * @param node    The {@link Node} the new {@link NodeToken} is being placed on
+   * @param executionType The {@link ExecutionType} represented by this node token.
    * @param parents The list of ArcTokens which preceded this {@link NodeToken}
    * @return        A new {@link NodeToken}
    */
-  NodeToken newNodeToken (GraphProcess process, Node node, List<ArcToken> parents);
+  NodeToken newNodeToken (GraphProcess process, Node node, ExecutionType executionType, List<ArcToken> parents);
 
   /**
    * Generates a new {@link ArcToken} for the given {@link GraphProcess}, pointing
@@ -122,10 +124,11 @@ public interface GraphFactory<G extends Graph>
    *
    * @param process The {@link GraphProcess} which the new ArcToken will belong to
    * @param arc     The {@link Arc} the new ArcToken is being placed on
+   * @param executionType The {@link ExecutionType} represented by this arc token.
    * @param parent  The {@link NodeToken} which preceded this {@link ArcToken}.
    * @return A new {@link ArcToken}
    */
-  ArcToken newArcToken (GraphProcess process, Arc arc, NodeToken parent);
+  ArcToken newArcToken (GraphProcess process, Arc arc, ExecutionType executionType, NodeToken parent);
 
   /**
    * Adds the type to the {@link GraphFactory} for this engine. Specifies
