@@ -67,10 +67,12 @@ public abstract class BaseEngine implements Engine
         process.addNodeToken( startToken );
         executeNode( process, startToken );
       }
+      executeQueuedArcTokens( process );
     }
     finally
     {
-      executeQueuedArcTokens( process );
+      arcExecutionStarted = false;
+      drainAsyncQueue( process );
     }
 
     if ( process.isExecuting() )
@@ -260,11 +262,15 @@ public abstract class BaseEngine implements Engine
     finally
     {
       arcExecutionStarted = false;
+      drainAsyncQueue( process );
+    }
+  }
 
-      while ( !asyncQueue.isEmpty() )
-      {
-        process.enqueueArcTokenForExecution( asyncQueue.remove( 0 ) );
-      }
+  private void drainAsyncQueue (GraphProcess process)
+  {
+    while ( !asyncQueue.isEmpty() )
+    {
+      process.enqueueArcTokenForExecution( asyncQueue.remove( 0 ) );
     }
   }
 
@@ -314,7 +320,9 @@ public abstract class BaseEngine implements Engine
 
         if ( !current.getNode().isBacktrackable( current ) )
         {
-          throw new WorkflowException( "Can not backtrack node" );
+          throw new WorkflowException( "Can not backtrack node name: " +
+                                        current.getNode().getName()  +
+                                       "id: " + current.getNode().getId() );
         }
 
         for ( ArcToken childArcToken : current.getChildTokens() )

@@ -38,4 +38,5 @@ import java.lang.annotation.Target;
 @Documented
 public @interface RubricFunctionContainer
 {
+  // no atributes
 }

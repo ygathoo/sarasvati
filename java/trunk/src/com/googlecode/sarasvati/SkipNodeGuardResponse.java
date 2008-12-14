@@ -71,4 +71,27 @@ public class SkipNodeGuardResponse implements GuardResponse
   {
     return SvUtil.equals( Arc.DEFAULT_ARC, exitArcForSkip ) ? "SkipNodeResponse"  : "SkipNodeResponse (" + exitArcForSkip + ")";
   }
+
+  @Override
+  public int hashCode ()
+  {
+    return exitArcForSkip == null ? 0 : exitArcForSkip.hashCode();
+  }
+
+  @Override
+  public boolean equals (Object obj)
+  {
+    if (this == obj)
+      return true;
+    if (obj == null || !(obj instanceof SkipNodeGuardResponse) )
+      return false;
+    SkipNodeGuardResponse other = (SkipNodeGuardResponse) obj;
+    if (exitArcForSkip == null)
+    {
+      if (other.exitArcForSkip != null)
+        return false;
+    } else if (!exitArcForSkip.equals( other.exitArcForSkip ))
+      return false;
+    return true;
+  }
 }
