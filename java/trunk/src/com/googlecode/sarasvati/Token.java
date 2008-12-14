@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati;
 
+import com.googlecode.sarasvati.visitor.TokenVisitor;
+
 /**
  * The set of tokens in a process represent the current state
  * of the workflow. There are two types of tokens, node tokens
@@ -47,5 +49,23 @@ public interface Token
    */
   ExecutionType getExecutionType ();
 
-  void setExecutionType (ExecutionType executionType);
+  /**
+   * Marks the token as backtracked by changing the execution
+   * type. If the execution type is {@link ExecutionType#Forward}
+   * it gets changed to {@link ExecutionType#ForwardBacktracked}.
+   * If the execution type is {@link ExecutionType#Backward} it
+   * gets changed to {@value ExecutionType#BackwardBacktracked}.
+   *
+   * Any other type of change should not occur.
+   */
+  void markBacktracked (Engine engine);
+
+  /**
+   * Should call the appropriate visit method on the given
+   * visitor.
+   *
+   * @param visitor The visitor which is traversing the
+   *                execution history.
+   */
+  void accept (TokenVisitor visitor);
 }

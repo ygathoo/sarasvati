@@ -147,15 +147,28 @@ insert into wf_guard_action values ( 0, 'Accept Token' );
 insert into wf_guard_action values ( 1, 'Discard Token' );
 insert into wf_guard_action values ( 2, 'Skip Node' );
 
+create table wf_execution_type
+(
+  id            int  NOT NULL PRIMARY KEY,
+  name          text NOT NULL
+);
+
+insert into wf_execution_type values ( 0, 'Forward' );
+insert into wf_execution_type values ( 1, 'Forward/Backtracked' );
+insert into wf_execution_type values ( 2, 'Backward' );
+insert into wf_execution_type values ( 3, 'Backward/Backtracked' );
+
 create table wf_node_token
 (
-  id            serial    NOT NULL PRIMARY KEY,
-  process_id    int       NOT NULL REFERENCES wf_process,
-  node_ref_id   int       NOT NULL REFERENCES wf_node_ref,
-  attr_set_id   int       NULL     REFERENCES wf_node_token,
-  create_date   timestamp NOT NULL DEFAULT current_timestamp,
-  guard_action  int       NULL     REFERENCES wf_guard_action,
-  complete_date timestamp NULL
+  id              serial    NOT NULL PRIMARY KEY,
+  process_id      int       NOT NULL REFERENCES wf_process,
+  node_ref_id     int       NOT NULL REFERENCES wf_node_ref,
+  attr_set_id     int       NULL     REFERENCES wf_node_token,
+  create_date     timestamp NOT NULL DEFAULT current_timestamp,
+  guard_action    int       NULL     REFERENCES wf_guard_action,
+  execution_type  int       NOT NULL REFERENCES wf_execution_type,
+  complete_date   timestamp NULL
+
 );
 
 ALTER TABLE wf_process
@@ -170,6 +183,7 @@ create table wf_arc_token
   arc_id          int       NOT NULL REFERENCES wf_arc,
   parent_token_id int       NOT NULL REFERENCES wf_node_token,
   pending         char(1)   NOT NULL,
+  execution_type  int       NOT NULL REFERENCES wf_execution_type,
   create_date     timestamp NOT NULL DEFAULT current_timestamp,
   complete_date   timestamp NULL
 );

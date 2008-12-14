@@ -319,4 +319,11 @@ public interface Engine
    * @return The parent engine.
    */
   Engine getParentEngine ();
+
+  /**
+   * Backtracks execution to the point where the given node token was active.
+   *
+   * @param token The destination token to backtrack to.
+   */
+  void backtrack (NodeToken token);
 }

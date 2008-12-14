@@ -50,6 +50,7 @@ import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NestedEnv;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 @Entity
 @Table(name="wf_node_token")
@@ -254,9 +255,15 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void setExecutionType (ExecutionType executionType)
+  public void markBacktracked (Engine engine)
   {
-    this.executionType = executionType;
+    executionType = executionType.getCorrespondingBacktracked();
+  }
+
+  @Override
+  public void accept (TokenVisitor visitor)
+  {
+    visitor.visit( this );
   }
 
   @Override

@@ -30,6 +30,15 @@ import java.util.List;
 public interface NodeToken extends Token
 {
   /**
+   * A unique identifier for this node token. May
+   * be globally unique, or may be unique for just
+   * the containing GraphProcess.
+   *
+   * @return A unique identifier for this node token
+   */
+  Long getId ();
+
+  /**
    * Returns the node that this token points to.
    *
    * @return The node associated node.
@@ -53,7 +62,7 @@ public interface NodeToken extends Token
   List<ArcToken> getParentTokens ();
 
   /**
-   * Returns the list of ArcTokens whic have this token as their parent. If this NodeToken
+   * Returns the list of ArcTokens which have this token as their parent. If this NodeToken
    * has not yet been completed, or no arcs match the selected arc name when the node was
    * completed, the list will be empty.
    *

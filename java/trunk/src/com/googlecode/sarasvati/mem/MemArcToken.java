@@ -27,6 +27,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 public class MemArcToken implements ArcToken
 {
@@ -45,7 +46,6 @@ public class MemArcToken implements ArcToken
     this.executionType = executionType;
     this.parentToken = parentToken;
     this.pending = true;
-    this.executionType = ExecutionType.Forward;
   }
 
   @Override
@@ -104,8 +104,14 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public void setExecutionType (ExecutionType executionType)
+  public void markBacktracked (Engine engine)
   {
-    this.executionType = executionType;
+    executionType = executionType.getCorrespondingBacktracked();
+  }
+
+  @Override
+  public void accept (TokenVisitor visitor)
+  {
+    visitor.visit( this );
   }
 }

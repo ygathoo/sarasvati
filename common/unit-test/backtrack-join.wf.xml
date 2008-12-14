@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!--
+  The unit test should progress B.
+  It should then backtrack to B.
+
+  The arc token on the arc from B to C should
+  be marked as backtracked.
+ -->
+<process-definition name="backtrack1" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="A" type="wait" isStart="true">
+    <arc to="C"/>
+  </node>
+
+  <node name="B" type="wait" isStart="true">
+    <arc to="C"/>
+  </node>
+
+  <node name="C" type="wait">
+  </node>
+
+</process-definition>

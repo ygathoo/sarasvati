@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+
+<!--
+  The unit test should progress from A to B,C,D then try to backtrack to A
+ -->
+<process-definition name="backtrack-split" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="A" type="wait" isStart="true">
+    <arc to="B"/>
+    <arc to="C"/>
+    <arc to="D"/>
+  </node>
+
+  <node name="B" type="wait">
+  </node>
+
+  <node name="C" type="wait">
+  </node>
+
+  <node name="D" type="wait">
+  </node>
+
+</process-definition>
