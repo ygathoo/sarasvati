@@ -20,10 +20,8 @@ package com.googlecode.sarasvati;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
 
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
@@ -33,6 +31,8 @@ import com.googlecode.sarasvati.rubric.env.DefaultRubricEnv;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.script.ScriptEnv;
+import com.googlecode.sarasvati.visitor.BacktrackTokenVisitor;
+import com.googlecode.sarasvati.visitor.TokenTraversals;
 
 /**
  *
@@ -218,7 +218,7 @@ public abstract class BaseEngine implements Engine
     for ( Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
     {
       ArcToken arcToken = getFactory().newArcToken( process, arc, ExecutionType.Forward, token );
-      token.getChildTokens().add(  arcToken );
+      token.getChildTokens().add( arcToken );
       fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
 
       if ( asynchronous && arcExecutionStarted )
@@ -307,57 +307,28 @@ public abstract class BaseEngine implements Engine
     getFactory().addGlobalCustomType( type, nodeClass );
   }
 
+  @Override
   public void backtrack (NodeToken token)
   {
-    Set<NodeToken> leaves = new HashSet<NodeToken>();
-    Set<NodeToken> processed = new HashSet<NodeToken>();
-    List<NodeToken> queue = new LinkedList<NodeToken>();
-
-    queue.add( token );
-
-    while ( !queue.isEmpty() )
+    if ( token.getChildTokens().isEmpty() )
     {
-      NodeToken current = queue.remove( 0 );
-      if ( !processed.contains( current ) )
-      {
-        processed.add( current );
-
-        if ( !current.getNode().isBacktrackable( current ) )
-        {
-          throw new WorkflowException( "Can not backtrack node name: " +
-                                        current.getNode().getName()  +
-                                       "id: " + current.getNode().getId() );
-        }
-
-        for ( ArcToken childArcToken : current.getChildTokens() )
-        {
-          NodeToken child = childArcToken.getChildToken();
-          (child.getChildTokens().isEmpty() ? leaves : queue).add( child );
-        }
-      }
+      throw new WorkflowException( "Cannot got backtrack to a dead end node token (produced no arc tokens)." );
     }
 
-    queue.addAll( leaves );
-
-    while ( !queue.isEmpty() )
+    if ( !token.isComplete() )
     {
-      NodeToken current = queue.remove( 0 );
-      current.getNode().backtrack(  current );
-
-      if ( !current.isComplete() )
-      {
-        current.markComplete( this );
-      }
-
-      for ( ArcToken arcToken : current.getParentTokens() )
-      {
-        NodeToken parent = arcToken.getParentToken();
-        if ( processed.contains( parent ) )
-        {
-          queue.add( parent );
-        }
-      }
+      throw new WorkflowException( "Cannot backtrack to a node token which isn't completed." );
     }
+
+    if ( token.getExecutionType().isBacktracked() )
+    {
+      throw new WorkflowException( "Cannot backtrack to a node token which has been backtracked." );
+    }
+
+    BacktrackTokenVisitor visitor = new BacktrackTokenVisitor( this, token );
+    TokenTraversals.breadthFirstTraversal( token, visitor );
+    NodeToken resultToken = visitor.backtrack();
+    executeNode( resultToken.getProcess(), resultToken );
   }
 
   @Override

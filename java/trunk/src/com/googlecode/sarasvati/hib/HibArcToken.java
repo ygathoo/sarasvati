@@ -43,6 +43,7 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 @Entity
 @Table (name="wf_arc_token")
@@ -200,9 +201,15 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public void setExecutionType (ExecutionType executionType)
+  public void markBacktracked (Engine engine)
   {
-    this.executionType = executionType;
+    executionType = executionType.getCorrespondingBacktracked();
+  }
+
+  @Override
+  public void accept (TokenVisitor visitor)
+  {
+    visitor.visit( this );
   }
 
   @Override

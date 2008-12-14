@@ -35,9 +35,11 @@ import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NestedEnv;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 public class MemNodeToken implements NodeToken
 {
+  protected long id;
   protected Node node;
   protected GraphProcess process;
   protected GuardAction guardAction;
@@ -52,14 +54,21 @@ public class MemNodeToken implements NodeToken
   protected Env env = new MapEnv();
   protected Env fullEnv = null;
 
-  public MemNodeToken (Node node, GraphProcess process, ExecutionType executionType, List<ArcToken> parentTokens)
+  public MemNodeToken (long id, Node node, GraphProcess process, ExecutionType executionType, List<ArcToken> parentTokens)
   {
+    this.id = id;
     this.node = node;
     this.process = process;
     this.parentTokens = parentTokens;
     this.executionType = executionType;;
     this.childTokens = new LinkedList<ArcToken>();
     this.createDate = new Date();
+  }
+
+  @Override
+  public Long getId ()
+  {
+    return id;
   }
 
   @Override
@@ -123,6 +132,12 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
+  public void accept (TokenVisitor visitor)
+  {
+    visitor.visit( this );
+  }
+
+  @Override
   public Env getFullEnv()
   {
     if ( fullEnv == null )
@@ -145,10 +160,11 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void setExecutionType (ExecutionType executionType)
+  public void markBacktracked (Engine engine)
   {
-    this.executionType = executionType;
+    executionType = executionType.getCorrespondingBacktracked();
   }
+
   @Override
   public String toString()
   {

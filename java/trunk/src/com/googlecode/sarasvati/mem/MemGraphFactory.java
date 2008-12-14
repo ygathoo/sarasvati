@@ -123,7 +123,9 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   @Override
   public NodeToken newNodeToken (GraphProcess process, Node node, ExecutionType executionType, List<ArcToken> parents)
   {
-    MemNodeToken token = new MemNodeToken( node, process, executionType, parents );
+    MemGraphProcess memGraphProcess = (MemGraphProcess)process;
+
+    MemNodeToken token = new MemNodeToken( memGraphProcess.nextTokenId(), node, process, executionType, parents );
     Env env = token.getEnv();
 
     for ( ArcToken t : parents )

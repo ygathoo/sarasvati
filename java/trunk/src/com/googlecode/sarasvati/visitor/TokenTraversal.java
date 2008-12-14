@@ -16,34 +16,14 @@
 
     Copyright 2008 Paul Lorenz
 */
+package com.googlecode.sarasvati.visitor;
 
-package com.googlecode.sarasvati;
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.NodeToken;
 
-public enum ExecutionType
+public interface TokenTraversal
 {
-  Forward,
-  ForwardBacktracked,
-  Backward,
-  BackwardBacktracked;
+  void traverse (NodeToken token, TokenVisitor visitor);
 
-  public ExecutionType getCorrespondingBacktracked ()
-  {
-    if ( this == Forward )
-    {
-      return ForwardBacktracked;
-    }
-
-    if ( this == Backward )
-    {
-      return BackwardBacktracked;
-    }
-
-    return this;
-  }
-
-  public boolean isBacktracked ()
-  {
-    return this == ForwardBacktracked ||
-           this == BackwardBacktracked;
-  }
+  void traverse (ArcToken token, TokenVisitor visitor);
 }
