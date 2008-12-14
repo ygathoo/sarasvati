@@ -16,9 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
+
 package com.googlecode.sarasvati;
 
 /**
@@ -39,4 +37,15 @@ public interface Token
    * @return True if this token has been completed
    */
   boolean isComplete ();
+
+  /**
+   * Returns the {@link ExecutionType} of the token. For a normal
+   * token, which occurs as part of graph execution, the
+   * ExecutionType will be {@link ExecutionType#Forward}.
+   *
+   * @return The token execution type
+   */
+  ExecutionType getExecutionType ();
+
+  void setExecutionType (ExecutionType executionType);
 }

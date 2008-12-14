@@ -24,6 +24,7 @@ import java.util.Date;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 
@@ -35,13 +36,16 @@ public class MemArcToken implements ArcToken
   protected NodeToken childToken;
   protected boolean pending;
   protected Date completeDate;
+  protected ExecutionType executionType;
 
-  public MemArcToken (Arc arc, GraphProcess process, NodeToken parentToken)
+  public MemArcToken (Arc arc, GraphProcess process, ExecutionType executionType, NodeToken parentToken)
   {
     this.arc = arc;
     this.process = process;
+    this.executionType = executionType;
     this.parentToken = parentToken;
     this.pending = true;
+    this.executionType = ExecutionType.Forward;
   }
 
   @Override
@@ -91,5 +95,17 @@ public class MemArcToken implements ArcToken
   public void markProcessed (Engine engine)
   {
     this.pending = false;
+  }
+
+  @Override
+  public ExecutionType getExecutionType ()
+  {
+    return executionType;
+  }
+
+  @Override
+  public void setExecutionType (ExecutionType executionType)
+  {
+    this.executionType = executionType;
   }
 }
