@@ -23,6 +23,7 @@
   * [#Graph_Composition_and_Nested_Processes Graph Composition and Nested Processes]
     * [#Graph_Composition_Example_One Graph Composition Example One]
     * [#Graph_Composition_Example_Two Graph Composition Example Two]
+    * [#Nested_Processes_Example Nested Processes Example]
   * [#Execution_Environment Execution Environment]
     * [#Process_Attributes Process Attributes]
     * [#Token_Attributes Token Attributes]
@@ -458,6 +459,17 @@ When it is loaded, the composed graph looks like:
 [http://sarasvati.googlecode.com/svn/wiki/images/concepts-externals5.jpg]
 
 As you can see, we now have two copies of _ext_ embedded in the process definition. One copy will be made for each unique instance referenced. A process definition can have references to any number of different external definitions and each external process definition can be imported any number of times.
+
+[#Contents Back to Table of Contents]
+
+====Nested Processes Example====
+The above example could not be implemented with nested processes because a nested process must be represented by a single node in the parent process. So, here is a similar, but simpler example using nested processes.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/concepts-nested1.jpg]
+
+Nodes `S` and `T` both refer to the nested process named `nested`. Note that `nested` is almost the same as `ext`, except that the first node is a start node. This is because `nested` will be executed as a separate process. If it didn't have a start node, it would not execute. 
+
+When `S` and `T` execute, each will spawn a separate process. When `S` is executed, it will have an incomplete node token `t`. As part of execution it will start a new `nested` process `P` which have have the token `t` as a parent. When `P` completes, it will check if it has a parent token, and finding that it does, will complete `t`. This will allow execution to continue in the original process.
 
 [#Contents Back to Table of Contents]
 
