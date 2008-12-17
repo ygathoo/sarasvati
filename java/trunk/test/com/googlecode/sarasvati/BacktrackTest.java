@@ -3,8 +3,6 @@ package com.googlecode.sarasvati;
 import java.io.File;
 import java.util.Collection;
 
-import junit.framework.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -40,47 +38,26 @@ public class BacktrackTest
     GraphProcess p = engine.startProcess( g );
     Collection<? extends NodeToken> tokens = p.getActiveNodeTokens();
 
-    Assert.assertTrue( "Should contain one node token", tokens.size() == 1 );
+    String state = "[1 A I F]";
+    TestProcess.validate( p, state );
 
     NodeToken tokenA = tokens.iterator().next();
-
-    Assert.assertEquals( "A", tokenA.getNode().getName() );
-
     engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
 
     tokens = p.getActiveNodeTokens();
 
-    Assert.assertTrue( "Should contain one node token", tokens.size() == 1 );
-
-    NodeToken tokenB = tokens.iterator().next();
-
-    Assert.assertEquals( "B", tokenB.getNode().getName() );
+    state = "[1 A C F]\n" +
+            "  (C F 2)\n" +
+            "[2 B I F]";
+    TestProcess.validate( p, state );
 
     engine.backtrack( tokenA );
 
-    tokens = p.getActiveNodeTokens();
-
-    Assert.assertTrue( "Token B should be backtracked", tokenB.getExecutionType().isBacktracked() );
-    Assert.assertTrue( "Token A should be backtracked", tokenB.getExecutionType().isBacktracked() );
-
-    tokens = p.getActiveNodeTokens();
-    Assert.assertTrue( "Should contain one node token", tokens.size() == 1 );
-
-    NodeToken tokenANew = tokens.iterator().next();
-
-    Assert.assertEquals( "A", tokenANew.getNode().getName() );
-    Assert.assertFalse( "New Token A should be incomplete", tokenANew.isComplete() );
-    Assert.assertEquals( 1, tokenANew.getParentTokens().size() );
-
-    ArcToken arcParent = tokenANew.getParentTokens().get( 0 );
-
-    Assert.assertEquals( ExecutionType.BackwardBacktracked, arcParent.getExecutionType() );
-    Assert.assertEquals( tokenB, arcParent.getParentToken() );
-    Assert.assertEquals( 1, tokenB.getParentTokens().size() );
-
-    arcParent = tokenB.getParentTokens().get( 0 );
-
-    Assert.assertEquals( ExecutionType.ForwardBacktracked, arcParent.getExecutionType() );
-    Assert.assertEquals( tokenA, arcParent.getParentToken() );
+    state = "[1 A C FB]\n" +
+            "  (C FB 2)\n" +
+            "[2 B C FB]\n" +
+            "  (C BB 3)\n" +
+            "[3 A I F]\n";
+    TestProcess.validate( p, state );
   }
 }

@@ -1,21 +1,21 @@
+
 package com.googlecode.sarasvati;
 
-public class TestArcToken
+import junit.framework.Assert;
+
+public class TestArcToken extends TestToken<ArcToken>
 {
   protected TestNodeToken parent;
-  protected TestNodeToken child;
+  protected TestNodeToken childToken;
+  protected Node          childNode;
 
-  protected boolean pending;
-  protected boolean complete;
-  protected ExecutionType executionType;
-  protected String parentId;
+  protected boolean       pending;
 
-  public TestArcToken (TestNodeToken parent, boolean pending, boolean complete, ExecutionType executionType)
+  public TestArcToken (int lineNumber, TestNodeToken parent, boolean pending, boolean complete, ExecutionType executionType)
   {
+    super( lineNumber, complete, executionType );
     this.parent = parent;
     this.pending = pending;
-    this.complete = complete;
-    this.executionType = executionType;
   }
 
   public TestNodeToken getParent ()
@@ -28,14 +28,24 @@ public class TestArcToken
     this.parent = parent;
   }
 
-  public TestNodeToken getChild ()
+  public TestNodeToken getChildToken ()
   {
-    return child;
+    return childToken;
   }
 
-  public void setChild (TestNodeToken child)
+  public void setChildToken (TestNodeToken childToken)
   {
-    this.child = child;
+    this.childToken = childToken;
+  }
+
+  public Node getChildNode ()
+  {
+    return childNode;
+  }
+
+  public void setChildNode (Node childNode)
+  {
+    this.childNode = childNode;
   }
 
   public boolean isPending ()
@@ -48,23 +58,28 @@ public class TestArcToken
     this.pending = pending;
   }
 
-  public boolean isComplete ()
+  @Override
+  public void validate ()
   {
-    return complete;
+    Assert.assertEquals( "Parent token does not match on " + toString(), parent.getToken(), token.getParentToken() );
+    Assert.assertEquals( "IsPending? does not match on " + toString(), pending, token.isPending() );
+
+    if ( isComplete() )
+    {
+      Assert.assertNotNull( "Completed test arc token should have child token: " + toString(), childToken );
+    }
+    else
+    {
+      Assert.assertNotNull( "Incomplete test arc token should have child node: " + toString(), childNode );
+      Assert.assertEquals( "Child node does not match on " + toString(), childNode, token.getArc().getEndNode() );
+    }
+
+    super.validate();
   }
 
-  public void setComplete (boolean complete)
+  @Override
+  public String toString ()
   {
-    this.complete = complete;
-  }
-
-  public ExecutionType getExecutionType ()
-  {
-    return executionType;
-  }
-
-  public void setExecutionType (ExecutionType executionType)
-  {
-    this.executionType = executionType;
+    return "[TestArcToken parentId=" + getParent().getId() + " line=" + lineNumber + "]";
   }
 }
