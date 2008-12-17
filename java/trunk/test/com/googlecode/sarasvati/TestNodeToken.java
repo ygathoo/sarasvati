@@ -3,20 +3,32 @@ package com.googlecode.sarasvati;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TestNodeToken
+import junit.framework.Assert;
+
+public class TestNodeToken extends TestToken<NodeToken>
 {
   protected List<TestArcToken> parents  = new LinkedList<TestArcToken>();
   protected List<TestArcToken> children = new LinkedList<TestArcToken>();
 
+  protected String             id;
   protected Node               node;
-  protected boolean            complete;
-  protected ExecutionType      executionType;
 
-  public TestNodeToken (Node node, boolean complete, ExecutionType executionType)
+  public TestNodeToken (int lineNumber, String id, Node node, boolean complete, ExecutionType executionType)
   {
+    super( lineNumber, complete, executionType );
+    this.lineNumber = lineNumber;
+    this.id = id;
     this.node = node;
-    this.complete = complete;
-    this.executionType = executionType;
+  }
+
+  public String getId ()
+  {
+    return id;
+  }
+
+  public void setId (String id)
+  {
+    this.id = id;
   }
 
   public Node getNode ()
@@ -27,16 +39,6 @@ public class TestNodeToken
   public void setNode (Node node)
   {
     this.node = node;
-  }
-
-  public boolean isComplete ()
-  {
-    return complete;
-  }
-
-  public void setComplete (boolean complete)
-  {
-    this.complete = complete;
   }
 
   public List<TestArcToken> getParents ()
@@ -67,5 +69,17 @@ public class TestNodeToken
   public void addParent (TestArcToken token)
   {
     parents.add( token );
+  }
+
+  public void validate ()
+  {
+    Assert.assertEquals( "Node does not match on " + toString(), node, token.getNode() );
+    super.validate();
+  }
+
+  @Override
+  public String toString ()
+  {
+    return "[TestNodeToken id=" + id + " line=" + lineNumber + "]";
   }
 }
