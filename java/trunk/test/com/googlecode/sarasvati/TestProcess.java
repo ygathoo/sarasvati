@@ -3,6 +3,7 @@ package com.googlecode.sarasvati;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -72,9 +73,7 @@ public class TestProcess
           throw new RuntimeException( "Unreconized status marker in: " + line );
         }
 
-        Node node = null;
-
-        current = new TestNodeToken( node, complete, stringToExecutionType( line, parts[3] ) );
+        current = new TestNodeToken( getNode( parts[1] ), complete, stringToExecutionType( line, parts[3] ) );
         nodeTokens.put( parts[0], current );
       }
       else if ( line.startsWith( "(" ) )
@@ -171,6 +170,48 @@ public class TestProcess
     }
 
     throw new RuntimeException( "Unrecognized execution type in: " + line );
+  }
+
+  public Node getNode (String name)
+  {
+    List<Node> nodes = new ArrayList<Node>();
+    for ( Node node : graph.getNodes() )
+    {
+      if ( name.equals( node.getName() ) )
+      {
+        nodes.add( node );
+      }
+    }
+
+    if ( nodes.isEmpty() )
+    {
+      throw new RuntimeException( "Found no nodes named " + name );
+    }
+
+    if ( nodes.size() > 1 )
+    {
+      StringBuilder buf = new StringBuilder();
+      for ( Node node : nodes )
+      {
+        buf.append( "Node id=" );
+        buf.append( node.getId() );
+        buf.append( " name=" );
+        buf.append( node.getName() );
+        buf.append( " type=" );
+        buf.append( node.getType() );
+        buf.append(" external=" );
+        buf.append( node.isExternal() );
+        buf.append( " join=" );
+        buf.append( node.isJoin() );
+        buf.append( " start=" );
+        buf.append(  node.isStart() );
+        buf.append( "\n" );
+      }
+
+      throw new RuntimeException( "Found too many nodes named " + name + "\n" + buf.toString() );
+    }
+
+    return nodes.get( 0 );
   }
 
 //  public void compare (GraphProcess p)
