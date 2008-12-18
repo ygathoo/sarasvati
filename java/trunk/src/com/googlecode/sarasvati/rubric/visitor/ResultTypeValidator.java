@@ -36,7 +36,7 @@ public class ResultTypeValidator extends RubricVisitorAdaptor
   }
 
   protected Class<?> type;
-  protected boolean allMatch = false;
+  protected boolean allMatch = true;
 
   public ResultTypeValidator (Class<?> type)
   {
