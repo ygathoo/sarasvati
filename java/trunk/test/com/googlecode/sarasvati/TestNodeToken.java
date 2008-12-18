@@ -61,16 +61,17 @@ public class TestNodeToken extends TestToken<NodeToken>
     this.children = children;
   }
 
-  public void addChild (TestArcToken token)
+  public void addChild (TestArcToken childToken)
   {
-    children.add( token );
+    children.add( childToken );
   }
 
-  public void addParent (TestArcToken token)
+  public void addParent (TestArcToken parentToken)
   {
-    parents.add( token );
+    parents.add( parentToken );
   }
 
+  @Override
   public void validate ()
   {
     Assert.assertEquals( "Node does not match on " + toString(), node, token.getNode() );

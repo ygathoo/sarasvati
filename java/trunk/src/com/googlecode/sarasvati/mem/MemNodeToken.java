@@ -60,7 +60,7 @@ public class MemNodeToken implements NodeToken
     this.node = node;
     this.process = process;
     this.parentTokens = parentTokens;
-    this.executionType = executionType;;
+    this.executionType = executionType;
     this.childTokens = new LinkedList<ArcToken>();
     this.createDate = new Date();
   }
