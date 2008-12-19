@@ -114,4 +114,10 @@ public class MemArcToken implements ArcToken
   {
     visitor.visit( this );
   }
+
+  @Override
+  public String toString ()
+  {
+    return "[MemArcToken execType=" + executionType + " arc=" + getArc() + "]";
+  }
 }

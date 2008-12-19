@@ -77,13 +77,15 @@ public class BacktrackTokenVisitor implements TokenVisitor
     while ( !queue.isEmpty() )
     {
       NodeToken token = queue.removeFirst();
-      NodeToken backtrackToken = backtrackNodeToken( token );
-      if ( token == destinationToken )
+      boolean isDestination = token == destinationToken;
+
+      if ( isDestination )
       {
-        resultToken = backtrackToken;
+        resultToken = backtrackCompletedToken( token, ExecutionType.Forward );
       }
       else
       {
+        NodeToken backtrackToken = backtrackToken( token );
         backtrackToken.markBacktracked( engine );
         backtrackToken.markComplete( engine );
       }
@@ -92,7 +94,31 @@ public class BacktrackTokenVisitor implements TokenVisitor
     return resultToken;
   }
 
-  private NodeToken backtrackNodeToken (NodeToken token)
+  private NodeToken backtrackCompletedToken (NodeToken token, ExecutionType executionType)
+  {
+    token.markBacktracked( engine );
+
+    List<ArcToken> parents = new ArrayList<ArcToken>( token.getChildTokens().size() );
+    for ( ArcToken childToken : token.getChildTokens() )
+    {
+      parents.add( arcTokenMap.get( childToken ) );
+    }
+
+    NodeToken backtrackToken =
+      engine.getFactory().newNodeToken( token.getProcess(),
+                                        token.getNode(),
+                                        executionType,
+                                        parents );
+
+    for ( ArcToken parent : parents )
+    {
+      parent.markComplete( engine, backtrackToken );
+    }
+
+    return backtrackToken;
+  }
+
+  private NodeToken backtrackToken (NodeToken token)
   {
     NodeToken backtrackToken = token;
 
@@ -104,46 +130,29 @@ public class BacktrackTokenVisitor implements TokenVisitor
     }
     else if ( !token.getExecutionType().isBacktracked() )
     {
-      List<ArcToken> parents = new ArrayList<ArcToken>( token.getChildTokens().size() );
-      for ( ArcToken childToken : token.getChildTokens() )
-      {
-        parents.add( arcTokenMap.get( childToken ) );
-      }
-
-      backtrackToken =
-        engine.getFactory().newNodeToken( token.getProcess(),
-                                          token.getNode(),
-                                          ExecutionType.Backward,
-                                          parents );
-
-      for ( ArcToken parent : parents )
-      {
-        parent.markComplete( engine, backtrackToken );
-      }
+      backtrackToken = backtrackCompletedToken( token, ExecutionType.Backward );
     }
 
-    for ( ArcToken parent : token.getParentTokens() )
+    for ( ArcToken parent : getParents( token ) )
     {
       boolean backtrackParent = visited.contains( parent.getParentToken() );
 
-      if ( !parent.getExecutionType().isBacktracked() )
+      parent.markBacktracked( engine );
+      ArcToken backtrackArcToken =
+        engine.getFactory().newArcToken( token.getProcess(),
+                                         parent.getArc(),
+                                         ExecutionType.Backward,
+                                         backtrackToken );
+
+      backtrackToken.getChildTokens().add( backtrackArcToken );
+
+      backtrackArcToken.markProcessed( engine );
+
+      if ( backtrackParent )
       {
-        parent.markBacktracked( engine );
-        ArcToken backtrackArcToken =
-          engine.getFactory().newArcToken( token.getProcess(),
-                                           parent.getArc(),
-                                           ExecutionType.Backward,
-                                           backtrackToken );
-        backtrackToken.getChildTokens().add( backtrackArcToken );
-
-        backtrackArcToken.markProcessed( engine );
-
-        if ( backtrackParent )
-        {
-          backtrackArcToken.markBacktracked( engine );
-        }
-        arcTokenMap.put( parent, backtrackArcToken );
+        backtrackArcToken.markBacktracked( engine );
       }
+      arcTokenMap.put( parent, backtrackArcToken );
 
       if ( backtrackParent )
       {
@@ -152,5 +161,19 @@ public class BacktrackTokenVisitor implements TokenVisitor
     }
 
     return backtrackToken;
+  }
+
+  private List<ArcToken> getParents (NodeToken token)
+  {
+    while ( true )
+    {
+      List<ArcToken> parents = token.getParentTokens();
+      if ( parents.isEmpty() ||
+           !parents.get( 0 ).getExecutionType().isBacktracked() )
+      {
+        return parents;
+      }
+      token = parents.get( 0 ).getParentToken();
+    }
   }
 }
