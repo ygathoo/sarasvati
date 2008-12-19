@@ -7,17 +7,18 @@
   The arc token on the arc from B to C should
   be marked as backtracked.
  -->
-<process-definition name="backtrack1" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="backtrack-join"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node name="A" type="wait" isStart="true">
-    <arc to="C"/>
+  <node name="nodeA" type="wait" isStart="true">
+    <arc to="nodeC"/>
   </node>
 
-  <node name="B" type="wait" isStart="true">
-    <arc to="C"/>
+  <node name="nodeB" type="wait" isStart="true">
+    <arc to="nodeC"/>
   </node>
 
-  <node name="C" type="wait">
+  <node name="nodeC" type="wait" isJoin="true">
   </node>
 
 </process-definition>

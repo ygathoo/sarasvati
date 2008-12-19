@@ -1,8 +1,6 @@
 package com.googlecode.sarasvati;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -72,28 +70,47 @@ public class TestProcess
   {
     this.graph = graph;
 
-    BufferedReader reader = new BufferedReader( new StringReader( spec ) );
-
     Map<String, TestNodeToken> nodeTokens = new HashMap<String, TestNodeToken>();
     Map<String, List<TestArcToken>> arcTokens = new HashMap<String, List<TestArcToken>>();
 
     TestNodeToken current = null;
 
-    String line = null;
     int lineNumber = 1;
-    while ( null != ( line = reader.readLine() ) )
+
+    StringBuilder buf = new StringBuilder( spec );
+    int index = 0;
+
+    while ( index < buf.length() )
     {
-      line = line.trim();
-      if ( line.startsWith( "[" ) )
+      if ( buf.charAt( index ) == '[' )
       {
-        current = parseNodeToken( line, lineNumber );
+        int endIndex = buf.indexOf( "]", index );
+        if ( endIndex == -1 )
+        {
+          throw new IllegalArgumentException( "No closing ] found at line: " + lineNumber );
+        }
+        String tokenSpec = buf.substring( index + 1, endIndex );
+        current = parseNodeToken( tokenSpec.trim(), lineNumber );
         nodeTokens.put( current.getId(), current );
+        lineNumber++;
+        index = endIndex + 1;
       }
-      else if ( line.startsWith( "(" ) )
+      else if ( buf.charAt( index ) == '(' )
       {
-        parseArcToken(line, current, arcTokens, lineNumber );
+        int endIndex = buf.indexOf( ")", index );
+        if ( endIndex == -1 )
+        {
+          throw new IllegalArgumentException( "No closing ) found at line: " + lineNumber );
+        }
+        String tokenSpec = buf.substring( index + 1, endIndex );
+        parseArcToken(tokenSpec, current, arcTokens, lineNumber );
+        lineNumber++;
+        index = endIndex + 1;
       }
-      lineNumber++;
+      else
+      {
+        index++;
+      }
     }
 
     for ( Entry<String,List<TestArcToken>> entry : arcTokens.entrySet() )
@@ -119,13 +136,10 @@ public class TestProcess
         startTestTokens.add( token );
       }
     }
-
-    reader.close();
   }
 
   private TestNodeToken parseNodeToken (String line, int lineNumber)
   {
-    line = line.substring( 1, line.length() - 1 );
     String[] parts = line.split( " " );
 
     boolean complete = false;
@@ -144,7 +158,6 @@ public class TestProcess
 
   private void parseArcToken (String line, TestNodeToken parent, Map<String, List<TestArcToken>> arcTokens, int lineNumber)
   {
-    line = line.substring( 1, line.length() - 1 );
     String[] parts = line.split( " " );
 
     if ( parent == null )
@@ -197,27 +210,14 @@ public class TestProcess
 
   private static ExecutionType stringToExecutionType (String line, String type)
   {
-    if ( "F".equals( type ) )
+    ExecutionType executionType = executionTypeMap.get( type );
+
+    if (executionType != null )
     {
-      return ExecutionType.Forward;
+      return executionType;
     }
 
-    if ( "B".equals( type ) )
-    {
-      return ExecutionType.Backward;
-    }
-
-    if ( "FB".equals( type ) )
-    {
-      return ExecutionType.ForwardBacktracked;
-    }
-
-    if ( "BB".equals( type ) )
-    {
-      return ExecutionType.BackwardBacktracked;
-    }
-
-    throw new RuntimeException( "Unrecognized execution type in: " + line );
+    throw new RuntimeException( "Unrecognized execution type '" + type + "' on line: " + line );
   }
 
   private Node getNode (String name)
@@ -422,5 +422,16 @@ public class TestProcess
         }
       }
     }
+  }
+
+  private static final Map<String, ExecutionType> executionTypeMap = new HashMap<String, ExecutionType>();
+
+  static
+  {
+    executionTypeMap.put( "F", ExecutionType.Forward );
+    executionTypeMap.put( "FB", ExecutionType.ForwardBacktracked );
+    executionTypeMap.put( "B", ExecutionType.Backward);
+    executionTypeMap.put( "BB", ExecutionType.BackwardBacktracked );
+    executionTypeMap.put( "U", ExecutionType.UTurn );
   }
 }

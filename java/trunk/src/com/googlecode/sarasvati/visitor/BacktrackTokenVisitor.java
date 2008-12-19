@@ -106,9 +106,10 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
     NodeToken backtrackToken =
       engine.getFactory().newNodeToken( token.getProcess(),
-                                        token.getNode(),
-                                        executionType,
-                                        parents );
+                                                 token.getNode(),
+                                                 executionType,
+                                                 parents,
+                                                 token );
 
     for ( ArcToken parent : parents )
     {
@@ -141,22 +142,22 @@ public class BacktrackTokenVisitor implements TokenVisitor
       ArcToken backtrackArcToken =
         engine.getFactory().newArcToken( token.getProcess(),
                                          parent.getArc(),
-                                         ExecutionType.Backward,
+                                         backtrackParent ? ExecutionType.Backward : ExecutionType.UTurn,
                                          backtrackToken );
 
       backtrackToken.getChildTokens().add( backtrackArcToken );
 
-      backtrackArcToken.markProcessed( engine );
-
-      if ( backtrackParent )
-      {
-        backtrackArcToken.markBacktracked( engine );
-      }
       arcTokenMap.put( parent, backtrackArcToken );
 
       if ( backtrackParent )
       {
+        backtrackArcToken.markBacktracked( engine );
         queue.add( parent.getParentToken() );
+        backtrackArcToken.markProcessed( engine );
+      }
+      else
+      {
+        token.getProcess().enqueueArcTokenForExecution( backtrackArcToken );
       }
     }
 

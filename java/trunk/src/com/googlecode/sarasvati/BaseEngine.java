@@ -64,7 +64,6 @@ public abstract class BaseEngine implements Engine
       for ( Node startNode : process.getGraph().getStartNodes() )
       {
         NodeToken startToken = getFactory().newNodeToken( process, startNode,
-                                                          ExecutionType.Forward,
                                                           new ArrayList<ArcToken>(0) );
         process.addNodeToken( startToken );
         executeNode( process, startToken );
@@ -148,9 +147,7 @@ public abstract class BaseEngine implements Engine
 
   private void completeExecuteArc (GraphProcess process, Node targetNode, ArcToken ... tokens)
   {
-    NodeToken nodeToken = getFactory().newNodeToken( process, targetNode,
-                                                     ExecutionType.Forward,
-                                                     Arrays.asList( tokens ) );
+    NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, Arrays.asList( tokens ) );
     process.addNodeToken( nodeToken );
     fireEvent( NodeTokenEvent.newCreatedEvent( this, nodeToken ) );
 
@@ -329,6 +326,7 @@ public abstract class BaseEngine implements Engine
     TokenTraversals.breadthFirstTraversal( token, visitor );
     NodeToken resultToken = visitor.backtrack();
     executeNode( resultToken.getProcess(), resultToken );
+    executeQueuedArcTokens( token.getProcess() );
   }
 
   @Override

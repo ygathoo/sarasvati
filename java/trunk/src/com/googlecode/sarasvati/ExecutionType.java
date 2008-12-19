@@ -24,7 +24,8 @@ public enum ExecutionType
   Forward,
   ForwardBacktracked,
   Backward,
-  BackwardBacktracked;
+  BackwardBacktracked,
+  UTurn;
 
   public ExecutionType getCorrespondingBacktracked ()
   {
@@ -33,7 +34,7 @@ public enum ExecutionType
       return ForwardBacktracked;
     }
 
-    if ( this == Backward )
+    if ( this == Backward || this == UTurn )
     {
       return BackwardBacktracked;
     }
