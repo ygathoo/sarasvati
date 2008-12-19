@@ -147,9 +147,12 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     return newRef;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
-  public HibNodeToken newNodeToken (GraphProcess process, Node node, ExecutionType executionType, List<ArcToken> parents)
+  public HibNodeToken newNodeToken( GraphProcess process,
+                                             Node node,
+                                             ExecutionType executionType,
+                                             List<ArcToken> parents,
+                                             NodeToken envSource )
   {
     // Here we setup the token attributes for the new node
     // If the node has no predecessors, it will have no attributes
@@ -157,14 +160,14 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     // it will inherit the attributes of that one node
     // Otherwise, the attributes of all predecessor nodes will get merged into
     // a single set.
-    List<HibArcToken> hibParents = (List<HibArcToken>)(List<?>)parents;
+    List<ArcToken> envParents = envSource == null ? parents : envSource.getParentTokens();
 
     HibNodeToken attrSetToken = null;
     Map<String,String> attrMap = new HashMap<String,String>();
     Map<String,Object> transientAttributes = new HashMap<String, Object>();
     boolean isMerge = false;
 
-    for ( HibArcToken arcToken : hibParents )
+    for ( ArcToken arcToken : envParents )
     {
       HibNodeToken parent = (HibNodeToken)arcToken.getParentToken();
 

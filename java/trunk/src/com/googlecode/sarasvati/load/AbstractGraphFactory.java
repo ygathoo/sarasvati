@@ -19,11 +19,16 @@
 package com.googlecode.sarasvati.load;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.NodeToken;
 
 public abstract class AbstractGraphFactory<G extends Graph> implements GraphFactory<G>
 {
@@ -58,5 +63,11 @@ public abstract class AbstractGraphFactory<G extends Graph> implements GraphFact
   public void addNodeFactory (String type, NodeFactory nodeFactory)
   {
     factoryMap.put( type, nodeFactory );
+  }
+
+  @Override
+  public NodeToken newNodeToken( GraphProcess process, Node node, List<ArcToken> parents )
+  {
+    return newNodeToken( process, node, ExecutionType.Forward, parents, null );
   }
 }

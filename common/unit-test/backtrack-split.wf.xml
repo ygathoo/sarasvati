@@ -5,19 +5,19 @@
  -->
 <process-definition name="backtrack-split" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node name="A" type="wait" isStart="true">
-    <arc to="B"/>
-    <arc to="C"/>
-    <arc to="D"/>
+  <node name="nodeA" type="wait" isStart="true">
+    <arc to="nodeB"/>
+    <arc to="nodeC"/>
+    <arc to="nodeD"/>
   </node>
 
-  <node name="B" type="wait">
+  <node name="nodeB" type="wait">
   </node>
 
-  <node name="C" type="wait">
+  <node name="nodeC" type="wait">
   </node>
 
-  <node name="D" type="wait">
+  <node name="nodeD" type="wait">
   </node>
 
 </process-definition>

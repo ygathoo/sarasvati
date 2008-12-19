@@ -112,11 +112,29 @@ public interface GraphFactory<G extends Graph>
    *
    * @param process The {@link GraphProcess} which the new {@link NodeToken} will belong to
    * @param node    The {@link Node} the new {@link NodeToken} is being placed on
-   * @param executionType The {@link ExecutionType} represented by this node token.
    * @param parents The list of ArcTokens which preceded this {@link NodeToken}
    * @return        A new {@link NodeToken}
    */
-  NodeToken newNodeToken (GraphProcess process, Node node, ExecutionType executionType, List<ArcToken> parents);
+  NodeToken newNodeToken (GraphProcess process, Node node, List<ArcToken> parents);
+
+  /**
+   * Generates a new {@link NodeToken} for the given {@link GraphProcess}, pointing
+   * to the given {@link Node}.
+   *
+   * @param process The {@link GraphProcess} which the new {@link NodeToken} will belong to
+   * @param node    The {@link Node} the new {@link NodeToken} is being placed on
+   * @param executionType The {@link ExecutionType} represented by this node token.
+   * @param parents The list of ArcTokens which preceded this {@link NodeToken}
+   * @param envToken The token who's parents the new token should take its environment from.
+   *                 This means the new token will have the same starting environment as
+   *                 the passed in token.
+   * @return        A new {@link NodeToken}
+   */
+  NodeToken newNodeToken (GraphProcess process,
+                          Node node,
+                          ExecutionType executionType,
+                          List<ArcToken> parents,
+                          NodeToken envToken);
 
   /**
    * Generates a new {@link ArcToken} for the given {@link GraphProcess}, pointing
