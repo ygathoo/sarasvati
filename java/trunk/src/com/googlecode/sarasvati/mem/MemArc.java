@@ -30,7 +30,6 @@ public class MemArc implements Arc
 
   public MemArc (String name, Node startNode, Node endNode)
   {
-    super();
     this.name = name;
     this.startNode = startNode;
     this.endNode = endNode;
@@ -52,5 +51,11 @@ public class MemArc implements Arc
   public Node getStartNode ()
   {
     return startNode;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return "[MemArcToken start=" + startNode.getName() + " end=" + endNode.getName() + " name=" + name + "]";
   }
 }

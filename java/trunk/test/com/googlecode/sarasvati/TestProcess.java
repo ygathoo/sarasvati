@@ -5,9 +5,11 @@ import java.io.IOException;
 import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import junit.framework.Assert;
@@ -44,13 +46,22 @@ public class TestProcess
 {
   public static void validate (GraphProcess p, String state)
   {
+    TestProcess testProcess = null;
     try
     {
-      new TestProcess( p.getGraph(), state ).compare( p );
+      testProcess = new TestProcess( p.getGraph(), state );
+      testProcess.compare( p );
     }
     catch( IOException ioe )
     {
       throw new RuntimeException( ioe );
+    }
+    finally
+    {
+      if ( testProcess != null )
+      {
+        testProcess.dumpToStandardOut();
+      }
     }
   }
 
@@ -62,7 +73,6 @@ public class TestProcess
     this.graph = graph;
 
     BufferedReader reader = new BufferedReader( new StringReader( spec ) );
-
 
     Map<String, TestNodeToken> nodeTokens = new HashMap<String, TestNodeToken>();
     Map<String, List<TestArcToken>> arcTokens = new HashMap<String, List<TestArcToken>>();
@@ -335,9 +345,13 @@ public class TestProcess
         }
         else
         {
+          boolean backwards = arcToken.getExecutionType() == ExecutionType.Backward ||
+                              arcToken.getExecutionType() == ExecutionType.BackwardBacktracked;
+
+          Node endNode = backwards ? arcToken.getArc().getStartNode() : arcToken.getArc().getEndNode();
           for ( TestArcToken testArcToken : testNodeToken.getChildren() )
           {
-            if ( !testArcToken.isComplete() && arcToken.getArc().getEndNode().equals( testArcToken.getChildNode() ) )
+            if ( !testArcToken.isComplete() && endNode.equals( testArcToken.getChildNode() ) )
             {
               testArcToken.setToken( arcToken );
               found = true;
@@ -372,6 +386,39 @@ public class TestProcess
         if ( testArcToken.getChildToken() != null && !testArcToken.getChildToken().isValidated() )
         {
           queue.add( testArcToken.getChildToken() );
+        }
+      }
+    }
+  }
+
+  public void dumpToStandardOut ()
+  {
+    System.out.println( "\nTesProcess: " );
+    Set<TestNodeToken> p = new HashSet<TestNodeToken>();
+
+    LinkedList<TestNodeToken> queue = new LinkedList<TestNodeToken>();
+    queue.addAll( startTestTokens );
+
+    while ( !queue.isEmpty() )
+    {
+      TestNodeToken token = queue.removeFirst();
+      System.out.println( "TestToken" +
+                          " testId=" + token.getId() +
+                          " node=" + token.getNode().getName() +
+                          " testComplete=" + token.isComplete() +
+                          " testExecutionType=" + token.getExecutionType() +
+                          ( token.getToken() == null ?
+                              " token=null" :
+                              " tokenId=" + token.getToken().getId() +
+                              " complete=" + token.getToken().isComplete() +
+                              " executionType=" + token.getToken().getExecutionType() ) );
+
+      for ( TestArcToken child : token.getChildren() )
+      {
+        if ( child.getChildToken() != null && !p.contains( child.getChildToken() ) )
+        {
+          p.add( child.getChildToken() );
+          queue.add( child.getChildToken() );
         }
       }
     }

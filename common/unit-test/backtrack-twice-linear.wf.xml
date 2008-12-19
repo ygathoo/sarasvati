@@ -5,17 +5,17 @@
   It should then try to backtrack from C to B and
   then from B to A.
 -->
-<process-definition name="backtrack-linear" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition name="backtrack-twice-linear" xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node name="A" type="wait" isStart="true">
-    <arc to="B"/>
+  <node name="nodeA" type="wait" isStart="true">
+    <arc to="nodeB"/>
   </node>
 
-  <node name="B" type="wait">
-    <arc to ="C"/>
+  <node name="nodeB" type="wait">
+    <arc to ="nodeC"/>
   </node>
 
-  <node name="C" type="wait">
+  <node name="nodeC" type="wait">
   </node>
 
 </process-definition>
