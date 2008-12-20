@@ -169,8 +169,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     while ( true )
     {
       List<ArcToken> parents = token.getParentTokens();
-      if ( parents.isEmpty() ||
-           !parents.get( 0 ).getExecutionType().isBacktracked() )
+      if ( parents.isEmpty() || !parents.get( 0 ).getExecutionType().isBacktracked() )
       {
         return parents;
       }
