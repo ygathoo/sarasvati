@@ -136,7 +136,7 @@ guardResult returns [GuardResponse value]
 STRING   :  '"' ( '\\\"' | ~( '"' ) )* '"'
          ;
 
-ID       :  LETTER ( LETTER | DIGIT | '.' )*
+ID       :  LETTER ( LETTER | DIGIT | '.' | '_' )*
          ;
 
 NUMBER   :  '-'? DIGIT+
