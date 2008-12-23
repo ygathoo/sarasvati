@@ -21,6 +21,11 @@ package com.googlecode.sarasvati.visitor;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.NodeToken;
 
+/**
+ * Class which provides default implementations in {@link TokenVisitor}.
+ *
+ * @author Paul Lorenz
+ */
 public class TokenVisitorAdaptor implements TokenVisitor
 {
   @Override
