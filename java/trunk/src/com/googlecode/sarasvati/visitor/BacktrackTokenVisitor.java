@@ -25,6 +25,8 @@ public class BacktrackTokenVisitor implements TokenVisitor
   protected Set<NodeToken> visited = new HashSet<NodeToken>();
   protected Map<ArcToken,ArcToken> arcTokenMap = new HashMap<ArcToken, ArcToken>();
 
+  protected LinkedList<ArcToken> backtrackQueue = new LinkedList<ArcToken>();
+  
   public BacktrackTokenVisitor (Engine engine, NodeToken destinationToken)
   {
     this.engine = engine;
@@ -62,7 +64,6 @@ public class BacktrackTokenVisitor implements TokenVisitor
   {
     return false;
   }
-
 
   private void backtrackLeafArcTokens ()
   {
