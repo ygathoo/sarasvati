@@ -56,6 +56,13 @@ public class BacktrackTokenVisitor implements TokenVisitor
       arcTokenLeaves.add( token );
     }
   }
+  
+  @Override
+  public boolean follow (ArcToken child)
+  {
+    return false;
+  }
+
 
   private void backtrackLeafArcTokens ()
   {
