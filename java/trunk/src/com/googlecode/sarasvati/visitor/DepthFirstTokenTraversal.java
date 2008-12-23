@@ -26,7 +26,7 @@ import java.util.Set;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.NodeToken;
 
-public class BreadthFirstTokenTraversal implements TokenTraversal
+public class DepthFirstTokenTraversal implements TokenTraversal
 {
   protected LinkedList<NodeToken> nodeTokenQueue = new LinkedList<NodeToken>();
   protected LinkedList<ArcToken> arcTokenQueue = new LinkedList<ArcToken>();
@@ -51,14 +51,14 @@ public class BreadthFirstTokenTraversal implements TokenTraversal
   {
     while ( !nodeTokenQueue.isEmpty() || !arcTokenQueue.isEmpty() )
     {
-      while ( !nodeTokenQueue.isEmpty() )
+      if ( !nodeTokenQueue.isEmpty() )
       {
         NodeToken token = nodeTokenQueue.removeFirst();
         token.accept( visitor );
-        arcTokenQueue.addAll( token.getChildTokens() );
+        arcTokenQueue.addAll( 0, token.getChildTokens() );
       }
 
-      while ( !arcTokenQueue.isEmpty() )
+      if ( !arcTokenQueue.isEmpty() )
       {
         ArcToken token = arcTokenQueue.removeFirst();
 
@@ -75,7 +75,7 @@ public class BreadthFirstTokenTraversal implements TokenTraversal
   {
     if ( token != null && !nodeTokens.contains( token.getId() ) )
     {
-      nodeTokenQueue.add( token );
+      nodeTokenQueue.add( 0, token );
       nodeTokens.add( token.getId() );
     }
   }

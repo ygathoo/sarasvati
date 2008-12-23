@@ -16,33 +16,35 @@
 
     Copyright 2008 Paul Lorenz
 */
+package com.googlecode.sarasvati;
 
-package com.googlecode.sarasvati.visitor;
+import java.io.File;
 
-import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.NodeToken;
+import org.junit.Before;
 
-public interface TokenVisitor
+import com.googlecode.sarasvati.load.GraphLoader;
+import com.googlecode.sarasvati.mem.MemEngine;
+import com.googlecode.sarasvati.mem.MemGraph;
+
+public class ExecutionTest
 {
-  /**
-   * Visits the given {@link NodeToken}.
-   *
-   * @param token The {@link NodeToken} being visited.
-   */
-  void visit (NodeToken token);
+  protected MemEngine engine;
 
-  /**
-   * Visits the given {@link ArcToken}.
-   *
-   * @param token The {@link ArcToken} being visited.
-   */
-  void visit (ArcToken token);
+  @Before
+  public void setup ()
+  {
+    engine = new MemEngine();
+  }
 
-  /**
-   * Returns true if the arc token should be followed.
-   *
-   * @param child The child arc token in question
-   * @return True if the arc token should be followed, false otherwise
-   */
-  boolean follow (ArcToken child);
+  protected Graph ensureLoaded (String name) throws Exception
+  {
+    File basePath = new File( "/home/paul/workspace/wf-common/unit-test/" );
+    GraphLoader<MemGraph> loader = engine.getLoader();
+
+    if ( !loader.isLoaded( name ) )
+    {
+      loader.load( new File( basePath, name + ".wf.xml" ) );
+    }
+    return engine.getRepository().getLatestGraph( name );
+  }
 }

@@ -16,33 +16,26 @@
 
     Copyright 2008 Paul Lorenz
 */
-
 package com.googlecode.sarasvati.visitor;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.NodeToken;
 
-public interface TokenVisitor
+public class TokenVisitorAdaptor implements TokenVisitor
 {
-  /**
-   * Visits the given {@link NodeToken}.
-   *
-   * @param token The {@link NodeToken} being visited.
-   */
-  void visit (NodeToken token);
+  @Override
+  public boolean follow (ArcToken child)
+  {
+    return true;
+  }
 
-  /**
-   * Visits the given {@link ArcToken}.
-   *
-   * @param token The {@link ArcToken} being visited.
-   */
-  void visit (ArcToken token);
+  @Override
+  public void visit( NodeToken token )
+  {
+  }
 
-  /**
-   * Returns true if the arc token should be followed.
-   *
-   * @param child The child arc token in question
-   * @return True if the arc token should be followed, false otherwise
-   */
-  boolean follow (ArcToken child);
+  @Override
+  public void visit( ArcToken token )
+  {
+  }
 }

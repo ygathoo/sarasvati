@@ -33,4 +33,14 @@ public class TokenTraversals
   {
     new BreadthFirstTokenTraversal().traverse( token, visitor );
   }
+
+  public static void depthFirstTraversal (NodeToken token, TokenVisitor visitor)
+  {
+    new DepthFirstTokenTraversal().traverse( token, visitor );
+  }
+
+  public static void depthFirstTraversal (ArcToken token, TokenVisitor visitor)
+  {
+    new DepthFirstTokenTraversal().traverse( token, visitor );
+  }
 }
