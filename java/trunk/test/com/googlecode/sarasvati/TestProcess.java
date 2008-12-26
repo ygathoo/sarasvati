@@ -18,7 +18,6 @@
 */
 package com.googlecode.sarasvati;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -68,10 +67,6 @@ public class TestProcess
       testProcess = new TestProcess( p.getGraph(), state );
       testProcess.compare( p );
     }
-    catch( IOException ioe )
-    {
-      throw new RuntimeException( ioe );
-    }
     finally
     {
       if ( testProcess != null )
@@ -84,7 +79,7 @@ public class TestProcess
   protected List<TestNodeToken> startTestTokens = new LinkedList<TestNodeToken>();
   protected Graph graph;
 
-  public TestProcess (Graph graph, String spec) throws IOException
+  public TestProcess (Graph graph, String spec)
   {
     this.graph = graph;
 
@@ -334,6 +329,8 @@ public class TestProcess
     {
       TestNodeToken testNodeToken = queue.removeFirst();
       NodeToken nodeToken = testNodeToken.getToken();
+
+      Assert.assertTrue( "Node token should be tracked by process", nodeToken.getProcess().getNodeTokens().contains( nodeToken ) );
 
       for ( ArcToken arcToken : nodeToken.getChildTokens() )
       {

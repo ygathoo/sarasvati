@@ -81,13 +81,82 @@ public class BacktrackJoinTest extends ExecutionTest
     state =
       "[1 nodeA C FB]" +
       "  (C FB 3)" +
-      "[2 nodeB C F]" +
+      "[2 nodeB C FB]" +
       "  (C FB 3)" +
       "[3 nodeC C FB]" +
       "  (C BB 4)" +
       "  (C BB 5)" +
       "[4 nodeA I F]" +
       "[5 nodeB I F]";
+    TestProcess.validate( p, state );
+  }
+
+  @Test public void testJoin2() throws Exception
+  {
+    Graph g = ensureLoaded( "backtrack-join" );
+    GraphProcess p = engine.startProcess( g );
+
+    Iterator<? extends NodeToken> iter = p.getActiveNodeTokens().iterator();
+    NodeToken tokenA = iter.next();
+    NodeToken tokenB = iter.next();
+
+    if ( "nodeB".equals( tokenA.getNode().getName() ) )
+    {
+      NodeToken tmp = tokenA;
+      tokenA = tokenB;
+      tokenB = tmp;
+    }
+
+    String state =
+      "[1 nodeA I F]" +
+      "[2 nodeB I F]";
+    TestProcess.validate( p, state );
+
+    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (I F nodeC)" +
+      "[2 nodeB I F]";
+    TestProcess.validate( p, state );
+
+    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 3)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "[3 nodeC I F]";
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenA );
+
+    state =
+      "[1 nodeA C FB]" +
+      "  (C FB 3)" +
+      "[2 nodeB C F]" +
+      "  (C FB 3)" +
+      "[3 nodeC C FB]" +
+      "  (C BB 4)" +
+      "  (I U nodeC)" +
+      "[4 nodeA I F]";
+    TestProcess.validate( p, state );
+
+    tokenA = p.getActiveNodeTokens().iterator().next();
+    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C FB]" +
+      "  (C FB 3)" +
+      "[2 nodeB C F]" +
+      "  (C FB 3)" +
+      "[3 nodeC C FB]" +
+      "  (C BB 4)" +
+      "  (C U 5)" +
+      "[4 nodeA C F]" +
+      "  (C F 5)" +
+      "[5 nodeC I F]";
     TestProcess.validate( p, state );
   }
 }

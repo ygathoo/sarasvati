@@ -37,10 +37,12 @@ public class TokenVisitorAdaptor implements TokenVisitor
   @Override
   public void visit( NodeToken token )
   {
+    // does nothing by default
   }
 
   @Override
   public void visit( ArcToken token )
   {
+    // does nothing by default
   }
 }
