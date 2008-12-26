@@ -147,7 +147,6 @@ public class DOMToObjectLoadHelper
     return PropertyMutatorRegistry.getMutator( attr, obj, new BasePropertyMutator() );
   }
 
-  @SuppressWarnings("null")
   public static void setValues (Object obj, Map<String, String> values) throws LoadException
   {
     for (Entry<String, String> entry : values.entrySet() )
