@@ -71,7 +71,7 @@ public class BacktrackJoinTest extends ExecutionTest
       "[2 nodeB C F]" +
       "  (C FB 3)" +
       "[3 nodeC C FB]" +
-      "  (C BB 4)" +
+      "  (C B 4)" +
       "  (I U nodeC)" +
       "[4 nodeA I F]";
     TestProcess.validate( p, state );
@@ -84,8 +84,8 @@ public class BacktrackJoinTest extends ExecutionTest
       "[2 nodeB C FB]" +
       "  (C FB 3)" +
       "[3 nodeC C FB]" +
-      "  (C BB 4)" +
-      "  (C BB 5)" +
+      "  (C B 4)" +
+      "  (C B 5)" +
       "[4 nodeA I F]" +
       "[5 nodeB I F]";
     TestProcess.validate( p, state );
@@ -138,7 +138,7 @@ public class BacktrackJoinTest extends ExecutionTest
       "[2 nodeB C F]" +
       "  (C FB 3)" +
       "[3 nodeC C FB]" +
-      "  (C BB 4)" +
+      "  (C B 4)" +
       "  (I U nodeC)" +
       "[4 nodeA I F]";
     TestProcess.validate( p, state );
@@ -152,11 +152,49 @@ public class BacktrackJoinTest extends ExecutionTest
       "[2 nodeB C F]" +
       "  (C FB 3)" +
       "[3 nodeC C FB]" +
-      "  (C BB 4)" +
+      "  (C B 4)" +
       "  (C U 5)" +
       "[4 nodeA C F]" +
       "  (C F 5)" +
       "[5 nodeC I F]";
     TestProcess.validate( p, state );
+
+    engine.backtrack( tokenA );
+
+    state =
+      "[1 nodeA C FB]" +
+      "  (C FB 3)" +
+      "[2 nodeB C F]" +
+      "  (C FB 3)" +
+      "[3 nodeC C FB]" +
+      "  (C B 4)" +
+      "  (C UB 5)" +
+      "[4 nodeA C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeC C FB]" +
+      "  (C B 6)" +
+      "  (I U nodeC)" +
+      "[6 nodeA I F]";
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenB );
+
+    state =
+      "[1 nodeA C FB]" +
+      "  (C FB 3)" +
+      "[2 nodeB C FB]" +
+      "  (C FB 3)" +
+      "[3 nodeC C FB]" +
+      "  (C B 4)" +
+      "  (C UB 5)" +
+      "[4 nodeA C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeC C FB]" +
+      "  (C B 6)" +
+      "  (C B 7)" +
+      "[6 nodeA I F]" +
+      "[7 nodeB I F]";
+    TestProcess.validate( p, state );
+
   }
 }

@@ -20,6 +20,8 @@ package com.googlecode.sarasvati;
 
 import java.io.File;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 
 import com.googlecode.sarasvati.load.GraphLoader;
@@ -46,5 +48,19 @@ public class ExecutionTest
       loader.load( new File( basePath, name + ".wf.xml" ) );
     }
     return engine.getRepository().getLatestGraph( name );
+  }
+
+  public NodeToken getActiveToken (GraphProcess p, String nodeName)
+  {
+    for ( NodeToken token : p.getActiveNodeTokens() )
+    {
+      if ( nodeName.equals( token.getNode().getName() ) )
+      {
+        return token;
+      }
+    }
+
+    Assert.assertTrue( "No node token found on node: " + nodeName, false );
+    return null;
   }
 }

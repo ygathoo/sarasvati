@@ -49,6 +49,19 @@ public class TaskNode extends MemNode
   }
 
   @Override
+  public void backtrack (NodeToken token)
+  {
+    for (Task t : TaskList.getTasks() )
+    {
+      if ( t.getNodeToken().equals( token ) )
+      {
+        t.setState( TaskState.Cancelled );
+        return;
+      }
+    }
+  }
+
+  @Override
   public void execute (Engine engine, NodeToken token)
   {
     Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );

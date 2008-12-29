@@ -257,7 +257,7 @@ public class HibNodeToken implements NodeToken
   @Override
   public void markBacktracked (Engine engine)
   {
-    executionType = executionType.getCorrespondingBacktracked();
+    executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }
 
   @Override

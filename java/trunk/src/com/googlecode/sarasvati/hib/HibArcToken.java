@@ -203,7 +203,7 @@ public class HibArcToken implements ArcToken
   @Override
   public void markBacktracked (Engine engine)
   {
-    executionType = executionType.getCorrespondingBacktracked();
+    executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }
 
   @Override

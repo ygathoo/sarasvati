@@ -23,20 +23,20 @@ public enum ExecutionType
 {
   Forward,
   ForwardBacktracked,
-  Backward,
-  BackwardBacktracked,
-  UTurn;
+  Backtracked,
+  UTurn,
+  UTurnBacktracked;
 
-  public ExecutionType getCorrespondingBacktracked ()
+  public ExecutionType getCorrespondingBacktracked (boolean isComplete)
   {
     if ( this == Forward )
     {
       return ForwardBacktracked;
     }
 
-    if ( this == Backward || this == UTurn )
+    if ( this == UTurn )
     {
-      return BackwardBacktracked;
+      return isComplete ? UTurnBacktracked : Backtracked;
     }
 
     return this;
@@ -45,6 +45,7 @@ public enum ExecutionType
   public boolean isBacktracked ()
   {
     return this == ForwardBacktracked ||
-           this == BackwardBacktracked;
+           this == Backtracked ||
+           this == UTurnBacktracked;
   }
 }

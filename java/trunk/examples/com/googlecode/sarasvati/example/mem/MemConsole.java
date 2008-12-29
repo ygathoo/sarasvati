@@ -107,7 +107,8 @@ public class MemConsole
         int count = 0;
         for (Task task : tasks )
         {
-          System.out.println( (++count) + ": " + task.getName() + " - " + task.getState() );
+          System.out.println( (++count) + ": " + task.getName() + " - " + task.getState() +
+                              (task.getNodeToken().getExecutionType().isBacktracked() ? " (backtracked)" : "" ));
         }
 
         System.out.print( "> " );
@@ -141,16 +142,25 @@ public class MemConsole
     System.out.println( "\tDescription : "  + t.getDescription() );
     System.out.println( "\tState       : "  + t.getState() );
 
-    if ( t.getState() != TaskState.Open )
+    boolean backtrackable = t.getNodeToken().isComplete() && !t.getNodeToken().getExecutionType().isBacktracked();
+
+    if ( t.getState() != TaskState.Open && !backtrackable )
     {
       return;
     }
 
-    System.out.println( "1. Complete" );
-
-    if ( t.isRejectable() )
+    if ( backtrackable )
     {
-      System.out.println( "2. Reject" );
+      System.out.println( "1. Backtrack" );
+    }
+    else
+    {
+      System.out.println( "1. Complete" );
+
+      if ( t.isRejectable() )
+      {
+        System.out.println( "2. Reject" );
+      }
     }
 
     System.out.println( "Anything else to cancel" );
@@ -163,9 +173,17 @@ public class MemConsole
       int line = Integer.parseInt( input );
       if ( line == 1 )
       {
-        System.out.println( "Completing task" );
-        t.setState( TaskState.Completed );
-        engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
+        if ( backtrackable )
+        {
+          System.out.println( "Backtracking to task" );
+          engine.backtrack( t.getNodeToken() );
+        }
+        else
+        {
+          System.out.println( "Completing task" );
+          t.setState( TaskState.Completed );
+          engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
+        }
       }
       else if ( line == 2 && t.isRejectable() )
       {
