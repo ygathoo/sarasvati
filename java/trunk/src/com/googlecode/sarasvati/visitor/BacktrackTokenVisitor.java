@@ -11,6 +11,7 @@ import java.util.Set;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
+import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.WorkflowException;
 
@@ -72,11 +73,11 @@ public class BacktrackTokenVisitor implements TokenVisitor
       }
     }
 
-    if ( token.getExecutionType() == ExecutionType.BackwardBacktracked ||
+    if ( token.getExecutionType() == ExecutionType.Backtracked ||
          token.getExecutionType() == ExecutionType.UTurn )
     {
       ArcToken related = backtrackStack.removeLast();
-      if ( backtrackStack.isEmpty() && token.getExecutionType() == ExecutionType.BackwardBacktracked )
+      if ( backtrackStack.isEmpty() && token.getExecutionType() == ExecutionType.Backtracked )
       {
         parentMap.put( token.getChildToken(), related.getParentToken() );
       }
@@ -86,8 +87,9 @@ public class BacktrackTokenVisitor implements TokenVisitor
   @Override
   public boolean follow (ArcToken child)
   {
-    if ( child.getExecutionType() == ExecutionType.BackwardBacktracked ||
-         child.getExecutionType() == ExecutionType.UTurn )
+    if ( child.getExecutionType() == ExecutionType.Backtracked ||
+         child.getExecutionType() == ExecutionType.UTurn ||
+         child.getExecutionType() == ExecutionType.UTurnBacktracked )
     {
       if ( backtrackStack.isEmpty() )
       {
@@ -126,6 +128,8 @@ public class BacktrackTokenVisitor implements TokenVisitor
         continue;
       }
 
+      token.getNode().backtrack( token );
+
       boolean isDestination = token == destinationToken;
 
       if ( isDestination )
@@ -151,6 +155,10 @@ public class BacktrackTokenVisitor implements TokenVisitor
     for ( ArcToken childToken : token.getChildTokens() )
     {
       ArcToken parent = arcTokenMap.get( childToken );
+      if ( parent == null )
+      {
+        throw new RuntimeException( "No backtrack found for: " + childToken );
+      }
       parents.add( parent );
     }
 
@@ -189,7 +197,8 @@ public class BacktrackTokenVisitor implements TokenVisitor
       }
       else
       {
-        backtrackToken = backtrackCompletedToken( token, ExecutionType.Backward );
+        backtrackToken = backtrackCompletedToken( token, ExecutionType.Backtracked );
+        backtrackToken.recordGuardAction( engine, GuardAction.SkipNode );
       }
     }
 
@@ -201,7 +210,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
       ArcToken backtrackArcToken =
         engine.getFactory().newArcToken( token.getProcess(),
                                          parent.getArc(),
-                                         backtrackParent ? ExecutionType.Backward : ExecutionType.UTurn,
+                                         backtrackParent ? ExecutionType.Backtracked : ExecutionType.UTurn,
                                          backtrackToken );
 
       backtrackToken.getChildTokens().add( backtrackArcToken );

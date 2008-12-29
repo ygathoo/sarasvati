@@ -53,11 +53,11 @@ public class BacktrackSplitTest extends ExecutionTest
       "  (C FB 3)" +
       "  (C FB 4)" +
       "[2 nodeB C FB]" +
-      "  (C BB 5)" +
+      "  (C B 5)" +
       "[3 nodeC C FB]" +
-      "  (C BB 5)" +
+      "  (C B 5)" +
       "[4 nodeD C FB]" +
-      "  (C BB 5)" +
+      "  (C B 5)" +
       "[5 nodeA I F]"
       ;
 
@@ -71,11 +71,11 @@ public class BacktrackSplitTest extends ExecutionTest
       "  (C FB 3)" +
       "  (C FB 4)" +
       "[2 nodeB C FB]" +
-      "  (C BB 5)" +
+      "  (C B 5)" +
       "[3 nodeC C FB]" +
-      "  (C BB 5)" +
+      "  (C B 5)" +
       "[4 nodeD C FB]" +
-      "  (C BB 5)" +
+      "  (C B 5)" +
       "[5 nodeA C F]" +
       "  (C F 6)" +
       "  (C F 7)" +
@@ -95,21 +95,21 @@ public class BacktrackSplitTest extends ExecutionTest
       "  (C FB 3)" +
       "  (C FB 4)" +
       "[2 nodeB C FB]" +
-      "  (C BB 5)" +
+      "  (C B 5)" +
       "[3 nodeC C FB]" +
-      "  (C BB 5)" +
+      "  (C B 5)" +
       "[4 nodeD C FB]" +
-      "  (C BB 5)" +
+      "  (C B 5)" +
       "[5 nodeA C FB]" +
       "  (C FB 6)" +
       "  (C FB 7)" +
       "  (C FB 8)" +
       "[6 nodeB C FB]" +
-      "  (C BB 9)" +
+      "  (C B 9)" +
       "[7 nodeC C FB]" +
-      "  (C BB 9)" +
+      "  (C B 9)" +
       "[8 nodeD C FB]" +
-      "  (C BB 9)" +
+      "  (C B 9)" +
       "[9 nodeA I F]"
       ;
 

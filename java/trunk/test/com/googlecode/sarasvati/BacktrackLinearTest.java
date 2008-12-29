@@ -48,7 +48,7 @@ public class BacktrackLinearTest extends ExecutionTest
     state = "[1 nodeA C FB]" +
             "  (C FB 2)" +
             "[2 nodeB C FB]" +
-            "  (C BB 3)" +
+            "  (C B 3)" +
             "[3 nodeA I F]";
     TestProcess.validate( p, state );
 
@@ -60,7 +60,7 @@ public class BacktrackLinearTest extends ExecutionTest
     state = "[1 nodeA C FB]" +
             "  (C FB 2)" +
             "[2 nodeB C FB]" +
-            "  (C BB 3)" +
+            "  (C B 3)" +
             "[3 nodeA C F]" +
             "  (C F 4)" +
             "[4 nodeB I F]"
@@ -72,11 +72,11 @@ public class BacktrackLinearTest extends ExecutionTest
     state = "[1 nodeA C FB]" +
             "  (C FB 2)" +
             "[2 nodeB C FB]" +
-            "  (C BB 3)" +
+            "  (C B 3)" +
             "[3 nodeA C FB]" +
             "  (C FB 4)" +
             "[4 nodeB C FB]" +
-            "  (C BB 5)" +
+            "  (C B 5)" +
             "[5 nodeA I F]"
             ;
     TestProcess.validate( p, state );
@@ -120,7 +120,7 @@ public class BacktrackLinearTest extends ExecutionTest
             "[2 nodeB C FB]\n" +
             "  (C FB 3)\n" +
             "[3 nodeC C FB]\n" +
-            "  (C BB 4)\n" +
+            "  (C B 4)\n" +
             "[4 nodeB I F]\n";
 
     TestProcess.validate( p, state );
@@ -131,9 +131,9 @@ public class BacktrackLinearTest extends ExecutionTest
             "[2 nodeB C FB]\n" +
             "  (C FB 3)\n" +
             "[3 nodeC C FB]\n" +
-            "  (C BB 4)\n" +
+            "  (C B 4)\n" +
             "[4 nodeB C FB]\n" +
-            "  (C BB 5)\n" +
+            "  (C B 5)\n" +
             "[5 nodeA I F]\n";
 
     TestProcess.validate( p, state );

@@ -4,6 +4,7 @@ drop table if exists wf_process_attr cascade;
 drop table if exists wf_node_token_parent cascade;
 drop table if exists wf_arc_token cascade;
 drop table if exists wf_node_token cascade;
+drop table if exists wf_execution_type cascade;
 drop table if exists wf_arc cascade;
 drop table if exists wf_node_ref cascade;
 drop table if exists wf_node_script cascade;
@@ -155,8 +156,9 @@ create table wf_execution_type
 
 insert into wf_execution_type values ( 0, 'Forward' );
 insert into wf_execution_type values ( 1, 'Forward/Backtracked' );
-insert into wf_execution_type values ( 2, 'Backward' );
-insert into wf_execution_type values ( 3, 'Backward/Backtracked' );
+insert into wf_execution_type values ( 2, 'Backtracked' );
+insert into wf_execution_type values ( 3, 'U-Turn' );
+insert into wf_execution_type values ( 4, 'U-Turn/Backtracked' );
 
 create table wf_node_token
 (

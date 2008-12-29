@@ -22,5 +22,6 @@ public enum TaskState
 {
   Open,
   Completed,
-  Rejected
+  Rejected,
+  Cancelled
 }

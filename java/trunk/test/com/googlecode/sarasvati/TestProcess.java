@@ -360,8 +360,7 @@ public class TestProcess
         }
         else
         {
-          boolean backwards = arcToken.getExecutionType() == ExecutionType.Backward ||
-                              arcToken.getExecutionType() == ExecutionType.BackwardBacktracked;
+          boolean backwards = arcToken.getExecutionType() == ExecutionType.Backtracked;
 
           Node endNode = backwards ? arcToken.getArc().getStartNode() : arcToken.getArc().getEndNode();
           for ( TestArcToken testArcToken : testNodeToken.getChildren() )
@@ -445,8 +444,8 @@ public class TestProcess
   {
     executionTypeMap.put( "F", ExecutionType.Forward );
     executionTypeMap.put( "FB", ExecutionType.ForwardBacktracked );
-    executionTypeMap.put( "B", ExecutionType.Backward);
-    executionTypeMap.put( "BB", ExecutionType.BackwardBacktracked );
+    executionTypeMap.put( "B", ExecutionType.Backtracked );
     executionTypeMap.put( "U", ExecutionType.UTurn );
+    executionTypeMap.put( "UB", ExecutionType.UTurnBacktracked );
   }
 }
