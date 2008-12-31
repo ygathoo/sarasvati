@@ -351,10 +351,10 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     engine.backtrack( tokenA );
 
     state =
-      "[1 nodeA CB F]" +
+      "[1 nodeA C FB]" +
       "  (C FB 2)" +
       "  (C FB 3)" +
-      "[2 nodeB C F]" +
+      "[2 nodeB C FB]" +
       "  (C FB 4)" +
       "[3 nodeC C FB]" +
       "  (C FB 4)" +

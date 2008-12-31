@@ -118,6 +118,6 @@ public class MemArcToken implements ArcToken
   @Override
   public String toString ()
   {
-    return "[MemArcToken execType=" + executionType + " arc=" + getArc() + "]";
+    return "[MemArcToken execType=" + executionType + " arc=" + getArc() + " hash=" + hashCode() + "]";
   }
 }

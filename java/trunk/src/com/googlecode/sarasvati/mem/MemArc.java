@@ -56,6 +56,6 @@ public class MemArc implements Arc
   @Override
   public String toString ()
   {
-    return "[MemArcToken start=" + startNode.getName() + " end=" + endNode.getName() + " name=" + name + "]";
+    return "[MemArc start=" + startNode.getName() + " end=" + endNode.getName() + " name=" + name + "]";
   }
 }
