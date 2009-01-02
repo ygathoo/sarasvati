@@ -65,11 +65,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     {
       if ( token.getExecutionType() == ExecutionType.UTurn )
       {
-        ArcToken mirror = backtrackMirror.getMirror( token );
-        while ( mirror.getExecutionType() == ExecutionType.UTurnBacktracked )
-        {
-          mirror = backtrackMirror.getMirror( mirror );
-        }
+        ArcToken mirror = backtrackMirror.getLastMirror( token );
         arcTokenMap.put( mirror, token );
         queue.add( mirror.getParentToken() );
       }
@@ -79,8 +75,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
       }
     }
 
-    if ( token.getExecutionType() == ExecutionType.Backtracked ||
-         token.getExecutionType() == ExecutionType.UTurn )
+    if (token.getExecutionType() == ExecutionType.Backtracked)
     {
       ArcToken mirror = backtrackMirror.getMirror( token );
       parentMap.put( token.getChildToken(), mirror.getParentToken() );
@@ -124,7 +119,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
       {
         continue;
       }
-
+      System.out.println( "Backtracking: " + token );
       token.getNode().backtrack( token );
 
       boolean isDestination = token == destinationToken;
@@ -202,8 +197,13 @@ public class BacktrackTokenVisitor implements TokenVisitor
     for ( ArcToken parent : getParents( token ) )
     {
       boolean backtrackParent = visited.contains( parent.getParentToken() );
+      System.out.println( "Backtracking parent arc token: " + parent +
+                          " which has parent: " + parent.getParentToken() +
+                          " backtrackParent? " + backtrackParent );
+
 
       parent.markBacktracked( engine );
+
       ArcToken backtrackArcToken =
         engine.getFactory().newArcToken( token.getProcess(),
                                          parent.getArc(),
@@ -212,11 +212,22 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
       backtrackToken.getChildTokens().add( backtrackArcToken );
 
+
       arcTokenMap.put( parent, backtrackArcToken );
 
       if ( backtrackParent )
       {
-        queue.add( parent.getParentToken() );
+        if ( parent.getExecutionType() == ExecutionType.UTurn )
+        {
+          ArcToken mirror = backtrackMirror.getLastMirror( parent );
+          arcTokenMap.put( mirror, backtrackArcToken );
+          System.out.println( "Parent: " + mirror.getParentToken() );
+          queue.add( mirror.getParentToken() );
+        }
+        else
+        {
+          queue.add( parent.getParentToken() );
+        }
         backtrackArcToken.markProcessed( engine );
       }
       else
