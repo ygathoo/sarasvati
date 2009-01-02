@@ -1,18 +1,21 @@
 package com.googlecode.sarasvati.visitor;
 
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ExecutionType;
 
 public class BacktrackMirrors
 {
-  protected Map<ArcToken, ArcToken> map = new HashMap<ArcToken, ArcToken> ();
+  protected Set<ArcToken>           validParents = new HashSet<ArcToken>();
+  protected Map<ArcToken, ArcToken> map          = new HashMap<ArcToken, ArcToken> ();
 
   public void add (ArcToken token)
   {
-    map.put( token, null );
+    validParents.add( token );
   }
 
   public boolean hasMirror (ArcToken token)
@@ -25,14 +28,14 @@ public class BacktrackMirrors
     ArcToken result = map.get( token );
     if ( result == null )
     {
-      findBacktrackMirror( token );
+      findMirror( token );
       result = map.get( token );
     }
 
     return result;
   }
 
-  public void findBacktrackMirror (ArcToken token)
+  public void findMirror (ArcToken token)
   {
     for ( ArcToken parent : token.getParentToken().getParentTokens() )
     {
@@ -68,7 +71,7 @@ public class BacktrackMirrors
     return ( candidate.getExecutionType() == ExecutionType.ForwardBacktracked ||
              candidate.getExecutionType() == ExecutionType.UTurnBacktracked ) &&
            token.getArc().equals( candidate.getArc() ) &&
-           map.containsKey( candidate );
+           validParents.contains( candidate );
   }
 
   public ArcToken getLastMirror (ArcToken token)
