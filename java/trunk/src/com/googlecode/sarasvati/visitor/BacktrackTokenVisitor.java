@@ -212,31 +212,34 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
       backtrackToken.getChildTokens().add( backtrackArcToken );
 
-
-      arcTokenMap.put( parent, backtrackArcToken );
-
-      if ( backtrackParent )
+      if ( backtrackParent && parent.getExecutionType() == ExecutionType.UTurnBacktracked )
       {
-        if ( parent.getExecutionType() == ExecutionType.UTurn )
-        {
-          ArcToken mirror = backtrackMirror.getLastMirror( parent );
-          arcTokenMap.put( mirror, backtrackArcToken );
-          System.out.println( "Parent: " + mirror.getParentToken() );
-          queue.add( mirror.getParentToken() );
-        }
-        else
-        {
-          queue.add( parent.getParentToken() );
-        }
-        backtrackArcToken.markProcessed( engine );
+        ArcToken mirror = backtrackMirror.getLastMirror( parent );
+        arcTokenMap.put( mirror, backtrackArcToken );
+        finishArcTokenBacktrack( backtrackArcToken, mirror );
       }
       else
       {
-        token.getProcess().enqueueArcTokenForExecution( backtrackArcToken );
+        finishArcTokenBacktrack( backtrackArcToken, parent );
       }
     }
 
     return backtrackToken;
+  }
+
+  protected void finishArcTokenBacktrack (ArcToken backtrackArcToken, ArcToken parent)
+  {
+    arcTokenMap.put( parent, backtrackArcToken );
+    NodeToken nodeTokenParent = parent.getParentToken();
+    if ( visited.contains( nodeTokenParent ) )
+    {
+      queue.add( nodeTokenParent );
+      backtrackArcToken.markProcessed( engine );
+    }
+    else
+    {
+      parent.getProcess().enqueueArcTokenForExecution( backtrackArcToken );
+    }
   }
 
   private List<ArcToken> getParents (NodeToken token)

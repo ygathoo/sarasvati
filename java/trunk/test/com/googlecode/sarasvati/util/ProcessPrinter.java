@@ -8,6 +8,7 @@ public class ProcessPrinter
 {
   public static void print (GraphProcess p)
   {
+    System.out.println( "Process: " + p.getGraph().getName() );
     for (NodeToken t : p.getNodeTokens() )
     {
       System.out.println( t );
@@ -16,5 +17,6 @@ public class ProcessPrinter
         System.out.println( "\t" + a );
       }
     }
+    System.out.println();
   }
 }
