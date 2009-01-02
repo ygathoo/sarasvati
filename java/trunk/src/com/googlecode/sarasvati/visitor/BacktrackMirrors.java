@@ -38,6 +38,7 @@ public class BacktrackMirrors
     {
       if ( isMirror( token, parent ) )
       {
+        System.out.println( token + " has mirror " + parent );
         map.put( token, parent );
         return;
       }
@@ -51,6 +52,7 @@ public class BacktrackMirrors
           {
             if ( isMirror( token, mirrorParent ) )
             {
+              System.out.println( token + " has mirror " + mirrorParent );
               map.put( token, mirrorParent );
               return;
             }
@@ -58,6 +60,7 @@ public class BacktrackMirrors
         }
       }
     }
+    System.out.println( "No mirror found for " + token );
   }
 
   private boolean isMirror (ArcToken token, ArcToken candidate)
@@ -66,5 +69,25 @@ public class BacktrackMirrors
              candidate.getExecutionType() == ExecutionType.UTurnBacktracked ) &&
            token.getArc().equals( candidate.getArc() ) &&
            map.containsKey( candidate );
+  }
+
+  public ArcToken getLastMirror (ArcToken token)
+  {
+    ArcToken result = map.get( token );
+
+    while ( result != null && result.getExecutionType() == ExecutionType.UTurnBacktracked )
+    {
+      ArcToken tmp = map.get( result );
+      if ( tmp != null )
+      {
+        result = tmp;
+      }
+      else
+      {
+        break;
+      }
+    }
+
+    return result;
   }
 }
