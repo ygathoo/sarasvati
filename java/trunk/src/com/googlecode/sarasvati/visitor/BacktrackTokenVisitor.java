@@ -124,7 +124,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
         continue;
       }
 
-      token.getNode().backtrack( token );
+      token.getNode().backtrack( engine, token );
 
       boolean isDestination = token == destinationToken;
 

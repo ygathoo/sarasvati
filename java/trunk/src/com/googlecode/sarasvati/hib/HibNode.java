@@ -164,7 +164,7 @@ public class HibNode implements Node
    * @see Node#backtrack(NodeToken)
    */
   @Override
-  public void backtrack (NodeToken token)
+  public void backtrack (Engine engine, NodeToken token)
   {
     // does nothing by default. Can be overridden by subclasses.
   }

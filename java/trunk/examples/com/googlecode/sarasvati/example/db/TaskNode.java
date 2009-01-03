@@ -66,6 +66,14 @@ public class TaskNode extends HibNode
     this.taskDesc = taskDesc;
   }
 
+  @Override
+  public void backtrack (Engine engine, NodeToken token)
+  {
+    HibEngine hibEngine = (HibEngine)engine;
+    Task task = TaskDAO.getTaskForToken( hibEngine.getSession(), token );
+    task.setState( (TaskState) hibEngine.getSession().load( TaskState.class, 1 ) );
+  }
+
   @SuppressWarnings("unchecked")
   @Override
   public <T> T getAdaptor (Class<T> clazz)
