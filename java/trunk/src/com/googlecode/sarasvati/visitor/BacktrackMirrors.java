@@ -42,14 +42,9 @@ public class BacktrackMirrors
     {
       if ( isMirror( token, parent ) )
       {
-        System.out.println( token + " has mirror " + parent );
         map.put( token, parent );
         tieToEndOfBacktrackChain( token );
         return;
-      }
-      else
-      {
-        System.out.println( token + " NOT PARENT " + parent );
       }
 
       if ( parent.getExecutionType() == ExecutionType.Backtracked )
@@ -61,7 +56,6 @@ public class BacktrackMirrors
           {
             if ( isMirror( token, mirrorParent ) )
             {
-              System.out.println( token + " has mirror " + mirrorParent );
               map.put( token, mirrorParent );
               tieToEndOfBacktrackChain( token );
               return;
@@ -70,7 +64,6 @@ public class BacktrackMirrors
         }
       }
     }
-    System.out.println( "No mirror found for " + token );
   }
 
   private void findForwardBacktrackedMirror (ArcToken token)
@@ -85,7 +78,6 @@ public class BacktrackMirrors
       if ( parent.getExecutionType() == ExecutionType.Backtracked &&
            token.getArc().equals( parent.getArc() ) )
       {
-        System.out.println( token + " has mirror " + parent );
         map.put( token, parent );
         tieToEndOfBacktrackChain( token );
         return;
