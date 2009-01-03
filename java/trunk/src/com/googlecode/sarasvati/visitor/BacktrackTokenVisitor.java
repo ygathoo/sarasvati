@@ -123,7 +123,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
       {
         continue;
       }
-      System.out.println( "Backtracking: " + token );
+
       token.getNode().backtrack( token );
 
       boolean isDestination = token == destinationToken;
@@ -168,6 +168,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
     for ( ArcToken parent : parents )
     {
+      token.getProcess().removeActiveArcToken( parent );
       parent.markBacktracked( engine );
       parent.markComplete( engine, backtrackToken );
     }
@@ -201,11 +202,8 @@ public class BacktrackTokenVisitor implements TokenVisitor
     for ( ArcToken parent : getParents( token ) )
     {
       boolean backtrackParent = visited.contains( parent.getParentToken() );
-      System.out.println( "Backtracking parent arc token: " + parent +
-                          " which has parent: " + parent.getParentToken() +
-                          " backtrackParent? " + backtrackParent );
 
-
+      token.getProcess().removeActiveArcToken( parent );
       parent.markBacktracked( engine );
 
       ArcToken backtrackArcToken =
