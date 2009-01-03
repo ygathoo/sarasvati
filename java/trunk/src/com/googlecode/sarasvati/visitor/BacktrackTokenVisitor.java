@@ -55,17 +55,16 @@ public class BacktrackTokenVisitor implements TokenVisitor
   @Override
   public void visit (ArcToken token)
   {
-    if ( token.getExecutionType() == ExecutionType.ForwardBacktracked ||
-         token.getExecutionType() == ExecutionType.UTurnBacktracked )
+    if ( token.getExecutionType() != ExecutionType.Forward  )
     {
-      backtrackMirror.add( token );
+      backtrackMirror.addVisited( token );
     }
 
     if ( token.getChildToken() == null )
     {
       if ( token.getExecutionType() == ExecutionType.UTurn )
       {
-        ArcToken mirror = backtrackMirror.getLastMirror( token );
+        ArcToken mirror = backtrackMirror.getMirror( token );
         arcTokenMap.put( mirror, token );
         queue.add( mirror.getParentToken() );
       }
@@ -85,6 +84,11 @@ public class BacktrackTokenVisitor implements TokenVisitor
   @Override
   public boolean follow (ArcToken child)
   {
+    if ( child.getExecutionType() != ExecutionType.Forward )
+    {
+      backtrackMirror.findMirror( child );
+    }
+
     if ( child.getExecutionType() == ExecutionType.Backtracked ||
          child.getExecutionType() == ExecutionType.UTurn ||
          child.getExecutionType() == ExecutionType.UTurnBacktracked )
@@ -212,9 +216,9 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
       backtrackToken.getChildTokens().add( backtrackArcToken );
 
-      if ( backtrackParent && parent.getExecutionType() == ExecutionType.UTurnBacktracked )
+      if ( backtrackParent && parent.getExecutionType() != ExecutionType.Forward )
       {
-        ArcToken mirror = backtrackMirror.getLastMirror( parent );
+        ArcToken mirror = backtrackMirror.getMirror( parent );
         arcTokenMap.put( mirror, backtrackArcToken );
         finishArcTokenBacktrack( backtrackArcToken, mirror );
       }

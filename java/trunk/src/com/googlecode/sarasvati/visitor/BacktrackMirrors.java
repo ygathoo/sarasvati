@@ -1,41 +1,42 @@
 package com.googlecode.sarasvati.visitor;
 
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ExecutionType;
 
 public class BacktrackMirrors
 {
-  protected Set<ArcToken>           validParents = new HashSet<ArcToken>();
   protected Map<ArcToken, ArcToken> map          = new HashMap<ArcToken, ArcToken> ();
 
-  public void add (ArcToken token)
+  public void addVisited (ArcToken token)
   {
-    validParents.add( token );
+    System.out.println( "Visited: " + token.hashCode() );
+    if ( !map.containsKey( token ) )
+    {
+      map.put( token, null );
+    }
   }
 
   public boolean hasMirror (ArcToken token)
   {
-    return getMirror( token ) != null;
-  }
-
-  public ArcToken getMirror (ArcToken token)
-  {
-    ArcToken result = map.get( token );
-    if ( result == null )
-    {
-      findMirror( token );
-      result = map.get( token );
-    }
-
-    return result;
+    return map.containsKey( token );
   }
 
   public void findMirror (ArcToken token)
+  {
+    if ( token.getExecutionType() == ExecutionType.ForwardBacktracked )
+    {
+      findForwardBacktrackedMirror( token );
+    }
+    else
+    {
+      findBacktrackMirror( token );
+    }
+  }
+
+  private void findBacktrackMirror (ArcToken token)
   {
     for ( ArcToken parent : token.getParentToken().getParentTokens() )
     {
@@ -43,7 +44,12 @@ public class BacktrackMirrors
       {
         System.out.println( token + " has mirror " + parent );
         map.put( token, parent );
+        tieToEndOfBacktrackChain( token );
         return;
+      }
+      else
+      {
+        System.out.println( token + " NOT PARENT " + parent );
       }
 
       if ( parent.getExecutionType() == ExecutionType.Backtracked )
@@ -57,6 +63,7 @@ public class BacktrackMirrors
             {
               System.out.println( token + " has mirror " + mirrorParent );
               map.put( token, mirrorParent );
+              tieToEndOfBacktrackChain( token );
               return;
             }
           }
@@ -66,31 +73,53 @@ public class BacktrackMirrors
     System.out.println( "No mirror found for " + token );
   }
 
+  private void findForwardBacktrackedMirror (ArcToken token)
+  {
+    if ( token.getParentToken().getExecutionType() != ExecutionType.ForwardBacktracked )
+    {
+      return;
+    }
+
+    for ( ArcToken parent : token.getParentToken().getParentTokens() )
+    {
+      if ( parent.getExecutionType() == ExecutionType.Backtracked &&
+           token.getArc().equals( parent.getArc() ) )
+      {
+        System.out.println( token + " has mirror " + parent );
+        map.put( token, parent );
+        tieToEndOfBacktrackChain( token );
+        return;
+      }
+    }
+  }
+
   private boolean isMirror (ArcToken token, ArcToken candidate)
   {
     return ( candidate.getExecutionType() == ExecutionType.ForwardBacktracked ||
              candidate.getExecutionType() == ExecutionType.UTurnBacktracked ) &&
            token.getArc().equals( candidate.getArc() ) &&
-           validParents.contains( candidate );
+           map.containsKey( candidate );
   }
 
-  public ArcToken getLastMirror (ArcToken token)
+  private void tieToEndOfBacktrackChain (ArcToken token)
   {
-    ArcToken result = map.get( token );
-
-    while ( result != null && result.getExecutionType() == ExecutionType.UTurnBacktracked )
+    ArcToken lookup = map.get( token );
+    ArcToken result = lookup;
+    while ( lookup != null )
     {
-      ArcToken tmp = map.get( result );
-      if ( tmp != null )
+      lookup = map.get( lookup );
+      if ( lookup != null )
       {
-        result = tmp;
-      }
-      else
-      {
-        break;
+        result = lookup;
       }
     }
 
-    return result;
+    map.put( token, result );
+  }
+
+  public ArcToken getMirror (ArcToken token)
+  {
+    ArcToken result = map.get( token );
+    return result == null ? token : result;
   }
 }
