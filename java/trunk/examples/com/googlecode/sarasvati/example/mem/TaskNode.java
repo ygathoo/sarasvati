@@ -49,7 +49,7 @@ public class TaskNode extends MemNode
   }
 
   @Override
-  public void backtrack (NodeToken token)
+  public void backtrack (Engine engine, NodeToken token)
   {
     for (Task t : TaskList.getTasks() )
     {

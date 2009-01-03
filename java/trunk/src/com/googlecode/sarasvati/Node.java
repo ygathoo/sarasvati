@@ -137,9 +137,10 @@ public interface Node extends Adaptable
    * Does whatever work is necessary to backtrack this execution. For example,
    * a task node may send a notification that the task has been backtracked.
    *
+   * @param engine The engine doing the backtracking
    * @param token The specific token being backtracked.
    */
-  void backtrack (NodeToken token);
+  void backtrack (Engine engine, NodeToken token);
 
   /**
    * When a NodeToken is created, the associated Node will not

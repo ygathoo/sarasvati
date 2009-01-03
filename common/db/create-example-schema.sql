@@ -18,6 +18,7 @@ create table wf_task_state
 insert into wf_task_state values ( 0, 'Open' );
 insert into wf_task_state values ( 1, 'Complete' );
 insert into wf_task_state values ( 2, 'Rejected' );
+insert into wf_task_state values ( 3, 'Canceled' );
 
 create table wf_task
 (

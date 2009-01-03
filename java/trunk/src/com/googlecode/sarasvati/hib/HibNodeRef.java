@@ -132,9 +132,9 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public void backtrack (NodeToken token)
+  public void backtrack (Engine engine, NodeToken token)
   {
-    node.backtrack( token );
+    node.backtrack( engine, token );
   }
 
   @Override
