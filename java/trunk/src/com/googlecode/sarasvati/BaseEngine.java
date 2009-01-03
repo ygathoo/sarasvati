@@ -323,7 +323,7 @@ public abstract class BaseEngine implements Engine
     }
 
     BacktrackTokenVisitor visitor = new BacktrackTokenVisitor( this, token );
-    TokenTraversals.breadthFirstTraversal( token, visitor );
+    TokenTraversals.createOrderTraversal( token, visitor );
     NodeToken resultToken = visitor.backtrack();
     executeNode( resultToken.getProcess(), resultToken );
     executeQueuedArcTokens( token.getProcess() );

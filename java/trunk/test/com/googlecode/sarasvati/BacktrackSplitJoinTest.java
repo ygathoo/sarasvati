@@ -369,7 +369,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     TestProcess.validate( p, state );
   }
 
-  @Test public void testDiamond2() throws Exception
+  @Test public void testDiamondExtended() throws Exception
   {
     Graph g = ensureLoaded( "backtrack-diamond" );
     GraphProcess p = engine.startProcess( g );
@@ -581,4 +581,280 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[11 nodeA I F]";
     TestProcess.validate( p, state );
   }
+
+  @Test public void testDiamond2() throws Exception
+  {
+    Graph g = ensureLoaded( "backtrack-diamond2" );
+    GraphProcess p = engine.startProcess( g );
+
+    NodeToken tokenA = getActiveToken( p, "nodeA" );
+
+    String state =
+      "[1 nodeA I F]";
+    TestProcess.validate( p, state );
+
+    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB I F]";
+    TestProcess.validate( p, state );
+
+    NodeToken tokenB = getActiveToken( p, "nodeB" );
+    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[3 nodeC I F]" +
+      "[4 nodeD I F]";
+    TestProcess.validate( p, state );
+
+    NodeToken tokenC = getActiveToken( p, "nodeC" );
+    NodeToken tokenD = getActiveToken( p, "nodeD" );
+
+    engine.completeExecution( tokenC, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[3 nodeC C F]" +
+      "  (I F nodeE)" +
+      "[4 nodeD I F]";
+    TestProcess.validate( p, state );
+
+    engine.completeExecution( tokenD, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[3 nodeC C F]" +
+      "  (C F 5)" +
+      "[4 nodeD C F]" +
+      "  (C F 5)" +
+      "[5 nodeE I F]";
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenD );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[3 nodeC C F]" +
+      "  (C FB 5)" +
+      "[4 nodeD C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeE C FB]" +
+      "  (C B 6)" +
+      "  (I U nodeE)" +
+      "[6 nodeD I F]";
+    TestProcess.validate( p, state );
+
+    tokenD = getActiveToken( p, "nodeD" );
+    engine.completeExecution( tokenD, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[3 nodeC C F]" +
+      "  (C FB 5)" +
+      "[4 nodeD C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeE C FB]" +
+      "  (C B 6)" +
+      "  (C U 7)" +
+      "[6 nodeD C F]" +
+      "  (C F 7)" +
+      "[7 nodeE I F]";
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[3 nodeC C FB]" +
+      "  (C FB 5)" +
+      "[4 nodeD C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeE C FB]" +
+      "  (C B 6)" +
+      "  (C UB 7)" +
+      "[6 nodeD C F]" +
+      "  (C FB 7)" +
+      "[7 nodeE C FB]" +
+      "  (C B 8)" +
+      "  (I U nodeE)" +
+      "[8 nodeC I F]";
+    TestProcess.validate( p, state );
+
+    tokenC = getActiveToken( p, "nodeC" );
+    engine.completeExecution( tokenC, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[3 nodeC C FB]" +
+      "  (C FB 5)" +
+      "[4 nodeD C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeE C FB]" +
+      "  (C B 6)" +
+      "  (C UB 7)" +
+      "[6 nodeD C F]" +
+      "  (C FB 7)" +
+      "[7 nodeE C FB]" +
+      "  (C B 8)" +
+      "  (C U 9)" +
+      "[8 nodeC C F]" +
+      "  (C F 9)" +
+      "[9 nodeE I F]";
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[3 nodeC C FB]" +
+      "  (C FB 5)" +
+      "[4 nodeD C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeE C FB]" +
+      "  (C B 6)" +
+      "  (C UB 7)" +
+      "[6 nodeD C F]" +
+      "  (C FB 7)" +
+      "[7 nodeE C FB]" +
+      "  (C B 8)" +
+      "  (C UB 9)" +
+      "[8 nodeC C FB]" +
+      "  (C FB 9)" +
+      "[9 nodeE C FB]" +
+      "  (C B 10)" +
+      "  (I U nodeE)" +
+      "[10 nodeC I F]";
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenD );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C F]" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[3 nodeC C FB]" +
+      "  (C FB 5)" +
+      "[4 nodeD C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeE C FB]" +
+      "  (C B 6)" +
+      "  (C UB 7)" +
+      "[6 nodeD C FB]" +
+      "  (C FB 7)" +
+      "[7 nodeE C FB]" +
+      "  (C B 8)" +
+      "  (C UB 9)" +
+      "[8 nodeC C FB]" +
+      "  (C FB 9)" +
+      "[9 nodeE C FB]" +
+      "  (C B 10)" +
+      "  (C B 11)" +
+      "[10 nodeC I F]" +
+      "[11 nodeD I F]";
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenB );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "[2 nodeB C FB]" +
+      "  (C FB 3)" +
+      "  (C FB 4)" +
+      "[3 nodeC C FB]" +
+      "  (C FB 5)" +
+      "[4 nodeD C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeE C FB]" +
+      "  (C B 6)" +
+      "  (C UB 7)" +
+      "[6 nodeD C FB]" +
+      "  (C FB 7)" +
+      "[7 nodeE C FB]" +
+      "  (C B 8)" +
+      "  (C UB 9)" +
+      "[8 nodeC C FB]" +
+      "  (C FB 9)" +
+      "[9 nodeE C FB]" +
+      "  (C B 10)" +
+      "  (C B 11)" +
+      "[10 nodeC C FB]" +
+      "  (C B 12)" +
+      "[11 nodeD C FB]" +
+      "  (C B 12)" +
+      "[12 nodeB I F]";
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenA );
+
+    state =
+      "[1 nodeA C FB]" +
+      "  (C FB 2)" +
+      "[2 nodeB C FB]" +
+      "  (C FB 3)" +
+      "  (C FB 4)" +
+      "[3 nodeC C FB]" +
+      "  (C FB 5)" +
+      "[4 nodeD C FB]" +
+      "  (C FB 5)" +
+      "[5 nodeE C FB]" +
+      "  (C B 6)" +
+      "  (C UB 7)" +
+      "[6 nodeD C FB]" +
+      "  (C FB 7)" +
+      "[7 nodeE C FB]" +
+      "  (C B 8)" +
+      "  (C UB 9)" +
+      "[8 nodeC C FB]" +
+      "  (C FB 9)" +
+      "[9 nodeE C FB]" +
+      "  (C B 10)" +
+      "  (C B 11)" +
+      "[10 nodeC C FB]" +
+      "  (C B 12)" +
+      "[11 nodeD C FB]" +
+      "  (C B 12)" +
+      "[12 nodeB C FB]" +
+      "  (C B 13)" +
+      "[13 nodeA I F]";
+    TestProcess.validate( p, state );
+  }
+
 }
