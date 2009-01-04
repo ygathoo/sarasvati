@@ -69,7 +69,11 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
           if ( token != null )
           {
             w.setStroke( new BasicStroke( 3 ) );
-            if ( token.isComplete() )
+            if ( token.getExecutionType().isBacktracked() )
+            {
+              w.setLineColor( NodeDrawConfig.NODE_BG_BACKTRACKED );
+            }
+            else if ( token.isComplete() )
             {
               w.setLineColor( NodeDrawConfig.NODE_BG_COMPLETED );
             }
