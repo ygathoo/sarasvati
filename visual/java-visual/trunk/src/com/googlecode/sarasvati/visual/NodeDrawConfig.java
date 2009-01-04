@@ -42,17 +42,23 @@ public class NodeDrawConfig
 
   public static final Color NODE_BORDER       = Color.black; // new Color( 0, 0, 200 );
 
-  public static final Color NODE_BACKGROUND   = new Color( 153, 153, 153 );
-  public static final Color NODE_BG_ACTIVE    = new Color( 153, 153, 0 );
-  public static final Color NODE_BG_DISCARDED = new Color( 153, 0, 51 );
-  public static final Color NODE_BG_SKIPPED   = new Color( 204, 102, 0 );
-  public static final Color NODE_BG_COMPLETED = new Color( 0, 153, 204 );
+  public static final Color NODE_BACKGROUND     = new Color( 153, 153, 153 );
+  public static final Color NODE_BG_ACTIVE      = new Color( 153, 153, 0 );
+  public static final Color NODE_BG_DISCARDED   = new Color( 204, 102, 0 );
+  public static final Color NODE_BG_SKIPPED     = new Color( 255, 204, 51 );
+  public static final Color NODE_BG_COMPLETED   = new Color( 0, 153, 204 );
+  public static final Color NODE_BG_BACKTRACKED = new Color( 153, 0, 51 );
 
   public static Color getColor (NodeToken token)
   {
     if ( token == null )
     {
       return NodeDrawConfig.NODE_BACKGROUND;
+    }
+
+    if ( token.getExecutionType().isBacktracked() )
+    {
+      return NODE_BG_BACKTRACKED;
     }
 
     if ( token.getGuardAction() == GuardAction.AcceptToken )
