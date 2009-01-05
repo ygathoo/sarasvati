@@ -71,7 +71,7 @@ public class ProcessVisualizer
     init ();
 
     final Session session = getSession();
-    HibEngine engine = new HibEngine( session );
+    final HibEngine engine = new HibEngine( session );
 
     List<GraphProcess> process = engine.getSession().createQuery( "from HibGraphProcess order by graph, createDate" ).list();
 
@@ -82,7 +82,7 @@ public class ProcessVisualizer
     JSplitPane splitPane = new JSplitPane( JSplitPane.HORIZONTAL_SPLIT );
     frame.getContentPane().add( splitPane );
 
-    DefaultListModel listModel = new DefaultListModel();
+    final DefaultListModel listModel = new DefaultListModel();
     for ( GraphProcess p : process )
     {
       listModel.addElement( p );
@@ -179,6 +179,15 @@ public class ProcessVisualizer
                        currentVersion.intValue() !=  currentProcess.getVersion().intValue() )
                   {
                     setProcess( currentProcess );
+                  }
+                }
+
+                List<GraphProcess> processList = engine.getSession().createQuery( "from HibGraphProcess order by graph, createDate" ).list();
+                for ( GraphProcess p : processList )
+                {
+                  if ( !listModel.contains( p ) )
+                  {
+                    listModel.addElement( p );
                   }
                 }
               }
