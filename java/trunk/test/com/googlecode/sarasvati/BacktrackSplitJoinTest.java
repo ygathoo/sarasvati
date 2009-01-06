@@ -22,8 +22,6 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
-import com.googlecode.sarasvati.util.ProcessPrinter;
-
 public class BacktrackSplitJoinTest extends ExecutionTest
 {
   @Test public void testSplitJoin() throws Exception
@@ -347,7 +345,6 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[6 nodeB I F]";
     TestProcess.validate( p, state );
 
-    ProcessPrinter.print( p );
     engine.backtrack( tokenA );
 
     state =
@@ -550,7 +547,6 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[10 nodeC I F]";
     TestProcess.validate( p, state );
 
-    ProcessPrinter.print( p );
     engine.backtrack( tokenA );
 
     state =

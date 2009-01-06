@@ -12,7 +12,6 @@ public class BacktrackMirrors
 
   public void addVisited (ArcToken token)
   {
-    System.out.println( "Visited: " + token.hashCode() );
     if ( !map.containsKey( token ) )
     {
       map.put( token, null );
