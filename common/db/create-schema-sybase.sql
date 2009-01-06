@@ -6,11 +6,11 @@ go
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_task') drop table wf_task
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_task_state') drop table wf_task_state
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_task') drop table wf_node_task
-IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_string_attr') drop table wf_token_string_attr
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_attr') drop table wf_token_attr
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token_parent') drop table wf_node_token_parent
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc_token') drop table wf_arc_token
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token') drop table wf_node_token
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_execution_type') drop table wf_execution_type
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc') drop table wf_arc
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_ref') drop table wf_node_ref
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_attr') drop table wf_node_attr
@@ -105,12 +105,8 @@ go
 insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' )
 insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'wait' )
 insert into wf_node_type values ( 'script', 'Node which executes a script', 'script' )
-insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'nested' );
-insert into wf_node_type values ( 'custom', 'Supertype for user custom node types', 'custom' );
-
-insert into wf_node_type values ( 'task', 'Node which generates tasks', 'task' )
-insert into wf_node_type values ( 'init', 'Node which generates a random number and updates a counter', 'init' )
-insert into wf_node_type values ( 'dump', 'Node which indicates on stdout that it has been invoked', 'dump' )
+insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'nested' )
+insert into wf_node_type values ( 'custom', 'Supertype for user custom node types', 'custom' )
 go
 
 create table wf_node
@@ -181,15 +177,30 @@ insert into wf_guard_action values ( 1, 'Discard Token' )
 insert into wf_guard_action values ( 2, 'Skip Node' )
 go
 
+create table wf_execution_type
+(
+  id            int          NOT NULL PRIMARY KEY,
+  name          varchar(255) NOT NULL
+)
+go
+
+insert into wf_execution_type values ( 0, 'Forward' )
+insert into wf_execution_type values ( 1, 'Forward/Backtracked' )
+insert into wf_execution_type values ( 2, 'Backtracked' )
+insert into wf_execution_type values ( 3, 'U-Turn' )
+insert into wf_execution_type values ( 4, 'U-Turn/Backtracked' )
+go
+
 create table wf_node_token
 (
-  id            bigint    IDENTITY NOT NULL PRIMARY KEY,
-  process_id    bigint             NOT NULL REFERENCES wf_process,
-  node_ref_id   bigint             NOT NULL REFERENCES wf_node_ref,
-  attr_set_id   bigint             NULL     REFERENCES wf_node_token,
-  create_date   datetime           DEFAULT getDate() NOT NULL,
-  guard_action  int                NULL     REFERENCES wf_guard_action,
-  complete_date datetime           NULL
+  id             bigint    IDENTITY NOT NULL PRIMARY KEY,
+  process_id     bigint             NOT NULL REFERENCES wf_process,
+  node_ref_id    bigint             NOT NULL REFERENCES wf_node_ref,
+  attr_set_id    bigint             NULL     REFERENCES wf_node_token,
+  create_date    datetime           DEFAULT getDate() NOT NULL,
+  guard_action   int                NULL     REFERENCES wf_guard_action,
+  execution_type int                NOT NULL REFERENCES wf_execution_type,
+  complete_date  datetime           NULL
 ) with identity_gap = 100
 go
 
@@ -206,6 +217,7 @@ create table wf_arc_token
   arc_id          bigint             NOT NULL REFERENCES wf_arc,
   parent_token_id bigint             NOT NULL REFERENCES wf_node_token,
   pending         char(1)            NOT NULL,
+  execution_type  int                NOT NULL REFERENCES wf_execution_type,
   create_date     datetime           DEFAULT getDate() NOT NULL,
   complete_date   datetime           NULL
 ) with identity_gap = 100
