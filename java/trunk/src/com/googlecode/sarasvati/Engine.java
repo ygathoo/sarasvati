@@ -321,7 +321,11 @@ public interface Engine
   Engine getParentEngine ();
 
   /**
-   * Backtracks execution to the point where the given node token was active.
+   * Backtracks execution to the point where the given node token was active. The token
+   * must be complete and must not have been backtracked before. If it's not complete,
+   * there isn't any point in backtracking to it. If it has already been backtracked,
+   * the execution has either returned to a point previous to that token, or there is
+   * a newer, non-backtracked token at that node now.
    *
    * @param token The destination token to backtrack to.
    */
