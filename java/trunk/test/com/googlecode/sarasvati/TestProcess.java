@@ -429,6 +429,8 @@ public class TestProcess
 
       for ( TestArcToken child : token.getChildren() )
       {
+        System.out.println( "\tTestArcToken " +
+                            " " + child.getExecutionType() );
         if ( child.getChildToken() != null && !p.contains( child.getChildToken() ) )
         {
           p.add( child.getChildToken() );

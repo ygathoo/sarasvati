@@ -307,10 +307,6 @@ public abstract class BaseEngine implements Engine
   @Override
   public void backtrack (NodeToken token)
   {
-    if ( token.getChildTokens().isEmpty() )
-    {
-      throw new WorkflowException( "Cannot got backtrack to a dead end node token (produced no arc tokens)." );
-    }
 
     if ( !token.isComplete() )
     {
@@ -322,9 +318,19 @@ public abstract class BaseEngine implements Engine
       throw new WorkflowException( "Cannot backtrack to a node token which has been backtracked." );
     }
 
+    NodeToken resultToken = null;
     BacktrackTokenVisitor visitor = new BacktrackTokenVisitor( this, token );
-    TokenTraversals.createOrderTraversal( token, visitor );
-    NodeToken resultToken = visitor.backtrack();
+
+    if ( token.getChildTokens().isEmpty() )
+    {
+      resultToken = visitor.backtrackDeadEnd( token );
+    }
+    else
+    {
+      TokenTraversals.createOrderTraversal( token, visitor );
+      resultToken = visitor.backtrack();
+    }
+
     executeNode( resultToken.getProcess(), resultToken );
     executeQueuedArcTokens( token.getProcess() );
   }

@@ -249,4 +249,37 @@ public class BacktrackTokenVisitor implements TokenVisitor
     NodeToken related = parentMap.get( token );
     return (related == null ? token : related).getParentTokens();
   }
+
+  public NodeToken backtrackDeadEnd (NodeToken token)
+  {
+    token.markBacktracked( engine );
+    List<ArcToken> parents = new ArrayList<ArcToken>( token.getParentTokens().size() );
+    for (ArcToken parent : token.getParentTokens() )
+    {
+      parent.markBacktracked( engine );
+      ArcToken backtrackArcToken =
+        engine.getFactory().newArcToken( token.getProcess(),
+                                         parent.getArc(),
+                                         ExecutionType.UTurn,
+                                         token );
+      token.getChildTokens().add( backtrackArcToken );
+      parents.add( backtrackArcToken );
+    }
+
+    NodeToken backtrackToken =
+      engine.getFactory().newNodeToken( token.getProcess(),
+                                        token.getNode(),
+                                        ExecutionType.Forward,
+                                        parents,
+                                        token );
+    token.getProcess().addNodeToken( backtrackToken );
+
+    for ( ArcToken parent : parents )
+    {
+      parent.markProcessed( engine );
+      parent.markComplete( engine, backtrackToken );
+    }
+
+    return backtrackToken;
+  }
 }

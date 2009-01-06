@@ -27,7 +27,7 @@ public class BacktrackSplitTest extends ExecutionTest
     Graph g = ensureLoaded( "backtrack-split" );
     GraphProcess p = engine.startProcess( g );
 
-    NodeToken tokenA = p.getActiveNodeTokens().iterator().next();
+    NodeToken tokenA = getActiveToken( p, "nodeA" );
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
@@ -112,6 +112,124 @@ public class BacktrackSplitTest extends ExecutionTest
       "  (C B 9)" +
       "[9 nodeA I F]"
       ;
+
+    TestProcess.validate( p, state );
+  }
+
+  @Test public void testSplitDeadEnd() throws Exception
+  {
+    Graph g = ensureLoaded( "backtrack-split" );
+    GraphProcess p = engine.startProcess( g );
+
+    NodeToken tokenA = getActiveToken( p, "nodeA" );
+
+    String state = "[1 nodeA I F]";
+    TestProcess.validate( p, state );
+
+    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[2 nodeB I F]" +
+      "[3 nodeC I F]" +
+      "[4 nodeD I F]";
+    TestProcess.validate( p, state );
+
+    NodeToken tokenB = getActiveToken( p,"nodeB" );
+    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[2 nodeB C F]" +
+      "[3 nodeC I F]" +
+      "[4 nodeD I F]";
+    TestProcess.validate( p, state );
+
+    NodeToken tokenC = getActiveToken( p,"nodeC" );
+    engine.completeExecution( tokenC, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[2 nodeB C F]" +
+      "[3 nodeC C F]" +
+      "[4 nodeD I F]";
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenB );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C FB 2)" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[2 nodeB C FB]" +
+      "  (C U 5)" +
+      "[3 nodeC C F]" +
+      "[4 nodeD I F]" +
+      "[5 nodeB I F]";
+
+    TestProcess.validate( p, state );
+
+    tokenB = getActiveToken( p,"nodeB" );
+    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C FB 2)" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[2 nodeB C FB]" +
+      "  (C U 5)" +
+      "[3 nodeC C F]" +
+      "[4 nodeD I F]" +
+      "[5 nodeB C F]";
+
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenB );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C FB 2)" +
+      "  (C F 3)" +
+      "  (C F 4)" +
+      "[2 nodeB C FB]" +
+      "  (C UB 5)" +
+      "[3 nodeC C F]" +
+      "[4 nodeD I F]" +
+      "[5 nodeB C FB]" +
+      "  (C U 6)" +
+      "[6 nodeB I F]";
+
+    TestProcess.validate( p, state );
+
+    engine.backtrack( tokenA );
+
+    state =
+      "[1 nodeA C FB]" +
+      "  (C FB 2)" +
+      "  (C FB 3)" +
+      "  (C FB 4)" +
+      "[2 nodeB C FB]" +
+      "  (C UB 5)" +
+      "[3 nodeC C FB]" +
+      "  (C B 7)" +
+      "[4 nodeD C FB]" +
+      "  (C B 7)" +
+      "[5 nodeB C FB]" +
+      "  (C UB 6)" +
+      "[6 nodeB C FB]" +
+      "  (C B 7)" +
+      "[7 nodeA I F]";
 
     TestProcess.validate( p, state );
   }
