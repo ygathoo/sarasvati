@@ -38,9 +38,16 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
 {
   protected GraphProcess process;
   protected ProcessTree processTree;
+  protected boolean showSelfArcs;
 
   public SarasvatiProcessScene (GraphProcess process)
   {
+    this( process, false );
+  }
+
+  public SarasvatiProcessScene (GraphProcess process, boolean showSelfArcs)
+  {
+    this.showSelfArcs = showSelfArcs;
     this.process = process;
 
     if ( process != null )
@@ -52,34 +59,41 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
       {
         addNode( node );
         Widget widget = findWidget( node );
-        widget.setPreferredLocation( new Point( node.getOriginX(), node.getOriginY() ) );
+
+        Point origin = new Point( node.getOriginX(), node.getOriginY() );
+        widget.setPreferredLocation( origin );
+        widget.resolveBounds( origin, null );
       }
 
       for ( ProcessTreeNode node : nodes )
       {
         for ( ProcessTreeArc ptArc : node.getChildren() )
         {
-          addEdge( ptArc );
-          setEdgeSource( ptArc, ptArc.getParent() );
-          setEdgeTarget( ptArc, ptArc.getChild() );
-
-          ConnectionWidget w = (ConnectionWidget)findWidget( ptArc );
-
-          ArcToken token =  ptArc.getToken();
-          if ( token != null )
+          if ( showSelfArcs || !ptArc.getParent().equals( ptArc.getChild() ) )
           {
-            w.setStroke( new BasicStroke( 3 ) );
-            if ( token.getExecutionType().isBacktracked() )
+            addEdge( ptArc );
+            setEdgeSource( ptArc, ptArc.getParent() );
+            setEdgeTarget( ptArc, ptArc.getChild() );
+
+            ConnectionWidget w = (ConnectionWidget)findWidget( ptArc );
+            w.resolveBounds( null, null );
+
+            ArcToken token =  ptArc.getToken();
+            if ( token != null )
             {
-              w.setLineColor( NodeDrawConfig.NODE_BG_BACKTRACKED );
-            }
-            else if ( token.isComplete() )
-            {
-              w.setLineColor( NodeDrawConfig.NODE_BG_COMPLETED );
-            }
-            else
-            {
-              w.setLineColor( NodeDrawConfig.NODE_BG_ACTIVE );
+              w.setStroke( new BasicStroke( 3 ) );
+              if ( token.getExecutionType().isBacktracked() )
+              {
+                w.setLineColor( NodeDrawConfig.NODE_BG_BACKTRACKED );
+              }
+              else if ( token.isComplete() )
+              {
+                w.setLineColor( NodeDrawConfig.NODE_BG_COMPLETED );
+              }
+              else
+              {
+                w.setLineColor( NodeDrawConfig.NODE_BG_ACTIVE );
+              }
             }
           }
         }
