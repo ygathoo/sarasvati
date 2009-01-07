@@ -33,7 +33,7 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
 {
   protected Graph graph;
   protected GraphTree graphTree;
-  boolean showSelfArcs;
+  protected boolean showSelfArcs;
 
   public SarasvatiGraphScene (Graph graph)
   {
@@ -67,8 +67,9 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
       {
         Widget widget = findWidget( node );
         GraphTreeNode treeNode = graphTree.getTreeNode( node );
-        widget.setPreferredLocation( new Point( treeNode.getOriginX(), treeNode.getOriginY() ) );
-        widget.resolveBounds( new Point( treeNode.getOriginX(), treeNode.getOriginY() ), null );
+        Point origin = new Point( treeNode.getOriginX(), treeNode.getOriginY() );
+        widget.setPreferredLocation( origin );
+        widget.resolveBounds( origin, null );
       }
 
       for ( Arc arc : graph.getArcs() )
