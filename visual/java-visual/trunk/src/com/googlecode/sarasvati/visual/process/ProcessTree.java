@@ -247,7 +247,7 @@ public class ProcessTree
     {
       for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
       {
-        if ( !ptNode.isTokenOnArc( arc ) )
+        if ( !ptNode.isTokenOnArc( arc ) && !arc.getStartNode().equals( arc.getEndNode() ) )
         {
           // If the node has an active token, we don't want to point to any nodes with tokens on them
           ProcessTreeNode child = ptNode.getToken().isComplete() ?
