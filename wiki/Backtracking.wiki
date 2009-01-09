@@ -1,0 +1,4 @@
+#summary Backtracking
+
+= Introduction =
+In graph based workflow, execution proceeds forward from node to node along directed arcs.
