@@ -45,6 +45,7 @@ public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeW
   public HibCustomNodeWrapper (CustomNode customNode)
   {
     this.customNode = customNode;
+    customNode.setNodeWrapper( this );
   }
 
   public CustomNode getCustomNode (Engine engine)
@@ -55,6 +56,7 @@ public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeW
       {
         NodeFactory factory = engine.getFactory().getNodeFactory( getType() );
         customNode = (CustomNode)factory.newNode( getType() );
+        customNode.setNodeWrapper( this );
         DOMToObjectLoadHelper.setValues( customNode, attrMap );
       }
       catch ( LoadException le )

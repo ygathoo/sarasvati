@@ -16,46 +16,41 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.mem;
+package com.googlecode.sarasvati;
 
-import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.script.ScriptRunnerFactory;
-
-public class MemScriptNode extends MemNode
+/**
+ * Node type for nested processes. Stores the name of the graph to be
+ * executed.
+ *
+ * @author Paul Lorenz
+ */
+public class NestedProcessNode extends CustomNode
 {
-  protected String script;
-  protected String scriptType;
+  protected String graphName;
 
-  public String getScript ()
+  public String getGraphName()
   {
-    return script;
+    return graphName;
   }
 
-  public void setScript (String script)
+  public void setGraphName(String graphName)
   {
-    this.script = script;
-  }
-
-  public String getScriptType ()
-  {
-    return scriptType;
-  }
-
-  public void setScriptType (String scriptType)
-  {
-    this.scriptType = scriptType;
+    this.graphName = graphName;
   }
 
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, script, scriptType );
+    Graph subGraph = engine.getRepository().getLatestGraph( graphName );
 
-    if ( !token.isComplete() )
+    if ( subGraph == null )
     {
-      engine.completeExecution( token, Arc.DEFAULT_ARC );
+      throw new WorkflowException( "No version of graph named '" + graphName + "'. " +
+                                   "Used by node " + getName() + " in graph " + getGraph().getName() );
     }
+
+    GraphProcess subProcess =  engine.getFactory().newNestedProcess( subGraph, token );
+    subProcess.getEnv().importEnv( token.getFullEnv() );
+    engine.startProcess( subProcess );
   }
 }

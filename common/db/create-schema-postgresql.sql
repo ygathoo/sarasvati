@@ -7,7 +7,6 @@ drop table if exists wf_node_token cascade;
 drop table if exists wf_execution_type cascade;
 drop table if exists wf_arc cascade;
 drop table if exists wf_node_ref cascade;
-drop table if exists wf_node_script cascade;
 drop table if exists wf_node_attr cascade;
 drop table if exists wf_node cascade;
 drop table if exists wf_node_type cascade;
@@ -84,10 +83,11 @@ create table wf_node_type
 );
 
 insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' );
-insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'wait' );
-insert into wf_node_type values ( 'script', 'Node which executes a script', 'script' );
-insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'nested' );
 insert into wf_node_type values ( 'custom', 'Supertype for user custom node types', 'custom' );
+insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'custom' );
+insert into wf_node_type values ( 'script', 'Node which executes a script', 'custom' );
+insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'custom' );
+
 
 create table wf_node
 (
@@ -113,13 +113,6 @@ create table wf_node_attr
 
 ALTER TABLE wf_node_attr
   ADD PRIMARY KEY (node_id, name);
-
-create table wf_node_script
-(
-  id          int  NOT NULL PRIMARY KEY REFERENCES wf_node,
-  script      text NOT NULL,
-  script_type text NOT NULL
-);
 
 create table wf_node_ref
 (

@@ -32,6 +32,7 @@ public class MemCustomNodeWrapper extends MemNode implements CustomNodeWrapper
   public MemCustomNodeWrapper (CustomNode customNode)
   {
     this.customNode = customNode;
+    this.customNode.setNodeWrapper( this );
   }
 
   public CustomNode getCustomNode (Engine engine)

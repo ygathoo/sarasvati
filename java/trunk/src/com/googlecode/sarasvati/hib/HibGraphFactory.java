@@ -47,10 +47,6 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   {
     super( HibNode.class );
     this.session = session;
-
-    this.defaultNodeFactory.addType( "wait",   HibWaitNode.class );
-    this.defaultNodeFactory.addType( "script", HibScriptNode.class );
-    this.defaultNodeFactory.addType( "nested", HibNestedProcessNode.class );
   }
 
   @Override
