@@ -172,10 +172,10 @@ public class HibNode implements Node
   /**
    * Returns true. Can be overridden by subclasses.
    *
-   * @see Node#isBacktrackable(NodeToken)
+   * @see Node#isBacktrackable(Engine,NodeToken)
    */
   @Override
-  public boolean isBacktrackable (NodeToken token)
+  public boolean isBacktrackable (Engine engine, NodeToken token)
   {
     return true;
   }

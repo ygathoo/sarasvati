@@ -138,9 +138,9 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public boolean isBacktrackable(NodeToken token)
+  public boolean isBacktrackable(Engine engine, NodeToken token)
   {
-    return node.isBacktrackable( token );
+    return node.isBacktrackable( engine, token );
   }
 
   @Override

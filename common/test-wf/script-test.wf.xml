@@ -6,25 +6,25 @@
     <arc to="next"/>
 
     <custom>
-      <script type="js">
+      <execute type="js">
         <![CDATA[
           java.lang.System.out.println( "Hello" );
           java.lang.System.out.println( "token: " + token );
 
           engine.completeExecution( token, null );
         ]]>
-      </script>
+      </execute>
     </custom>
   </node>
 
   <node name="next" type="script" isJoin="true">
     <custom>
-      <script type="js">
+      <execute type="js">
         <![CDATA[
           java.lang.System.out.println( "Hello from node: " + token.node.name );
           java.lang.System.out.println( "token: " + token );
         ]]>
-      </script>
+      </execute>
     </custom>
   </node>
 
