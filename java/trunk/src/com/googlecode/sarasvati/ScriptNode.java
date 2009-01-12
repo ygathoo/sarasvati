@@ -25,17 +25,40 @@ import com.googlecode.sarasvati.script.ScriptRunnerFactory;
 
 public class ScriptNode extends CustomNode
 {
-  protected String script;
+  protected String execute;
+  protected String backtrack;
+  protected String allowBacktrack;
+
   protected String scriptType;
 
-  public String getScript ()
+  public String getExecute ()
   {
-    return script;
+    return execute;
   }
 
-  public void setScript (String script)
+  public void setExecute (String execute)
   {
-    this.script = script;
+    this.execute = execute;
+  }
+
+  public String getBacktrack ()
+  {
+    return backtrack;
+  }
+
+  public void setBacktrack (String backtrack)
+  {
+    this.backtrack = backtrack;
+  }
+
+  public String getAllowBacktrack ()
+  {
+    return allowBacktrack;
+  }
+
+  public void setAllowBacktrack (String allowBacktrack)
+  {
+    this.allowBacktrack = allowBacktrack;
   }
 
   public String getScriptType ()
@@ -51,11 +74,33 @@ public class ScriptNode extends CustomNode
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, script, scriptType );
+    ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, execute, scriptType );
 
     if ( !token.isComplete() )
     {
       engine.completeExecution( token, Arc.DEFAULT_ARC );
     }
   }
+
+  @Override
+  public void backtrack (Engine engine, NodeToken token)
+  {
+    if ( backtrack != null && !backtrack.trim().isEmpty() )
+    {
+      ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, backtrack, scriptType );
+    }
+  }
+
+  @Override
+  public boolean isBacktrackable (Engine engine, NodeToken token)
+  {
+    if ( allowBacktrack != null && !allowBacktrack.trim().isEmpty() )
+    {
+      return (Boolean)ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, allowBacktrack, scriptType );
+    }
+
+    return super.isBacktrackable( engine, token );
+  }
+
+
 }

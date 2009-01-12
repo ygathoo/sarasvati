@@ -33,7 +33,7 @@ public class BSFScriptRunner implements ScriptRunner
   }
 
   @Override
-  public void executeScript(Engine engine, NodeToken token, String script, String scriptType)
+  public Object executeScript(Engine engine, NodeToken token, String script, String scriptType)
   {
     BSFManager bsfManager = new BSFManager();
 
@@ -41,11 +41,11 @@ public class BSFScriptRunner implements ScriptRunner
     {
       if ( scriptType == null || scriptType.trim().isEmpty() )
       {
-        scriptType = BSFManager.getLangFromFilename( "test.js" );
+        scriptType = BSFManager.getLangFromFilename( "dummy.js" );
       }
 
       engine.setupScriptEnv( new BSFManagerEnv( bsfManager ), token );
-      bsfManager.exec( scriptType, token.getNode().getName() + ".script", 1, 1, script );
+      return bsfManager.eval( scriptType, token.getNode().getName() + ".script", 1, 1, script );
     }
     catch (BSFException e)
     {

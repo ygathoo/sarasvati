@@ -38,7 +38,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
   @Override
   public void visit (NodeToken token)
   {
-    if ( !token.getNode().isBacktrackable( token ) )
+    if ( !token.getNode().isBacktrackable( engine, token ) )
     {
       throw new WorkflowException( "Can not backtrack node name: " +
                                    token.getNode().getName()  +

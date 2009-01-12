@@ -106,9 +106,9 @@ public abstract class CustomNode implements Node
    * will just call your isBacktrackable method again, resulting in an recursive call,
    * which will exit when your VM runs out of stack space.
    *
-   * @see Node#isBacktrackable(NodeToken)
+   * @see Node#isBacktrackable(Engine,NodeToken)
    */
-  @Override public boolean isBacktrackable (NodeToken token)
+  @Override public boolean isBacktrackable (Engine engine, NodeToken token)
   {
     return true;
   }

@@ -128,10 +128,11 @@ public interface Node extends Adaptable
    * Returns true if the specific execution of this Node by the given
    * NodeToken can be backtracked.
    *
-   * @param token
+   * @param engine The engine doing the backtracking
+   * @param token The token being backtracked
    * @return True if the node can be backtracked, false otherwise.
    */
-  boolean isBacktrackable (NodeToken token);
+  boolean isBacktrackable (Engine engine, NodeToken token);
 
   /**
    * Does whatever work is necessary to backtrack this execution. For example,

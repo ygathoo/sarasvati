@@ -45,7 +45,7 @@ public class JavaSixScriptRunner implements ScriptRunner
   }
 
   @Override
-  public void executeScript(Engine engine, NodeToken token, String script, String scriptType)
+  public Object executeScript(Engine engine, NodeToken token, String script, String scriptType)
   {
     if ( scriptType == null || scriptType.trim().isEmpty() )
     {
@@ -63,7 +63,7 @@ public class JavaSixScriptRunner implements ScriptRunner
       }
 
       engine.setupScriptEnv( new ScriptEngineEnv( scriptEngine ), token);
-      scriptEngine.eval( script );
+      return scriptEngine.eval( script );
     }
     catch ( ScriptException se )
     {

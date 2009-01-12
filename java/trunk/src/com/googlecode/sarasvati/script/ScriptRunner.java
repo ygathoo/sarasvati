@@ -23,5 +23,5 @@ import com.googlecode.sarasvati.NodeToken;
 
 public interface ScriptRunner
 {
-  void executeScript (Engine engine, NodeToken token, String script, String scriptType);
+  Object executeScript (Engine engine, NodeToken token, String script, String scriptType);
 }
