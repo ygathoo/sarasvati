@@ -29,7 +29,9 @@ public class ScriptNode extends CustomNode
   protected String backtrack;
   protected String allowBacktrack;
 
-  protected String scriptType;
+  protected String executeType;
+  protected String backtrackType;
+  protected String allowBacktrackType;
 
   public String getExecute ()
   {
@@ -61,20 +63,40 @@ public class ScriptNode extends CustomNode
     this.allowBacktrack = allowBacktrack;
   }
 
-  public String getScriptType ()
+  public String getExecuteType ()
   {
-    return scriptType;
+    return executeType;
   }
 
-  public void setScriptType (String scriptType)
+  public void setExecuteType (String executeType)
   {
-    this.scriptType = scriptType;
+    this.executeType = executeType;
+  }
+
+  public String getBacktrackType ()
+  {
+    return backtrackType;
+  }
+
+  public void setBacktrackType (String backtrackType)
+  {
+    this.backtrackType = backtrackType;
+  }
+
+  public String getAllowBacktrackType ()
+  {
+    return allowBacktrackType;
+  }
+
+  public void setAllowBacktrackType (String allowBacktrackType)
+  {
+    this.allowBacktrackType = allowBacktrackType;
   }
 
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, execute, scriptType );
+    ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, execute, executeType );
 
     if ( !token.isComplete() )
     {
@@ -87,7 +109,7 @@ public class ScriptNode extends CustomNode
   {
     if ( backtrack != null && !backtrack.trim().isEmpty() )
     {
-      ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, backtrack, scriptType );
+      ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, backtrack, backtrackType );
     }
   }
 
@@ -96,11 +118,9 @@ public class ScriptNode extends CustomNode
   {
     if ( allowBacktrack != null && !allowBacktrack.trim().isEmpty() )
     {
-      return (Boolean)ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, allowBacktrack, scriptType );
+      return (Boolean)ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, allowBacktrack, allowBacktrackType );
     }
 
     return super.isBacktrackable( engine, token );
   }
-
-
 }
