@@ -59,7 +59,9 @@
       <classpath refid="classpath"/>
       <sourcepath path="src"/>
     </javac>
+  </target>
 
+  <target name="buildLangJar" depends="buildLang">
     <jar basedir="${build.dir}/lang" destfile="lib/rubric.jar">
       <include name="**/lang/RubricParser*.class"/>
       <include name="**/lang/RubricLexer*.class"/>
