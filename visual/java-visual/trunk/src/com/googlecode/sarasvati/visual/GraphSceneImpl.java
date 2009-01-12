@@ -169,8 +169,6 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
       buf.append( ">\n" );
     }
 
-    System.out.println( buf.toString() );
-
     return image;
   }
 }

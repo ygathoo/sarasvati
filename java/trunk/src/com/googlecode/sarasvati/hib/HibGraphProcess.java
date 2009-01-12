@@ -71,7 +71,7 @@ public class HibGraphProcess implements GraphProcess
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long id;
 
-  @ManyToOne (fetch=FetchType.EAGER)
+  @ManyToOne (fetch=FetchType.LAZY)
   @Cascade( CascadeType.LOCK )
   @JoinColumn( name="graph_id")
   protected HibGraph            graph;
