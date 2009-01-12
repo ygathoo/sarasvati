@@ -16,10 +16,8 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.mem;
+package com.googlecode.sarasvati;
 
-import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.NodeToken;
 
 /**
  * This node overrides the default execute behavior to do nothing.
@@ -28,7 +26,7 @@ import com.googlecode.sarasvati.NodeToken;
  *
  * @author Paul Lorenz
  */
-public class MemWaitNode extends MemNode
+public class WaitNode extends CustomNode
 {
   @Override
   public void execute (Engine engine, NodeToken token)

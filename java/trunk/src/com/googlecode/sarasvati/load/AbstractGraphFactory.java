@@ -27,11 +27,21 @@ import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NestedProcessNode;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.ScriptNode;
+import com.googlecode.sarasvati.WaitNode;
 
 public abstract class AbstractGraphFactory<G extends Graph> implements GraphFactory<G>
 {
+  static
+  {
+    DefaultNodeFactory.addGlobalCustomType( "nested", NestedProcessNode.class );
+    DefaultNodeFactory.addGlobalCustomType( "script", ScriptNode.class );
+    DefaultNodeFactory.addGlobalCustomType( "wait",   WaitNode.class );
+  }
+
   protected Map<String, NodeFactory>  factoryMap = new HashMap<String, NodeFactory>();
   protected DefaultNodeFactory        defaultNodeFactory;
 

@@ -14,7 +14,6 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_execution_type') drop table w
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc') drop table wf_arc
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_ref') drop table wf_node_ref
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_attr') drop table wf_node_attr
-IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_script') drop table wf_node_script
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node') drop table wf_node
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_type') drop table wf_node_type
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_guard_action') drop table wf_guard_action
@@ -103,10 +102,10 @@ create table wf_node_type
 go
 
 insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' )
-insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'wait' )
-insert into wf_node_type values ( 'script', 'Node which executes a script', 'script' )
-insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'nested' )
 insert into wf_node_type values ( 'custom', 'Supertype for user custom node types', 'custom' )
+insert into wf_node_type values ( 'wait', 'Node which enters a wait state when executed', 'custom' )
+insert into wf_node_type values ( 'script', 'Node which executes a script', 'custom' )
+insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'custom' )
 go
 
 create table wf_node
@@ -136,14 +135,6 @@ go
 
 ALTER TABLE wf_node_attr
   ADD PRIMARY KEY (node_id, name)
-go
-
-create table wf_node_script
-(
-  id          bigint       NOT NULL PRIMARY KEY REFERENCES wf_node,
-  script      varchar(512) NOT NULL,
-  script_type varchar(20)  NOT NULL
-)
 go
 
 create table wf_node_ref
