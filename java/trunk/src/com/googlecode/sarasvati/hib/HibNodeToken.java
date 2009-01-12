@@ -60,11 +60,11 @@ public class HibNodeToken implements NodeToken
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long    id;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "process_id")
   protected HibGraphProcess process;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "node_ref_id")
   protected HibNodeRef nodeRef;
 

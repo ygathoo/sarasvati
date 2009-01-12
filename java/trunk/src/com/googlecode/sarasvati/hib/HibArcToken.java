@@ -53,11 +53,11 @@ public class HibArcToken implements ArcToken
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   protected Long    id;
 
-  @ManyToOne (fetch = FetchType.EAGER)
+  @ManyToOne (fetch = FetchType.LAZY)
   @JoinColumn (name = "process_id")
   protected HibGraphProcess process;
 
-  @ManyToOne (fetch = FetchType.EAGER)
+  @ManyToOne (fetch = FetchType.LAZY)
   @JoinColumn (name = "arc_id")
   protected HibArc     arc;
 
@@ -234,5 +234,11 @@ public class HibArcToken implements ArcToken
     }
     else if ( !id.equals( other.getId() ) ) return false;
     return true;
+  }
+
+  @Override
+  public String toString ()
+  {
+    return "[HibArcToken id=" + id + " pending? " + pending + " execType=" + executionType + " complete? " + isComplete() + " arc=" + arc + "]";
   }
 }
