@@ -84,4 +84,16 @@ public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeW
   {
     getCustomNode( engine ).execute( engine, token );
   }
+
+  @Override
+  public void backtrack (Engine engine, NodeToken token)
+  {
+    getCustomNode( engine ).backtrack( engine, token );
+  }
+
+  @Override
+  public boolean isBacktrackable (Engine engine, NodeToken token)
+  {
+    return getCustomNode( engine ).isBacktrackable( engine, token );
+  }
 }
