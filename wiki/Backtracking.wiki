@@ -1,4 +1,14 @@
 #summary Backtracking
 
 = Introduction =
-In graph based workflow, execution proceeds forward from node to node along directed arcs.
+In graph based workflow, execution proceeds forward from node to node along directed arcs. Here is a simple, linear workflow:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-graph1.jpg]
+
+In this case, there is only one progression that can be made. Using squares for node tokens and triangles for arc tokens, the resulting execution looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process1.jpg]
+
+If however, we want to let a user choose to send the workflow backwards, instead of forwards, say to fix a mistake made earlier. If we wanted to be able to go back, we'd have to set up arcs backwards. Assuming, we want maximum flexibility, we'd end up with a process definition that looked like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-graph2.jpg]
