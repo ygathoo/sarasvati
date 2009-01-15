@@ -1,6 +1,6 @@
 #summary Backtracking
 
-= Introduction =
+= Motivation =
 In graph based workflow, execution proceeds forward from node to node along directed arcs. Here is a simple, linear workflow:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-graph1.jpg]
@@ -12,3 +12,11 @@ In this case, there is only one progression that can be made. Using squares for 
 If however, we want to let a user choose to send the workflow backwards, instead of forwards, say to fix a mistake made earlier. If we wanted to be able to go back, we'd have to set up arcs backwards. Assuming, we want maximum flexibility, we'd end up with a process definition that looked like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-graph2.jpg]
+
+Now we could go from A to B to C, back to B to C to D, back to B to C to D and done. The execution would look like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process2.jpg]
+
+Note that the arc tokens now display the arc name.
+
+We have gained flexibility, but at the cost of making the workflow much more complex. The number of arcs has tripled.
