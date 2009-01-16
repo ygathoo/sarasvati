@@ -6,6 +6,7 @@
 
   <property name="dist.dir" value="dist"/>
   <property name="build.dir" value="${dist.dir}/build"/>
+  <property name="examples.build.dir" value="${dist.dir}/examples"/>
 
   <property name="dist.name" value="sarasvati-java-${version}"/>
   <property name="release.name" value="sarasvati-${version}"/>
@@ -74,6 +75,15 @@
     <javac srcdir="src" destdir="${build.dir}" source="1.5" target="1.5" debug="true">
       <include name="**/*.java" />
       <classpath refid="classpath"/>
+    </javac>
+  </target>
+
+  <target name="compile-examples" depends="compile, buildLang">
+    <mkdir dir="${examples.build.dir}" />
+    <javac srcdir="examples" destdir="${examples.build.dir}" source="1.5" target="1.5" debug="true">
+      <include name="**/*.java" />
+      <classpath refid="classpath"/>
+      <classpath path="${build.dir}"/>
     </javac>
   </target>
 
