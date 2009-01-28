@@ -18,13 +18,22 @@ public class DefaultNodeIcon implements Icon
   public static final int WIDTH  = 100;
   public static final int HEIGHT = NodeDrawConfig.getMaxNodeRadius() << 1;
 
-  protected Node node;
-  protected NodeToken token;
+  protected boolean isJoin;
+  protected String label;
+  protected Color color;
 
   public DefaultNodeIcon (Node node, NodeToken token)
   {
-    this.node = node;
-    this.token = token;
+    this.label = node.getAdaptor( String.class );
+    this.isJoin = node.isJoin();
+    this.color = NodeDrawConfig.getColor( token );
+  }
+
+  public DefaultNodeIcon (String label, Color color, boolean isJoin)
+  {
+    this.label = label;
+    this.color = color;
+    this.isJoin = isJoin;
   }
 
   @Override
@@ -44,13 +53,13 @@ public class DefaultNodeIcon implements Icon
   {
     Graphics2D g2d = (Graphics2D)g;
 
-    g.setColor( NodeDrawConfig.getColor( token ) );
+    g.setColor( color );
     g.fillOval( x, y, WIDTH - 1, HEIGHT - 1 );
 
     //g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER : NodeDrawConfig.NODE_BORDER);
     g.setColor( NodeDrawConfig.NODE_BORDER);
 
-    float[] dashes = node.isJoin() ? new float[] { 10, 5 } : null;
+    float[] dashes = isJoin ? new float[] { 10, 5 } : null;
 
     int offset = 1;
 
@@ -70,13 +79,11 @@ public class DefaultNodeIcon implements Icon
 
     int maxWidth = getIconWidth() - (padding << 1);
 
-    String name = node.getName();
-
-    FontUtil.setSizedFont( g, name, 11, maxWidth );
-    int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( name, g ).getWidth() );
+    FontUtil.setSizedFont( g, label, 11, maxWidth );
+    int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( label, g ).getWidth() );
     int strHeight = g.getFontMetrics().getAscent();
     int left = startX + ((maxWidth - strWidth) >> 1);
     int top = y + ((getIconHeight() + strHeight) >> 1);
-    g.drawString( name, left, top );
+    g.drawString( label, left, top );
   }
 }
