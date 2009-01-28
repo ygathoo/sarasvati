@@ -38,6 +38,7 @@ import org.netbeans.api.visual.graph.GraphScene;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.LayerWidget;
 import org.netbeans.api.visual.widget.Widget;
+import org.netbeans.modules.visual.export.Scene2Image;
 
 import com.googlecode.sarasvati.adapter.Function;
 
@@ -135,7 +136,8 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
     getScene().validate( g );
     getScene().paint( g );
 
-    SvScene2Image s = new SvScene2Image( getScene() );
+    Scene2Image s = new Scene2Image( getScene(), null );
+    s.setScale( 1 );
 
     List<WidgetPolygonalCoordinates> coords = s.getSceneImageMapCoordinates(  0 );
 
