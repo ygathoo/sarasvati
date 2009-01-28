@@ -37,5 +37,4 @@ public class EditorGraphMember
   {
     this.name = name;
   }
-
 }

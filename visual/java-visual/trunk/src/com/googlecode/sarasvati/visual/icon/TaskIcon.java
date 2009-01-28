@@ -39,13 +39,22 @@ public class TaskIcon implements Icon
   public static final int WIDTH  = 100;
   public static final int HEIGHT = NodeDrawConfig.getMaxNodeRadius() << 1;
 
-  protected Node node;
-  protected NodeToken token;
+  protected boolean isJoin;
+  protected String label;
+  protected Color color;
 
   public TaskIcon (Node node, NodeToken token)
   {
-    this.node = node;
-    this.token = token;
+    this.label = node.getAdaptor( String.class );
+    this.isJoin = node.isJoin();
+    this.color = NodeDrawConfig.getColor( token );
+  }
+
+  public TaskIcon (String label, Color color, boolean isJoin)
+  {
+    this.label = label;
+    this.color = color;
+    this.isJoin = isJoin;
   }
 
   @Override
@@ -65,11 +74,11 @@ public class TaskIcon implements Icon
   {
     Graphics2D g2d = (Graphics2D)g;
 
-    g.setColor( NodeDrawConfig.getColor( token ) );
+    g.setColor( color );
     g.fillOval( x, y, WIDTH - 1, HEIGHT - 1 );
     g.fillRoundRect( x, y, WIDTH - 1, HEIGHT - 1, 10, 10 );
 
-    float[] dashes = node.isJoin() ? new float[] { 10, 5 } : null;
+    float[] dashes = isJoin ? new float[] { 10, 5 } : null;
 
     int offset = 1;
 
@@ -85,9 +94,8 @@ public class TaskIcon implements Icon
     g.drawRoundRect( x + offset, y + offset, width, height, 10, 10 );
 
     g.setColor( Color.white );
-    String taskName = node.getAdaptor( String.class );
 
-    String[] lines = FontUtil.split( taskName );
+    String[] lines = FontUtil.split( label );
 
     int padding = 2 + offset;
     int startX = x + padding;
@@ -96,10 +104,10 @@ public class TaskIcon implements Icon
 
     if ( lines.length == 1 )
     {
-      FontUtil.setSizedFont( g, taskName, 11, maxWidth );
+      FontUtil.setSizedFont( g, label, 11, maxWidth );
       int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[0], g ).getWidth() );
       int left = startX + ((maxWidth - strWidth) >> 1);
-      g.drawString( taskName, left, y + (getIconHeight() >> 1) );
+      g.drawString( label, left, y + (getIconHeight() >> 1) );
     }
     else if ( lines.length == 2 )
     {
