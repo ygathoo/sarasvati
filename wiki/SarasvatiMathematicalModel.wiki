@@ -3,8 +3,9 @@
 == Concise Natural Language Description ==
 
   * A graph is made up of nodes and arcs.
-  * A subset of nodes are join nodes
-  * A subset of nodes are start nodes
+  * A subset of nodes are join nodes.
+  * A subset of nodes are start nodes. The set of start nodes may be empty, but this case is not useful, as it will not be executable. 
+  * The set of join nodes and the set of start nodes may intersect.
   * Nodes have the following properties
     * A guard function, which given a node token, returns one of Accept, Discard or Skip.
     * An execute function.
