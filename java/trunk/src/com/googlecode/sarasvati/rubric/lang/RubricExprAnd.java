@@ -22,25 +22,11 @@ package com.googlecode.sarasvati.rubric.lang;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricExprAnd implements RubricExpr
+public class RubricExprAnd extends AbstractBinaryRubricExpr
 {
-  protected RubricExpr left;
-  protected RubricExpr right;
-
   public RubricExprAnd (RubricExpr left, RubricExpr right)
   {
-    this.left = left;
-    this.right = right;
-  }
-
-  public RubricExpr getLeft ()
-  {
-    return left;
-  }
-
-  public RubricExpr getRight ()
-  {
-    return right;
+    super( left, right );
   }
 
   @Override
@@ -55,5 +41,17 @@ public class RubricExprAnd implements RubricExpr
     visitor.visit( this );
     left.traverse( visitor );
     right.traverse( visitor );
+  }
+
+  @Override
+  public boolean isAnd ()
+  {
+    return true;
+  }
+
+  @Override
+  public RubricExprAnd toAnd ()
+  {
+    return this;
   }
 }

@@ -16,47 +16,37 @@
 
     Copyright 2008 Paul Lorenz
 */
-
 package com.googlecode.sarasvati.rubric.lang;
 
-import com.googlecode.sarasvati.rubric.env.RubricEnv;
-import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricExprSymbol extends AbstractRubricExpr
+public abstract class AbstractBinaryRubricExpr extends AbstractRubricExpr
 {
-  protected String symbol;
+  protected RubricExpr left;
+  protected RubricExpr right;
 
-  public RubricExprSymbol (String symbol)
+  public AbstractBinaryRubricExpr (RubricExpr left, RubricExpr right)
   {
-    this.symbol = symbol;
+    this.left = left;
+    this.right = right;
   }
 
-  public String getSymbol ()
+  public RubricExpr getLeft ()
   {
-    return symbol;
+    return left;
   }
 
-  @Override
-  public boolean eval (RubricEnv env)
+  public void setLeft (RubricExpr left)
   {
-    return env.evalPredicate( symbol );
+    this.left = left;
   }
 
-  @Override
-  public void traverse (RubricVisitor visitor)
+  public RubricExpr getRight ()
   {
-    visitor.visit( this );
+    return right;
   }
 
-  @Override
-  public boolean isSymbol ()
+  public void setRight (RubricExpr right)
   {
-    return true;
-  }
-
-  @Override
-  public RubricExprSymbol toSymbol ()
-  {
-    return this;
+    this.right = right;
   }
 }

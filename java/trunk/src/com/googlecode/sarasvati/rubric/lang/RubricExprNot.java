@@ -22,7 +22,7 @@ package com.googlecode.sarasvati.rubric.lang;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricExprNot implements RubricExpr
+public class RubricExprNot extends AbstractRubricExpr
 {
   protected RubricExpr expr;
 
@@ -36,6 +36,11 @@ public class RubricExprNot implements RubricExpr
     return expr;
   }
 
+  public void setExpr (RubricExpr expr)
+  {
+    this.expr = expr;
+  }
+
   @Override
   public boolean eval (RubricEnv env)
   {
@@ -47,5 +52,17 @@ public class RubricExprNot implements RubricExpr
   {
     visitor.visit( this );
     expr.traverse( visitor );
+  }
+
+  @Override
+  public boolean isNot ()
+  {
+    return true;
+  }
+
+  @Override
+  public RubricExprNot toNot ()
+  {
+    return this;
   }
 }

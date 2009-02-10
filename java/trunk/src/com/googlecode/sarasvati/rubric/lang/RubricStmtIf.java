@@ -40,14 +40,29 @@ public class RubricStmtIf implements RubricStmt
     return expr;
   }
 
+  public void setExpr (RubricExpr expr)
+  {
+    this.expr = expr;
+  }
+
   public RubricStmt getIfStmt ()
   {
     return ifStmt;
   }
 
+  public void setIfStmt (RubricStmt ifStmt)
+  {
+    this.ifStmt = ifStmt;
+  }
+
   public RubricStmt getElseStmt ()
   {
     return elseStmt;
+  }
+
+  public void setElseStmt (RubricStmt elseStmt)
+  {
+    this.elseStmt = elseStmt;
   }
 
   @Override
