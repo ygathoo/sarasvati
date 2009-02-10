@@ -27,4 +27,20 @@ public interface RubricExpr
   boolean eval (RubricEnv env);
 
   void traverse (RubricVisitor visitor);
+
+  boolean isAnd ();
+
+  boolean isOr ();
+
+  boolean isNot ();
+
+  boolean isSymbol ();
+
+  RubricExprAnd toAnd ();
+
+  RubricExprOr toOr ();
+
+  RubricExprNot toNot ();
+
+  RubricExprSymbol toSymbol ();
 }

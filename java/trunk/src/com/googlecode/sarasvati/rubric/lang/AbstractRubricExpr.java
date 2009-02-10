@@ -16,47 +16,56 @@
 
     Copyright 2008 Paul Lorenz
 */
-
 package com.googlecode.sarasvati.rubric.lang;
 
-import com.googlecode.sarasvati.rubric.env.RubricEnv;
-import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricExprSymbol extends AbstractRubricExpr
+public abstract class AbstractRubricExpr implements RubricExpr
 {
-  protected String symbol;
-
-  public RubricExprSymbol (String symbol)
+  @Override
+  public boolean isAnd ()
   {
-    this.symbol = symbol;
-  }
-
-  public String getSymbol ()
-  {
-    return symbol;
+    return false;
   }
 
   @Override
-  public boolean eval (RubricEnv env)
+  public boolean isNot ()
   {
-    return env.evalPredicate( symbol );
+    return false;
   }
 
   @Override
-  public void traverse (RubricVisitor visitor)
+  public boolean isOr ()
   {
-    visitor.visit( this );
+    return false;
   }
 
   @Override
   public boolean isSymbol ()
   {
-    return true;
+    return false;
+  }
+
+  @Override
+  public RubricExprAnd toAnd ()
+  {
+    return null;
+  }
+
+  @Override
+  public RubricExprNot toNot ()
+  {
+    return null;
+  }
+
+  @Override
+  public RubricExprOr toOr ()
+  {
+    return null;
   }
 
   @Override
   public RubricExprSymbol toSymbol ()
   {
-    return this;
+    return null;
   }
 }
