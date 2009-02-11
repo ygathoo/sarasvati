@@ -22,16 +22,19 @@ import com.googlecode.sarasvati.rubric.lang.RubricExpr;
 import com.googlecode.sarasvati.rubric.lang.RubricExprAnd;
 import com.googlecode.sarasvati.rubric.lang.RubricExprNot;
 import com.googlecode.sarasvati.rubric.lang.RubricExprOr;
+import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtIf;
 
 public class DropNotToAboveLeavesVisitor extends RubricVisitorAdaptor
 {
+  public static final DropNotToAboveLeavesVisitor INSTANCE = new DropNotToAboveLeavesVisitor ();
+
   @Override
   public void visit (RubricStmtIf ifStmt)
   {
     if ( ifStmt.getExpr().isNot() )
     {
-      ifStmt.setExpr( pushDownNot( ifStmt.getExpr().toNot() ) );
+      ifStmt.setExpr( pushDownNot( ifStmt.getExpr().asNot() ) );
     }
   }
 
@@ -40,11 +43,11 @@ public class DropNotToAboveLeavesVisitor extends RubricVisitorAdaptor
   {
     if ( andExpr.getLeft().isNot() )
     {
-      andExpr.setLeft( pushDownNot( andExpr.getLeft().toNot() ) );
+      andExpr.setLeft( pushDownNot( andExpr.getLeft().asNot() ) );
     }
     if ( andExpr.getRight().isNot() )
     {
-      andExpr.setRight( pushDownNot( andExpr.getRight().toNot() ) );
+      andExpr.setRight( pushDownNot( andExpr.getRight().asNot() ) );
     }
   }
 
@@ -53,32 +56,40 @@ public class DropNotToAboveLeavesVisitor extends RubricVisitorAdaptor
   {
     if ( orExpr.getLeft().isNot() )
     {
-      orExpr.setLeft( pushDownNot( orExpr.getLeft().toNot() ) );
+      orExpr.setLeft( pushDownNot( orExpr.getLeft().asNot() ) );
     }
     if ( orExpr.getRight().isNot() )
     {
-      orExpr.setRight( pushDownNot( orExpr.getRight().toNot() ) );
+      orExpr.setRight( pushDownNot( orExpr.getRight().asNot() ) );
     }
   }
 
   protected RubricExpr pushDownNot (RubricExprNot notExpr)
   {
     RubricExpr expr = notExpr.getExpr();
+
     if ( expr.isAnd() )
     {
-      RubricExprAnd andExpr = expr.toAnd();
-      expr = new RubricExprOr( negate( andExpr.getLeft() ), negate( andExpr.getRight() ) );
+      RubricExprAnd andExpr = expr.asAnd();
+      return new RubricExprOr( negate( andExpr.getLeft() ), negate( andExpr.getRight() ) );
     }
+
     if ( expr.isOr() )
     {
-      RubricExprAnd andExpr = expr.toAnd();
-      expr = new RubricExprAnd( negate( andExpr.getLeft() ), negate( andExpr.getRight() ) );
+      RubricExprOr orExpr = expr.asOr();
+      return new RubricExprAnd( negate( orExpr.getLeft() ), negate( orExpr.getRight() ) );
     }
-    return expr;
+
+    return notExpr;
   }
 
   protected RubricExpr negate (RubricExpr expr)
   {
-    return expr.isNot() ? expr.toNot().getExpr() : new RubricExprNot( expr );
+    return expr.isNot() ? expr.asNot().getExpr() : new RubricExprNot( expr );
+  }
+
+  public static void process (RubricStmt stmt)
+  {
+    stmt.traverse( INSTANCE );
   }
 }

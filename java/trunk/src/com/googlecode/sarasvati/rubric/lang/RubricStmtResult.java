@@ -22,7 +22,7 @@ package com.googlecode.sarasvati.rubric.lang;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricStmtResult implements RubricStmt
+public class RubricStmtResult extends AbstractRubricStmt
 {
   protected Object result;
 
@@ -36,6 +36,11 @@ public class RubricStmtResult implements RubricStmt
     return result;
   }
 
+  public void setResult (Object result)
+  {
+    this.result = result;
+  }
+
   @Override
   public Object eval (RubricEnv env)
   {
@@ -46,5 +51,23 @@ public class RubricStmtResult implements RubricStmt
   public void traverse (RubricVisitor visitor)
   {
     visitor.visit( this );
+  }
+
+  @Override
+  public boolean isEqualTo (RubricStmt stmt)
+  {
+    return stmt.isResult() && stmt.asResult().getResult().equals( result );
+  }
+
+  @Override
+  public RubricStmtResult asResult ()
+  {
+    return this;
+  }
+
+  @Override
+  public boolean isResult ()
+  {
+    return true;
   }
 }

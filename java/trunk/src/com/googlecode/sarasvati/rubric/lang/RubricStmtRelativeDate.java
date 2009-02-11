@@ -28,7 +28,7 @@ import java.util.Map.Entry;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricStmtRelativeDate implements RubricStmt
+public class RubricStmtRelativeDate extends AbstractRubricStmt
 {
   private static Map<String, Integer> unitMapping = new HashMap<String, Integer>();
 
@@ -110,5 +110,31 @@ public class RubricStmtRelativeDate implements RubricStmt
     }
 
     return offset + " " + (business ? " business " : "" ) + unitDesc + ( offset > 0 ? " after " : " before " ) + dateSymbolExpr.getSymbol();
+  }
+
+  @Override
+  public boolean isEqualTo (RubricStmt stmt)
+  {
+    if ( !stmt.isRelativeDate() )
+    {
+      return false;
+    }
+
+    RubricStmtRelativeDate other = stmt.asRelativeDate();
+    return other.getDateSymbolExpr().isEqualTo( dateSymbolExpr ) &&
+           other.getOffset() == offset &&
+           other.getUnit() == offset;
+  }
+
+  @Override
+  public RubricStmtRelativeDate asRelativeDate ()
+  {
+    return this;
+  }
+
+  @Override
+  public boolean isRelativeDate ()
+  {
+    return true;
   }
 }

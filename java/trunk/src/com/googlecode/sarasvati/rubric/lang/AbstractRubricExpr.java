@@ -46,25 +46,25 @@ public abstract class AbstractRubricExpr implements RubricExpr
   }
 
   @Override
-  public RubricExprAnd toAnd ()
+  public RubricExprAnd asAnd ()
   {
     return null;
   }
 
   @Override
-  public RubricExprNot toNot ()
+  public RubricExprNot asNot ()
   {
     return null;
   }
 
   @Override
-  public RubricExprOr toOr ()
+  public RubricExprOr asOr ()
   {
     return null;
   }
 
   @Override
-  public RubricExprSymbol toSymbol ()
+  public RubricExprSymbol asSymbol ()
   {
     return null;
   }

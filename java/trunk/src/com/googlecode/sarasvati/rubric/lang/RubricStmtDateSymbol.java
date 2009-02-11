@@ -24,7 +24,7 @@ import java.util.Date;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricStmtDateSymbol implements RubricStmt
+public class RubricStmtDateSymbol extends AbstractRubricStmt
 {
   protected String symbol;
 
@@ -38,6 +38,11 @@ public class RubricStmtDateSymbol implements RubricStmt
     return symbol;
   }
 
+  public void setSymbol (String symbol)
+  {
+    this.symbol = symbol;
+  }
+
   @Override
   public Date eval (RubricEnv env)
   {
@@ -48,5 +53,23 @@ public class RubricStmtDateSymbol implements RubricStmt
   public void traverse (RubricVisitor visitor)
   {
     visitor.visit( this );
+  }
+
+  @Override
+  public boolean isEqualTo (RubricStmt stmt)
+  {
+    return stmt.isDateSymbol() && stmt.asDateSymbol().getSymbol().equals( symbol );
+  }
+
+  @Override
+  public RubricStmtDateSymbol asDateSymbol ()
+  {
+    return this;
+  }
+
+  @Override
+  public boolean isDateSymbol ()
+  {
+    return true;
   }
 }

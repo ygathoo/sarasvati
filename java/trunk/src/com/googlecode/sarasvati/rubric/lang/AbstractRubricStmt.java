@@ -16,33 +16,56 @@
 
     Copyright 2008 Paul Lorenz
 */
-
 package com.googlecode.sarasvati.rubric.lang;
 
-import com.googlecode.sarasvati.rubric.env.RubricEnv;
-import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public interface RubricExpr
+public abstract class AbstractRubricStmt implements RubricStmt
 {
-  boolean eval (RubricEnv env);
+  @Override
+  public RubricStmtDateSymbol asDateSymbol ()
+  {
+    return null;
+  }
 
-  void traverse (RubricVisitor visitor);
+  @Override
+  public RubricStmtIf asIf ()
+  {
+    return null;
+  }
 
-  boolean isAnd ();
+  @Override
+  public RubricStmtRelativeDate asRelativeDate ()
+  {
+    return null;
+  }
 
-  boolean isOr ();
+  @Override
+  public RubricStmtResult asResult ()
+  {
+    return null;
+  }
 
-  boolean isNot ();
+  @Override
+  public boolean isDateSymbol ()
+  {
+    return false;
+  }
 
-  boolean isSymbol ();
+  @Override
+  public boolean isIf ()
+  {
+    return false;
+  }
 
-  RubricExprAnd asAnd ();
+  @Override
+  public boolean isRelativeDate ()
+  {
+    return false;
+  }
 
-  RubricExprOr asOr ();
-
-  RubricExprNot asNot ();
-
-  RubricExprSymbol asSymbol ();
-
-  boolean isEqualTo (RubricExpr expr);
+  @Override
+  public boolean isResult ()
+  {
+    return false;
+  }
 }
