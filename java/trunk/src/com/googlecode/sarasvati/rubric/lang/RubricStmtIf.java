@@ -22,7 +22,7 @@ package com.googlecode.sarasvati.rubric.lang;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
-public class RubricStmtIf implements RubricStmt
+public class RubricStmtIf extends AbstractRubricStmt
 {
   protected RubricExpr expr;
   protected RubricStmt ifStmt;
@@ -78,5 +78,32 @@ public class RubricStmtIf implements RubricStmt
     expr.traverse( visitor );
     ifStmt.traverse( visitor );
     elseStmt.traverse( visitor );
+  }
+
+  @Override
+  public RubricStmtIf asIf ()
+  {
+    return this;
+  }
+
+  @Override
+  public boolean isIf ()
+  {
+    return true;
+  }
+
+  @Override
+  public boolean isEqualTo (RubricStmt stmt)
+  {
+    if ( !stmt.isIf() )
+    {
+      return false;
+    }
+
+    RubricStmtIf other = stmt.asIf();
+
+    return other.getExpr().isEqualTo( expr ) &&
+           other.getIfStmt().isEqualTo( ifStmt ) &&
+           other.getElseStmt().isEqualTo( elseStmt );
   }
 }

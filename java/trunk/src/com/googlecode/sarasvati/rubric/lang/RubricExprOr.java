@@ -50,8 +50,21 @@ public class RubricExprOr extends AbstractBinaryRubricExpr
   }
 
   @Override
-  public RubricExprOr toOr ()
+  public RubricExprOr asOr ()
   {
     return this;
+  }
+
+  @Override
+  public boolean isEqualTo (RubricExpr expr)
+  {
+    if ( !expr.isOr() )
+    {
+      return false;
+    }
+
+    RubricExprOr other = expr.asOr();
+    return other.getLeft().isEqualTo( left ) &&
+           other.getRight().isEqualTo( right );
   }
 }

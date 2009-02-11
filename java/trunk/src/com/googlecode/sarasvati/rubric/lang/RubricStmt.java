@@ -27,4 +27,22 @@ public interface RubricStmt
   Object eval (RubricEnv env);
 
   void traverse (RubricVisitor visitor);
+
+  boolean isEqualTo (RubricStmt stmt);
+
+  boolean isDateSymbol ();
+
+  boolean isIf ();
+
+  boolean isRelativeDate ();
+
+  boolean isResult ();
+
+  RubricStmtDateSymbol asDateSymbol ();
+
+  RubricStmtIf asIf ();
+
+  RubricStmtRelativeDate asRelativeDate ();
+
+  RubricStmtResult asResult ();
 }

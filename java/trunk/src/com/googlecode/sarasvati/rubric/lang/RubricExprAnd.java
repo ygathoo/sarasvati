@@ -50,8 +50,21 @@ public class RubricExprAnd extends AbstractBinaryRubricExpr
   }
 
   @Override
-  public RubricExprAnd toAnd ()
+  public RubricExprAnd asAnd ()
   {
     return this;
+  }
+
+  @Override
+  public boolean isEqualTo (RubricExpr expr)
+  {
+    if ( !expr.isAnd() )
+    {
+      return false;
+    }
+
+    RubricExprAnd other = expr.asAnd();
+    return other.getLeft().isEqualTo( left ) &&
+           other.getRight().isEqualTo( right );
   }
 }

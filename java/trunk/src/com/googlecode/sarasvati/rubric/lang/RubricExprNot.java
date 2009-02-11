@@ -61,8 +61,14 @@ public class RubricExprNot extends AbstractRubricExpr
   }
 
   @Override
-  public RubricExprNot toNot ()
+  public RubricExprNot asNot ()
   {
     return this;
+  }
+
+  @Override
+  public boolean isEqualTo (RubricExpr e)
+  {
+    return e.isNot() && e.asNot().getExpr().isEqualTo( expr );
   }
 }
