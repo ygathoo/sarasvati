@@ -1,7 +1,11 @@
 #summary Backtracking
 
 = Motivation =
-In graph based workflow, execution proceeds forward from node to node along directed arcs. Here is a simple, linear workflow:
+In graph based workflow, execution proceeds forward from node to node along directed arcs. However, it happens that we wish to allow execution to return to nodes where it has already been. Sometimes this is done a some action needs to be performed repeatedly. Other times, it's because something has gone wrong, and we need to go back to an earlier point to fix things and go back through the process. Here we focus primarily on the second case, and look at different ways of accomplishing this.
+
+=Linear Backtracking=
+==Linear Process Definition
+Here is a simple, linear workflow:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-graph1.jpg]
 
@@ -9,7 +13,7 @@ In this case, there is only one progression that can be made. Using squares for 
 
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process1.jpg]
 
-==Going back manually==
+==Linear Backtracking: Manual==
 
 What if we wish to let a user choose to send the workflow backwards, instead of forwards, say to fix a mistake made earlier. If we wanted to be able to go back, we'd have to set up arcs going backwards. Assuming, we want maximum flexibility, we'd end up with a process definition that looked like:
 
@@ -23,7 +27,7 @@ Note that the arc tokens now display the arc name.
 
 We have gained flexibility, but at the cost of making the workflow much more complex. The number of arcs has tripled.
 
-==Backtracking==
+==Linear Backtracking: Automatic==
 
 What if instead, we could use the existing arcs? After all we know where we've been, and we just wish to go back to a previous good state. So, rather than having to make explicit arcs that go back to all conceivable previous states, we can just *backtrack*. In other words we can just trace our footsteps backwards to where we were.
 
@@ -50,3 +54,26 @@ Note that since we are somewhat literally retracing our steps, to get from *D* t
 From here we now finish, and go to the end.
 
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process3-5.jpg]
+
+=Nonlinear Backtracking=
+==Nonlinear Process Definition==
+Let us now examine a process definition which has splits and joins. 
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-graph3.jpg]
+
+These complicate manual backtracking a great deal. 
+
+===Backtracking a Split===
+If one has multiple, concurrent node tokens active after a split, backtracking one of them means that all must be backtracked. The one which has been backtracked must out and find all incomplete concurrent tokens and complete them. It must also set a marker indicating that backtracking should occur. All the tokens must then first be collected by an intermediary node, which will test to see if a backtrack is required. It will then send execution forward or back based on this test.
+
+If all tokens which were generated from the split aren't collected and sent back as a single token then each token sent back to the split will generate a new set of tokens from the split. This could cause many duplicates to be generated.
+
+===Backtracking a Join===
+Going back from a join is both more and less problematic. A join can act as a split and send tokens back all of its inputs. However, it is very difficult to go back to just one of the join's inputs. If only one of the join inputs is reactivated, then the join will never fire, since it won't have all the required inputs available.
+
+==Nonlinear Backtracking: Manual==
+Here is an example of what a graph which would be roughly equivalent to the previous graph, but allows manual backtracking.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-graph4.jpg]
+
+It has a great deal many more arcs, as well as a more complicated structure, to accommodate backtracking to the split.
