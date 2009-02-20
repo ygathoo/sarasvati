@@ -76,4 +76,28 @@ Here is an example of what a graph which would be roughly equivalent to the prev
 
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-graph4.jpg]
 
-It has a great deal many more arcs, as well as a more complicated structure, to accommodate backtracking to the split.
+It has a great deal many more arcs, as well as a more complicated structure, to accommodate backtracking to the split. 
+
+==Nonlinear Backtracking: Automatic==
+To see how automated backtracking would work, let us first progress from *A* to *B* to where both *C* and *D* are open.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process4-s1.jpg]
+
+We can now attempt to backtrack to *B*.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process4-s2.jpg]
+
+The engine will follow all execution history which emanated from *B* and attempt to reverse it. So we can see that it flows backwards from *C* and *D* backwards to *B*.
+
+If we now attempt to backtrack one more step to *A*, the execution history will look like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process4-s3.jpg]
+
+Though this appears to be a simple linear backtrack, it's actually slightly complicated. The history starting from *A* includes the backtracking we just did. So the engine must traverse this to get to the current active tokens and backtrack them.
+
+===Variation===
+If we were to backtrack directly from when *C* and *D* were open back to *A*, the execution history would look as follows:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process4-s4.jpg]
+
+It looks almost the same, except that the second *B* is marked as a backwards execution, since this time, we went straight across it, instead of stopping there, and then continuing backwards.
