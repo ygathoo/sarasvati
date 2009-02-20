@@ -9,7 +9,9 @@ In this case, there is only one progression that can be made. Using squares for 
 
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process1.jpg]
 
-If however, we want to let a user choose to send the workflow backwards, instead of forwards, say to fix a mistake made earlier. If we wanted to be able to go back, we'd have to set up arcs backwards. Assuming, we want maximum flexibility, we'd end up with a process definition that looked like:
+==Going back manually==
+
+What if we wish to let a user choose to send the workflow backwards, instead of forwards, say to fix a mistake made earlier. If we wanted to be able to go back, we'd have to set up arcs going backwards. Assuming, we want maximum flexibility, we'd end up with a process definition that looked like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-graph2.jpg]
 
@@ -20,3 +22,31 @@ Now we could go from A to B to C, back to B to C to D, back to B to C to D and d
 Note that the arc tokens now display the arc name.
 
 We have gained flexibility, but at the cost of making the workflow much more complex. The number of arcs has tripled.
+
+==Backtracking==
+
+What if instead, we could use the existing arcs? After all we know where we've been, and we just wish to go back to a previous good state. So, rather than having to make explicit arcs that go back to all conceivable previous states, we can just *backtrack*. In other words we can just trace our footsteps backwards to where we were.
+
+So, lets says we've gotten up to *C*. At this point, the process execution history looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process3-1.jpg]
+
+Now we wish to backtrack to *B*. If we retrace our steps, the process history will now look like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process3-2.jpg]
+
+Note that when we traverse arc *2* backward, it's marked in red. This is to mark that we've gone backwards along that arc. The node tokens on *B* and *C*, as well as the forward moving arc token on *2* are also marked, but in blue. This is to note that these actions have been backtracked. When node tokens are backtracked, they are given the opportunity to undo whatever work they did, send out notifications, or do whatever else is required.
+
+We can now move forward again, this time going up to *D*, where the process execution history looks like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process3-3.jpg]
+
+If from here, we once again wish to return to *B*, the execution history will look like:
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process3-4.jpg]
+
+Note that since we are somewhat literally retracing our steps, to get from *D* to *B* we created backwards tokens at arc *3*, node *C* and arc *2*. The corresponding forward tokens have been marked as backtracked. 
+
+From here we now finish, and go to the end.
+
+[http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process3-5.jpg]
