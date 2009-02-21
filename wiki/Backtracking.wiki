@@ -154,9 +154,9 @@ To backtrack, invoke the `backtrack(NodeToken token)` method on your `Engine` in
 
 Your custom node classes may override the `isBacktrackable` and `backtrack` methods on `Node`.
 
-`isBacktrackable` will control whether a given invocation of `Engine#backtrack` will succeed. Sometimes, business logic may require that certain actions not be repeated. 
+`Node#isBacktrackable` will control whether a given invocation of `Engine#backtrack` will succeed. Sometimes, business logic may require that certain actions not be repeated. 
 
-`Node#backtrack` gives a place to to undo the the results of your custom node logic, and/or send notifications. 
+`Node#backtrack` gives a place to to undo the the results of your custom node logic, and/or send notifications. This method will not be invoked until after `isBacktrackable` has returned true for all nodes needing to be backtracked. 
 
 {{{
   /**
