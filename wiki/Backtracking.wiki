@@ -110,7 +110,7 @@ We'll use the same process definition as we used for demonstrating splits.
 Going back from a join is both more and less problematic than a split. A join can act as a split and send tokens back all of its inputs. However, it is very difficult to go back to just one of the inputs. If only one of the join inputs is reactivated, then the join will never fire, since it won't have all the required inputs available.
 
 ==Automated==
-To start of with, assume execution has proceeded to *E* and the execution history looks like:
+To start off with, assume execution has proceeded to *E* and the execution history looks like:
 
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process4-j1.jpg]
 
