@@ -3,7 +3,7 @@
 Note: This document assumes that you have read an understood the [EngineConcepts core concepts documentation]. However, the general concepts presented here should still make sense without that, if you some basic knowledge of graph based execution models.
 
 = Motivation =
-In graph based workflow, execution proceeds forward from node to node along directed arcs. However, it happens that we wish to allow execution to return to nodes where it has already been. Sometimes this is done a some action needs to be performed repeatedly. Other times, it's because something has gone wrong, and we need to go back to an earlier point to fix things and go back through the process. Here we focus primarily on the second case, and look at different ways of accomplishing this.
+In graph based workflow, execution proceeds forward from node to node along directed arcs. However, it happens that we wish to allow execution to return to nodes where it has already been. Sometimes this is done because some action needs to be performed repeatedly. Other times, it's because something has gone wrong, and we need to go back to an earlier point to fix things and go back through the process. Here we focus primarily on the second case, and look at different ways of accomplishing this.
 
 =Linear Backtracking=
 ==Linear Process Definition==
