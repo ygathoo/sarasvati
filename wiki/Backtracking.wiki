@@ -133,3 +133,48 @@ If instead of completing *C* we backtracked to *D* as well, the process would no
 [http://sarasvati.googlecode.com/svn/wiki/images/backtrack-process4-j4.jpg]
 
 The u-turn arc token is now marked as backtracked and a node token is now active on *D*.
+
+=Java API=
+Backtracking is very easy to use in Sarasvati.
+
+To backtrack, invoke the `backtrack(NodeToken token)` method on your `Engine` instance.
+
+{{{
+  /**
+   * Backtracks execution to the point where the given node token was active. The token
+   * must be complete and must not have been backtracked before. If it's not complete,
+   * there isn't any point in backtracking to it. If it has already been backtracked,
+   * the execution has either returned to a point previous to that token, or there is
+   * a newer, non-backtracked token at that node now.
+   *
+   * @param token The destination token to backtrack to.
+   */
+  void backtrack (NodeToken token);
+}}}
+
+Your custom node classes may override the `isBacktrackable` and `backtrack` methods on `Node`.
+
+`isBacktrackable` will control whether a given invocation of `Engine#backtrack` will succeed. Sometimes, business logic may require that certain actions not be repeated. 
+
+`Node#backtrack` gives a place to to undo the the results of your custom node logic, and/or send notifications. 
+
+{{{
+  /**
+   * Returns true if the specific execution of this Node by the given
+   * NodeToken can be backtracked.
+   *
+   * @param engine The engine doing the backtracking
+   * @param token The token being backtracked
+   * @return True if the node can be backtracked, false otherwise.
+   */
+  boolean isBacktrackable (Engine engine, NodeToken token);
+
+  /**
+   * Does whatever work is necessary to backtrack this execution. For example,
+   * a task node may send a notification that the task has been backtracked.
+   *
+   * @param engine The engine doing the backtracking
+   * @param token The specific token being backtracked.
+   */
+  void backtrack (Engine engine, NodeToken token);
+}}}
