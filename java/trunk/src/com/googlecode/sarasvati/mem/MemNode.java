@@ -161,7 +161,7 @@ public class MemNode implements Node, Cloneable
 
   /**
    * Does nothing by default. Can be overridden by subclasses.
-   * @see Node#backtrack(NodeToken)
+   * @see Node#backtrack(Engine, NodeToken)
    */
   @Override
   public void backtrack (Engine engine, NodeToken token)

@@ -36,7 +36,7 @@ Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' t
 
     * BSF
        Summary : Bean Scripting Framework
-       License : Unknown, free to download
+       License : Apache License 2.0
        Homepage: http://jakarta.apache.org/bsf/
        Other   : Optional at runtime, required for scripting support in Java 1.5 environments
 
@@ -45,6 +45,20 @@ Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' t
        License : MPL 1.1/GPL2.0 dual license
        Homepage: http://www.mozilla.org/rhino/
        Other   : Optional at runtime, provides for javascript scripting support in Java 1.5 environments
+
+    * Visual Library
+       Summary : Graphical editing frame work from Netbeans project
+       License : GPL with Classpath Exception
+       Homepage: http://graph.netbeans.org/
+       Other   : Covers the jars: org-openide-util.jar, org-netbeans-api-visual.jar.
+                 org-netbeans-api-visual-src.jar contains the source code for org-netbeans-api-visual.jar
+                 since it has one minor API change.
+
+    *  Eclipse GEF Draw2D
+       Summary : Graphical editing framework from Eclipse project
+       License : EPL
+       Homepage: http://www.eclipse.org/gef/
+       Other   : Is only used for the ShortestPathRouter class.
 
 Notice:
   This product includes software developed by the Apache Software Foundation (http://www.apache.org/).

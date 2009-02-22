@@ -53,8 +53,10 @@ public interface Token
    * Marks the token as backtracked by changing the execution
    * type. If the execution type is {@link ExecutionType#Forward}
    * it gets changed to {@link ExecutionType#ForwardBacktracked}.
-   * If the execution type is {@link ExecutionType#Backward} it
-   * gets changed to {@value ExecutionType#BackwardBacktracked}.
+   * If the execution type is {@link ExecutionType#UTurn} it
+   * gets changed to {@link ExecutionType#UTurnBacktracked}.
+   * If the execution type is {@link ExecutionType#Backtracked} it
+   * stays the same.
    *
    * Any other type of change should not occur.
    */

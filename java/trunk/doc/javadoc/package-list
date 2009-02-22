@@ -12,4 +12,11 @@ com.googlecode.sarasvati.rubric.lang
 com.googlecode.sarasvati.rubric.visitor
 com.googlecode.sarasvati.script
 com.googlecode.sarasvati.util
+com.googlecode.sarasvati.visitor
+com.googlecode.sarasvati.visual
+com.googlecode.sarasvati.visual.common
+com.googlecode.sarasvati.visual.graph
+com.googlecode.sarasvati.visual.icon
+com.googlecode.sarasvati.visual.process
+com.googlecode.sarasvati.visual.util
 com.googlecode.sarasvati.xml
