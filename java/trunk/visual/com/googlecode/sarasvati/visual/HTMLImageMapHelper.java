@@ -50,7 +50,7 @@ public class HTMLImageMapHelper
    *                                                        hrefMapper,
    *                                                        titleMapper,
    *                                                        "/path/to/file.gif" );
-   *   String map = "<map name=\"graph\">" + result + "</map>";
+   *   String map = "&lt;map name=\"graph\"&gt;" + result + "&lt;/map&gt;";
    * </pre>
    *
    * @param graph The graph to export
@@ -92,7 +92,7 @@ public class HTMLImageMapHelper
    *                                                        hrefMapper,
    *                                                        titleMapper,
    *                                                        "/path/to/file.gif" );
-   *   String map = "<map name=\"graph\">" + result + "</map>";
+   *   String map = "&lt;map name=\"graph\"&gt;" + result + "&lt;/map&gt;";
    * </pre>
    *
    * @param process The graph process to export
