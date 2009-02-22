@@ -22,6 +22,7 @@
   </path>
 
   <available file="${fetch.indicator}" property="libs.notfetched"/>
+  <available file="${lib/rubric.jar}" property="rubric.jar.missing" value="false"/>
 
   <target name="fetchlibs" if="libs.notfetched">
     <echo message="Need to fetch libraries from SVN respository. May be slow, depending on your internet connection"/>
@@ -36,6 +37,7 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/commons-collections-3.2.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/commons-logging.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/dom4j.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/eclipse-draw2d-3.4.0.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/ejb3-persistence.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-3.2.6.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-annotations-3.3.1.jar"/>
@@ -73,7 +75,11 @@
     </jar>
   </target>
 
-  <target name="compile" depends="fetchlibs">
+  <target name="buildMissingLangJar" if="rubric.jar.missing">
+    <ant target="buildLangJar"/>
+  </target>
+
+  <target name="compile" depends="fetchlibs, buildMissingLangJar">
     <mkdir dir="${build.dir}" />
     <javac destdir="${build.dir}" source="1.5" target="1.5" debug="true">
       <src>
@@ -112,7 +118,7 @@
     </copy>
 
     <jar basedir="${build.dir}" destfile="${archive.base}/${release.name}.jar">
-      <exclude name="lang/**"/>
+      <exclude name="lang/com/**"/>
       <exclude name="**/visual/**"/>
     </jar>
 
