@@ -10,6 +10,7 @@
 
   <property name="dist.name" value="sarasvati-java-${version}"/>
   <property name="release.name" value="sarasvati-${version}"/>
+  <property name="visual.release.name" value="sarasvati-visual-${version}"/>
 
   <property name="archive.base" value="${dist.dir}/${dist.name}"/>
   <property name="fetch.indicator" value="lib/.fetchlibs"/>
@@ -29,8 +30,8 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/antlr-3.1.1.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/antlr-3.1.1-runtime.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/antlr3-ant.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/dom4j.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/asm.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/bsf-2.4.0.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/cglib.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/commons-collections-3.2.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/commons-logging.jar"/>
@@ -41,8 +42,10 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-search-3.0.1.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-validator-3.0.0.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/jboss-j2ee.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/org-openide-util.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/org-netbeans-api-visual.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/org-netbeans-api-visual-src.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/postgresql-8.3-603.jdbc4.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/bsf-2.4.0.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/rhino-1.6R7.jar"/>
       </resources>
     </copy>
@@ -72,7 +75,11 @@
 
   <target name="compile" depends="fetchlibs">
     <mkdir dir="${build.dir}" />
-    <javac srcdir="src" destdir="${build.dir}" source="1.5" target="1.5" debug="true">
+    <javac destdir="${build.dir}" source="1.5" target="1.5" debug="true">
+      <src>
+        <pathelement path="src"/>
+        <pathelement path="visual"/>
+      </src>
       <include name="**/*.java" />
       <classpath refid="classpath"/>
     </javac>
@@ -104,12 +111,18 @@
       </fileset>
     </copy>
 
-    <jar basedir="${build.dir}" excludes="lang/**" destfile="${archive.base}/${release.name}.jar"/>
+    <jar basedir="${build.dir}" destfile="${archive.base}/${release.name}.jar">
+      <exclude name="lang/**"/>
+      <exclude name="**/visual/**"/>
+    </jar>
+
+    <jar basedir="${build.dir}" includes="**/visual/**" destfile="${archive.base}/${visual.release.name}.jar"/>
 
     <copy todir="${archive.base}">
       <fileset dir=".">
         <include name="build.xml"/>
         <include name="src/**"/>
+        <include name="visual/**"/>
         <include name="doc/**"/>
         <include name="examples/**"/>
         <include name="lang/**"/>
