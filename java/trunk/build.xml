@@ -22,7 +22,7 @@
   </path>
 
   <available file="${fetch.indicator}" property="libs.notfetched"/>
-  <available file="${lib/rubric.jar}" property="rubric.jar.missing" value="false"/>
+  <available file="lib/rubric.jar" property="rubric.jar.exists"/>
 
   <target name="fetchlibs" if="libs.notfetched">
     <echo message="Need to fetch libraries from SVN respository. May be slow, depending on your internet connection"/>
@@ -75,7 +75,7 @@
     </jar>
   </target>
 
-  <target name="buildMissingLangJar" if="rubric.jar.missing">
+  <target name="buildMissingLangJar" unless="rubric.jar.exists">
     <ant target="buildLangJar"/>
   </target>
 
