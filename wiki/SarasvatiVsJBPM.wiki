@@ -8,6 +8,8 @@ jBPM is the dominant open-source business process modeling solution at the momen
 
 ==Sarasvati Advantages==
 
+  * Support for [Backtracking backtracking]
+  * Built in support for generating web based visualizations
   * Support for [http://code.google.com/p/sarasvati/wiki/EngineConcepts#Graph_Composition_and_Nested_Processes load time process composition].
   * More concise model. jBPM requires separate nodes, specific nodes for split and join. In Sarasvati, any node can function as a split and/or join. 
     * If explicit splits and joins are desired, Sarasvati can handle this easily.
