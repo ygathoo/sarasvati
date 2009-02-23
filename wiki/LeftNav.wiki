@@ -1,4 +1,3 @@
-*Contents*
  * [Workflow What is Workflow?]
  * [GraphBasedWorkflow Why use graphs?]
  * [EngineConcepts Core Concepts]
