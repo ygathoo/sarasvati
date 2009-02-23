@@ -2,6 +2,6 @@
  * [GraphBasedWorkflow Why use graphs?]
  * [EngineConcepts Core Concepts]
  * [UsingSarasvati APIs and Integration]
- * [Rubric Rubric - ]
+ * [Rubric Rubric: A language for guards ]
  * [Backtracking Backtracking]
  * [SarasvatiMathematicalModel Mathematical Model]
