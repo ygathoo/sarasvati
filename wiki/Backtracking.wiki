@@ -1,6 +1,6 @@
 #summary Backtracking
 
-Note: This document assumes that you have read an understood the [EngineConcepts core concepts documentation]. However, the general concepts presented here should still make sense without that, if you some basic knowledge of graph based execution models.
+Note: This document assumes that you have read an understood the [EngineConcepts core concepts documentation]. However, the general concepts presented here should still make sense without that, if you have basic knowledge of how graph based execution works.
 
 <wiki:toc/>
 
