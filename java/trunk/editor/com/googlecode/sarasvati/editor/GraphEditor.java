@@ -1,16 +1,20 @@
 package com.googlecode.sarasvati.editor;
 
+import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.xml.bind.JAXBException;
 
@@ -27,7 +31,11 @@ public class GraphEditor
 {
   protected XmlLoader   xmlLoader;
   protected JFrame      mainWindow;
+  protected JPanel      mainPanel;
+  protected JToolBar    toolBar;
   protected JTabbedPane tabPane;
+
+  protected EditorMode  mode;
 
   public GraphEditor () throws JAXBException, LoadException
   {
@@ -39,6 +47,16 @@ public class GraphEditor
     return mainWindow;
   }
 
+  public EditorMode getMode ()
+  {
+    return mode;
+  }
+
+  public void setMode (EditorMode mode)
+  {
+    this.mode = mode;
+  }
+
   protected void setup ()
   {
     mainWindow = new JFrame( "Sarasvati Graph Editor" );
@@ -47,10 +65,24 @@ public class GraphEditor
     mainWindow.setJMenuBar( createMenu() );
     mainWindow.setVisible( true );
 
+    toolBar = new JToolBar( "Tools" );
+    toolBar.setFloatable( true );
+    toolBar.add( new JButton( "Move" ) );
+    toolBar.add( new JButton( "Edit Arcs" ) );
+    toolBar.add( new JButton( "Add Nodes" ) );
+    toolBar.add( new JButton( "Add External" ) );
+    toolBar.add( new JButton( "Add Tasks" ) );
+
     tabPane = new JTabbedPane( JTabbedPane.TOP );
     tabPane.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );
 
-    mainWindow.setContentPane( tabPane );
+    mainPanel = new JPanel ();
+    mainPanel.setLayout( new BorderLayout() );
+
+    mainPanel.add( toolBar, BorderLayout.PAGE_START );
+    mainPanel.add( tabPane, BorderLayout.CENTER );
+
+    mainWindow.setContentPane( mainPanel );
   }
 
   protected JMenuBar createMenu ()
@@ -78,7 +110,7 @@ public class GraphEditor
   {
     try
     {
-      XmlProcessDefinition xmlProcDef = xmlLoader.loadProcessDefinition(  processDefinitionFile );
+      XmlProcessDefinition xmlProcDef = xmlLoader.loadProcessDefinition( processDefinitionFile );
       EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef );
       EditorScene scene = new EditorScene();
 
