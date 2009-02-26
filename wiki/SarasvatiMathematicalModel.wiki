@@ -1,5 +1,7 @@
 #summary A concise mathematical description of the Sarasvati model
 
+<wiki:toc/>
+
 == Concise Natural Language Description ==
 
   * A graph is made up of nodes and arcs.
