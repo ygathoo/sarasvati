@@ -16,52 +16,29 @@
 
     Copyright 2008 Paul Lorenz
  */
-package com.googlecode.sarasvati.editor.model;
+package com.googlecode.sarasvati.editor.toolbar;
 
-public class EditorNode extends EditorGraphMember
+import java.awt.event.ActionEvent;
+
+import javax.swing.AbstractAction;
+
+import com.googlecode.sarasvati.editor.GraphEditor;
+
+public class MoveModeAction extends AbstractAction
 {
-  protected String  type;
-  protected boolean isStart;
-  protected boolean isJoin;
-  protected String  guard;
+  private static final long serialVersionUID = 1L;
 
-  public String getType ()
+  protected GraphEditor     editor;
+
+  public MoveModeAction (GraphEditor editor)
   {
-    return type;
+    super( "Move" );
+    this.editor = editor;
   }
 
-  public void setType (String type)
+  @Override
+  public void actionPerformed (ActionEvent e)
   {
-    this.type = type;
-  }
-
-  public boolean isStart ()
-  {
-    return isStart;
-  }
-
-  public void setStart (boolean isStart)
-  {
-    this.isStart = isStart;
-  }
-
-  public boolean isJoin ()
-  {
-    return isJoin;
-  }
-
-  public void setJoin (boolean isJoin)
-  {
-    this.isJoin = isJoin;
-  }
-
-  public String getGuard ()
-  {
-    return guard;
-  }
-
-  public void setGuard (String guard)
-  {
-    this.guard = guard;
+    editor.modeMove();
   }
 }

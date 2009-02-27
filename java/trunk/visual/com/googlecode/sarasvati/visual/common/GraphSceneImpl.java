@@ -28,8 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.netbeans.api.visual.action.ActionFactory;
-import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.anchor.AnchorFactory;
 import org.netbeans.api.visual.anchor.AnchorShape;
@@ -50,15 +48,13 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   protected LayerWidget connLayer = new LayerWidget( this );
 
   protected ShortestPathRouterAdapter router;
-  protected WidgetAction moveAction = ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null );
-
   protected Map<N,Anchor> anchorMap = new HashMap<N,Anchor>();
 
   public GraphSceneImpl()
   {
     addChild( mainLayer );
-    addChild( intrLayer );
     addChild( connLayer );
+    addChild( intrLayer );
 
     router = new ShortestPathRouterAdapter( this );
   }
@@ -95,11 +91,10 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   }
 
   @Override
-  protected Widget attachNodeWidget(N node)
+  protected Widget attachNodeWidget (N node)
   {
     Widget widget = widgetForNode( node );
     mainLayer.addChild( widget );
-    widget.getActions().addAction( moveAction );
     anchorMap.put( node, AnchorFactory.createRectangularAnchor( widget ) );
     router.addNodeWidget( widget );
     return widget;

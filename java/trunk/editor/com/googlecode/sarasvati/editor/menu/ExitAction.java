@@ -15,53 +15,36 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
- */
-package com.googlecode.sarasvati.editor.model;
+*/
+package com.googlecode.sarasvati.editor.menu;
 
-public class EditorNode extends EditorGraphMember
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
+
+import com.googlecode.sarasvati.editor.GraphEditor;
+
+public class ExitAction extends AbstractAction
 {
-  protected String  type;
-  protected boolean isStart;
-  protected boolean isJoin;
-  protected String  guard;
+  private static final long serialVersionUID = 1L;
 
-  public String getType ()
+  protected GraphEditor editor;
+
+  public ExitAction (GraphEditor editor)
   {
-    return type;
+    super( "Exit" );
+    this.editor = editor;
+
+    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Q, KeyEvent.CTRL_MASK ) );
+    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_X );
   }
 
-  public void setType (String type)
+  @Override
+  public void actionPerformed (ActionEvent e)
   {
-    this.type = type;
-  }
-
-  public boolean isStart ()
-  {
-    return isStart;
-  }
-
-  public void setStart (boolean isStart)
-  {
-    this.isStart = isStart;
-  }
-
-  public boolean isJoin ()
-  {
-    return isJoin;
-  }
-
-  public void setJoin (boolean isJoin)
-  {
-    this.isJoin = isJoin;
-  }
-
-  public String getGuard ()
-  {
-    return guard;
-  }
-
-  public void setGuard (String guard)
-  {
-    this.guard = guard;
+    System.exit( 0 );
   }
 }

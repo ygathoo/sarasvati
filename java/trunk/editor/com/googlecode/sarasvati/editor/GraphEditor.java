@@ -1,3 +1,21 @@
+/*
+    This file is part of Sarasvati.
+
+    Sarasvati is free software: you can redistribute it and/or modify
+    it under the terms of the GNU Lesser General Public License as
+    published by the Free Software Foundation, either version 3 of the
+    License, or (at your option) any later version.
+
+    Sarasvati is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU Lesser General Public License for more details.
+
+    You should have received a copy of the GNU Lesser General Public
+    License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
+
+    Copyright 2008 Paul Lorenz
+*/
 package com.googlecode.sarasvati.editor;
 
 import java.awt.BorderLayout;
@@ -6,6 +24,7 @@ import java.awt.event.KeyEvent;
 import java.io.File;
 
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -18,11 +37,14 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.xml.bind.JAXBException;
 
-import com.googlecode.sarasvati.editor.model.EditorArc;
+import com.googlecode.sarasvati.editor.menu.ExitAction;
+import com.googlecode.sarasvati.editor.menu.NewGraphAction;
+import com.googlecode.sarasvati.editor.menu.OpenAction;
 import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
-import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorScene;
+import com.googlecode.sarasvati.editor.toolbar.AddNodeModeAction;
+import com.googlecode.sarasvati.editor.toolbar.MoveModeAction;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
@@ -67,9 +89,16 @@ public class GraphEditor
 
     toolBar = new JToolBar( "Tools" );
     toolBar.setFloatable( true );
-    toolBar.add( new JButton( "Move" ) );
+
+    JButton moveButton = new JButton( "Move" );
+    moveButton.setAction( new MoveModeAction( this ) );
+
+    toolBar.add( moveButton );
     toolBar.add( new JButton( "Edit Arcs" ) );
-    toolBar.add( new JButton( "Add Nodes" ) );
+
+    JButton addNodeButton = new JButton( "Add Nodes" );
+    addNodeButton.setAction( new AddNodeModeAction( this ) );
+    toolBar.add( addNodeButton );
     toolBar.add( new JButton( "Add External" ) );
     toolBar.add( new JButton( "Add Tasks" ) );
 
@@ -83,6 +112,8 @@ public class GraphEditor
     mainPanel.add( tabPane, BorderLayout.CENTER );
 
     mainWindow.setContentPane( mainPanel );
+
+    createNewProcessDefinition();
   }
 
   protected JMenuBar createMenu ()
@@ -102,8 +133,12 @@ public class GraphEditor
 
   public void createNewProcessDefinition ()
   {
-    JScrollPane scrollPane = new JScrollPane();
+    final JScrollPane scrollPane = new JScrollPane();
     tabPane.addTab( "Untitled", scrollPane );
+
+    final EditorScene scene = new EditorScene( this, new EditorGraph() );
+    scrollPane.setViewportView( scene.createView() );
+    scrollPane.putClientProperty( "scene", scene );
   }
 
   public void openProcessDefinition (File processDefinitionFile)
@@ -112,19 +147,7 @@ public class GraphEditor
     {
       XmlProcessDefinition xmlProcDef = xmlLoader.loadProcessDefinition( processDefinitionFile );
       EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef );
-      EditorScene scene = new EditorScene();
-
-      for ( EditorGraphMember member : graph.getMembers().values() )
-      {
-        scene.addNode( member );
-      }
-
-      for ( EditorArc arc : graph.getArcs() )
-      {
-        scene.addEdge( arc );
-        scene.setEdgeSource(  arc, arc.getStart() );
-        scene.setEdgeTarget( arc, arc.getEnd() );
-      }
+      EditorScene scene = new EditorScene( this, graph );
 
       JScrollPane scrollPane = new JScrollPane();
       scrollPane.setViewportView( scene.createView() );
@@ -135,6 +158,38 @@ public class GraphEditor
     {
       JOptionPane.showMessageDialog( mainWindow, e.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE );
     }
+  }
+
+  public void modeMove ()
+  {
+    if ( this.mode != EditorMode.Move )
+    {
+      this.mode = EditorMode.Move;
+      EditorScene scene = getCurrentScene();
+      if ( scene != null )
+      {
+        scene.modeMove();
+      }
+    }
+  }
+
+  public void modeAddNode ()
+  {
+    if ( this.mode != EditorMode.AddNode )
+    {
+      this.mode = EditorMode.AddNode;
+      EditorScene scene = getCurrentScene();
+      if ( scene != null )
+      {
+        scene.modeAddNode();
+      }
+    }
+  }
+
+  public EditorScene getCurrentScene ()
+  {
+    JComponent c = (JComponent)tabPane.getSelectedComponent();
+    return c != null ? (EditorScene)c.getClientProperty( "scene" ) : null;
   }
 
   public static void main( String[] args ) throws Exception
