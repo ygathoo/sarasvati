@@ -81,7 +81,7 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   }
 
   @Override
-  protected Widget attachEdgeWidget(E edge)
+  protected PathTrackingConnectionWidget attachEdgeWidget(E edge)
   {
     PathTrackingConnectionWidget conn = new PathTrackingConnectionWidget( router, this );
     conn.setRouter( router );
