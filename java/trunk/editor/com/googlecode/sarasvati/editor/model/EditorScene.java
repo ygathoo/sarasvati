@@ -28,6 +28,7 @@ import org.netbeans.api.visual.action.ConnectProvider;
 import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.action.ReconnectProvider;
 import org.netbeans.api.visual.action.WidgetAction;
+import org.netbeans.api.visual.anchor.PointShape;
 import org.netbeans.api.visual.widget.ComponentWidget;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Scene;
@@ -38,6 +39,7 @@ import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.SceneAddNodeAction;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
+import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 
 public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
@@ -91,9 +93,10 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
   }
 
   @Override
-  protected Widget attachEdgeWidget (EditorArc edge)
+  protected PathTrackingConnectionWidget attachEdgeWidget (EditorArc edge)
   {
-    Widget widget = super.attachEdgeWidget( edge );
+    PathTrackingConnectionWidget widget = super.attachEdgeWidget( edge );
+    widget.setEndPointShape (PointShape.SQUARE_FILLED_BIG);
     widget.getActions().addAction( createObjectHoverAction() );
     widget.getActions().addAction( createSelectAction() );
     widget.getActions().addAction( reconnectAction );
@@ -142,7 +145,6 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 
     public boolean isSourceWidget (Widget sourceWidget)
     {
-      System.out.println( "Hello" );
       Object object = findObject (sourceWidget);
       source = isNode (object) ? (EditorGraphMember) object : null;
       return source != null;
