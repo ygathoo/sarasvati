@@ -28,17 +28,23 @@ import com.googlecode.sarasvati.editor.model.EditorScene;
 
 public class SceneAddNodeAction extends WidgetAction.Adapter
 {
-  protected boolean enabled = true;
-  protected EditorScene scene;
+  public static SceneAddNodeAction INSTANCE = new SceneAddNodeAction();
 
-  public SceneAddNodeAction (EditorScene scene)
+  protected static boolean enabled = false;
+
+  public static void setEnabled (boolean enabled)
   {
-    this.scene = scene;
+    SceneAddNodeAction.enabled = enabled;
   }
 
   @Override
   public State mouseClicked (Widget widget, WidgetMouseEvent event)
   {
+    if( !enabled )
+    {
+      return State.REJECTED;
+    }
+
     if ( event.getClickCount() == 1 && event.getButton() == MouseEvent.BUTTON1 )
     {
       EditorNode node = new EditorNode();
@@ -50,7 +56,7 @@ public class SceneAddNodeAction extends WidgetAction.Adapter
 
       node.setOrigin( widget.convertLocalToScene( event.getPoint() ) );
 
-      scene.addNode( node );
+      ((EditorScene)widget.getScene()).addNode( node );
       return State.CONSUMED;
     }
 

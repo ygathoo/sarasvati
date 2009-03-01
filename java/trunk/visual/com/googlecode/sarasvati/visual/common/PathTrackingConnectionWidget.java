@@ -76,10 +76,10 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
     else
     {
       router.removePath( path );
-      start  = null;
-      end    = null;
-      path   = null;
-      router = null;
+      start = null;
+      end   = null;
+      path  = null;
+      route = null;
     }
   }
 

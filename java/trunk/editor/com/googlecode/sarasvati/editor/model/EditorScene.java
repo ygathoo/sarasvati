@@ -36,6 +36,7 @@ import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.editor.EditorMode;
 import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.NodePropertiesAction;
 import com.googlecode.sarasvati.editor.SceneAddNodeAction;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
@@ -47,7 +48,6 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
   private GraphEditor editor;
   private EditorGraph graph;
 
-  final private WidgetAction addNodeAction = new SceneAddNodeAction( this );
   final private WidgetAction moveAction = ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null );
   final private WidgetAction connectAction = ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() );
   final private WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
@@ -56,6 +56,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
   {
     this.editor = editor;
     this.graph = graph;
+
+    getActions().addAction( SceneAddNodeAction.INSTANCE );
 
     for ( EditorGraphMember member : graph.getMembers().values() )
     {
@@ -72,8 +74,6 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 
   public void modeAddNode ()
   {
-    getActions().addAction( addNodeAction );
-
     for (Widget widget : mainLayer.getChildren() )
     {
       widget.getActions().removeAction( moveAction );
@@ -83,8 +83,6 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 
   public void modeMove ()
   {
-    getActions().removeAction( addNodeAction );
-
     for ( Widget widget : mainLayer.getChildren() )
     {
       widget.getActions().removeAction( connectAction );
@@ -126,6 +124,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 
     widget.setPreferredLocation( node.getOrigin() );
 
+    widget.getActions().addAction( new NodePropertiesAction() );
     if ( editor.getMode() == EditorMode.Move )
     {
       widget.getActions().addAction( moveAction );

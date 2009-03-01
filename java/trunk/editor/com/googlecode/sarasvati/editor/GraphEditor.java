@@ -87,6 +87,8 @@ public class GraphEditor
     mainWindow.setJMenuBar( createMenu() );
     mainWindow.setVisible( true );
 
+    DialogFactory.setFrame( mainWindow );
+
     toolBar = new JToolBar( "Tools" );
     toolBar.setFloatable( true );
 
@@ -162,6 +164,7 @@ public class GraphEditor
 
   public void modeMove ()
   {
+    SceneAddNodeAction.setEnabled( false );
     if ( this.mode != EditorMode.Move )
     {
       this.mode = EditorMode.Move;
@@ -175,6 +178,7 @@ public class GraphEditor
 
   public void modeAddNode ()
   {
+    SceneAddNodeAction.setEnabled( true );
     if ( this.mode != EditorMode.AddNode )
     {
       this.mode = EditorMode.AddNode;

@@ -113,8 +113,8 @@ public class ShortestPathRouterAdapter implements Router
 
   public class WidgetListener implements Widget.Dependency
   {
-    Widget widget;
-    Rectangle bounds;
+    private Widget widget;
+    private Rectangle bounds;
 
     public Rectangle getNewBounds ()
     {
@@ -131,34 +131,37 @@ public class ShortestPathRouterAdapter implements Router
     {
       this.widget = widget;
       this.bounds = getNewBounds();
+
+      if ( bounds != null )
+      {
+        router.addObstacle( bounds );
+      }
+
       dirty = true;
     }
 
     @Override
     public void revalidateDependency ()
     {
-      if (bounds == null )
+      Rectangle newBounds = getNewBounds();
+
+      if ( bounds == null )
       {
-        bounds = getNewBounds();
-        if (bounds != null )
+        if ( newBounds != null )
         {
-          router.addObstacle( bounds );
+          router.addObstacle( newBounds );
         }
+      }
+      else if ( newBounds == null )
+      {
+        router.removeObstacle( bounds );
       }
       else
       {
-        Rectangle newBounds = getNewBounds();
-        if ( newBounds == null )
-        {
-          router.removeObstacle( bounds );
-        }
-        else
-        {
-          router.updateObstacle( bounds, newBounds );
-        }
-        bounds = newBounds;
+        router.updateObstacle( bounds, newBounds );
       }
 
+      bounds = newBounds;
       dirty = true;
     }
 
