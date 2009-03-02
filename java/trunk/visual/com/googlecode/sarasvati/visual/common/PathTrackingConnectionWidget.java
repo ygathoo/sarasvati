@@ -38,10 +38,9 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
   protected Point start = null;
   protected Point end   = null;
 
+  protected Path oldPath = null;
   protected Path path;
   protected boolean resetControlPoints = false;
-
-  protected List<Point> route = null;
 
   public PathTrackingConnectionWidget (ShortestPathRouterAdapter router, Scene scene)
   {
@@ -70,7 +69,6 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
         path = new Path( ConvertUtil.awtToSwt( start ), ConvertUtil.awtToSwt( end ) );
         router.addPath( path );
         resetControlPoints = true;
-        route = null;
       }
     }
     else
@@ -79,7 +77,6 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
       start = null;
       end   = null;
       path  = null;
-      route = null;
     }
   }
 
@@ -90,17 +87,16 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
       return Collections.emptyList();
     }
 
-    if ( route == null )
+    PointList pointList = path.getPoints();
+
+    // Route is apparently not cache-able, b/c when I try,
+    // connections no longer route properly.
+    ArrayList<Point> route = new ArrayList<Point>( pointList.size() );
+
+    for ( int i = 0; i < pointList.size(); i++ )
     {
-      PointList pointList = path.getPoints();
-
-      route = new ArrayList<Point>( pointList.size() );
-
-      for ( int i = 0; i < pointList.size(); i++ )
-      {
-        Point point = ConvertUtil.swtToAwt( pointList.getPoint( i ) );
-        route.add( point );
-      }
+      Point point = ConvertUtil.swtToAwt( pointList.getPoint( i ) );
+      route.add( point );
     }
 
     return route;

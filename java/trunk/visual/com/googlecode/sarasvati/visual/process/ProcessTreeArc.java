@@ -3,7 +3,7 @@ package com.googlecode.sarasvati.visual.process;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 
-public class ProcessTreeArc
+public class ProcessTreeArc implements VisualProcessArc
 {
   protected ArcToken token;
   protected Arc      arc;

@@ -31,13 +31,17 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.adapter.Function;
 import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
 import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
+import com.googlecode.sarasvati.visual.util.HoverFunctionAdapter;
+import com.googlecode.sarasvati.visual.util.HrefFunctionAdapter;
+import com.googlecode.sarasvati.visual.util.ProcessHoverFunctionAdapter;
+import com.googlecode.sarasvati.visual.util.ProcessHrefFunctionAdapter;
 
 /**
  * Utility class to help generating HTML Image maps of graphs and processes.
  *
  * @author Paul Lorenz
  */
-public class HTMLImageMapHelper
+public class ImageMapUtil
 {
   /**
    * Generates the contents of an HTML image map. The results must still be
@@ -47,16 +51,14 @@ public class HTMLImageMapHelper
    *   Graph graph = ...;
    *   String result = HTMLImageMapHelper.exportToImageMap( graph,
    *                                                        widgetFactory,
-   *                                                        hrefMapper,
-   *                                                        titleMapper,
+   *                                                        graphToImageMap,
    *                                                        "/path/to/file.gif" );
    *   String map = "&lt;map name=\"graph\"&gt;" + result + "&lt;/map&gt;";
    * </pre>
    *
    * @param graph The graph to export
    * @param widgetFactory The Factory to use to generate Widgets for Nodes.
-   * @param hrefMapper The function to use to generate clickable links for nodes
-   * @param titleMapper The function to use to generate hovers for nodes
+   * @param graphToImageMap Helper class which generates links and hovers for the image map
    * @param gifFileName The file in which to put the generated .gif.
    *
    * @return The contents of an HTML image map.
@@ -65,8 +67,7 @@ public class HTMLImageMapHelper
    */
   public static String exportToImageMap (Graph graph,
                                          NodeWidgetFactory widgetFactory,
-                                         Function<String, Widget> hrefMapper,
-                                         Function<String, Widget> titleMapper,
+                                         GraphToImageMap graphToImageMap,
                                          String gifFileName)
     throws IOException
   {
@@ -74,7 +75,10 @@ public class HTMLImageMapHelper
     graphScene.setupForExportOnHeadless();
 
     StringBuilder buf = new StringBuilder( 1024 );
-    BufferedImage image = graphScene.export( buf, hrefMapper, titleMapper );
+
+    Function<String,Widget> hrefMapper = new HrefFunctionAdapter( graphToImageMap );
+    Function<String,Widget> hoverMapper = new HoverFunctionAdapter( graphToImageMap );
+    BufferedImage image = graphScene.export( buf, hrefMapper, hoverMapper );
     ImageIO.write( image, "gif", new File( gifFileName ) );
     image.flush();
 
@@ -89,16 +93,14 @@ public class HTMLImageMapHelper
    *   GraphProcess process = ...;
    *   String result = HTMLImageMapHelper.exportToImageMap( process,
    *                                                        widgetFactory
-   *                                                        hrefMapper,
-   *                                                        titleMapper,
+   *                                                        processToImageMap,
    *                                                        "/path/to/file.gif" );
    *   String map = "&lt;map name=\"graph\"&gt;" + result + "&lt;/map&gt;";
    * </pre>
    *
    * @param process The graph process to export
    * @param widgetFactory The Factory to use to generate Widgets for ProcessTreeNodes.
-   * @param hrefMapper The function to use to generate clickable links for nodes
-   * @param titleMapper The function to use to generate hovers for nodes
+   * @param processToImageMap Helper class which generates links and hovers for the image map
    * @param gifFileName The file in which to put the generate .gif.
    *
    * @return The contents of an HTML image map.
@@ -107,16 +109,18 @@ public class HTMLImageMapHelper
    */
   public static String exportToImageMap (GraphProcess process,
                                          ProcessTreeNodeWidgetFactory widgetFactory,
-                                         Function<String, Widget> hrefMapper,
-                                         Function<String, Widget> titleMapper,
+                                         ProcessToImageMap processToImageMap,
                                          String gifFileName)
     throws IOException
   {
     SarasvatiProcessScene graphScene = new SarasvatiProcessScene( process, widgetFactory, false );
     graphScene.setupForExportOnHeadless();
 
+    Function<String,Widget> hrefMapper = new ProcessHrefFunctionAdapter( processToImageMap );
+    Function<String,Widget> hoverMapper = new ProcessHoverFunctionAdapter( processToImageMap );
+
     StringBuilder buf = new StringBuilder( 1024 );
-    BufferedImage image = graphScene.export( buf, hrefMapper, titleMapper );
+    BufferedImage image = graphScene.export( buf, hrefMapper, hoverMapper );
     ImageIO.write( image, "gif", new File( gifFileName ) );
     image.flush();
 
