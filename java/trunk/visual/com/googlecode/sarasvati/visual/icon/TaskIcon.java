@@ -16,9 +16,6 @@
 
     Copyright 2008 Paul Lorenz
 */
-/**
- * Created on May 16, 2008
- */
 package com.googlecode.sarasvati.visual.icon;
 
 import java.awt.BasicStroke;

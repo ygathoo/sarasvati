@@ -108,7 +108,7 @@ public class ImageMapUtil
    * @throws IOException
    */
   public static String exportToImageMap (GraphProcess process,
-                                         ProcessTreeNodeWidgetFactory widgetFactory,
+                                         VisualProcessNodeWidgetFactory widgetFactory,
                                          ProcessToImageMap processToImageMap,
                                          String gifFileName)
     throws IOException
