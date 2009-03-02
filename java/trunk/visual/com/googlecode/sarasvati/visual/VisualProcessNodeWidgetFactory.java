@@ -20,10 +20,10 @@ package com.googlecode.sarasvati.visual;
 
 import org.netbeans.api.visual.widget.Widget;
 
-import com.googlecode.sarasvati.visual.process.ProcessTreeNode;
 import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
+import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 
-public interface ProcessTreeNodeWidgetFactory
+public interface VisualProcessNodeWidgetFactory
 {
-  Widget newWidget (ProcessTreeNode node, SarasvatiProcessScene scene);
+  Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene);
 }

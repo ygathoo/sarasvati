@@ -25,8 +25,8 @@ import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
-import com.googlecode.sarasvati.visual.process.ProcessTreeNode;
 import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
+import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 
 /**
  * Generates widgets using a TaskIcon for nodes of type 'task', and DefaultNodeIcon
@@ -34,12 +34,12 @@ import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
  *
  * @author Paul Lorenz
  */
-public class DefaultProcessTreeNodeWidgetFactory implements ProcessTreeNodeWidgetFactory
+public class DefaultVisualProcessNodeWidgetFactory implements VisualProcessNodeWidgetFactory
 {
-  public static final DefaultProcessTreeNodeWidgetFactory INSTANCE = new DefaultProcessTreeNodeWidgetFactory();
+  public static final DefaultVisualProcessNodeWidgetFactory INSTANCE = new DefaultVisualProcessNodeWidgetFactory();
 
   @Override
-  public Widget newWidget (ProcessTreeNode node, SarasvatiProcessScene scene)
+  public Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene)
   {
     JLabel label = null;
 

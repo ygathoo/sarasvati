@@ -26,23 +26,23 @@ import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.visual.ProcessTreeNodeWidgetFactory;
+import com.googlecode.sarasvati.visual.VisualProcessNodeWidgetFactory;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 
 public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, ProcessTreeArc>
 {
   protected GraphProcess process;
-  protected ProcessTreeNodeWidgetFactory widgetFactory;
+  protected VisualProcessNodeWidgetFactory widgetFactory;
   protected ProcessTree processTree;
   protected boolean showSelfArcs;
 
-  public SarasvatiProcessScene (GraphProcess process, ProcessTreeNodeWidgetFactory widgetFactory)
+  public SarasvatiProcessScene (GraphProcess process, VisualProcessNodeWidgetFactory widgetFactory)
   {
     this( process, widgetFactory, false );
   }
 
-  public SarasvatiProcessScene (GraphProcess process, ProcessTreeNodeWidgetFactory widgetFactory, boolean showSelfArcs)
+  public SarasvatiProcessScene (GraphProcess process, VisualProcessNodeWidgetFactory widgetFactory, boolean showSelfArcs)
   {
     this.widgetFactory = widgetFactory;
     this.showSelfArcs = showSelfArcs;
@@ -76,7 +76,7 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
             ConnectionWidget w = (ConnectionWidget)findWidget( ptArc );
             w.resolveBounds( null, null );
 
-            ArcToken token =  ptArc.getToken();
+            ArcToken token = ptArc.getToken();
             if ( token != null )
             {
               w.setStroke( new BasicStroke( 3 ) );
