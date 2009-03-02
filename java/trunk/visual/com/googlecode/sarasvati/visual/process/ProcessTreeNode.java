@@ -26,7 +26,7 @@ import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 
-public class ProcessTreeNode
+public class ProcessTreeNode implements VisualProcessNode
 {
   protected ProcessTreeNode parent;
 

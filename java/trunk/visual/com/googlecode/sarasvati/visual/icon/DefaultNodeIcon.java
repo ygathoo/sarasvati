@@ -2,29 +2,20 @@ package com.googlecode.sarasvati.visual.icon;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
+import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-
-import javax.swing.Icon;
 
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.util.FontUtil;
 
-public class DefaultNodeIcon implements Icon
+public class DefaultNodeIcon extends AbstractNodeIcon
 {
-  public static final int WIDTH  = 100;
-  public static final int HEIGHT = NodeDrawConfig.getMaxNodeRadius() << 1;
-
   protected boolean isJoin;
   protected String label;
   protected Color color;
-
-  protected BufferedImage image;
 
   public DefaultNodeIcon (Node node, NodeToken token)
   {
@@ -47,31 +38,6 @@ public class DefaultNodeIcon implements Icon
   }
 
   @Override
-  public int getIconHeight()
-  {
-    return HEIGHT;
-  }
-
-  @Override
-  public int getIconWidth()
-  {
-    return WIDTH;
-  }
-
-  @Override
-  public void paintIcon(Component c, Graphics g, int x, int y)
-  {
-    g.drawImage( image, x, y, c );
-  }
-
-  public void redrawImage ()
-  {
-    image = new BufferedImage( getIconWidth(), getIconHeight(), BufferedImage.TYPE_4BYTE_ABGR );
-    Graphics2D g = image.createGraphics();
-    redrawImage( g );
-    g.dispose();
-  }
-
   public void redrawImage (Graphics2D g)
   {
     g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
@@ -102,6 +68,7 @@ public class DefaultNodeIcon implements Icon
 
     int maxWidth = getIconWidth() - (padding << 1);
 
+    g.setFont( g.getFont().deriveFont( Font.BOLD ) );
     FontUtil.setSizedFont( g, label, 11, maxWidth );
     int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( label, g ).getWidth() );
     int strHeight = g.getFontMetrics().getAscent();

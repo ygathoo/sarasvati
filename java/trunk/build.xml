@@ -2,7 +2,7 @@
 
   <taskdef name="antlr3" classname="org.apache.tools.ant.antlr.ANTLR3"/>
 
-  <property name="version" value="1.0.0-rc1"/>
+  <property name="version" value="1.0.0-rc2"/>
 
   <property name="dist.dir" value="dist"/>
   <property name="build.dir" value="${dist.dir}/build"/>
@@ -41,8 +41,7 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/ejb3-persistence.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-3.2.6.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-annotations-3.3.1.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-search-3.0.1.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-validator-3.0.0.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-commons-annotations-3.3.1.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/jboss-j2ee.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/org-openide-util.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/org-netbeans-api-visual.jar"/>

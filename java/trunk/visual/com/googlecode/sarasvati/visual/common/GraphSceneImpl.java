@@ -53,8 +53,8 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   public GraphSceneImpl()
   {
     addChild( mainLayer );
-    addChild( connLayer );
     addChild( intrLayer );
+    addChild( connLayer );
 
     router = new ShortestPathRouterAdapter( this );
   }

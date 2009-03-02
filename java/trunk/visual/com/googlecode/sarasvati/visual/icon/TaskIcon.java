@@ -23,22 +23,16 @@ package com.googlecode.sarasvati.visual.icon;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Component;
-import java.awt.Graphics;
+import java.awt.Font;
 import java.awt.Graphics2D;
-
-import javax.swing.Icon;
 
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.util.FontUtil;
 
-public class TaskIcon implements Icon
+public class TaskIcon extends AbstractNodeIcon
 {
-  public static final int WIDTH  = 100;
-  public static final int HEIGHT = NodeDrawConfig.getMaxNodeRadius() << 1;
-
   protected boolean isJoin;
   protected String label;
   protected Color color;
@@ -48,6 +42,7 @@ public class TaskIcon implements Icon
     this.label = node.getAdaptor( String.class );
     this.isJoin = node.isJoin();
     this.color = NodeDrawConfig.getColor( token );
+    redrawImage();
   }
 
   public TaskIcon (String label, Color color, boolean isJoin)
@@ -55,35 +50,23 @@ public class TaskIcon implements Icon
     this.label = label;
     this.color = color;
     this.isJoin = isJoin;
+    redrawImage();
   }
 
   @Override
-  public int getIconHeight ()
+  public void redrawImage (Graphics2D g)
   {
-    return HEIGHT;
-  }
-
-  @Override
-  public int getIconWidth ()
-  {
-    return WIDTH;
-  }
-
-  @Override
-  public void paintIcon (Component c, Graphics g, int x, int y)
-  {
-    Graphics2D g2d = (Graphics2D)g;
-
+    g.setFont( g.getFont().deriveFont( Font.BOLD ) );
     g.setColor( color );
-    g.fillOval( x, y, WIDTH - 1, HEIGHT - 1 );
-    g.fillRoundRect( x, y, WIDTH - 1, HEIGHT - 1, 10, 10 );
+    g.fillOval( 0, 0, WIDTH - 1, HEIGHT - 1 );
+    g.fillRoundRect( 0, 0, WIDTH - 1, HEIGHT - 1, 10, 10 );
 
     float[] dashes = isJoin ? new float[] { 10, 5 } : null;
 
     int offset = 1;
 
     BasicStroke stroke = new BasicStroke( 3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, dashes, 0) ;
-    g2d.setStroke( stroke );
+    g.setStroke( stroke );
 
     //g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER: NodeDrawConfig.NODE_BORDER );
     g.setColor( NodeDrawConfig.NODE_BORDER );
@@ -91,14 +74,14 @@ public class TaskIcon implements Icon
     int width = WIDTH - ((offset << 1) + 1);
     int height = HEIGHT - ((offset<< 1) + 1);
 
-    g.drawRoundRect( x + offset, y + offset, width, height, 10, 10 );
+    g.drawRoundRect( offset, offset, width, height, 10, 10 );
 
     g.setColor( Color.white );
 
     String[] lines = FontUtil.split( label );
 
     int padding = 2 + offset;
-    int startX = x + padding;
+    int startX = padding;
 
     int maxWidth = getIconWidth() - (padding << 1);
 
@@ -107,7 +90,7 @@ public class TaskIcon implements Icon
       FontUtil.setSizedFont( g, label, 11, maxWidth );
       int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[0], g ).getWidth() );
       int left = startX + ((maxWidth - strWidth) >> 1);
-      g.drawString( label, left, y + (getIconHeight() >> 1) );
+      g.drawString( label, left, (getIconHeight() >> 1) );
     }
     else if ( lines.length == 2 )
     {
@@ -115,7 +98,7 @@ public class TaskIcon implements Icon
 
       int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[0], g ).getWidth() );
       int left = startX + ((maxWidth - strWidth) >> 1);
-      g.drawString( lines[0], left, y + (getIconHeight() - offset >> 1) );
+      g.drawString( lines[0], left, (getIconHeight() - offset >> 1) );
 
       FontUtil.setSizedFont( g, lines[1], 11, maxWidth );
 
@@ -123,7 +106,7 @@ public class TaskIcon implements Icon
       strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[1], g ).getWidth() );
       left = startX + ((maxWidth - strWidth) >> 1);
 
-      g.drawString( lines[1], left, y + (getIconHeight() - offset >> 1) + (strHeight + 1) );
+      g.drawString( lines[1], left, (getIconHeight() - offset >> 1) + (strHeight + 1) );
     }
   }
 }
