@@ -45,8 +45,8 @@ import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 
 public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 {
-  private GraphEditor editor;
-  private EditorGraph graph;
+  protected GraphEditor editor;
+  protected EditorGraph graph;
 
   final private WidgetAction moveAction = ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null );
   final private WidgetAction connectAction = ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() );
@@ -137,7 +137,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
     return widget;
   }
 
-  private class SceneConnectProvider implements ConnectProvider
+  public class SceneConnectProvider implements ConnectProvider
   {
     private EditorGraphMember source = null;
     private EditorGraphMember target = null;
@@ -184,7 +184,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
     }
   }
 
-  private class SceneReconnectProvider implements ReconnectProvider
+  public class SceneReconnectProvider implements ReconnectProvider
   {
     private EditorArc arc;
     private EditorGraphMember originalNode;
