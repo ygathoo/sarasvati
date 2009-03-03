@@ -70,7 +70,7 @@ public class GraphTreeNode
     int xBasis = NodeDrawConfig.isVertical() ? getIndex() : getDepth();
     int yBasis = NodeDrawConfig.isVertical() ? getDepth() : getIndex();
 
-    originX = ((xBasis) * NodeDrawConfig.getHorizontalNodeSpacing()) +
+    originX = ((xBasis + 1) * NodeDrawConfig.getHorizontalNodeSpacing()) +
               (xBasis * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
               NodeDrawConfig.getMaxNodeRadius();
 

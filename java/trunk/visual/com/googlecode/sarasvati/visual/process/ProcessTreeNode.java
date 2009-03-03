@@ -32,7 +32,7 @@ public class ProcessTreeNode implements VisualProcessNode
 
   protected NodeToken token;
   protected Node      node;
-  protected int       depth;
+  protected int       depth = -1;
   protected int       index;
 
   protected int       originX;
@@ -173,7 +173,7 @@ public class ProcessTreeNode implements VisualProcessNode
       }
 
       if ( currentParent.getDepth() > selectedParent.getDepth() ||
-           currentParent.getDepth() == 0 )
+           currentParent.getDepth() == -1 )
       {
         return true;
       }
@@ -190,7 +190,7 @@ public class ProcessTreeNode implements VisualProcessNode
               (xBasis * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
               NodeDrawConfig.getMaxNodeRadius();
 
-    originY = ((yBasis + 1) * NodeDrawConfig.getVerticalNodeSpacing()) +
+    originY = ((yBasis) * NodeDrawConfig.getVerticalNodeSpacing()) +
               (yBasis * (NodeDrawConfig.getMaxNodeRadius() << 1)) +
               NodeDrawConfig.getMaxNodeRadius();
   }

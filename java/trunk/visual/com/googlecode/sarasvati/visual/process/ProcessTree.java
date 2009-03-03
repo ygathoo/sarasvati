@@ -293,7 +293,7 @@ public class ProcessTree
                !(treeNode.isCompletedNodeToken() && ptArc.getChild().hasNonCompleteNodeTokenParent() ) &&
                !(ptArc.getToken() == null && treeNode.getToken() != null && ptArc.getChild().hasLowerParent( treeNode ) ) )
           {
-            if ( ptArc.getChild().getDepth() == 0 )
+            if ( ptArc.getChild().getDepth() == -1 )
             {
               ptArc.getChild().setDepth( depth );
               ptArc.getChild().addToLayer( nextLayer );
