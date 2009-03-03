@@ -18,6 +18,7 @@
  */
 package com.googlecode.sarasvati.visual;
 
+import javax.swing.Icon;
 import javax.swing.JLabel;
 
 import org.netbeans.api.visual.widget.ComponentWidget;
@@ -41,17 +42,19 @@ public class DefaultVisualProcessNodeWidgetFactory implements VisualProcessNodeW
   @Override
   public Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene)
   {
-    JLabel label = null;
+    Icon icon = null;
 
     if ( "task".equals( node.getNode().getType() ) )
     {
-      label =  new JLabel( new TaskIcon( node.getNode(), node.getToken() ) );
+      icon = new TaskIcon( node.getNode(), node.getToken() );
     }
     else
     {
-      label = new JLabel( new DefaultNodeIcon( node.getNode(), node.getToken() ) );
+      icon = new DefaultNodeIcon( node.getNode(), node.getToken() );
     }
 
+    JLabel label = new JLabel( icon );
+    label.setSize( icon.getIconWidth(), icon.getIconHeight() );
     return new ComponentWidget( scene, label );
   }
 }

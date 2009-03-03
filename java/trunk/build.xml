@@ -157,11 +157,13 @@
     <zip destfile="${archive.base}.zip" basedir="${dist.dir}" compress="true" level="9">
       <include name="${dist.name}/**"/>
     </zip>
+    <!--
     <tar destfile="${archive.base}.tar" basedir="${dist.dir}" longfile="gnu">
       <include name="${dist.name}/**"/>
     </tar>
     <bzip2 src="${archive.base}.tar" destfile="${archive.base}.tar.bz2"/>
     <delete file="${archive.base}.tar"/>
+    -->
   </target>
 
   <target name="clean">
