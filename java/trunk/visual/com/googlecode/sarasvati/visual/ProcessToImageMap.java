@@ -62,7 +62,7 @@ public interface ProcessToImageMap
    *
    * If null is returned, no link will be associated with the arc.
    *
-   * @param node The arc to generate the HREF for
+   * @param arc The arc to generate the HREF for
    * @return An HREF for when the arc is clicked in the generated image.
    *         May be null, in which case no link is generated.
    */
@@ -75,7 +75,7 @@ public interface ProcessToImageMap
    *
    * If null is returned, no hover will be created for the arc.
    *
-   * @param node The arc to generate the hover for.
+   * @param arc The arc to generate the hover for.
    * @return An String to display in a hover when the arc is moused over.
    *         May be null, in which case no hover will appear.
    */
