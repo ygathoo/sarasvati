@@ -163,6 +163,24 @@ public class ProcessTreeNode implements VisualProcessNode
     return false;
   }
 
+  public boolean hasLowerParent (ProcessTreeNode selectedParent)
+  {
+    for ( ProcessTreeNode currentParent : parents )
+    {
+      if ( currentParent == selectedParent )
+      {
+        continue;
+      }
+
+      if ( currentParent.getDepth() > selectedParent.getDepth() ||
+           currentParent.getDepth() == 0 )
+      {
+        return true;
+      }
+    }
+    return false;
+  }
+
   public void recalculateOrigin ()
   {
     int xBasis = NodeDrawConfig.isVertical() ? getIndex() : getDepth();
