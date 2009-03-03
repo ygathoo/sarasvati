@@ -32,9 +32,7 @@ import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 
 public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, ProcessTreeArc>
 {
-  protected GraphProcess process;
   protected VisualProcessNodeWidgetFactory widgetFactory;
-  protected ProcessTree processTree;
   protected boolean showSelfArcs;
 
   public SarasvatiProcessScene (GraphProcess process, VisualProcessNodeWidgetFactory widgetFactory)
@@ -46,17 +44,15 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
   {
     this.widgetFactory = widgetFactory;
     this.showSelfArcs = showSelfArcs;
-    this.process = process;
 
     if ( process != null )
     {
-      ProcessTree pt = new ProcessTree( process );
-      Iterable<ProcessTreeNode> nodes = pt.getProcessTreeNodes();
+      ProcessTree processTree = new ProcessTree( process );
+      Iterable<ProcessTreeNode> nodes = processTree.getProcessTreeNodes();
 
       for ( ProcessTreeNode node : nodes )
       {
-        addNode( node );
-        Widget widget = findWidget( node );
+        Widget widget = addNode( node );
 
         Point origin = new Point( node.getOriginX(), node.getOriginY() );
         widget.setPreferredLocation( origin );
@@ -69,12 +65,9 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
         {
           if ( showSelfArcs || !ptArc.getParent().equals( ptArc.getChild() ) )
           {
-            addEdge( ptArc );
+            ConnectionWidget w = (ConnectionWidget)addEdge( ptArc );
             setEdgeSource( ptArc, ptArc.getParent() );
             setEdgeTarget( ptArc, ptArc.getChild() );
-
-            ConnectionWidget w = (ConnectionWidget)findWidget( ptArc );
-            w.resolveBounds( null, null );
 
             ArcToken token = ptArc.getToken();
             if ( token != null )
@@ -93,6 +86,8 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
                 w.setLineColor( NodeDrawConfig.NODE_BG_ACTIVE );
               }
             }
+
+            w.resolveBounds( null, null );
           }
         }
       }
@@ -102,8 +97,8 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
   }
 
   @Override
-  protected Widget widgetForNode (ProcessTreeNode ptNode)
+  protected Widget widgetForNode (ProcessTreeNode node)
   {
-    return widgetFactory.newWidget( ptNode, this );
+    return widgetFactory.newWidget( node, this );
   }
 }

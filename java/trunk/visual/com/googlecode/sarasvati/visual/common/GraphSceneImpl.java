@@ -119,7 +119,7 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
 
   public BufferedImage export (StringBuilder buf, Function<String, Widget> hrefMapper, Function<String, Widget> titleMapper )
   {
-    Rectangle bounds = getScene().getPreferredBounds();
+    Rectangle bounds = getPreferredBounds();
     BufferedImage image = new BufferedImage( bounds.width + NodeDrawConfig.getHorizontalNodeSpacing(),
                                              bounds.height + 20,
                                              BufferedImage.TYPE_4BYTE_ABGR );
@@ -129,10 +129,10 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
     g.fillRect( 0, 0, image.getWidth(), image.getHeight() );
     g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
 
-    getScene().validate( g );
-    getScene().paint( g );
+    validate( g );
+    paint( g );
 
-    Scene2Image s = new Scene2Image( getScene(), null );
+    Scene2Image s = new Scene2Image( this, null );
     s.setScale( 1 );
 
     List<WidgetPolygonalCoordinates> coords = s.getSceneImageMapCoordinates(  0 );
