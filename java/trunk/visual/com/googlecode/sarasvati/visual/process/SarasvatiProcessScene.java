@@ -19,31 +19,29 @@
 package com.googlecode.sarasvati.visual.process;
 
 import java.awt.BasicStroke;
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Point;
 
+import org.netbeans.api.visual.layout.LayoutFactory.ConnectionWidgetLayoutAlignment;
 import org.netbeans.api.visual.widget.ConnectionWidget;
+import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.visual.VisualProcessNodeWidgetFactory;
+import com.googlecode.sarasvati.visual.ProcessLookAndFeel;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 
 public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, ProcessTreeArc>
 {
-  protected VisualProcessNodeWidgetFactory widgetFactory;
-  protected boolean showSelfArcs;
+  protected static final Font ARC_LABEL_FONT = Font.decode( "serif bold 11" );
+  protected ProcessLookAndFeel lookAndFeel;
 
-  public SarasvatiProcessScene (GraphProcess process, VisualProcessNodeWidgetFactory widgetFactory)
+  public SarasvatiProcessScene (GraphProcess process, ProcessLookAndFeel lookAndFeel)
   {
-    this( process, widgetFactory, false );
-  }
-
-  public SarasvatiProcessScene (GraphProcess process, VisualProcessNodeWidgetFactory widgetFactory, boolean showSelfArcs)
-  {
-    this.widgetFactory = widgetFactory;
-    this.showSelfArcs = showSelfArcs;
+    this.lookAndFeel = lookAndFeel;
 
     if ( process != null )
     {
@@ -63,7 +61,7 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
       {
         for ( ProcessTreeArc ptArc : node.getChildren() )
         {
-          if ( showSelfArcs || !ptArc.getParent().equals( ptArc.getChild() ) )
+          if ( lookAndFeel.drawSelfArcs() || !ptArc.getParent().equals( ptArc.getChild() ) )
           {
             ConnectionWidget w = (ConnectionWidget)addEdge( ptArc );
             setEdgeSource( ptArc, ptArc.getParent() );
@@ -88,6 +86,16 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
             }
 
             w.resolveBounds( null, null );
+
+            if ( lookAndFeel.drawArcLabels() && ptArc.getArc().getName() != null )
+            {
+              LabelWidget arcLabel = new LabelWidget( this, ptArc.getArc().getName() );
+              arcLabel.setFont( ARC_LABEL_FONT );
+              arcLabel.setForeground( Color.BLUE );
+              arcLabel.setOpaque( true );
+              w.addChild( arcLabel );
+              w.setConstraint( arcLabel, ConnectionWidgetLayoutAlignment.CENTER, 30 );
+            }
           }
         }
       }
@@ -99,6 +107,6 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
   @Override
   protected Widget widgetForNode (ProcessTreeNode node)
   {
-    return widgetFactory.newWidget( node, this );
+    return lookAndFeel.newWidget( node, this );
   }
 }

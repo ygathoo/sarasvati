@@ -18,6 +18,10 @@
  */
 package com.googlecode.sarasvati.visual;
 
+import javax.swing.Icon;
+
+import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.TaskIcon;
 import com.googlecode.sarasvati.visual.process.VisualProcessArc;
 import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 
@@ -30,6 +34,32 @@ import com.googlecode.sarasvati.visual.process.VisualProcessNode;
  */
 public class ProcessToImageMapAdapter implements ProcessToImageMap
 {
+  /**
+   * Returns true unless overridden
+   * @see com.googlecode.sarasvati.visual.ProcessToImageMap#drawArcLabels()
+   */
+  @Override
+  public boolean drawArcLabels ()
+  {
+    return true;
+  }
+
+  /**
+   * Returns a {@link TaskIcon} for nodes with type of 'task' and a
+   * {@link DefaultNodeIcon} for all other nodes.
+   *
+   * @see com.googlecode.sarasvati.visual.GraphToImageMap#iconForNode(com.googlecode.sarasvati.Node)
+   */
+  @Override
+  public Icon iconForNode (VisualProcessNode node)
+  {
+    if ( "task".equalsIgnoreCase( node.getNode().getType() ) )
+    {
+      return new TaskIcon( node.getNode(), node.getToken() );
+    }
+    return new DefaultNodeIcon( node.getNode(), node.getToken() );
+  }
+
   @Override
   public String hoverForArc (VisualProcessArc arc)
   {

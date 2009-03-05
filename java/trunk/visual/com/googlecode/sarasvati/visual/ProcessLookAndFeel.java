@@ -20,15 +20,36 @@ package com.googlecode.sarasvati.visual;
 
 import org.netbeans.api.visual.widget.Widget;
 
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
+import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
+import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 
 /**
- * Generates an appropriate {@link Widget} for the given {@link Node}.
+ * Controls how a graph will be drawn, including generating an appropriate {@link Widget}
+ * for each {@link VisualProcessNode}.
  *
  * @author Paul Lorenz
  */
-public interface NodeWidgetFactory
+public interface ProcessLookAndFeel
 {
-  Widget newWidget (Node node, SarasvatiGraphScene scene);
+  /**
+   * Controls if self arcs should be drawn.
+   *
+   * @return True if self arcs should be drawn, false otherwise
+   */
+  boolean drawSelfArcs ();
+
+  /**
+   * Controls if arc labels should be drawn.
+   *
+   * @return True if arc labels should be drawn, false otherwise
+   */
+  boolean drawArcLabels ();
+
+  /**
+   * Controls if arc labels should be drawn.
+   *
+   * @return True if arc labels should be drawn, false otherwise
+   */
+
+  Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene);
 }

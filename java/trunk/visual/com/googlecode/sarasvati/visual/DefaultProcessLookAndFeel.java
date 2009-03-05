@@ -35,9 +35,30 @@ import com.googlecode.sarasvati.visual.process.VisualProcessNode;
  *
  * @author Paul Lorenz
  */
-public class DefaultVisualProcessNodeWidgetFactory implements VisualProcessNodeWidgetFactory
+public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
 {
-  public static final DefaultVisualProcessNodeWidgetFactory INSTANCE = new DefaultVisualProcessNodeWidgetFactory();
+  public static final DefaultProcessLookAndFeel INSTANCE = new DefaultProcessLookAndFeel( false, true );
+
+  protected boolean drawSelfArcs;
+  protected boolean drawArcLabels;
+
+  public DefaultProcessLookAndFeel (boolean drawSelfArcs, boolean drawArcLabels)
+  {
+    this.drawSelfArcs = drawSelfArcs;
+    this.drawArcLabels = drawArcLabels;
+  }
+
+  @Override
+  public boolean drawArcLabels ()
+  {
+    return drawArcLabels;
+  }
+
+  @Override
+  public boolean drawSelfArcs ()
+  {
+    return drawSelfArcs;
+  }
 
   @Override
   public Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene)
