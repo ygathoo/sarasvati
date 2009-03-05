@@ -43,7 +43,7 @@
     };
 
     imageMapCreator = new GraphImageMapCreator( graph, helper );
-    imageMapCreator.writeMapImageToFile( "gif", basePath + name );
+    imageMapCreator.writeImageToFile( "gif", basePath + name );
   }
   finally
   {

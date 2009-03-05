@@ -290,8 +290,11 @@ public class ProcessTree
         for ( ProcessTreeArc ptArc : treeNode.getChildren() )
         {
           if ( !processed.contains( ptArc.getChild() ) &&
-               !(treeNode.isCompletedNodeToken() && ptArc.getChild().hasNonCompleteNodeTokenParent() ) &&
-               !(ptArc.getToken() == null && treeNode.getToken() != null && ptArc.getChild().hasLowerParent( treeNode ) ) )
+               !( treeNode.isCompletedNodeToken() &&
+                  ptArc.getChild().hasNonCompleteNodeTokenParent() ) &&
+               !( ptArc.getToken() == null &&
+                  treeNode.getToken() != null &&
+                  ptArc.getChild().hasLowerParent( treeNode ) ) )
           {
             if ( ptArc.getChild().getDepth() == -1 )
             {

@@ -18,8 +18,11 @@
 */
 package com.googlecode.sarasvati.visual.process;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Queue;
+import java.util.Set;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
@@ -172,10 +175,37 @@ public class ProcessTreeNode implements VisualProcessNode
         continue;
       }
 
-      if ( currentParent.getDepth() > selectedParent.getDepth() ||
-           currentParent.getDepth() == -1 )
+      if ( ( currentParent.getDepth() > selectedParent.getDepth() ||
+             currentParent.getDepth() == -1 ) &&
+            !isAncestor( selectedParent ) )
       {
         return true;
+      }
+    }
+    return false;
+  }
+
+  public boolean isAncestor (ProcessTreeNode ptNode)
+  {
+    Set<ProcessTreeNode> visited = new HashSet<ProcessTreeNode>();
+
+    Queue<ProcessTreeNode> queue = new LinkedList<ProcessTreeNode>();
+    queue.add( ptNode );
+
+    while( !queue.isEmpty() )
+    {
+      for ( ProcessTreeNode selectedParent : queue.remove().parents )
+      {
+        if ( visited.contains( selectedParent ) )
+        {
+          continue;
+        }
+        visited.add( selectedParent );
+        if ( selectedParent == this )
+        {
+          return true;
+        }
+        queue.add( selectedParent );
       }
     }
     return false;

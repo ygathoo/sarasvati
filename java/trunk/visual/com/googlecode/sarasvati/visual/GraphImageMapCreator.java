@@ -65,7 +65,7 @@ import com.googlecode.sarasvati.visual.util.HrefFunctionAdapter;
  *
  *    String basePath = config.getServletContext().getRealPath( "/" );
  *    GraphImageMapCreator imageMapCreator = new GraphImageMapCreator( graph, helper );
- *    imageMapCreator.writeMapImageToFile( "gif", basepath + "/test-graph.gif" );
+ *    imageMapCreator.writeImageToFile( "gif", basepath + "/test-graph.gif" );
  *  %&gt;
  *
  *  &lt;map name="graphMap"&gt;
@@ -143,11 +143,11 @@ public class GraphImageMapCreator
   }
 
   /**
-   * Returns the generate graph image. If you just want to write it to a file,
-   * you can use {@link GraphImageMapCreator#writeMapImageToFile(String, String)}.
+   * Returns the generated graph image. If you just want to write it to a file,
+   * you can use {@link GraphImageMapCreator#writeImageToFile(String, String)}.
    * @return The generated graph image
    */
-  public BufferedImage getMapImage ()
+  public BufferedImage getImage ()
   {
     return image;
   }
@@ -160,7 +160,7 @@ public class GraphImageMapCreator
    * @param imageFileName The name of the file to write the image to
    * @throws IOException If an error occurs writing the image to disc
    */
-  public void writeMapImageToFile (String imageFormat, String imageFileName)
+  public void writeImageToFile (String imageFormat, String imageFileName)
     throws IOException
   {
     ImageIO.write( image, imageFormat, new File( imageFileName ) );
