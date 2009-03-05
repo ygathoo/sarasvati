@@ -20,6 +20,8 @@
 
   String name = "/" + System.currentTimeMillis() + ".gif";
 
+  GraphImageMapCreator imageMapCreator = null;
+
   try
   {
     HibEngine hibEngine = new HibEngine( hibSession );
@@ -40,8 +42,8 @@
       }
     };
 
-    mapContents = ImageMapUtil.exportToImageMap( graph, new DefaultNodeWidgetFactory(), helper,
-                                                 basePath + name );
+    imageMapCreator = new GraphImageMapCreator( graph, helper );
+    imageMapCreator.writeMapImageToFile( "gif", basePath + name );
   }
   finally
   {
@@ -56,7 +58,7 @@
 <body>
 
   <map name="graphMap">
-    <%=mapContents %>
+    <%=imageMapCreator.getMapContents()%>
   </map>
 
   <div style="margin-left:10px; padding-top:10px">
