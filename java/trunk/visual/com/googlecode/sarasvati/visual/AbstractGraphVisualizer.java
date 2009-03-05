@@ -82,9 +82,9 @@ public abstract class AbstractGraphVisualizer
    */
   public abstract Session getSession ();
 
-  public NodeWidgetFactory getWidgetFactory ()
+  public GraphLookAndFeel getWidgetFactory ()
   {
-    return DefaultNodeWidgetFactory.INSTANCE;
+    return DefaultGraphLookAndFeel.INSTANCE;
   }
 
   public void run () throws Exception

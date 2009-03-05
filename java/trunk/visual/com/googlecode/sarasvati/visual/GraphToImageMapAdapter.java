@@ -18,18 +18,50 @@
  */
 package com.googlecode.sarasvati.visual;
 
+import javax.swing.Icon;
+
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
 /**
  * Provides default implementations for methods in the
  * {@link GraphToImageMap} interface. All methods return
- * null unless overridden.
+ * null unless overridden except the iconForNode method,
+ * which returns either a {@link TaskIcon} or {@link DefaultNodeIcon}
+ * depending on the type of the node passed in.
  *
  * @author Paul Lorenz
  */
 public class GraphToImageMapAdapter implements GraphToImageMap
 {
+  /**
+   * Returns true unless overridden
+   * @see com.googlecode.sarasvati.visual.GraphToImageMap#drawArcLabels()
+   */
+  @Override
+  public boolean drawArcLabels ()
+  {
+    return true;
+  }
+
+  /**
+   * Returns a {@link TaskIcon} for nodes with type of 'task' and a
+   * {@link DefaultNodeIcon} for all other nodes.
+   *
+   * @see com.googlecode.sarasvati.visual.GraphToImageMap#iconForNode(com.googlecode.sarasvati.Node)
+   */
+  @Override
+  public Icon iconForNode (Node node)
+  {
+    if ( "task".equalsIgnoreCase( node.getType() ) )
+    {
+      return new TaskIcon( node, null );
+    }
+    return new DefaultNodeIcon( node, null );
+  }
+
   /**
    * Returns null unless overridden.
    */

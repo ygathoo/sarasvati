@@ -33,9 +33,30 @@ import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
  *
  * @author Paul Lorenz
  */
-public class DefaultNodeWidgetFactory implements NodeWidgetFactory
+public class DefaultGraphLookAndFeel implements GraphLookAndFeel
 {
-  public static final DefaultNodeWidgetFactory INSTANCE = new DefaultNodeWidgetFactory();
+  public static final DefaultGraphLookAndFeel INSTANCE = new DefaultGraphLookAndFeel( false, false );
+
+  protected boolean drawSelfArcs;
+  protected boolean drawArcLabels;
+
+  public DefaultGraphLookAndFeel (boolean drawSelfArcs, boolean drawArcLabels)
+  {
+    this.drawSelfArcs = drawSelfArcs;
+    this.drawArcLabels = drawArcLabels;
+  }
+
+  @Override
+  public boolean drawArcLabels ()
+  {
+    return drawArcLabels;
+  }
+
+  @Override
+  public boolean drawSelfArcs ()
+  {
+    return drawSelfArcs;
+  }
 
   @Override
   public Widget newWidget (Node node, SarasvatiGraphScene scene)

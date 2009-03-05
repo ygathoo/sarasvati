@@ -18,6 +18,8 @@
  */
 package com.googlecode.sarasvati.visual;
 
+import javax.swing.Icon;
+
 import com.googlecode.sarasvati.visual.process.VisualProcessArc;
 import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 
@@ -29,6 +31,23 @@ import com.googlecode.sarasvati.visual.process.VisualProcessNode;
  */
 public interface ProcessToImageMap
 {
+  /**
+   * Controls drawing of arc labels
+   *
+   * @return true if arc labels should be rendered, false otherwise
+   */
+  boolean drawArcLabels ();
+
+  /**
+   * Each node may have a different {@link Icon} representing
+   * it in the generated image map. Override this method
+   * to specify which Icon to use for a given node.
+   *
+   * @param node The graph node needing an icon
+   * @return An icon representing the given node.
+   */
+  Icon iconForNode (VisualProcessNode node);
+
   /**
    * Every node in a generated image of a graph process may have
    * a link for when the node is clicked. The link may

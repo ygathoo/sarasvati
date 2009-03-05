@@ -18,7 +18,7 @@ import com.googlecode.sarasvati.adapter.Function;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.example.db.TestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.visual.DefaultNodeWidgetFactory;
+import com.googlecode.sarasvati.visual.DefaultGraphLookAndFeel;
 import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
@@ -58,7 +58,7 @@ public class TestExporter
     JPanel panel = new JPanel();
     panel.addNotify();
 
-    SarasvatiGraphScene graphScene = new SarasvatiGraphScene( graph, new DefaultNodeWidgetFactory(), false );
+    SarasvatiGraphScene graphScene = new SarasvatiGraphScene( graph, new DefaultGraphLookAndFeel( false, true ) );
 
     Function<String, Widget> mapper = new Function<String, Widget>()
     {
