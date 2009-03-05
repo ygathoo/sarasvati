@@ -1,19 +1,11 @@
 package com.googlecode.sarasvati.example.web;
 
-import java.awt.Component;
-
-import javax.swing.Icon;
-import javax.swing.JLabel;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
 import org.hibernate.dialect.PostgreSQLDialect;
 import org.postgresql.Driver;
 
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.adapter.Function;
-import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.example.db.AsyncNode;
 import com.googlecode.sarasvati.example.db.DumpNode;
 import com.googlecode.sarasvati.example.db.InitNode;
@@ -21,8 +13,6 @@ import com.googlecode.sarasvati.example.db.Task;
 import com.googlecode.sarasvati.example.db.TaskNode;
 import com.googlecode.sarasvati.example.db.TaskState;
 import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
-import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
 public class TestSetup
 {
@@ -54,27 +44,6 @@ public class TestSetup
       config.addAnnotatedClass( AsyncNode.class );
 
       sessionFactory = config.buildSessionFactory();
-
-      NodeAdapterManager.registerFactory( Component.class,
-          new Function<Component, Node>()
-          {
-            public Component apply (Node node)
-            {
-              Icon icon = null;
-              if ( "task".equals( node.getType() ) )
-              {
-                icon = new TaskIcon( node, null );
-              }
-              else
-              {
-                icon = new DefaultNodeIcon( node, null );
-              }
-
-              JLabel label = new JLabel( icon );
-              label.setSize( icon.getIconWidth(), icon.getIconHeight() );
-              return label;
-            }
-          });
 
       System.out.println( "Hibernate initialized" );
     }
