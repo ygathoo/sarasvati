@@ -48,7 +48,7 @@
     };
 
     imageMapCreator = new ProcessImageMapCreator( process, helper );
-    imageMapCreator.writeMapImageToFile( "gif", basePath + name );
+    imageMapCreator.writeImageToFile( "gif", basePath + name );
   }
   finally
   {

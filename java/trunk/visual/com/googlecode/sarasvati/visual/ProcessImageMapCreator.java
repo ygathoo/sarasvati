@@ -69,7 +69,7 @@ import com.googlecode.sarasvati.visual.util.ProcessHrefFunctionAdapter;
  *
  *    String basePath = config.getServletContext().getRealPath( "/" );
  *    ProcessImageMapCreator imageMapCreator = new ProcessImageMapCreator( process, helper );
- *    imageMapCreator.writeMapImageToFile( "gif", basepath + "/test-process.gif" );
+ *    imageMapCreator.writeImageToFile( "gif", basepath + "/test-process.gif" );
  *  %&gt;
  *
  *  &lt;map name="processMap"&gt;
@@ -89,11 +89,11 @@ public class ProcessImageMapCreator
   protected BufferedImage image;
 
   /**
-   * Creates a new ProcessImageMapCreate using the given graph and graph to image map
+   * Creates a new ProcessImageMapCreate using the given process and process to image map
    * helper. Will immediately generate the map contents and image.
    *
-   * @param graph The graph to create an image map and image from.
-   * @param graphToImageMap Controls how the image and image map are constructed.
+   * @param graph The process to create an image map and image from.
+   * @param processToImageMap Controls how the image and image map are constructed.
    */
   public ProcessImageMapCreator (final GraphProcess process, final ProcessToImageMap processToImageMap)
   {
@@ -147,24 +147,24 @@ public class ProcessImageMapCreator
   }
 
   /**
-   * Returns the generate graph image. If you just want to write it to a file,
-   * you can use {@link ProcessImageMapCreator#writeMapImageToFile(String, String)}.
-   * @return The generated graph image
+   * Returns the generated process image. If you just want to write it to a file,
+   * you can use {@link ProcessImageMapCreator#writeImageToFile(String, String)}.
+   * @return The generated process image
    */
-  public BufferedImage getMapImage ()
+  public BufferedImage getImage ()
   {
     return image;
   }
 
   /**
-   * Writes the generate graph image to a file in the given format
+   * Writes the generated process image to a file in the given format
    *
    * @param imageFormat The informal name of the format to write the file in,
    *                    as understood by {@link ImageIO}.
    * @param imageFileName The name of the file to write the image to
    * @throws IOException If an error occurs writing the image to disc
    */
-  public void writeMapImageToFile (String imageFormat, String imageFileName)
+  public void writeImageToFile (String imageFormat, String imageFileName)
     throws IOException
   {
     ImageIO.write( image, imageFormat, new File( imageFileName ) );
