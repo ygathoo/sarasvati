@@ -4,4 +4,6 @@
  * [UsingSarasvati APIs and Integration]
  * [Rubric Rubric: A language for guards ]
  * [Backtracking Backtracking]
+ * [ProcessDefinitionVisualization Graph Visualizations]
+ * [ProcessVisualization Process Visualizations]
  * [SarasvatiMathematicalModel Mathematical Model]
