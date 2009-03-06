@@ -54,6 +54,12 @@ public class MemArc implements Arc
   }
 
   @Override
+  public boolean isSelfArc ()
+  {
+    return startNode.equals( endNode );
+  }
+
+  @Override
   public String toString ()
   {
     return "[MemArc start=" + startNode.getName() + " end=" + endNode.getName() + " name=" + name + "]";

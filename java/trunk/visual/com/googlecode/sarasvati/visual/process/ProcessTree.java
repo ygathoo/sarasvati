@@ -247,7 +247,7 @@ public class ProcessTree
     {
       for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
       {
-        if ( !ptNode.isTokenOnArc( arc ) && !arc.getStartNode().equals( arc.getEndNode() ) )
+        if ( !ptNode.isTokenOnArc( arc ) && !arc.isSelfArc() )
         {
           // If the node has an active token, we don't want to point to any nodes with tokens on them
           ProcessTreeNode child = ptNode.getToken().isComplete() ?
@@ -266,7 +266,7 @@ public class ProcessTree
       ProcessTreeNode ptNode = queue.remove( 0 );
       for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
       {
-        ProcessTreeNode child = getProcessTreeNode( ptNode, arc.getEndNode() );
+        ProcessTreeNode child = arc.isSelfArc() ? ptNode : getProcessTreeNode( ptNode, arc.getEndNode() );
         ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, child );
         ptNode.addChild( arcTokenWrapper );
         child.addParent( ptNode );

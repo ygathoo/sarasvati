@@ -115,6 +115,12 @@ public class HibArc implements Arc
   }
 
   @Override
+  public boolean isSelfArc ()
+  {
+    return startNode.equals( endNode );
+  }
+
+  @Override
   public String toString ()
   {
     return "[Arc id=" + id + " name=" + name + "]";
