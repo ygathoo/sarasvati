@@ -61,4 +61,11 @@ public interface Arc
    * @return The arc name.
    */
   String getName ();
+
+  /**
+   * Returns true if the start node is the same as the end node, false otherwise.
+   *
+   * @return true if the start node is the same as the end node, false otherwise.
+   */
+  boolean isSelfArc ();
 }

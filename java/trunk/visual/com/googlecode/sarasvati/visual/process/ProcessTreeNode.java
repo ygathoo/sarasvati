@@ -158,7 +158,7 @@ public class ProcessTreeNode implements VisualProcessNode
   {
     for ( ProcessTreeNode currentParent : parents )
     {
-      if ( currentParent.getToken() != null && !currentParent.getToken().isComplete() )
+      if ( currentParent != null && currentParent.getToken() != null && !currentParent.getToken().isComplete() )
       {
         return true;
       }
@@ -170,7 +170,7 @@ public class ProcessTreeNode implements VisualProcessNode
   {
     for ( ProcessTreeNode currentParent : parents )
     {
-      if ( currentParent == selectedParent )
+      if ( currentParent == selectedParent || currentParent == this )
       {
         continue;
       }

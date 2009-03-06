@@ -168,12 +168,6 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public Object clone () throws CloneNotSupportedException
-  {
-    throw new CloneNotSupportedException( "HibNodeRef objects should never be cloned. The contained HibNode should be cloned instead." );
-  }
-
-  @Override
   public int hashCode ()
   {
     final int prime = 31;
