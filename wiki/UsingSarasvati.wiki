@@ -475,7 +475,7 @@ The call to `startProcess` will create tokens on the start nodes and will contin
 ===Custom Attributes===
 Often, custom nodes will need some information with which to do their work. Sarasvati supports this in two ways.
 
-The schema for process definition files has a <custom> element which contains an <xs:any> element at the end of the node definition. Custom elements may be added here. These can be automatically mapped to properties on custom nodes.
+The schema for process definition files has a `<custom>` element which contains an `<xs:any>` element at the end of the node definition. Custom elements may be added here. These can be automatically mapped to properties on custom nodes.
 
 For example, given the following custom node:
 
@@ -517,7 +517,7 @@ The following process definition would load the value `test` into the `custom` p
 
 There several things to note with custom elements.
 
-  * All custom elements must be contained within the <custom> tag.
+  * All custom elements must be contained within the `<custom>` tag.
   * Non-string properties on custom node types are supported.
     * Support for primitive types such as boolean, byte, char, short, int, long, float, double as well as their corresponding object types is built in.
     * Support for non-primitive types can be added
