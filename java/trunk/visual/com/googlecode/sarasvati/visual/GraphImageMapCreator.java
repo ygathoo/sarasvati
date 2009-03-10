@@ -47,7 +47,7 @@ import com.googlecode.sarasvati.visual.util.HrefFunctionAdapter;
  * <br>
  *  Example usage in a JSP:
  *  <pre>
- *  %lt;%
+ *  &lt;%
  *    GraphToImageMapAdapter helper = new GraphToImageMapAdapter ()
  *    {
  *      public String hrefForNode (Node node)
