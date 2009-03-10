@@ -33,23 +33,24 @@ public interface GraphLookAndFeel
 {
   /**
    * Controls if self arcs should be drawn.
-   * 
+   *
    * @return True if self arcs should be drawn, false otherwise
    */
   boolean drawSelfArcs ();
 
   /**
    * Controls if arc labels should be drawn.
-   * 
+   *
    * @return True if arc labels should be drawn, false otherwise
    */
   boolean drawArcLabels ();
 
   /**
-   * 
-   * @param node
-   * @param scene
-   * @return
+   * Returns a new Widget to represent the given node.
+   *
+   * @param node The node we need a widget for
+   * @param scene The scene the widget is created in
+   * @return A new widget for the given node
    */
   Widget newWidget (Node node, SarasvatiGraphScene scene);
 }

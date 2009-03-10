@@ -50,12 +50,12 @@ import com.googlecode.sarasvati.visual.util.HrefFunctionAdapter;
  *  %lt;%
  *    GraphToImageMapAdapter helper = new GraphToImageMapAdapter ()
  *    {
- *      @Override public String hrefForNode (Node node)
+ *      public String hrefForNode (Node node)
  *      {
  *         return "javascript:alert( 'You have selected " + node.getName() + "' );";
  *       }
  *
- *       @Override public String hoverForNode (Node node)
+ *       public String hoverForNode (Node node)
  *       {
  *         return "Name: " + node.getName() + ",  Type: " + node.getType() +
  *                ",  Guard: " + node.getGuard() + ",  Is start: " + node.isStart() +

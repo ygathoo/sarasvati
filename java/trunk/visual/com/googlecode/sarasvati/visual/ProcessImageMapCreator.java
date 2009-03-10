@@ -50,12 +50,12 @@ import com.googlecode.sarasvati.visual.util.ProcessHrefFunctionAdapter;
  *  %lt;%
  *    ProcessToImageMapAdapter helper = new ProcessToImageMapAdapter ()
  *    {
- *      @Override public String hrefForNode (VisualProcessNode node)
+ *      public String hrefForNode (VisualProcessNode node)
  *      {
  *        return "javascript:alert( 'You have selected " + node.getNode().getName() + "' );";
  *      }
  *
- *      @Override public String hoverForNode (VisualProcessNode node)
+ *      public String hoverForNode (VisualProcessNode node)
  *      {
  *        NodeToken token = node.getToken();
  *        if ( token == null )
@@ -92,7 +92,7 @@ public class ProcessImageMapCreator
    * Creates a new ProcessImageMapCreate using the given process and process to image map
    * helper. Will immediately generate the map contents and image.
    *
-   * @param graph The process to create an image map and image from.
+   * @param process The process to create an image map and image from.
    * @param processToImageMap Controls how the image and image map are constructed.
    */
   public ProcessImageMapCreator (final GraphProcess process, final ProcessToImageMap processToImageMap)
