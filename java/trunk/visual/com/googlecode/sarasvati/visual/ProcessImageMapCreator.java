@@ -47,7 +47,7 @@ import com.googlecode.sarasvati.visual.util.ProcessHrefFunctionAdapter;
  * <br>
  *  Example usage in a JSP:
  *  <pre>
- *  %lt;%
+ *  &lt;%
  *    ProcessToImageMapAdapter helper = new ProcessToImageMapAdapter ()
  *    {
  *      public String hrefForNode (VisualProcessNode node)
