@@ -128,7 +128,7 @@
         <include name="build.xml"/>
         <include name="src/**"/>
         <include name="visual/**"/>
-        <include name="doc/**"/>
+        <include name="doc/javadoc/**"/>
         <include name="examples/**"/>
         <include name="lang/**"/>
         <include name="lib/*.txt"/>
