@@ -21,13 +21,9 @@
  */
 package com.googlecode.sarasvati.hib;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,16 +36,12 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.persistence.Transient;
 
-import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.util.SvUtil;
+import com.googlecode.sarasvati.AbstractGraph;
 
 @Entity
 @Table (name="wf_graph")
-public class HibGraph implements Graph
+public class HibGraph extends AbstractGraph
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -77,12 +69,6 @@ public class HibGraph implements Graph
 
   @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE)
   protected List<HibArc>     arcs;
-
-  @Transient
-  protected Map<Node, List<Arc>> inputMap;
-
-  @Transient
-  protected Map<Node, List<Arc>> outputMap;
 
   public Long getId ()
   {
@@ -144,131 +130,6 @@ public class HibGraph implements Graph
   public void setArcs (List<HibArc> arcs)
   {
     this.arcs = arcs;
-  }
-
-  @Override
-  public List<Arc> getInputArcs (Node node)
-  {
-    if ( inputMap == null )
-    {
-      initialize();
-    }
-    return inputMap.get( node );
-  }
-
-  @Override
-  public List<Arc> getInputArcs (Node node, String arcName)
-  {
-    List<Arc> arcList = getInputArcs( node );
-    List<Arc> result = new ArrayList<Arc>( arcList.size() );
-
-    for ( Arc arc : arcList )
-    {
-      if ( SvUtil.equals( arcName, arc.getName() ) )
-      {
-        result.add( arc );
-      }
-    }
-    return result;
-  }
-
-  @Override
-  public List<Arc> getOutputArcs (Node node)
-  {
-    if (outputMap == null)
-    {
-      initialize();
-    }
-    return outputMap.get( node );
-  }
-
-  @Override
-  public List<Arc> getOutputArcs (Node node, String arcName)
-  {
-    List<Arc> arcList = getOutputArcs( node );
-    List<Arc> result = new ArrayList<Arc>( arcList.size() );
-
-    for ( Arc arc : arcList )
-    {
-      if ( SvUtil.equals( arcName, arc.getName() ) )
-      {
-        result.add( arc );
-      }
-    }
-    return result;
-  }
-
-  public void initialize ()
-  {
-    inputMap  = new HashMap<Node, List<Arc>>();
-    outputMap = new HashMap<Node, List<Arc>>();
-
-    for ( HibArc arc : arcs )
-    {
-      Node node = arc.getStartNode();
-      List<Arc> list = outputMap.get( node );
-
-      if ( list == null )
-      {
-        list = new LinkedList<Arc>();
-        outputMap.put( node, list );
-      }
-
-      list.add( arc );
-
-      node = arc.getEndNode();
-      list = inputMap.get( node );
-
-      if ( list == null )
-      {
-        list = new LinkedList<Arc>();
-        inputMap.put( node, list );
-      }
-
-      list.add( arc );
-    }
-
-    List<Arc> emptyList = Collections.emptyList();
-    for (HibNodeRef node : nodes )
-    {
-      if ( !inputMap.containsKey( node ) )
-      {
-        inputMap.put( node, emptyList );
-      }
-      if ( !outputMap.containsKey( node ) )
-      {
-        outputMap.put( node, emptyList );
-      }
-    }
-  }
-
-  @Override
-  public List<Node> getStartNodes ()
-  {
-    List<Node> startNodes = new LinkedList<Node>();
-
-    for ( Node node : nodes )
-    {
-      if ( node.isStart() )
-      {
-        startNodes.add( node );
-      }
-    }
-
-    return startNodes;
-  }
-
-  public boolean hasArcInverse( Arc arc )
-  {
-    for (Arc tmpArc : arcs)
-    {
-      if ( arc.getStartNode().equals( tmpArc.getEndNode() ) &&
-           arc.getEndNode().equals( tmpArc.getStartNode() ) )
-      {
-        return true;
-      }
-    }
-    return false;
   }
 
   @Override
