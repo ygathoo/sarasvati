@@ -39,7 +39,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
     return new DefaultExecutionEventQueue( new CopyOnWriteArrayList<ExecutionListenerWrapper>() );
   }
 
-  private DefaultExecutionEventQueue(List<ExecutionListenerWrapper> listeners)
+  DefaultExecutionEventQueue(List<ExecutionListenerWrapper> listeners)
   {
     this.listeners = listeners;
   }

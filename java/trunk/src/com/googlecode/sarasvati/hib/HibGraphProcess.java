@@ -57,11 +57,12 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.ProcessState;
-import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.CachingExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
+import com.googlecode.sarasvati.event.ListenerCache;
 
 @Entity
 @Table (name="wf_process")
@@ -148,12 +149,13 @@ public class HibGraphProcess implements GraphProcess
 
     private void initEventQueue (Engine engine)
     {
-      ExecutionEventQueue newEventQueue = DefaultExecutionEventQueue.newArrayListInstance();
+      ExecutionEventQueue newEventQueue = CachingExecutionEventQueue.newArrayListInstance();
+      ListenerCache cache = CachingExecutionEventQueue.getListenerCache();
 
       for ( HibProcessListener listener : getListeners() )
       {
         newEventQueue.addListener( engine,
-                                   engine.getExecutionListenerInstance( listener.getType() ),
+                                   cache.getListener( listener.getType() ),
                                    listener.getEventType() );
       }
 

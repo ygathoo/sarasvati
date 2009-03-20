@@ -20,21 +20,10 @@
 package com.googlecode.sarasvati.mem;
 
 import com.googlecode.sarasvati.BaseEngine;
-import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.WorkflowException;
-import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
-import com.googlecode.sarasvati.event.ExecutionEvent;
-import com.googlecode.sarasvati.event.ExecutionEventQueue;
-import com.googlecode.sarasvati.event.ExecutionEventType;
-import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.GraphLoader;
 
 public class MemEngine extends BaseEngine
 {
-  protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
-
-  protected MemEngine parentEngine = null;
-
   @Override
   public MemGraphFactory getFactory ()
   {
@@ -54,57 +43,8 @@ public class MemEngine extends BaseEngine
   }
 
   @Override
-  public void fireEvent (ExecutionEvent event)
+  public MemEngine newEngine ()
   {
-    globalEventQueue.fireEvent( event );
-    event.getProcess().getEventQueue().fireEvent( event );
-  }
-
-  @Override
-  public void addExecutionListener (ExecutionListener listener, ExecutionEventType... eventTypes)
-  {
-    globalEventQueue.addListener( this, listener, eventTypes );
-  }
-
-  @Override
-  public void addExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
-  {
-    process.getEventQueue().addListener( this, listener, eventTypes );
-  }
-
-  @Override
-  public void removeExecutionListener (ExecutionListener listener, ExecutionEventType... eventTypes)
-  {
-    globalEventQueue.removeListener( this, listener, eventTypes );
-  }
-
-  @Override
-  public void removeExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
-  {
-    process.getEventQueue().removeListener( this, listener, eventTypes );
-  }
-
-  @Override
-  public ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException
-  {
-    return null;
-  }
-
-  @Override
-  public MemEngine newEngine (boolean forNested)
-  {
-    MemEngine engine = new MemEngine ();
-
-    if ( forNested )
-    {
-      engine.parentEngine = this;
-    }
-    return engine;
-  }
-
-  @Override
-  public MemEngine getParentEngine ()
-  {
-    return parentEngine;
+    return new MemEngine ();
   }
 }

@@ -26,23 +26,13 @@ import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.googlecode.sarasvati.BaseEngine;
-import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.WorkflowException;
-import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
-import com.googlecode.sarasvati.event.ExecutionEvent;
-import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
-import com.googlecode.sarasvati.event.ListenerCache;
 import com.googlecode.sarasvati.load.GraphLoader;
 
 public class HibEngine extends BaseEngine
 {
-  protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
-  protected static final ListenerCache       listenerCache    = new ListenerCache();
-
-  protected HibEngine parentEngine;
   protected Session session;
   protected HibGraphFactory factory;
   protected HibGraphRepository repository;
@@ -95,25 +85,6 @@ public class HibEngine extends BaseEngine
   }
 
   @Override
-  public void fireEvent(ExecutionEvent event)
-  {
-    globalEventQueue.fireEvent( event );
-    event.getProcess().getEventQueue().fireEvent( event );
-  }
-
-  @Override
-  public void addExecutionListener(ExecutionListener listener, ExecutionEventType... eventTypes)
-  {
-    if ( eventTypes == null || listener == null )
-    {
-      return;
-    }
-
-    globalEventQueue.addListener( this, listener, eventTypes );
-    listenerCache.ensureContainsListenerType( listener );
-  }
-
-  @Override
   public void addExecutionListener(GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
     if ( eventTypes == null || listener == null )
@@ -130,21 +101,12 @@ public class HibEngine extends BaseEngine
       }
     }
 
-    process.getEventQueue().addListener( this, listener, eventTypes );
-    listenerCache.ensureContainsListenerType( listener );
-  }
-
-  @Override
-  public void removeExecutionListener(ExecutionListener listener, ExecutionEventType... eventTypes)
-  {
-    globalEventQueue.removeListener( this, listener, eventTypes );
+    super.addExecutionListener( process, listener, eventTypes );
   }
 
   @Override
   public void removeExecutionListener(GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
   {
-    process.getEventQueue().removeListener( this, listener, eventTypes );
-
     List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
 
     for ( HibProcessListener hibListener : ((HibGraphProcess)process).getListeners() )
@@ -155,16 +117,12 @@ public class HibEngine extends BaseEngine
         session.delete( hibListener );
       }
     }
+
+    super.removeExecutionListener( process, listener, eventTypes );
   }
 
   @Override
-  public ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException
-  {
-    return listenerCache.getListener( type );
-  }
-
-  @Override
-  public HibEngine newEngine (boolean forNested)
+  public HibEngine newEngine ()
   {
     HibEngine engine = new HibEngine();
 
@@ -172,18 +130,7 @@ public class HibEngine extends BaseEngine
     engine.factory = factory;
     engine.repository = repository;
 
-    if ( forNested )
-    {
-      engine.parentEngine = this;
-    }
-
     return engine;
-  }
-
-  @Override
-  public Engine getParentEngine ()
-  {
-    return parentEngine;
   }
 
   public static void addToConfiguration (AnnotationConfiguration config, boolean enableCaching)
