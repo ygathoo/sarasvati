@@ -24,6 +24,11 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.googlecode.sarasvati.event.ArcTokenEvent;
+import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEvent;
+import com.googlecode.sarasvati.event.ExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
 import com.googlecode.sarasvati.event.ProcessEvent;
 import com.googlecode.sarasvati.rubric.RubricInterpreter;
@@ -40,8 +45,12 @@ import com.googlecode.sarasvati.visitor.TokenTraversals;
  */
 public abstract class BaseEngine implements Engine
 {
+  protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
+
   protected boolean arcExecutionStarted = false;
   protected List<ArcToken> asyncQueue = new LinkedList<ArcToken>();
+
+  protected BaseEngine parentEngine;
 
   @Override
   public GraphProcess startProcess (Graph graph)
@@ -350,5 +359,67 @@ public abstract class BaseEngine implements Engine
     }
 
     return (GuardResponse) RubricInterpreter.compile( guard ).eval( newRubricEnv( token ) );
+  }
+
+  @Override
+  public BaseEngine newEngine (boolean forNested)
+  {
+    BaseEngine engine = newEngine();
+
+    if ( forNested )
+    {
+      engine.parentEngine = this;
+    }
+    return engine;
+  }
+
+  @Override
+  public BaseEngine getParentEngine ()
+  {
+    return parentEngine;
+  }
+
+  /**
+   * Creates a new engine base on the same parameters as this. For
+   * example, if the engine is database backed, it should share
+   * the same database engine.
+   *
+   * @return A new engine
+   */
+  protected abstract BaseEngine newEngine ();
+
+  // ==========================================================================================
+  //             Global Event Queue Methods
+  // ==========================================================================================
+
+  @Override
+  public void addExecutionListener(ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    globalEventQueue.addListener( this, listener, eventTypes );
+  }
+
+  @Override
+  public void removeExecutionListener(ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    globalEventQueue.removeListener( this, listener, eventTypes );
+  }
+
+  @Override
+  public void addExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    process.getEventQueue().addListener( this, listener, eventTypes );
+  }
+
+  @Override
+  public void removeExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  {
+    process.getEventQueue().removeListener( this, listener, eventTypes );
+  }
+
+  @Override
+  public void fireEvent (ExecutionEvent event)
+  {
+    globalEventQueue.fireEvent( event );
+    event.getProcess().getEventQueue().fireEvent( event );
   }
 }
