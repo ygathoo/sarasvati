@@ -28,6 +28,16 @@
               </xs:documentation>
             </xs:annotation>
           </xs:element>
+
+          <xs:element name="external" type="External" minOccurs="0" maxOccurs="unbounded" >
+            <xs:annotation>
+              <xs:documentation>
+                Every process definition may contain contain zero or more
+                references to external process definitions.
+              </xs:documentation>
+            </xs:annotation>
+          </xs:element>
+
         </xs:sequence>
 
         <xs:attribute name="name" type="xs:string" use="required">
@@ -89,6 +99,44 @@
         </xs:annotation>
       </xs:attribute>
 
+      <xs:attribute name="x"
+                    type="xs:int"
+                    use="optional"/>
+
+      <xs:attribute name="y"
+                    type="xs:int"
+                    use="optional"/>
+
+    </xs:complexType>
+
+    <xs:complexType name="External">
+
+      <xs:attribute name="name" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            External instances names must be unique within a given process definition. However,
+            multiple external instances can point to the same process definition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="processDefinition" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation>
+            Must refer to a valid process definition name.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="x"
+                    type="xs:int"
+                    use="optional"/>
+
+      <xs:attribute name="y"
+                    type="xs:int"
+                    use="optional"/>
+
+
     </xs:complexType>
 
     <xs:simpleType name="Guard">
@@ -112,22 +160,9 @@
       <xs:attribute name="external" type="xs:string">
         <xs:annotation>
           <xs:documentation>
-            Specifies the name of the external process definition that is
+            Specifies the instance name of the external process definition that is
             being linked to. The latest version of the external
             process definition will be used.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-
-      <xs:attribute name="instance" type="xs:string" use="required">
-        <xs:annotation>
-          <xs:documentation>
-            It may be desirable to included multiple distinct
-            instances of an external process definition. The instance
-            attribute allows a way to distinguish between
-            instances. All external arcs which point to the same
-            process definition and have the same instance name will
-            refer to the same set of imported nodes.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
