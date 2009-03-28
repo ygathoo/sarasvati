@@ -114,16 +114,17 @@
       <xs:attribute name="name" type="xs:string" use="required">
         <xs:annotation>
           <xs:documentation>
-            External instances names must be unique within a given process definition. However,
-            multiple external instances can point to the same process definition.
+            Must refer to a valid process definition name.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="processDefinition" type="xs:string" use="required">
+      <xs:attribute name="alias" type="xs:string" use="required">
         <xs:annotation>
           <xs:documentation>
-            Must refer to a valid process definition name.
+            Since it may be desirable to include the same external process definition
+            more than once, each external must also define an alias, which must be
+            unique in the process definition.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
