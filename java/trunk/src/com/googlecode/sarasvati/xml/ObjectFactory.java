@@ -37,6 +37,14 @@ public class ObjectFactory
   }
 
   /**
+   * Create an instance of {@link XmlExternal }
+   */
+  public XmlExternal createExternal ()
+  {
+    return new XmlExternal();
+  }
+
+  /**
    * Create an instance of {@link XmlExternalArc }
    */
   public XmlExternalArc createExternalArc ()

@@ -7,11 +7,13 @@
   </node>
 
   <node name="three-deep.1">
-    <externalArc external="two-deep" instance="1" nodeName="two-deep.1" type="out"/>
+    <externalArc external="two-deep" node="two-deep.1" type="out"/>
   </node>
 
   <node name="three-deep.2">
-    <externalArc external="two-deep" instance="1" nodeName="two-deep.2" type="in"/>
+    <externalArc external="two-deep" node="two-deep.2" type="in"/>
   </node>
+
+  <external name="two-deep" processDefinition="two-deep"/>
 
 </process-definition>

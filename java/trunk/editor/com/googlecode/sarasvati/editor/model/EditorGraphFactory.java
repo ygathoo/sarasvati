@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.editor.model;
 
 import com.googlecode.sarasvati.xml.XmlArc;
+import com.googlecode.sarasvati.xml.XmlExternal;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
 import com.googlecode.sarasvati.xml.XmlExternalArcType;
 import com.googlecode.sarasvati.xml.XmlNode;
@@ -43,6 +44,14 @@ public class EditorGraphFactory
       graph.addMember( node );
     }
 
+    for ( XmlExternal xmlExternal : xmlProcDef.getExternals() )
+    {
+      EditorExternal external = new EditorExternal();
+      external.setName( xmlExternal.getName() );
+      external.setGraphName( xmlExternal.getProcessDefinition() );
+      graph.addMember( external );
+    }
+
     for ( XmlNode xmlNode : xmlProcDef.getNodes() )
     {
       for ( XmlArc xmlArc : xmlNode.getArcs() )
@@ -52,21 +61,13 @@ public class EditorGraphFactory
 
       for ( XmlExternalArc xmlExternal : xmlNode.getExternalArcs() )
       {
-        if ( !graph.hasMember( xmlExternal.getInstance() ) )
-        {
-          EditorExternal external = new EditorExternal();
-          external.setName( xmlExternal.getInstance() );
-          external.setGraphName( external.getGraphName() );
-          graph.addMember( external );
-        }
-
         if ( xmlExternal.getType() == XmlExternalArcType.OUT )
         {
-          graph.addArc( xmlExternal.getInstance(), xmlExternal.getNodeName(), xmlExternal.getName() );
+          graph.addArc( xmlExternal.getExternal(), xmlExternal.getNode(), xmlExternal.getName() );
         }
         else
         {
-          graph.addArc( xmlExternal.getNodeName(), xmlExternal.getInstance(), xmlExternal.getName() );
+          graph.addArc( xmlExternal.getNode(), xmlExternal.getExternal(), xmlExternal.getName() );
         }
       }
     }

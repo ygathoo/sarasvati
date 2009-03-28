@@ -19,79 +19,87 @@
 
 package com.googlecode.sarasvati.xml;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
 
-@XmlRootElement (name="process-definition")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlProcessDefinition
+public class XmlExternal
 {
+  @XmlAttribute (name="processDefinition", required=true)
+  protected String processDefinition;
+
   @XmlAttribute (name="name", required=true)
   protected String name;
 
-  @XmlElement (name="node")
-  protected List<XmlNode> nodes = new ArrayList<XmlNode>();
+  @XmlAttribute (name="x", required=false)
+  protected String x;
 
-  @XmlElement (name="external")
-  protected List<XmlExternal> externals = new ArrayList<XmlExternal>();
+  @XmlAttribute (name="y", required=false)
+  protected String y;
 
-  public String getName ()
+  public String getProcessDefinition()
+  {
+    return processDefinition;
+  }
+
+  public void setProcessDefinition( String processDefinition )
+  {
+    this.processDefinition = processDefinition;
+  }
+
+  public String getName()
   {
     return name;
   }
 
-  public void setName (String name)
+  public void setName( String name )
   {
     this.name = name;
   }
 
-  public List<XmlNode> getNodes ()
+  public String getX()
   {
-    return nodes;
+    return x;
   }
 
-  public void setNodes (List<XmlNode> nodes)
+  public void setX( String x )
   {
-    this.nodes = nodes;
+    this.x = x;
   }
 
-  public List<XmlExternal> getExternals()
+  public String getY()
   {
-    return externals;
+    return y;
   }
 
-  public void setExternals( List<XmlExternal> externals )
+  public void setY( String y )
   {
-    this.externals = externals;
+    this.y = y;
   }
 
   @Override
   public String toString ()
   {
-    StringBuilder buf = new StringBuilder ();
-    buf.append( "<workflow name=\"" );
-    buf.append( getName() );
-    buf.append( "\">\n" );
+    StringBuilder buf = new StringBuilder();
+    buf.append( "<external name=\"" );
+    buf.append( name );
+    buf.append( "\" processDefinition=\"" );
+    buf.append( processDefinition );
 
-    for ( XmlNode node : nodes )
+    if ( x != null )
     {
-      buf.append( node );
-      buf.append( "\n" );
+      buf.append( "\" x=\"" );
+      buf.append( x );
     }
 
-    for ( XmlExternal external : externals )
+    if ( y != null )
     {
-      buf.append( external );
-      buf.append( "\n" );
+      buf.append( "\" y=\"" );
+      buf.append( y );
     }
 
-    buf.append( "</workflow>" );
+    buf.append( "\"/>\n" );
     return buf.toString();
   }
 }

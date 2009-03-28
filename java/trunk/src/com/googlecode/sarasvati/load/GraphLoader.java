@@ -32,6 +32,7 @@ import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;
+import com.googlecode.sarasvati.xml.XmlExternal;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
 import com.googlecode.sarasvati.xml.XmlExternalArcType;
 import com.googlecode.sarasvati.xml.XmlLoader;
@@ -113,22 +114,25 @@ public class GraphLoader<G extends Graph>
     }
   }
 
-  protected String getInstanceKey (XmlExternalArc externalArc)
+  protected void importExternals (XmlProcessDefinition xmlDef) throws LoadException
   {
-    return externalArc.getExternal() + ":" + externalArc.getInstance();
+    for ( XmlExternal external : xmlDef.getExternals() )
+    {
+      Map<String,Node> instance = importInstance( external.getProcessDefinition(), external.getName() );
+      instanceCache.put( external.getName(), instance );
+    }
   }
 
   protected Node getExternalNode (XmlExternalArc externalArc) throws LoadException
   {
-    Map<String,Node> instance = instanceCache.get( getInstanceKey( externalArc ) );
+    Map<String,Node> instance = instanceCache.get( externalArc.getExternal() );
 
     if (instance == null)
     {
-      instance = importInstance( externalArc.getExternal(), externalArc.getInstance() );
-      instanceCache.put( getInstanceKey( externalArc ), instance );
+      throw new LoadException( "Referenced external '" + externalArc.getExternal() + "' not defined." );
     }
 
-    return instance.get( externalArc.getNodeName() );
+    return instance.get( externalArc.getNode() );
   }
 
   protected void importExternalArcs (XmlProcessDefinition xmlDef) throws LoadException
@@ -143,7 +147,7 @@ public class GraphLoader<G extends Graph>
         if ( extNode == null )
         {
           throw new LoadException( "External arc in node '" + xmlNode.getName() +
-                                     "' points to non-existent node '" + externalArc.getNodeName() + "'" +
+                                     "' points to non-existent node '" + externalArc.getNode() + "'" +
                                      " in process definition '" + externalArc.getExternal() + "'" );
         }
 
@@ -207,6 +211,7 @@ public class GraphLoader<G extends Graph>
 
     graph = factory.newGraph( xmlDef.getName(), version );
     repository.addGraph( graph );
+    importExternals( xmlDef );
     importNodes( xmlDef );
     importArcs( xmlDef );
     importExternalArcs( xmlDef );
@@ -224,20 +229,17 @@ public class GraphLoader<G extends Graph>
     stack.add( name );
     XmlProcessDefinition xmlDef = resolver.resolve( name );
 
-    for ( XmlNode node : xmlDef.getNodes() )
+    for ( XmlExternal external : xmlDef.getExternals() )
     {
-      for (XmlExternalArc extArc : node.getExternalArcs() )
+      String extName = external.getProcessDefinition();
+      if ( stack.contains( extName ) )
       {
-        String extName = extArc.getExternal();
-        if ( stack.contains( extName ) )
-        {
-          throw new LoadException( "Process definition '" + name + "' contains an illegal recursive reference to '" + extName + "'" );
-        }
+        throw new LoadException( "Process definition '" + name + "' contains an illegal recursive reference to '" + extName + "'" );
+      }
 
-        if ( !isLoaded( extName ) )
-        {
-          loadWithDependencies( extName, resolver, stack );
-        }
+      if ( !isLoaded( extName ) )
+      {
+        loadWithDependencies( extName, resolver, stack );
       }
     }
 

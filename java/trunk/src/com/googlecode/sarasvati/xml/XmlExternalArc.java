@@ -29,11 +29,8 @@ public class XmlExternalArc
   @XmlAttribute(name = "external", required = true)
   protected String             external;
 
-  @XmlAttribute(name = "instance", required = true)
-  protected String             instance;
-
-  @XmlAttribute(name = "nodeName", required = true)
-  protected String             nodeName;
+  @XmlAttribute(name = "node", required = true)
+  protected String             node;
 
   @XmlAttribute(name = "name", required = false)
   protected String             name;
@@ -51,24 +48,14 @@ public class XmlExternalArc
     this.external = external;
   }
 
-  public String getInstance ()
+  public String getNode ()
   {
-    return instance;
+    return node;
   }
 
-  public void setInstance (String instance)
+  public void setNode (String node)
   {
-    this.instance = instance;
-  }
-
-  public String getNodeName ()
-  {
-    return nodeName;
-  }
-
-  public void setNodeName (String nodeName)
-  {
-    this.nodeName = nodeName;
+    this.node = node;
   }
 
   public String getName ()
@@ -97,10 +84,8 @@ public class XmlExternalArc
     StringBuilder buf = new StringBuilder ();
     buf.append( "<externalArc external=\"" );
     buf.append( external );
-    buf.append( "\" instance=\"" );
-    buf.append( instance );
     buf.append( "\" nodeName=\"" );
-    buf.append( nodeName );
+    buf.append( node );
 
     if ( name != null )
     {

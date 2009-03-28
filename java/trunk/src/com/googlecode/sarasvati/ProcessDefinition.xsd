@@ -114,17 +114,17 @@
       <xs:attribute name="name" type="xs:string" use="required">
         <xs:annotation>
           <xs:documentation>
-            Must refer to a valid process definition name.
+            Since it may be desirable to include the same external process definition
+            more than once, each external must define a name which must be unique in
+            the process definition.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="alias" type="xs:string" use="required">
+      <xs:attribute name="processDefinition" type="xs:string" use="required">
         <xs:annotation>
           <xs:documentation>
-            Since it may be desirable to include the same external process definition
-            more than once, each external must also define an alias, which must be
-            unique in the process definition.
+            Must refer to a valid process definition name.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -168,7 +168,7 @@
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="nodeName" type="xs:string" use="required" >
+      <xs:attribute name="node" type="xs:string" use="required" >
         <xs:annotation>
           <xs:documentation>
             Name of the node in the specified external process
@@ -180,7 +180,8 @@
       <xs:attribute name="name" type="xs:string" use="optional" default="" >
         <xs:annotation>
           <xs:documentation>
-            The arc name.
+            The arc name. Does not need to be unique. Arcs with the same name
+            are considered to be part of a set.
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
