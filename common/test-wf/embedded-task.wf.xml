@@ -4,7 +4,7 @@
                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node type="task" name="1" isStart="true">
-    <externalArc external="subwf-tasks" instance="1" nodeName="sub1" type="out"/>
+    <externalArc external="subwf-tasks" node="sub1" type="out"/>
 
     <custom>
       <taskName>Enter order</taskName>
@@ -15,7 +15,9 @@
   </node>
 
   <node name="end">
-    <externalArc external="subwf-tasks" instance="1" nodeName="sub4" type="in"/>
+    <externalArc external="subwf-tasks" node="sub4" type="in"/>
   </node>
+
+  <external name="subwf-tasks" processDefinition="subwf-tasks"/>
 
 </process-definition>

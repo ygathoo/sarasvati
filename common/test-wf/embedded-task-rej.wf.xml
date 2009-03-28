@@ -8,8 +8,8 @@
   </node>
 
   <node name="1" type="task">
-    <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub1" type="out"/>
-    <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub1" type="in" name="reject"/>
+    <externalArc external="subwf" node="sub1" type="out"/>
+    <externalArc external="subwf" node="sub1" type="in" name="reject"/>
 
     <custom>
       <taskName>Enter order</taskName>
@@ -20,7 +20,9 @@
   </node>
 
   <node name="end">
-    <externalArc external="subwf-tasks-rej" instance="1" nodeName="sub4" type="in"/>
+    <externalArc external="subwf" node="sub4" type="in"/>
   </node>
+
+  <external name="subwf" processDefinition="subwf-tasks-rej"/>
 
 </process-definition>

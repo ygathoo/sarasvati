@@ -42,6 +42,12 @@ public class XmlNode
   @XmlAttribute (name="isStart", required=false)
   protected Boolean start;
 
+  @XmlAttribute (name="x", required=false)
+  protected Integer x;
+
+  @XmlAttribute (name="y", required=false)
+  protected Integer y;
+
   @XmlElement (name="guard", required=false)
   protected String guard;
 
@@ -104,6 +110,26 @@ public class XmlNode
     this.start = start;
   }
 
+  public Integer getX()
+  {
+    return x;
+  }
+
+  public void setX( Integer x )
+  {
+    this.x = x;
+  }
+
+  public Integer getY()
+  {
+    return y;
+  }
+
+  public void setY( Integer y )
+  {
+    this.y = y;
+  }
+
   public String getGuard()
   {
     return guard;
@@ -156,6 +182,18 @@ public class XmlNode
     buf.append( type );
     buf.append( "\" isStart=\"" );
     buf.append( isStart() );
+
+    if ( x != null )
+    {
+      buf.append( "\" x=\"" );
+      buf.append( getX() );
+    }
+    if ( y != null )
+    {
+      buf.append( "\" y=\"" );
+      buf.append( y );
+    }
+
     buf.append( "\">\n" );
 
     for ( XmlArc arc : arcs )
