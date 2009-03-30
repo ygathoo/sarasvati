@@ -15,7 +15,7 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
-*/
+ */
 package com.googlecode.sarasvati.xml;
 
 import java.util.List;
@@ -27,7 +27,7 @@ import javax.xml.bind.annotation.XmlAnyElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlCustom
 {
-  @XmlAnyElement (lax=true)
+  @XmlAnyElement(lax = true)
   protected List<Object> custom;
 
   public List<Object> getCustom ()
@@ -46,7 +46,7 @@ public class XmlCustom
     StringBuilder buf = new StringBuilder();
     buf.append( "<custom>\n" );
 
-    if (custom != null )
+    if (custom != null)
     {
       buf.append( custom );
       buf.append( "\n" );

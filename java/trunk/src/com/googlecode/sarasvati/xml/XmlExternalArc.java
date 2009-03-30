@@ -15,7 +15,7 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
-*/
+ */
 
 package com.googlecode.sarasvati.xml;
 
@@ -81,13 +81,13 @@ public class XmlExternalArc
   @Override
   public String toString ()
   {
-    StringBuilder buf = new StringBuilder ();
+    StringBuilder buf = new StringBuilder();
     buf.append( "<externalArc external=\"" );
     buf.append( external );
     buf.append( "\" nodeName=\"" );
     buf.append( node );
 
-    if ( name != null )
+    if (name != null)
     {
       buf.append( "\" name=\"" );
       buf.append( name );

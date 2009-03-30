@@ -15,7 +15,7 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
-*/
+ */
 
 package com.googlecode.sarasvati.xml;
 
@@ -23,12 +23,14 @@ import java.io.File;
 
 import javax.xml.bind.JAXBException;
 
-public class DefaultFileXmlProcessDefinitionResolver implements XmlProcessDefinitionResolver
+public class DefaultFileXmlProcessDefinitionResolver implements
+    XmlProcessDefinitionResolver
 {
-  protected File basePath;
+  protected File      basePath;
   protected XmlLoader loader;
 
-  public DefaultFileXmlProcessDefinitionResolver (XmlLoader loader, File basePath)
+  public DefaultFileXmlProcessDefinitionResolver (XmlLoader loader,
+      File basePath)
   {
     this.basePath = basePath;
     this.loader = loader;

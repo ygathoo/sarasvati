@@ -15,7 +15,7 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
-*/
+ */
 
 package com.googlecode.sarasvati.xml;
 
@@ -26,10 +26,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlArc
 {
-  @XmlAttribute (name="to", required=true)
+  @XmlAttribute(name = "to", required = true)
   protected String to;
 
-  @XmlAttribute (name="name", required=false)
+  @XmlAttribute(name = "name", required = false)
   protected String name;
 
   public String getTo ()
@@ -55,12 +55,12 @@ public class XmlArc
   @Override
   public String toString ()
   {
-    StringBuilder buf = new StringBuilder ();
+    StringBuilder buf = new StringBuilder();
     buf.append( "<arc to=\"" );
     buf.append( to );
     buf.append( "\"" );
 
-    if ( name != null )
+    if (name != null)
     {
       buf.append( " name=\"" );
       buf.append( name );
