@@ -48,9 +48,9 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
   protected GraphEditor editor;
   protected EditorGraph graph;
 
-  final private WidgetAction moveAction = ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null );
-  final private WidgetAction connectAction = ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() );
-  final private WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
+  private final WidgetAction moveAction = new MoveTrackAction( ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null ) );
+  private final WidgetAction connectAction = ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() );
+  private final WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
 
   public EditorScene (GraphEditor editor, EditorGraph graph)
   {

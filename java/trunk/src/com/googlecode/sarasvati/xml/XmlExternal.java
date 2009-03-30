@@ -33,10 +33,10 @@ public class XmlExternal
   protected String name;
 
   @XmlAttribute (name="x", required=false)
-  protected String x;
+  protected Integer x;
 
   @XmlAttribute (name="y", required=false)
-  protected String y;
+  protected Integer y;
 
   public String getProcessDefinition()
   {
@@ -58,22 +58,22 @@ public class XmlExternal
     this.name = name;
   }
 
-  public String getX()
+  public Integer getX()
   {
     return x;
   }
 
-  public void setX( String x )
+  public void setX( Integer x )
   {
     this.x = x;
   }
 
-  public String getY()
+  public Integer getY()
   {
     return y;
   }
 
-  public void setY( String y )
+  public void setY( Integer y )
   {
     this.y = y;
   }
