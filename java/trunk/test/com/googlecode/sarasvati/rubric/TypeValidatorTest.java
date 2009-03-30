@@ -19,15 +19,11 @@ public class TypeValidatorTest
   {
     String program = "\"foo\"";
     RubricStmt stmt = RubricInterpreter.compile( program );
-    ResultTypeValidator validator = new ResultTypeValidator( String.class );
-    stmt.traverse( validator );
-    Assert.assertTrue( "All result type should be string", validator.isAllResultsMatchType() );
+    Assert.assertTrue( "All result type should be string", ResultTypeValidator.isResultOfType( stmt, String.class ) );
 
     program = "if a or b then \"foo\" else \"bar\"";
     stmt = RubricInterpreter.compile( program );
-    validator = new ResultTypeValidator( String.class );
-    stmt.traverse( validator );
-    Assert.assertTrue( "All result type should be string", validator.isAllResultsMatchType() );
+    Assert.assertTrue( "All result type should be string", ResultTypeValidator.isResultOfType( stmt, String.class ) );
   }
 
   @Test public void testStringCheckOnNumber ()
@@ -139,15 +135,15 @@ public class TypeValidatorTest
   {
     String program = "(now)";
     RubricStmt stmt = RubricInterpreter.compile( program );
-    ResultTypeValidator validator = new ResultTypeValidator( Date.class );
-    stmt.traverse( validator );
-    Assert.assertTrue( "All result type should be date", validator.isAllResultsMatchType() );
+    Assert.assertTrue( "All result type should be date", ResultTypeValidator.isResultOfType( stmt, Date.class ) );
 
     program = "if a or b then (now) else (1 day after now)";
     stmt = RubricInterpreter.compile( program );
-    validator = new ResultTypeValidator( Date.class );
-    stmt.traverse( validator );
-    Assert.assertTrue( "All result type should be date", validator.isAllResultsMatchType() );
+    Assert.assertTrue( "All result type should be date", ResultTypeValidator.isResultOfType( stmt, Date.class ) );
+
+    program = "if A.b and C.d and E.f then (immediately) else if not G.h or J.k then (5 business days after immediately) else (immediately)";
+    stmt = RubricInterpreter.compile( program );
+    Assert.assertTrue( "All result type should be date", ResultTypeValidator.isResultOfType( stmt, Date.class ) );
   }
 
   @Test public void testDateCheckOnNumber ()
