@@ -41,6 +41,12 @@ public class EditorGraphFactory
       node.setStart( xmlNode.isStart() );
       node.setGuard( xmlNode.getGuard() );
 
+      if ( xmlNode.getX() != null && xmlNode.getY() != null )
+      {
+        node.setX( xmlNode.getX() );
+        node.setY( xmlNode.getY() );
+      }
+
       graph.addMember( node );
     }
 
@@ -49,6 +55,13 @@ public class EditorGraphFactory
       EditorExternal external = new EditorExternal();
       external.setName( xmlExternal.getName() );
       external.setGraphName( xmlExternal.getProcessDefinition() );
+
+      if ( xmlExternal.getX() != null && xmlExternal.getY() != null )
+      {
+        external.setX( xmlExternal.getX() );
+        external.setY( xmlExternal.getY() );
+      }
+
       graph.addMember( external );
     }
 
