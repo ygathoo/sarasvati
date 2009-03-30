@@ -15,7 +15,7 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
-*/
+ */
 
 package com.googlecode.sarasvati.xml;
 

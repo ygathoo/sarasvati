@@ -15,16 +15,36 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
- */
+*/
+package com.googlecode.sarasvati.editor.menu;
 
-package com.googlecode.sarasvati.xml;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 
-import javax.xml.bind.annotation.XmlEnum;
-import javax.xml.bind.annotation.XmlEnumValue;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.KeyStroke;
 
-@XmlEnum(String.class)
-public enum XmlExternalArcType {
-  @XmlEnumValue("in")
-  IN, @XmlEnumValue("out")
-  OUT;
+import com.googlecode.sarasvati.editor.GraphEditor;
+
+public class RedoAction extends AbstractAction
+{
+  private static final long serialVersionUID = 1L;
+
+  protected GraphEditor editor;
+
+  public RedoAction (GraphEditor editor)
+  {
+    super( "Redo" );
+    this.editor = editor;
+
+    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Y, KeyEvent.CTRL_MASK ) );
+    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_R );
+  }
+
+  @Override
+  public void actionPerformed (ActionEvent e)
+  {
+    editor.redo();
+  }
 }

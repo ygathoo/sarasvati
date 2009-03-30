@@ -15,7 +15,7 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
-*/
+ */
 
 package com.googlecode.sarasvati.xml;
 
@@ -26,54 +26,54 @@ import javax.xml.bind.annotation.XmlAttribute;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlExternal
 {
-  @XmlAttribute (name="processDefinition", required=true)
-  protected String processDefinition;
+  @XmlAttribute(name = "processDefinition", required = true)
+  protected String  processDefinition;
 
-  @XmlAttribute (name="name", required=true)
-  protected String name;
+  @XmlAttribute(name = "name", required = true)
+  protected String  name;
 
-  @XmlAttribute (name="x", required=false)
+  @XmlAttribute(name = "x", required = false)
   protected Integer x;
 
-  @XmlAttribute (name="y", required=false)
+  @XmlAttribute(name = "y", required = false)
   protected Integer y;
 
-  public String getProcessDefinition()
+  public String getProcessDefinition ()
   {
     return processDefinition;
   }
 
-  public void setProcessDefinition( String processDefinition )
+  public void setProcessDefinition (String processDefinition)
   {
     this.processDefinition = processDefinition;
   }
 
-  public String getName()
+  public String getName ()
   {
     return name;
   }
 
-  public void setName( String name )
+  public void setName (String name)
   {
     this.name = name;
   }
 
-  public Integer getX()
+  public Integer getX ()
   {
     return x;
   }
 
-  public void setX( Integer x )
+  public void setX (Integer x)
   {
     this.x = x;
   }
 
-  public Integer getY()
+  public Integer getY ()
   {
     return y;
   }
 
-  public void setY( Integer y )
+  public void setY (Integer y)
   {
     this.y = y;
   }
@@ -87,13 +87,13 @@ public class XmlExternal
     buf.append( "\" processDefinition=\"" );
     buf.append( processDefinition );
 
-    if ( x != null )
+    if (x != null)
     {
       buf.append( "\" x=\"" );
       buf.append( x );
     }
 
-    if ( y != null )
+    if (y != null)
     {
       buf.append( "\" y=\"" );
       buf.append( y );
