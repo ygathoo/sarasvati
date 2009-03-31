@@ -11,22 +11,26 @@ public class MoveNodeCommand implements Command
 
   private final Widget widget;
 
-  public MoveNodeCommand (Point startLocation, Point endLocation, Widget widget)
+  public MoveNodeCommand (Widget widget, Point startLocation, Point endLocation)
   {
+    this.widget = widget;
     this.startLocation = startLocation;
     this.endLocation = endLocation;
-    this.widget = widget;
   }
 
   @Override
   public void performAction ()
   {
     widget.setPreferredLocation( endLocation );
+    widget.revalidate();
+    widget.getScene().validate();
   }
 
   @Override
   public void undoAction ()
   {
     widget.setPreferredLocation( startLocation );
+    widget.revalidate();
+    widget.getScene().validate();
   }
 }

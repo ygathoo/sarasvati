@@ -9,6 +9,8 @@ import java.awt.event.MouseEvent;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.editor.command.CommandStack;
+
 public class MoveTrackAction extends WidgetActionDecorator
 {
   protected Widget currentWidget = null;
@@ -51,7 +53,7 @@ public class MoveTrackAction extends WidgetActionDecorator
     State state = getAction().mouseReleased( widget, event );
     if ( currentWidget == widget )
     {
-      System.out.println( "Moved " + currentWidget + " to " + widget.getLocation() );
+      CommandStack.nodeMoved( widget, startLocation, widget.getLocation() );
     }
     return state;
   }

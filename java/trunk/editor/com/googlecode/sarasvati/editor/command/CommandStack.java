@@ -1,9 +1,14 @@
 package com.googlecode.sarasvati.editor.command;
 
+import java.awt.Point;
 import java.util.LinkedList;
+
+import org.netbeans.api.visual.widget.Widget;
 
 public class CommandStack
 {
+  private static CommandStack current = new CommandStack ();
+
   private final LinkedList<Command> commandStack = new LinkedList<Command>();
   private int currentIndex = -1;
 
@@ -24,7 +29,7 @@ public class CommandStack
 
   public boolean canRedo ()
   {
-    return currentIndex < ( commandStack.size() - 2 );
+    return currentIndex < ( commandStack.size() - 1 );
   }
 
   public void undo ()
@@ -49,5 +54,15 @@ public class CommandStack
     currentIndex++;
     Command command = commandStack.get( currentIndex );
     command.performAction();
+  }
+
+  public static void nodeMoved (Widget widget, Point startLocation, Point endLocation)
+  {
+    current.pushCommand( new MoveNodeCommand( widget, startLocation, endLocation ) );
+  }
+
+  public static CommandStack getCurrent ()
+  {
+    return current;
   }
 }
