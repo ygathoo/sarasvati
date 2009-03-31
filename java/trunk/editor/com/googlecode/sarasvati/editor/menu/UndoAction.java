@@ -26,6 +26,7 @@ import javax.swing.Action;
 import javax.swing.KeyStroke;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.command.CommandStack;
 
 public class UndoAction extends AbstractAction
 {
@@ -45,6 +46,6 @@ public class UndoAction extends AbstractAction
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    editor.undo();
+    CommandStack.getCurrent().undo();
   }
 }

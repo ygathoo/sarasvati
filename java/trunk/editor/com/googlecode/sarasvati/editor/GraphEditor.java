@@ -37,7 +37,6 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.xml.bind.JAXBException;
 
-import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.menu.ExitAction;
 import com.googlecode.sarasvati.editor.menu.NewGraphAction;
 import com.googlecode.sarasvati.editor.menu.OpenAction;
@@ -61,8 +60,6 @@ public class GraphEditor
   protected JTabbedPane tabPane;
 
   protected EditorMode  mode;
-
-  private CommandStack commandStack = new CommandStack();
 
   public GraphEditor () throws JAXBException, LoadException
   {
@@ -144,16 +141,6 @@ public class GraphEditor
     menuBar.add( editMenu );
 
     return menuBar;
-  }
-
-  public void undo ()
-  {
-    commandStack.undo();
-  }
-
-  public void redo ()
-  {
-    commandStack.redo();
   }
 
   public void createNewProcessDefinition ()
