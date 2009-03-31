@@ -1,0 +1,49 @@
+#summary Sarasvati Roadmap
+
+= Roadmap =
+
+Sarasvati is fairly stable at this point, and we are workings towards a 1.0 release. 
+
+== 1.0 TODO ==
+
+=== Editor ===
+
+A graphical editor for process definitions is in progress. 
+
+ * Load: Done
+ * Save: TBD
+ * Add nodes: Done. Still needs undo/redo support.
+ * Delete nodes: TBD
+ * Add external: TBD
+ * Delete external: TBD
+ * Move nodes: Done with undo/redo support.
+ * Connect nodes: Done. Still needs undo/redo support.
+ * Change connections: Done. Still needs undo/redo support.
+ * Remove connections: Done. Still needs undo/redo support.
+ * Undo/Redo Framework: Implemented
+ * Edit node properties: Started
+ * Edit arc properties: TBD
+ * Cleanup MDI interactions: TBD
+
+=== Template Node ===
+
+Design work for templates has started. Will probably included the notion of token sets, which may be useful in other contexts.
+
+=== Performance Tuning ===
+
+Need to load 1k, 10k, 100k and maybe 1M process definitions, and make sure the hibernate backend still performs well. Will probably need to add indexes in some places.
+
+Will need to run 1k, 10k, 100k and maybe 1M processes through and check performance.
+
+=== JDBC Backend ===
+
+May not get to this pre-1.0 release. However, this would be good as a fall back for users who don't use hibernate. Also, it would make sure that the interfaces are sufficiently flexible.
+
+==Post 1.0 Release==
+
+Possibilities:
+
+  * Improve Editor (expression editor?)
+  * Improve visualizations
+  * Additional backends? (at least JDBC, if that isn't included in 1.0)
+  * Porting to .NET/Python/Ruby?
