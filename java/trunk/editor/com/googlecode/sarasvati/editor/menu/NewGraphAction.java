@@ -31,12 +31,9 @@ public class NewGraphAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  protected GraphEditor editor;
-
-  public NewGraphAction (GraphEditor editor)
+  public NewGraphAction ()
   {
     super( "New Process Definition" );
-    this.editor = editor;
 
     putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_N, KeyEvent.CTRL_MASK ) );
     putValue( Action.MNEMONIC_KEY, KeyEvent.VK_N );
@@ -45,6 +42,6 @@ public class NewGraphAction extends AbstractAction
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    editor.createNewProcessDefinition();
+    GraphEditor.getInstance().createNewProcessDefinition();
   }
 }

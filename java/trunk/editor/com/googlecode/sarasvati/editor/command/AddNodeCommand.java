@@ -15,38 +15,45 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
-*/
-package com.googlecode.sarasvati.editor.menu;
+ */
+package com.googlecode.sarasvati.editor.command;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.KeyEvent;
+import java.awt.Point;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.KeyStroke;
+import com.googlecode.sarasvati.editor.model.EditorNode;
+import com.googlecode.sarasvati.editor.model.EditorScene;
 
-import com.googlecode.sarasvati.editor.command.CommandStack;
-
-public class UndoAction extends AbstractAction
+public class AddNodeCommand implements Command
 {
-  private static final long serialVersionUID = 1L;
+  private EditorScene scene;
+  private Point location;
+  private EditorNode node;
 
-  public UndoAction ()
+  public AddNodeCommand (EditorScene scene, Point location, EditorNode node)
   {
-    super( "Undo" );
-
-    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Z, KeyEvent.CTRL_MASK ) );
-    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_U );
+    this.scene = scene;
+    this.location = location;
+    this.node = node;
   }
 
   @Override
-  public void actionPerformed (ActionEvent e)
+  public void performAction ()
   {
-    CommandStack.getCurrent().undo();
+    node.setOrigin( location );
+    scene.addNode( node );
+    scene.validate();
   }
 
-  public void setName (String name)
+  @Override
+  public void undoAction ()
   {
-    putValue( Action.NAME, name );
+    scene.removeNode( node );
+    scene.validate();
+  }
+
+  @Override
+  public String getName ()
+  {
+    return "Add Node";
   }
 }
