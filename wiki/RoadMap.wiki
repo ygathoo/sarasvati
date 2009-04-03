@@ -13,18 +13,18 @@ A graphical editor for process definitions is in progress.
 
  * Load: Done
  * Save: TBD
- * Add nodes: Done. Still needs undo/redo support.
+ * Add nodes: Done with undo/redo support.
  * Delete nodes: TBD
  * Add external: TBD
  * Delete external: TBD
  * Move nodes: Done with undo/redo support.
- * Connect nodes: Done. Still needs undo/redo support.
- * Change connections: Done. Still needs undo/redo support.
- * Remove connections: Done. Still needs undo/redo support.
+ * Connect nodes: Done. TODO: undo/redo support.
+ * Change connections: Done. TODO: undo/redo support.
+ * Remove connections: Done. TODO: undo/redo support.
  * Undo/Redo Framework: Implemented
  * Edit node properties: Started
  * Edit arc properties: TBD
- * Cleanup MDI interactions: TBD
+ * Cleanup undo/redo MDI interactions: Done
 
 === Template Node ===
 
