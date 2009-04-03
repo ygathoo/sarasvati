@@ -18,11 +18,13 @@
 */
 package com.googlecode.sarasvati.editor;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
@@ -54,9 +56,11 @@ public class SceneAddNodeAction extends WidgetAction.Adapter
       node.setJoin( false );
       node.setStart( false );
 
-      node.setOrigin( widget.convertLocalToScene( event.getPoint() ) );
+      EditorScene scene = (EditorScene)widget.getScene();
+      Point location = widget.convertLocalToScene( event.getPoint() );
 
-      ((EditorScene)widget.getScene()).addNode( node );
+      CommandStack.nodeAdded( scene, location, node );
+
       return State.CONSUMED;
     }
 

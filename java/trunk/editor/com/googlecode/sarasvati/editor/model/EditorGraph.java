@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.editor.model;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -25,6 +26,7 @@ import java.util.Map;
 
 public class EditorGraph
 {
+  protected File                           file;
   protected String                         name;
 
   protected Map<String, EditorGraphMember> members = new HashMap<String, EditorGraphMember>();
@@ -38,6 +40,16 @@ public class EditorGraph
   public void setName (String name)
   {
     this.name = name;
+  }
+
+  public File getFile ()
+  {
+    return file;
+  }
+
+  public void setFile (File file)
+  {
+    this.file = file;
   }
 
   public Map<String, EditorGraphMember> getMembers ()

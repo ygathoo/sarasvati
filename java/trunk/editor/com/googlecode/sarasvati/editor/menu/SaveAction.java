@@ -23,30 +23,32 @@ import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
 
-import com.googlecode.sarasvati.editor.command.CommandStack;
+import com.googlecode.sarasvati.editor.GraphEditor;
 
-public class UndoAction extends AbstractAction
+public class SaveAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  public UndoAction ()
+  public SaveAction ()
   {
-    super( "Undo" );
+    super( "Save" );
 
-    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Z, KeyEvent.CTRL_MASK ) );
-    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_U );
+    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_S, KeyEvent.CTRL_MASK ) );
+    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_S );
   }
 
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    CommandStack.getCurrent().undo();
-  }
+    JFileChooser fileChooser = new JFileChooser();
+    int retVal = fileChooser.showSaveDialog( GraphEditor.getInstance().getMainWindow() );
 
-  public void setName (String name)
-  {
-    putValue( Action.NAME, name );
+    if ( retVal == JFileChooser.APPROVE_OPTION )
+    {
+      GraphEditor.getInstance().saveProcessDefinition( fileChooser.getSelectedFile() );
+    }
   }
 }

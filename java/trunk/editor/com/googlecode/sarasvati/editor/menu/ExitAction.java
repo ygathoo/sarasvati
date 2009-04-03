@@ -25,18 +25,13 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import com.googlecode.sarasvati.editor.GraphEditor;
-
 public class ExitAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  protected GraphEditor editor;
-
-  public ExitAction (GraphEditor editor)
+  public ExitAction ()
   {
     super( "Exit" );
-    this.editor = editor;
 
     putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Q, KeyEvent.CTRL_MASK ) );
     putValue( Action.MNEMONIC_KEY, KeyEvent.VK_X );

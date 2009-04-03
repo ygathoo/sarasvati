@@ -25,19 +25,15 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
-import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 
 public class RedoAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  protected GraphEditor editor;
-
-  public RedoAction (GraphEditor editor)
+  public RedoAction ()
   {
     super( "Redo" );
-    this.editor = editor;
 
     putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Y, KeyEvent.CTRL_MASK ) );
     putValue( Action.MNEMONIC_KEY, KeyEvent.VK_R );
@@ -47,5 +43,10 @@ public class RedoAction extends AbstractAction
   public void actionPerformed (ActionEvent e)
   {
     CommandStack.getCurrent().redo();
+  }
+
+  public void setName (String name)
+  {
+    putValue( Action.NAME, name );
   }
 }
