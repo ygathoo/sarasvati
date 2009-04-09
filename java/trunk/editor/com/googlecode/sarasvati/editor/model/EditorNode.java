@@ -64,4 +64,10 @@ public class EditorNode extends EditorGraphMember
   {
     this.guard = guard;
   }
+
+  @Override
+  public boolean isExternal()
+  {
+    return false;
+  }
 }

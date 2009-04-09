@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.editor.model;
 
 import java.awt.Point;
 
-public class EditorGraphMember
+public abstract class EditorGraphMember
 {
   protected Point  origin = new Point();
 
@@ -65,4 +65,6 @@ public class EditorGraphMember
   {
     this.name = name;
   }
+
+  public abstract boolean isExternal ();
 }

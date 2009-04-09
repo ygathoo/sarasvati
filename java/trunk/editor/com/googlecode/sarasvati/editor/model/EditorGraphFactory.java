@@ -18,6 +18,9 @@
 */
 package com.googlecode.sarasvati.editor.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternal;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
@@ -32,10 +35,13 @@ public class EditorGraphFactory
     EditorGraph graph = new EditorGraph();
     graph.setName( xmlProcDef.getName() );
 
+    Map<String, EditorNode> nodeMap = new HashMap<String, EditorNode>();
+    Map<String, EditorExternal> externalMap = new HashMap<String, EditorExternal>();
+
     for ( XmlNode xmlNode : xmlProcDef.getNodes() )
     {
       EditorNode node = new EditorNode();
-      node.setName(  xmlNode.getName() );
+      node.setName( xmlNode.getName() );
       node.setType( xmlNode.getType() );
       node.setJoin( xmlNode.isJoin() );
       node.setStart( xmlNode.isStart() );
@@ -47,7 +53,8 @@ public class EditorGraphFactory
         node.setY( xmlNode.getY() );
       }
 
-      graph.addMember( node );
+      graph.addNode( node );
+      nodeMap.put( node.getName(), node );
     }
 
     for ( XmlExternal xmlExternal : xmlProcDef.getExternals() )
@@ -62,29 +69,122 @@ public class EditorGraphFactory
         external.setY( xmlExternal.getY() );
       }
 
-      graph.addMember( external );
+      graph.addExternal( external );
+      externalMap.put( external.getName(), external );
     }
 
     for ( XmlNode xmlNode : xmlProcDef.getNodes() )
     {
       for ( XmlArc xmlArc : xmlNode.getArcs() )
       {
-        graph.addArc( xmlNode.getName(), xmlArc.getTo(), xmlArc.getName() );
+        EditorGraphMember startMember = nodeMap.get( xmlNode.getName() );
+        EditorGraphMember endMember = nodeMap.get( xmlArc.getTo() );
+
+        EditorArc arc = new EditorArc();
+        arc.setStart( startMember );
+        arc.setEnd( endMember );
+        arc.setLabel( xmlArc.getName() );
+
+        graph.addArc( arc );
       }
 
       for ( XmlExternalArc xmlExternal : xmlNode.getExternalArcs() )
       {
+        EditorGraphMember startMember= null;
+        EditorGraphMember endMember  = null;
+
         if ( xmlExternal.getType() == XmlExternalArcType.OUT )
         {
-          graph.addArc( xmlExternal.getExternal(), xmlExternal.getNode(), xmlExternal.getName() );
+          startMember = nodeMap.get( xmlNode.getName() );
+          endMember = nodeMap.get( xmlExternal.getExternal() );
         }
         else
         {
-          graph.addArc( xmlExternal.getNode(), xmlExternal.getExternal(), xmlExternal.getName() );
+          endMember = nodeMap.get( xmlNode.getName() );
+          startMember = nodeMap.get( xmlExternal.getExternal() );
         }
+
+        EditorArc arc = new EditorArc();
+        arc.setStart( startMember );
+        arc.setEnd( endMember );
+        arc.setLabel( xmlExternal.getName() );
+
+        graph.addArc( arc );
       }
     }
 
     return graph;
+  }
+
+  public static XmlProcessDefinition exportToXml (EditorGraph graph)
+  {
+    XmlProcessDefinition xmlProcDef = new XmlProcessDefinition();
+    xmlProcDef.setName( graph.getName() );
+
+    Map<EditorNode,XmlNode> nodeMap = new HashMap<EditorNode, XmlNode>();
+    Map<EditorExternal,XmlExternal> externalMap = new HashMap<EditorExternal, XmlExternal>();
+
+    for ( EditorNode node : graph.getNodes() )
+    {
+      XmlNode xmlNode = new XmlNode();
+      xmlNode.setName( node.getName() );
+      xmlNode.setType( node.getType() );
+      xmlNode.setGuard( node.getGuard() );
+      xmlNode.setJoin( node.isJoin() );
+      xmlNode.setStart( node.isStart() );
+      xmlNode.setX( node.getX() );
+      xmlNode.setY( node.getY() );
+
+      xmlProcDef.getNodes().add( xmlNode );
+      nodeMap.put(  node, xmlNode );
+    }
+
+    for ( EditorExternal external : graph.getExternals() )
+    {
+      XmlExternal xmlExternal = new XmlExternal();
+      xmlExternal.setName( external.getName() );
+      xmlExternal.setProcessDefinition( external.getGraphName() );
+      xmlExternal.setX( external.getX() );
+      xmlExternal.setY( external.getY() );
+
+      xmlProcDef.getExternals().add( xmlExternal );
+      externalMap.put( external, xmlExternal );
+    }
+
+    for ( EditorArc arc : graph.getArcs() )
+    {
+      if ( arc.isExternalOutArc() )
+      {
+        XmlNode node = nodeMap.get( arc.getStart() );
+        XmlExternalArc xmlExternalArc = new XmlExternalArc();
+        xmlExternalArc.setExternal( arc.getEnd().getName() );
+        xmlExternalArc.setName( arc.getLabel() );
+        xmlExternalArc.setNode( "test" ); // TODO: Fix, once we have UI for selecting node
+        xmlExternalArc.setType( XmlExternalArcType.OUT );
+
+        node.getExternalArcs().add( xmlExternalArc );
+      }
+      else if ( arc.isExternalInArc() )
+      {
+        XmlNode node = nodeMap.get( arc.getEnd() );
+        XmlExternalArc xmlExternalArc = new XmlExternalArc();
+        xmlExternalArc.setExternal( arc.getStart().getName() );
+        xmlExternalArc.setName( arc.getLabel() );
+        xmlExternalArc.setNode( "test" ); // TODO: Fix, once we have UI for selecting node
+        xmlExternalArc.setType( XmlExternalArcType.IN );
+
+        node.getExternalArcs().add( xmlExternalArc );
+      }
+      else
+      {
+        XmlNode node = nodeMap.get( arc.getStart() );
+        XmlArc xmlArc = new XmlArc();
+        xmlArc.setName( arc.getLabel() );
+        xmlArc.setTo( arc.getEnd().getName() );
+        node.getArcs().add( xmlArc );
+      }
+    }
+
+    return xmlProcDef;
   }
 }

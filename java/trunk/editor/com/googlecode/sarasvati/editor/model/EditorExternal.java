@@ -31,4 +31,10 @@ public class EditorExternal extends EditorGraphMember
   {
     this.graphName = graphName;
   }
+
+  @Override
+  public boolean isExternal()
+  {
+    return true;
+  }
 }
