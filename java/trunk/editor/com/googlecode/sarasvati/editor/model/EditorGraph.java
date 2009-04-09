@@ -20,17 +20,16 @@ package com.googlecode.sarasvati.editor.model;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class EditorGraph
 {
-  protected File                           file;
-  protected String                         name;
+  protected File                 file;
+  protected String               name;
 
-  protected Map<String, EditorGraphMember> members = new HashMap<String, EditorGraphMember>();
-  protected List<EditorArc> arcs = new ArrayList<EditorArc>();
+  protected List<EditorNode>     nodes = new ArrayList<EditorNode>();
+  protected List<EditorExternal> externals = new ArrayList<EditorExternal>();
+  protected List<EditorArc>      arcs    = new ArrayList<EditorArc>();
 
   public String getName ()
   {
@@ -52,24 +51,34 @@ public class EditorGraph
     this.file = file;
   }
 
-  public Map<String, EditorGraphMember> getMembers ()
+  public List<EditorNode> getNodes()
   {
-    return members;
+    return nodes;
   }
 
-  public void setMembers (Map<String, EditorGraphMember> members)
+  public void setNodes (List<EditorNode> nodes)
   {
-    this.members = members;
+    this.nodes = nodes;
   }
 
-  public void addMember (EditorGraphMember member)
+  public void addNode (EditorNode node)
   {
-    members.put( member.getName(), member );
+    nodes.add( node );
   }
 
-  public boolean hasMember (String memberName)
+  public List<EditorExternal> getExternals()
   {
-    return members.containsKey( memberName );
+    return externals;
+  }
+
+  public void setExternals( List<EditorExternal> externals )
+  {
+    this.externals = externals;
+  }
+
+  public void addExternal (EditorExternal external)
+  {
+    externals.add( external );
   }
 
   public List<EditorArc> getArcs()
@@ -80,19 +89,6 @@ public class EditorGraph
   public void setArcs( List<EditorArc> arcs )
   {
     this.arcs = arcs;
-  }
-
-  public void addArc (String start, String end, String label)
-  {
-    EditorGraphMember startMember = members.get( start );
-    EditorGraphMember endMember = members.get( end );
-
-    EditorArc arc = new EditorArc();
-    arc.setStart(  startMember );
-    arc.setEnd( endMember );
-    arc.setLabel( label );
-
-    arcs.add( arc );
   }
 
   public void addArc (EditorArc arc)

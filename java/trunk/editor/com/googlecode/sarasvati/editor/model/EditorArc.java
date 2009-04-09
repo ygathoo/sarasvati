@@ -21,7 +21,6 @@ package com.googlecode.sarasvati.editor.model;
 public class EditorArc
 {
   protected EditorGraphMember start;
-
   protected EditorGraphMember end;
 
   protected String            label;
@@ -54,5 +53,15 @@ public class EditorArc
   public void setLabel( String label )
   {
     this.label = label;
+  }
+
+  public boolean isExternalOutArc ()
+  {
+    return end.isExternal();
+  }
+
+  public boolean isExternalInArc ()
+  {
+    return start.isExternal();
   }
 }

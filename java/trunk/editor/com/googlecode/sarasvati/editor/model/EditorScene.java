@@ -62,7 +62,12 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 
     getActions().addAction( SceneAddNodeAction.INSTANCE );
 
-    for ( EditorGraphMember member : graph.getMembers().values() )
+    for ( EditorGraphMember member : graph.getNodes() )
+    {
+      addNode( member );
+    }
+
+    for ( EditorGraphMember member : graph.getExternals() )
     {
       addNode( member );
     }
