@@ -41,6 +41,7 @@ public class AddNodeCommand implements Command
   {
     node.setOrigin( location );
     scene.addNode( node );
+    scene.getGraph().addNode( node );
     scene.validate();
   }
 
@@ -48,6 +49,7 @@ public class AddNodeCommand implements Command
   public void undoAction ()
   {
     scene.removeNode( node );
+    scene.getGraph().removeNode( node );
     scene.validate();
   }
 

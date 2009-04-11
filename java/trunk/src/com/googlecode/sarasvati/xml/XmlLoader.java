@@ -27,6 +27,7 @@ import java.io.Reader;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
@@ -103,9 +104,17 @@ public class XmlLoader
   {
     Unmarshaller u = context.createUnmarshaller();
     u.setSchema( schema );
-    u
-        .setEventHandler( new javax.xml.bind.helpers.DefaultValidationEventHandler() );
+    u.setEventHandler( new javax.xml.bind.helpers.DefaultValidationEventHandler() );
     return u;
+  }
+
+  protected Marshaller getMarshaller () throws JAXBException
+  {
+    Marshaller m = context.createMarshaller();
+    m.setSchema( schema );
+    m.setEventHandler( new javax.xml.bind.helpers.DefaultValidationEventHandler() );
+    m.setProperty( Marshaller.JAXB_FORMATTED_OUTPUT, true );
+    return m;
   }
 
   public XmlProcessDefinition loadProcessDefinition (File file)
@@ -130,5 +139,11 @@ public class XmlLoader
       throws JAXBException
   {
     return (XmlProcessDefinition) getUnmarshaller().unmarshal( in );
+  }
+
+  public void saveProcessDefinition (XmlProcessDefinition xmlProcDef, File file)
+      throws JAXBException
+  {
+    getMarshaller().marshal( xmlProcDef, file );
   }
 }

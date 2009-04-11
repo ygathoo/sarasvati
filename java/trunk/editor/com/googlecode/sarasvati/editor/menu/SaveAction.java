@@ -27,28 +27,59 @@ import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.model.EditorGraph;
+import com.googlecode.sarasvati.editor.model.EditorScene;
 
 public class SaveAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  public SaveAction ()
-  {
-    super( "Save" );
+  private final boolean isSaveAs;
 
-    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_S, KeyEvent.CTRL_MASK ) );
-    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_S );
+  public SaveAction (boolean isSaveAs)
+  {
+    super( isSaveAs ? "Save As.." : "Save" );
+    this.isSaveAs = isSaveAs;
+
+    if ( !isSaveAs )
+    {
+      putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_S, KeyEvent.CTRL_MASK ) );
+      putValue( Action.MNEMONIC_KEY, KeyEvent.VK_S );
+    }
   }
 
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    JFileChooser fileChooser = new JFileChooser();
-    int retVal = fileChooser.showSaveDialog( GraphEditor.getInstance().getMainWindow() );
+    EditorScene scene = GraphEditor.getInstance().getCurrentScene();
 
-    if ( retVal == JFileChooser.APPROVE_OPTION )
+    if ( scene == null )
     {
-      GraphEditor.getInstance().saveProcessDefinition( fileChooser.getSelectedFile() );
+      return;
     }
+
+    EditorGraph graph = scene.getGraph();
+
+    GraphEditor editor = GraphEditor.getInstance();
+
+    if ( isSaveAs || scene.getGraph().getFile() == null )
+    {
+      JFileChooser fileChooser = new JFileChooser();
+      fileChooser.setCurrentDirectory( editor.getLastFile() );
+
+      int retVal = fileChooser.showSaveDialog( GraphEditor.getInstance().getMainWindow() );
+
+      if ( retVal == JFileChooser.APPROVE_OPTION )
+      {
+        editor.setLastFile( fileChooser.getSelectedFile() );
+        editor.saveProcessDefinition( graph, fileChooser.getSelectedFile() );
+      }
+      else
+      {
+        return;
+      }
+    }
+
+    editor.saveProcessDefinition( graph, graph.getFile() );
   }
 }
