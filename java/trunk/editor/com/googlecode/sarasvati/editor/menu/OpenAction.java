@@ -43,11 +43,16 @@ public class OpenAction extends AbstractAction
   @Override
   public void actionPerformed (ActionEvent e)
   {
+    GraphEditor editor = GraphEditor.getInstance();
+
     JFileChooser fileChooser = new JFileChooser();
-    int retVal = fileChooser.showOpenDialog( GraphEditor.getInstance().getMainWindow() );
+    fileChooser.setCurrentDirectory( editor.getLastFile() );
+
+    int retVal = fileChooser.showOpenDialog( editor.getMainWindow() );
 
     if ( retVal == JFileChooser.APPROVE_OPTION )
     {
+      editor.setLastFile( fileChooser.getSelectedFile() );
       GraphEditor.getInstance().openProcessDefinition( fileChooser.getSelectedFile() );
     }
   }

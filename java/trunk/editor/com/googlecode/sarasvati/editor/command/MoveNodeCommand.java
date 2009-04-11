@@ -43,6 +43,7 @@ public class MoveNodeCommand implements Command
   @Override
   public void performAction ()
   {
+    member.setOrigin( endLocation );
     Widget widget = scene.findWidget( member );
     widget.setPreferredLocation( endLocation );
     widget.revalidate();
@@ -52,6 +53,7 @@ public class MoveNodeCommand implements Command
   @Override
   public void undoAction ()
   {
+    member.setOrigin( startLocation );
     Widget widget = scene.findWidget( member );
     widget.setPreferredLocation( startLocation );
     widget.revalidate();

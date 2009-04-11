@@ -66,6 +66,11 @@ public class EditorGraph
     nodes.add( node );
   }
 
+  public void removeNode (EditorNode node)
+  {
+    nodes.remove( node );
+  }
+
   public List<EditorExternal> getExternals()
   {
     return externals;

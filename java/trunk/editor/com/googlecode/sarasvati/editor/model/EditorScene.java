@@ -46,17 +46,15 @@ import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 
 public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 {
-  protected CommandStack commandStack;
-  protected GraphEditor editor;
-  protected EditorGraph graph;
+  protected final CommandStack commandStack;
+  protected final EditorGraph graph;
 
   private final WidgetAction moveAction = new MoveTrackAction( ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null ) );
   private final WidgetAction connectAction = ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() );
   private final WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
 
-  public EditorScene (GraphEditor editor, EditorGraph graph)
+  public EditorScene (EditorGraph graph)
   {
-    this.editor = editor;
     this.graph = graph;
     this.commandStack = new CommandStack();
 
@@ -83,6 +81,11 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
   public CommandStack getCommandStack ()
   {
     return commandStack;
+  }
+
+  public EditorGraph getGraph ()
+  {
+    return graph;
   }
 
   public void modeAddNode ()
@@ -138,7 +141,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
     widget.getActions().addAction( new NodePropertiesAction() );
     widget.getActions().addAction( moveAction );
 
-    if ( editor.getMode() == EditorMode.AddNode )
+    if ( GraphEditor.getInstance().getMode() == EditorMode.AddNode )
     {
       widget.getActions().addAction( connectAction );
     }

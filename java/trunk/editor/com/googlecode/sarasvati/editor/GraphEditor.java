@@ -76,6 +76,7 @@ public class GraphEditor
   protected RedoAction redoAction;
 
   protected EditorMode  mode;
+  protected File        lastFile;
 
   public GraphEditor () throws JAXBException, LoadException
   {
@@ -96,6 +97,16 @@ public class GraphEditor
   public void setMode (EditorMode mode)
   {
     this.mode = mode;
+  }
+
+  public File getLastFile ()
+  {
+    return lastFile;
+  }
+
+  public void setLastFile (File lastFile)
+  {
+    this.lastFile = lastFile;
   }
 
   protected void setup ()
@@ -156,6 +167,8 @@ public class GraphEditor
 
     fileMenu.add( new JMenuItem( new NewGraphAction() ) );
     fileMenu.add( new JMenuItem( new OpenAction() ) );
+    fileMenu.add( new JMenuItem( new SaveAction( true ) ) );
+    fileMenu.add( new JMenuItem( new SaveAction( false ) ) );
     fileMenu.add( new JMenuItem( new ExitAction() ) );
 
     JMenu editMenu = new JMenu( "Edit" );
@@ -177,7 +190,7 @@ public class GraphEditor
   {
     final JScrollPane scrollPane = new JScrollPane();
 
-    final EditorScene scene = new EditorScene( this, new EditorGraph() );
+    final EditorScene scene = new EditorScene( new EditorGraph() );
     scrollPane.setViewportView( scene.createView() );
     scrollPane.putClientProperty( "scene", scene );
 
@@ -191,7 +204,7 @@ public class GraphEditor
     {
       XmlProcessDefinition xmlProcDef = xmlLoader.loadProcessDefinition( processDefinitionFile );
       EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef );
-      EditorScene scene = new EditorScene( this, graph );
+      EditorScene scene = new EditorScene( graph );
 
       JScrollPane scrollPane = new JScrollPane();
       scrollPane.setViewportView( scene.createView() );
@@ -206,9 +219,29 @@ public class GraphEditor
     }
   }
 
-  public void saveProcessDefinition (File outputFile)
+  public void saveProcessDefinition (EditorGraph graph, File outputFile)
   {
-    System.out.println( "Saving to " + outputFile + " not yet supported." );
+    String name = outputFile.getName();
+    int firstDot = name.indexOf(  '.' );
+
+    if ( firstDot > 0 )
+    {
+      name = name.substring( 0, firstDot );
+    }
+
+    graph.setName( name );
+    tabPane.setTitleAt( tabPane.getSelectedIndex(), name );
+
+    try
+    {
+      XmlProcessDefinition xmlProcDef = EditorGraphFactory.exportToXml( graph );
+      xmlLoader.saveProcessDefinition( xmlProcDef, outputFile );
+      graph.setFile( outputFile );
+    }
+    catch ( Exception e )
+    {
+      JOptionPane.showMessageDialog( mainWindow, e.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE );
+    }
   }
 
   public void modeMove ()
