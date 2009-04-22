@@ -46,9 +46,8 @@ public class DOMToObjectLoadHelper
 
   public static void setBeanValues (Object obj, Node node, String name, Map<String, String> beanProperties) throws LoadException
   {
-    PropertyMutator editor = getMutatorForProperty( obj, node.getLocalName() );
-
-    Object currentValue = editor.getCurrentValue();
+    PropertyMutator editor = null;
+    Object currentValue = null;
 
     NodeList list = node.getChildNodes();
 
@@ -59,6 +58,11 @@ public class DOMToObjectLoadHelper
       Object child = list.item( i );
       if ( child instanceof Element )
       {
+        if ( editor == null )
+        {
+          editor = getMutatorForProperty( obj, node.getLocalName() );
+          currentValue = editor.getCurrentValue();
+        }
         Element elemChild = (Element)child;
         String childName = getChildName( name, node.getLocalName() );
         setBeanValues( currentValue, elemChild, childName, beanProperties );
@@ -72,6 +76,12 @@ public class DOMToObjectLoadHelper
 
       if ( !SvUtil.isBlankOrNull( value ) )
       {
+        if ( editor == null )
+        {
+          editor = getMutatorForProperty( obj, node.getLocalName() );
+          currentValue = editor.getCurrentValue();
+        }
+
         editor.setFromText( value.trim() );
         beanProperties.put( getChildName( name, node.getLocalName() ), value );
       }
@@ -91,6 +101,12 @@ public class DOMToObjectLoadHelper
 
       if ( hasElementChildren )
       {
+        if ( editor == null )
+        {
+          editor = getMutatorForProperty( obj, node.getLocalName() );
+          currentValue = editor.getCurrentValue();
+        }
+
         String childName = getChildName( name, attrName );
         setBeanValues( currentValue, attribute, childName, beanProperties );
       }
