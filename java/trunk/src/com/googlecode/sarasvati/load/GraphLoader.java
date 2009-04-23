@@ -29,6 +29,7 @@ import javax.xml.bind.JAXBException;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphValidator;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;
@@ -202,6 +203,14 @@ public class GraphLoader<G extends Graph>
   public void loadDefinition (XmlProcessDefinition xmlDef)
     throws LoadException
   {
+    loadDefinition( xmlDef, null );
+  }
+
+  public void loadDefinition (XmlProcessDefinition xmlDef, GraphValidator validator)
+    throws LoadException
+  {
+    validateXml( xmlDef, validator );
+
     instanceCache = new HashMap<String, Map<String,Node>>();
     nodeCache     = new HashMap<String, Node>();
 
@@ -210,20 +219,79 @@ public class GraphLoader<G extends Graph>
     int version = latest == null ? 1 : latest.getVersion() + 1;
 
     graph = factory.newGraph( xmlDef.getName(), version );
-    repository.addGraph( graph );
+
     importExternals( xmlDef );
     importNodes( xmlDef );
     importArcs( xmlDef );
     importExternalArcs( xmlDef );
+
+    validateGraph( validator );
+
+    repository.addGraph( graph );
+  }
+
+  protected void validateXml (XmlProcessDefinition xmlDef, GraphValidator validator)
+    throws LoadException
+  {
+    if ( validator == null )
+    {
+      return;
+    }
+
+    validator.validateXmlProcessDefinition( xmlDef );
+    for ( XmlNode xmlNode : xmlDef.getNodes() )
+    {
+      validator.validateXmlNode( xmlNode );
+      for ( XmlArc xmlArc : xmlNode.getArcs() )
+      {
+        validator.validateXmlArc( xmlArc );
+      }
+      for ( XmlExternalArc xmlExternalArc : xmlNode.getExternalArcs() )
+      {
+        validator.validateXmlExternalArc( xmlExternalArc );
+      }
+    }
+
+    for ( XmlExternal xmlExternal : xmlDef.getExternals() )
+    {
+      validator.validateXmlExternal( xmlExternal );
+    }
+  }
+
+  protected void validateGraph (GraphValidator validator)
+    throws LoadException
+  {
+    if ( validator == null )
+    {
+      return;
+    }
+
+    validator.validateGraph( graph );
+
+    for ( Node node : graph.getNodes() )
+    {
+      validator.validateNode( node );
+    }
+
+    for ( Arc arc : graph.getArcs() )
+    {
+      validator.validateArc( arc );
+    }
   }
 
   public void loadWithDependencies (String name, XmlProcessDefinitionResolver resolver)
     throws JAXBException, LoadException
   {
-    loadWithDependencies( name, resolver, new ArrayList<String>() );
+    loadWithDependencies( name, resolver, null );
   }
 
-  private void loadWithDependencies (String name, XmlProcessDefinitionResolver resolver, List<String> stack)
+  public void loadWithDependencies (String name, XmlProcessDefinitionResolver resolver, GraphValidator validator)
+    throws JAXBException, LoadException
+  {
+    loadWithDependencies( name, resolver, validator, new ArrayList<String>() );
+  }
+
+  private void loadWithDependencies (String name, XmlProcessDefinitionResolver resolver, GraphValidator validator, List<String> stack)
       throws JAXBException, LoadException
   {
     stack.add( name );
@@ -239,13 +307,13 @@ public class GraphLoader<G extends Graph>
 
       if ( !isLoaded( extName ) )
       {
-        loadWithDependencies( extName, resolver, stack );
+        loadWithDependencies( extName, resolver, validator, stack );
       }
     }
 
     stack.remove( stack.size() - 1 );
 
-    loadDefinition( xmlDef );
+    loadDefinition( xmlDef, validator );
   }
 
   public boolean isLoaded (String name)
@@ -253,15 +321,67 @@ public class GraphLoader<G extends Graph>
     return null != repository.getLatestGraph( name );
   }
 
+  /**
+   * Loads the process definitions defined in the specified XML file
+   * into the {@link GraphRepository} that this GraphLoader was constructed
+   * with.
+   *
+   * @param fileName The path to the process definition xml file to load
+   *
+   * @throws LoadException If there is a problem loading the process definition
+   * @throws JAXBException If there is an error loading the xml into objects
+   */
   public void load (String fileName) throws LoadException, JAXBException
   {
-    load( new File( fileName ) );
+    load( fileName, null );
   }
 
+  /**
+   * Loads the process definitions defined in the specified XML file
+   * into the {@link GraphRepository} that this GraphLoader was constructed
+   * with.
+   *
+   * @param fileName The path to the process definition xml file to load
+   * @param validator The {@link GraphValidator} to use to validate the xml and graph
+   *
+   * @throws LoadException If there is a problem loading the process definition
+   * @throws JAXBException If there is an error loading the xml into objects
+   */
+  public void load (String fileName, GraphValidator validator) throws LoadException, JAXBException
+  {
+    load( new File( fileName ), validator );
+  }
+
+  /**
+   * Loads the process definitions defined in the specified XML file
+   * into the {@link GraphRepository} that this GraphLoader was constructed
+   * with.
+   *
+   * @param file The file to load the the process definition xml from
+   *
+   * @throws LoadException If there is a problem loading the process definition
+   * @throws JAXBException If there is an error loading the xml into objects
+   */
   public void load (File file) throws LoadException, JAXBException
+  {
+    load( file, null );
+  }
+
+  /**
+   * Loads the process definitions defined in the specified XML file
+   * into the {@link GraphRepository} that this GraphLoader was constructed
+   * with.
+   *
+   * @param file The file to load the the process definition xml from
+   * @param validator The {@link GraphValidator} to use to validate the xml and graph
+   * 
+   * @throws LoadException If there is a problem loading the process definition
+   * @throws JAXBException If there is an error loading the xml into objects
+   */
+  public void load (File file, GraphValidator validator) throws LoadException, JAXBException
   {
     XmlLoader xmlLoader = new XmlLoader();
     XmlProcessDefinition xmlDef = xmlLoader.loadProcessDefinition( file );
-    loadDefinition( xmlDef );
+    loadDefinition( xmlDef, validator );
   }
 }
