@@ -17,7 +17,7 @@ License:
 Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' to get them. See BUILDING for more details)
 
     * Java 1.5+
-      Summary  : Sarasvati runs on java. It  annotations and other JDK 1.5+ features.
+      Summary  : Sarasvati runs on java. It uses annotations, enums, generics and other JDK 1.5+ features.
       License  : GPL
       Homepage : java.sun.com
       Version  : 1.5+
