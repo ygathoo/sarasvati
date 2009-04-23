@@ -16,17 +16,26 @@ License:
 
 Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' to get them. See BUILDING for more details)
 
+    * Java 1.5+
+      Summary  : Sarasvati runs on java. It  annotations and other JDK 1.5+ features.
+      License  : GPL
+      Homepage : java.sun.com
+      Version  : 1.5+
+
     * Hibernate
        Summary : Object relational mapping
        License : LPGL
        Homepage: http://hibernate.org
        Other   : Has its own list of dependencies
-       Version : 3.2.6, but may work with earlier versions.
+       Version : 3.2.6, but may work with earlier versions and should work with later versions.
 
     * PostgreSQL JDBC Driver
        Summary : JDBC driver to connect to PostgreSQL
        License : BSD
        Homepage: http://jdbc.postgresql.org/
+       Other   : Only required if using a PostgreSQL database. Sarasvati has been tested
+                 with PostreSQL and Sybase, but should work with any database supported
+                 by Hibernate.
 
     * ANTLR
        Summary : Java parser generator
@@ -38,13 +47,15 @@ Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' t
        Summary : Bean Scripting Framework
        License : Apache License 2.0
        Homepage: http://jakarta.apache.org/bsf/
-       Other   : Optional at runtime, required for scripting support in Java 1.5 environments
+       Other   : Optional at runtime, required for scripting support in Java 1.5 environments.
+                 Not required for Java 1.6+
 
     * Rhino
        Summary : Javascript implementation
        License : MPL 1.1/GPL2.0 dual license
        Homepage: http://www.mozilla.org/rhino/
        Other   : Optional at runtime, provides for javascript scripting support in Java 1.5 environments
+                 Not required for Java 1.6+
 
     * Visual Library
        Summary : Graphical editing frame work from Netbeans project
