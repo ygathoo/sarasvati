@@ -1,0 +1,29 @@
+Create API for TokenSet
+
+TokenSet
+  Long id
+  String name
+  Env env
+
+TokenSetMember
+  Long id
+  TokenSet set
+  int memberIndex
+
+add method to Engine
+  completeExecutionWithToken( NodeToken token, 
+                              String arcname, 
+                              String tokenSetName,
+                              int numberOfTokens, 
+                              Env initialEnv )
+
+This will create numberOfTokens tokens on the given arc name, tied to a new token set with the given name and which has the given initial Env.
+
+Add new join type: token set join.
+
+Move from isJoin attribute to joinType
+
+{{{
+<node joinType="none|label|tokenset" tokenJoinName="...">
+}}}
+
