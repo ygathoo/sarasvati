@@ -77,7 +77,7 @@ public interface GraphFactory<G extends Graph>
    *
    * @param graph The graph to import the node into
    * @param node  The node to import.
-   * @param instanceName The instance name given to the externa graph.
+   * @param instanceName The instance name given to the external graph.
    *
    * @return The new, imported node
    */

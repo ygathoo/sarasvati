@@ -133,8 +133,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   {
     HibNodeRef nodeRef = (HibNodeRef)node;
 
-    String label = nodeRef.getInstance();
-    label = label == null || "".equals( label ) ? instanceName : instanceName + ":" + label;
+    String label = getInstance( nodeRef.getInstance(), instanceName );
 
     HibNodeRef newRef = new HibNodeRef( graph, nodeRef.getNode(), label );
     session.save( newRef );
