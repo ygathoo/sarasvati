@@ -32,6 +32,7 @@ import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.ScriptNode;
 import com.googlecode.sarasvati.WaitNode;
+import com.googlecode.sarasvati.util.SvUtil;
 
 public abstract class AbstractGraphFactory<G extends Graph> implements GraphFactory<G>
 {
@@ -79,5 +80,10 @@ public abstract class AbstractGraphFactory<G extends Graph> implements GraphFact
   public NodeToken newNodeToken( GraphProcess process, Node node, List<ArcToken> parents )
   {
     return newNodeToken( process, node, ExecutionType.Forward, parents, null );
+  }
+
+  public String getInstance (String nestedInstance, String instance)
+  {
+    return SvUtil.isBlankOrNull( nestedInstance ) ? instance : instance + ":" + nestedInstance;
   }
 }

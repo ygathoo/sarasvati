@@ -233,28 +233,35 @@ public class GraphLoader<G extends Graph>
   protected void validateXml (XmlProcessDefinition xmlDef, GraphValidator validator)
     throws LoadException
   {
-    if ( validator == null )
+    try
     {
-      return;
-    }
-
-    validator.validateXmlProcessDefinition( xmlDef );
-    for ( XmlNode xmlNode : xmlDef.getNodes() )
-    {
-      validator.validateXmlNode( xmlNode );
-      for ( XmlArc xmlArc : xmlNode.getArcs() )
+      if ( validator == null )
       {
-        validator.validateXmlArc( xmlArc );
+        return;
       }
-      for ( XmlExternalArc xmlExternalArc : xmlNode.getExternalArcs() )
+
+      validator.validateXmlProcessDefinition( xmlDef );
+      for ( XmlNode xmlNode : xmlDef.getNodes() )
       {
-        validator.validateXmlExternalArc( xmlExternalArc );
+        validator.validateXmlNode( xmlNode );
+        for ( XmlArc xmlArc : xmlNode.getArcs() )
+        {
+          validator.validateXmlArc( xmlArc );
+        }
+        for ( XmlExternalArc xmlExternalArc : xmlNode.getExternalArcs() )
+        {
+          validator.validateXmlExternalArc( xmlExternalArc );
+        }
+      }
+
+      for ( XmlExternal xmlExternal : xmlDef.getExternals() )
+      {
+        validator.validateXmlExternal( xmlExternal );
       }
     }
-
-    for ( XmlExternal xmlExternal : xmlDef.getExternals() )
+    catch ( RuntimeException re )
     {
-      validator.validateXmlExternal( xmlExternal );
+      throw new LoadException( "Failure while loading process definition '" + xmlDef + "'", re );
     }
   }
 
@@ -374,7 +381,7 @@ public class GraphLoader<G extends Graph>
    *
    * @param file The file to load the the process definition xml from
    * @param validator The {@link GraphValidator} to use to validate the xml and graph
-   * 
+   *
    * @throws LoadException If there is a problem loading the process definition
    * @throws JAXBException If there is an error loading the xml into objects
    */
