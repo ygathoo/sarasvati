@@ -21,14 +21,14 @@ package com.googlecode.sarasvati.jdbc.stmt;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
+import java.util.List;
 
-import com.googlecode.sarasvati.jdbc.JdbcLoadException;
-
-public abstract class AbstractInsertionStatementExecutor extends AbstractStatementExecutor
+public abstract class AbstractSelectStatementExecutor<T> extends AbstractStatementExecutor
 {
-  private Long generatedId;
+  private List<T> result = new LinkedList<T>();
 
-  public AbstractInsertionStatementExecutor (String sql)
+  public AbstractSelectStatementExecutor (String sql)
   {
     super( sql );
   }
@@ -39,17 +39,18 @@ public abstract class AbstractInsertionStatementExecutor extends AbstractStateme
     setParameters( getStatement() );
     executeQuery();
     ResultSet rs = getResultSet();
-    if ( !rs.next() )
+
+    while ( rs.next() )
     {
-      throw new JdbcLoadException( "No id returned from insert!" );
+      result.add( loadObject( rs ) );
     }
-    generatedId = rs.getLong( 1 );
   }
 
   protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
+  protected abstract T loadObject (ResultSet row) throws SQLException;
 
-  public Long getGeneratedId ()
+  public List<T> getResult ()
   {
-    return generatedId;
+    return result;
   }
 }
