@@ -23,16 +23,16 @@ import java.sql.Connection;
 public class PostgreSQLGraphFactory extends JdbcGraphFactory
 {
   private static final String GRAPH_INSERT_SQL =
-    "insert into wf_graph (name, version) values ( ?, ? ); select currval( 'wf_graph_id_seq' )";
+    "insert into wf_graph (name, version) values ( ?, ? ) returning id";
 
   private static final String NODE_INSERT_SQL =
-    "insert into wf_node (graph_id, name, type, guard, is_start, is_join) values ( ?, ?, ?, ?, ?, ? ); select currval( 'wf_node_id_seq' )";
+    "insert into wf_node (graph_id, name, type, guard, is_start, is_join) values ( ?, ?, ?, ?, ?, ? ) returning id";
 
   private static final String NODE_REF_INSERT_SQL =
-    "insert into wf_node_ref (graph_id, node_id, instance ) values ( ?, ?, ? ); select currval( 'wf_node_ref_id_seq' )";
+    "insert into wf_node_ref (graph_id, node_id, instance ) values ( ?, ?, ? ) returning id";
 
   private static final String ARC_INSERT_SQL =
-    "insert into wf_arc (graph_id, a_node_ref_id, z_node_ref_id, name ) values ( ?, ?, ?, ? ); select currval( 'wf_arc_id_seq' )";
+    "insert into wf_arc (graph_id, a_node_ref_id, z_node_ref_id, name ) values ( ?, ?, ?, ? ) returning id";
 
 
   public PostgreSQLGraphFactory (Connection connection)

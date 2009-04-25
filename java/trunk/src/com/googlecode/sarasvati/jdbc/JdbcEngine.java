@@ -31,17 +31,26 @@ public class JdbcEngine extends BaseEngine
   protected JdbcGraphRepostitory repository;
   protected Connection connection;
 
+  public JdbcEngine ()
+  {
+    // default constructor
+  }
+
   public JdbcEngine (Connection connection, JdbcGraphFactory factory)
   {
     this.connection = connection;
     this.factory = factory;
-    this.repository = new JdbcGraphRepostitory();
+    this.repository = new JdbcGraphRepostitory( connection );
   }
 
   @Override
   protected JdbcEngine newEngine ()
   {
-    return new JdbcEngine( connection, factory );
+    JdbcEngine engine =  new JdbcEngine();
+    engine.connection = connection;
+    engine.factory = factory;
+    engine.repository = repository;
+    return engine;
   }
 
   @Override
