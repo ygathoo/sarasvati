@@ -17,7 +17,7 @@
     Copyright 2008 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.example.db;
+package com.googlecode.sarasvati.example.hib;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -27,7 +27,7 @@ import org.postgresql.Driver;
 
 import com.googlecode.sarasvati.hib.HibEngine;
 
-public class TestSetup
+public class HibTestSetup
 {
   protected static SessionFactory sessionFactory = null;
 

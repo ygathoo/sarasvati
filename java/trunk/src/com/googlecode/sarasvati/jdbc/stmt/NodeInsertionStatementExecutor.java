@@ -57,7 +57,7 @@ public class NodeInsertionStatementExecutor extends AbstractInsertionStatementEx
     stmt.setString( 2, name );
     stmt.setString( 3, type );
     stmt.setString( 4, guard );
-    stmt.setBoolean( 5, isStart );
-    stmt.setBoolean( 5, isJoin );
+    stmt.setString( 5, isStart ? "Y" : "N" );
+    stmt.setString( 6, isJoin ? "Y" : "N" );
   }
 }

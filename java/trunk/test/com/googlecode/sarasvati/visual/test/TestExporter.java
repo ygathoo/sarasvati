@@ -16,7 +16,7 @@ import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.adapter.Function;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
-import com.googlecode.sarasvati.example.db.TestSetup;
+import com.googlecode.sarasvati.example.hib.HibTestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.visual.DefaultGraphLookAndFeel;
 import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
@@ -49,8 +49,8 @@ public class TestExporter
           }
         });
 
-    TestSetup.init();
-    Session session = TestSetup.openSession();
+    HibTestSetup.init();
+    Session session = HibTestSetup.openSession();
     HibEngine engine = new HibEngine( session );
 
     Graph graph = engine.getRepository().getLatestGraph( "embedded-task-rej" );

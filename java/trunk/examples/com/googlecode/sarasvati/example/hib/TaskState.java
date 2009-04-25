@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.example.db;
+package com.googlecode.sarasvati.example.hib;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;

@@ -1,4 +1,4 @@
-package com.googlecode.sarasvati.example.db;
+package com.googlecode.sarasvati.example.hib;
 
 import org.hibernate.Session;
 

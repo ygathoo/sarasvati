@@ -16,29 +16,32 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual.test;
+package com.googlecode.sarasvati.example.hib;
 
-import org.hibernate.Session;
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
 
-import com.googlecode.sarasvati.example.hib.HibTestSetup;
-import com.googlecode.sarasvati.visual.AbstractProcessVisualizer;
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.hib.HibNode;
 
-public class TestProcessVisualizer extends AbstractProcessVisualizer
+@Entity
+@DiscriminatorValue( "dump" )
+public class DumpNode extends HibNode
 {
   @Override
-  public void init () throws Exception
+  public void execute (Engine engine, NodeToken token)
   {
-    HibTestSetup.init();
-  }
+    System.out.println( "Accepted into: " + getName() );
 
-  @Override
-  public Session getSession  ()
-  {
-    return HibTestSetup.openSession();
-  }
-
-  public static void main (String[] args) throws Exception
-  {
-    new TestProcessVisualizer().run();
+    if ( token.getProcess().getParentToken() != null )
+    {
+      engine.completeExecution( token, Arc.DEFAULT_ARC );
+    }
+    else
+    {
+      engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
+    }
   }
 }

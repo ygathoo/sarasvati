@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.visual.test;
 
 import org.hibernate.Session;
 
-import com.googlecode.sarasvati.example.db.TestSetup;
+import com.googlecode.sarasvati.example.hib.HibTestSetup;
 import com.googlecode.sarasvati.visual.AbstractGraphVisualizer;
 
 public class TestGraphVisualizer extends AbstractGraphVisualizer
@@ -28,13 +28,13 @@ public class TestGraphVisualizer extends AbstractGraphVisualizer
   @Override
   public void init () throws Exception
   {
-    TestSetup.init();
+    HibTestSetup.init();
   }
 
   @Override
   public Session getSession  ()
   {
-    return TestSetup.openSession();
+    return HibTestSetup.openSession();
   }
 
   public static void main (String[] args) throws Exception

@@ -16,32 +16,35 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.example.db;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+package com.googlecode.sarasvati.example.jdbc;
 
-import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.hib.HibNode;
+import java.sql.Connection;
+import java.sql.DriverManager;
 
-@Entity
-@DiscriminatorValue( "dump" )
-public class DumpNode extends HibNode
+public class JdbcTestSetup
 {
-  @Override
-  public void execute (Engine engine, NodeToken token)
+  static
   {
-    System.out.println( "Accepted into: " + getName() );
-
-    if ( token.getProcess().getParentToken() != null )
+    try
     {
-      engine.completeExecution( token, Arc.DEFAULT_ARC );
+      Class.forName( "org.postgresql.Driver" );
     }
-    else
+    catch ( Exception e )
     {
-      engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
+      throw new ExceptionInInitializerError( e );
+    }
+  }
+
+  public static Connection openConnection ()
+  {
+    try
+    {
+      return DriverManager.getConnection( "jdbc:postgresql://localhost:5432/paul", "paul", "thesistest56" );
+    }
+    catch ( Exception e )
+    {
+      throw new RuntimeException( e );
     }
   }
 }
