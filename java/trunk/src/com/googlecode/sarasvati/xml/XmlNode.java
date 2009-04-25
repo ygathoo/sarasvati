@@ -54,9 +54,6 @@ public class XmlNode
   @XmlElement(name = "arc", required = false)
   protected List<XmlArc>         arcs         = new ArrayList<XmlArc>();
 
-  @XmlElement(name = "externalArc", required = false)
-  protected List<XmlExternalArc> externalArcs = new ArrayList<XmlExternalArc>();
-
   @XmlElement(name = "custom")
   protected XmlCustom            custom;
 
@@ -150,16 +147,6 @@ public class XmlNode
     this.arcs = arcs;
   }
 
-  public List<XmlExternalArc> getExternalArcs ()
-  {
-    return externalArcs;
-  }
-
-  public void setExternalArcs (List<XmlExternalArc> externalArcs)
-  {
-    this.externalArcs = externalArcs;
-  }
-
   public XmlCustom getCustom ()
   {
     return custom;
@@ -197,12 +184,6 @@ public class XmlNode
     buf.append( "\">\n" );
 
     for (XmlArc arc : arcs)
-    {
-      buf.append( arc );
-      buf.append( "\n" );
-    }
-
-    for (XmlExternalArc arc : externalArcs)
     {
       buf.append( arc );
       buf.append( "\n" );

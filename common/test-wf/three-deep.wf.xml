@@ -7,13 +7,13 @@
   </node>
 
   <node name="three-deep.1">
-    <externalArc external="two-deep" node="two-deep.1" type="out"/>
+    <arc external="two-deep" to="two-deep.1"/>
   </node>
 
-  <node name="three-deep.2">
-    <externalArc external="two-deep" node="two-deep.2" type="in"/>
-  </node>
+  <node name="three-deep.2"/>
 
-  <external name="two-deep" processDefinition="two-deep"/>
+  <external name="two-deep" processDefinition="two-deep">
+    <arc from="two-deep.2" to="three-deep.2" />
+  </external>
 
 </process-definition>

@@ -35,7 +35,6 @@ import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternal;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
-import com.googlecode.sarasvati.xml.XmlExternalArcType;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlNode;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
@@ -103,11 +102,25 @@ public class GraphLoader<G extends Graph>
       for ( XmlArc xmlArc : xmlNode.getArcs() )
       {
         Node startNode = nodeCache.get( xmlNode.getName() );
-        Node endNode   = nodeCache.get( xmlArc.getTo() );
+        Node endNode = null;
 
-        if ( endNode == null )
+        if ( !SvUtil.isBlankOrNull( xmlArc.getExternal() ) )
         {
-          throw new LoadException( "Arc in node '" + xmlNode.getName() + "' points to non-existent node '" + xmlArc.getTo() + "'" );
+          endNode = getExternalNode( xmlArc.getExternal(), xmlArc.getTo() );
+          if ( endNode == null )
+          {
+            throw new LoadException( "Arc in node '" + xmlNode.getName() +
+                                     "' points to non-existent node '" + xmlArc.getTo() +
+                                     "' in external '" + xmlArc.getExternal() + "'" );
+          }
+        }
+        else
+        {
+          endNode   = nodeCache.get( xmlArc.getTo() );
+          if ( endNode == null )
+          {
+            throw new LoadException( "Arc in node '" + xmlNode.getName() + "' points to non-existent node '" + xmlArc.getTo() + "'" );
+          }
         }
 
         factory.newArc( graph, startNode, endNode, SvUtil.isBlankOrNull( xmlArc.getName() ) ? Arc.DEFAULT_ARC : xmlArc.getName() );
@@ -124,44 +137,50 @@ public class GraphLoader<G extends Graph>
     }
   }
 
-  protected Node getExternalNode (XmlExternalArc externalArc) throws LoadException
+  protected Node getExternalNode (String external, String node) throws LoadException
   {
-    Map<String,Node> instance = instanceCache.get( externalArc.getExternal() );
+    Map<String,Node> instance = instanceCache.get( external );
 
     if (instance == null)
     {
-      throw new LoadException( "Referenced external '" + externalArc.getExternal() + "' not defined." );
+      throw new LoadException( "Referenced external '" + external + "' not defined." );
     }
 
-    return instance.get( externalArc.getNode() );
+    return instance.get( node );
   }
 
   protected void importExternalArcs (XmlProcessDefinition xmlDef) throws LoadException
   {
-    for ( XmlNode xmlNode : xmlDef.getNodes() )
+    for ( XmlExternal xmlExternal : xmlDef.getExternals() )
     {
-      for ( XmlExternalArc externalArc : xmlNode.getExternalArcs() )
+      for ( XmlExternalArc xmlExternalArc : xmlExternal.getExternalArcs() )
       {
-        Node localNode = nodeCache.get( xmlNode.getName() );
-        Node extNode = getExternalNode( externalArc );
+        Node startNode = getExternalNode( xmlExternal.getName(), xmlExternalArc.getFrom() );
+        Node endNode = null;
 
-        if ( extNode == null )
+        if ( !SvUtil.isBlankOrNull( xmlExternalArc.getExternal() ) )
         {
-          throw new LoadException( "External arc in node '" + xmlNode.getName() +
-                                     "' points to non-existent node '" + externalArc.getNode() + "'" +
-                                     " in process definition '" + externalArc.getExternal() + "'" );
-        }
-
-        String arcName = SvUtil.isBlankOrNull( externalArc.getName() ) ? Arc.DEFAULT_ARC : externalArc.getName();
-
-        if ( externalArc.getType() == XmlExternalArcType.OUT )
-        {
-          factory.newArc( graph, localNode, extNode, arcName );
+          endNode = getExternalNode( xmlExternalArc.getExternal(), xmlExternalArc.getTo() );
+          if ( endNode == null )
+          {
+            throw new LoadException( "Arc in external '" + xmlExternal.getName() +
+                                     "' points to non-existent node '" + xmlExternalArc.getTo() +
+                                     "' in external '" + xmlExternalArc.getExternal() + "'" );
+          }
         }
         else
         {
-          factory.newArc( graph, extNode, localNode, arcName );
+          endNode   = nodeCache.get( xmlExternalArc.getTo() );
+          if ( endNode == null )
+          {
+            throw new LoadException( "Arc in external'" + xmlExternalArc.getName() +
+                                     "' points to non-existent node '" + xmlExternalArc.getTo() + "'" );
+          }
         }
+
+        String arcName = SvUtil.isBlankOrNull( xmlExternalArc.getName() ) ? Arc.DEFAULT_ARC : xmlExternalArc.getName();
+
+        factory.newArc( graph, startNode, endNode, arcName );
       }
     }
   }
@@ -244,19 +263,21 @@ public class GraphLoader<G extends Graph>
       for ( XmlNode xmlNode : xmlDef.getNodes() )
       {
         validator.validateXmlNode( xmlNode );
+
         for ( XmlArc xmlArc : xmlNode.getArcs() )
         {
           validator.validateXmlArc( xmlArc );
-        }
-        for ( XmlExternalArc xmlExternalArc : xmlNode.getExternalArcs() )
-        {
-          validator.validateXmlExternalArc( xmlExternalArc );
         }
       }
 
       for ( XmlExternal xmlExternal : xmlDef.getExternals() )
       {
         validator.validateXmlExternal( xmlExternal );
+
+        for ( XmlExternalArc xmlExternalArc : xmlExternal.getExternalArcs() )
+        {
+          validator.validateXmlExternalArc( xmlExternalArc );
+        }
       }
     }
     catch ( RuntimeException re )

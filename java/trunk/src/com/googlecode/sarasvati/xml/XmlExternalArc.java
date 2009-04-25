@@ -23,80 +23,93 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import com.googlecode.sarasvati.util.SvUtil;
+
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlExternalArc
 {
-  @XmlAttribute(name = "external", required = true)
-  protected String             external;
+  @XmlAttribute(name = "from", required = true)
+  protected String from;
 
-  @XmlAttribute(name = "node", required = true)
-  protected String             node;
+  @XmlAttribute(name = "external", required = false)
+  protected String external;
+
+  @XmlAttribute(name = "to", required = true)
+  protected String to;
 
   @XmlAttribute(name = "name", required = false)
-  protected String             name;
+  protected String name;
 
-  @XmlAttribute(name = "type", required = true)
-  protected XmlExternalArcType type;
+  public String getFrom()
+  {
+    return from;
+  }
 
-  public String getExternal ()
+  public void setFrom( String from )
+  {
+    this.from = from;
+  }
+
+  public String getExternal()
   {
     return external;
   }
 
-  public void setExternal (String external)
+  public void setExternal( String external )
   {
     this.external = external;
   }
 
-  public String getNode ()
+  public String getTo()
   {
-    return node;
+    return to;
   }
 
-  public void setNode (String node)
+  public void setTo( String to )
   {
-    this.node = node;
+    this.to = to;
   }
 
-  public String getName ()
+  public String getName()
   {
     return name;
   }
 
-  public void setName (String name)
+  public void setName( String name )
   {
     this.name = name;
   }
 
-  public XmlExternalArcType getType ()
+  public boolean isToExternal ()
   {
-    return type;
-  }
-
-  public void setType (XmlExternalArcType type)
-  {
-    this.type = type;
+    return !SvUtil.isBlankOrNull( external );
   }
 
   @Override
-  public String toString ()
+  public String toString()
   {
     StringBuilder buf = new StringBuilder();
-    buf.append( "<externalArc external=\"" );
-    buf.append( external );
-    buf.append( "\" nodeName=\"" );
-    buf.append( node );
+    buf.append( "<arc from=\"" );
+    buf.append( from );
+    buf.append( "\"" );
+
+    if ( external != null )
+    {
+      buf.append( "external=\"" );
+      buf.append( external );
+      buf.append( "\"" );
+    }
+    buf.append( " to=\"" );
+    buf.append( to );
 
     if (name != null)
     {
       buf.append( "\" name=\"" );
       buf.append( name );
+      buf.append( "\"" );
     }
 
-    buf.append( "\" type=\"" );
-    buf.append( type.name().toLowerCase() );
-
-    buf.append( "\"/>" );
+    buf.append( "/>" );
     return buf.toString();
   }
 }
