@@ -58,7 +58,7 @@
       <xs:sequence>
         <xs:element name="guard" type="Guard" minOccurs="0" maxOccurs="1" />
         <xs:element name="arc" type="Arc" minOccurs="0" maxOccurs="unbounded" />
-        <xs:element name="externalArc" type="ExternalArc" minOccurs="0" maxOccurs="unbounded" />
+
 
         <xs:element name="custom" minOccurs="0" maxOccurs="1">
           <xs:complexType>
@@ -110,6 +110,9 @@
     </xs:complexType>
 
     <xs:complexType name="External">
+      <xs:sequence>
+        <xs:element name="arc" type="ExternalArc" minOccurs="0" maxOccurs="unbounded" />
+      </xs:sequence>
 
       <xs:attribute name="name" type="xs:string" use="required">
         <xs:annotation>
@@ -152,23 +155,34 @@
     </xs:simpleType>
 
     <xs:complexType name="Arc">
+      <xs:attribute name="external" type="xs:string" use="optional" default=""/>
       <xs:attribute name="to" type="xs:string" use="required"/>
       <xs:attribute name="name" type="xs:string" use="optional" default=""/>
     </xs:complexType>
 
     <xs:complexType name="ExternalArc">
 
-      <xs:attribute name="external" type="xs:string">
+      <xs:attribute name="from" type="xs:string" use="required" >
         <xs:annotation>
           <xs:documentation>
-            Specifies the instance name of the external process definition that is
-            being linked to. The latest version of the external
-            process definition will be used.
+            Name of the node in the this external process
+            definition that this arc will start from
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="node" type="xs:string" use="required" >
+      <xs:attribute name="external" type="xs:string" use="optional" default="">
+        <xs:annotation>
+          <xs:documentation>
+            Specifies the instance name of the external process definition that is
+            being linked to. The latest version of the external process definition
+            will be used. If this is not specified, it is assumed that we are linking
+            to a node in the surrounding process definition.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="to" type="xs:string" use="required" >
         <xs:annotation>
           <xs:documentation>
             Name of the node in the specified external process
@@ -186,24 +200,6 @@
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="type" type="ExternalArcType" use="required">
-        <xs:annotation>
-          <xs:documentation>
-            The arc type, which may be either in or out. Out
-            arcs will use the surrounding node as the start
-            node. In arcs will use the surrounding node as the
-            end node.
-          </xs:documentation>
-        </xs:annotation>
-      </xs:attribute>
-
     </xs:complexType>
-
-    <xs:simpleType name="ExternalArcType">
-      <xs:restriction base="xs:string">
-        <xs:enumeration value="in"/>
-        <xs:enumeration value="out"/>
-      </xs:restriction>
-    </xs:simpleType>
 
 </xs:schema>

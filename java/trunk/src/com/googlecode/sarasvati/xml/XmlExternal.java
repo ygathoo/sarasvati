@@ -19,9 +19,13 @@
 
 package com.googlecode.sarasvati.xml;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 @XmlAccessorType(XmlAccessType.FIELD)
 public class XmlExternal
@@ -37,6 +41,9 @@ public class XmlExternal
 
   @XmlAttribute(name = "y", required = false)
   protected Integer y;
+
+  @XmlElement(name = "arc", required = false)
+  protected List<XmlExternalArc> externalArcs = new ArrayList<XmlExternalArc>();
 
   public String getProcessDefinition ()
   {
@@ -78,6 +85,16 @@ public class XmlExternal
     this.y = y;
   }
 
+  public List<XmlExternalArc> getExternalArcs()
+  {
+    return externalArcs;
+  }
+
+  public void setExternalArcs( List<XmlExternalArc> externalArcs )
+  {
+    this.externalArcs = externalArcs;
+  }
+
   @Override
   public String toString ()
   {
@@ -99,7 +116,15 @@ public class XmlExternal
       buf.append( y );
     }
 
-    buf.append( "\"/>\n" );
+    buf.append( ">\n" );
+
+    for (XmlExternalArc arc : externalArcs)
+    {
+      buf.append( arc );
+      buf.append( "\n" );
+    }
+
+    buf.append( "</external>\n" );
     return buf.toString();
   }
 }

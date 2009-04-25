@@ -23,6 +23,9 @@ public class EditorArc
   protected EditorGraphMember start;
   protected EditorGraphMember end;
 
+  protected String externalStart;
+  protected String externalEnd;
+
   protected String            label;
 
   public EditorGraphMember getStart()
@@ -63,5 +66,25 @@ public class EditorArc
   public boolean isExternalInArc ()
   {
     return start.isExternal();
+  }
+
+  public String getExternalStart()
+  {
+    return externalStart;
+  }
+
+  public void setExternalStart( String externalStart )
+  {
+    this.externalStart = externalStart;
+  }
+
+  public String getExternalEnd()
+  {
+    return externalEnd;
+  }
+
+  public void setExternalEnd( String externalEnd )
+  {
+    this.externalEnd = externalEnd;
   }
 }
