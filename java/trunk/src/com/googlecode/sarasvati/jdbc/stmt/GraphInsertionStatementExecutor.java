@@ -38,6 +38,6 @@ public class GraphInsertionStatementExecutor extends AbstractInsertionStatementE
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
     stmt.setString( 1, name );
-    stmt.setInt( 1, version );
+    stmt.setInt( 2, version );
   }
 }

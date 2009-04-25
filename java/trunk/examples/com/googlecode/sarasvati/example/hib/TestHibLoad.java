@@ -17,7 +17,7 @@
     Copyright 2008 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.example.db;
+package com.googlecode.sarasvati.example.hib;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -32,13 +32,13 @@ import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
-public class TestDbLoad
+public class TestHibLoad
 {
   public static void main (String[] args) throws Exception
   {
-    TestSetup.init();
+    HibTestSetup.init();
 
-    Session sess = TestSetup.openSession();
+    Session sess = HibTestSetup.openSession();
     sess.beginTransaction();
 
     HibEngine engine = new HibEngine( sess );

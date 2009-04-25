@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.example.db;
+package com.googlecode.sarasvati.example.hib;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -40,7 +40,7 @@ import com.googlecode.sarasvati.load.DefaultNodeFactory;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 
-public class DbConsole
+public class HibConsole
 {
   public static boolean log = false;
 
@@ -75,13 +75,13 @@ public class DbConsole
       }
     });
 
-    TestSetup.init();
+    HibTestSetup.init();
 
     DefaultNodeFactory.addGlobalCustomType( "customTest", CustomTestNode.class );
 
     while ( true )
     {
-      Session session = TestSetup.openSession();
+      Session session = HibTestSetup.openSession();
       Transaction t = session.beginTransaction();
       HibEngine engine = new HibEngine( session );
 
@@ -101,7 +101,7 @@ public class DbConsole
   {
     while (true)
     {
-      Session session = TestSetup.openSession();
+      Session session = HibTestSetup.openSession();
       Transaction trans = session.beginTransaction();
       HibEngine engine = new HibEngine( session );
 
@@ -111,7 +111,7 @@ public class DbConsole
       {
         trans.commit();
         session.close();
-        session = TestSetup.openSession();
+        session = HibTestSetup.openSession();
         trans = session.beginTransaction();
         engine = new HibEngine( session );
 
