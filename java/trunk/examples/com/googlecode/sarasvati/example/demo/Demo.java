@@ -11,8 +11,8 @@ public class Demo
   {
     MemEngine engine = new MemEngine();
     engine.addNodeType( "task", TaskNode.class );
-    engine.getLoader().load( "/home/paul/workspace/wf-common/test-wf/demo-example.wf.xml" );
-    Graph graph = engine.getRepository().getLatestGraph( "order" );
+    engine.getLoader().load( "/home/paul/workspace/wf-common/test-wf/hello-world.wf.xml" );
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
     GraphProcess p = engine.startProcess( graph );
   }
 }
