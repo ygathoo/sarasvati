@@ -59,7 +59,7 @@ go
 create table wf_process
 (
   id              bigint       IDENTITY NOT NULL PRIMARY KEY,
-  graph_id        bigint                NOT NULL,
+  graph_id        bigint                NOT NULL REFERENCES wf_graph,
   state           int                   NOT NULL REFERENCES wf_process_state,
   parent_token_id bigint                NULL,
   create_date     datetime              DEFAULT getDate() NOT NULL,
