@@ -46,7 +46,7 @@ insert into wf_process_state values ( 5, 'Canceled' );
 create table wf_process
 (
   id              serial       NOT NULL PRIMARY KEY,
-  graph_id        int          NOT NULL,
+  graph_id        int          NOT NULL REFERENCES wf_graph,
   state           int          NOT NULL REFERENCES wf_process_state,
   parent_token_id int          NULL,
   create_date     timestamp    NOT NULL DEFAULT current_timestamp,
