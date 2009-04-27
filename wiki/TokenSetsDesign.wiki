@@ -1,14 +1,14 @@
 Create API for TokenSet
 
 TokenSet
-  Long id
-  String name
-  Env env
+  * Long id
+  * String name
+  * Env env
 
 TokenSetMember
-  Long id
-  TokenSet set
-  int memberIndex
+  * Long id
+  * TokenSet set
+  * int memberIndex
 
 add method to Engine
   completeExecutionWithToken( NodeToken token, 
@@ -26,4 +26,3 @@ Move from isJoin attribute to joinType
 {{{
 <node joinType="none|label|tokenset" tokenJoinName="...">
 }}}
-
