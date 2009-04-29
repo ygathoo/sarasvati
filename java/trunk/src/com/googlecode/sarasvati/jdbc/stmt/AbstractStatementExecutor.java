@@ -24,6 +24,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.googlecode.sarasvati.jdbc.JdbcLoadException;
+import com.googlecode.sarasvati.load.LoadException;
 
 public abstract class AbstractStatementExecutor
 {
@@ -39,15 +40,15 @@ public abstract class AbstractStatementExecutor
 
   public void execute (final Connection connection)
   {
-    SQLException ex = null;
+    Throwable ex = null;
     try
     {
       statement = connection.prepareStatement( sql );
       doWork();
     }
-    catch ( SQLException sqle )
+    catch ( Throwable t )
     {
-      ex = sqle;
+      ex = t;
     }
 
     if ( resultSet != null )
@@ -58,11 +59,7 @@ public abstract class AbstractStatementExecutor
       }
       catch ( SQLException sqle )
       {
-        if ( ex != null )
-        {
-          ex.setNextException( sqle );
-        }
-        else
+        if ( ex == null )
         {
           ex = sqle;
         }
@@ -77,15 +74,16 @@ public abstract class AbstractStatementExecutor
       }
       catch ( SQLException sqle )
       {
-        if ( ex != null )
-        {
-          ex.setNextException( sqle );
-        }
-        else
+        if ( ex == null )
         {
           ex = sqle;
         }
       }
+    }
+
+    if ( ex instanceof RuntimeException )
+    {
+      throw (RuntimeException)ex;
     }
 
     if ( ex != null )
@@ -109,5 +107,5 @@ public abstract class AbstractStatementExecutor
     return resultSet;
   }
 
-  public abstract void doWork () throws SQLException;
+  public abstract void doWork () throws SQLException, LoadException;
 }

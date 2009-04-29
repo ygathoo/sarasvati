@@ -22,7 +22,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.googlecode.sarasvati.AbstractGraph;
-import com.googlecode.sarasvati.Arc;
 
 public class JdbcGraph extends AbstractGraph
 {
@@ -31,7 +30,7 @@ public class JdbcGraph extends AbstractGraph
   protected int    version;
 
   protected List<JdbcNodeRef> nodes;
-  protected List<Arc> arcs;
+  protected List<JdbcArc> arcs;
 
   public JdbcGraph (long id, String name, int version)
   {
@@ -39,6 +38,7 @@ public class JdbcGraph extends AbstractGraph
     this.name    = name;
     this.version = version;
     this.nodes   = new LinkedList<JdbcNodeRef>();
+    this.arcs    = new LinkedList<JdbcArc>();
   }
 
   public long getId ()
@@ -47,7 +47,7 @@ public class JdbcGraph extends AbstractGraph
   }
 
   @Override
-  public List< ? extends Arc> getArcs ()
+  public List<JdbcArc> getArcs ()
   {
     return arcs;
   }

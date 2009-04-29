@@ -24,6 +24,8 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.googlecode.sarasvati.load.LoadException;
+
 public abstract class AbstractSelectStatementExecutor<T> extends AbstractStatementExecutor
 {
   private List<T> result = new LinkedList<T>();
@@ -34,7 +36,7 @@ public abstract class AbstractSelectStatementExecutor<T> extends AbstractStateme
   }
 
   @Override
-  public void doWork () throws SQLException
+  public void doWork () throws SQLException, LoadException
   {
     setParameters( getStatement() );
     executeQuery();
@@ -47,7 +49,7 @@ public abstract class AbstractSelectStatementExecutor<T> extends AbstractStateme
   }
 
   protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
-  protected abstract T loadObject (ResultSet row) throws SQLException;
+  protected abstract T loadObject (ResultSet row) throws SQLException, LoadException;
 
   public List<T> getResult ()
   {

@@ -30,7 +30,7 @@ public class JdbcArc implements Arc
 
   protected JdbcNodeRef endNode;
 
-  protected JdbcArc (long id, JdbcGraph graph, JdbcNodeRef startNode, JdbcNodeRef endNode, String name)
+  public JdbcArc (long id, JdbcGraph graph, JdbcNodeRef startNode, JdbcNodeRef endNode, String name)
   {
     this.id        = id;
     this.graph     = graph;
