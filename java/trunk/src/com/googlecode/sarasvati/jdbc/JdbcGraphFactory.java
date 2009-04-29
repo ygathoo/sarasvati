@@ -34,6 +34,7 @@ import com.googlecode.sarasvati.jdbc.stmt.NodeInsertionStatementExecutor;
 import com.googlecode.sarasvati.jdbc.stmt.NodeRefInsertionStatementExecutor;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.NodeFactory;
 
 public abstract class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
 {
@@ -123,7 +124,6 @@ public abstract class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
 
   @Override
   public Arc newArc (JdbcGraph graph, Node startNode, Node endNode, String name)
-      throws LoadException
   {
     JdbcNodeRef startNodeRef = (JdbcNodeRef)startNode;
     JdbcNodeRef endNodeRef   = (JdbcNodeRef)endNode;
@@ -145,10 +145,19 @@ public abstract class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   {
     long nodeId = insertNode( graph, name, type, guard, isJoin, isStart );
 
-    JdbcNode node = new JdbcNode( nodeId, graph, name, type, guard, isJoin, isStart );
+    NodeFactory nodeFactory = getNodeFactory( type );
+    JdbcNode newNode = (JdbcNode)nodeFactory.newNode( type );
 
-    long nodeRefId = insertNodeRef( graph, node, "" );
-    JdbcNodeRef nodeRef = new JdbcNodeRef( nodeRefId, graph, node, "" );
+    newNode.setId( nodeId );
+    newNode.setGraph( graph );
+    newNode.setName( name );
+    newNode.setType( type );
+    newNode.setStart( isStart );
+    newNode.setJoin( isJoin );
+    newNode.setGuard( guard );
+
+    long nodeRefId = insertNodeRef( graph, newNode, "" );
+    JdbcNodeRef nodeRef = new JdbcNodeRef( nodeRefId, graph, newNode, "" );
 
     return nodeRef;
   }

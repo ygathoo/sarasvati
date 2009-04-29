@@ -40,7 +40,7 @@ public class JdbcEngine extends BaseEngine
   {
     this.connection = connection;
     this.factory = factory;
-    this.repository = new JdbcGraphRepostitory( connection );
+    this.repository = new JdbcGraphRepostitory( connection, factory );
   }
 
   @Override

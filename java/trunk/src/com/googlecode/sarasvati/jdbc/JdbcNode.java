@@ -36,15 +36,9 @@ public class JdbcNode implements Node
 
   protected JdbcGraph graph;
 
-  public JdbcNode (long id, JdbcGraph graph, String name, String type, String guard, boolean isStart, boolean isJoin)
+  public JdbcNode ()
   {
-    this.id      = id;
-    this.graph   = graph;
-    this.name    = name;
-    this.type    = type;
-    this.guard   = guard;
-    this.isStart = isStart;
-    this.isJoin  = isJoin;
+    // default constructor
   }
 
   public Long getId ()

@@ -24,6 +24,8 @@ import java.sql.SQLException;
 import java.util.List;
 
 import com.googlecode.sarasvati.jdbc.stmt.AbstractGraphSelectStatementExecutor;
+import com.googlecode.sarasvati.jdbc.stmt.ArcSelectStatementExecutor;
+import com.googlecode.sarasvati.jdbc.stmt.NodeSelectStatementExecutor;
 import com.googlecode.sarasvati.load.GraphRepository;
 
 public class JdbcGraphRepostitory implements GraphRepository<JdbcGraph>
@@ -38,11 +40,21 @@ public class JdbcGraphRepostitory implements GraphRepository<JdbcGraph>
   private static final String SELECT_GRAPHS_BY_NAME_SQL =
     "select id, name, version from wf_graph where name = ?";
 
-  protected Connection connection;
+  private static final String SELECT_NODES_SQL =
+    "select ref.id as ref_id, ref.instance, node.id, node.name, node.type, node.is_join, node.is_start, node.guard" +
+    "  from wf_node_ref ref join wf_node node on ref.node_id = node.node_id " +
+    " where ref.graph_id = ?";
 
-  public JdbcGraphRepostitory (Connection connection)
+  private static final String SELECT_ARCS_SQL =
+    "select id, a_node_ref_id, z_node_ref_id from wf_arc where graph_id = ?";
+
+  protected Connection connection;
+  protected JdbcGraphFactory factory;
+
+  public JdbcGraphRepostitory (Connection connection, JdbcGraphFactory factory)
   {
     this.connection = connection;
+    this.factory = factory;
   }
 
   @Override
@@ -101,5 +113,15 @@ public class JdbcGraphRepostitory implements GraphRepository<JdbcGraph>
     ex.execute( connection );
 
     return ex.getResult().isEmpty() ? null : ex.getResult().get( 0 );
+  }
+
+  protected void loadNodes (JdbcGraph graph)
+  {
+    new NodeSelectStatementExecutor( SELECT_NODES_SQL, graph, factory ).execute( connection );
+  }
+
+  public void loadArcs (JdbcGraph graph)
+  {
+    new ArcSelectStatementExecutor( SELECT_ARCS_SQL, graph ).execute( connection );
   }
 }

@@ -32,9 +32,7 @@ public class JdbcNodeRef implements Node
 
   protected String instance;
 
-  protected JdbcNodeRef () { /* Default constructor for Hibernate */ }
-
-  protected JdbcNodeRef (Long id, JdbcGraph graph, JdbcNode node, String instance )
+  public JdbcNodeRef (Long id, JdbcGraph graph, JdbcNode node, String instance )
   {
     this.id       = id;
     this.graph    = graph;
