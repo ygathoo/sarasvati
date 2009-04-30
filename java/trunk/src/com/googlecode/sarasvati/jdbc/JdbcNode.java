@@ -18,12 +18,15 @@
 */
 package com.googlecode.sarasvati.jdbc;
 
+import java.sql.Connection;
+
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
+import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 
 public class JdbcNode implements Node
 {
@@ -160,5 +163,17 @@ public class JdbcNode implements Node
   public boolean isExternal ()
   {
     return false;
+  }
+
+  /**
+   * Called after this node is persisted to the database. Allows subclasses
+   * to persist additional attributes to the database.
+   *
+   * @param dialect The database dialect to use
+   * @param connection The database connection to use
+   */
+  public void create (DatabaseDialect dialect, Connection connection)
+  {
+    // does nothing by default.
   }
 }

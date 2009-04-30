@@ -23,8 +23,12 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.sql.Connection;
 
+import com.googlecode.sarasvati.example.CustomTestNode;
+import com.googlecode.sarasvati.example.DumpNode;
+import com.googlecode.sarasvati.example.InitNode;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
+import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.jdbc.dialect.PostgreSQLDatabaseDialect;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
@@ -38,13 +42,16 @@ public class TestJdbcLoad
     Connection conn = JdbcTestSetup.openConnection();
     conn.setAutoCommit( false );
 
-    JdbcEngine engine = new JdbcEngine( conn, new PostgreSQLDatabaseDialect() );
+    DatabaseDialect dialect = new PostgreSQLDatabaseDialect();
+    dialect.setUserData( ExampleStatementFactory.class, new BaseExampleStatementFactory() );
+
+    JdbcEngine engine = new JdbcEngine( conn, dialect );
     XmlLoader xmlLoader = new XmlLoader();
 
-//    engine.addNodeType( "task", TaskNode.class );
-//    engine.addNodeType( "init", InitNode.class );
-//    engine.addNodeType( "dump", DumpNode.class );
-//    engine.addNodeType( "customTest", CustomTestNode.class );
+    engine.addNodeType( "task", JdbcExampleTaskNode.class );
+    engine.addNodeType( "init", InitNode.class );
+    engine.addNodeType( "dump", DumpNode.class );
+    engine.addNodeType( "customTest", CustomTestNode.class );
 
     GraphLoader<JdbcGraph> wfLoader = engine.getLoader();
 
@@ -57,7 +64,7 @@ public class TestJdbcLoad
       @Override
       public boolean accept( File dir, String name )
       {
-        return name.endsWith( ".wf.xml" );
+        return name.endsWith( ".wf.xml" ) && !name.equals( "demo-example.wf.xml" );
       }
     };
 
@@ -68,8 +75,9 @@ public class TestJdbcLoad
 
       try
       {
+        System.out.println( "Starting load of: " + name );
         wfLoader.loadWithDependencies( name, resolver );
-        System.out.println( "Loaded " + name );
+        System.out.println( "Finished load of: " + name );
       }
       catch ( Exception t )
       {

@@ -29,7 +29,7 @@ import com.googlecode.sarasvati.load.GraphRepository;
 public class JdbcEngine extends BaseEngine
 {
   protected JdbcGraphFactory factory;
-  protected JdbcGraphRepostitory repository;
+  protected JdbcGraphRepository repository;
   protected Connection connection;
 
   public JdbcEngine ()
@@ -41,7 +41,7 @@ public class JdbcEngine extends BaseEngine
   {
     this.connection = connection;
     this.factory = new JdbcGraphFactory( dialect, connection );
-    this.repository = new JdbcGraphRepostitory( dialect, factory, connection );
+    this.repository = new JdbcGraphRepository( dialect, factory, connection );
   }
 
   @Override

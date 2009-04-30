@@ -16,19 +16,31 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.example.mem;
+package com.googlecode.sarasvati.example;
+
+import java.util.Random;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.mem.MemNode;
 
-public class DumpNode extends MemNode
+public class InitNode extends CustomNode
 {
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    System.out.println( "Accepted into: " + getName() );
+    long iter = 0;
+
+    Env env = token.getEnv();
+    if ( env.hasAttribute( "iter" ) )
+    {
+      iter = env.getLongAttribute( "iter" );
+    }
+
+    env.setLongAttribute( "iter", ++iter );
+    env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }

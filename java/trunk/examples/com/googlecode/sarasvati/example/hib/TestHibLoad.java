@@ -44,7 +44,7 @@ public class TestHibLoad
     HibEngine engine = new HibEngine( sess );
     XmlLoader xmlLoader = new XmlLoader();
 
-    engine.addNodeType( "task", TaskNode.class );
+    engine.addNodeType( "task", HibExampleTaskNode.class );
     engine.addNodeType( "init", InitNode.class );
     engine.addNodeType( "dump", DumpNode.class );
     engine.addNodeType( "customTest", CustomTestNode.class );

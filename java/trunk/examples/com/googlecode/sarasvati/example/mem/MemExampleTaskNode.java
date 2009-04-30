@@ -23,7 +23,7 @@ import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.mem.MemNode;
 
-public class TaskNode extends MemNode
+public class MemExampleTaskNode extends MemNode
 {
   protected String taskName;
   protected String taskDesc;
