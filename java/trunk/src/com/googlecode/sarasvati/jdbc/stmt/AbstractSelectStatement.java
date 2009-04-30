@@ -21,18 +21,22 @@ package com.googlecode.sarasvati.jdbc.stmt;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
 import com.googlecode.sarasvati.load.LoadException;
 
-public abstract class AbstractSelectStatementExecutor<T> extends AbstractStatementExecutor
+public abstract class AbstractSelectStatement<T> extends AbstractStatement
 {
-  private List<T> result = new LinkedList<T>();
+  private final List<T> result;
+  private final boolean collect;
 
-  public AbstractSelectStatementExecutor (String sql)
+  public AbstractSelectStatement (final String sql, final boolean collect)
   {
     super( sql );
+    this.collect = collect;
+    this.result = collect ? new LinkedList<T>() : null;
   }
 
   @Override
@@ -42,17 +46,28 @@ public abstract class AbstractSelectStatementExecutor<T> extends AbstractStateme
     executeQuery();
     ResultSet rs = getResultSet();
 
-    while ( rs.next() )
+    if ( collect )
     {
-      result.add( loadObject( rs ) );
+      while ( rs.next() )
+      {
+        result.add( loadObject( rs ) );
+      }
+    }
+    else
+    {
+      while ( rs.next() )
+      {
+        loadObject( rs );
+      }
     }
   }
 
   protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
   protected abstract T loadObject (ResultSet row) throws SQLException, LoadException;
 
+  @SuppressWarnings("unchecked")
   public List<T> getResult ()
   {
-    return result;
+    return collect ? result : Collections.EMPTY_LIST;
   }
 }

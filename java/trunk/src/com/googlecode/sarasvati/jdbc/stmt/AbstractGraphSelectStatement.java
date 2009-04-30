@@ -18,38 +18,25 @@
 */
 package com.googlecode.sarasvati.jdbc.stmt;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcLoadException;
+import com.googlecode.sarasvati.jdbc.JdbcGraph;
 
-public abstract class AbstractInsertionStatementExecutor extends AbstractStatementExecutor
+public abstract class AbstractGraphSelectStatement extends AbstractSelectStatement<JdbcGraph>
 {
-  private Long generatedId;
-
-  public AbstractInsertionStatementExecutor (String sql)
+  public AbstractGraphSelectStatement (String sql)
   {
-    super( sql );
+    super( sql, true );
   }
 
   @Override
-  public void doWork () throws SQLException
+  protected JdbcGraph loadObject (ResultSet row) throws SQLException
   {
-    setParameters( getStatement() );
-    executeQuery();
-    ResultSet rs = getResultSet();
-    if ( !rs.next() )
-    {
-      throw new JdbcLoadException( "No id returned from insert!" );
-    }
-    generatedId = rs.getLong( 1 );
-  }
+    long graphId = row.getLong( 1 );
+    String graphName = row.getString( 2 );
+    int version = row.getInt( 3 );
 
-  protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
-
-  public Long getGeneratedId ()
-  {
-    return generatedId;
+    return new JdbcGraph( graphId, graphName, version );
   }
 }

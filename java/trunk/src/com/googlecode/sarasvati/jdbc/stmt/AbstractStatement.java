@@ -26,14 +26,14 @@ import java.sql.SQLException;
 import com.googlecode.sarasvati.jdbc.JdbcLoadException;
 import com.googlecode.sarasvati.load.LoadException;
 
-public abstract class AbstractStatementExecutor
+public abstract class AbstractStatement
 {
   private final String sql;
 
   private PreparedStatement statement;
   private ResultSet resultSet;
 
-  public AbstractStatementExecutor (String sql)
+  public AbstractStatement (String sql)
   {
     this.sql = sql;
   }

@@ -18,25 +18,35 @@
 */
 package com.googlecode.sarasvati.jdbc.stmt;
 
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
+import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 
-public abstract class AbstractGraphSelectStatementExecutor extends AbstractSelectStatementExecutor<JdbcGraph>
+
+public class ArcInsertStatement extends AbstractInsertStatement
 {
-  public AbstractGraphSelectStatementExecutor (String sql)
+  protected JdbcGraph graph;
+  protected JdbcNodeRef startNode;
+  protected JdbcNodeRef endNode;
+  protected String name;
+
+  public ArcInsertStatement (String sql, JdbcGraph graph, JdbcNodeRef startNode, JdbcNodeRef endNode, String name)
   {
     super( sql );
+    this.graph = graph;
+    this.startNode = startNode;
+    this.endNode = endNode;
+    this.name = name;
   }
 
   @Override
-  protected JdbcGraph loadObject (ResultSet row) throws SQLException
+  protected void setParameters (PreparedStatement stmt) throws SQLException
   {
-    long graphId = row.getLong( 1 );
-    String graphName = row.getString( 2 );
-    int version = row.getInt( 3 );
-
-    return new JdbcGraph( graphId, graphName, version );
+    stmt.setLong( 1, graph.getId() );
+    stmt.setLong( 2, startNode.getId() );
+    stmt.setLong( 3, endNode.getId() );
+    stmt.setString( 4, name );
   }
 }

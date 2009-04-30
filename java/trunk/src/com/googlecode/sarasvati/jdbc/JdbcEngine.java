@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.jdbc;
 import java.sql.Connection;
 
 import com.googlecode.sarasvati.BaseEngine;
+import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.GraphRepository;
@@ -36,11 +37,11 @@ public class JdbcEngine extends BaseEngine
     // default constructor
   }
 
-  public JdbcEngine (Connection connection, JdbcGraphFactory factory)
+  public JdbcEngine (final Connection connection, final DatabaseDialect dialect)
   {
     this.connection = connection;
-    this.factory = factory;
-    this.repository = new JdbcGraphRepostitory( connection, factory );
+    this.factory = new JdbcGraphFactory( dialect, connection );
+    this.repository = new JdbcGraphRepostitory( dialect, factory, connection );
   }
 
   @Override
