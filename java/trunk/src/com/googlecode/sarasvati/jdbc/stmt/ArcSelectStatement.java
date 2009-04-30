@@ -29,15 +29,15 @@ import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 import com.googlecode.sarasvati.load.LoadException;
 
-public class ArcSelectStatementExecutor extends AbstractSelectStatementExecutor<JdbcArc>
+public class ArcSelectStatement extends AbstractSelectStatement<JdbcArc>
 {
   protected JdbcGraph graph;
 
   protected Map<Long, JdbcNodeRef> nodeRefMap = new HashMap<Long,JdbcNodeRef>();
 
-  public ArcSelectStatementExecutor (String sql, JdbcGraph graph)
+  public ArcSelectStatement (String sql, JdbcGraph graph)
   {
-    super( sql );
+    super( sql, false );
     this.graph = graph;
 
     for ( JdbcNodeRef ref : graph.getNodes() )

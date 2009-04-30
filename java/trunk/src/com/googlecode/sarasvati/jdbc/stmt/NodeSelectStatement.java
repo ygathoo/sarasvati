@@ -31,16 +31,16 @@ import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
 
-public class NodeSelectStatementExecutor extends AbstractSelectStatementExecutor<JdbcNodeRef>
+public class NodeSelectStatement extends AbstractSelectStatement<JdbcNodeRef>
 {
   protected JdbcGraph graph;
   protected JdbcGraphFactory factory;
 
   protected Map<Long, JdbcNode> nodeMap = new HashMap<Long,JdbcNode>();
 
-  public NodeSelectStatementExecutor (String sql, JdbcGraph graph, JdbcGraphFactory factory)
+  public NodeSelectStatement (String sql, JdbcGraph graph, JdbcGraphFactory factory)
   {
-    super( sql );
+    super( sql, false );
     this.graph = graph;
     this.factory = factory;
   }

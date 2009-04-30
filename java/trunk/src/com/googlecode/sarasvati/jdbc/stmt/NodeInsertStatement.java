@@ -22,27 +22,42 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
-import com.googlecode.sarasvati.jdbc.JdbcNode;
 
-public class NodeRefInsertionStatementExecutor extends AbstractInsertionStatementExecutor
+
+public class NodeInsertStatement extends AbstractInsertStatement
 {
   protected JdbcGraph graph;
-  protected JdbcNode node;
-  protected String instance;
+  protected String name;
+  protected String type;
+  protected String guard;
+  protected boolean isStart;
+  protected boolean isJoin;
 
-  public NodeRefInsertionStatementExecutor (String sql, JdbcGraph graph, JdbcNode node, String instance )
+  public NodeInsertStatement (String sql,
+                                         JdbcGraph graph,
+                                         String name,
+                                         String type,
+                                         String guard,
+                                         boolean isStart,
+                                         boolean isJoin)
   {
     super( sql );
     this.graph = graph;
-    this.node = node;
-    this.instance = instance;
+    this.name = name;
+    this.type = type;
+    this.guard = guard;
+    this.isStart = isStart;
+    this.isJoin = isJoin;
   }
 
   @Override
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
     stmt.setLong( 1, graph.getId() );
-    stmt.setLong( 2, node.getId() );
-    stmt.setString( 3, instance );
+    stmt.setString( 2, name );
+    stmt.setString( 3, type );
+    stmt.setString( 4, guard );
+    stmt.setString( 5, isStart ? "Y" : "N" );
+    stmt.setString( 6, isJoin ? "Y" : "N" );
   }
 }

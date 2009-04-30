@@ -22,12 +22,12 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 
-public class GraphInsertionStatementExecutor extends AbstractInsertionStatementExecutor
+public class GraphInsertStatement extends AbstractInsertStatement
 {
   protected String name;
   protected int    version;
 
-  public GraphInsertionStatementExecutor (String sql, String name, int version)
+  public GraphInsertStatement (String sql, String name, int version)
   {
     super( sql );
     this.name = name;

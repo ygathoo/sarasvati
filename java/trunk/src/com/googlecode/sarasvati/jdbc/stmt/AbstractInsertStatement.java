@@ -19,34 +19,37 @@
 package com.googlecode.sarasvati.jdbc.stmt;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcGraph;
-import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
+import com.googlecode.sarasvati.jdbc.JdbcLoadException;
 
-
-public class ArcInsertionStatementExecutor extends AbstractInsertionStatementExecutor
+public abstract class AbstractInsertStatement extends AbstractStatement
 {
-  protected JdbcGraph graph;
-  protected JdbcNodeRef startNode;
-  protected JdbcNodeRef endNode;
-  protected String name;
+  private Long generatedId;
 
-  public ArcInsertionStatementExecutor (String sql, JdbcGraph graph, JdbcNodeRef startNode, JdbcNodeRef endNode, String name)
+  public AbstractInsertStatement (String sql)
   {
     super( sql );
-    this.graph = graph;
-    this.startNode = startNode;
-    this.endNode = endNode;
-    this.name = name;
   }
 
   @Override
-  protected void setParameters (PreparedStatement stmt) throws SQLException
+  public void doWork () throws SQLException
   {
-    stmt.setLong( 1, graph.getId() );
-    stmt.setLong( 2, startNode.getId() );
-    stmt.setLong( 3, endNode.getId() );
-    stmt.setString( 4, name );
+    setParameters( getStatement() );
+    executeQuery();
+    ResultSet rs = getResultSet();
+    if ( !rs.next() )
+    {
+      throw new JdbcLoadException( "No id returned from insert!" );
+    }
+    generatedId = rs.getLong( 1 );
+  }
+
+  protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
+
+  public Long getGeneratedId ()
+  {
+    return generatedId;
   }
 }

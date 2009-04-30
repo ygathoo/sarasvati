@@ -25,7 +25,7 @@ import java.sql.Connection;
 
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
-import com.googlecode.sarasvati.jdbc.PostgreSQLGraphFactory;
+import com.googlecode.sarasvati.jdbc.dialect.PostgreSQLDatabaseDialect;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
@@ -38,7 +38,7 @@ public class TestJdbcLoad
     Connection conn = JdbcTestSetup.openConnection();
     conn.setAutoCommit( false );
 
-    JdbcEngine engine = new JdbcEngine( conn, new PostgreSQLGraphFactory( conn ) );
+    JdbcEngine engine = new JdbcEngine( conn, new PostgreSQLDatabaseDialect() );
     XmlLoader xmlLoader = new XmlLoader();
 
 //    engine.addNodeType( "task", TaskNode.class );
