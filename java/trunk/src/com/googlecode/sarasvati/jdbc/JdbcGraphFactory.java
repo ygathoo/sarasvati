@@ -19,10 +19,13 @@
 package com.googlecode.sarasvati.jdbc;
 
 import java.sql.Connection;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
@@ -51,7 +54,9 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     return connection;
   }
 
-  protected long insertNodeRef (JdbcGraph graph, JdbcNode node, String instance)
+  protected long insertNodeRef (final JdbcGraph graph,
+                                final JdbcNode node,
+                                final String instance)
   {
     AbstractInsertStatement ex = dialect.newNodeRefInsertStatement( graph, node, instance );
     ex.execute( connection );
@@ -59,7 +64,9 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   }
 
   @Override
-  public Node importNode (JdbcGraph graph, Node node, String instanceName)
+  public Node importNode (final JdbcGraph graph,
+                          final Node node,
+                          final String instanceName)
   {
     JdbcNodeRef nodeRef = (JdbcNodeRef)node;
 
@@ -73,7 +80,10 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   }
 
   @Override
-  public Arc newArc (JdbcGraph graph, Node startNode, Node endNode, String name)
+  public Arc newArc (final JdbcGraph graph,
+                     final Node startNode,
+                     final Node endNode,
+                     final String name)
   {
     JdbcNodeRef startNodeRef = (JdbcNodeRef)startNode;
     JdbcNodeRef endNodeRef   = (JdbcNodeRef)endNode;
@@ -95,8 +105,14 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   }
 
   @Override
-  public Node newNode (JdbcGraph graph, String name, String type, boolean isJoin, boolean isStart,
-                       String guard, List<Object> customList) throws LoadException
+  public Node newNode (final JdbcGraph graph,
+                       final String name,
+                       final String type,
+                       final boolean isJoin,
+                       final boolean isStart,
+                       final String guard,
+                       final List<Object> customList)
+    throws LoadException
   {
     AbstractInsertStatement ex =
       dialect.newNodeInsertStatement( graph, name, type, guard, isStart, isJoin );
@@ -105,52 +121,84 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     long nodeId = ex.getGeneratedId();
 
     NodeFactory nodeFactory = getNodeFactory( type );
-    JdbcNode newNode = (JdbcNode)nodeFactory.newNode( type );
+    Node newNode = nodeFactory.newNode( type );
 
-    newNode.setId( nodeId );
-    newNode.setGraph( graph );
-    newNode.setName( name );
-    newNode.setType( type );
-    newNode.setStart( isStart );
-    newNode.setJoin( isJoin );
-    newNode.setGuard( guard );
+    JdbcNode node = null;
+    JdbcCustomNodeWrapper customNodeWrapper = null;
 
-    long nodeRefId = insertNodeRef( graph, newNode, "" );
-    JdbcNodeRef nodeRef = new JdbcNodeRef( nodeRefId, graph, newNode, "" );
+    if (newNode instanceof CustomNode )
+    {
+      customNodeWrapper = new JdbcCustomNodeWrapper( (CustomNode)newNode );
+      node = customNodeWrapper;
+    }
+    else
+    {
+      node = (JdbcNode)newNode;
+    }
 
-    return nodeRef;
+    if ( customList != null )
+    {
+      for ( Object custom : customList )
+      {
+        Map<String, String> customProps = nodeFactory.loadCustom( newNode, custom );
+
+        // If this is a custom node, we need save the properties in the CustomNodeWrapper
+        // as well as in the CustomNode, so that they can be set back in when the CustomNode
+        // is re-created, after being loaded from the database
+        if ( customNodeWrapper != null )
+        {
+          customNodeWrapper.importProperties( customProps );
+        }
+      }
+    }
+
+    node.setId( nodeId );
+    node.setGraph( graph );
+    node.setName( name );
+    node.setType( type );
+    node.setStart( isStart );
+    node.setJoin( isJoin );
+    node.setGuard( guard );
+
+    long nodeRefId = insertNodeRef( graph, node, "" );
+    return new JdbcNodeRef( nodeRefId, graph, node, "" );
   }
 
   @Override
-  public GraphProcess newProcess (Graph graph)
+  public GraphProcess newProcess (final Graph graph)
+  {
+    return newNestedProcess( graph, null );
+  }
+
+  @Override
+  public GraphProcess newNestedProcess (final Graph graph, final NodeToken parentToken)
+  {
+    JdbcGraph g = (JdbcGraph)graph;
+    JdbcNodeToken token = (JdbcNodeToken)parentToken;
+
+    Date createDate = new Date();
+    AbstractInsertStatement stmt = dialect.newProcessInsertStatement( g, token, createDate );
+    stmt.execute( connection );
+
+    return new JdbcGraphProcess( stmt.getGeneratedId(), g, token, createDate );
+  }
+
+  @Override
+  public NodeToken newNodeToken (final GraphProcess process,
+                                 final Node node,
+                                 final ExecutionType executionType,
+                                 final List<ArcToken> parents,
+                                 final NodeToken envToken)
   {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public GraphProcess newNestedProcess (Graph graph, NodeToken parentToken)
-  {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public NodeToken newNodeToken (GraphProcess process,
-                                 Node node,
-                                 ExecutionType executionType,
-                                 List<ArcToken> parents,
-                                 NodeToken envToken)
-  {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  @Override
-  public ArcToken newArcToken (GraphProcess process,
-                               Arc arc,
-                               ExecutionType executionType,
-                               NodeToken parent)
+  public ArcToken newArcToken (final GraphProcess process,
+                               final Arc arc,
+                               final ExecutionType executionType,
+                               final NodeToken parent)
   {
     // TODO Auto-generated method stub
     return null;

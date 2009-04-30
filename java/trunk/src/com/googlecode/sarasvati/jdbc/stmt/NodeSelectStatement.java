@@ -24,6 +24,9 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.jdbc.JdbcCustomNodeWrapper;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.JdbcGraphFactory;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
@@ -62,7 +65,18 @@ public class NodeSelectStatement extends AbstractSelectStatement<JdbcNodeRef>
     if ( node == null )
     {
       NodeFactory nodeFactory = factory.getNodeFactory( type );
-      node = (JdbcNode)nodeFactory.newNode( type );
+      Node loadNode = nodeFactory.newNode( type );
+      JdbcCustomNodeWrapper customNodeWrapper = null;
+
+      if ( loadNode instanceof CustomNode )
+      {
+        customNodeWrapper = new JdbcCustomNodeWrapper( (CustomNode)loadNode );
+        node = customNodeWrapper;
+      }
+      else
+      {
+        node = (JdbcNode)loadNode;
+      }
 
       node.setId( nodeId );
       node.setGraph( graph );

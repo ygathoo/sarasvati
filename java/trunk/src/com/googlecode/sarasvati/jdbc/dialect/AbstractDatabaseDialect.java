@@ -20,13 +20,18 @@ package com.googlecode.sarasvati.jdbc.dialect;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.googlecode.sarasvati.jdbc.JdbcArc;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.JdbcGraphFactory;
+import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractExecuteUpdateStatement;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractGraphSelectStatement;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractSelectStatement;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
 import com.googlecode.sarasvati.jdbc.stmt.ArcSelectStatement;
 import com.googlecode.sarasvati.jdbc.stmt.NodeSelectStatement;
 
@@ -45,11 +50,16 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
 
   private static final String SELECT_NODES_SQL =
     "select ref.id as ref_id, ref.instance, node.id, node.name, node.type, node.is_join, node.is_start, node.guard" +
-    "  from wf_node_ref ref join wf_node node on ref.node_id = node.node_id " +
+    "  from wf_node_ref ref join wf_node node on ref.node_id = node.id " +
     " where ref.graph_id = ?";
 
   private static final String SELECT_ARCS_SQL =
-    "select id, a_node_ref_id, z_node_ref_id from wf_arc where graph_id = ?";
+    "select id, a_node_ref_id, z_node_ref_id, name from wf_arc where graph_id = ?";
+
+  private static final String INSERT_NODE_PROPERTY_SQL =
+    "insert into wf_node_attr (node_id, name, value) values (?, ?, ?)";
+
+  protected Map<Class<?>,Object> userData = new HashMap<Class<?>,Object> ();
 
   @Override
   public AbstractSelectStatement<JdbcArc> newArcSelectStatement (final JdbcGraph graph)
@@ -101,5 +111,33 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   public AbstractSelectStatement<JdbcNodeRef> newNodeSelectStatement (final JdbcGraph graph, final JdbcGraphFactory factory)
   {
     return new NodeSelectStatement( SELECT_NODES_SQL, graph, factory );
+  }
+
+  @Override
+  public AbstractStatement newNodePropertyInsertStatement (final JdbcNode node, final String key, final String value)
+  {
+    return new AbstractExecuteUpdateStatement( INSERT_NODE_PROPERTY_SQL )
+    {
+      @Override
+      protected void setParameters (PreparedStatement stmt) throws SQLException
+      {
+        stmt.setLong( 1, node.getId() );
+        stmt.setString( 2, key );
+        stmt.setString( 3, value );
+      }
+    };
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public <T> T getUserData (Class<T> key)
+  {
+    return (T)userData.get( key );
+  }
+
+  @Override
+  public <T> void setUserData (Class<T> key, T value)
+  {
+    userData.put( key, value );
   }
 }

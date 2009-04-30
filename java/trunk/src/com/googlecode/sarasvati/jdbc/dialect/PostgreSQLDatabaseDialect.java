@@ -3,14 +3,18 @@
  */
 package com.googlecode.sarasvati.jdbc.dialect;
 
+import java.util.Date;
+
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
+import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractInsertStatement;
 import com.googlecode.sarasvati.jdbc.stmt.ArcInsertStatement;
 import com.googlecode.sarasvati.jdbc.stmt.GraphInsertStatement;
 import com.googlecode.sarasvati.jdbc.stmt.NodeInsertStatement;
 import com.googlecode.sarasvati.jdbc.stmt.NodeRefInsertStatement;
+import com.googlecode.sarasvati.jdbc.stmt.ProcessInsertStatement;
 
 public class PostgreSQLDatabaseDialect extends AbstractDatabaseDialect
 {
@@ -25,6 +29,9 @@ public class PostgreSQLDatabaseDialect extends AbstractDatabaseDialect
 
   private static final String ARC_INSERT_SQL =
     "insert into wf_arc (graph_id, a_node_ref_id, z_node_ref_id, name ) values ( ?, ?, ?, ? ) returning id";
+
+  private static final String PROCESS_INSERT_SQL =
+    "insert into wf_process (graph_id, state, parent_token_id, create_date, version) values ( ?, 0, ?, ?, 1 ) returning id";
 
 
   @Override
@@ -56,5 +63,11 @@ public class PostgreSQLDatabaseDialect extends AbstractDatabaseDialect
                                                             String instance)
   {
     return new NodeRefInsertStatement( NODE_REF_INSERT_SQL, graph, node, instance );
+  }
+
+  @Override
+  public AbstractInsertStatement newProcessInsertStatement (JdbcGraph graph, JdbcNodeToken parentToken, Date createDate)
+  {
+    return new ProcessInsertStatement( PROCESS_INSERT_SQL, graph, parentToken, createDate );
   }
 }

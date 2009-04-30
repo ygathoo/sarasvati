@@ -47,7 +47,7 @@ public class HibTestSetup
 
     HibEngine.addToConfiguration( config, false );
 
-    config.addAnnotatedClass( TaskNode.class );
+    config.addAnnotatedClass( HibExampleTaskNode.class );
     config.addAnnotatedClass( Task.class );
     config.addAnnotatedClass( TaskState.class );
     config.addAnnotatedClass( InitNode.class );

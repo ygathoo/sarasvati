@@ -36,7 +36,7 @@ import com.googlecode.sarasvati.hib.HibNodeToken;
 @Entity
 @DiscriminatorValue( "task" )
 @SecondaryTable( name="wf_node_task", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
-public class TaskNode extends HibNode
+public class HibExampleTaskNode extends HibNode
 {
   @Column (name="name", table="wf_node_task")
   protected String taskName;
@@ -44,7 +44,7 @@ public class TaskNode extends HibNode
   @Column (name="description", table="wf_node_task")
   protected String taskDesc;
 
-  public TaskNode() { /* Default constructor for Hibernate */ }
+  public HibExampleTaskNode() { /* Default constructor for Hibernate */ }
 
   public String getTaskName ()
   {

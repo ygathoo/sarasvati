@@ -25,13 +25,13 @@ import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractSelectStatement;
 import com.googlecode.sarasvati.load.GraphRepository;
 
-public class JdbcGraphRepostitory implements GraphRepository<JdbcGraph>
+public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
 {
   protected DatabaseDialect dialect;
   protected JdbcGraphFactory factory;
   protected Connection connection;
 
-  public JdbcGraphRepostitory (final DatabaseDialect dialect, final JdbcGraphFactory factory, final Connection connection)
+  public JdbcGraphRepository (final DatabaseDialect dialect, final JdbcGraphFactory factory, final Connection connection)
   {
     this.dialect = dialect;
     this.factory = factory;
@@ -49,6 +49,13 @@ public class JdbcGraphRepostitory implements GraphRepository<JdbcGraph>
   {
     AbstractSelectStatement<JdbcGraph> stmt = dialect.newGraphByNameSelectStatement( name );
     stmt.execute( connection );
+
+    for ( JdbcGraph graph :  stmt.getResult() )
+    {
+      loadNodes( graph );
+      loadArcs( graph );
+    }
+
     return stmt.getResult();
   }
 
@@ -57,6 +64,13 @@ public class JdbcGraphRepostitory implements GraphRepository<JdbcGraph>
   {
     AbstractSelectStatement<JdbcGraph> stmt = dialect.newGraphSelectStatement();
     stmt.execute( connection );
+
+    for ( JdbcGraph graph :  stmt.getResult() )
+    {
+      loadNodes( graph );
+      loadArcs( graph );
+    }
+
     return stmt.getResult();
   }
 
@@ -65,6 +79,13 @@ public class JdbcGraphRepostitory implements GraphRepository<JdbcGraph>
   {
     AbstractSelectStatement<JdbcGraph> stmt = dialect.newLatestGraphByNameSelectStatement( name );
     stmt.execute( connection );
+
+    for ( JdbcGraph graph :  stmt.getResult() )
+    {
+      loadNodes( graph );
+      loadArcs( graph );
+    }
+
     return stmt.getResult().isEmpty() ? null : stmt.getResult().get( 0 );
   }
 
