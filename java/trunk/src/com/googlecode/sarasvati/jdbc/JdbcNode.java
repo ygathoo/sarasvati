@@ -168,7 +168,7 @@ public class JdbcNode implements Node, HasGeneratedId
    *
    * @param engine The {@link JdbcEngine} to use to work with the database
    */
-  public void afterCreate (@SuppressWarnings("unused") JdbcEngine engine)
+  public void afterCreate (JdbcEngine engine)
   {
     // does nothing by default.
   }
@@ -178,9 +178,8 @@ public class JdbcNode implements Node, HasGeneratedId
    * to persist additional attributes to the database.
    *
    * @param engine The {@link JdbcEngine} to use to work with the database
-   * @param connection The database connection to use
    */
-  public void afterLoad (@SuppressWarnings("unused") JdbcEngine engine)
+  public void afterLoad (JdbcEngine engine)
   {
     // does nothing by default.
   }

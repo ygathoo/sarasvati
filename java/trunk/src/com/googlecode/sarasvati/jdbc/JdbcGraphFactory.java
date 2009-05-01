@@ -18,12 +18,14 @@
 */
 package com.googlecode.sarasvati.jdbc;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
@@ -168,10 +170,60 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
                                  final Node node,
                                  final ExecutionType executionType,
                                  final List<ArcToken> parents,
-                                 final NodeToken envToken)
+                                 final NodeToken envSource)
   {
-    // TODO Auto-generated method stub
-    return null;
+    // Here we setup the token attributes for the new node
+    // If the node has no predecessors, it will have no attributes
+    // If it has only one processor (or only one processor with attributes)
+    // it will inherit the attributes of that one node
+    // Otherwise, the attributes of all predecessor nodes will get merged into
+    // a single set.
+    List<ArcToken> envParents = envSource == null ? parents : envSource.getParentTokens();
+
+    JdbcNodeToken attrSetToken = null;
+    Map<String,String> attrMap = new HashMap<String,String>();
+    Map<String,Object> transientAttributes = new HashMap<String, Object>();
+    boolean isMerge = false;
+
+    for ( ArcToken arcToken : envParents )
+    {
+      JdbcNodeToken parent = (JdbcNodeToken)arcToken.getParentToken();
+
+      if ( parent.getAttrSetToken() == null )
+      {
+        continue;
+      }
+      if ( attrSetToken == null )
+      {
+        attrSetToken = parent.getAttrSetToken();
+      }
+      else if ( !isMerge )
+      {
+        attrMap.putAll( attrSetToken.getAttrMap() );
+        isMerge = true;
+      }
+
+      if ( isMerge )
+      {
+        attrMap.putAll( parent.getAttrMap() );
+      }
+
+      Env mergeEnv = parent.getEnv();
+      for ( String name : mergeEnv.getTransientAttributeNames() )
+      {
+        transientAttributes.put( name, mergeEnv.getTransientAttribute( name ) );
+      }
+    }
+
+    JdbcNodeToken token = new JdbcNodeToken( (JdbcGraphProcess)process,
+                                             (JdbcNodeRef)node,
+                                             attrSetToken,
+                                             executionType,
+                                             attrMap,
+                                             parents,
+                                             transientAttributes);
+
+    return token;
   }
 
   @Override

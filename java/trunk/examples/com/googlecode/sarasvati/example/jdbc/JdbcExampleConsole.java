@@ -16,15 +16,14 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.example.hib;
+package com.googlecode.sarasvati.example.jdbc;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.List;
-
-import org.hibernate.Session;
-import org.hibernate.Transaction;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
@@ -32,16 +31,27 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
-import com.googlecode.sarasvati.hib.HibEngine;
-import com.googlecode.sarasvati.hib.HibGraph;
-import com.googlecode.sarasvati.hib.HibGraphProcess;
+import com.googlecode.sarasvati.example.TaskState;
+import com.googlecode.sarasvati.jdbc.JdbcEngine;
+import com.googlecode.sarasvati.jdbc.JdbcGraph;
+import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
+import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
+import com.googlecode.sarasvati.jdbc.dialect.PostgreSQLDatabaseDialect;
 import com.googlecode.sarasvati.load.DefaultNodeFactory;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 
-public class HibExampleConsole
+public class JdbcExampleConsole
 {
   public static boolean log = false;
+
+  private static final ExampleDatabase exampleDB = new BaseExampleDatabase();
+  private static final DatabaseDialect dialect = new PostgreSQLDatabaseDialect();
+
+  static
+  {
+    dialect.setUserData( ExampleDatabase.class, exampleDB );
+  }
 
   public static void main (String[] args) throws Exception
   {
@@ -74,49 +84,36 @@ public class HibExampleConsole
       }
     });
 
-    HibTestSetup.init();
-
     DefaultNodeFactory.addGlobalCustomType( "customTest", CustomTestNode.class );
 
     while ( true )
     {
-      Session session = HibTestSetup.openSession();
-      Transaction t = session.beginTransaction();
-      HibEngine engine = new HibEngine( session );
+      Connection conn = JdbcTestSetup.openConnection();
+      conn.setAutoCommit( false );
 
-      HibGraph graph = getGraph( engine );
+      JdbcEngine engine = new JdbcEngine( conn, dialect );
 
-      HibGraphProcess process = (HibGraphProcess)engine.startProcess( graph );
-      session.flush();
-      t.commit();
-      session.close();
+      JdbcGraph graph = getGraph( engine );
+
+      JdbcGraphProcess process = (JdbcGraphProcess)engine.startProcess( graph );
+      conn.commit();
 
       runWorkflow( process.getId() );
     }
   }
 
-  @SuppressWarnings("unchecked")
-  public static void runWorkflow (long processId)
+  public static void runWorkflow (long processId) throws SQLException
   {
     while (true)
     {
-      Session session = HibTestSetup.openSession();
-      Transaction trans = session.beginTransaction();
-      HibEngine engine = new HibEngine( session );
+      Connection conn = JdbcTestSetup.openConnection();
+      conn.setAutoCommit( false );
+      JdbcEngine engine = new JdbcEngine( conn, dialect );
 
-      HibGraphProcess p = engine.getRepository().loadProcess( processId );
+      JdbcGraphProcess p = null; // engine.getRepository().loadProcess( processId );
 
       while ( !p.getExecutionQueue().isEmpty() )
       {
-        trans.commit();
-        session.close();
-        session = HibTestSetup.openSession();
-        trans = session.beginTransaction();
-        engine = new HibEngine( session );
-
-        p = engine.getRepository().loadProcess( processId );
-
-        // ExampleUtil.waitFor( 1000 );
         engine.executeQueuedArcTokens( p );
       }
 
@@ -126,26 +123,26 @@ public class HibExampleConsole
         return;
       }
 
-      List<Task> tasks =
-        session
-          .createQuery( "from Task where nodeToken.process = :p order by state" )
-          .setEntity( "p", p )
-          .list();
+      List<JdbcExampleTask> tasks = null;
+//        session
+//          .createQuery( "from Task where nodeToken.process = :p order by state" )
+//          .setEntity( "p", p )
+//          .list();
+//
+//      tasks.addAll(
+//        session
+//          .createQuery( "from Task where nodeToken.process.parentToken.process = :p order by state" )
+//          .setEntity( "p", p )
+//          .list() );
 
-      tasks.addAll(
-        session
-          .createQuery( "from Task where nodeToken.process.parentToken.process = :p order by state" )
-          .setEntity( "p", p )
-          .list() );
-
-      Task t = null;
+      JdbcExampleTask t = null;
 
       while ( t == null )
       {
         int count = 0;
-        for (Task task : tasks )
+        for (JdbcExampleTask task : tasks )
         {
-          System.out.println( (++count) + ": " + task.getName() + " - " + task.getState().getDescription() );
+          System.out.println( (++count) + ": " + task.getName() + " - " + task.getState() );
         }
 
         System.out.print( "> " );
@@ -186,18 +183,16 @@ public class HibExampleConsole
         }
       }
 
-      session.flush();
-      trans.commit();
-      session.close();
+      conn.commit();
     }
   }
 
-  public static void processTask (Task t, HibEngine engine)
+  public static void processTask (JdbcExampleTask t, JdbcEngine engine)
   {
     System.out.println( "Task " );
     System.out.println( "\tName        : "  + t.getName() );
     System.out.println( "\tDescription : "  + t.getDescription() );
-    System.out.println( "\tState       : "  + t.getState().getDescription() );
+    System.out.println( "\tState       : "  + t.getState() );
 
     boolean backtrackable = t.getNodeToken().isComplete() && !t.getNodeToken().getExecutionType().isBacktracked();
 
@@ -238,14 +233,16 @@ public class HibExampleConsole
         else
         {
           System.out.println( "Completing task" );
-          t.setState( (TaskState) engine.getSession().load( TaskState.class, 1 ) );
+          t.setState( TaskState.Completed );
+          exampleDB.newUpdateTaskStatement( t ).execute( engine );
           engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
         }
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
-        t.setState( (TaskState) engine.getSession().load( TaskState.class, 2 ) );
+        t.setState( TaskState.Rejected );
+        exampleDB.newUpdateTaskStatement( t ).execute( engine );
         engine.completeExecution( t.getNodeToken(), "reject" );
       }
       else
@@ -259,16 +256,16 @@ public class HibExampleConsole
     }
   }
 
-  public static HibGraph getGraph (HibEngine engine)
+  public static JdbcGraph getGraph (JdbcEngine engine)
   {
-    HibGraph graph = null;
+    JdbcGraph graph = null;
 
     while ( graph == null )
     {
-      List<HibGraph> graphs = engine.getRepository().getGraphs();
+      List<JdbcGraph> graphs = engine.getRepository().getGraphs();
 
       int count = 0;
-      for ( HibGraph g : graphs )
+      for ( JdbcGraph g : graphs )
       {
         System.out.println( (++count) + ": " + g.getName() + ": version " + g.getVersion() );
       }
