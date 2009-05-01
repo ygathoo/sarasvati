@@ -71,7 +71,7 @@ public class HibExampleTaskNode extends HibNode
   {
     HibEngine hibEngine = (HibEngine)engine;
     Task task = TaskDAO.getTaskForToken( hibEngine.getSession(), token );
-    task.setState( (TaskState) hibEngine.getSession().load( TaskState.class, 1 ) );
+    task.setState( (TaskState) hibEngine.getSession().load( TaskState.class, 3 ) );
   }
 
   @SuppressWarnings("unchecked")

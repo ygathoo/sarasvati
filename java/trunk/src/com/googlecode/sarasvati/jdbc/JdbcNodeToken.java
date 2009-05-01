@@ -60,8 +60,6 @@ public class JdbcNodeToken implements NodeToken
   protected Env env = null;
   protected Env fullEnv = null;
 
-  public JdbcNodeToken () { /* Default constructor for Hibernate */ }
-
   public JdbcNodeToken (final JdbcGraphProcess process,
                         final JdbcNodeRef nodeRef,
                         final JdbcNodeToken attrSetToken,
@@ -97,20 +95,10 @@ public class JdbcNodeToken implements NodeToken
     return process;
   }
 
-  public void setProcess (JdbcGraphProcess process)
-  {
-    this.process = process;
-  }
-
   @Override
   public JdbcNodeRef getNode ()
   {
     return nodeRef;
-  }
-
-  public void setNodeRef (JdbcNodeRef nodeRef)
-  {
-    this.nodeRef = nodeRef;
   }
 
   @Override
@@ -125,24 +113,14 @@ public class JdbcNodeToken implements NodeToken
     this.guardAction = action;
   }
 
-  public JdbcNodeToken getAttrSetToken()
+  public JdbcNodeToken getAttrSetToken ()
   {
     return attrSetToken;
   }
 
-  public void setAttrSetToken( JdbcNodeToken attrSetToken )
-  {
-    this.attrSetToken = attrSetToken;
-  }
-
-  public Map<String, String> getAttrMap()
+  public Map<String, String> getAttrMap ()
   {
     return attrMap;
-  }
-
-  public void setAttrMap( Map<String, String> attrMap )
-  {
-    this.attrMap = attrMap;
   }
 
   @Override
@@ -151,20 +129,10 @@ public class JdbcNodeToken implements NodeToken
     return parentTokens;
   }
 
-  public void setParentTokens (List<ArcToken> parentTokens)
-  {
-    this.parentTokens = parentTokens;
-  }
-
   @Override
   public List<ArcToken> getChildTokens()
   {
     return childTokens;
-  }
-
-  public void setChildTokens (List<ArcToken> childTokens)
-  {
-    this.childTokens = childTokens;
   }
 
   @Override
@@ -173,20 +141,10 @@ public class JdbcNodeToken implements NodeToken
     return createDate;
   }
 
-  public void setCreateDate (Date createDate)
-  {
-    this.createDate = createDate;
-  }
-
   @Override
   public Date getCompleteDate ()
   {
     return completeDate;
-  }
-
-  public void setCompleteDate (Date completeDate)
-  {
-    this.completeDate = completeDate;
   }
 
   @Override
@@ -220,7 +178,7 @@ public class JdbcNodeToken implements NodeToken
   }
 
   @Override
-  public Env getFullEnv()
+  public Env getFullEnv ()
   {
     if ( fullEnv == null )
     {
@@ -230,7 +188,7 @@ public class JdbcNodeToken implements NodeToken
   }
 
   @Override
-  public Env getEnv()
+  public Env getEnv ()
   {
     if ( env == null )
     {
