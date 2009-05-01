@@ -6,11 +6,11 @@ package com.googlecode.sarasvati.example.mem;
 import java.util.LinkedList;
 import java.util.List;
 
-public class TaskList
+public class MemExampleTaskList
 {
-  protected static List<Task> tasks = new LinkedList<Task>();
+  protected static List<MemExampleTask> tasks = new LinkedList<MemExampleTask>();
 
-  public static List<Task> getTasks ()
+  public static List<MemExampleTask> getTasks ()
   {
     return tasks;
   }

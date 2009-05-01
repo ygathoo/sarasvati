@@ -46,7 +46,7 @@ import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.event.ListenerCache;
 import com.googlecode.sarasvati.hib.HibProcessListener;
 
-public class JdbcGraphProcess implements GraphProcess
+public class JdbcGraphProcess implements GraphProcess, HasGeneratedId
 {
   protected Long id;
 
@@ -111,15 +111,18 @@ public class JdbcGraphProcess implements GraphProcess
     }
   };
 
-  public JdbcGraphProcess () { /* Default constructor for Hibernate */ }
+  public JdbcGraphProcess (JdbcGraph graph, JdbcNodeToken parentToken)
+  {
+    this( null, graph, parentToken );
+  }
 
-  public JdbcGraphProcess (long id, JdbcGraph graph, JdbcNodeToken parentToken, Date createDate)
+  public JdbcGraphProcess (Long id, JdbcGraph graph, JdbcNodeToken parentToken)
   {
     this.id = id;
     this.graph = graph;
     this.state = ProcessState.Created;
     this.parentToken = parentToken;
-    this.createDate = createDate;
+    this.createDate = new Date();
     this.version = 1;
 
     this.nodeTokens = new HashSet<NodeToken>();

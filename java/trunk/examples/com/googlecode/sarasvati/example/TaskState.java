@@ -16,25 +16,37 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.example;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
-
-import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
-
-public class NodeRefInsertStatement extends AbstractInsertStatement<JdbcNodeRef>
+public enum TaskState
 {
-  public NodeRefInsertStatement (String sql, JdbcNodeRef nodeRef)
+  Open( 0 ),
+  Completed( 1 ),
+  Rejected( 2 ),
+  Cancelled( 3 );
+
+  private int id;
+
+  private TaskState (final int id)
   {
-    super( sql, nodeRef );
+    this.id = id;
   }
 
-  @Override
-  protected void setParameters (PreparedStatement stmt) throws SQLException
+  public int getId ()
   {
-    stmt.setLong( 1, value.getGraph().getId() );
-    stmt.setLong( 2, value.getNode().getId() );
-    stmt.setString( 3, value.getInstance() );
+    return id;
+  }
+
+  public static TaskState getById (int id)
+  {
+    for ( TaskState state : TaskState.values() )
+    {
+      if ( state.getId() == id )
+      {
+        return state;
+      }
+    }
+
+    return null;
   }
 }

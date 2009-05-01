@@ -22,15 +22,17 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.googlecode.sarasvati.jdbc.HasGeneratedId;
 import com.googlecode.sarasvati.jdbc.JdbcLoadException;
 
-public abstract class AbstractInsertStatement extends AbstractStatement
+public abstract class AbstractInsertStatement<T extends HasGeneratedId> extends AbstractStatement
 {
-  private Long generatedId;
+  protected final T value;
 
-  public AbstractInsertStatement (String sql)
+  public AbstractInsertStatement (String sql, T value)
   {
     super( sql );
+    this.value = value;
   }
 
   @Override
@@ -43,13 +45,8 @@ public abstract class AbstractInsertStatement extends AbstractStatement
     {
       throw new JdbcLoadException( "No id returned from insert!" );
     }
-    generatedId = rs.getLong( 1 );
+    value.setId( rs.getLong( 1 ) );
   }
 
   protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
-
-  public Long getGeneratedId ()
-  {
-    return generatedId;
-  }
 }

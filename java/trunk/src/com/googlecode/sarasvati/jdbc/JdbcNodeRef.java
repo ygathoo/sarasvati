@@ -23,7 +23,7 @@ import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 
-public class JdbcNodeRef implements Node
+public class JdbcNodeRef implements Node,HasGeneratedId
 {
   protected Long   id;
 
@@ -31,6 +31,11 @@ public class JdbcNodeRef implements Node
   protected JdbcGraph graph;
 
   protected String instance;
+
+  public JdbcNodeRef (JdbcGraph graph, JdbcNode node, String instance )
+  {
+    this( null, graph, node, instance );
+  }
 
   public JdbcNodeRef (Long id, JdbcGraph graph, JdbcNode node, String instance )
   {

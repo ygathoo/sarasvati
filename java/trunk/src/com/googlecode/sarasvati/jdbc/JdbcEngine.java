@@ -31,6 +31,7 @@ public class JdbcEngine extends BaseEngine
   protected JdbcGraphFactory factory;
   protected JdbcGraphRepository repository;
   protected Connection connection;
+  protected DatabaseDialect dialect;
 
   public JdbcEngine ()
   {
@@ -40,8 +41,9 @@ public class JdbcEngine extends BaseEngine
   public JdbcEngine (final Connection connection, final DatabaseDialect dialect)
   {
     this.connection = connection;
-    this.factory = new JdbcGraphFactory( dialect, connection );
-    this.repository = new JdbcGraphRepository( dialect, factory, connection );
+    this.dialect = dialect;
+    this.factory = new JdbcGraphFactory( this );
+    this.repository = new JdbcGraphRepository( this );
   }
 
   @Override
@@ -70,5 +72,15 @@ public class JdbcEngine extends BaseEngine
   public GraphRepository<JdbcGraph> getRepository ()
   {
     return repository;
+  }
+
+  public DatabaseDialect getDatabaseDialect ()
+  {
+    return dialect;
+  }
+
+  public Connection getConnection ()
+  {
+    return connection;
   }
 }

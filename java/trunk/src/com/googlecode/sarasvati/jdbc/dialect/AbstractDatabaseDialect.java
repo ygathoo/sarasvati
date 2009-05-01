@@ -24,15 +24,17 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.googlecode.sarasvati.jdbc.JdbcArc;
+import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
-import com.googlecode.sarasvati.jdbc.JdbcGraphFactory;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
+import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractExecuteUpdateStatement;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractGraphSelectStatement;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractSelectStatement;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
 import com.googlecode.sarasvati.jdbc.stmt.ArcSelectStatement;
+import com.googlecode.sarasvati.jdbc.stmt.NodePropertyLoadStatement;
 import com.googlecode.sarasvati.jdbc.stmt.NodeSelectStatement;
 
 
@@ -58,6 +60,9 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
 
   private static final String INSERT_NODE_PROPERTY_SQL =
     "insert into wf_node_attr (node_id, name, value) values (?, ?, ?)";
+
+  private static final String SELECT_NODE_PROPERTIES_SQL =
+    "select name, value from wf_node_attr where node_id = ?";
 
   protected Map<Class<?>,Object> userData = new HashMap<Class<?>,Object> ();
 
@@ -108,9 +113,9 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   }
 
   @Override
-  public AbstractSelectStatement<JdbcNodeRef> newNodeSelectStatement (final JdbcGraph graph, final JdbcGraphFactory factory)
+  public AbstractSelectStatement<JdbcNodeRef> newNodeSelectStatement (final JdbcGraph graph, final JdbcEngine engine)
   {
-    return new NodeSelectStatement( SELECT_NODES_SQL, graph, factory );
+    return new NodeSelectStatement( SELECT_NODES_SQL, graph, engine );
   }
 
   @Override
@@ -126,6 +131,12 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
         stmt.setString( 3, value );
       }
     };
+  }
+
+  @Override
+  public AbstractStatement newNodePropertiesLoadStatement (JdbcPropertyNode node)
+  {
+    return new NodePropertyLoadStatement( SELECT_NODE_PROPERTIES_SQL, node );
   }
 
   @SuppressWarnings("unchecked")

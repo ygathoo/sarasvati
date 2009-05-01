@@ -18,8 +18,6 @@
 */
 package com.googlecode.sarasvati.jdbc;
 
-import java.sql.Connection;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -32,35 +30,28 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractInsertStatement;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
 
 public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
 {
-  protected DatabaseDialect dialect;
-  protected Connection connection;
+  private final JdbcEngine engine;
 
-  public JdbcGraphFactory (final DatabaseDialect dialect, final Connection connection)
+  public JdbcGraphFactory (final JdbcEngine engine)
   {
     super( JdbcNode.class );
-    this.dialect = dialect;
-    this.connection = connection;
+    this.engine = engine;
   }
 
-  protected Connection getConnection ()
+  public JdbcEngine getEngine ()
   {
-    return connection;
+    return engine;
   }
 
-  protected long insertNodeRef (final JdbcGraph graph,
-                                final JdbcNode node,
-                                final String instance)
+  private DatabaseDialect getDialect ()
   {
-    AbstractInsertStatement ex = dialect.newNodeRefInsertStatement( graph, node, instance );
-    ex.execute( connection );
-    return ex.getGeneratedId();
+    return engine.getDatabaseDialect();
   }
 
   @Override
@@ -72,10 +63,9 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
 
     String label = getInstance( nodeRef.getInstance(), instanceName );
 
-    long nodeRefId = insertNodeRef( graph, nodeRef.getNode(), label );
-    JdbcNodeRef newRef = new JdbcNodeRef( nodeRefId, graph, nodeRef.getNode(), label );
+    JdbcNodeRef newRef = new JdbcNodeRef( graph, nodeRef.getNode(), label );
+    getDialect().newNodeRefInsertStatement( newRef ).execute( engine );
     graph.getNodes().add( newRef );
-
     return newRef;
   }
 
@@ -88,20 +78,17 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     JdbcNodeRef startNodeRef = (JdbcNodeRef)startNode;
     JdbcNodeRef endNodeRef   = (JdbcNodeRef)endNode;
 
-    AbstractInsertStatement ex = dialect.newArcInsertStatement( graph, startNodeRef, endNodeRef, name );
-    ex.execute( connection );
-    long arcId = ex.getGeneratedId();
-
-    return new JdbcArc( arcId, graph, startNodeRef, endNodeRef, name );
+    JdbcArc arc = new JdbcArc( graph, startNodeRef, endNodeRef, name );
+    getDialect().newArcInsertStatement( arc ).execute( engine );
+    return arc;
   }
 
   @Override
   public JdbcGraph newGraph (final String name, final int version)
   {
-    AbstractInsertStatement ex = dialect.newGraphInsertStatement( name, version );
-    ex.execute( connection );
-    long graphId = ex.getGeneratedId();
-    return new JdbcGraph( graphId, name, version );
+    JdbcGraph graph = new JdbcGraph( name, version );
+    getDialect().newGraphInsertStatement( graph ).execute( engine );
+    return graph;
   }
 
   @Override
@@ -114,12 +101,6 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
                        final List<Object> customList)
     throws LoadException
   {
-    AbstractInsertStatement ex =
-      dialect.newNodeInsertStatement( graph, name, type, guard, isStart, isJoin );
-    ex.execute( connection );
-
-    long nodeId = ex.getGeneratedId();
-
     NodeFactory nodeFactory = getNodeFactory( type );
     Node newNode = nodeFactory.newNode( type );
 
@@ -152,7 +133,6 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
       }
     }
 
-    node.setId( nodeId );
     node.setGraph( graph );
     node.setName( name );
     node.setType( type );
@@ -160,8 +140,13 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     node.setJoin( isJoin );
     node.setGuard( guard );
 
-    long nodeRefId = insertNodeRef( graph, node, "" );
-    return new JdbcNodeRef( nodeRefId, graph, node, "" );
+    getDialect().newNodeInsertStatement( node ).execute( engine );
+
+    node.afterCreate( engine );
+
+    JdbcNodeRef nodeRef = new JdbcNodeRef( graph, node, "" );
+    getDialect().newNodeRefInsertStatement( nodeRef ).execute( engine );
+    return nodeRef;
   }
 
   @Override
@@ -173,14 +158,9 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   @Override
   public GraphProcess newNestedProcess (final Graph graph, final NodeToken parentToken)
   {
-    JdbcGraph g = (JdbcGraph)graph;
-    JdbcNodeToken token = (JdbcNodeToken)parentToken;
-
-    Date createDate = new Date();
-    AbstractInsertStatement stmt = dialect.newProcessInsertStatement( g, token, createDate );
-    stmt.execute( connection );
-
-    return new JdbcGraphProcess( stmt.getGeneratedId(), g, token, createDate );
+    JdbcGraphProcess process = new JdbcGraphProcess( (JdbcGraph)graph, (JdbcNodeToken)parentToken );
+    getDialect().newProcessInsertStatement( process ).execute( engine );
+    return process;
   }
 
   @Override

@@ -16,12 +16,19 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.example.mem;
+package com.googlecode.sarasvati.jdbc;
 
-public enum TaskState
+/**
+ * An interface for database types with generated ids.
+ *
+ * @author Paul Lorenz
+ */
+public interface HasGeneratedId
 {
-  Open,
-  Completed,
-  Rejected,
-  Cancelled
+  /**
+   * Sets the generated id
+   *
+   * @param id The generated ID
+   */
+  void setId (Long id);
 }

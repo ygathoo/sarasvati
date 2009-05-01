@@ -40,7 +40,7 @@ import com.googlecode.sarasvati.load.DefaultNodeFactory;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 
-public class HibConsole
+public class HibExampleConsole
 {
   public static boolean log = false;
 

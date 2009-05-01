@@ -23,16 +23,21 @@ import java.util.List;
 
 import com.googlecode.sarasvati.AbstractGraph;
 
-public class JdbcGraph extends AbstractGraph
+public class JdbcGraph extends AbstractGraph implements HasGeneratedId
 {
-  protected long   id;
+  protected Long   id;
   protected String name;
   protected int    version;
 
   protected List<JdbcNodeRef> nodes;
   protected List<JdbcArc> arcs;
 
-  public JdbcGraph (long id, String name, int version)
+  public JdbcGraph (String name, int version)
+  {
+    this( null, name, version );
+  }
+
+  public JdbcGraph (Long id, String name, int version)
   {
     this.id      = id;
     this.name    = name;
@@ -41,9 +46,14 @@ public class JdbcGraph extends AbstractGraph
     this.arcs    = new LinkedList<JdbcArc>();
   }
 
-  public long getId ()
+  public Long getId ()
   {
     return id;
+  }
+
+  public void setId (Long id)
+  {
+    this.id = id;
   }
 
   @Override
@@ -68,5 +78,33 @@ public class JdbcGraph extends AbstractGraph
   public int getVersion ()
   {
     return version;
+  }
+
+  @Override
+  public int hashCode ()
+  {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ((id == null) ? 0 : id.hashCode());
+    return result;
+  }
+
+  @Override
+  public boolean equals (Object obj)
+  {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (!(obj instanceof JdbcGraph))
+      return false;
+    JdbcGraph other = (JdbcGraph) obj;
+    if (id == null)
+    {
+      if (other.id != null)
+        return false;
+    } else if (!id.equals( other.id ))
+      return false;
+    return true;
   }
 }

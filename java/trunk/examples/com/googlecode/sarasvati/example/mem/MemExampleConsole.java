@@ -34,6 +34,7 @@ import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.DumpNode;
 import com.googlecode.sarasvati.example.InitNode;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
+import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
@@ -43,7 +44,7 @@ import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
-public class MemConsole
+public class MemExampleConsole
 {
   public static boolean log = false;
 
@@ -100,14 +101,14 @@ public class MemConsole
         return;
       }
 
-      List<Task> tasks = TaskList.getTasks();
+      List<MemExampleTask> tasks = MemExampleTaskList.getTasks();
 
-      Task t = null;
+      MemExampleTask t = null;
 
       while ( t == null )
       {
         int count = 0;
-        for (Task task : tasks )
+        for (MemExampleTask task : tasks )
         {
           System.out.println( (++count) + ": " + task.getName() + " - " + task.getState() +
                               (task.getNodeToken().getExecutionType().isBacktracked() ? " (backtracked)" : "" ));
@@ -137,7 +138,7 @@ public class MemConsole
     }
   }
 
-  public static void processTask (Task t, MemEngine engine)
+  public static void processTask (MemExampleTask t, MemEngine engine)
   {
     System.out.println( "Task " );
     System.out.println( "\tName        : "  + t.getName() );

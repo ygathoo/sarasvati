@@ -18,11 +18,13 @@
 */
 package com.googlecode.sarasvati.example.jdbc;
 
-import java.sql.Connection;
-
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.example.TaskState;
+import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
+import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
 
@@ -55,24 +57,38 @@ public class JdbcExampleTaskNode extends JdbcNode
   }
 
   @Override
-  public void create (DatabaseDialect dialect, Connection connection)
+  public void afterCreate (final JdbcEngine engine)
   {
-    ExampleStatementFactory factory = dialect.getUserData( ExampleStatementFactory.class );
+    DatabaseDialect dialect = engine.getDatabaseDialect();
+    ExampleDatabase factory = dialect.getUserData( ExampleDatabase.class );
     AbstractStatement stmt = factory.newInsertTaskNodeStatement( this );
-    stmt.execute( connection );
+    stmt.execute( engine );
   }
 
   @Override
-  public void backtrack (Engine engine, NodeToken token)
+  public void afterLoad (final JdbcEngine engine)
   {
-//    HibEngine hibEngine = (HibEngine)engine;
-//    Task task = TaskDAO.getTaskForToken( hibEngine.getSession(), token );
-//    task.setState( (TaskState) hibEngine.getSession().load( TaskState.class, 1 ) );
+    DatabaseDialect dialect = engine.getDatabaseDialect();
+    ExampleDatabase factory = dialect.getUserData( ExampleDatabase.class );
+    AbstractStatement stmt = factory.newLoadTaskNodeStatement( this );
+    stmt.execute( engine );
+  }
+
+  @Override
+  public void backtrack (final Engine engine, final NodeToken token)
+  {
+    JdbcEngine jdbcEngine = (JdbcEngine)engine;
+    DatabaseDialect dialect = jdbcEngine.getDatabaseDialect();
+    ExampleDatabase db = dialect.getUserData( ExampleDatabase.class );
+
+    JdbcExampleTask task = db.getTaskForToken( jdbcEngine, (JdbcNodeToken)token );
+    task.setState( TaskState.Cancelled );
+    db.newUpdateTaskStatement( task ).execute( jdbcEngine );
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public <T> T getAdaptor (Class<T> clazz)
+  public <T> T getAdaptor (final Class<T> clazz)
   {
     if ( String.class == clazz )
     {
@@ -82,20 +98,17 @@ public class JdbcExampleTaskNode extends JdbcNode
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
-//    HibEngine hibEngine = (HibEngine)engine;
-//
-//    Session session = hibEngine.getSession();
-//
-//    TaskState open = (TaskState)session.load( TaskState.class, 0 );
-//    Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), open );
-//    session.save( newTask );
-//
-//    Env env = token.getEnv();
-//    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
-//
-//    env = token.getProcess().getEnv();
-//    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
+    JdbcEngine jdbcEngine = (JdbcEngine)engine;
+
+    JdbcExampleTask task = new JdbcExampleTask( (JdbcNodeToken)token, getTaskName(), getTaskDesc(), TaskState.Open );
+    ExampleDatabase factory = jdbcEngine.getDatabaseDialect().getUserData( ExampleDatabase.class );
+    factory.newInsertTaskStatement( task ).execute( jdbcEngine );
+
+    Env env = token.getEnv();
+    env.setLongAttribute( task.getName(), env.getLongAttribute( task.getName() ) + 1 );
+    env = token.getProcess().getEnv();
+    env.setLongAttribute( task.getName(), env.getLongAttribute( task.getName() ) + 1 );
   }
 }

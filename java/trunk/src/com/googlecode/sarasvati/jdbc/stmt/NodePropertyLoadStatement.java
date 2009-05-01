@@ -19,22 +19,32 @@
 package com.googlecode.sarasvati.jdbc.stmt;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
+import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
+import com.googlecode.sarasvati.load.LoadException;
 
-public class NodeRefInsertStatement extends AbstractInsertStatement<JdbcNodeRef>
+public class NodePropertyLoadStatement extends AbstractSelectStatement<Object>
 {
-  public NodeRefInsertStatement (String sql, JdbcNodeRef nodeRef)
+  private JdbcPropertyNode node;
+
+  public NodePropertyLoadStatement (String sql, JdbcPropertyNode node)
   {
-    super( sql, nodeRef );
+    super( sql, false );
+    this.node = node;
+  }
+
+  @Override
+  protected Object loadObject (ResultSet row) throws SQLException, LoadException
+  {
+    node.setProperty( row.getString( 1 ), row.getString( 2 ) );
+    return null;
   }
 
   @Override
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
-    stmt.setLong( 1, value.getGraph().getId() );
-    stmt.setLong( 2, value.getNode().getId() );
-    stmt.setString( 3, value.getInstance() );
+    stmt.setLong( 1, node.getId() );
   }
 }
