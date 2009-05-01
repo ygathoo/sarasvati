@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.example.mem;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.mem.MemNode;
 
 public class MemExampleTaskNode extends MemNode
@@ -51,7 +52,7 @@ public class MemExampleTaskNode extends MemNode
   @Override
   public void backtrack (Engine engine, NodeToken token)
   {
-    for (Task t : TaskList.getTasks() )
+    for (MemExampleTask t : MemExampleTaskList.getTasks() )
     {
       if ( t.getNodeToken().equals( token ) )
       {
@@ -64,8 +65,8 @@ public class MemExampleTaskNode extends MemNode
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );
-    TaskList.getTasks().add( newTask );
+    MemExampleTask newTask = new MemExampleTask( token, getTaskName(), getTaskDesc(), TaskState.Open );
+    MemExampleTaskList.getTasks().add( newTask );
 
     Env env = token.getEnv();
     env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );

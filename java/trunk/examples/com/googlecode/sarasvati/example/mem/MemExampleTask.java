@@ -20,8 +20,9 @@ package com.googlecode.sarasvati.example.mem;
 
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.example.TaskState;
 
-public class Task
+public class MemExampleTask
 {
   protected NodeToken nodeToken;
 
@@ -30,7 +31,7 @@ public class Task
 
   protected TaskState state;
 
-  public Task (NodeToken nodeToken, String name, String description, TaskState state)
+  public MemExampleTask (NodeToken nodeToken, String name, String description, TaskState state)
   {
     this.nodeToken = nodeToken;
     this.name = name;

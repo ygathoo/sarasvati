@@ -18,7 +18,6 @@
 */
 package com.googlecode.sarasvati.jdbc;
 
-import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -30,17 +29,17 @@ public class JdbcPropertyNode extends JdbcNode
 {
   protected Map<String, String> attrMap = new HashMap<String, String>();
 
-  public String getProperty (String key)
+  public String getProperty (final String key)
   {
     return attrMap.get( key );
   }
 
-  public void setProperty (String key, String value)
+  public void setProperty (final String key, final String value)
   {
     attrMap.put( key, value );
   }
 
-  public void importProperties (Map<String, String> properties)
+  public void importProperties (final Map<String, String> properties)
   {
     if ( properties != null )
     {
@@ -52,12 +51,20 @@ public class JdbcPropertyNode extends JdbcNode
   }
 
   @Override
-  public void create (DatabaseDialect dialect, Connection connection)
+  public void afterCreate (final JdbcEngine engine)
   {
+    DatabaseDialect dialect = engine.getDatabaseDialect();
     for ( Entry<String, String> entry : attrMap.entrySet() )
     {
       AbstractStatement stmt = dialect.newNodePropertyInsertStatement( this, entry.getKey(), entry.getValue() );
-      stmt.execute( connection );
+      stmt.execute( engine );
     }
+  }
+
+  @Override
+  public void afterLoad (JdbcEngine engine)
+  {
+    DatabaseDialect dialect = engine.getDatabaseDialect();
+    dialect.newNodePropertiesLoadStatement( this ).execute( engine );
   }
 }

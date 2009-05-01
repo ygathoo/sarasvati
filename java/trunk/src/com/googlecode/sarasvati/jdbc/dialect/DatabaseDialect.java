@@ -18,17 +18,17 @@
 */
 package com.googlecode.sarasvati.jdbc.dialect;
 
-import java.util.Date;
-
 import com.googlecode.sarasvati.jdbc.JdbcArc;
+import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
-import com.googlecode.sarasvati.jdbc.JdbcGraphFactory;
+import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
-import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
+import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractInsertStatement;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractSelectStatement;
 import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
+import com.googlecode.sarasvati.jdbc.stmt.NodePropertyLoadStatement;
 
 /**
  * Interface to perform database-specific logic, such as
@@ -42,73 +42,51 @@ public interface DatabaseDialect
    * Return an {@link AbstractInsertStatement} to
    * insert a new graph into the database.
    *
-   * @param name The graph name
-   * @param version The graph version
+   * @param graph The graph to insert
    *
    * @return The insert statement.
    */
-  AbstractInsertStatement newGraphInsertStatement (String name, int version);
+  AbstractStatement newGraphInsertStatement (JdbcGraph graph);
 
   /**
    * Return an {@link AbstractInsertStatement} to
    * insert a new process into the database.
    *
-   * @param graph The graph being executed
-   * @param parentToken If this is a nested process, this should be the token
-   *                    which is causing the process to be started. Otherwise
-   *                    it should be null.
+   * @param process The graph process to insert
    *
    * @return The insert statement.
    */
-  AbstractInsertStatement newProcessInsertStatement (JdbcGraph graph, JdbcNodeToken parentToken, Date createDate);
+  AbstractStatement newProcessInsertStatement (JdbcGraphProcess process);
 
   /**
    * Return an {@link AbstractInsertStatement} to
    * insert a new node into the database.
    *
-   * @param graph The graph the node is being create for
-   * @param name The node name
-   * @param type The node type
-   * @param guard The node guard
-   * @param isStart Whether the node is a start node
-   * @param isJoin Whether the node is a join node
+   * @param node The node to insert
    *
    * @return The insert statement
    */
-  AbstractInsertStatement newNodeInsertStatement (JdbcGraph graph,
-                                                  String name,
-                                                  String type,
-                                                  String guard,
-                                                  boolean isStart,
-                                                  boolean isJoin);
+  AbstractStatement newNodeInsertStatement (JdbcNode node);
 
   /**
    * Returns an {@link AbstractInsertStatement} to
    * insert a new node ref into the database.
    *
-   * @param graph The graph the node ref belongs to
-   * @param node The node the node ref points to
-   * @param instance The instance name associated with the node ref
+   * @param nodeRef The node ref to insert
    *
    * @return The insert statement
    */
-  AbstractInsertStatement newNodeRefInsertStatement (JdbcGraph graph, JdbcNode node, String instance);
+  AbstractStatement newNodeRefInsertStatement (JdbcNodeRef nodeRef);
 
   /**
    * Returns an {@link AbstractInsertStatement} to
    * insert a new arc into the database.
    *
-   * @param graph The graph the arc belongs to
-   * @param startNode The arc's starting point
-   * @param endNode The arc's ending point
-   * @param name The arc name
+   * @param arc The arc to insert
    *
    * @return The insert statement
    */
-  AbstractInsertStatement newArcInsertStatement (JdbcGraph graph,
-                                                 JdbcNodeRef startNode,
-                                                 JdbcNodeRef endNode,
-                                                 String name );
+  AbstractStatement newArcInsertStatement (JdbcArc arc );
 
   /**
    * Returns an {@link AbstractStatement} to
@@ -121,6 +99,16 @@ public interface DatabaseDialect
    * @return The insert statement
    */
   AbstractStatement newNodePropertyInsertStatement (JdbcNode node, String key, String value);
+
+  /**
+   * Returns a {@link NodePropertyLoadStatement} to load the node's associated
+   * properties.
+   *
+   * @param node The {@link JdbcPropertyNode} whose properties need to be loaded.
+   *
+   * @return The load statement
+   */
+  AbstractStatement newNodePropertiesLoadStatement (JdbcPropertyNode node);
 
   /**
    * Returns an {@link AbstractSelectStatement} which will load all graphs from the database.
@@ -151,10 +139,11 @@ public interface DatabaseDialect
    * Returns an {@link AbstractSelectStatement} which will load nodes into the given graph.
    *
    * @param graph The graph whose nodes are to be loaded.
+   * @param engine The engine to use to help instantiate nodes
    *
    * @return The select statement
    */
-  AbstractSelectStatement<JdbcNodeRef> newNodeSelectStatement (JdbcGraph graph, JdbcGraphFactory factory);
+  AbstractSelectStatement<JdbcNodeRef> newNodeSelectStatement (JdbcGraph graph, JdbcEngine engine);
 
   /**
    * Returns an {@link AbstractSelectStatement} which will load arcs into the given graph.

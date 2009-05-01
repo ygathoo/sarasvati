@@ -3,13 +3,12 @@
  */
 package com.googlecode.sarasvati.jdbc.dialect;
 
-import java.util.Date;
-
+import com.googlecode.sarasvati.jdbc.JdbcArc;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
+import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
-import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractInsertStatement;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
 import com.googlecode.sarasvati.jdbc.stmt.ArcInsertStatement;
 import com.googlecode.sarasvati.jdbc.stmt.GraphInsertStatement;
 import com.googlecode.sarasvati.jdbc.stmt.NodeInsertStatement;
@@ -35,39 +34,32 @@ public class PostgreSQLDatabaseDialect extends AbstractDatabaseDialect
 
 
   @Override
-  public GraphInsertStatement newGraphInsertStatement (String name, int version)
+  public AbstractStatement newGraphInsertStatement (JdbcGraph graph)
   {
-    return new GraphInsertStatement( GRAPH_INSERT_SQL, name, version );
+    return new GraphInsertStatement( GRAPH_INSERT_SQL, graph );
   }
 
   @Override
-  public AbstractInsertStatement newNodeInsertStatement (JdbcGraph graph,
-                                                         String name,
-                                                         String type,
-                                                         String guard,
-                                                         boolean isStart,
-                                                         boolean isJoin)
+  public AbstractStatement newNodeInsertStatement (JdbcNode node)
   {
-    return new NodeInsertStatement( NODE_INSERT_SQL, graph, name, type, guard, isStart, isJoin );
+    return new NodeInsertStatement( NODE_INSERT_SQL, node );
   }
 
   @Override
-  public AbstractInsertStatement newArcInsertStatement (JdbcGraph graph, JdbcNodeRef startNode,
-                                                        JdbcNodeRef endNode, String name)
+  public AbstractStatement newArcInsertStatement (JdbcArc arc)
   {
-    return new ArcInsertStatement( ARC_INSERT_SQL, graph, startNode, endNode, name );
+    return new ArcInsertStatement( ARC_INSERT_SQL, arc );
   }
 
   @Override
-  public AbstractInsertStatement newNodeRefInsertStatement (JdbcGraph graph, JdbcNode node,
-                                                            String instance)
+  public AbstractStatement newNodeRefInsertStatement (JdbcNodeRef nodeRef)
   {
-    return new NodeRefInsertStatement( NODE_REF_INSERT_SQL, graph, node, instance );
+    return new NodeRefInsertStatement( NODE_REF_INSERT_SQL, nodeRef );
   }
 
   @Override
-  public AbstractInsertStatement newProcessInsertStatement (JdbcGraph graph, JdbcNodeToken parentToken, Date createDate)
+  public AbstractStatement newProcessInsertStatement (JdbcGraphProcess process)
   {
-    return new ProcessInsertStatement( PROCESS_INSERT_SQL, graph, parentToken, createDate );
+    return new ProcessInsertStatement( PROCESS_INSERT_SQL, process );
   }
 }

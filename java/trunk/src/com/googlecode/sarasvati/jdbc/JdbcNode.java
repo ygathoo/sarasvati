@@ -18,17 +18,14 @@
 */
 package com.googlecode.sarasvati.jdbc;
 
-import java.sql.Connection;
-
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
-import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 
-public class JdbcNode implements Node
+public class JdbcNode implements Node, HasGeneratedId
 {
   protected Long      id;
   protected String    name;
@@ -169,10 +166,21 @@ public class JdbcNode implements Node
    * Called after this node is persisted to the database. Allows subclasses
    * to persist additional attributes to the database.
    *
-   * @param dialect The database dialect to use
+   * @param engine The {@link JdbcEngine} to use to work with the database
+   */
+  public void afterCreate (@SuppressWarnings("unused") JdbcEngine engine)
+  {
+    // does nothing by default.
+  }
+
+  /**
+   * Called after this node is loaded from the database. Allows subclasses
+   * to persist additional attributes to the database.
+   *
+   * @param engine The {@link JdbcEngine} to use to work with the database
    * @param connection The database connection to use
    */
-  public void create (DatabaseDialect dialect, Connection connection)
+  public void afterLoad (@SuppressWarnings("unused") JdbcEngine engine)
   {
     // does nothing by default.
   }

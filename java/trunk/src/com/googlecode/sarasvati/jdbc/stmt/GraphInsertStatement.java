@@ -21,23 +21,19 @@ package com.googlecode.sarasvati.jdbc.stmt;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
+import com.googlecode.sarasvati.jdbc.JdbcGraph;
 
-public class GraphInsertStatement extends AbstractInsertStatement
+public class GraphInsertStatement extends AbstractInsertStatement<JdbcGraph>
 {
-  protected String name;
-  protected int    version;
-
-  public GraphInsertStatement (String sql, String name, int version)
+  public GraphInsertStatement (final String sql, final JdbcGraph graph)
   {
-    super( sql );
-    this.name = name;
-    this.version = version;
+    super( sql, graph );
   }
 
   @Override
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
-    stmt.setString( 1, name );
-    stmt.setInt( 2, version );
+    stmt.setString( 1, value.getName() );
+    stmt.setInt( 2, value.getVersion() );
   }
 }

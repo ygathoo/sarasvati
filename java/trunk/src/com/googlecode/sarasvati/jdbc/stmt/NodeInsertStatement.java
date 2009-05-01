@@ -21,43 +21,24 @@ package com.googlecode.sarasvati.jdbc.stmt;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcGraph;
+import com.googlecode.sarasvati.jdbc.JdbcNode;
 
 
-public class NodeInsertStatement extends AbstractInsertStatement
+public class NodeInsertStatement extends AbstractInsertStatement<JdbcNode>
 {
-  protected JdbcGraph graph;
-  protected String name;
-  protected String type;
-  protected String guard;
-  protected boolean isStart;
-  protected boolean isJoin;
-
-  public NodeInsertStatement (String sql,
-                                         JdbcGraph graph,
-                                         String name,
-                                         String type,
-                                         String guard,
-                                         boolean isStart,
-                                         boolean isJoin)
+  public NodeInsertStatement (final String sql, final JdbcNode node )
   {
-    super( sql );
-    this.graph = graph;
-    this.name = name;
-    this.type = type;
-    this.guard = guard;
-    this.isStart = isStart;
-    this.isJoin = isJoin;
+    super( sql, node );
   }
 
   @Override
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
-    stmt.setLong( 1, graph.getId() );
-    stmt.setString( 2, name );
-    stmt.setString( 3, type );
-    stmt.setString( 4, guard );
-    stmt.setString( 5, isStart ? "Y" : "N" );
-    stmt.setString( 6, isJoin ? "Y" : "N" );
+    stmt.setLong( 1, value.getGraph().getId() );
+    stmt.setString( 2, value.getName() );
+    stmt.setString( 3, value.getType() );
+    stmt.setString( 4, value.getGuard() );
+    stmt.setString( 5, value.isStart() ? "Y" : "N" );
+    stmt.setString( 6, value.isJoin() ? "Y" : "N" );
   }
 }

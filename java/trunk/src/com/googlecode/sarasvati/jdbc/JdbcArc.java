@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.jdbc;
 
 import com.googlecode.sarasvati.Arc;
 
-public class JdbcArc implements Arc
+public class JdbcArc implements Arc, HasGeneratedId
 {
   protected Long id;
   protected String name;
@@ -30,7 +30,12 @@ public class JdbcArc implements Arc
 
   protected JdbcNodeRef endNode;
 
-  public JdbcArc (long id, JdbcGraph graph, JdbcNodeRef startNode, JdbcNodeRef endNode, String name)
+  public JdbcArc (JdbcGraph graph, JdbcNodeRef startNode, JdbcNodeRef endNode, String name)
+  {
+    this ( null, graph, startNode, endNode, name );
+  }
+
+  public JdbcArc (Long id, JdbcGraph graph, JdbcNodeRef startNode, JdbcNodeRef endNode, String name)
   {
     this.id        = id;
     this.graph     = graph;

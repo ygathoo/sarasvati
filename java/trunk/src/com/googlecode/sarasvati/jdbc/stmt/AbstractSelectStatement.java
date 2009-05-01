@@ -70,4 +70,9 @@ public abstract class AbstractSelectStatement<T> extends AbstractStatement
   {
     return collect ? result : Collections.EMPTY_LIST;
   }
+
+  public T getFirstResult ()
+  {
+    return !collect || result.isEmpty() ? null : result.get( 0 );
+  }
 }

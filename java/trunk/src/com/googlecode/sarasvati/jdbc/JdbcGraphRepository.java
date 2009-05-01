@@ -18,7 +18,6 @@
 */
 package com.googlecode.sarasvati.jdbc;
 
-import java.sql.Connection;
 import java.util.List;
 
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
@@ -27,15 +26,16 @@ import com.googlecode.sarasvati.load.GraphRepository;
 
 public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
 {
-  protected DatabaseDialect dialect;
-  protected JdbcGraphFactory factory;
-  protected Connection connection;
+  private final JdbcEngine engine;
 
-  public JdbcGraphRepository (final DatabaseDialect dialect, final JdbcGraphFactory factory, final Connection connection)
+  public JdbcGraphRepository (final JdbcEngine engine)
   {
-    this.dialect = dialect;
-    this.factory = factory;
-    this.connection = connection;
+    this.engine = engine;
+  }
+
+  private DatabaseDialect getDialect ()
+  {
+    return engine.getDatabaseDialect();
   }
 
   @Override
@@ -47,8 +47,8 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   @Override
   public List<JdbcGraph> getGraphs (final String name)
   {
-    AbstractSelectStatement<JdbcGraph> stmt = dialect.newGraphByNameSelectStatement( name );
-    stmt.execute( connection );
+    AbstractSelectStatement<JdbcGraph> stmt = getDialect().newGraphByNameSelectStatement( name );
+    stmt.execute( engine );
 
     for ( JdbcGraph graph :  stmt.getResult() )
     {
@@ -62,8 +62,8 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   @Override
   public List<JdbcGraph> getGraphs ()
   {
-    AbstractSelectStatement<JdbcGraph> stmt = dialect.newGraphSelectStatement();
-    stmt.execute( connection );
+    AbstractSelectStatement<JdbcGraph> stmt = getDialect().newGraphSelectStatement();
+    stmt.execute( engine );
 
     for ( JdbcGraph graph :  stmt.getResult() )
     {
@@ -77,8 +77,8 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   @Override
   public JdbcGraph getLatestGraph (final String name)
   {
-    AbstractSelectStatement<JdbcGraph> stmt = dialect.newLatestGraphByNameSelectStatement( name );
-    stmt.execute( connection );
+    AbstractSelectStatement<JdbcGraph> stmt = getDialect().newLatestGraphByNameSelectStatement( name );
+    stmt.execute( engine );
 
     for ( JdbcGraph graph :  stmt.getResult() )
     {
@@ -86,18 +86,18 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
       loadArcs( graph );
     }
 
-    return stmt.getResult().isEmpty() ? null : stmt.getResult().get( 0 );
+    return stmt.getFirstResult();
   }
 
   protected void loadNodes (final JdbcGraph graph)
   {
-    AbstractSelectStatement<JdbcNodeRef> stmt = dialect.newNodeSelectStatement( graph, factory );
-    stmt.execute( connection );
+    AbstractSelectStatement<JdbcNodeRef> stmt = getDialect().newNodeSelectStatement( graph, engine );
+    stmt.execute( engine );
   }
 
   public void loadArcs (final JdbcGraph graph)
   {
-    AbstractSelectStatement<JdbcArc> stmt = dialect.newArcSelectStatement( graph );
-    stmt.execute( connection );
+    AbstractSelectStatement<JdbcArc> stmt = getDialect().newArcSelectStatement( graph );
+    stmt.execute( engine );
   }
 }

@@ -27,8 +27,8 @@ import java.util.Map;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.jdbc.JdbcCustomNodeWrapper;
+import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
-import com.googlecode.sarasvati.jdbc.JdbcGraphFactory;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 import com.googlecode.sarasvati.load.LoadException;
@@ -36,16 +36,18 @@ import com.googlecode.sarasvati.load.NodeFactory;
 
 public class NodeSelectStatement extends AbstractSelectStatement<JdbcNodeRef>
 {
-  protected JdbcGraph graph;
-  protected JdbcGraphFactory factory;
+  protected final JdbcGraph graph;
+  protected final JdbcEngine engine;
 
   protected Map<Long, JdbcNode> nodeMap = new HashMap<Long,JdbcNode>();
 
-  public NodeSelectStatement (String sql, JdbcGraph graph, JdbcGraphFactory factory)
+  public NodeSelectStatement (final String sql,
+                              final JdbcGraph graph,
+                              final JdbcEngine engine)
   {
     super( sql, false );
     this.graph = graph;
-    this.factory = factory;
+    this.engine = engine;
   }
 
   @Override
@@ -64,7 +66,7 @@ public class NodeSelectStatement extends AbstractSelectStatement<JdbcNodeRef>
 
     if ( node == null )
     {
-      NodeFactory nodeFactory = factory.getNodeFactory( type );
+      NodeFactory nodeFactory = engine.getFactory().getNodeFactory( type );
       Node loadNode = nodeFactory.newNode( type );
       JdbcCustomNodeWrapper customNodeWrapper = null;
 
@@ -85,6 +87,8 @@ public class NodeSelectStatement extends AbstractSelectStatement<JdbcNodeRef>
       node.setStart( isStart );
       node.setJoin( isJoin );
       node.setGuard( guard );
+
+      node.afterLoad( engine );
 
       nodeMap.put( nodeId, node );
     }

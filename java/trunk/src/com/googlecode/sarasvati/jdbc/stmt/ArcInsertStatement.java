@@ -21,32 +21,22 @@ package com.googlecode.sarasvati.jdbc.stmt;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcGraph;
-import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
+import com.googlecode.sarasvati.jdbc.JdbcArc;
 
 
-public class ArcInsertStatement extends AbstractInsertStatement
+public class ArcInsertStatement extends AbstractInsertStatement<JdbcArc>
 {
-  protected JdbcGraph graph;
-  protected JdbcNodeRef startNode;
-  protected JdbcNodeRef endNode;
-  protected String name;
-
-  public ArcInsertStatement (String sql, JdbcGraph graph, JdbcNodeRef startNode, JdbcNodeRef endNode, String name)
+  public ArcInsertStatement (final String sql, JdbcArc arc)
   {
-    super( sql );
-    this.graph = graph;
-    this.startNode = startNode;
-    this.endNode = endNode;
-    this.name = name;
+    super( sql, arc );
   }
 
   @Override
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
-    stmt.setLong( 1, graph.getId() );
-    stmt.setLong( 2, startNode.getId() );
-    stmt.setLong( 3, endNode.getId() );
-    stmt.setString( 4, name );
+    stmt.setLong( 1, value.getGraph().getId() );
+    stmt.setLong( 2, value.getStartNode().getId() );
+    stmt.setLong( 3, value.getEndNode().getId() );
+    stmt.setString( 4, value.getName() );
   }
 }

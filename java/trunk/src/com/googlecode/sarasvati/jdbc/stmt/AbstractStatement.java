@@ -23,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcLoadException;
 import com.googlecode.sarasvati.load.LoadException;
 
@@ -38,8 +39,9 @@ public abstract class AbstractStatement
     this.sql = sql;
   }
 
-  public void execute (final Connection connection)
+  public void execute (final JdbcEngine engine)
   {
+    final Connection connection = engine.getConnection();
     Throwable ex = null;
     try
     {

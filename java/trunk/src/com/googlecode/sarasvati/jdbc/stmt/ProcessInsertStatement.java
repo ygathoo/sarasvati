@@ -22,42 +22,30 @@ import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.sql.Types;
-import java.util.Date;
 
-import com.googlecode.sarasvati.jdbc.JdbcGraph;
-import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
+import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
 
-public class ProcessInsertStatement extends AbstractInsertStatement
+public class ProcessInsertStatement extends AbstractInsertStatement<JdbcGraphProcess>
 {
-  protected final JdbcGraph graph;
-  protected final JdbcNodeToken parent;
-  protected final Date createDate;
-
-  public ProcessInsertStatement (final String sql,
-                                 final JdbcGraph graph,
-                                 final JdbcNodeToken parent,
-                                 final Date createDate)
+  public ProcessInsertStatement (final String sql, final JdbcGraphProcess process)
   {
-    super( sql );
-    this.graph = graph;
-    this.parent = parent;
-    this.createDate = createDate;
+    super( sql, process );
   }
 
   @Override
   protected void setParameters (final PreparedStatement stmt) throws SQLException
   {
-    stmt.setLong( 1, graph.getId() );
+    stmt.setLong( 1, value.getGraph().getId() );
 
-    if ( parent == null )
+    if ( value.getParentToken() == null )
     {
       stmt.setNull( 2, Types.BIGINT );
     }
     else
     {
-      stmt.setLong( 2, parent.getId() );
+      stmt.setLong( 2, value.getParentToken().getId() );
     }
 
-    stmt.setTimestamp( 3, new Timestamp( createDate.getTime() ) );
+    stmt.setTimestamp( 3, new Timestamp( value.getCreateDate().getTime() ) );
   }
 }
