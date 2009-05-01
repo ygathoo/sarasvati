@@ -21,7 +21,6 @@ package com.googlecode.sarasvati.editor.model;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternal;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
