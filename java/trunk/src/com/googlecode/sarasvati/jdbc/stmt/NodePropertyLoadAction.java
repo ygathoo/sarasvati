@@ -21,50 +21,30 @@ package com.googlecode.sarasvati.jdbc.stmt;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.Map;
 
-import com.googlecode.sarasvati.jdbc.JdbcArc;
-import com.googlecode.sarasvati.jdbc.JdbcGraph;
-import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
+import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
 import com.googlecode.sarasvati.load.LoadException;
 
-public class ArcSelectStatement extends AbstractSelectStatement<JdbcArc>
+public class NodePropertyLoadAction extends AbstractLoadAction<Object>
 {
-  protected JdbcGraph graph;
+  private JdbcPropertyNode node;
 
-  protected Map<Long, JdbcNodeRef> nodeRefMap = new HashMap<Long,JdbcNodeRef>();
-
-  public ArcSelectStatement (String sql, JdbcGraph graph)
+  public NodePropertyLoadAction (String sql, JdbcPropertyNode node)
   {
     super( sql, false );
-    this.graph = graph;
-
-    for ( JdbcNodeRef ref : graph.getNodes() )
-    {
-      nodeRefMap.put( ref.getId(), ref );
-    }
+    this.node = node;
   }
 
   @Override
-  protected JdbcArc loadObject (ResultSet row) throws SQLException, LoadException
+  protected Object loadObject (ResultSet row) throws SQLException, LoadException
   {
-    long arcId       = row.getLong( 1 );
-    long startRefId  = row.getLong( 2 );
-    long endRefId    = row.getLong( 3 );
-    String name      = row.getString( 4 );
-
-    JdbcNodeRef startRef = nodeRefMap.get( startRefId );
-    JdbcNodeRef endRef   = nodeRefMap.get( endRefId );
-
-    JdbcArc arc = new JdbcArc( arcId, graph, startRef, endRef, name );
-    graph.getArcs().add( arc );
-    return arc;
+    node.setProperty( row.getString( 1 ), row.getString( 2 ) );
+    return null;
   }
 
   @Override
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
-    stmt.setLong( 1, graph.getId() );
+    stmt.setLong( 1, node.getId() );
   }
 }

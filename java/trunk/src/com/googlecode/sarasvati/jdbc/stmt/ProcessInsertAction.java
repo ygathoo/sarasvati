@@ -25,9 +25,9 @@ import java.sql.Types;
 
 import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
 
-public class ProcessInsertStatement extends AbstractInsertStatement<JdbcGraphProcess>
+public class ProcessInsertAction extends AbstractInsertAction<JdbcGraphProcess>
 {
-  public ProcessInsertStatement (final String sql, final JdbcGraphProcess process)
+  public ProcessInsertAction (final String sql, final JdbcGraphProcess process)
   {
     super( sql, process );
   }

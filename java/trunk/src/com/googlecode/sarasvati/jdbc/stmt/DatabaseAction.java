@@ -18,22 +18,14 @@
 */
 package com.googlecode.sarasvati.jdbc.stmt;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import com.googlecode.sarasvati.jdbc.JdbcEngine;
 
-public abstract class AbstractExecuteUpdateStatement extends AbstractStatement
+/**
+ * Represents an action to be performed against a database.
+ *
+ * @author Paul Lorenz
+ */
+public interface DatabaseAction
 {
-  public AbstractExecuteUpdateStatement (String sql)
-  {
-    super( sql );
-  }
-
-  @Override
-  public void doWork () throws SQLException
-  {
-    setParameters( getStatement() );
-    getStatement().executeUpdate();
-  }
-
-  protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
+  void execute (JdbcEngine engine);
 }

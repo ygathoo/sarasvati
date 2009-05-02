@@ -18,25 +18,22 @@
 */
 package com.googlecode.sarasvati.jdbc.stmt;
 
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
 
-public abstract class AbstractGraphSelectStatement extends AbstractSelectStatement<JdbcGraph>
+public class GraphInsertAction extends AbstractInsertAction<JdbcGraph>
 {
-  public AbstractGraphSelectStatement (String sql)
+  public GraphInsertAction (final String sql, final JdbcGraph graph)
   {
-    super( sql, true );
+    super( sql, graph );
   }
 
   @Override
-  protected JdbcGraph loadObject (ResultSet row) throws SQLException
+  protected void setParameters (PreparedStatement stmt) throws SQLException
   {
-    long graphId = row.getLong( 1 );
-    String graphName = row.getString( 2 );
-    int version = row.getInt( 3 );
-
-    return new JdbcGraph( graphId, graphName, version );
+    stmt.setString( 1, value.getName() );
+    stmt.setInt( 2, value.getVersion() );
   }
 }

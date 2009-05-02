@@ -29,13 +29,13 @@ import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractExecuteUpdateStatement;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractGraphSelectStatement;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractSelectStatement;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
-import com.googlecode.sarasvati.jdbc.stmt.ArcSelectStatement;
-import com.googlecode.sarasvati.jdbc.stmt.NodePropertyLoadStatement;
-import com.googlecode.sarasvati.jdbc.stmt.NodeSelectStatement;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractExecuteUpdateAction;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractGraphLoadAction;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractLoadAction;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractDatabaseAction;
+import com.googlecode.sarasvati.jdbc.stmt.ArcLoadAction;
+import com.googlecode.sarasvati.jdbc.stmt.NodePropertyLoadAction;
+import com.googlecode.sarasvati.jdbc.stmt.NodeLoadAction;
 
 
 public abstract class AbstractDatabaseDialect implements DatabaseDialect
@@ -67,15 +67,15 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   protected Map<Class<?>,Object> userData = new HashMap<Class<?>,Object> ();
 
   @Override
-  public AbstractSelectStatement<JdbcArc> newArcSelectStatement (final JdbcGraph graph)
+  public AbstractLoadAction<JdbcArc> newArcLoadAction (final JdbcGraph graph)
   {
-    return new ArcSelectStatement( SELECT_ARCS_SQL, graph );
+    return new ArcLoadAction( SELECT_ARCS_SQL, graph );
   }
 
   @Override
-  public AbstractSelectStatement<JdbcGraph> newGraphByNameSelectStatement (final String name)
+  public AbstractLoadAction<JdbcGraph> newGraphByNameLoadAction (final String name)
   {
-    return new AbstractGraphSelectStatement( SELECT_GRAPHS_BY_NAME_SQL )
+    return new AbstractGraphLoadAction( SELECT_GRAPHS_BY_NAME_SQL )
     {
       @Override
       protected void setParameters (PreparedStatement stmt) throws SQLException
@@ -86,9 +86,9 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   }
 
   @Override
-  public AbstractSelectStatement<JdbcGraph> newGraphSelectStatement ()
+  public AbstractLoadAction<JdbcGraph> newGraphLoadAction ()
   {
-    return new AbstractGraphSelectStatement( SELECT_ALL_GRAPHS_SQL )
+    return new AbstractGraphLoadAction( SELECT_ALL_GRAPHS_SQL )
     {
       @Override
       protected void setParameters (PreparedStatement stmt) throws SQLException
@@ -99,9 +99,9 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   }
 
   @Override
-  public AbstractSelectStatement<JdbcGraph> newLatestGraphByNameSelectStatement (final String name)
+  public AbstractLoadAction<JdbcGraph> newLatestGraphByNameLoadAction (final String name)
   {
-    return new AbstractGraphSelectStatement( SELECT_LATEST_GRAPH_SQL )
+    return new AbstractGraphLoadAction( SELECT_LATEST_GRAPH_SQL )
     {
       @Override
       protected void setParameters (PreparedStatement stmt) throws SQLException
@@ -113,15 +113,15 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   }
 
   @Override
-  public AbstractSelectStatement<JdbcNodeRef> newNodeSelectStatement (final JdbcGraph graph, final JdbcEngine engine)
+  public AbstractLoadAction<JdbcNodeRef> newNodeLoadAction (final JdbcGraph graph, final JdbcEngine engine)
   {
-    return new NodeSelectStatement( SELECT_NODES_SQL, graph, engine );
+    return new NodeLoadAction( SELECT_NODES_SQL, graph, engine );
   }
 
   @Override
-  public AbstractStatement newNodePropertyInsertStatement (final JdbcNode node, final String key, final String value)
+  public AbstractDatabaseAction newNodePropertyInsertAction (final JdbcNode node, final String key, final String value)
   {
-    return new AbstractExecuteUpdateStatement( INSERT_NODE_PROPERTY_SQL )
+    return new AbstractExecuteUpdateAction( INSERT_NODE_PROPERTY_SQL )
     {
       @Override
       protected void setParameters (PreparedStatement stmt) throws SQLException
@@ -134,9 +134,9 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   }
 
   @Override
-  public AbstractStatement newNodePropertiesLoadStatement (JdbcPropertyNode node)
+  public AbstractDatabaseAction newNodePropertiesLoadAction (JdbcPropertyNode node)
   {
-    return new NodePropertyLoadStatement( SELECT_NODE_PROPERTIES_SQL, node );
+    return new NodePropertyLoadAction( SELECT_NODE_PROPERTIES_SQL, node );
   }
 
   @SuppressWarnings("unchecked")

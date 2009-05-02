@@ -66,7 +66,7 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     String label = getInstance( nodeRef.getInstance(), instanceName );
 
     JdbcNodeRef newRef = new JdbcNodeRef( graph, nodeRef.getNode(), label );
-    getDialect().newNodeRefInsertStatement( newRef ).execute( engine );
+    getDialect().newNodeRefInsertAction( newRef ).execute( engine );
     graph.getNodes().add( newRef );
     return newRef;
   }
@@ -81,7 +81,7 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     JdbcNodeRef endNodeRef   = (JdbcNodeRef)endNode;
 
     JdbcArc arc = new JdbcArc( graph, startNodeRef, endNodeRef, name );
-    getDialect().newArcInsertStatement( arc ).execute( engine );
+    getDialect().newArcInsertAction( arc ).execute( engine );
     return arc;
   }
 
@@ -89,7 +89,7 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   public JdbcGraph newGraph (final String name, final int version)
   {
     JdbcGraph graph = new JdbcGraph( name, version );
-    getDialect().newGraphInsertStatement( graph ).execute( engine );
+    getDialect().newGraphInsertAction( graph ).execute( engine );
     return graph;
   }
 
@@ -142,12 +142,12 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     node.setJoin( isJoin );
     node.setGuard( guard );
 
-    getDialect().newNodeInsertStatement( node ).execute( engine );
+    getDialect().newNodeInsertAction( node ).execute( engine );
 
     node.afterCreate( engine );
 
     JdbcNodeRef nodeRef = new JdbcNodeRef( graph, node, "" );
-    getDialect().newNodeRefInsertStatement( nodeRef ).execute( engine );
+    getDialect().newNodeRefInsertAction( nodeRef ).execute( engine );
     return nodeRef;
   }
 
@@ -161,7 +161,7 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   public GraphProcess newNestedProcess (final Graph graph, final NodeToken parentToken)
   {
     JdbcGraphProcess process = new JdbcGraphProcess( (JdbcGraph)graph, (JdbcNodeToken)parentToken );
-    getDialect().newProcessInsertStatement( process ).execute( engine );
+    getDialect().newProcessInsertAction( process ).execute( engine );
     return process;
   }
 
@@ -223,6 +223,8 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
                                              parents,
                                              transientAttributes);
 
+    getDialect().newNodeTokenInsertAction( token ).execute( engine );
+
     return token;
   }
 
@@ -232,7 +234,13 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
                                final ExecutionType executionType,
                                final NodeToken parent)
   {
-    // TODO Auto-generated method stub
-    return null;
+    JdbcArcToken token = new JdbcArcToken( (JdbcGraphProcess)process,
+                                           (JdbcArc)arc,
+                                           executionType,
+                                           (JdbcNodeToken)parent );
+
+    getDialect().newArcTokenInsertAction( token ).execute( engine );
+
+    return token;
   }
 }

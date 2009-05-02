@@ -19,32 +19,21 @@
 package com.googlecode.sarasvati.jdbc.stmt;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
-import com.googlecode.sarasvati.load.LoadException;
-
-public class NodePropertyLoadStatement extends AbstractSelectStatement<Object>
+public abstract class AbstractExecuteUpdateAction extends AbstractDatabaseAction
 {
-  private JdbcPropertyNode node;
-
-  public NodePropertyLoadStatement (String sql, JdbcPropertyNode node)
+  public AbstractExecuteUpdateAction (String sql)
   {
-    super( sql, false );
-    this.node = node;
+    super( sql );
   }
 
   @Override
-  protected Object loadObject (ResultSet row) throws SQLException, LoadException
+  public void doWork () throws SQLException
   {
-    node.setProperty( row.getString( 1 ), row.getString( 2 ) );
-    return null;
+    setParameters( getStatement() );
+    getStatement().executeUpdate();
   }
 
-  @Override
-  protected void setParameters (PreparedStatement stmt) throws SQLException
-  {
-    stmt.setLong( 1, node.getId() );
-  }
+  protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
 }

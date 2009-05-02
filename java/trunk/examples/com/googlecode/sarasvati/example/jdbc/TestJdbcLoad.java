@@ -43,7 +43,7 @@ public class TestJdbcLoad
     conn.setAutoCommit( false );
 
     DatabaseDialect dialect = new PostgreSQLDatabaseDialect();
-    dialect.setUserData( ExampleDatabase.class, new BaseExampleDatabase() );
+    dialect.setUserData( ExampleActionFactory.class, new BaseExampleActionFactory() );
 
     JdbcEngine engine = new JdbcEngine( conn, dialect );
     XmlLoader xmlLoader = new XmlLoader();

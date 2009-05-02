@@ -20,25 +20,42 @@ package com.googlecode.sarasvati.jdbc.stmt;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 
-import com.googlecode.sarasvati.jdbc.JdbcNode;
+import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
 
-
-public class NodeInsertStatement extends AbstractInsertStatement<JdbcNode>
+/**
+ * Assumes insert is of the form:
+ * <br>
+ * (process_id, node_ref_id, attr_set_id, create_date, execution_type)
+ *
+ * @author Paul Lorenz
+ *
+ */
+public class NodeTokenInsertAction extends AbstractInsertAction<JdbcNodeToken>
 {
-  public NodeInsertStatement (final String sql, final JdbcNode node )
+  public NodeTokenInsertAction (final String sql, JdbcNodeToken nodeToken)
   {
-    super( sql, node );
+    super( sql, nodeToken );
   }
 
   @Override
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
-    stmt.setLong( 1, value.getGraph().getId() );
-    stmt.setString( 2, value.getName() );
-    stmt.setString( 3, value.getType() );
-    stmt.setString( 4, value.getGuard() );
-    stmt.setString( 5, value.isStart() ? "Y" : "N" );
-    stmt.setString( 6, value.isJoin() ? "Y" : "N" );
+    stmt.setLong( 1, value.getProcess().getId() );
+    stmt.setLong( 2, value.getNode().getId() );
+
+    if ( value.getAttrSetToken() == null )
+    {
+      stmt.setNull( 3, Types.BIGINT );
+    }
+    else
+    {
+      stmt.setLong( 3, value.getAttrSetToken().getId() );
+    }
+
+    stmt.setTimestamp( 4, new Timestamp( value.getCreateDate().getTime() ) );
+    stmt.setInt( 5, value.getExecutionType().ordinal() );
   }
 }
