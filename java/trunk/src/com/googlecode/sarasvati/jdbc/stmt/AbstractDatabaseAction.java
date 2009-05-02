@@ -27,14 +27,14 @@ import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcLoadException;
 import com.googlecode.sarasvati.load.LoadException;
 
-public abstract class AbstractStatement
+public abstract class AbstractDatabaseAction implements DatabaseAction
 {
   private final String sql;
 
   private PreparedStatement statement;
   private ResultSet resultSet;
 
-  public AbstractStatement (String sql)
+  public AbstractDatabaseAction (String sql)
   {
     this.sql = sql;
   }
@@ -109,5 +109,5 @@ public abstract class AbstractStatement
     return resultSet;
   }
 
-  public abstract void doWork () throws SQLException, LoadException;
+  protected abstract void doWork () throws SQLException, LoadException;
 }

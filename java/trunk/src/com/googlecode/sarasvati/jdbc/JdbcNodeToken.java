@@ -34,7 +34,7 @@ import com.googlecode.sarasvati.NestedEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
-public class JdbcNodeToken implements NodeToken
+public class JdbcNodeToken implements NodeToken, HasGeneratedId
 {
   protected Long    id;
 
@@ -85,6 +85,7 @@ public class JdbcNodeToken implements NodeToken
     return id;
   }
 
+  @Override
   public void setId (Long id)
   {
     this.id = id;

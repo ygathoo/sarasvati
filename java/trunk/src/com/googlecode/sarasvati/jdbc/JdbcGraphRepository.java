@@ -21,7 +21,7 @@ package com.googlecode.sarasvati.jdbc;
 import java.util.List;
 
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractSelectStatement;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractLoadAction;
 import com.googlecode.sarasvati.load.GraphRepository;
 
 public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
@@ -47,7 +47,7 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   @Override
   public List<JdbcGraph> getGraphs (final String name)
   {
-    AbstractSelectStatement<JdbcGraph> stmt = getDialect().newGraphByNameSelectStatement( name );
+    AbstractLoadAction<JdbcGraph> stmt = getDialect().newGraphByNameLoadAction( name );
     stmt.execute( engine );
 
     for ( JdbcGraph graph :  stmt.getResult() )
@@ -62,7 +62,7 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   @Override
   public List<JdbcGraph> getGraphs ()
   {
-    AbstractSelectStatement<JdbcGraph> stmt = getDialect().newGraphSelectStatement();
+    AbstractLoadAction<JdbcGraph> stmt = getDialect().newGraphLoadAction();
     stmt.execute( engine );
 
     for ( JdbcGraph graph :  stmt.getResult() )
@@ -77,7 +77,7 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   @Override
   public JdbcGraph getLatestGraph (final String name)
   {
-    AbstractSelectStatement<JdbcGraph> stmt = getDialect().newLatestGraphByNameSelectStatement( name );
+    AbstractLoadAction<JdbcGraph> stmt = getDialect().newLatestGraphByNameLoadAction( name );
     stmt.execute( engine );
 
     for ( JdbcGraph graph :  stmt.getResult() )
@@ -91,13 +91,13 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
 
   protected void loadNodes (final JdbcGraph graph)
   {
-    AbstractSelectStatement<JdbcNodeRef> stmt = getDialect().newNodeSelectStatement( graph, engine );
+    AbstractLoadAction<JdbcNodeRef> stmt = getDialect().newNodeLoadAction( graph, engine );
     stmt.execute( engine );
   }
 
   public void loadArcs (final JdbcGraph graph)
   {
-    AbstractSelectStatement<JdbcArc> stmt = getDialect().newArcSelectStatement( graph );
+    AbstractLoadAction<JdbcArc> stmt = getDialect().newArcLoadAction( graph );
     stmt.execute( engine );
   }
 }

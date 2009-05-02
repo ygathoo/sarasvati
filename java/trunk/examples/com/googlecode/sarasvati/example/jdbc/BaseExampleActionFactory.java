@@ -10,13 +10,13 @@ import java.sql.SQLException;
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractExecuteUpdateStatement;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractInsertStatement;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractSelectStatement;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractDatabaseAction;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractExecuteUpdateAction;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractInsertAction;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractLoadAction;
 import com.googlecode.sarasvati.load.LoadException;
 
-public class BaseExampleDatabase implements ExampleDatabase
+public class BaseExampleActionFactory implements ExampleActionFactory
 {
   private static final String INSERT_TASK_NODE_SQL =
     "insert into wf_node_task ( id, name, description ) values ( ?, ?, ? )";
@@ -34,9 +34,9 @@ public class BaseExampleDatabase implements ExampleDatabase
     "update wf_task set name = ?, description = ?, state = ? where id = ?";
 
   @Override
-  public AbstractStatement newInsertTaskNodeStatement (final JdbcExampleTaskNode taskNode)
+  public AbstractDatabaseAction newInsertTaskNodeAction (final JdbcExampleTaskNode taskNode)
   {
-    return new AbstractExecuteUpdateStatement( INSERT_TASK_NODE_SQL )
+    return new AbstractExecuteUpdateAction( INSERT_TASK_NODE_SQL )
     {
       @Override
       protected void setParameters (final PreparedStatement stmt) throws SQLException
@@ -49,9 +49,9 @@ public class BaseExampleDatabase implements ExampleDatabase
   }
 
   @Override
-  public AbstractStatement newLoadTaskNodeStatement (final JdbcExampleTaskNode taskNode)
+  public AbstractDatabaseAction newLoadTaskNodeAction (final JdbcExampleTaskNode taskNode)
   {
-    return new AbstractSelectStatement<Object>( SELECT_TASK_NODE_SQL, false )
+    return new AbstractLoadAction<Object>( SELECT_TASK_NODE_SQL, false )
     {
       @Override
       protected Object loadObject (ResultSet row) throws SQLException, LoadException
@@ -70,9 +70,9 @@ public class BaseExampleDatabase implements ExampleDatabase
   }
 
   @Override
-  public AbstractStatement newInsertTaskStatement (final JdbcExampleTask task)
+  public AbstractDatabaseAction newInsertTaskAction (final JdbcExampleTask task)
   {
-    return new AbstractInsertStatement<JdbcExampleTask>( INSERT_TASK_SQL, task )
+    return new AbstractInsertAction<JdbcExampleTask>( INSERT_TASK_SQL, task )
     {
       @Override
       protected void setParameters (final PreparedStatement stmt) throws SQLException
@@ -84,19 +84,18 @@ public class BaseExampleDatabase implements ExampleDatabase
     };
   }
 
-
   @Override
   public JdbcExampleTask getTaskForToken (final JdbcEngine engine, final JdbcNodeToken token)
   {
-    AbstractSelectStatement<JdbcExampleTask> stmt = newTaskByTokenSelectStatement( token );
+    AbstractLoadAction<JdbcExampleTask> stmt = newTaskByTokenSelectAction( token );
     stmt.execute( engine );
     return stmt.getFirstResult();
   }
 
   @Override
-  public AbstractSelectStatement<JdbcExampleTask> newTaskByTokenSelectStatement (final JdbcNodeToken token)
+  public AbstractLoadAction<JdbcExampleTask> newTaskByTokenSelectAction (final JdbcNodeToken token)
   {
-    return new AbstractSelectStatement<JdbcExampleTask>( SELECT_TASK_BY_TOKEN_SQL, true )
+    return new AbstractLoadAction<JdbcExampleTask>( SELECT_TASK_BY_TOKEN_SQL, true )
     {
       @Override
       protected JdbcExampleTask loadObject (ResultSet row) throws SQLException, LoadException
@@ -117,9 +116,9 @@ public class BaseExampleDatabase implements ExampleDatabase
   }
 
   @Override
-  public AbstractStatement newUpdateTaskStatement (final JdbcExampleTask task)
+  public AbstractDatabaseAction newUpdateTaskAction (final JdbcExampleTask task)
   {
-    return new AbstractExecuteUpdateStatement( UPDATE_TASK_SQL )
+    return new AbstractExecuteUpdateAction( UPDATE_TASK_SQL )
     {
       @Override
       protected void setParameters (PreparedStatement stmt) throws SQLException
@@ -130,6 +129,4 @@ public class BaseExampleDatabase implements ExampleDatabase
       }
     };
   }
-
-
 }

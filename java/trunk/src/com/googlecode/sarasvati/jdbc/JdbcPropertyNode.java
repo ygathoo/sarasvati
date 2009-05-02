@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
+import com.googlecode.sarasvati.jdbc.stmt.DatabaseAction;
 
 public class JdbcPropertyNode extends JdbcNode
 {
@@ -56,7 +56,7 @@ public class JdbcPropertyNode extends JdbcNode
     DatabaseDialect dialect = engine.getDatabaseDialect();
     for ( Entry<String, String> entry : attrMap.entrySet() )
     {
-      AbstractStatement stmt = dialect.newNodePropertyInsertStatement( this, entry.getKey(), entry.getValue() );
+      DatabaseAction stmt = dialect.newNodePropertyInsertAction( this, entry.getKey(), entry.getValue() );
       stmt.execute( engine );
     }
   }
@@ -65,6 +65,6 @@ public class JdbcPropertyNode extends JdbcNode
   public void afterLoad (JdbcEngine engine)
   {
     DatabaseDialect dialect = engine.getDatabaseDialect();
-    dialect.newNodePropertiesLoadStatement( this ).execute( engine );
+    dialect.newNodePropertiesLoadAction( this ).execute( engine );
   }
 }

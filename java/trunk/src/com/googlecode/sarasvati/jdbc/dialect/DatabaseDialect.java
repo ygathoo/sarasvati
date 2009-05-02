@@ -19,16 +19,16 @@
 package com.googlecode.sarasvati.jdbc.dialect;
 
 import com.googlecode.sarasvati.jdbc.JdbcArc;
+import com.googlecode.sarasvati.jdbc.JdbcArcToken;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
+import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
 import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractInsertStatement;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractSelectStatement;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
-import com.googlecode.sarasvati.jdbc.stmt.NodePropertyLoadStatement;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractLoadAction;
+import com.googlecode.sarasvati.jdbc.stmt.DatabaseAction;
 
 /**
  * Interface to perform database-specific logic, such as
@@ -39,122 +39,156 @@ import com.googlecode.sarasvati.jdbc.stmt.NodePropertyLoadStatement;
 public interface DatabaseDialect
 {
   /**
-   * Return an {@link AbstractInsertStatement} to
-   * insert a new graph into the database.
+   * Return a {@link DatabaseAction} to insert a new graph into the database.
    *
    * @param graph The graph to insert
    *
-   * @return The insert statement.
+   * @return The insert action.
    */
-  AbstractStatement newGraphInsertStatement (JdbcGraph graph);
+  DatabaseAction newGraphInsertAction (JdbcGraph graph);
 
   /**
-   * Return an {@link AbstractInsertStatement} to
-   * insert a new process into the database.
+   * Return a {@link DatabaseAction} to insert a new process into the database.
    *
    * @param process The graph process to insert
    *
-   * @return The insert statement.
+   * @return The insert action.
    */
-  AbstractStatement newProcessInsertStatement (JdbcGraphProcess process);
+  DatabaseAction newProcessInsertAction (JdbcGraphProcess process);
 
   /**
-   * Return an {@link AbstractInsertStatement} to
-   * insert a new node into the database.
+   * Return a {@link DatabaseAction} to insert a new node into the database.
    *
    * @param node The node to insert
    *
-   * @return The insert statement
+   * @return The insert action
    */
-  AbstractStatement newNodeInsertStatement (JdbcNode node);
+  DatabaseAction newNodeInsertAction (JdbcNode node);
 
   /**
-   * Returns an {@link AbstractInsertStatement} to
-   * insert a new node ref into the database.
+   * Returns a {@link DatabaseAction} to insert a new node ref into the database.
    *
    * @param nodeRef The node ref to insert
    *
-   * @return The insert statement
+   * @return The insert action
    */
-  AbstractStatement newNodeRefInsertStatement (JdbcNodeRef nodeRef);
+  DatabaseAction newNodeRefInsertAction (JdbcNodeRef nodeRef);
 
   /**
-   * Returns an {@link AbstractInsertStatement} to
-   * insert a new arc into the database.
+   * Returns a {@link DatabaseAction} to insert a new arc into the database.
    *
    * @param arc The arc to insert
    *
-   * @return The insert statement
+   * @return The insert action
    */
-  AbstractStatement newArcInsertStatement (JdbcArc arc );
+  DatabaseAction newArcInsertAction (JdbcArc arc);
 
   /**
-   * Returns an {@link AbstractStatement} to
-   * insert the node property into the database.
+   * Returns a {@link DatabaseAction} to insert a new node token into the database.
+   *
+   * @param arc The node token to insert
+   *
+   * @return The insert action
+   */
+  DatabaseAction newNodeTokenInsertAction (JdbcNodeToken nodeToken);
+
+  /**
+   * Returns a {@link DatabaseAction} to insert a new arc token into the database.
+   *
+   * @param arc The arc token to insert
+   *
+   * @return The insert action
+   */
+  DatabaseAction newArcTokenInsertAction (JdbcArcToken arcToken);
+
+  /**
+   * Returns a {@link DatabaseAction} to insert a node property into the database.
    *
    * @param node The node that the property is tied to
    * @param key The property key
    * @param value The property value
    *
-   * @return The insert statement
+   * @return The insert action
    */
-  AbstractStatement newNodePropertyInsertStatement (JdbcNode node, String key, String value);
+  DatabaseAction newNodePropertyInsertAction (JdbcNode node, String key, String value);
 
   /**
-   * Returns a {@link NodePropertyLoadStatement} to load the node's associated
+   * Returns a {@link DatabaseAction} to load the node's associated
    * properties.
    *
    * @param node The {@link JdbcPropertyNode} whose properties need to be loaded.
    *
-   * @return The load statement
+   * @return The load action
    */
-  AbstractStatement newNodePropertiesLoadStatement (JdbcPropertyNode node);
+  DatabaseAction newNodePropertiesLoadAction (JdbcPropertyNode node);
 
   /**
-   * Returns an {@link AbstractSelectStatement} which will load all graphs from the database.
+   * Returns an {@link AbstractLoadAction} which will load all graphs from the database.
    *
-   * @return The select statement
+   * @return The load action
    */
-  AbstractSelectStatement<JdbcGraph> newGraphSelectStatement ();
+  AbstractLoadAction<JdbcGraph> newGraphLoadAction ();
 
   /**
-   * Returns an {@link AbstractSelectStatement} which will load all graphs with the given name.
+   * Returns an {@link AbstractLoadAction} which will load all graphs with the given name.
    *
    * @param name The name of the graphs to load
    *
-   * @return The select statement
+   * @return The load action
    */
-  AbstractSelectStatement<JdbcGraph> newGraphByNameSelectStatement (String name);
+  AbstractLoadAction<JdbcGraph> newGraphByNameLoadAction (String name);
 
   /**
-   * Returns an {@link AbstractSelectStatement} which will load the latest graph with the given name.
+   * Returns an {@link AbstractLoadAction} which will load the latest graph with the given name.
    *
    * @param name The name of the graph to load
    *
-   * @return The select statement
+   * @return The load action
    */
-  AbstractSelectStatement<JdbcGraph> newLatestGraphByNameSelectStatement (String name);
+  AbstractLoadAction<JdbcGraph> newLatestGraphByNameLoadAction (String name);
 
   /**
-   * Returns an {@link AbstractSelectStatement} which will load nodes into the given graph.
+   * Returns an {@link AbstractLoadAction} which will load nodes into the given graph.
    *
    * @param graph The graph whose nodes are to be loaded.
    * @param engine The engine to use to help instantiate nodes
    *
-   * @return The select statement
+   * @return The load action
    */
-  AbstractSelectStatement<JdbcNodeRef> newNodeSelectStatement (JdbcGraph graph, JdbcEngine engine);
+  AbstractLoadAction<JdbcNodeRef> newNodeLoadAction (JdbcGraph graph, JdbcEngine engine);
 
   /**
-   * Returns an {@link AbstractSelectStatement} which will load arcs into the given graph.
+   * Returns an {@link AbstractLoadAction} which will load arcs into the given graph.
    *
    * @param graph The graph whose arcs are to be loaded.
    *
-   * @return The select statement
+   * @return The load action
    */
-  AbstractSelectStatement<JdbcArc> newArcSelectStatement (JdbcGraph graph);
+  AbstractLoadAction<JdbcArc> newArcLoadAction (JdbcGraph graph);
 
+  /**
+   * Allows user data to be stored in the Dialect. This can be useful
+   * if the user wishes to store an ActionFactory with the dialect,
+   * so as to be available from the {@link JdbcNode#afterCreate(JdbcEngine)}
+   * and {@link JdbcNode#afterLoad(JdbcEngine)} methods.
+   * @param <T> The type of data to store
+   *
+   * @param key The class of the data to store
+   * @param value The data to store
+   */
   <T> void setUserData (Class<T> key, T value);
 
+  /**
+   * Allows retrieval of user database previously stored in this dialect
+   * using {@link DatabaseDialect#setUserData(Class, Object)}.
+   *
+   * @see DatabaseDialect#setUserData(Class, Object)
+   *
+   * @param <T> The type of the user data to return
+   *
+   * @param key The class of the user data to return
+   *
+   * @return The user data for that type that was previous stored in this dialect.
+   */
   <T> T getUserData (Class<T> key);
 }

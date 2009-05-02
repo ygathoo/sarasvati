@@ -34,14 +34,14 @@ import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
 
-public class NodeSelectStatement extends AbstractSelectStatement<JdbcNodeRef>
+public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
 {
   protected final JdbcGraph graph;
   protected final JdbcEngine engine;
 
   protected Map<Long, JdbcNode> nodeMap = new HashMap<Long,JdbcNode>();
 
-  public NodeSelectStatement (final String sql,
+  public NodeLoadAction (final String sql,
                               final JdbcGraph graph,
                               final JdbcEngine engine)
   {

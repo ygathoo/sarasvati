@@ -23,9 +23,9 @@ import java.sql.SQLException;
 
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 
-public class NodeRefInsertStatement extends AbstractInsertStatement<JdbcNodeRef>
+public class NodeRefInsertAction extends AbstractInsertAction<JdbcNodeRef>
 {
-  public NodeRefInsertStatement (String sql, JdbcNodeRef nodeRef)
+  public NodeRefInsertAction (String sql, JdbcNodeRef nodeRef)
   {
     super( sql, nodeRef );
   }

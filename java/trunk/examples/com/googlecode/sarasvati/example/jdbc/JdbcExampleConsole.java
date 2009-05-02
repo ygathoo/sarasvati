@@ -45,12 +45,12 @@ public class JdbcExampleConsole
 {
   public static boolean log = false;
 
-  private static final ExampleDatabase exampleDB = new BaseExampleDatabase();
+  private static final ExampleActionFactory exampleDB = new BaseExampleActionFactory();
   private static final DatabaseDialect dialect = new PostgreSQLDatabaseDialect();
 
   static
   {
-    dialect.setUserData( ExampleDatabase.class, exampleDB );
+    dialect.setUserData( ExampleActionFactory.class, exampleDB );
   }
 
   public static void main (String[] args) throws Exception
@@ -234,7 +234,7 @@ public class JdbcExampleConsole
         {
           System.out.println( "Completing task" );
           t.setState( TaskState.Completed );
-          exampleDB.newUpdateTaskStatement( t ).execute( engine );
+          exampleDB.newUpdateTaskAction( t ).execute( engine );
           engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
         }
       }
@@ -242,7 +242,7 @@ public class JdbcExampleConsole
       {
         System.out.println( "Rejecting task" );
         t.setState( TaskState.Rejected );
-        exampleDB.newUpdateTaskStatement( t ).execute( engine );
+        exampleDB.newUpdateTaskAction( t ).execute( engine );
         engine.completeExecution( t.getNodeToken(), "reject" );
       }
       else

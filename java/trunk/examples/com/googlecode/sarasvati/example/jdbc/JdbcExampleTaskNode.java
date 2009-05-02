@@ -26,7 +26,7 @@ import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractStatement;
+import com.googlecode.sarasvati.jdbc.stmt.AbstractDatabaseAction;
 
 public class JdbcExampleTaskNode extends JdbcNode
 {
@@ -60,8 +60,8 @@ public class JdbcExampleTaskNode extends JdbcNode
   public void afterCreate (final JdbcEngine engine)
   {
     DatabaseDialect dialect = engine.getDatabaseDialect();
-    ExampleDatabase factory = dialect.getUserData( ExampleDatabase.class );
-    AbstractStatement stmt = factory.newInsertTaskNodeStatement( this );
+    ExampleActionFactory factory = dialect.getUserData( ExampleActionFactory.class );
+    AbstractDatabaseAction stmt = factory.newInsertTaskNodeAction( this );
     stmt.execute( engine );
   }
 
@@ -69,8 +69,8 @@ public class JdbcExampleTaskNode extends JdbcNode
   public void afterLoad (final JdbcEngine engine)
   {
     DatabaseDialect dialect = engine.getDatabaseDialect();
-    ExampleDatabase factory = dialect.getUserData( ExampleDatabase.class );
-    AbstractStatement stmt = factory.newLoadTaskNodeStatement( this );
+    ExampleActionFactory factory = dialect.getUserData( ExampleActionFactory.class );
+    AbstractDatabaseAction stmt = factory.newLoadTaskNodeAction( this );
     stmt.execute( engine );
   }
 
@@ -79,11 +79,11 @@ public class JdbcExampleTaskNode extends JdbcNode
   {
     JdbcEngine jdbcEngine = (JdbcEngine)engine;
     DatabaseDialect dialect = jdbcEngine.getDatabaseDialect();
-    ExampleDatabase db = dialect.getUserData( ExampleDatabase.class );
+    ExampleActionFactory db = dialect.getUserData( ExampleActionFactory.class );
 
     JdbcExampleTask task = db.getTaskForToken( jdbcEngine, (JdbcNodeToken)token );
     task.setState( TaskState.Cancelled );
-    db.newUpdateTaskStatement( task ).execute( jdbcEngine );
+    db.newUpdateTaskAction( task ).execute( jdbcEngine );
   }
 
   @SuppressWarnings("unchecked")
@@ -103,8 +103,8 @@ public class JdbcExampleTaskNode extends JdbcNode
     JdbcEngine jdbcEngine = (JdbcEngine)engine;
 
     JdbcExampleTask task = new JdbcExampleTask( (JdbcNodeToken)token, getTaskName(), getTaskDesc(), TaskState.Open );
-    ExampleDatabase factory = jdbcEngine.getDatabaseDialect().getUserData( ExampleDatabase.class );
-    factory.newInsertTaskStatement( task ).execute( jdbcEngine );
+    ExampleActionFactory factory = jdbcEngine.getDatabaseDialect().getUserData( ExampleActionFactory.class );
+    factory.newInsertTaskAction( task ).execute( jdbcEngine );
 
     Env env = token.getEnv();
     env.setLongAttribute( task.getName(), env.getLongAttribute( task.getName() ) + 1 );
