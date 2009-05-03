@@ -20,8 +20,8 @@ package com.googlecode.sarasvati.jdbc;
 
 import java.util.List;
 
+import com.googlecode.sarasvati.jdbc.action.DatabaseLoadAction;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractLoadAction;
 import com.googlecode.sarasvati.load.GraphRepository;
 
 public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
@@ -47,57 +47,78 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   @Override
   public List<JdbcGraph> getGraphs (final String name)
   {
-    AbstractLoadAction<JdbcGraph> stmt = getDialect().newGraphByNameLoadAction( name );
-    stmt.execute( engine );
+    DatabaseLoadAction<JdbcGraph> action = getDialect().newGraphByNameLoadAction( name );
+    action.execute( engine );
 
-    for ( JdbcGraph graph :  stmt.getResult() )
+    for ( JdbcGraph graph :  action.getResult() )
     {
       loadNodes( graph );
       loadArcs( graph );
     }
 
-    return stmt.getResult();
+    return action.getResult();
   }
 
   @Override
   public List<JdbcGraph> getGraphs ()
   {
-    AbstractLoadAction<JdbcGraph> stmt = getDialect().newGraphLoadAction();
-    stmt.execute( engine );
+    DatabaseLoadAction<JdbcGraph> action = getDialect().newGraphLoadAction();
+    action.execute( engine );
 
-    for ( JdbcGraph graph :  stmt.getResult() )
+    for ( JdbcGraph graph :  action.getResult() )
     {
       loadNodes( graph );
       loadArcs( graph );
     }
 
-    return stmt.getResult();
+    return action.getResult();
   }
 
   @Override
   public JdbcGraph getLatestGraph (final String name)
   {
-    AbstractLoadAction<JdbcGraph> stmt = getDialect().newLatestGraphByNameLoadAction( name );
-    stmt.execute( engine );
+    DatabaseLoadAction<JdbcGraph> action = getDialect().newLatestGraphByNameLoadAction( name );
+    action.execute( engine );
 
-    for ( JdbcGraph graph :  stmt.getResult() )
+    for ( JdbcGraph graph :  action.getResult() )
     {
       loadNodes( graph );
       loadArcs( graph );
     }
 
-    return stmt.getFirstResult();
+    return action.getFirstResult();
+  }
+
+  public JdbcGraph getGraph (final long graphId)
+  {
+    DatabaseLoadAction<JdbcGraph> action = getDialect().newGraphByIdLoadAction( graphId );
+    action.execute( engine );
+
+    for ( JdbcGraph graph :  action.getResult() )
+    {
+      loadNodes( graph );
+      loadArcs( graph );
+    }
+
+    return action.getFirstResult();
+  }
+
+  public JdbcGraphProcess loadProcess (final long processId)
+  {
+    DatabaseLoadAction<JdbcGraphProcess> action = getDialect().newProcessLoadAction( processId, engine );
+    action.execute( engine );
+    return action.getFirstResult();
   }
 
   protected void loadNodes (final JdbcGraph graph)
   {
-    AbstractLoadAction<JdbcNodeRef> stmt = getDialect().newNodeLoadAction( graph, engine );
+    DatabaseLoadAction<JdbcNodeRef> stmt = getDialect().newNodeLoadAction( graph, engine );
     stmt.execute( engine );
   }
 
   public void loadArcs (final JdbcGraph graph)
   {
-    AbstractLoadAction<JdbcArc> stmt = getDialect().newArcLoadAction( graph );
-    stmt.execute( engine );
+    DatabaseLoadAction<JdbcArc> action = getDialect().newArcLoadAction( graph );
+    action.execute( engine );
   }
 }

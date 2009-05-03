@@ -16,27 +16,36 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.jdbc.action;
 
-import java.sql.ResultSet;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 
-import com.googlecode.sarasvati.jdbc.JdbcGraph;
+import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
 
-public abstract class AbstractGraphLoadAction extends AbstractLoadAction<JdbcGraph>
+public class ProcessInsertAction extends AbstractInsertAction<JdbcGraphProcess>
 {
-  public AbstractGraphLoadAction (String sql)
+  public ProcessInsertAction (final String sql, final JdbcGraphProcess process)
   {
-    super( sql, true );
+    super( sql, process );
   }
 
   @Override
-  protected JdbcGraph loadObject (ResultSet row) throws SQLException
+  protected void setParameters (final PreparedStatement stmt) throws SQLException
   {
-    long graphId = row.getLong( 1 );
-    String graphName = row.getString( 2 );
-    int version = row.getInt( 3 );
+    stmt.setLong( 1, value.getGraph().getId() );
 
-    return new JdbcGraph( graphId, graphName, version );
+    if ( value.getParentToken() == null )
+    {
+      stmt.setNull( 2, Types.BIGINT );
+    }
+    else
+    {
+      stmt.setLong( 2, value.getParentToken().getId() );
+    }
+
+    stmt.setTimestamp( 3, new Timestamp( value.getCreateDate().getTime() ) );
   }
 }

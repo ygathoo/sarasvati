@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.jdbc.dialect;
 
+import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.jdbc.JdbcArc;
 import com.googlecode.sarasvati.jdbc.JdbcArcToken;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
@@ -27,8 +28,8 @@ import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
 import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractLoadAction;
-import com.googlecode.sarasvati.jdbc.stmt.DatabaseAction;
+import com.googlecode.sarasvati.jdbc.action.DatabaseAction;
+import com.googlecode.sarasvati.jdbc.action.DatabaseLoadAction;
 
 /**
  * Interface to perform database-specific logic, such as
@@ -123,48 +124,66 @@ public interface DatabaseDialect
   DatabaseAction newNodePropertiesLoadAction (JdbcPropertyNode node);
 
   /**
-   * Returns an {@link AbstractLoadAction} which will load all graphs from the database.
+   * Returns a {@link DatabaseLoadAction} which will load all graphs from the database.
    *
    * @return The load action
    */
-  AbstractLoadAction<JdbcGraph> newGraphLoadAction ();
+  DatabaseLoadAction<JdbcGraph> newGraphLoadAction ();
 
   /**
-   * Returns an {@link AbstractLoadAction} which will load all graphs with the given name.
+   * Returns a {@link DatabaseLoadAction} which will load all graphs with the given name.
    *
    * @param name The name of the graphs to load
    *
    * @return The load action
    */
-  AbstractLoadAction<JdbcGraph> newGraphByNameLoadAction (String name);
+  DatabaseLoadAction<JdbcGraph> newGraphByNameLoadAction (String name);
 
   /**
-   * Returns an {@link AbstractLoadAction} which will load the latest graph with the given name.
+   * Returns a {@link DatabaseLoadAction} which will load the latest graph with the given name.
    *
    * @param name The name of the graph to load
    *
    * @return The load action
    */
-  AbstractLoadAction<JdbcGraph> newLatestGraphByNameLoadAction (String name);
+  DatabaseLoadAction<JdbcGraph> newLatestGraphByNameLoadAction (String name);
 
   /**
-   * Returns an {@link AbstractLoadAction} which will load nodes into the given graph.
+   * Returns a {@link DatabaseLoadAction} which will load the graph with the given id.
+   *
+   * @param graphId The id of the graph to load
+   *
+   * @return The load action
+   */
+  DatabaseLoadAction<JdbcGraph> newGraphByIdLoadAction (long graphId);
+
+  /**
+   * Returns a {@link DatabaseLoadAction} which will load nodes into the given graph.
    *
    * @param graph The graph whose nodes are to be loaded.
    * @param engine The engine to use to help instantiate nodes
    *
    * @return The load action
    */
-  AbstractLoadAction<JdbcNodeRef> newNodeLoadAction (JdbcGraph graph, JdbcEngine engine);
+  DatabaseLoadAction<JdbcNodeRef> newNodeLoadAction (JdbcGraph graph, JdbcEngine engine);
 
   /**
-   * Returns an {@link AbstractLoadAction} which will load arcs into the given graph.
+   * Returns a {@link DatabaseLoadAction} which will load arcs into the given graph.
    *
    * @param graph The graph whose arcs are to be loaded.
    *
    * @return The load action
    */
-  AbstractLoadAction<JdbcArc> newArcLoadAction (JdbcGraph graph);
+  DatabaseLoadAction<JdbcArc> newArcLoadAction (JdbcGraph graph);
+
+  /**
+   * Returns a {@link DatabaseLoadAction} which will load the given {@link GraphProcess}.
+   *
+   * @param processId The id of the process to load
+   * @param engine     The engine to use to load the graph and other constituent parts of the process
+   * @return The load action
+   */
+  DatabaseLoadAction<JdbcGraphProcess> newProcessLoadAction (long processId, JdbcEngine engine);
 
   /**
    * Allows user data to be stored in the Dialect. This can be useful

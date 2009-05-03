@@ -110,7 +110,7 @@ public class JdbcExampleConsole
       conn.setAutoCommit( false );
       JdbcEngine engine = new JdbcEngine( conn, dialect );
 
-      JdbcGraphProcess p = null; // engine.getRepository().loadProcess( processId );
+      JdbcGraphProcess p = engine.getRepository().loadProcess( processId );
 
       while ( !p.getExecutionQueue().isEmpty() )
       {

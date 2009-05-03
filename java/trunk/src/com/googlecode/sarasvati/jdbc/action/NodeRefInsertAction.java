@@ -16,29 +16,25 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.jdbc.action;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcNode;
+import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 
-
-public class NodeInsertAction extends AbstractInsertAction<JdbcNode>
+public class NodeRefInsertAction extends AbstractInsertAction<JdbcNodeRef>
 {
-  public NodeInsertAction (final String sql, final JdbcNode node )
+  public NodeRefInsertAction (String sql, JdbcNodeRef nodeRef)
   {
-    super( sql, node );
+    super( sql, nodeRef );
   }
 
   @Override
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
     stmt.setLong( 1, value.getGraph().getId() );
-    stmt.setString( 2, value.getName() );
-    stmt.setString( 3, value.getType() );
-    stmt.setString( 4, value.getGuard() );
-    stmt.setString( 5, value.isStart() ? "Y" : "N" );
-    stmt.setString( 6, value.isJoin() ? "Y" : "N" );
+    stmt.setLong( 2, value.getNode().getId() );
+    stmt.setString( 3, value.getInstance() );
   }
 }

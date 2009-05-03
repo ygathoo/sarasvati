@@ -10,15 +10,15 @@ import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractDatabaseAction;
-import com.googlecode.sarasvati.jdbc.stmt.ArcInsertAction;
-import com.googlecode.sarasvati.jdbc.stmt.ArcTokenInsertAction;
-import com.googlecode.sarasvati.jdbc.stmt.DatabaseAction;
-import com.googlecode.sarasvati.jdbc.stmt.GraphInsertAction;
-import com.googlecode.sarasvati.jdbc.stmt.NodeInsertAction;
-import com.googlecode.sarasvati.jdbc.stmt.NodeRefInsertAction;
-import com.googlecode.sarasvati.jdbc.stmt.NodeTokenInsertAction;
-import com.googlecode.sarasvati.jdbc.stmt.ProcessInsertAction;
+import com.googlecode.sarasvati.jdbc.action.AbstractDatabaseAction;
+import com.googlecode.sarasvati.jdbc.action.ArcInsertAction;
+import com.googlecode.sarasvati.jdbc.action.ArcTokenInsertAction;
+import com.googlecode.sarasvati.jdbc.action.DatabaseAction;
+import com.googlecode.sarasvati.jdbc.action.GraphInsertAction;
+import com.googlecode.sarasvati.jdbc.action.NodeInsertAction;
+import com.googlecode.sarasvati.jdbc.action.NodeRefInsertAction;
+import com.googlecode.sarasvati.jdbc.action.NodeTokenInsertAction;
+import com.googlecode.sarasvati.jdbc.action.ProcessInsertAction;
 
 public class PostgreSQLDatabaseDialect extends AbstractDatabaseDialect
 {

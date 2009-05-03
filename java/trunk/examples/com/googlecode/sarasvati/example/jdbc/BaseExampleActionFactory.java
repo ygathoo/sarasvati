@@ -10,10 +10,11 @@ import java.sql.SQLException;
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractDatabaseAction;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractExecuteUpdateAction;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractInsertAction;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractLoadAction;
+import com.googlecode.sarasvati.jdbc.action.AbstractDatabaseAction;
+import com.googlecode.sarasvati.jdbc.action.AbstractExecuteUpdateAction;
+import com.googlecode.sarasvati.jdbc.action.AbstractInsertAction;
+import com.googlecode.sarasvati.jdbc.action.AbstractLoadAction;
+import com.googlecode.sarasvati.jdbc.action.DatabaseAction;
 import com.googlecode.sarasvati.load.LoadException;
 
 public class BaseExampleActionFactory implements ExampleActionFactory
@@ -34,7 +35,7 @@ public class BaseExampleActionFactory implements ExampleActionFactory
     "update wf_task set name = ?, description = ?, state = ? where id = ?";
 
   @Override
-  public AbstractDatabaseAction newInsertTaskNodeAction (final JdbcExampleTaskNode taskNode)
+  public DatabaseAction newInsertTaskNodeAction (final JdbcExampleTaskNode taskNode)
   {
     return new AbstractExecuteUpdateAction( INSERT_TASK_NODE_SQL )
     {
@@ -49,7 +50,7 @@ public class BaseExampleActionFactory implements ExampleActionFactory
   }
 
   @Override
-  public AbstractDatabaseAction newLoadTaskNodeAction (final JdbcExampleTaskNode taskNode)
+  public DatabaseAction newLoadTaskNodeAction (final JdbcExampleTaskNode taskNode)
   {
     return new AbstractLoadAction<Object>( SELECT_TASK_NODE_SQL, false )
     {
@@ -70,7 +71,7 @@ public class BaseExampleActionFactory implements ExampleActionFactory
   }
 
   @Override
-  public AbstractDatabaseAction newInsertTaskAction (final JdbcExampleTask task)
+  public DatabaseAction newInsertTaskAction (final JdbcExampleTask task)
   {
     return new AbstractInsertAction<JdbcExampleTask>( INSERT_TASK_SQL, task )
     {

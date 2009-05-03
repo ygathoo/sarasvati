@@ -16,35 +16,24 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.jdbc.action;
 
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
-import com.googlecode.sarasvati.load.LoadException;
-
-public class NodePropertyLoadAction extends AbstractLoadAction<Object>
+public abstract class AbstractExecuteUpdateAction extends AbstractDatabaseAction
 {
-  private JdbcPropertyNode node;
-
-  public NodePropertyLoadAction (String sql, JdbcPropertyNode node)
+  public AbstractExecuteUpdateAction (String sql)
   {
-    super( sql, false );
-    this.node = node;
+    super( sql );
   }
 
   @Override
-  protected Object loadObject (ResultSet row) throws SQLException, LoadException
+  public void doWork () throws SQLException
   {
-    node.setProperty( row.getString( 1 ), row.getString( 2 ) );
-    return null;
+    setParameters( getStatement() );
+    getStatement().executeUpdate();
   }
 
-  @Override
-  protected void setParameters (PreparedStatement stmt) throws SQLException
-  {
-    stmt.setLong( 1, node.getId() );
-  }
+  protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
 }

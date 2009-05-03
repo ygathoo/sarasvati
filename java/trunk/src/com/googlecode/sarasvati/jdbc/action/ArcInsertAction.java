@@ -16,24 +16,27 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.jdbc.action;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcGraph;
+import com.googlecode.sarasvati.jdbc.JdbcArc;
 
-public class GraphInsertAction extends AbstractInsertAction<JdbcGraph>
+
+public class ArcInsertAction extends AbstractInsertAction<JdbcArc>
 {
-  public GraphInsertAction (final String sql, final JdbcGraph graph)
+  public ArcInsertAction (final String sql, JdbcArc arc)
   {
-    super( sql, graph );
+    super( sql, arc );
   }
 
   @Override
   protected void setParameters (PreparedStatement stmt) throws SQLException
   {
-    stmt.setString( 1, value.getName() );
-    stmt.setInt( 2, value.getVersion() );
+    stmt.setLong( 1, value.getGraph().getId() );
+    stmt.setLong( 2, value.getStartNode().getId() );
+    stmt.setLong( 3, value.getEndNode().getId() );
+    stmt.setString( 4, value.getName() );
   }
 }

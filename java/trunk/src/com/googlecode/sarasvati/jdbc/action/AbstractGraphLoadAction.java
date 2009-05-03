@@ -16,16 +16,27 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.jdbc.action;
 
-import com.googlecode.sarasvati.jdbc.JdbcEngine;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-/**
- * Represents an action to be performed against a database.
- *
- * @author Paul Lorenz
- */
-public interface DatabaseAction
+import com.googlecode.sarasvati.jdbc.JdbcGraph;
+
+public abstract class AbstractGraphLoadAction extends AbstractLoadAction<JdbcGraph>
 {
-  void execute (JdbcEngine engine);
+  public AbstractGraphLoadAction (String sql)
+  {
+    super( sql, true );
+  }
+
+  @Override
+  protected JdbcGraph loadObject (ResultSet row) throws SQLException
+  {
+    long graphId = row.getLong( 1 );
+    String graphName = row.getString( 2 );
+    int version = row.getInt( 3 );
+
+    return new JdbcGraph( graphId, graphName, version );
+  }
 }

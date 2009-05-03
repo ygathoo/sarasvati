@@ -22,9 +22,7 @@ import java.sql.Connection;
 
 import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
-import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphLoader;
-import com.googlecode.sarasvati.load.GraphRepository;
 
 public class JdbcEngine extends BaseEngine
 {
@@ -57,7 +55,7 @@ public class JdbcEngine extends BaseEngine
   }
 
   @Override
-  public GraphFactory<JdbcGraph> getFactory ()
+  public JdbcGraphFactory getFactory ()
   {
     return factory;
   }
@@ -69,7 +67,7 @@ public class JdbcEngine extends BaseEngine
   }
 
   @Override
-  public GraphRepository<JdbcGraph> getRepository ()
+  public JdbcGraphRepository getRepository ()
   {
     return repository;
   }

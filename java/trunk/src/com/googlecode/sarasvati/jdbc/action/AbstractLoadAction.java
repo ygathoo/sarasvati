@@ -16,37 +16,63 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.jdbc.action;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
-import com.googlecode.sarasvati.jdbc.HasGeneratedId;
-import com.googlecode.sarasvati.jdbc.JdbcLoadException;
+import com.googlecode.sarasvati.load.LoadException;
 
-public abstract class AbstractInsertAction<T extends HasGeneratedId> extends AbstractDatabaseAction
+public abstract class AbstractLoadAction<T> extends AbstractDatabaseAction implements DatabaseLoadAction<T>
 {
-  protected final T value;
+  private final List<T> result;
+  private final boolean collect;
 
-  public AbstractInsertAction (String sql, T value)
+  public AbstractLoadAction (final String sql, final boolean collect)
   {
     super( sql );
-    this.value = value;
+    this.collect = collect;
+    this.result = collect ? new LinkedList<T>() : null;
   }
 
   @Override
-  public void doWork () throws SQLException
+  public void doWork () throws SQLException, LoadException
   {
     setParameters( getStatement() );
     executeQuery();
     ResultSet rs = getResultSet();
-    if ( !rs.next() )
+
+    if ( collect )
     {
-      throw new JdbcLoadException( "No id returned from insert!" );
+      while ( rs.next() )
+      {
+        result.add( loadObject( rs ) );
+      }
     }
-    value.setId( rs.getLong( 1 ) );
+    else
+    {
+      while ( rs.next() )
+      {
+        loadObject( rs );
+      }
+    }
   }
 
   protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
+  protected abstract T loadObject (ResultSet row) throws SQLException, LoadException;
+
+  @SuppressWarnings("unchecked")
+  public List<T> getResult ()
+  {
+    return collect ? result : Collections.EMPTY_LIST;
+  }
+
+  public T getFirstResult ()
+  {
+    return !collect || result.isEmpty() ? null : result.get( 0 );
+  }
 }

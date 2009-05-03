@@ -16,24 +16,31 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.jdbc.action;
 
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.util.List;
 
-public abstract class AbstractExecuteUpdateAction extends AbstractDatabaseAction
+/**
+ * An interface for database actions which load 1 or more objects
+ * from the database.
+ *
+ * @author Paul Lorenz
+ *
+ * @param <T> The type of object being loaded from the database.
+ */
+public interface DatabaseLoadAction<T> extends DatabaseAction
 {
-  public AbstractExecuteUpdateAction (String sql)
-  {
-    super( sql );
-  }
+  /**
+   * Returns the loaded objects. The list may be empty, but will
+   * never be null.
+   *
+   * @return The load objects
+   */
+  List<T> getResult ();
 
-  @Override
-  public void doWork () throws SQLException
-  {
-    setParameters( getStatement() );
-    getStatement().executeUpdate();
-  }
-
-  protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
+  /**
+   * Returns the first loaded object, or null, if no objects were loaded.
+   * @return The first loaded object, or null, if no objects were loaded.
+   */
+  T getFirstResult ();
 }

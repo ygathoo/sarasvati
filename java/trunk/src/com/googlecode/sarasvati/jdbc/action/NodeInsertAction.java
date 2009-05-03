@@ -16,36 +16,29 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.jdbc.action;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Timestamp;
-import java.sql.Types;
 
-import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
+import com.googlecode.sarasvati.jdbc.JdbcNode;
 
-public class ProcessInsertAction extends AbstractInsertAction<JdbcGraphProcess>
+
+public class NodeInsertAction extends AbstractInsertAction<JdbcNode>
 {
-  public ProcessInsertAction (final String sql, final JdbcGraphProcess process)
+  public NodeInsertAction (final String sql, final JdbcNode node )
   {
-    super( sql, process );
+    super( sql, node );
   }
 
   @Override
-  protected void setParameters (final PreparedStatement stmt) throws SQLException
+  protected void setParameters (PreparedStatement stmt) throws SQLException
   {
     stmt.setLong( 1, value.getGraph().getId() );
-
-    if ( value.getParentToken() == null )
-    {
-      stmt.setNull( 2, Types.BIGINT );
-    }
-    else
-    {
-      stmt.setLong( 2, value.getParentToken().getId() );
-    }
-
-    stmt.setTimestamp( 3, new Timestamp( value.getCreateDate().getTime() ) );
+    stmt.setString( 2, value.getName() );
+    stmt.setString( 3, value.getType() );
+    stmt.setString( 4, value.getGuard() );
+    stmt.setString( 5, value.isStart() ? "Y" : "N" );
+    stmt.setString( 6, value.isJoin() ? "Y" : "N" );
   }
 }
