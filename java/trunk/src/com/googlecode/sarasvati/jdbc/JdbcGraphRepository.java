@@ -18,7 +18,10 @@
 */
 package com.googlecode.sarasvati.jdbc;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.googlecode.sarasvati.jdbc.action.DatabaseLoadAction;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
@@ -26,7 +29,35 @@ import com.googlecode.sarasvati.load.GraphRepository;
 
 public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
 {
+  public interface JdbcCache
+  {
+    void notifyLoaded (JdbcObject obj);
+
+    <T> T get (Class<T> clazz, Long id);
+  }
+
+  public class DefaultCache implements JdbcCache
+  {
+    protected Map<String, Object> map = new HashMap<String, Object> ();
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T get (Class<T> clazz, Long id)
+    {
+      String key = clazz.getName() + id;
+      return (T)map.get( key );
+    }
+
+    @Override
+    public void notifyLoaded (JdbcObject obj)
+    {
+      String key = obj.getClass().getName() + obj.getId();
+      map.put( key, obj );
+    }
+  }
+
   private final JdbcEngine engine;
+  private final JdbcCache  cache = new DefaultCache ();
 
   public JdbcGraphRepository (final JdbcEngine engine)
   {
@@ -49,14 +80,7 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   {
     DatabaseLoadAction<JdbcGraph> action = getDialect().newGraphByNameLoadAction( name );
     action.execute( engine );
-
-    for ( JdbcGraph graph :  action.getResult() )
-    {
-      loadNodes( graph );
-      loadArcs( graph );
-    }
-
-    return action.getResult();
+    return loadGraphs( action.getResult() );
   }
 
   @Override
@@ -64,14 +88,7 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   {
     DatabaseLoadAction<JdbcGraph> action = getDialect().newGraphLoadAction();
     action.execute( engine );
-
-    for ( JdbcGraph graph :  action.getResult() )
-    {
-      loadNodes( graph );
-      loadArcs( graph );
-    }
-
-    return action.getResult();
+    return loadGraphs( action.getResult() );
   }
 
   @Override
@@ -79,28 +96,46 @@ public class JdbcGraphRepository implements GraphRepository<JdbcGraph>
   {
     DatabaseLoadAction<JdbcGraph> action = getDialect().newLatestGraphByNameLoadAction( name );
     action.execute( engine );
-
-    for ( JdbcGraph graph :  action.getResult() )
-    {
-      loadNodes( graph );
-      loadArcs( graph );
-    }
-
-    return action.getFirstResult();
+    List<JdbcGraph> result = loadGraphs( action.getResult() );
+    return result.isEmpty() ? null : result.get( 0 );
   }
 
   public JdbcGraph getGraph (final long graphId)
   {
-    DatabaseLoadAction<JdbcGraph> action = getDialect().newGraphByIdLoadAction( graphId );
-    action.execute( engine );
+    JdbcGraph graph = cache.get( JdbcGraph.class, graphId );
 
-    for ( JdbcGraph graph :  action.getResult() )
+    if ( graph != null )
     {
-      loadNodes( graph );
-      loadArcs( graph );
+      return graph;
     }
 
-    return action.getFirstResult();
+    DatabaseLoadAction<JdbcGraph> action = getDialect().newGraphByIdLoadAction( graphId );
+    action.execute( engine );
+    List<JdbcGraph> result = loadGraphs( action.getResult() );
+    return result.isEmpty() ? null : result.get( 0 );
+  }
+
+  protected List<JdbcGraph> loadGraphs (List<JdbcGraph> list)
+  {
+    List<JdbcGraph> result = new ArrayList<JdbcGraph>( list.size() );
+
+    for ( JdbcGraph graph : list )
+    {
+      JdbcGraph cached = cache.get( JdbcGraph.class, graph.getId() );
+      if ( cached != null )
+      {
+        result.add( cached );
+      }
+      else
+      {
+        loadNodes( graph );
+        loadArcs( graph );
+        cache.notifyLoaded( graph );
+        result.add( graph );
+      }
+    }
+
+    return result;
   }
 
   public JdbcGraphProcess loadProcess (final long processId)

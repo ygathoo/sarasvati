@@ -46,7 +46,7 @@ import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.event.ListenerCache;
 import com.googlecode.sarasvati.hib.HibProcessListener;
 
-public class JdbcGraphProcess implements GraphProcess, HasGeneratedId
+public class JdbcGraphProcess implements GraphProcess, JdbcObject
 {
   protected Long id;
 
@@ -354,6 +354,12 @@ public class JdbcGraphProcess implements GraphProcess, HasGeneratedId
   public ExecutionEventQueue getEventQueue ()
   {
     return eventQueue;
+  }
+
+  @Override
+  public boolean isMutable ()
+  {
+    return true;
   }
 
   @Override

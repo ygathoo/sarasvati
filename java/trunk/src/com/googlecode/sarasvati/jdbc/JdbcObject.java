@@ -23,12 +23,28 @@ package com.googlecode.sarasvati.jdbc;
  *
  * @author Paul Lorenz
  */
-public interface HasGeneratedId
+public interface JdbcObject
 {
+  /**
+   * Returns the object id
+   *
+   * @return The object id
+   */
+  Long getId ();
+
   /**
    * Sets the generated id
    *
    * @param id The generated ID
    */
   void setId (Long id);
+
+  /**
+   * True if the object is mutated after creation, false otherwise. Mutable
+   * objects are instances of process and tokens. Immutable objects are
+   * instances of graph, node and arc.
+   *
+   * @return True if the object is mutated after creation, false otherwise.
+   */
+  boolean isMutable ();
 }

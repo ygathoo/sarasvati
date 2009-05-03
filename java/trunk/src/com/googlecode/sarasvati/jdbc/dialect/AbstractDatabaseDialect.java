@@ -71,7 +71,7 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
 
   private static final String SELECT_PROCESS_SQL =
     "select graph_id, state, parent_token_id, create_date, version" +
-    "  from wf_process where process_id = ?";
+    "  from wf_process where id = ?";
 
   protected Map<Class<?>,Object> userData = new HashMap<Class<?>,Object> ();
 

@@ -22,10 +22,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.HasGeneratedId;
+import com.googlecode.sarasvati.jdbc.JdbcObject;
 import com.googlecode.sarasvati.jdbc.JdbcLoadException;
 
-public abstract class AbstractInsertAction<T extends HasGeneratedId> extends AbstractDatabaseAction
+public abstract class AbstractInsertAction<T extends JdbcObject> extends AbstractDatabaseAction
 {
   protected final T value;
 

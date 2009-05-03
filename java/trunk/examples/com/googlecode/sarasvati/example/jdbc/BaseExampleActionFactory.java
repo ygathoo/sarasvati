@@ -6,15 +6,18 @@ package com.googlecode.sarasvati.example.jdbc;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
+import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
 import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
 import com.googlecode.sarasvati.jdbc.action.AbstractDatabaseAction;
 import com.googlecode.sarasvati.jdbc.action.AbstractExecuteUpdateAction;
 import com.googlecode.sarasvati.jdbc.action.AbstractInsertAction;
 import com.googlecode.sarasvati.jdbc.action.AbstractLoadAction;
 import com.googlecode.sarasvati.jdbc.action.DatabaseAction;
+import com.googlecode.sarasvati.jdbc.action.DatabaseLoadAction;
 import com.googlecode.sarasvati.load.LoadException;
 
 public class BaseExampleActionFactory implements ExampleActionFactory
@@ -33,6 +36,14 @@ public class BaseExampleActionFactory implements ExampleActionFactory
 
   private static final String UPDATE_TASK_SQL =
     "update wf_task set name = ?, description = ?, state = ? where id = ?";
+
+  private static final String SELECT_TASKS_BY_PROCESS_SQL =
+    "select t.id, t.node_token_id, t.name, t.description, t.state " +
+    "  from wf_task t join" +
+    "  join wf_node_token nt on t.node_token_id = nt.id " +
+    "  join wf_process p on nt.process_id = p.id " +
+    " where p.id = ? or " +
+    "       p.parent_token_id in (select nt2.id from wf_node_token nt2 where nt2.process_id = ?";
 
   @Override
   public DatabaseAction newInsertTaskNodeAction (final JdbcExampleTaskNode taskNode)
@@ -88,13 +99,13 @@ public class BaseExampleActionFactory implements ExampleActionFactory
   @Override
   public JdbcExampleTask getTaskForToken (final JdbcEngine engine, final JdbcNodeToken token)
   {
-    AbstractLoadAction<JdbcExampleTask> stmt = newTaskByTokenSelectAction( token );
+    AbstractLoadAction<JdbcExampleTask> stmt = newLoadTaskByTokenAction( token );
     stmt.execute( engine );
     return stmt.getFirstResult();
   }
 
   @Override
-  public AbstractLoadAction<JdbcExampleTask> newTaskByTokenSelectAction (final JdbcNodeToken token)
+  public AbstractLoadAction<JdbcExampleTask> newLoadTaskByTokenAction (final JdbcNodeToken token)
   {
     return new AbstractLoadAction<JdbcExampleTask>( SELECT_TASK_BY_TOKEN_SQL, true )
     {
@@ -112,6 +123,38 @@ public class BaseExampleActionFactory implements ExampleActionFactory
       protected void setParameters (PreparedStatement stmt) throws SQLException
       {
         stmt.setLong( 1, token.getId() );
+      }
+    };
+  }
+
+  @Override
+  public List<JdbcExampleTask> loadTasksForProcess (JdbcEngine engine, JdbcGraphProcess process)
+  {
+    DatabaseLoadAction<JdbcExampleTask> action = newLoadTasksByProcessAction( process );
+    action.execute( engine );
+    return action.getResult();
+  }
+
+  @Override
+  public AbstractLoadAction<JdbcExampleTask> newLoadTasksByProcessAction (final JdbcGraphProcess process)
+  {
+    return new AbstractLoadAction<JdbcExampleTask>( SELECT_TASKS_BY_PROCESS_SQL, true )
+    {
+      @Override
+      protected JdbcExampleTask loadObject (ResultSet row) throws SQLException, LoadException
+      {
+        long id = row.getLong( 1 );
+        String name = row.getString( 2 );
+        String description = row.getString( 3 );
+        TaskState state = TaskState.getById( row.getInt( 4 ) );
+        return new JdbcExampleTask( id, null, name, description, state );
+      }
+
+      @Override
+      protected void setParameters (PreparedStatement stmt) throws SQLException
+      {
+        stmt.setLong( 1, process.getId() );
+        stmt.setLong( 2, process.getId() );
       }
     };
   }

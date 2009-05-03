@@ -34,7 +34,7 @@ import com.googlecode.sarasvati.NestedEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
-public class JdbcNodeToken implements NodeToken, HasGeneratedId
+public class JdbcNodeToken implements NodeToken, JdbcObject
 {
   protected Long    id;
 
@@ -368,6 +368,12 @@ public class JdbcNodeToken implements NodeToken, HasGeneratedId
         setTransientAttribute( name, copyEnv.getTransientAttribute( name ) );
       }
     }
+  }
+
+  @Override
+  public boolean isMutable ()
+  {
+    return true;
   }
 
   @Override

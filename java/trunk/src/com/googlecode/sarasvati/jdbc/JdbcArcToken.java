@@ -29,7 +29,7 @@ import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
-public class JdbcArcToken implements ArcToken, HasGeneratedId
+public class JdbcArcToken implements ArcToken, JdbcObject
 {
   protected Long    id;
   protected JdbcGraphProcess process;
@@ -147,6 +147,12 @@ public class JdbcArcToken implements ArcToken, HasGeneratedId
   public void accept (TokenVisitor visitor)
   {
     visitor.visit( this );
+  }
+
+  @Override
+  public boolean isMutable ()
+  {
+    return true;
   }
 
   @Override

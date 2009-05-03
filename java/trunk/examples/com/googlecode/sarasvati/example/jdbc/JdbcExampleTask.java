@@ -20,10 +20,10 @@ package com.googlecode.sarasvati.example.jdbc;
 
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.example.TaskState;
-import com.googlecode.sarasvati.jdbc.HasGeneratedId;
 import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
+import com.googlecode.sarasvati.jdbc.JdbcObject;
 
-public class JdbcExampleTask implements HasGeneratedId
+public class JdbcExampleTask implements JdbcObject
 {
   protected Long id;
   protected JdbcNodeToken nodeToken;
@@ -92,5 +92,11 @@ public class JdbcExampleTask implements HasGeneratedId
   {
     Node node = getNodeToken().getNode();
     return !node.getGraph().getOutputArcs( node, "reject" ).isEmpty();
+  }
+
+  @Override
+  public boolean isMutable ()
+  {
+    return true;
   }
 }

@@ -123,17 +123,7 @@ public class JdbcExampleConsole
         return;
       }
 
-      List<JdbcExampleTask> tasks = null;
-//        session
-//          .createQuery( "from Task where nodeToken.process = :p order by state" )
-//          .setEntity( "p", p )
-//          .list();
-//
-//      tasks.addAll(
-//        session
-//          .createQuery( "from Task where nodeToken.process.parentToken.process = :p order by state" )
-//          .setEntity( "p", p )
-//          .list() );
+      List<JdbcExampleTask> tasks = exampleDB.loadTasksForProcess( engine, p );
 
       JdbcExampleTask t = null;
 
