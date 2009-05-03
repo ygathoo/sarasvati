@@ -113,24 +113,28 @@ public class JdbcGraphProcess implements GraphProcess, HasGeneratedId
 
   public JdbcGraphProcess (JdbcGraph graph, JdbcNodeToken parentToken)
   {
-    this( null, graph, parentToken );
+    this( null, graph, ProcessState.Created, parentToken, new Date(), 1 );
   }
 
-  public JdbcGraphProcess (Long id, JdbcGraph graph, JdbcNodeToken parentToken)
+  public JdbcGraphProcess (final Long id,
+                           final JdbcGraph graph,
+                           final ProcessState state,
+                           final JdbcNodeToken parentToken,
+                           final Date createDate,
+                           final int version)
   {
     this.id = id;
     this.graph = graph;
-    this.state = ProcessState.Created;
+    this.state = state;
     this.parentToken = parentToken;
-    this.createDate = new Date();
-    this.version = 1;
+    this.createDate = createDate;
+    this.version = version;
 
     this.nodeTokens = new HashSet<NodeToken>();
     this.activeArcTokens = new HashSet<ArcToken>();
     this.activeNodeTokens = new HashSet<NodeToken>();
     this.executionQueue = new LinkedList<ArcToken>();
     this.listeners = new LinkedList<HibProcessListener>();
-    this.state = ProcessState.Created;
 
     this.attrMap = new HashMap<String, String>();
   }

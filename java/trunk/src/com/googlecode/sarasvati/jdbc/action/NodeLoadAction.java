@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.jdbc.stmt;
+package com.googlecode.sarasvati.jdbc.action;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

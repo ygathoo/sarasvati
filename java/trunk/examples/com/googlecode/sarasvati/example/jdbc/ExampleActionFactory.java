@@ -5,20 +5,20 @@ package com.googlecode.sarasvati.example.jdbc;
 
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractLoadAction;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractDatabaseAction;
+import com.googlecode.sarasvati.jdbc.action.DatabaseAction;
+import com.googlecode.sarasvati.jdbc.action.DatabaseLoadAction;
 
 public interface ExampleActionFactory
 {
-  AbstractDatabaseAction newInsertTaskNodeAction (JdbcExampleTaskNode taskNode);
+  DatabaseAction newInsertTaskNodeAction (JdbcExampleTaskNode taskNode);
 
-  AbstractDatabaseAction newLoadTaskNodeAction (JdbcExampleTaskNode taskNode);
+  DatabaseAction newLoadTaskNodeAction (JdbcExampleTaskNode taskNode);
 
-  AbstractDatabaseAction newInsertTaskAction (JdbcExampleTask task);
+  DatabaseAction newInsertTaskAction (JdbcExampleTask task);
 
   JdbcExampleTask getTaskForToken (JdbcEngine engine, JdbcNodeToken token);
 
-  AbstractLoadAction<JdbcExampleTask> newTaskByTokenSelectAction (JdbcNodeToken token);
+  DatabaseLoadAction<JdbcExampleTask> newTaskByTokenSelectAction (JdbcNodeToken token);
 
-  AbstractDatabaseAction newUpdateTaskAction (JdbcExampleTask task);
+  DatabaseAction newUpdateTaskAction (JdbcExampleTask task);
 }

@@ -25,8 +25,8 @@ import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeToken;
+import com.googlecode.sarasvati.jdbc.action.DatabaseAction;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractDatabaseAction;
 
 public class JdbcExampleTaskNode extends JdbcNode
 {
@@ -61,7 +61,7 @@ public class JdbcExampleTaskNode extends JdbcNode
   {
     DatabaseDialect dialect = engine.getDatabaseDialect();
     ExampleActionFactory factory = dialect.getUserData( ExampleActionFactory.class );
-    AbstractDatabaseAction stmt = factory.newInsertTaskNodeAction( this );
+    DatabaseAction stmt = factory.newInsertTaskNodeAction( this );
     stmt.execute( engine );
   }
 
@@ -70,7 +70,7 @@ public class JdbcExampleTaskNode extends JdbcNode
   {
     DatabaseDialect dialect = engine.getDatabaseDialect();
     ExampleActionFactory factory = dialect.getUserData( ExampleActionFactory.class );
-    AbstractDatabaseAction stmt = factory.newLoadTaskNodeAction( this );
+    DatabaseAction stmt = factory.newLoadTaskNodeAction( this );
     stmt.execute( engine );
   }
 

@@ -26,16 +26,18 @@ import java.util.Map;
 import com.googlecode.sarasvati.jdbc.JdbcArc;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
+import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractExecuteUpdateAction;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractGraphLoadAction;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractLoadAction;
-import com.googlecode.sarasvati.jdbc.stmt.AbstractDatabaseAction;
-import com.googlecode.sarasvati.jdbc.stmt.ArcLoadAction;
-import com.googlecode.sarasvati.jdbc.stmt.NodePropertyLoadAction;
-import com.googlecode.sarasvati.jdbc.stmt.NodeLoadAction;
+import com.googlecode.sarasvati.jdbc.action.AbstractDatabaseAction;
+import com.googlecode.sarasvati.jdbc.action.AbstractExecuteUpdateAction;
+import com.googlecode.sarasvati.jdbc.action.AbstractGraphLoadAction;
+import com.googlecode.sarasvati.jdbc.action.ArcLoadAction;
+import com.googlecode.sarasvati.jdbc.action.DatabaseLoadAction;
+import com.googlecode.sarasvati.jdbc.action.NodeLoadAction;
+import com.googlecode.sarasvati.jdbc.action.NodePropertyLoadAction;
+import com.googlecode.sarasvati.jdbc.action.ProcessLoadAction;
 
 
 public abstract class AbstractDatabaseDialect implements DatabaseDialect
@@ -49,6 +51,9 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
 
   private static final String SELECT_GRAPHS_BY_NAME_SQL =
     "select id, name, version from wf_graph where name = ?";
+
+  private static final String SELECT_GRAPHS_BY_ID_SQL =
+    "select id, name, version from wf_graph where id = ?";
 
   private static final String SELECT_NODES_SQL =
     "select ref.id as ref_id, ref.instance, node.id, node.name, node.type, node.is_join, node.is_start, node.guard" +
@@ -64,16 +69,20 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   private static final String SELECT_NODE_PROPERTIES_SQL =
     "select name, value from wf_node_attr where node_id = ?";
 
+  private static final String SELECT_PROCESS_SQL =
+    "select graph_id, state, parent_token_id, create_date, version" +
+    "  from wf_process where process_id = ?";
+
   protected Map<Class<?>,Object> userData = new HashMap<Class<?>,Object> ();
 
   @Override
-  public AbstractLoadAction<JdbcArc> newArcLoadAction (final JdbcGraph graph)
+  public DatabaseLoadAction<JdbcArc> newArcLoadAction (final JdbcGraph graph)
   {
     return new ArcLoadAction( SELECT_ARCS_SQL, graph );
   }
 
   @Override
-  public AbstractLoadAction<JdbcGraph> newGraphByNameLoadAction (final String name)
+  public DatabaseLoadAction<JdbcGraph> newGraphByNameLoadAction (final String name)
   {
     return new AbstractGraphLoadAction( SELECT_GRAPHS_BY_NAME_SQL )
     {
@@ -86,7 +95,20 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   }
 
   @Override
-  public AbstractLoadAction<JdbcGraph> newGraphLoadAction ()
+  public DatabaseLoadAction<JdbcGraph> newGraphByIdLoadAction (final long graphId)
+  {
+    return new AbstractGraphLoadAction( SELECT_GRAPHS_BY_ID_SQL )
+    {
+      @Override
+      protected void setParameters (PreparedStatement stmt) throws SQLException
+      {
+        stmt.setLong( 1, graphId );
+      }
+    };
+  }
+
+  @Override
+  public DatabaseLoadAction<JdbcGraph> newGraphLoadAction ()
   {
     return new AbstractGraphLoadAction( SELECT_ALL_GRAPHS_SQL )
     {
@@ -99,7 +121,7 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   }
 
   @Override
-  public AbstractLoadAction<JdbcGraph> newLatestGraphByNameLoadAction (final String name)
+  public DatabaseLoadAction<JdbcGraph> newLatestGraphByNameLoadAction (final String name)
   {
     return new AbstractGraphLoadAction( SELECT_LATEST_GRAPH_SQL )
     {
@@ -113,7 +135,7 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   }
 
   @Override
-  public AbstractLoadAction<JdbcNodeRef> newNodeLoadAction (final JdbcGraph graph, final JdbcEngine engine)
+  public DatabaseLoadAction<JdbcNodeRef> newNodeLoadAction (final JdbcGraph graph, final JdbcEngine engine)
   {
     return new NodeLoadAction( SELECT_NODES_SQL, graph, engine );
   }
@@ -137,6 +159,12 @@ public abstract class AbstractDatabaseDialect implements DatabaseDialect
   public AbstractDatabaseAction newNodePropertiesLoadAction (JdbcPropertyNode node)
   {
     return new NodePropertyLoadAction( SELECT_NODE_PROPERTIES_SQL, node );
+  }
+
+  public DatabaseLoadAction<JdbcGraphProcess> newProcessLoadAction (final long processId,
+                                                                    final JdbcEngine engine)
+  {
+    return new ProcessLoadAction( SELECT_PROCESS_SQL, processId, engine );
   }
 
   @SuppressWarnings("unchecked")

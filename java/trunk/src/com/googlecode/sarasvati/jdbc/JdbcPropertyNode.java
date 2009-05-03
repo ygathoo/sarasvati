@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.googlecode.sarasvati.jdbc.action.DatabaseAction;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
-import com.googlecode.sarasvati.jdbc.stmt.DatabaseAction;
 
 public class JdbcPropertyNode extends JdbcNode
 {
