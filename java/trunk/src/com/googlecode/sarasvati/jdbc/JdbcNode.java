@@ -25,7 +25,7 @@ import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 
-public class JdbcNode implements Node, HasGeneratedId
+public class JdbcNode implements Node, JdbcObject
 {
   protected Long      id;
   protected String    name;
@@ -158,6 +158,12 @@ public class JdbcNode implements Node, HasGeneratedId
 
   @Override
   public boolean isExternal ()
+  {
+    return false;
+  }
+
+  @Override
+  public boolean isMutable ()
   {
     return false;
   }

@@ -23,7 +23,7 @@ import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 
-public class JdbcNodeRef implements Node,HasGeneratedId
+public class JdbcNodeRef implements Node,JdbcObject
 {
   protected Long   id;
 
@@ -147,6 +147,12 @@ public class JdbcNodeRef implements Node,HasGeneratedId
   public <T> T getAdaptor (Class<T> clazz)
   {
     return node.getAdaptor (clazz);
+  }
+
+  @Override
+  public boolean isMutable ()
+  {
+    return false;
   }
 
   @Override

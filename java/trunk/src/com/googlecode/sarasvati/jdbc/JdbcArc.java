@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.jdbc;
 
 import com.googlecode.sarasvati.Arc;
 
-public class JdbcArc implements Arc, HasGeneratedId
+public class JdbcArc implements Arc, JdbcObject
 {
   protected Long id;
   protected String name;
@@ -101,6 +101,12 @@ public class JdbcArc implements Arc, HasGeneratedId
   public boolean isSelfArc ()
   {
     return startNode.equals( endNode );
+  }
+
+  @Override
+  public boolean isMutable ()
+  {
+    return false;
   }
 
   @Override

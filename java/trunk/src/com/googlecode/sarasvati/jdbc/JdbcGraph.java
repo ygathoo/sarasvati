@@ -23,7 +23,7 @@ import java.util.List;
 
 import com.googlecode.sarasvati.AbstractGraph;
 
-public class JdbcGraph extends AbstractGraph implements HasGeneratedId
+public class JdbcGraph extends AbstractGraph implements JdbcObject
 {
   protected Long   id;
   protected String name;
@@ -78,6 +78,12 @@ public class JdbcGraph extends AbstractGraph implements HasGeneratedId
   public int getVersion ()
   {
     return version;
+  }
+
+  @Override
+  public boolean isMutable ()
+  {
+    return false;
   }
 
   @Override
