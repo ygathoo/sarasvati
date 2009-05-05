@@ -29,7 +29,6 @@ import javax.xml.bind.JAXBException;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.GraphValidator;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;

@@ -16,10 +16,11 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.load;
 
-import com.googlecode.sarasvati.load.GraphRepository;
-import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternal;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
