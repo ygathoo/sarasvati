@@ -90,7 +90,7 @@ Sarasvati uses ant to build. To rebuild the library .jar file, run
 
 USAGE:
 ---------------------------------------------------------------------------------------------------
-XML Process defintions should conform to the XML Schema in common/workflow.xsd. External elements
+XML Process definitions should conform to the XML Schema in common/workflow.xsd. External elements
 may be embedded. See some of the example workflows and common/example.xsd.
 
 If using the Hibernate backend, the database schema must be created. The schema creation script
