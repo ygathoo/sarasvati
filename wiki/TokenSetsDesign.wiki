@@ -4,9 +4,18 @@
 
 The end goal is to allow template nodes. Template nodes are nodes that that may be allowed to execute many times in parallel. Another node will then collect all the executions.
 
-So the 
+An example usage would be as part of an approvals process. The process might contain a section which looks like
 
-An example of where template nodes would be useful is for approvals. At runtime, the system determines how many approvals are required.
+(Determine approvals need) -> (Approval) -> (Check Results)
+
+The first step would figure out how many approvals are needed. Then the *Approval* node would be executed once for each approval needed. The *Check Results* node would not execute until all the approvals had been completed. So if there were two approvals required, the execution would look something like
+
+(Determine approvals need) ---> (Approval) ----> (Check Results)
+                           \                 /
+                            \-> (Approval) -/
+
+=Token Sets=
+Templates will be implemented using token sets. When completing a node execution, the user be able specify that the completion should generate a token set as well as how many arc tokens should be generated. A new type of join will be added, tokenSetAnd, which will wait for all members of the given token set to either be completed or be waiting on incoming arcs of the node.
 
 Create API for TokenSet
 
