@@ -1,3 +1,13 @@
+#summary Design document for token sets.
+
+= Introduction =
+
+The end goal is to allow template nodes. Template nodes are nodes that that may be allowed to execute many times in parallel. Another node will then collect all the executions.
+
+So the 
+
+An example of where template nodes would be useful is for approvals. At runtime, the system determines how many approvals are required.
+
 Create API for TokenSet
 
 TokenSet
