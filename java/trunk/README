@@ -98,6 +98,7 @@ has only been tested on PostgreSQL, but may work with other databases. The Hiber
 should work with any database supported by Hibernate which supports identity columns. It has only
 been tested with PostgreSQL though.
 
+
 EXAMPLES:
 ---------------------------------------------------------------------------------------------------
 Some example workflows can be found in common/test-wf
