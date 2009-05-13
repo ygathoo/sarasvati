@@ -72,8 +72,9 @@ public interface Engine
   void cancelProcess (GraphProcess process);
 
   /**
-   * Will set the state to {@link ProcessState#Completed} and perform whatever
-   * cleanup is required.
+   * Called by the engine when the process is detected to be completed.
+   * It will set the state to {@link ProcessState#Completed} and perform
+   * whatever cleanup is required.
    *
    * If this process is a nested process, at this point the containing
    * token will be completed.
@@ -83,7 +84,8 @@ public interface Engine
   void finalizeComplete (GraphProcess process);
 
   /**
-   * Will set the state to {@link ProcessState#Canceled} and perform whatever
+   * Called by the engine when a process is cancelled, via {@link Engine#cancelProcess(GraphProcess)}.
+   * It will set the state to {@link ProcessState#Canceled} and perform whatever
    * cleanup is required.
    *
    * @param process The process being canceled.
