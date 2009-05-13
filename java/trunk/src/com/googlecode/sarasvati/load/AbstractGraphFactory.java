@@ -27,11 +27,11 @@ import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.NestedProcessNode;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.ScriptNode;
-import com.googlecode.sarasvati.WaitNode;
+import com.googlecode.sarasvati.impl.NestedProcessNode;
+import com.googlecode.sarasvati.impl.ScriptNode;
+import com.googlecode.sarasvati.impl.WaitNode;
 import com.googlecode.sarasvati.util.SvUtil;
 
 public abstract class AbstractGraphFactory<G extends Graph> implements GraphFactory<G>

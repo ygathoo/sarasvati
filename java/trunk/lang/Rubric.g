@@ -43,7 +43,7 @@ tokens {
 package com.googlecode.sarasvati.rubric.lang;
 
 import com.googlecode.sarasvati.GuardResponse;
-import com.googlecode.sarasvati.SkipNodeGuardResponse;
+import com.googlecode.sarasvati.impl.SkipNodeGuardResponse;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.rubric.lang.*;
 

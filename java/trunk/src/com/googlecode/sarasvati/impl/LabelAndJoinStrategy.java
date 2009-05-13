@@ -16,21 +16,19 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.impl;
 
+import java.util.List;
 
-/**
- * This node overrides the default execute behavior to do nothing.
- * It relies on something external to complete node tokens which
- * enter here.
- *
- * @author Paul Lorenz
- */
-public class WaitNode extends CustomNode
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.GraphProcess;
+
+public class LabelAndJoinStrategy extends AndJoinStrategy
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  protected List<? extends Arc> getJoiningArcs (GraphProcess process, ArcToken token)
   {
-    // Does nothing
-  }
+    return process.getGraph().getInputArcs( token.getArc().getEndNode(), token.getArc().getName() );
+  }  
 }

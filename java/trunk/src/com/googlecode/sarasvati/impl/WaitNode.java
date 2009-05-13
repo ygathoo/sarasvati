@@ -16,46 +16,25 @@
 
     Copyright 2008 Paul Lorenz
 */
+package com.googlecode.sarasvati.impl;
 
-package com.googlecode.sarasvati.mem;
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
 
-import java.util.LinkedList;
-import java.util.List;
 
-import com.googlecode.sarasvati.impl.AbstractGraph;
-
-public class MemGraph extends AbstractGraph
+/**
+ * This node overrides the default execute behavior to do nothing.
+ * It relies on something external to complete node tokens which
+ * enter here.
+ *
+ * @author Paul Lorenz
+ */
+public class WaitNode extends CustomNode
 {
-  protected String        name;
-  protected List<MemNode> nodes;
-  protected List<MemArc>  arcs;
-
-  public MemGraph (String name)
-  {
-    this.name  = name;
-    this.nodes = new LinkedList<MemNode>();
-    this.arcs  = new LinkedList<MemArc>();
-  }
-
-  public List<MemNode> getNodes ()
-  {
-    return nodes;
-  }
-
-  public List<MemArc> getArcs ()
-  {
-    return arcs;
-  }
-
   @Override
-  public String getName ()
+  public void execute (Engine engine, NodeToken token)
   {
-    return name;
-  }
-
-  @Override
-  public int getVersion ()
-  {
-    return 1;
+    // Does nothing
   }
 }

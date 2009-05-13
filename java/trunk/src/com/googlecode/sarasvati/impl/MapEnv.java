@@ -16,10 +16,12 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.impl;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import com.googlecode.sarasvati.Env;
 
 /**
  * Implements {@link Env} using a Map

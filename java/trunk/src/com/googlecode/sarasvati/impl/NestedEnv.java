@@ -16,10 +16,12 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.impl;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import com.googlecode.sarasvati.Env;
 
 public class NestedEnv implements Env
 {

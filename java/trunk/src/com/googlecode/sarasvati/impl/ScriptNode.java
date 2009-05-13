@@ -16,9 +16,10 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.impl;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.script.ScriptRunnerFactory;

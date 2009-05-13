@@ -48,8 +48,8 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GuardAction;
-import com.googlecode.sarasvati.NestedEnv;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.impl.NestedEnv;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 @Entity

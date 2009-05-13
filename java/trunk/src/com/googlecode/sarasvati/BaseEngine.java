@@ -19,7 +19,6 @@
 package com.googlecode.sarasvati;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -121,42 +120,27 @@ public abstract class BaseEngine implements Engine
   private void executeArc (GraphProcess process, ArcToken token)
   {
     token.markProcessed( this );
-    if ( !token.getArc().getEndNode().isJoin() )
+    
+    Node targetNode = token.getArc().getEndNode();
+    
+    JoinStrategy joinStrategy = 
+      targetNode.isJoin() ? JoinStrategy.LABEL_AND_JOIN_STRATEGY : JoinStrategy.OR_JOIN_STRATEGY;
+ 
+    JoinResult result = joinStrategy.performJoin( process, token );
+    
+    if ( result.isJoinComplete() )
     {
-      completeExecuteArc( process, token.getArc().getEndNode(), token );
+      completeExecuteArc( process, targetNode, result.getArcTokensCompletingJoin() );
     }
     else
     {
       process.addActiveArcToken( token );
-
-      Node targetNode = token.getArc().getEndNode();
-      List<? extends Arc> inputs = process.getGraph().getInputArcs( targetNode, token.getArc().getName() );
-
-      ArcToken[] tokens = new ArcToken[inputs.size()];
-      int tokensFound = 0;
-
-      for ( Arc arc : inputs )
-      {
-        for ( ArcToken arcToken : process.getActiveArcTokens() )
-        {
-          if ( arcToken.getArc().equals( arc ) )
-          {
-            tokens[tokensFound++] = arcToken;
-            break;
-          }
-        }
-      }
-
-      if ( tokensFound == tokens.length )
-      {
-        completeExecuteArc( process, targetNode, tokens );
-      }
-    }
+    }    
   }
 
-  private void completeExecuteArc (GraphProcess process, Node targetNode, ArcToken ... tokens)
+  private void completeExecuteArc (GraphProcess process, Node targetNode, List<ArcToken> tokens)
   {
-    NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, Arrays.asList( tokens ) );
+    NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, tokens );
     process.addNodeToken( nodeToken );
     fireEvent( NodeTokenEvent.newCreatedEvent( this, nodeToken ) );
 
