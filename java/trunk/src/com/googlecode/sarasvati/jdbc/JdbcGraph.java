@@ -21,7 +21,7 @@ package com.googlecode.sarasvati.jdbc;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.googlecode.sarasvati.AbstractGraph;
+import com.googlecode.sarasvati.impl.AbstractGraph;
 
 public class JdbcGraph extends AbstractGraph implements JdbcObject
 {

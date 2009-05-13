@@ -37,7 +37,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import com.googlecode.sarasvati.AbstractGraph;
+import com.googlecode.sarasvati.impl.AbstractGraph;
 
 @Entity
 @Table (name="wf_graph")

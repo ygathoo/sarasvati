@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -27,6 +27,9 @@ import java.util.Map;
 
 import javax.persistence.Transient;
 
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.util.SvUtil;
 
 /**

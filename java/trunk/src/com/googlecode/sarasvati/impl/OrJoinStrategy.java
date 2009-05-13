@@ -16,46 +16,20 @@
 
     Copyright 2008 Paul Lorenz
 */
+package com.googlecode.sarasvati.impl;
 
-package com.googlecode.sarasvati.mem;
+import java.util.Collections;
 
-import java.util.LinkedList;
-import java.util.List;
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.JoinResult;
+import com.googlecode.sarasvati.JoinStrategy;
 
-import com.googlecode.sarasvati.impl.AbstractGraph;
-
-public class MemGraph extends AbstractGraph
+public class OrJoinStrategy implements JoinStrategy
 {
-  protected String        name;
-  protected List<MemNode> nodes;
-  protected List<MemArc>  arcs;
-
-  public MemGraph (String name)
-  {
-    this.name  = name;
-    this.nodes = new LinkedList<MemNode>();
-    this.arcs  = new LinkedList<MemArc>();
-  }
-
-  public List<MemNode> getNodes ()
-  {
-    return nodes;
-  }
-
-  public List<MemArc> getArcs ()
-  {
-    return arcs;
-  }
-
   @Override
-  public String getName ()
+  public JoinResult performJoin (GraphProcess process, ArcToken token)
   {
-    return name;
-  }
-
-  @Override
-  public int getVersion ()
-  {
-    return 1;
+    return new CompleteJoinResult( Collections.singletonList( token ) );
   }
 }

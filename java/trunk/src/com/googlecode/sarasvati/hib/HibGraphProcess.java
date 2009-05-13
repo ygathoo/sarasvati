@@ -54,7 +54,6 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.MapEnv;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.event.CachingExecutionEventQueue;
@@ -63,6 +62,7 @@ import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.event.ListenerCache;
+import com.googlecode.sarasvati.impl.MapEnv;
 
 @Entity
 @Table (name="wf_process")

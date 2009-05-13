@@ -16,7 +16,14 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.impl;
+
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.WorkflowException;
 
 /**
  * Node type for nested processes. Stores the name of the graph to be

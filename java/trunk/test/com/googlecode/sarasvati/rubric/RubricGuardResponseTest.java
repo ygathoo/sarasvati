@@ -5,7 +5,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.googlecode.sarasvati.GuardResponse;
-import com.googlecode.sarasvati.SkipNodeGuardResponse;
+import com.googlecode.sarasvati.impl.SkipNodeGuardResponse;
 
 public class RubricGuardResponseTest
 {
