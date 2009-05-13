@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.jdbc;
 
 import java.sql.Connection;
 
-import com.googlecode.sarasvati.BaseEngine;
+import com.googlecode.sarasvati.impl.BaseEngine;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.load.GraphLoader;
 

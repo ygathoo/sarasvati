@@ -24,11 +24,18 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
 
+/**
+ * Implements a join strategy in which nodes will wait for arc tokens to be
+ * present on all incoming arcs which share the same name as the current incoming
+ * arc token before completing the join.
+ *
+ * @author Paul Lorenz
+ */
 public class LabelAndJoinStrategy extends AndJoinStrategy
 {
   @Override
   protected List<? extends Arc> getJoiningArcs (GraphProcess process, ArcToken token)
   {
     return process.getGraph().getInputArcs( token.getArc().getEndNode(), token.getArc().getName() );
-  }  
+  }
 }

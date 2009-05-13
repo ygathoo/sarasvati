@@ -19,6 +19,12 @@
 
 package com.googlecode.sarasvati;
 
+/**
+ * CustomNode provides a superclass for user defined nodes
+ * that are portable across all engines.
+ *
+ * @author Paul Lorenz
+ */
 public abstract class CustomNode implements Node
 {
   protected CustomNodeWrapper nodeWrapper;

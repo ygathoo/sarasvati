@@ -25,10 +25,10 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
 
-import com.googlecode.sarasvati.BaseEngine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
+import com.googlecode.sarasvati.impl.BaseEngine;
 import com.googlecode.sarasvati.load.GraphLoader;
 
 public class HibEngine extends BaseEngine
