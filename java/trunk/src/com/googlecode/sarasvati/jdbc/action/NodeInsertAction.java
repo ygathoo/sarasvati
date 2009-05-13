@@ -39,6 +39,6 @@ public class NodeInsertAction extends AbstractInsertAction<JdbcNode>
     stmt.setString( 3, value.getType() );
     stmt.setString( 4, value.getGuard() );
     stmt.setString( 5, value.isStart() ? "Y" : "N" );
-    stmt.setString( 6, value.isJoin() ? "Y" : "N" );
+    stmt.setInt( 6, value.getJoinType().ordinal() );
   }
 }

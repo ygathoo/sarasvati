@@ -41,7 +41,7 @@
     </custom>
   </node>
 
-  <node name="sub4" type="task" isJoin="true">
+  <node name="sub4" type="task" joinType="labelAnd">
     <arc to="sub1" name="reject"/>
 
     <custom>

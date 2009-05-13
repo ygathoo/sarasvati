@@ -76,17 +76,20 @@ public interface Node extends Adaptable
   String getType ();
 
   /**
-   * Return true if the node is a join node. When an arc token
-   * arrives at a join node, it will wait for arc tokens to be
-   * present all other arcs that have the same name before
-   * executing the node.
+   * Returns the {@link JoinType} of the node.
    *
-   * When an arc token arrives at a non-join node it executes
-   * the node right away.
-   *
-   * @return True if the node is a join node
+   * @return The {@link JoinType} of the node.
    */
-  boolean isJoin ();
+  JoinType getJoinType ();
+
+  /**
+   * Returns the {@link JoinStrategy} to be used when an
+   * {@link ArcToken} arrives at this Node.
+   *
+   * @return The {@link JoinStrategy} to be used when an
+   *         {@link ArcToken} arrives at this Node.
+   */
+  JoinStrategy getJoinStrategy ();
 
   /**
    * Returns true if this node is a start node. Start nodes

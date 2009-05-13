@@ -24,6 +24,7 @@ import java.util.Map;
 import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternal;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
+import com.googlecode.sarasvati.xml.XmlJoinType;
 import com.googlecode.sarasvati.xml.XmlNode;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
@@ -42,7 +43,7 @@ public class EditorGraphFactory
       EditorNode node = new EditorNode();
       node.setName( xmlNode.getName() );
       node.setType( xmlNode.getType() );
-      node.setJoin( xmlNode.isJoin() );
+      node.setJoinType( xmlNode.getJoinType().getJoinType() );
       node.setStart( xmlNode.isStart() );
       node.setGuard( xmlNode.getGuard() );
 
@@ -138,7 +139,7 @@ public class EditorGraphFactory
       xmlNode.setName( node.getName() );
       xmlNode.setType( node.getType() );
       xmlNode.setGuard( node.getGuard() );
-      xmlNode.setJoin( node.isJoin() );
+      xmlNode.setJoinType( XmlJoinType.getXmlJoinType( node.getJoinType() ) );
       xmlNode.setStart( node.isStart() );
       xmlNode.setX( node.getX() );
       xmlNode.setY( node.getY() );

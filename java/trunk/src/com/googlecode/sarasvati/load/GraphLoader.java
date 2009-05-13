@@ -86,7 +86,7 @@ public class GraphLoader<G extends Graph>
 
       Node newNode = factory.newNode( graph, nodeName,
                                       type == null ? "node" : type,
-                                      xmlNode.isJoin(),
+                                      xmlNode.getJoinType().getJoinType(),
                                       xmlNode.isStart(),
                                       xmlNode.getGuard(),
                                       customData );

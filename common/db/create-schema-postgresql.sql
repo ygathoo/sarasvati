@@ -88,13 +88,22 @@ insert into wf_node_type values ( 'wait', 'Node which enters a wait state when e
 insert into wf_node_type values ( 'script', 'Node which executes a script', 'custom' );
 insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'custom' );
 
+create table wf_node_join_type
+(
+  id int NOT NULL PRIMARY KEY,
+  description text NOT NULL
+);
+
+insert into wf_node_join_type values ( 0, 'Or: Join is completed whenever any arc token arrives at the node' );
+insert into wf_node_join_type values ( 1, 'And: Join is completed when there are arc tokens on all incoming arcs to a node' );
+insert into wf_node_join_type values ( 2, 'Label And: Join is completed when there are arc tokens on all incoming arcs with the same name as that of the arc that the current incoming arc token is on.' );
 
 create table wf_node
 (
   id              serial  NOT NULL PRIMARY KEY,
   graph_id        int     NOT NULL REFERENCES wf_graph,
   name            text    NOT NULL,
-  is_join         char(1) NOT NULL,
+  join_type       int     NOT NULL REFERENCES wf_node_join_type,
   is_start        char(1) NOT NULL,
   type            text    NOT NULL REFERENCES wf_node_type,
   guard           text    NULL

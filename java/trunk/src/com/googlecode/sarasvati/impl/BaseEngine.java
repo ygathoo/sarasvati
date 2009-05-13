@@ -32,7 +32,6 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.JoinResult;
-import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.ProcessState;
@@ -54,6 +53,7 @@ import com.googlecode.sarasvati.visitor.BacktrackTokenVisitor;
 import com.googlecode.sarasvati.visitor.TokenTraversals;
 
 /**
+ * Contains all the engine logic which is not backend specific.
  *
  * @author Paul Lorenz
  */
@@ -137,14 +137,12 @@ public abstract class BaseEngine implements Engine
     token.markProcessed( this );
     process.addActiveArcToken( token );
 
-    JoinStrategy joinStrategy =
-      token.getArc().getEndNode().isJoin() ? JoinStrategy.LABEL_AND_JOIN_STRATEGY : JoinStrategy.OR_JOIN_STRATEGY;
-
-    JoinResult result = joinStrategy.performJoin( process, token );
+    Node targetNode = token.getArc().getEndNode();
+    JoinResult result = targetNode.getJoinStrategy().performJoin( process, token );
 
     if ( result.isJoinComplete() )
     {
-      completeExecuteArc( process, token.getArc().getEndNode(), result.getArcTokensCompletingJoin() );
+      completeExecuteArc( process, targetNode, result.getArcTokensCompletingJoin() );
     }
   }
 

@@ -281,7 +281,7 @@ public class MemExampleConsole
       @Override
       public boolean accept (File dir, String name)
       {
-        return name.endsWith( ".wf.xml" );
+        return name.endsWith( ".wf.xml" ) && !name.equals( "demo-example.wf.xml" );
       }
     };
 

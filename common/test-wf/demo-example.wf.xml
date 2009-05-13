@@ -18,7 +18,7 @@
     <custom><task job="Fulfill Order" user="Carol"/></custom>
   </node>
 
-  <node name="marketing" type="task" isJoin="true">
+  <node name="marketing" type="task" joinType="labelAnd">
     <custom><task job="Marketing" user="Dave"/></custom>
   </node>
 

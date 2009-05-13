@@ -25,6 +25,8 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.JoinStrategy;
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
@@ -38,7 +40,7 @@ public class MemNode implements Node, Cloneable
   protected long    id;
   protected String  name;
   protected String  type;
-  protected boolean isJoin;
+  protected JoinType joinType;
   protected boolean isStart;
   protected String guard;
 
@@ -127,15 +129,20 @@ public class MemNode implements Node, Cloneable
     return engine.evaluateGuard( token, guard );
   }
 
-  @Override
-  public boolean isJoin ()
+  public JoinType getJoinType ()
   {
-    return isJoin;
+    return joinType;
   }
 
-  public void setJoin (boolean isJoin)
+  public void setJoinType (JoinType joinType)
   {
-    this.isJoin = isJoin;
+    this.joinType = joinType;
+  }
+
+  @Override
+  public JoinStrategy getJoinStrategy ()
+  {
+    return joinType.getJoinStrategy();
   }
 
   @Override

@@ -41,7 +41,7 @@
     </custom>
   </node>
 
-  <node type="task" name="sub4" isJoin="true">
+  <node type="task" name="sub4" joinType="labelAnd">
     <custom>
       <taskName>Mark Complete</taskName>
       <taskDesc>

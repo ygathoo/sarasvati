@@ -262,8 +262,8 @@ public class TestProcess
         buf.append( node.getType() );
         buf.append(" external=" );
         buf.append( node.isExternal() );
-        buf.append( " join=" );
-        buf.append( node.isJoin() );
+        buf.append( " joinType=" );
+        buf.append( node.getJoinType() );
         buf.append( " start=" );
         buf.append(  node.isStart() );
         buf.append( "\n" );

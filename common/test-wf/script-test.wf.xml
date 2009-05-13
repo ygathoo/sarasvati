@@ -17,7 +17,7 @@
     </custom>
   </node>
 
-  <node name="next" type="script" isJoin="true">
+  <node name="next" type="script" joinType="labelAnd">
     <custom>
       <execute type="js">
         <![CDATA[

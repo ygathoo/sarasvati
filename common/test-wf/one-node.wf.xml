@@ -6,6 +6,6 @@
     <arc to="one-node.1"/>
   </node>
 
-  <node name="one-node.1" isJoin="true"/>
+  <node name="one-node.1" joinType="labelAnd"/>
 
 </process-definition>

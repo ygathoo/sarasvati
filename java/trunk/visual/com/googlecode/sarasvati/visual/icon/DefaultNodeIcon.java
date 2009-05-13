@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
@@ -24,7 +25,7 @@ public class DefaultNodeIcon extends AbstractNodeIcon
     {
       label = node.getName();
     }
-    this.isJoin = node.isJoin();
+    this.isJoin = node.getJoinType() != JoinType.OR;
     this.color = NodeDrawConfig.getColor( token );
     redrawImage();
   }

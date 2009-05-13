@@ -29,6 +29,7 @@ import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
@@ -97,7 +98,7 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   public Node newNode (final JdbcGraph graph,
                        final String name,
                        final String type,
-                       final boolean isJoin,
+                       final JoinType joinType,
                        final boolean isStart,
                        final String guard,
                        final List<Object> customList)
@@ -139,7 +140,7 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     node.setName( name );
     node.setType( type );
     node.setStart( isStart );
-    node.setJoin( isJoin );
+    node.setJoinType( joinType );
     node.setGuard( guard );
 
     getDialect().newNodeInsertAction( node ).execute( engine );

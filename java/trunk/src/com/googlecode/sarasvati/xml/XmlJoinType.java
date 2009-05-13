@@ -15,36 +15,27 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
- */
-package com.googlecode.sarasvati.editor.model;
+*/
+
+package com.googlecode.sarasvati.xml;
+
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlEnumValue;
 
 import com.googlecode.sarasvati.JoinType;
 
-public class EditorNode extends EditorGraphMember
+@XmlEnum(String.class)
+public enum XmlJoinType
 {
-  protected String  type;
-  protected boolean isStart;
-  protected JoinType joinType;
-  protected String  guard;
+  @XmlEnumValue("or")   OR( JoinType.OR ),
+  @XmlEnumValue ("and") AND( JoinType.AND ),
+  @XmlEnumValue ("labelAnd") LABEL_AND( JoinType.LABEL_AND );
 
-  public String getType ()
-  {
-    return type;
-  }
+  private final JoinType joinType;
 
-  public void setType (String type)
+  private XmlJoinType (final JoinType joinType)
   {
-    this.type = type;
-  }
-
-  public boolean isStart ()
-  {
-    return isStart;
-  }
-
-  public void setStart (boolean isStart)
-  {
-    this.isStart = isStart;
+    this.joinType = joinType;
   }
 
   public JoinType getJoinType ()
@@ -52,24 +43,16 @@ public class EditorNode extends EditorGraphMember
     return joinType;
   }
 
-  public void setJoinType (JoinType joinType)
+  public static XmlJoinType getXmlJoinType (JoinType joinType)
   {
-    this.joinType = joinType;
-  }
+    for ( XmlJoinType xmlJoinType : values() )
+    {
+      if ( joinType == xmlJoinType.getJoinType() )
+      {
+        return xmlJoinType;
+      }
+    }
 
-  public String getGuard ()
-  {
-    return guard;
-  }
-
-  public void setGuard (String guard)
-  {
-    this.guard = guard;
-  }
-
-  @Override
-  public boolean isExternal()
-  {
-    return false;
+    return null;
   }
 }

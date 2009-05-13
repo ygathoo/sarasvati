@@ -20,6 +20,8 @@ package com.googlecode.sarasvati.jdbc;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.JoinStrategy;
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 
@@ -102,9 +104,15 @@ public class JdbcNodeRef implements Node,JdbcObject
   }
 
   @Override
-  public boolean isJoin ()
+  public JoinType getJoinType ()
   {
-    return node.isJoin();
+    return node.getJoinType();
+  }
+
+  @Override
+  public JoinStrategy getJoinStrategy ()
+  {
+    return node.getJoinStrategy();
   }
 
   @Override
