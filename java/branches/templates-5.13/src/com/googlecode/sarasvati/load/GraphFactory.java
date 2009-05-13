@@ -30,6 +30,9 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.Token;
+import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.TokenSetMember;
 
 public interface GraphFactory<G extends Graph>
 {
@@ -148,6 +151,10 @@ public interface GraphFactory<G extends Graph>
    * @return A new {@link ArcToken}
    */
   ArcToken newArcToken (GraphProcess process, Arc arc, ExecutionType executionType, NodeToken parent);
+
+  TokenSet newTokenSet (GraphProcess process, String name);
+
+  TokenSetMember newTokenSetMember (TokenSet tokenSet, Token token, int memberIndex);
 
   /**
    * Adds the type to the {@link GraphFactory} for this engine. Specifies
