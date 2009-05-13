@@ -16,12 +16,27 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.impl;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.ExecutionType;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.GuardAction;
+import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.JoinResult;
+import com.googlecode.sarasvati.JoinStrategy;
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.ProcessState;
+import com.googlecode.sarasvati.WorkflowException;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEvent;
@@ -120,22 +135,17 @@ public abstract class BaseEngine implements Engine
   private void executeArc (GraphProcess process, ArcToken token)
   {
     token.markProcessed( this );
-    
-    Node targetNode = token.getArc().getEndNode();
-    
-    JoinStrategy joinStrategy = 
-      targetNode.isJoin() ? JoinStrategy.LABEL_AND_JOIN_STRATEGY : JoinStrategy.OR_JOIN_STRATEGY;
- 
+    process.addActiveArcToken( token );
+
+    JoinStrategy joinStrategy =
+      token.getArc().getEndNode().isJoin() ? JoinStrategy.LABEL_AND_JOIN_STRATEGY : JoinStrategy.OR_JOIN_STRATEGY;
+
     JoinResult result = joinStrategy.performJoin( process, token );
-    
+
     if ( result.isJoinComplete() )
     {
-      completeExecuteArc( process, targetNode, result.getArcTokensCompletingJoin() );
+      completeExecuteArc( process, token.getArc().getEndNode(), result.getArcTokensCompletingJoin() );
     }
-    else
-    {
-      process.addActiveArcToken( token );
-    }    
   }
 
   private void completeExecuteArc (GraphProcess process, Node targetNode, List<ArcToken> tokens)

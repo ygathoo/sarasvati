@@ -19,7 +19,7 @@
 
 package com.googlecode.sarasvati.mem;
 
-import com.googlecode.sarasvati.BaseEngine;
+import com.googlecode.sarasvati.impl.BaseEngine;
 import com.googlecode.sarasvati.load.GraphLoader;
 
 public class MemEngine extends BaseEngine
