@@ -21,6 +21,8 @@ package com.googlecode.sarasvati.jdbc;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.JoinStrategy;
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
@@ -32,7 +34,7 @@ public class JdbcNode implements Node, JdbcObject
   protected String    type;
   protected String    guard;
   protected boolean   isStart;
-  protected boolean   isJoin;
+  protected JoinType  joinType;
 
   protected JdbcGraph graph;
 
@@ -41,16 +43,19 @@ public class JdbcNode implements Node, JdbcObject
     // default constructor
   }
 
+  @Override
   public Long getId ()
   {
     return id;
   }
 
+  @Override
   public void setId (Long id)
   {
     this.id = id;
   }
 
+  @Override
   public String getName ()
   {
     return name;
@@ -61,6 +66,7 @@ public class JdbcNode implements Node, JdbcObject
     this.name = name;
   }
 
+  @Override
   public String getType ()
   {
     return type;
@@ -71,6 +77,7 @@ public class JdbcNode implements Node, JdbcObject
     this.type = type;
   }
 
+  @Override
   public String getGuard ()
   {
     return guard;
@@ -81,6 +88,7 @@ public class JdbcNode implements Node, JdbcObject
     this.guard = guard;
   }
 
+  @Override
   public boolean isStart ()
   {
     return isStart;
@@ -91,16 +99,24 @@ public class JdbcNode implements Node, JdbcObject
     this.isStart = isStart;
   }
 
-  public boolean isJoin ()
+  @Override
+  public JoinType getJoinType ()
   {
-    return isJoin;
+    return joinType;
   }
 
-  public void setJoin (boolean isJoin)
+  public void setJoinType (JoinType joinType)
   {
-    this.isJoin = isJoin;
+    this.joinType = joinType;
   }
 
+  @Override
+  public JoinStrategy getJoinStrategy ()
+  {
+    return joinType.getJoinStrategy();
+  }
+
+  @Override
   public JdbcGraph getGraph ()
   {
     return graph;

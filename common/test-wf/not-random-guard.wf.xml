@@ -21,7 +21,7 @@
     <arc to="join"/>
   </node>
 
-  <node name="join" isJoin="false">
+  <node name="join" joinType="or">
     <arc to="dump3"/>
     <arc to="dump4"/>
   </node>
@@ -36,7 +36,7 @@
     <arc to="leave-decision"/>
   </node>
 
-  <node name="leave-decision" isJoin="true">
+  <node name="leave-decision" joinType="labelAnd">
     <guard>IF isTenthIteration THEN Skip exit ELSE Skip beginning</guard>
 
     <arc to="last-node" name="exit"/>

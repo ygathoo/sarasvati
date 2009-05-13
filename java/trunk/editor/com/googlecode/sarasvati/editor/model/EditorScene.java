@@ -34,6 +34,7 @@ import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.EditorMode;
 import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.NodePropertiesAction;
@@ -122,7 +123,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 
     if ( node instanceof EditorNode )
     {
-      join = ((EditorNode)node).isJoin();
+      join = ((EditorNode)node).getJoinType() != JoinType.OR;
     }
 
     Icon icon = new DefaultNodeIcon( node.getName(), NodeDrawConfig.NODE_BG_COMPLETED, join );

@@ -108,12 +108,24 @@ insert into wf_node_type values ( 'script', 'Node which executes a script', 'cus
 insert into wf_node_type values ( 'nested', 'Node which executes a nested process', 'custom' )
 go
 
+create table wf_node_join_type
+(
+  id int NOT NULL PRIMARY KEY,
+  description varchar(255) NOT NULL
+)
+go
+
+insert into wf_node_join_type values ( 0, 'Or: Join is completed whenever any arc token arrives at the node' )
+insert into wf_node_join_type values ( 1, 'And: Join is completed when there are arc tokens on all incoming arcs to a node' )
+insert into wf_node_join_type values ( 2, 'Label And: Join is completed when there are arc tokens on all incoming arcs with the same name as that of the arc that the current incoming arc token is on.' )
+go
+
 create table wf_node
 (
   id              bigint       IDENTITY NOT NULL PRIMARY KEY,
   graph_id        bigint                NOT NULL REFERENCES wf_graph,
   name            varchar(255)          NOT NULL,
-  is_join         char(1)               NOT NULL,
+  join_type       int                   NOT NULL REFERENCES wf_node_join_type,
   is_start        char(1)               NOT NULL,
   type            varchar(255)          NOT NULL REFERENCES wf_node_type,
   guard           varchar(255)          NULL

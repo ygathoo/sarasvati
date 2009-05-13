@@ -25,6 +25,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.jdbc.JdbcCustomNodeWrapper;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
@@ -53,14 +54,14 @@ public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
   @Override
   protected JdbcNodeRef loadObject (ResultSet row) throws SQLException, LoadException
   {
-    long nodeRefId  = row.getLong( 1 );
-    String instance = row.getString( 2 );
-    long nodeId     = row.getLong( 3 );
-    String name     = row.getString( 4 );
-    String type     = row.getString( 5 );
-    boolean isStart = "Y".equalsIgnoreCase( row.getString( 6 ) );
-    boolean isJoin  = "Y".equalsIgnoreCase( row.getString( 7 ) );
-    String guard    = row.getString( 8 );
+    long nodeRefId    = row.getLong( 1 );
+    String instance   = row.getString( 2 );
+    long nodeId       = row.getLong( 3 );
+    String name       = row.getString( 4 );
+    String type       = row.getString( 5 );
+    boolean isStart   = "Y".equalsIgnoreCase( row.getString( 6 ) );
+    JoinType joinType = JoinType.values()[ row.getInt( 7 ) ];
+    String guard      = row.getString( 8 );
 
     JdbcNode node = nodeMap.get( nodeId );
 
@@ -85,7 +86,7 @@ public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
       node.setName( name );
       node.setType( type );
       node.setStart( isStart );
-      node.setJoin( isJoin );
+      node.setJoinType( joinType );
       node.setGuard( guard );
 
       node.afterLoad( engine );

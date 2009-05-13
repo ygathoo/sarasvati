@@ -33,8 +33,8 @@ public class XmlNode
   @XmlAttribute(name = "name", required = true)
   protected String               name;
 
-  @XmlAttribute(name = "isJoin", required = false)
-  protected Boolean              join;
+  @XmlAttribute(name = "joinType", required = false)
+  protected XmlJoinType          joinType;
 
   @XmlAttribute(name = "type", required = false)
   protected String               type;
@@ -67,19 +67,14 @@ public class XmlNode
     this.name = name;
   }
 
-  public boolean isJoin ()
+  public XmlJoinType getJoinType ()
   {
-    return join == null ? false : join;
+    return joinType == null ? XmlJoinType.OR : joinType;
   }
 
-  public Boolean getJoin ()
+  public void setJoinType (XmlJoinType joinType)
   {
-    return join;
-  }
-
-  public void setJoin (Boolean join)
-  {
-    this.join = join;
+    this.joinType = joinType;
   }
 
   public String getType ()
@@ -163,8 +158,8 @@ public class XmlNode
     StringBuilder buf = new StringBuilder();
     buf.append( "<node name=\"" );
     buf.append( name );
-    buf.append( "\" isJoin=\"" );
-    buf.append( isJoin() );
+    buf.append( "\" joinType=\"" );
+    buf.append( getJoinType() );
     buf.append( "\" type=\"" );
     buf.append( type );
     buf.append( "\" isStart=\"" );

@@ -77,10 +77,10 @@
         </xs:annotation>
       </xs:attribute>
 
-      <xs:attribute name="isJoin"
-                    type="xs:boolean"
+      <xs:attribute name="joinType"
+                    type="JoinType"
                     use="optional"
-                    default="false"/>
+                    default="or"/>
 
       <xs:attribute name="type"
                     type="xs:string"
@@ -201,5 +201,13 @@
       </xs:attribute>
 
     </xs:complexType>
+
+    <xs:simpleType name="JoinType">
+      <xs:restriction base="xs:string">
+        <xs:enumeration value="or"/>
+        <xs:enumeration value="and"/>
+        <xs:enumeration value="labelAnd"/>
+      </xs:restriction>
+    </xs:simpleType>
 
 </xs:schema>

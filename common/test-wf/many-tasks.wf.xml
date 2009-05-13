@@ -30,7 +30,7 @@
     </custom>
   </node>
 
-  <node type="task" name="3" isJoin="true">
+  <node type="task" name="3" joinType="labelAnd">
 
     <arc to="4"/>
 

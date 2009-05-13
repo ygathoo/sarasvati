@@ -67,7 +67,7 @@ public class NodePropertiesDialog extends JDialog
     namePanel.add( nameInput );
 
     isStartInput = new JCheckBox( "Start node", node.isStart() );
-    isJoinInput = new JCheckBox( "Join node", node.isJoin() );
+    isJoinInput = new JCheckBox( "Join node", false );
 
     JButton cancelButton = new JButton( "Cancel" );
 

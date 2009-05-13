@@ -39,6 +39,8 @@ import org.hibernate.annotations.Type;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.JoinStrategy;
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
@@ -61,9 +63,8 @@ public class HibNode implements Node
   protected String name;
   protected String type;
 
-  @Column (name="is_join")
-  @Type (type="yes_no")
-  protected boolean join;
+  @Column (name="join_type")
+  protected JoinType joinType;
 
   @Column (name="is_start")
   @Type (type="yes_no")
@@ -116,15 +117,20 @@ public class HibNode implements Node
     this.graph = graph;
   }
 
-  @Override
-  public boolean isJoin ()
+  public JoinType getJoinType ()
   {
-    return join;
+    return joinType;
   }
 
-  public void setJoin (boolean join)
+  public void setJoinType (JoinType joinType)
   {
-    this.join = join;
+    this.joinType = joinType;
+  }
+
+  @Override
+  public JoinStrategy getJoinStrategy ()
+  {
+    return getJoinType().getJoinStrategy();
   }
 
   @Override

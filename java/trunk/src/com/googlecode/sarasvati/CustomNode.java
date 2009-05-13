@@ -76,9 +76,15 @@ public abstract class CustomNode implements Node
   }
 
   @Override
-  public final boolean isJoin ()
+  public final JoinType getJoinType ()
   {
-    return nodeWrapper.isJoin();
+    return nodeWrapper.getJoinType();
+  }
+
+  @Override
+  public JoinStrategy getJoinStrategy ()
+  {
+    return nodeWrapper.getJoinStrategy();
   }
 
   @Override

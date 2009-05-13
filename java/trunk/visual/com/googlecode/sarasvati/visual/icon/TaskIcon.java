@@ -23,6 +23,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
 
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
@@ -37,7 +38,7 @@ public class TaskIcon extends AbstractNodeIcon
   public TaskIcon (Node node, NodeToken token)
   {
     this.label = node.getAdaptor( String.class );
-    this.isJoin = node.isJoin();
+    this.isJoin = node.getJoinType() != JoinType.OR;
     this.color = NodeDrawConfig.getColor( token );
     redrawImage();
   }

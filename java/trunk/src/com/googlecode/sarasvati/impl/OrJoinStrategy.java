@@ -25,6 +25,12 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
 
+/**
+ * Implements a join strategy where a node will complete a join
+ * whenever any arc token arrives.
+ *
+ * @author Paul Lorenz
+ */
 public class OrJoinStrategy implements JoinStrategy
 {
   @Override

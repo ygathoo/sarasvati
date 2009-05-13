@@ -41,7 +41,7 @@
     </custom>
   </node>
 
-  <node type="task" name="4" isJoin="true">
+  <node type="task" name="4" joinType="labelAnd">
 
     <custom>
       <taskName>Market to Customer</taskName>

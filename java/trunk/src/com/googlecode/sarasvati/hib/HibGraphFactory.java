@@ -33,6 +33,7 @@ import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
@@ -73,7 +74,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   public Node newNode (final HibGraph graph,
                        final String name,
                        final String type,
-                       final boolean isJoin,
+                       final JoinType joinType,
                        final boolean isStart,
                        final String guard,
                        final List<Object> customList)
@@ -98,7 +99,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     node.setGraph( graph );
     node.setName( name );
     node.setType( type );
-    node.setJoin( isJoin );
+    node.setJoinType( joinType );
     node.setStart( isStart );
     node.setGuard( guard );
 
