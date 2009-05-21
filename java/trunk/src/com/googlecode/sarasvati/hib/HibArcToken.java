@@ -26,6 +26,8 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -37,6 +39,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -53,14 +56,17 @@ public class HibArcToken implements ArcToken
   @GeneratedValue (strategy=GenerationType.IDENTITY)
   protected Long    id;
 
+  @ForeignKey( name="FK_arctok_process" )
   @ManyToOne (fetch = FetchType.LAZY)
   @JoinColumn (name = "process_id")
   protected HibGraphProcess process;
 
+  @ForeignKey( name="FK_arctok_arc" )
   @ManyToOne (fetch = FetchType.LAZY)
   @JoinColumn (name = "arc_id")
   protected HibArc     arc;
 
+  @ForeignKey( name="FK_arctok_parent" )
   @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
   @JoinColumn (name = "parent_token_id", nullable=false)
   protected NodeToken parentToken;
@@ -84,6 +90,7 @@ public class HibArcToken implements ArcToken
   protected boolean pending;
 
   @Column (name="execution_type")
+  @Enumerated( EnumType.ORDINAL )
   protected ExecutionType executionType;
 
   public HibArcToken () { /* Default constructor for hibernate */ }

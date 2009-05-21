@@ -28,10 +28,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 
 import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.annotations.ForeignKey;
 
 @Entity
 public class HibPropertyNode extends HibNode
 {
+  @ForeignKey(name="FK_node_attr")
   @CollectionOfElements
   @JoinTable( name="wf_node_attr", joinColumns={@JoinColumn( name="node_id")})
   @org.hibernate.annotations.MapKey( columns={@Column(name="name")})

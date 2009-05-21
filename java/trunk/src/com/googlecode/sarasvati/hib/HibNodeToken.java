@@ -42,6 +42,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.annotations.ForeignKey;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
@@ -60,24 +61,29 @@ public class HibNodeToken implements NodeToken
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long    id;
 
+  @ForeignKey(name="FK_nodetok_process")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "process_id")
   protected HibGraphProcess process;
 
+  @ForeignKey(name="FK_nodetok_ref")
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "node_ref_id")
   protected HibNodeRef nodeRef;
 
+  @ForeignKey(name="FK_nodetok_attr_node")
   @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "attr_set_id")
   protected HibNodeToken attrSetToken;
 
+  @ForeignKey(name="FK_nodetok_attr")
   @CollectionOfElements
   @JoinTable( name="wf_token_attr", joinColumns={@JoinColumn( name="attr_set_id")})
   @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
   @Column( name="value")
   protected Map<String, String> attrMap;
 
+  @ForeignKey(name="FK_nodetok_parent", inverseName="FK_nodetok_child")
   @OneToMany( fetch=FetchType.LAZY, targetEntity=HibArcToken.class, cascade= {CascadeType.ALL}, mappedBy="childToken" )
   protected List<ArcToken> parentTokens;
 
