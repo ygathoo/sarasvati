@@ -31,6 +31,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ForeignKey;
+
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.JoinStrategy;
@@ -46,10 +48,12 @@ public class HibNodeRef implements Node
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long   id;
 
+  @ForeignKey(name="FK_ref_node")
   @ManyToOne (fetch=FetchType.EAGER, cascade=CascadeType.REMOVE)
   @JoinColumn(name="node_id")
   protected HibNode node;
 
+  @ForeignKey(name="FK_ref_graph")
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="graph_id")
   protected HibGraph graph;

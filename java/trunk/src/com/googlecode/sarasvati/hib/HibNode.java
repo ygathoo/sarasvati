@@ -34,6 +34,7 @@ import javax.persistence.Table;
 
 import org.hibernate.Session;
 import org.hibernate.annotations.DiscriminatorFormula;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.Arc;
@@ -56,8 +57,9 @@ public class HibNode implements Node
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long   id;
 
+  @ForeignKey(name="FK_node_graph")
   @ManyToOne (fetch=FetchType.EAGER)
-  @JoinColumn( name="graph_id")
+  @JoinColumn(name="graph_id")
   protected HibGraph graph;
 
   protected String name;

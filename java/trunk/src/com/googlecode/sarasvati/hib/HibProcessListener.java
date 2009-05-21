@@ -28,6 +28,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ForeignKey;
+
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 
@@ -44,6 +46,7 @@ public class HibProcessListener
   @Column (name="event_type")
   protected ExecutionEventType eventType;
 
+  @ForeignKey(name="FK_listener_process")
   @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibGraphProcess.class)
   @JoinColumn(name = "process_id")
   protected GraphProcess process;

@@ -48,6 +48,7 @@ import javax.persistence.Version;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Where;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -72,6 +73,7 @@ public class HibGraphProcess implements GraphProcess
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long id;
 
+  @ForeignKey(name="FK_process_graph")
   @ManyToOne (fetch=FetchType.LAZY)
   @Cascade( CascadeType.LOCK )
   @JoinColumn( name="graph_id")
@@ -79,6 +81,7 @@ public class HibGraphProcess implements GraphProcess
 
   protected ProcessState state;
 
+  @ForeignKey(name="FK_process_parent")
   @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
   @JoinColumn (name = "parent_token_id", nullable=true)
   @Cascade( CascadeType.LOCK )
@@ -114,6 +117,7 @@ public class HibGraphProcess implements GraphProcess
   @Cascade( CascadeType.LOCK )
   protected List<HibProcessListener>  listeners;
 
+  @ForeignKey(name="FK_process_attr")
   @CollectionOfElements
   @JoinTable( name="wf_process_attr", joinColumns={@JoinColumn( name="process_id")})
   @org.hibernate.annotations.MapKey( columns={@Column(name="name")})

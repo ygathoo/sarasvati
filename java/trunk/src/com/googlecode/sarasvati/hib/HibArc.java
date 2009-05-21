@@ -27,6 +27,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.ForeignKey;
+
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
 
@@ -39,14 +41,17 @@ public class HibArc implements Arc
   protected Long id;
   protected String name;
 
+  @ForeignKey( name="FK_arc_graph" )
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="graph_id")
   protected HibGraph graph;
 
+  @ForeignKey( name="FK_arc_start" )
   @ManyToOne (fetch=FetchType.EAGER, targetEntity=HibNodeRef.class)
   @JoinColumn (name="a_node_ref_id")
   protected Node startNode;
 
+  @ForeignKey( name="FK_arc_end" )
   @ManyToOne (fetch=FetchType.EAGER, targetEntity=HibNodeRef.class)
   @JoinColumn (name="z_node_ref_id")
   protected Node endNode;
