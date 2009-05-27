@@ -29,12 +29,14 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.annotations.NodeType;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
 @Entity
 @DiscriminatorValue( "custom" )
+@NodeType(id="custom", description="Generic node allowing for many inputs, many outputs and guards")
 public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeWrapper
 {
   @Transient

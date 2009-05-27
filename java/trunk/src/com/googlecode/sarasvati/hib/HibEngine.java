@@ -26,6 +26,8 @@ import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
 
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.annotations.NodeType;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.impl.BaseEngine;
@@ -82,6 +84,29 @@ public class HibEngine extends BaseEngine
   public GraphLoader<HibGraph> getLoader()
   {
     return new GraphLoader<HibGraph>( factory, repository );
+  }
+  
+  @Override
+  public void addNodeType (String type, Class< ? extends Node> nodeClass)
+  {
+
+    /*
+     * Insert NodeType 
+     */
+    NodeType nodeType = nodeClass.getAnnotation( NodeType.class );
+    if ( nodeType == null )
+    {
+      throw new IllegalArgumentException( "Node class must be annotated by @NodeType." );
+    }
+    String id = nodeType.id();
+    String description = nodeType.description();
+    session
+        .createSQLQuery("insert into wf_node_type (id, description, behaviour) values ( :id, :desc, :behaviour )" )
+        .setString( "id", type )
+        .setString( "desc", description )
+        .setString( "behaviour", id )
+        .executeUpdate();
+
   }
 
   @Override
