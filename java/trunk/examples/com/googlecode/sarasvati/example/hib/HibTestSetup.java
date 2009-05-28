@@ -22,8 +22,7 @@ package com.googlecode.sarasvati.example.hib;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
-import org.hibernate.dialect.PostgreSQLDialect;
-import org.postgresql.Driver;
+import org.hibernate.cfg.Environment;
 
 import com.googlecode.sarasvati.hib.HibEngine;
 
@@ -31,17 +30,36 @@ public class HibTestSetup
 {
   protected static SessionFactory sessionFactory = null;
 
-  public static void init () throws Exception
+  public static void init (boolean createSchema) throws Exception
   {
     AnnotationConfiguration config = new AnnotationConfiguration ();
-    config.setProperty( "hibernate.dialect", PostgreSQLDialect.class.getName() );
-    config.setProperty( "hibernate.connection.driver_class", Driver.class.getName() );
-    config.setProperty( "hibernate.connection.url", "jdbc:postgresql://localhost:5432/paul" );
-    config.setProperty( "hibernate.connection.username", "paul" );
-    config.setProperty( "hibernate.connection.password", "thesistest56" );
+    
+    /*
+     * Postgres Dialect
+     */
+//    config.setProperty( "hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect" );
+//    config.setProperty( "hibernate.connection.driver_class", "org.postgresql.Driver" );
+//    config.setProperty( "hibernate.connection.url", "jdbc:postgresql://localhost:5432/paul" );
+//    config.setProperty( "hibernate.connection.username", "paul" );
+//    config.setProperty( "hibernate.connection.password", "thesistest56" );
+//    config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );
+//    config.setProperty( "hibernate.cache.use_second_level_cache", "true" );
+    
+    /*
+     * HSQL Dialect
+     */
+    config.setProperty( "hibernate.dialect","org.hibernate.dialect.HSQLDialect" );
+    config.setProperty( "hibernate.connection.driver_class", "org.hsqldb.jdbcDriver" );
+    config.setProperty( "hibernate.connection.url", "jdbc:hsqldb:hsql://localhost/workflowdb;sql.enforce_strict_size=true" );
+    config.setProperty( "hibernate.connection.username", "sa" );
+    config.setProperty( "hibernate.connection.password", "" );
     config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );
     config.setProperty( "hibernate.cache.use_second_level_cache", "true" );
 
+    if(createSchema){
+      config.setProperty(Environment.HBM2DDL_AUTO, "create-drop");
+    }
+    
     //config.setProperty( "hibernate.show_sql", "true" );
     //config.setProperty( "hibernate.format_sql", "true" );
 
@@ -49,7 +67,6 @@ public class HibTestSetup
 
     config.addAnnotatedClass( HibExampleTaskNode.class );
     config.addAnnotatedClass( Task.class );
-    config.addAnnotatedClass( TaskState.class );
     config.addAnnotatedClass( InitNode.class );
     config.addAnnotatedClass( DumpNode.class );
     config.addAnnotatedClass( AsyncNode.class );

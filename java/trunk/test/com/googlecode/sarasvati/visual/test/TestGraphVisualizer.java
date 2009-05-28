@@ -28,7 +28,7 @@ public class TestGraphVisualizer extends AbstractGraphVisualizer
   @Override
   public void init () throws Exception
   {
-    HibTestSetup.init();
+    HibTestSetup.init(false);
   }
 
   @Override

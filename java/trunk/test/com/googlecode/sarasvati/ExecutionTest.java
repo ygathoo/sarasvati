@@ -40,7 +40,8 @@ public class ExecutionTest
 
   protected Graph ensureLoaded (String name) throws Exception
   {
-    File basePath = new File( "/home/paul/workspace/wf-common/unit-test/" );
+    File basePath = new File( "common/unit-test/" );
+    assert basePath.exists();
     GraphLoader<MemGraph> loader = engine.getLoader();
 
     if ( !loader.isLoaded( name ) )

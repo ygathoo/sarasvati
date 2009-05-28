@@ -49,7 +49,7 @@ public class TestExporter
           }
         });
 
-    HibTestSetup.init();
+    HibTestSetup.init(false);
     Session session = HibTestSetup.openSession();
     HibEngine engine = new HibEngine( session );
 

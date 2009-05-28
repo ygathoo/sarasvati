@@ -32,6 +32,7 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.hib.HibNodeToken;
+import com.googlecode.sarasvati.example.TaskState;
 
 @Entity
 @DiscriminatorValue( "task" )
@@ -71,7 +72,7 @@ public class HibExampleTaskNode extends HibNode
   {
     HibEngine hibEngine = (HibEngine)engine;
     Task task = TaskDAO.getTaskForToken( hibEngine.getSession(), token );
-    task.setState( (TaskState) hibEngine.getSession().load( TaskState.class, 3 ) );
+    task.setState( TaskState.Cancelled );
   }
 
   @SuppressWarnings("unchecked")
@@ -92,8 +93,7 @@ public class HibExampleTaskNode extends HibNode
 
     Session session = hibEngine.getSession();
 
-    TaskState open = (TaskState)session.load( TaskState.class, 0 );
-    Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), open );
+    Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), TaskState.Open );
     session.save( newTask );
 
     Env env = token.getEnv();

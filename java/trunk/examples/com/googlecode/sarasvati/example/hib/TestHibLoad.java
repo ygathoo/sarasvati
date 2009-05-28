@@ -24,9 +24,14 @@ import java.io.FilenameFilter;
 
 import org.hibernate.Session;
 
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
+import com.googlecode.sarasvati.hib.HibNode;
+import com.googlecode.sarasvati.impl.NestedProcessNode;
+import com.googlecode.sarasvati.impl.ScriptNode;
+import com.googlecode.sarasvati.impl.WaitNode;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
@@ -36,7 +41,7 @@ public class TestHibLoad
 {
   public static void main (String[] args) throws Exception
   {
-    HibTestSetup.init();
+    HibTestSetup.init(true);
 
     Session sess = HibTestSetup.openSession();
     sess.beginTransaction();
@@ -44,16 +49,23 @@ public class TestHibLoad
     HibEngine engine = new HibEngine( sess );
     XmlLoader xmlLoader = new XmlLoader();
 
+    engine.addNodeType( "node", HibNode.class);
     engine.addNodeType( "task", HibExampleTaskNode.class );
     engine.addNodeType( "init", InitNode.class );
     engine.addNodeType( "dump", DumpNode.class );
+    engine.addNodeType( "async", AsyncNode.class );
+    engine.addNodeType( "custom", CustomNode.class );
+    engine.addNodeType( "script", ScriptNode.class );
+    engine.addNodeType( "nested", NestedProcessNode.class );
+    engine.addNodeType( "wait", WaitNode.class );
     engine.addNodeType( "dumpTypeDupe", DumpNode.class );
     engine.addNodeType( "customTest", CustomTestNode.class );
     engine.addNodeType( "async", AsyncNode.class );
 
     GraphLoader<HibGraph> wfLoader = engine.getLoader();
 
-    File baseDir = new File( "/home/paul/workspace/wf-common/test-wf/" );
+    File baseDir = new File( "common/test-wf/" );
+    assert baseDir.exists() : "Workflow process def dir not found.";
 
     XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
 

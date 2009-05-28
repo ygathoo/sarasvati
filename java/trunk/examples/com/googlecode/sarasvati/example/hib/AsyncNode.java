@@ -24,10 +24,12 @@ import javax.persistence.Entity;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.annotations.NodeType;
 import com.googlecode.sarasvati.hib.HibNode;
 
 @Entity
 @DiscriminatorValue( "async" )
+@NodeType("Node which completes asynchronously")
 public class AsyncNode extends HibNode
 {
   @Override
