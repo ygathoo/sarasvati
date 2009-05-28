@@ -14,7 +14,8 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
+                        Chungonn
 */
 
 package com.googlecode.sarasvati.annotations;
@@ -25,18 +26,14 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * 
+ *
  * Annotation for Node subclasses
  * @author chungonn
  *
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
-public @interface NodeType 
+public @interface NodeType
 {
-
-  String id();
-
-  String description() default "";
-  
+  String value() default "User defined type";
 }

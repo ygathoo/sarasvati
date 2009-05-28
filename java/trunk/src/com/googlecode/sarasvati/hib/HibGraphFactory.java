@@ -23,6 +23,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.persistence.DiscriminatorValue;
+
 import org.hibernate.Hibernate;
 import org.hibernate.Session;
 
@@ -36,6 +38,7 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.annotations.NodeType;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
@@ -233,5 +236,54 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     process.setParentToken( parentToken );
     session.save(  process );
     return process;
+  }
+
+  @Override
+  public void addType (final String type, final Class<? extends Node> clazz)
+  {
+    HibNodeType hibNodeType = (HibNodeType) session.get( HibNodeType.class, type );
+
+    /*
+     * Node type doesn't exist in database yet, attempt to insert
+     */
+    if ( hibNodeType == null )
+    {
+      String behavior = null;
+      String description = "User defined type";
+
+      if ( CustomNode.class.isAssignableFrom( clazz ) )
+      {
+        behavior = HibCustomNodeWrapper.class.getAnnotation( DiscriminatorValue.class ).value();
+      }
+      else
+      {
+        DiscriminatorValue discriminator = clazz.getAnnotation( DiscriminatorValue.class );
+
+        if ( discriminator != null )
+        {
+          behavior = discriminator.value();
+        }
+      }
+
+      NodeType nodeType = clazz.getAnnotation( NodeType.class );
+      if ( nodeType != null )
+      {
+        description = nodeType.value();
+      }
+
+      if ( type.equals( behavior ) )
+      {
+        hibNodeType = new HibNodeType( type, description );
+      }
+      else
+      {
+        HibNodeType behaviorType = (HibNodeType) session.load( HibNodeType.class, behavior );
+        hibNodeType = new HibNodeType( type, description, behaviorType );
+      }
+
+      session.save( hibNodeType );
+    }
+
+    super.addType( type, clazz );
   }
 }

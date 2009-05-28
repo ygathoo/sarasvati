@@ -14,7 +14,9 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
+                        Chungonn
+
 */
 package com.googlecode.sarasvati.hib;
 
@@ -25,7 +27,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 /**
- * 
+ *
  * @author chungonn
  *
  */
@@ -38,12 +40,13 @@ public class HibNodeType
 
   private String      description;
 
-  @OneToOne()
+  @OneToOne
   @JoinColumn(name = "Behaviour")
   private HibNodeType behaviour;
 
-  public HibNodeType ()
+  protected HibNodeType ()
   {
+    /* default constructor for hibernate */
   }
 
   public HibNodeType (String id, String description)
@@ -74,5 +77,4 @@ public class HibNodeType
   {
     return description;
   }
-
 }

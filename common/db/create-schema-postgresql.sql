@@ -10,6 +10,7 @@ drop table if exists wf_node_ref cascade;
 drop table if exists wf_node_attr cascade;
 drop table if exists wf_node cascade;
 drop table if exists wf_node_type cascade;
+drop table if exists wf_node_join_type cascade;
 drop table if exists wf_guard_action cascade;
 drop table if exists wf_process_listener cascade;
 drop table if exists wf_process cascade;
