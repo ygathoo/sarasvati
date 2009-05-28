@@ -15,7 +15,7 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008-2009 Paul Lorenz
-                        Chungonn
+                        chung-onn
 */
 
 package com.googlecode.sarasvati.annotations;
