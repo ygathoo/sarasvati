@@ -28,7 +28,7 @@ public class TestProcessVisualizer extends AbstractProcessVisualizer
   @Override
   public void init () throws Exception
   {
-    HibTestSetup.init();
+    HibTestSetup.init(false);
   }
 
   @Override

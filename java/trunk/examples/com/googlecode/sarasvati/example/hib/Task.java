@@ -19,6 +19,8 @@
 package com.googlecode.sarasvati.example.hib;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -27,6 +29,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.hib.HibNodeRef;
 import com.googlecode.sarasvati.hib.HibNodeToken;
 
@@ -46,8 +49,7 @@ public class Task
 
   protected String    description;
 
-  @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn (name="state")
+  @Enumerated(EnumType.STRING)
   protected TaskState state;
 
   public Task() { /* Default constructor for Hibernate */ }

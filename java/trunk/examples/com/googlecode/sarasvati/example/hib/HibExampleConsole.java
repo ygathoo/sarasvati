@@ -32,6 +32,7 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
+import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.hib.HibGraphProcess;
@@ -74,7 +75,7 @@ public class HibExampleConsole
       }
     });
 
-    HibTestSetup.init();
+    HibTestSetup.init(false);
 
     DefaultNodeFactory.addGlobalCustomType( "customTest", CustomTestNode.class );
 
@@ -145,7 +146,7 @@ public class HibExampleConsole
         int count = 0;
         for (Task task : tasks )
         {
-          System.out.println( (++count) + ": " + task.getName() + " - " + task.getState().getDescription() );
+          System.out.println( (++count) + ": " + task.getName() + " - " + task.getState() );
         }
 
         System.out.print( "> " );
@@ -197,7 +198,7 @@ public class HibExampleConsole
     System.out.println( "Task " );
     System.out.println( "\tName        : "  + t.getName() );
     System.out.println( "\tDescription : "  + t.getDescription() );
-    System.out.println( "\tState       : "  + t.getState().getDescription() );
+    System.out.println( "\tState       : "  + t.getState() );
 
     boolean backtrackable = t.getNodeToken().isComplete() && !t.getNodeToken().getExecutionType().isBacktracked();
 
@@ -238,14 +239,14 @@ public class HibExampleConsole
         else
         {
           System.out.println( "Completing task" );
-          t.setState( (TaskState) engine.getSession().load( TaskState.class, 1 ) );
+          t.setState( TaskState.Completed );
           engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
         }
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
-        t.setState( (TaskState) engine.getSession().load( TaskState.class, 2 ) );
+        t.setState( TaskState.Rejected );
         engine.completeExecution( t.getNodeToken(), "reject" );
       }
       else
