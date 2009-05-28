@@ -41,6 +41,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
 
@@ -81,6 +82,7 @@ public class HibNodeToken implements NodeToken
   @JoinTable( name="wf_token_attr", joinColumns={@JoinColumn( name="attr_set_id")})
   @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
   @Column( name="value")
+  @Cascade( org.hibernate.annotations.CascadeType.DELETE )
   protected Map<String, String> attrMap;
 
   @ForeignKey(name="FK_nodetok_parent", inverseName="FK_nodetok_child")

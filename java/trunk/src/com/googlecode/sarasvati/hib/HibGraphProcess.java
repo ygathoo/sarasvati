@@ -29,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -46,7 +47,6 @@ import javax.persistence.Transient;
 import javax.persistence.Version;
 
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Where;
@@ -75,7 +75,7 @@ public class HibGraphProcess implements GraphProcess
 
   @ForeignKey(name="FK_process_graph")
   @ManyToOne (fetch=FetchType.LAZY)
-  @Cascade( CascadeType.LOCK )
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
   @JoinColumn( name="graph_id")
   protected HibGraph            graph;
 
@@ -84,7 +84,7 @@ public class HibGraphProcess implements GraphProcess
   @ForeignKey(name="FK_process_parent")
   @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
   @JoinColumn (name = "parent_token_id", nullable=true)
-  @Cascade( CascadeType.LOCK )
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
   protected NodeToken parentToken;
 
   @Column (name="create_date", updatable=false)
@@ -94,27 +94,30 @@ public class HibGraphProcess implements GraphProcess
   @Version
   protected Integer version;
 
-  @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
-  @Cascade( CascadeType.LOCK )
+  @OneToMany (mappedBy="process",
+              targetEntity=HibNodeToken.class,
+              fetch=FetchType.LAZY,
+              cascade=CascadeType.REMOVE)
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
   protected Set<NodeToken> nodeTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null and pending='N'")
-  @Cascade( CascadeType.LOCK )
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
   protected Set<ArcToken>  activeArcTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null")
-  @Cascade( CascadeType.LOCK )
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
   protected Set<NodeToken> activeNodeTokens;
 
   @OneToMany (mappedBy="process", targetEntity=HibArcToken.class, fetch=FetchType.LAZY)
   @Where (clause="complete_date is null and pending='Y'")
-  @Cascade( CascadeType.LOCK )
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
   protected List<ArcToken>  executionQueue;
 
   @OneToMany (mappedBy="process", fetch=FetchType.LAZY)
-  @Cascade( CascadeType.LOCK )
+  @Cascade( { org.hibernate.annotations.CascadeType.LOCK, org.hibernate.annotations.CascadeType.DELETE } )
   protected List<HibProcessListener>  listeners;
 
   @ForeignKey(name="FK_process_attr")
@@ -122,6 +125,7 @@ public class HibGraphProcess implements GraphProcess
   @JoinTable( name="wf_process_attr", joinColumns={@JoinColumn( name="process_id")})
   @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
   @Column( name="value")
+  @Cascade( org.hibernate.annotations.CascadeType.DELETE )
   protected Map<String, String> attrMap;
 
   @Transient
