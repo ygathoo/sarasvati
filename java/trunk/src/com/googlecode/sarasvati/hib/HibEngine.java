@@ -96,7 +96,7 @@ public class HibEngine extends BaseEngine
     NodeType nodeType = nodeClass.getAnnotation( NodeType.class );
     if ( nodeType == null )
     {
-      throw new IllegalArgumentException( "Node class must be annotated by @NodeType." );
+      throw new IllegalArgumentException( "Node " + nodeClass.getName() +" must be annotated by @NodeType." );
     }
     String id = nodeType.id();
     String description = nodeType.description();
@@ -106,6 +106,7 @@ public class HibEngine extends BaseEngine
         .setString( "desc", description )
         .setString( "behaviour", id )
         .executeUpdate();
+    super.addNodeType( type, nodeClass );
 
   }
 
