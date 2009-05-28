@@ -36,7 +36,7 @@ import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
 @Entity
 @DiscriminatorValue( "custom" )
-@NodeType(id="custom", description="Generic node allowing for many inputs, many outputs and guards")
+@NodeType("Generic node allowing for many inputs, many outputs and guards")
 public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeWrapper
 {
   @Transient

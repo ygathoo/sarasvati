@@ -47,7 +47,9 @@ public class TestHibLoad
     engine.addNodeType( "task", HibExampleTaskNode.class );
     engine.addNodeType( "init", InitNode.class );
     engine.addNodeType( "dump", DumpNode.class );
+    engine.addNodeType( "dumpTypeDupe", DumpNode.class );
     engine.addNodeType( "customTest", CustomTestNode.class );
+    engine.addNodeType( "async", AsyncNode.class );
 
     GraphLoader<HibGraph> wfLoader = engine.getLoader();
 
