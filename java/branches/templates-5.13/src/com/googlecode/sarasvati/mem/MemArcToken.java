@@ -20,6 +20,8 @@
 package com.googlecode.sarasvati.mem;
 
 import java.util.Date;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
@@ -27,6 +29,8 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 public class MemArcToken implements ArcToken
@@ -38,6 +42,8 @@ public class MemArcToken implements ArcToken
   protected boolean pending;
   protected Date completeDate;
   protected ExecutionType executionType;
+
+  protected List<TokenSet> tokenSets = new LinkedList<TokenSet>();
 
   public MemArcToken (Arc arc, GraphProcess process, ExecutionType executionType, NodeToken parentToken)
   {
@@ -113,6 +119,25 @@ public class MemArcToken implements ArcToken
   public void accept (TokenVisitor visitor)
   {
     visitor.visit( this );
+  }
+
+  @Override
+  public TokenSet getTokenSet (String name)
+  {
+    for ( TokenSet tokenSet : tokenSets )
+    {
+      if ( SvUtil.equals( name, tokenSet.getName() ) )
+      {
+        return tokenSet;
+      }
+    }
+    return null;
+  }
+
+  @Override
+  public List<TokenSet> getTokenSets ()
+  {
+    return tokenSets;
   }
 
   @Override
