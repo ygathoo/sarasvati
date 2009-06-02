@@ -48,14 +48,26 @@ public class HibTestSetup
     /*
      * HSQL Dialect
      */
-    config.setProperty( "hibernate.dialect","org.hibernate.dialect.HSQLDialect" );
-    config.setProperty( "hibernate.connection.driver_class", "org.hsqldb.jdbcDriver" );
-    config.setProperty( "hibernate.connection.url", "jdbc:hsqldb:hsql://localhost/workflowdb;sql.enforce_strict_size=true" );
-    config.setProperty( "hibernate.connection.username", "sa" );
-    config.setProperty( "hibernate.connection.password", "" );
+//    config.setProperty( "hibernate.dialect","org.hibernate.dialect.HSQLDialect" );
+//    config.setProperty( "hibernate.connection.driver_class", "org.hsqldb.jdbcDriver" );
+//    config.setProperty( "hibernate.connection.url", "jdbc:hsqldb:hsql://localhost/workflowdb;sql.enforce_strict_size=true" );
+//    config.setProperty( "hibernate.connection.username", "sa" );
+//    config.setProperty( "hibernate.connection.password", "" );
+//    config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );
+//    config.setProperty( "hibernate.cache.use_second_level_cache", "true" );
+    
+    /*
+     * MySQL
+     */
+
+    config.setProperty( "hibernate.dialect","org.hibernate.dialect.MySQLDialect" );
+    config.setProperty( "hibernate.connection.driver_class", "com.mysql.jdbc.Driver" );
+    config.setProperty( "hibernate.connection.url", "jdbc:mysql://localhost/workflowdb" );
+    config.setProperty( "hibernate.connection.username", "root" );
+    config.setProperty( "hibernate.connection.password", "password" );
     config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );
     config.setProperty( "hibernate.cache.use_second_level_cache", "true" );
-
+    
     if(createSchema){
       config.setProperty(Environment.HBM2DDL_AUTO, "create-drop");
     }
@@ -77,5 +89,9 @@ public class HibTestSetup
   public static Session openSession ()
   {
     return sessionFactory.openSession();
+  }
+  
+  public static void main(String[] args) throws Exception{
+    init(true);
   }
 }
