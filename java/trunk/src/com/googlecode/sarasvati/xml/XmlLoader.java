@@ -20,6 +20,7 @@
 package com.googlecode.sarasvati.xml;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
@@ -142,8 +143,17 @@ public class XmlLoader
   }
 
   public void saveProcessDefinition (XmlProcessDefinition xmlProcDef, File file)
-      throws JAXBException
+      throws JAXBException, IOException
   {
-    getMarshaller().marshal( xmlProcDef, file );
+    FileOutputStream fOut = new FileOutputStream( file );
+
+    try
+    {
+      getMarshaller().marshal( xmlProcDef, fOut );
+    }
+    finally
+    {
+      fOut.close();
+    }
   }
 }
