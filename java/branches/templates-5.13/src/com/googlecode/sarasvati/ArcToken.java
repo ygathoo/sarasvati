@@ -21,6 +21,8 @@
  */
 package com.googlecode.sarasvati;
 
+import java.util.List;
+
 /**
  * Arc tokens point to arcs in the graph. Arc tokens may be active
  * only briefly, if the node at the end of the arc is ready to
@@ -97,4 +99,8 @@ public interface ArcToken extends Token
    * @param token The node token generated from this arc token
    */
   void markComplete (Engine engine, NodeToken token);
+
+  List<TokenSet> getTokenSets ();
+
+  TokenSet getTokenSet (String name);
 }
