@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<process-definition name="token-set-approvals"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="setup-approvals" type="approvalSetup" isStart="true">
+    <arc to="approval"/>
+  </node>
+
+  <node name="approval" type="approval" >
+    <arc to="finish-approval"/>
+  </node>
+
+  <node name="finish-approval" type="node" joinType="tokenSetAnd">
+    <guard>IF Approved THEN Skip approved ELSE Skip denied</guard>
+    <arc name="approved" to="approved"/>
+    <arc name="denied" to="denied"/>
+  </node>
+
+  <node name="approved" type="message">
+    <custom>
+      <message>Your request has been approved</message>
+    </custom>
+  </node>
+
+  <node name="denied" type="message">
+    <custom>
+      <message>Your request has been approved</message>
+    </custom>
+  </node>
+
+</process-definition>

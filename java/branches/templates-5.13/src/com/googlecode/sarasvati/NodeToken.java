@@ -139,5 +139,9 @@ public interface NodeToken extends Token
    */
   void markComplete (Engine engine);
 
+  TokenSet getTokenSet (String name);
+
+  NodeTokenSetMember getTokenSetMember (String name);
+
   List<NodeTokenSetMember> getTokenSetMemberships ();
 }

@@ -128,6 +128,11 @@ public interface Engine
    */
   void completeAsynchronous (NodeToken token, String arcName );
 
+  void completeWithNewTokenSet (NodeToken token,
+                                String arcName,
+                                String tokenSetName,
+                                int numberOfTokens);
+
   /**
    * If this process has any {@link ArcToken}s queued for execution, this method
    * will execute them.

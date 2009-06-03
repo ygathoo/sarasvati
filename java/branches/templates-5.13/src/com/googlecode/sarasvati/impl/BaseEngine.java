@@ -139,15 +139,18 @@ public abstract class BaseEngine implements Engine
 
   private void executeArc (GraphProcess process, ArcToken token)
   {
-    token.markProcessed( this );
-    process.addActiveArcToken( token );
-
-    Node targetNode = token.getArc().getEndNode();
-    JoinResult result = targetNode.getJoinStrategy().performJoin( this, process, token );
-
-    if ( result.isJoinComplete() )
+    if ( token.isPending() )
     {
-      completeExecuteArc( process, targetNode, result.getArcTokensCompletingJoin() );
+      token.markProcessed( this );
+      process.addActiveArcToken( token );
+
+      Node targetNode = token.getArc().getEndNode();
+      JoinResult result = targetNode.getJoinStrategy().performJoin( this, process, token );
+
+      if ( result.isJoinComplete() )
+      {
+        completeExecuteArc( process, targetNode, result.getArcTokensCompletingJoin() );
+      }
     }
   }
 
@@ -169,6 +172,7 @@ public abstract class BaseEngine implements Engine
           tokenSets.add( tokenSet );
           NodeTokenSetMember newSetMember = getFactory().newNodeTokenSetMember( tokenSet, nodeToken, setMember.getMemberIndex() );
           tokenSet.addNodeTokenSetMember( newSetMember );
+          nodeToken.getTokenSetMemberships().add( newSetMember );
         }
       }
     }
@@ -178,6 +182,10 @@ public abstract class BaseEngine implements Engine
     for ( ArcToken token : tokens )
     {
       process.removeActiveArcToken( token );
+      if ( token.isPending() )
+      {
+        token.markProcessed( this );
+      }
       token.markComplete( this, nodeToken );
       fireEvent( ArcTokenEvent.newCompletedEvent( this, token ) );
     }
@@ -212,64 +220,6 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void completeAsynchronous (NodeToken token, String arcName)
-  {
-    completeNodeExecution( token, arcName, true );
-  }
-
-  private void completeNodeToken (GraphProcess process, NodeToken token, String arcName)
-  {
-    process.removeActiveNodeToken( token );
-    token.markComplete( this );
-
-    // If the node was skipped, we already sent a 'skipped' event and don't want to
-    // send another 'completed' event.
-    if ( token.getGuardAction() != GuardAction.SkipNode )
-    {
-      fireEvent( NodeTokenEvent.newCompletedEvent( this, token, arcName ) );
-    }
-  }
-
-  protected void completeNodeExecution (NodeToken token, String arcName, boolean asynchronous)
-  {
-    GraphProcess process = token.getProcess();
-
-    if ( !process.isExecuting() || token.isComplete() )
-    {
-      return;
-    }
-
-    completeNodeToken( process, token, arcName );
-
-    for ( Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
-    {
-      ArcToken arcToken = getFactory().newArcToken( process, arc, ExecutionType.Forward, token );
-      token.getChildTokens().add( arcToken );
-
-      for ( NodeTokenSetMember setMember : token.getTokenSetMemberships() )
-      {
-        TokenSet tokenSet = setMember.getTokenSet();
-        if ( !tokenSet.isComplete() )
-        {
-          ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
-          tokenSet.addArcTokenSetMember( newSetMember );
-        }
-      }
-
-      fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
-
-      if ( asynchronous && arcExecutionStarted )
-      {
-        asyncQueue.add( arcToken );
-      }
-      else
-      {
-        process.enqueueArcTokenForExecution( arcToken );
-      }
-    }
-  }
-
-  @Override
   public void completeExecution (NodeToken token, String arcName)
   {
     GraphProcess process = token.getProcess();
@@ -283,7 +233,129 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void executeQueuedArcTokens (GraphProcess process)
+  public void completeAsynchronous (NodeToken token, String arcName)
+  {
+    completeNodeExecution( token, arcName, true );
+  }
+
+  public void completeWithNewTokenSet (final NodeToken token,
+                                       final String arcName,
+                                       final String tokenSetName,
+                                       final int numberOfTokens)
+  {
+    completeNodeExecutionWithNewTokenSet( token, arcName, tokenSetName, numberOfTokens, false );
+  }
+
+  protected void completeNodeExecutionWithNewTokenSet (final NodeToken token,
+                                                       final String    arcName,
+                                                       final String    tokenSetName,
+                                                       final int       numberOfTokens,
+                                                       final boolean   asynchronous)
+  {
+    GraphProcess process = token.getProcess();
+
+    if ( !process.isExecuting() || token.isComplete() )
+    {
+      return;
+    }
+
+    completeNodeToken( process, token, arcName );
+
+    List<? extends Arc> outArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
+
+    if ( !outArcs.isEmpty() )
+    {
+      TokenSet tokenSet = getFactory().newTokenSet( process, tokenSetName );
+      for ( int memberIndex = 0; memberIndex < numberOfTokens; memberIndex++ )
+      {
+        for ( Arc arc : outArcs )
+        {
+          ArcToken arcToken = generateArcToken( process, arc, token );
+
+          ArcTokenSetMember setMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, memberIndex );
+          tokenSet.addArcTokenSetMember( setMember );
+          arcToken.getTokenSetMemberships().add( setMember );
+
+          finishNewArcTokenProcessing( process, arcToken, asynchronous );
+        }
+      }
+    }
+  }
+
+  protected void completeNodeExecution (final NodeToken token,
+                                        final String arcName,
+                                        final boolean asynchronous)
+  {
+    GraphProcess process = token.getProcess();
+
+    if ( !process.isExecuting() || token.isComplete() )
+    {
+      return;
+    }
+
+    completeNodeToken( process, token, arcName );
+
+    for ( Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
+    {
+      ArcToken arcToken = generateArcToken( process, arc, token );
+      finishNewArcTokenProcessing( process, arcToken, asynchronous );
+    }
+  }
+
+  private void completeNodeToken (final GraphProcess process,
+                                  final NodeToken token,
+                                  final String arcName)
+  {
+    process.removeActiveNodeToken( token );
+    token.markComplete( this );
+
+    // If the node was skipped, we already sent a 'skipped' event and don't want to
+    // send another 'completed' event.
+    if ( token.getGuardAction() != GuardAction.SkipNode )
+    {
+      fireEvent( NodeTokenEvent.newCompletedEvent( this, token, arcName ) );
+    }
+  }
+
+  private ArcToken generateArcToken (final GraphProcess process,
+                                     final Arc arc,
+                                     final NodeToken token)
+  {
+    ArcToken arcToken = getFactory().newArcToken( process, arc, ExecutionType.Forward, token );
+    token.getChildTokens().add( arcToken );
+
+    for ( NodeTokenSetMember setMember : token.getTokenSetMemberships() )
+    {
+      TokenSet tokenSet = setMember.getTokenSet();
+      if ( !tokenSet.isComplete() )
+      {
+        ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
+        tokenSet.addArcTokenSetMember( newSetMember );
+        arcToken.getTokenSetMemberships().add( newSetMember );
+      }
+    }
+
+    return arcToken;
+  }
+
+  private void finishNewArcTokenProcessing (final GraphProcess process,
+                                            final ArcToken arcToken,
+                                            final boolean asynchronous)
+  {
+    fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
+
+    if ( asynchronous && arcExecutionStarted )
+    {
+      asyncQueue.add( arcToken );
+    }
+    else
+    {
+      process.enqueueArcTokenForExecution( arcToken );
+    }
+  }
+
+  @Override
+  public void executeQueuedArcTokens (final GraphProcess process)
   {
     arcExecutionStarted = true;
 
@@ -302,7 +374,7 @@ public abstract class BaseEngine implements Engine
     }
   }
 
-  private void drainAsyncQueue (GraphProcess process)
+  private void drainAsyncQueue (final GraphProcess process)
   {
     while ( !asyncQueue.isEmpty() )
     {
@@ -310,7 +382,7 @@ public abstract class BaseEngine implements Engine
     }
   }
 
-  private void checkForCompletion (GraphProcess process)
+  private void checkForCompletion (final GraphProcess process)
   {
     if ( !process.hasActiveTokens() && process.isArcTokenQueueEmpty() && asyncQueue.isEmpty() )
     {
@@ -321,26 +393,29 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void setupScriptEnv (ScriptEnv env, NodeToken token)
+  public void setupScriptEnv (final ScriptEnv env,
+                              final NodeToken token)
   {
     env.addVariable( "engine", this );
     env.addVariable( "token", token );
   }
 
   @Override
-  public void addNodeType(String type, Class<? extends Node> nodeClass)
+  public void addNodeType (final String type,
+                           final Class<? extends Node> nodeClass)
   {
     getFactory().addType(type, nodeClass);
   }
 
   @Override
-  public void addGlobalCustomNodeType (String type, Class<? extends CustomNode> nodeClass)
+  public void addGlobalCustomNodeType (final String type,
+                                       final Class<? extends CustomNode> nodeClass)
   {
     getFactory().addGlobalCustomType( type, nodeClass );
   }
 
   @Override
-  public void backtrack (NodeToken token)
+  public void backtrack (final NodeToken token)
   {
 
     if ( !token.isComplete() )
@@ -371,13 +446,14 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public RubricEnv newRubricEnv (NodeToken token)
+  public RubricEnv newRubricEnv (final NodeToken token)
   {
     return new DefaultRubricEnv( this, token, DefaultRubricFunctionRepository.getGlobalInstance() );
   }
 
   @Override
-  public GuardResponse evaluateGuard (NodeToken token, String guard)
+  public GuardResponse evaluateGuard (final NodeToken token,
+                                      final String guard)
   {
     if ( guard == null || guard.trim().length() == 0 )
     {
@@ -388,7 +464,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public BaseEngine newEngine (boolean forNested)
+  public BaseEngine newEngine (final boolean forNested)
   {
     BaseEngine engine = newEngine();
 
@@ -419,31 +495,37 @@ public abstract class BaseEngine implements Engine
   // ==========================================================================================
 
   @Override
-  public void addExecutionListener(ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void addExecutionListener(final ExecutionListener listener,
+                                   final ExecutionEventType... eventTypes)
   {
     globalEventQueue.addListener( this, listener, eventTypes );
   }
 
   @Override
-  public void removeExecutionListener(ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void removeExecutionListener(final ExecutionListener listener,
+                                      final ExecutionEventType... eventTypes)
   {
     globalEventQueue.removeListener( this, listener, eventTypes );
   }
 
   @Override
-  public void addExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void addExecutionListener (final GraphProcess process,
+                                    final ExecutionListener listener,
+                                    final ExecutionEventType... eventTypes)
   {
     process.getEventQueue().addListener( this, listener, eventTypes );
   }
 
   @Override
-  public void removeExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void removeExecutionListener (final GraphProcess process,
+                                       final ExecutionListener listener,
+                                       final ExecutionEventType... eventTypes)
   {
     process.getEventQueue().removeListener( this, listener, eventTypes );
   }
 
   @Override
-  public void fireEvent (ExecutionEvent event)
+  public void fireEvent (final ExecutionEvent event)
   {
     globalEventQueue.fireEvent( event );
     event.getProcess().getEventQueue().fireEvent( event );

@@ -52,7 +52,7 @@ public class MemNodeToken implements NodeToken
   protected Date completeDate;
   protected ExecutionType executionType;
 
-  protected List<NodeTokenSetMember> tokenSetMemberships;
+  protected List<NodeTokenSetMember> tokenSetMemberships = new LinkedList<NodeTokenSetMember>();
 
   protected Map<String, String> attributes = new HashMap<String, String>();
 
@@ -179,6 +179,12 @@ public class MemNodeToken implements NodeToken
   public TokenSet getTokenSet (String name)
   {
     return SvUtil.getTokenSet( this, name );
+  }
+
+  @Override
+  public NodeTokenSetMember getTokenSetMember (String name)
+  {
+    return (NodeTokenSetMember)SvUtil.getTokenSetMember( this, name );
   }
 
   @Override

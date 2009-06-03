@@ -30,10 +30,13 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.example.ApprovalNode;
+import com.googlecode.sarasvati.example.ApprovalSetupNode;
 import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.DumpNode;
 import com.googlecode.sarasvati.example.InitNode;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
+import com.googlecode.sarasvati.example.MessageNode;
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
@@ -79,6 +82,15 @@ public class MemExampleConsole
       {
         System.out.println( "iter: " + token.getEnv().getLongAttribute( "iter" ) );
         return token.getEnv().getLongAttribute( "iter" ) == 1000;
+      }
+    });
+
+    repository.registerPredicate( "Approved", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( Engine engine, NodeToken token )
+      {
+        return true;
       }
     });
 
@@ -270,6 +282,9 @@ public class MemExampleConsole
     engine.addNodeType( "init", InitNode.class );
     engine.addNodeType( "dump", DumpNode.class );
     engine.addNodeType( "customTest", CustomTestNode.class );
+    engine.addNodeType( "approval", ApprovalNode.class );
+    engine.addNodeType( "message", MessageNode.class );
+    engine.addNodeType( "approvalSetup", ApprovalSetupNode.class );
 
     GraphLoader<MemGraph> wfLoader = engine.getLoader();
 
