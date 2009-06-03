@@ -45,7 +45,7 @@ public class BacktrackJoinTest extends ExecutionTest
       "[2 nodeB I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -53,7 +53,7 @@ public class BacktrackJoinTest extends ExecutionTest
       "[2 nodeB I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+    engine.complete( tokenB, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -112,7 +112,7 @@ public class BacktrackJoinTest extends ExecutionTest
       "[2 nodeB I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -120,7 +120,7 @@ public class BacktrackJoinTest extends ExecutionTest
       "[2 nodeB I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+    engine.complete( tokenB, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -144,7 +144,7 @@ public class BacktrackJoinTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     tokenA = p.getActiveNodeTokens().iterator().next();
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C FB]" +

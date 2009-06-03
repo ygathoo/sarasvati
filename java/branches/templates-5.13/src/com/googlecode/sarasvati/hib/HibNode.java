@@ -195,7 +195,7 @@ public class HibNode implements Node
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 
   /**

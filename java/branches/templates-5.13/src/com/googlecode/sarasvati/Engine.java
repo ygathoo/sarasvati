@@ -95,7 +95,7 @@ public interface Engine
   /**
    * Continues execution of a process in a wait state.
    * If a call to {@link Node#execute(Engine, NodeToken)} does not contain a
-   * call to {@link Engine#completeExecution(NodeToken, String)}, then execution
+   * call to {@link Engine#complete(NodeToken, String)}, then execution
    * of the graph will halt at that point. This is generally referred to as a wait
    * state. It may happen, for example, if the action represented by that node
    * must be done by a human or some external system.
@@ -115,7 +115,7 @@ public interface Engine
    *                have the same name) to generate ArcTokens on.
    *
    */
-  void completeExecution (NodeToken token, String arcName);
+  void complete (NodeToken token, String arcName);
 
   /**
    * Marks the given node completed and generates the next set of arc tokens.
@@ -126,7 +126,7 @@ public interface Engine
    * @param arcName The name of the {@link Arc} (or arcs, as more than one {@link Arc} can
    *                have the same name) to generate ArcTokens on.
    */
-  void completeAsynchronous (NodeToken token, String arcName );
+  void completeAsynchronous (NodeToken token, String arcName);
 
   void completeWithNewTokenSet (NodeToken token,
                                 String arcName,
