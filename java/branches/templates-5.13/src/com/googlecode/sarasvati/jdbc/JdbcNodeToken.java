@@ -31,7 +31,10 @@ import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.impl.NestedEnv;
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 public class JdbcNodeToken implements NodeToken, JdbcObject
@@ -374,6 +377,25 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
   public boolean isMutable ()
   {
     return true;
+  }
+
+  @Override
+  public List<NodeTokenSetMember> getTokenSetMemberships ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public TokenSet getTokenSet (String name)
+  {
+    return SvUtil.getTokenSet( this, name );
+  }
+
+  @Override
+  public NodeTokenSetMember getTokenSetMember (String name)
+  {
+    return (NodeTokenSetMember)SvUtil.getTokenSetMember( this, name );
   }
 
   @Override

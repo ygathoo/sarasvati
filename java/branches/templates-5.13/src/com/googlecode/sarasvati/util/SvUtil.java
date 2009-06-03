@@ -54,4 +54,16 @@ public class SvUtil
     }
     return null;
   }
+
+  public static TokenSetMember getTokenSetMember (Token token, String name)
+  {
+    for ( TokenSetMember setMember : token.getTokenSetMemberships() )
+    {
+      if ( SvUtil.equals( name, setMember.getTokenSet().getName() ) )
+      {
+        return setMember;
+      }
+    }
+    return null;
+  }
 }

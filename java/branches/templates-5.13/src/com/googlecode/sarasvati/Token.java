@@ -73,7 +73,5 @@ public interface Token
    */
   void accept (TokenVisitor visitor);
 
-  TokenSet getTokenSet (String name);
-
   List<? extends TokenSetMember> getTokenSetMemberships ();
 }

@@ -14,18 +14,28 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Paul Lorenz
+    Copyright 2008 Paul Lorenz
 */
+package com.googlecode.sarasvati.example;
 
-package com.googlecode.sarasvati.mem;
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.TokenSetMember;
 
-import com.googlecode.sarasvati.NodeTokenSetMember;
-import com.googlecode.sarasvati.TokenSet;
-
-public class MemNodeTokenSetMember extends MemTokenSetMember<MemNodeToken> implements NodeTokenSetMember
+/**
+ * Example node to generate approvals
+ *
+ * @author Paul Lorenz
+ */
+public class ApprovalNode extends CustomNode
 {
-  public MemNodeTokenSetMember (TokenSet tokenSet, MemNodeToken token, int memberIndex)
+  @Override
+  public void execute (Engine engine, NodeToken token)
   {
-    super( tokenSet, token, memberIndex );
+    TokenSetMember setMember = token.getTokenSetMember( "approvals" );
+    System.out.println( "Hit approval " + setMember.getMemberIndex() );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
 }

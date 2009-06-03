@@ -27,15 +27,15 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
-import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.TokenSet;
 
 /**
  * Implements a join strategy in which nodes will wait for arc tokens to be
  * present on all incoming arcs before completing the join. If the incoming
- * arc token does not belong to a token set, the a fallback join strategy
- * will be invoked, defaulting to the {@link OrJoinStrategy}.
+ * arc token does not belong to a token set, an {@link IllegalStateException}
+ * will be thrown. This behavior could be changed in a subclass by overriding
+ * {@link TokenSetAndJoinStrategy#performFallbackJoin(Engine, GraphProcess, ArcToken)}.
  *
  * @author Paul Lorenz
  */
@@ -49,7 +49,7 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
 
   public JoinResult performFallbackJoin (Engine engine, GraphProcess process, ArcToken token)
   {
-    return JoinType.OR.getJoinStrategy().performJoin( engine, process, token );
+    throw new IllegalStateException( "Token " + token + " does not belong to the appropriate token set" );
   }
 
   @Override

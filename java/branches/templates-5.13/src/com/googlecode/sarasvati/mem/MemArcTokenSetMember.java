@@ -22,34 +22,10 @@ package com.googlecode.sarasvati.mem;
 import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.TokenSet;
 
-public class MemArcTokenSetMember implements ArcTokenSetMember
+public class MemArcTokenSetMember extends MemTokenSetMember<MemArcToken> implements ArcTokenSetMember
 {
-  protected TokenSet tokenSet;
-  protected MemArcToken token;
-  protected int memberIndex;
-
   public MemArcTokenSetMember (TokenSet tokenSet, MemArcToken token, int memberIndex)
   {
-    this.tokenSet = tokenSet;
-    this.token = token;
-    this.memberIndex = memberIndex;
-  }
-
-  @Override
-  public TokenSet getTokenSet ()
-  {
-    return tokenSet;
-  }
-
-  @Override
-  public MemArcToken getToken ()
-  {
-    return token;
-  }
-
-  @Override
-  public int getMemberIndex ()
-  {
-    return memberIndex;
+    super( tokenSet, token, memberIndex );
   }
 }

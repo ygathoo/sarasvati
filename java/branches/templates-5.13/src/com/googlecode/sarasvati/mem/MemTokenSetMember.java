@@ -19,13 +19,38 @@
 
 package com.googlecode.sarasvati.mem;
 
-import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.TokenSetMember;
 
-public class MemNodeTokenSetMember extends MemTokenSetMember<MemNodeToken> implements NodeTokenSetMember
+public class MemTokenSetMember<T extends Token> implements TokenSetMember
 {
-  public MemNodeTokenSetMember (TokenSet tokenSet, MemNodeToken token, int memberIndex)
+  protected TokenSet tokenSet;
+  protected T token;
+  protected int memberIndex;
+
+  public MemTokenSetMember (TokenSet tokenSet, T token, int memberIndex)
   {
-    super( tokenSet, token, memberIndex );
+    this.tokenSet = tokenSet;
+    this.token = token;
+    this.memberIndex = memberIndex;
+  }
+
+  @Override
+  public TokenSet getTokenSet ()
+  {
+    return tokenSet;
+  }
+
+  @Override
+  public T getToken ()
+  {
+    return token;
+  }
+
+  @Override
+  public int getMemberIndex ()
+  {
+    return memberIndex;
   }
 }

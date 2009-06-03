@@ -30,8 +30,6 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.TokenSet;
-import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 public class MemArcToken implements ArcToken
@@ -125,12 +123,6 @@ public class MemArcToken implements ArcToken
   public void accept (TokenVisitor visitor)
   {
     visitor.visit( this );
-  }
-
-  @Override
-  public TokenSet getTokenSet (String name)
-  {
-    return SvUtil.getTokenSet( this, name );
   }
 
   @Override

@@ -22,6 +22,7 @@
 package com.googlecode.sarasvati.hib;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -40,6 +41,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.NodeToken;
@@ -210,6 +212,12 @@ public class HibArcToken implements ArcToken
   public void accept (TokenVisitor visitor)
   {
     visitor.visit( this );
+  }
+
+  @Override
+  public List<ArcTokenSetMember> getTokenSetMemberships ()
+  {
+    return null;
   }
 
   @Override
