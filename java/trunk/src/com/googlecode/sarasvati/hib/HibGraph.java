@@ -67,7 +67,7 @@ public class HibGraph extends AbstractGraph
   @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE)
   protected List<HibNodeRef> nodes;
 
-  @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE)
+  @OneToMany (fetch=FetchType.LAZY, mappedBy="graph", cascade=CascadeType.REMOVE)
   protected List<HibArc>     arcs;
 
   public Long getId ()
