@@ -46,6 +46,6 @@ public class MessageNode extends CustomNode
   public void execute (Engine engine, NodeToken token)
   {
     System.out.println( "MESSAGE: " + message );
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 }

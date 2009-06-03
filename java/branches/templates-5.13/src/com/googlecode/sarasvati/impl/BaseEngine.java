@@ -127,7 +127,7 @@ public abstract class BaseEngine implements Engine
     if ( parentToken != null )
     {
       Engine engine = getParentEngine() == null ? newEngine( false ) : getParentEngine();
-      engine.completeExecution( parentToken, Arc.DEFAULT_ARC );
+      engine.complete( parentToken, Arc.DEFAULT_ARC );
     }
   }
 
@@ -214,13 +214,13 @@ public abstract class BaseEngine implements Engine
       case SkipNode :
         process.addActiveNodeToken( token );
         fireEvent( NodeTokenEvent.newSkippedEvent( this, token, response.getExitArcForSkip() ) );
-        completeExecution( token, response.getExitArcForSkip() );
+        complete( token, response.getExitArcForSkip() );
         break;
     }
   }
 
   @Override
-  public void completeExecution (NodeToken token, String arcName)
+  public void complete (NodeToken token, String arcName)
   {
     GraphProcess process = token.getProcess();
 

@@ -173,7 +173,7 @@ public interface Node extends Adaptable
   /**
    * Performs Node specific logic. Either from the execute method,
    * or later from outside, the
-   * {@link Engine#completeExecution(NodeToken, String)} method
+   * {@link Engine#complete(NodeToken, String)} method
    * must be called to continue executing the {@link GraphProcess}.
    *
    * @param engine The {@link Engine} which is performing the execution.

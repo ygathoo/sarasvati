@@ -36,6 +36,6 @@ public class ApprovalNode extends CustomNode
   {
     TokenSetMember setMember = token.getTokenSetMember( "approvals" );
     System.out.println( "Hit approval " + setMember.getMemberIndex() );
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 }

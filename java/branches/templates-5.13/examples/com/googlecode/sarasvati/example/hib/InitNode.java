@@ -50,7 +50,7 @@ public class InitNode extends HibNode
 
     if ( token.getProcess().getParentToken() != null )
     {
-      engine.completeExecution( token, Arc.DEFAULT_ARC );
+      engine.complete( token, Arc.DEFAULT_ARC );
     }
     else
     {
