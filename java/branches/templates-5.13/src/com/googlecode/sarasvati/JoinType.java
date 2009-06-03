@@ -42,7 +42,7 @@ public enum JoinType
    * are arc tokens waiting at all other incoming arcs to
    * the node.
    */
-  AND( new AndJoinStrategy()),
+  AND( new AndJoinStrategy() ),
 
   /**
    * Uses the {@link LabelAndJoinStrategy}. A join of this type

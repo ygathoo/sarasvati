@@ -31,8 +31,8 @@ import com.googlecode.sarasvati.TokenSet;
 /**
  * Implements a join strategy in which nodes will wait for arc tokens to be
  * present on all incoming arcs before completing the join. If the incoming
- * arc token does not belong to a token set, the join strategy will behave
- * like the {@link OrJoinStrategy}.
+ * arc token does not belong to a token set, the a fallback join strategy
+ * will be invoked, defaulting to the {@link OrJoinStrategy}.
  *
  * @author Paul Lorenz
  */
@@ -44,6 +44,11 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
     return tokenSets.isEmpty() ? null : tokenSets.get( 0 );
   }
 
+  public JoinResult performFallbackJoin (GraphProcess process, ArcToken token)
+  {
+    return JoinType.OR.getJoinStrategy().performJoin( process, token );
+  }
+
   @Override
   public JoinResult performJoin (GraphProcess process, ArcToken token)
   {
@@ -51,7 +56,7 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
 
     if ( tokenSet == null )
     {
-      return JoinType.OR.getJoinStrategy().performJoin( process, token );
+      return performFallbackJoin( process, token );
     }
 
     if ( !tokenSet.getActiveNodeTokens().isEmpty() )
