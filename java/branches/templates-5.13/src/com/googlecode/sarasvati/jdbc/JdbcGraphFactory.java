@@ -24,6 +24,7 @@ import java.util.Map;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
@@ -32,9 +33,8 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.Token;
+import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.TokenSet;
-import com.googlecode.sarasvati.TokenSetMember;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
@@ -90,7 +90,8 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   }
 
   @Override
-  public JdbcGraph newGraph (final String name, final int version)
+  public JdbcGraph newGraph (final String name,
+                             final int version)
   {
     JdbcGraph graph = new JdbcGraph( name, version );
     getDialect().newGraphInsertAction( graph ).execute( engine );
@@ -249,14 +250,26 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   }
 
     @Override
-  public TokenSet newTokenSet (GraphProcess process, String name)
+  public TokenSet newTokenSet (final GraphProcess process,
+                               final String name)
   {
     // TODO Auto-generated method stub
     return null;
   }
 
   @Override
-  public TokenSetMember newTokenSetMember (TokenSet tokenSet, Token token, int memberIndex)
+  public ArcTokenSetMember newArcTokenSetMember (final TokenSet tokenSet,
+                                                 final ArcToken token,
+                                                 final int memberIndex)
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public NodeTokenSetMember newNodeTokenSetMember (final TokenSet tokenSet,
+                                                   final NodeToken token,
+                                                   final int memberIndex)
   {
     // TODO Auto-generated method stub
     return null;
