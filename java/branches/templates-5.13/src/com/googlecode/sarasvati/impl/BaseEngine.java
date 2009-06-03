@@ -19,11 +19,14 @@
 package com.googlecode.sarasvati.impl;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
@@ -34,7 +37,9 @@ import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.ProcessState;
+import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.WorkflowException;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
@@ -138,7 +143,7 @@ public abstract class BaseEngine implements Engine
     process.addActiveArcToken( token );
 
     Node targetNode = token.getArc().getEndNode();
-    JoinResult result = targetNode.getJoinStrategy().performJoin( process, token );
+    JoinResult result = targetNode.getJoinStrategy().performJoin( this, process, token );
 
     if ( result.isJoinComplete() )
     {
@@ -150,6 +155,24 @@ public abstract class BaseEngine implements Engine
   {
     NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, tokens );
     process.addNodeToken( nodeToken );
+
+    // Add new node token to add the token sets which its generating arc tokens are members of
+    Set<TokenSet> tokenSets = new HashSet<TokenSet>();
+
+    for ( ArcToken token : tokens )
+    {
+      for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
+      {
+        TokenSet tokenSet = setMember.getTokenSet();
+        if ( !tokenSet.isComplete() && !tokenSets.contains( tokenSet ) )
+        {
+          tokenSets.add( tokenSet );
+          NodeTokenSetMember newSetMember = getFactory().newNodeTokenSetMember( tokenSet, nodeToken, setMember.getMemberIndex() );
+          tokenSet.addNodeTokenSetMember( newSetMember );
+        }
+      }
+    }
+
     fireEvent( NodeTokenEvent.newCreatedEvent( this, nodeToken ) );
 
     for ( ArcToken token : tokens )
@@ -191,18 +214,11 @@ public abstract class BaseEngine implements Engine
   @Override
   public void completeAsynchronous (NodeToken token, String arcName)
   {
-    completeNodeToken( token, arcName, true );
+    completeNodeExecution( token, arcName, true );
   }
 
-  protected void completeNodeToken (NodeToken token, String arcName, boolean asynchronous)
+  private void completeNodeToken (GraphProcess process, NodeToken token, String arcName)
   {
-    GraphProcess process = token.getProcess();
-
-    if ( !process.isExecuting() || token.isComplete() )
-    {
-      return;
-    }
-
     process.removeActiveNodeToken( token );
     token.markComplete( this );
 
@@ -212,11 +228,34 @@ public abstract class BaseEngine implements Engine
     {
       fireEvent( NodeTokenEvent.newCompletedEvent( this, token, arcName ) );
     }
+  }
+
+  protected void completeNodeExecution (NodeToken token, String arcName, boolean asynchronous)
+  {
+    GraphProcess process = token.getProcess();
+
+    if ( !process.isExecuting() || token.isComplete() )
+    {
+      return;
+    }
+
+    completeNodeToken( process, token, arcName );
 
     for ( Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
     {
       ArcToken arcToken = getFactory().newArcToken( process, arc, ExecutionType.Forward, token );
       token.getChildTokens().add( arcToken );
+
+      for ( NodeTokenSetMember setMember : token.getTokenSetMemberships() )
+      {
+        TokenSet tokenSet = setMember.getTokenSet();
+        if ( !tokenSet.isComplete() )
+        {
+          ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
+          tokenSet.addArcTokenSetMember( newSetMember );
+        }
+      }
+
       fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
 
       if ( asynchronous && arcExecutionStarted )
@@ -235,7 +274,7 @@ public abstract class BaseEngine implements Engine
   {
     GraphProcess process = token.getProcess();
 
-    completeNodeToken( token, arcName, false );
+    completeNodeExecution( token, arcName, false );
 
     if ( process.isExecuting() && !arcExecutionStarted )
     {

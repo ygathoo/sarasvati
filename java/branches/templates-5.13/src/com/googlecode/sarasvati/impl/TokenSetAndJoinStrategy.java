@@ -14,13 +14,16 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
@@ -40,41 +43,48 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
 {
   public TokenSet getTokenSet (ArcToken token)
   {
-    List<TokenSet> tokenSets = token.getTokenSets();
-    return tokenSets.isEmpty() ? null : tokenSets.get( 0 );
+    List<ArcTokenSetMember> tokenSetMemberShips = token.getTokenSetMemberships();
+    return tokenSetMemberShips.isEmpty() ? null : tokenSetMemberShips.get( 0 ).getTokenSet();
   }
 
-  public JoinResult performFallbackJoin (GraphProcess process, ArcToken token)
+  public JoinResult performFallbackJoin (Engine engine, GraphProcess process, ArcToken token)
   {
-    return JoinType.OR.getJoinStrategy().performJoin( process, token );
+    return JoinType.OR.getJoinStrategy().performJoin( engine, process, token );
   }
 
   @Override
-  public JoinResult performJoin (GraphProcess process, ArcToken token)
+  public JoinResult performJoin (Engine engine, GraphProcess process, ArcToken token)
   {
     TokenSet tokenSet = getTokenSet( token );
 
     if ( tokenSet == null )
     {
-      return performFallbackJoin( process, token );
+      return performFallbackJoin( engine, process, token );
     }
 
-    if ( !tokenSet.getActiveNodeTokens().isEmpty() )
+    if ( !tokenSet.getActiveNodeTokenSetMembers().isEmpty() )
     {
       return JoinResult.INCOMPLETE_JOIN_RESULT;
     }
 
     Node targetNode = token.getArc().getEndNode();
-    List<ArcToken> incompleteTokens = tokenSet.getActiveArcTokens();
+    List<ArcTokenSetMember> activeMembers = tokenSet.getActiveArcTokenSetMembers();
 
-    for ( ArcToken arcToken : incompleteTokens )
+    List<ArcToken> tokens = new ArrayList<ArcToken>( activeMembers.size() );
+
+    for ( ArcTokenSetMember setMember : activeMembers )
     {
+      ArcToken arcToken = setMember.getToken();
+      tokens.add( arcToken );
+
       if ( !arcToken.getArc().getEndNode().equals( targetNode ) )
       {
         return JoinResult.INCOMPLETE_JOIN_RESULT;
       }
     }
 
-    return new CompleteJoinResult( incompleteTokens );
+    tokenSet.markComplete( engine );
+
+    return new CompleteJoinResult( tokens );
   }
 }

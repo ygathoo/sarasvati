@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.impl;
 
@@ -23,6 +23,7 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
@@ -41,7 +42,7 @@ public class AndJoinStrategy implements JoinStrategy
   }
 
   @Override
-  public JoinResult performJoin (GraphProcess process, ArcToken token)
+  public JoinResult performJoin (Engine engine, GraphProcess process, ArcToken token)
   {
     List<? extends Arc> joinArcs = getJoiningArcs( process, token );
 

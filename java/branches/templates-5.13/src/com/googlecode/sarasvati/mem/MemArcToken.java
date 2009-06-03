@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.mem;
@@ -25,6 +25,7 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
@@ -43,7 +44,7 @@ public class MemArcToken implements ArcToken
   protected Date completeDate;
   protected ExecutionType executionType;
 
-  protected List<TokenSet> tokenSets = new LinkedList<TokenSet>();
+  protected List<ArcTokenSetMember> tokenSetMemberships = new LinkedList<ArcTokenSetMember>();
 
   public MemArcToken (Arc arc, GraphProcess process, ExecutionType executionType, NodeToken parentToken)
   {
@@ -89,6 +90,11 @@ public class MemArcToken implements ArcToken
   {
     this.completeDate = new Date();
     this.childToken = token;
+
+    for ( ArcTokenSetMember setMember : getTokenSetMemberships() )
+    {
+      setMember.getTokenSet().arcTokenSetMemberCompleted( setMember );
+    }
   }
 
   @Override
@@ -124,20 +130,13 @@ public class MemArcToken implements ArcToken
   @Override
   public TokenSet getTokenSet (String name)
   {
-    for ( TokenSet tokenSet : tokenSets )
-    {
-      if ( SvUtil.equals( name, tokenSet.getName() ) )
-      {
-        return tokenSet;
-      }
-    }
-    return null;
+    return SvUtil.getTokenSet( this, name );
   }
 
   @Override
-  public List<TokenSet> getTokenSets ()
+  public List<ArcTokenSetMember> getTokenSetMemberships ()
   {
-    return tokenSets;
+    return tokenSetMemberships;
   }
 
   @Override
