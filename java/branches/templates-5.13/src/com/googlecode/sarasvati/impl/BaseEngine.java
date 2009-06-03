@@ -235,14 +235,9 @@ public abstract class BaseEngine implements Engine
   {
     GraphProcess process = token.getProcess();
 
-    if ( !process.isExecuting() )
-    {
-      return;
-    }
-
     completeNodeToken( token, arcName, false );
 
-    if ( !arcExecutionStarted )
+    if ( process.isExecuting() && !arcExecutionStarted )
     {
       executeQueuedArcTokens( process );
     }
