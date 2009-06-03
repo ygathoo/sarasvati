@@ -40,18 +40,18 @@ Templates will be implemented using token sets. When completing a node execution
 Add methods to `Engine` interface:
 
 {{{
-  completeExecutionWithToken( NodeToken token, 
-                              String arcname,                               
-                              int numberOfTokens, 
-                              Env initialEnv,
-                              String tokenSetName )
+  completeExecutionWithTokenSet( NodeToken token, 
+                                 String arcname,                               
+                                 int numberOfTokens, 
+                                 Env initialEnv,
+                                 String tokenSetName )
 
   // here token set name defaults to the name of the node that the token is
   // pointing to
-  completeExecutionWithToken( NodeToken token, 
-                              String arcname, 
-                              int numberOfTokens, 
-                              Env initialEnv )
+  completeExecutionWithTokenSet( NodeToken token, 
+                                 String arcname, 
+                                 int numberOfTokens, 
+                                 Env initialEnv )
 
 }}}
 
