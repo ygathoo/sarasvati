@@ -22,6 +22,7 @@ package com.googlecode.sarasvati.hib;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -34,7 +35,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
-import org.hibernate.annotations.CascadeType;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcTokenSetMember;
@@ -61,9 +61,12 @@ public class HibTokenSet implements TokenSet
   @Column( name="complete")
   protected boolean complete = false;
 
-  @OneToMany (mappedBy="tokenSet", targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
-  @Cascade( CascadeType.LOCK )
+  @OneToMany (mappedBy="tokenSet", targetEntity=HibArcTokenSetMember.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
   protected List<ArcTokenSetMember> activeArcTokenSetMembers = new LinkedList<ArcTokenSetMember>();
+
+  @OneToMany (mappedBy="tokenSet", targetEntity=HibNodeTokenSetMember.class, fetch=FetchType.LAZY)
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
   protected List<NodeTokenSetMember> activeNodeTokenSetMembers = new LinkedList<NodeTokenSetMember>();
 
   public HibTokenSet (final HibGraphProcess process,

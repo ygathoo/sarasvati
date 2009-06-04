@@ -41,6 +41,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CollectionOfElements;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -110,6 +111,10 @@ public class HibNodeToken implements NodeToken
   @Transient
   protected Env fullEnv = null;
 
+  @OneToMany (mappedBy="token", targetEntity=HibNodeTokenSetMember.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
+  protected List<NodeTokenSetMember> tokenSetMemberships;
+
   public HibNodeToken () { /* Default constructor for Hibernate */ }
 
   public HibNodeToken (HibGraphProcess process,
@@ -130,6 +135,7 @@ public class HibNodeToken implements NodeToken
     this.createDate    = new Date();
 
     this.transientAttributes = transientAttributes;
+    this.tokenSetMemberships = new LinkedList<NodeTokenSetMember>();
   }
 
   public Long getId ()
@@ -284,7 +290,12 @@ public class HibNodeToken implements NodeToken
   @Override
   public List<NodeTokenSetMember> getTokenSetMemberships ()
   {
-    return null;
+    return tokenSetMemberships;
+  }
+
+  public void setTokenSetMemberships (List<NodeTokenSetMember> tokenSetMemberships)
+  {
+    this.tokenSetMemberships = tokenSetMemberships;
   }
 
   @Override
