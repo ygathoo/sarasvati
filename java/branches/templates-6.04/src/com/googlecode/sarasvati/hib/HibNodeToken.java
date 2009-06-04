@@ -51,7 +51,10 @@ import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.impl.NestedEnv;
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 @Entity
@@ -115,6 +118,10 @@ public class HibNodeToken implements NodeToken
   @Transient
   protected Env fullEnv = null;
 
+  @OneToMany (mappedBy="token", targetEntity=HibNodeTokenSetMember.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
+  protected List<NodeTokenSetMember> tokenSetMemberships;
+
   public HibNodeToken () { /* Default constructor for Hibernate */ }
 
   public HibNodeToken (HibGraphProcess process,
@@ -135,6 +142,7 @@ public class HibNodeToken implements NodeToken
     this.createDate    = new Date();
 
     this.transientAttributes = transientAttributes;
+    this.tokenSetMemberships = new LinkedList<NodeTokenSetMember>();
   }
 
   public Long getId ()
@@ -272,6 +280,29 @@ public class HibNodeToken implements NodeToken
   public void accept (TokenVisitor visitor)
   {
     visitor.visit( this );
+  }
+
+  @Override
+  public TokenSet getTokenSet (String name)
+  {
+    return SvUtil.getTokenSet( this, name );
+  }
+
+  @Override
+  public NodeTokenSetMember getTokenSetMember (String name)
+  {
+    return (NodeTokenSetMember)SvUtil.getTokenSetMember( this, name );
+  }
+
+  @Override
+  public List<NodeTokenSetMember> getTokenSetMemberships ()
+  {
+    return tokenSetMemberships;
+  }
+
+  public void setTokenSetMemberships (List<NodeTokenSetMember> tokenSetMemberships)
+  {
+    this.tokenSetMemberships = tokenSetMemberships;
   }
 
   @Override

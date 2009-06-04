@@ -16,28 +16,30 @@
 
     Copyright 2009 Paul Lorenz
 */
+
 package com.googlecode.sarasvati;
 
+import java.util.List;
 
-/**
- * Encapsulates a strategy for determining if a node is ready to execute. A JoinStrategy
- * will be executed whenever an {@link ArcToken} is processed. The join strategy will
- * determine if a NodeToken will be created or if the ArcToken will be added to the list
- * of active arc tokens.
- *
- * @author Paul Lorenz
- */
-public interface JoinStrategy
+public interface TokenSet
 {
+  GraphProcess getProcess ();
+  String getName ();
+
+  List<ArcTokenSetMember> getActiveArcTokenSetMembers ();
+  List<NodeTokenSetMember> getActiveNodeTokenSetMembers ();
+
+  void addArcTokenSetMember (ArcTokenSetMember setMember);
+  void addNodeTokenSetMember (NodeTokenSetMember setMember);
+
+  void arcTokenSetMemberCompleted (ArcTokenSetMember setMember);
+  void nodeTokenSetMemberCompleted (NodeTokenSetMember setMember);
+
+  boolean isComplete ();
+
   /**
-   * Called on every {@link ArcToken} when processed.
-   *
-   * @param The engine executing the given process.
-   * @param process The process being executed.
-   * @param token The arc token being processed.
-   *
-   * @return The {@link JoinResult} encapsulating if the join is complete and the set of
-   *         arc tokens participating in the join.
+   * Marks this token set as being complete, in the sense that a
+   * token set join has been performed on the token set.
    */
-  JoinResult performJoin (Engine engine, GraphProcess process, ArcToken token);
+  void markComplete (Engine engine);
 }

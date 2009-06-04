@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.mem;
@@ -31,6 +31,7 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
@@ -45,13 +46,17 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public MemGraph newGraph (String name, int version)
+  public MemGraph newGraph (final String name,
+                            final int version)
   {
     return new MemGraph( name );
   }
 
   @Override
-  public Arc newArc (MemGraph graph, Node startNode, Node endNode, String name)
+  public Arc newArc (final MemGraph graph,
+                     final Node startNode,
+                     final Node endNode,
+                     final String name)
       throws LoadException
   {
     MemArc arc = new MemArc( name, startNode, endNode );
@@ -106,7 +111,9 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public Node importNode (MemGraph graph, Node node, String instanceName)
+  public Node importNode (final MemGraph graph,
+                          final Node node,
+                          final String instanceName)
   {
     MemNode memNode = (MemNode)node;
     MemNode newNode = memNode.clone();
@@ -119,17 +126,20 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public ArcToken newArcToken (GraphProcess process, Arc arc, ExecutionType executionType, NodeToken parent)
+  public ArcToken newArcToken (final GraphProcess process,
+                               final Arc arc,
+                               final ExecutionType executionType,
+                               final NodeToken parent)
   {
     return new MemArcToken( arc, process, executionType, parent );
   }
 
   @Override
-  public NodeToken newNodeToken (GraphProcess process,
-                                          Node node,
-                                          ExecutionType executionType,
-                                          List<ArcToken> parents,
-                                          NodeToken envParent)
+  public NodeToken newNodeToken (final GraphProcess process,
+                                 final Node node,
+                                 final ExecutionType executionType,
+                                 final List<ArcToken> parents,
+                                 final NodeToken envParent)
   {
     MemGraphProcess memGraphProcess = (MemGraphProcess)process;
 
@@ -147,16 +157,41 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public MemGraphProcess newProcess (Graph graph)
+  public MemGraphProcess newProcess (final Graph graph)
   {
     return new MemGraphProcess( graph );
   }
 
   @Override
-  public GraphProcess newNestedProcess (Graph graph, NodeToken parentToken)
+  public MemGraphProcess newNestedProcess (final Graph graph,
+                                           final NodeToken parentToken)
   {
     MemGraphProcess process = newProcess( graph );
     process.setParentToken( parentToken );
     return process;
   }
+
+  @Override
+  public MemTokenSet newTokenSet (final GraphProcess process,
+                                  final String name)
+  {
+    return new MemTokenSet( process, name );
+  }
+
+  @Override
+  public MemArcTokenSetMember newArcTokenSetMember (final TokenSet tokenSet,
+                                                    final ArcToken token,
+                                                    final int memberIndex)
+  {
+    return new MemArcTokenSetMember( tokenSet, (MemArcToken)token, memberIndex );
+  }
+
+  @Override
+  public MemNodeTokenSetMember newNodeTokenSetMember (final TokenSet tokenSet,
+                                                      final NodeToken token,
+                                                      final int memberIndex)
+  {
+    return new MemNodeTokenSetMember( tokenSet, (MemNodeToken)token, memberIndex );
+  }
+
 }

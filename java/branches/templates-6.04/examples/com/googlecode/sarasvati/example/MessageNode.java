@@ -16,45 +16,36 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.example.hib;
-
-import java.util.Random;
-
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+package com.googlecode.sarasvati.example;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.hib.HibNode;
 
-@Entity
-@DiscriminatorValue( "init" )
-public class InitNode extends HibNode
+/**
+ * Example node to print out a message
+ *
+ * @author Paul Lorenz
+ */
+public class MessageNode extends CustomNode
 {
+  protected String message;
+
+  public String getMessage ()
+  {
+    return message;
+  }
+
+  public void setMessage (String message)
+  {
+    this.message = message;
+  }
+
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    long iter = 0;
-
-    Env env = token.getEnv();
-
-    if ( env.hasAttribute( "iter" ) )
-    {
-      iter = env.getLongAttribute( "iter" );
-    }
-
-    env.setLongAttribute( "iter", ++iter );
-    env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
-
-    if ( token.getProcess().getParentToken() != null )
-    {
-      engine.complete( token, Arc.DEFAULT_ARC );
-    }
-    else
-    {
-      engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
-    }
+    System.out.println( "MESSAGE: " + message );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 }
