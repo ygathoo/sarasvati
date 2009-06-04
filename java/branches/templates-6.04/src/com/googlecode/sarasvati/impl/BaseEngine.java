@@ -417,7 +417,6 @@ public abstract class BaseEngine implements Engine
   @Override
   public void backtrack (final NodeToken token)
   {
-
     if ( !token.isComplete() )
     {
       throw new WorkflowException( "Cannot backtrack to a node token which isn't completed." );
