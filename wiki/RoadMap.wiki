@@ -11,26 +11,60 @@ Sarasvati is fairly stable at this point, and we are workings towards a 1.0 rele
 
 A graphical editor for process definitions is in progress. 
 
+ * Undo/Redo framework: Done
  * Load: Done
  * Save: 50% done
- * Add nodes: Done with undo/redo support.
- * Delete nodes: TBD
- * Add external: TBD
- * Delete external: TBD
- * Move nodes: Done with undo/redo support.
- * Connect nodes: Done. TODO: undo/redo support.
- * Change connections: Done. TODO: undo/redo support.
- * Remove connections: Done. TODO: undo/redo support.
- * Undo/Redo Framework: Implemented
- * Edit node properties: Started
- * Edit arc properties: TBD
+ * Add nodes: 
+   * Implemented: Yes
+   * Undo/redo: Yes
+ * Delete nodes
+   * Implemented: No
+   * Undo/redo: No
+ * Add external
+   * Implemented: No
+   * Undo/redo: No
+ * Delete external
+   * Implemented: No
+   * Undo/redo: No
+ * Move nodes
+   * Implemented: Yes
+   * Undo/redo: No
+ * Connect nodes
+   * Implemented: Yes
+   * Undo/redo: No
+ * Change connections
+   * Implemented: Yes
+   * Undo/redo: No
+ * Remove connections
+   * Implemented: Yes
+   * Undo/redo: No
+ * Edit node properties
+   * Implemented: Started
+   * Undo/redo: No
+ * Edit arc properties
+   * Implemented: No
+   * Undo/redo: No
  * Cleanup undo/redo MDI interactions: Done
 
 === Template Node ===
 
-Design work for templates has started. Will probably included the notion of token sets, which may be useful in other contexts.
+See [TokenSetsDesign design]. 
 
-Implementation started in a feature branch.
+ * Milestone I
+   * Basic template based split join working in memory engine
+   * Status: Done
+ * Milestone II
+   * Basic template based split join working in hibernate engine
+   * Status: Incomplete
+ * Milestone III
+   * TokenSet env working in memory engine
+   * Status: Incomplete
+ * Milestone IV
+   * TokenSet env working in hibernate engine
+   * Status: Incomplete
+
+===Documentation===
+Documentation needs to be updated for changes. It also need to be shipped with the release, rather than just available on the project WIKI. Need to find a WIKI -> HTML compiler
 
 === Performance Tuning ===
 
