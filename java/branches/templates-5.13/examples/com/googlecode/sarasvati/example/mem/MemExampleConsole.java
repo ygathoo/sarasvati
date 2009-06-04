@@ -283,8 +283,8 @@ public class MemExampleConsole
     engine.addNodeType( "dump", DumpNode.class );
     engine.addNodeType( "customTest", CustomTestNode.class );
     engine.addNodeType( "approval", ApprovalNode.class );
-    engine.addNodeType( "message", MessageNode.class );
     engine.addNodeType( "approvalSetup", ApprovalSetupNode.class );
+    engine.addNodeType( "message", MessageNode.class );
 
     GraphLoader<MemGraph> wfLoader = engine.getLoader();
 

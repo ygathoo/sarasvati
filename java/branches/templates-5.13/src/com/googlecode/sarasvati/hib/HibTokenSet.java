@@ -36,6 +36,7 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
+import org.hibernate.annotations.Where;
 
 import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
@@ -63,10 +64,12 @@ public class HibTokenSet implements TokenSet
 
   @OneToMany (mappedBy="tokenSet", targetEntity=HibArcTokenSetMember.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
   @Cascade( org.hibernate.annotations.CascadeType.LOCK )
+  @Where( clause="token.completeDate is null" )
   protected List<ArcTokenSetMember> activeArcTokenSetMembers = new LinkedList<ArcTokenSetMember>();
 
   @OneToMany (mappedBy="tokenSet", targetEntity=HibNodeTokenSetMember.class, fetch=FetchType.LAZY)
   @Cascade( org.hibernate.annotations.CascadeType.LOCK )
+  @Where( clause="token.completeDate is null" )
   protected List<NodeTokenSetMember> activeNodeTokenSetMembers = new LinkedList<NodeTokenSetMember>();
 
   public HibTokenSet (final HibGraphProcess process,
