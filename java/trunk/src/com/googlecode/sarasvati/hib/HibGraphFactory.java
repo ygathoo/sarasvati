@@ -201,7 +201,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 
       if ( isMerge )
       {
-        attrMap.putAll( parent.getAttrMap() );
+        attrMap.putAll( parent.getAttrSetToken().getAttrMap() );
       }
 
       Env mergeEnv = parent.getEnv();
