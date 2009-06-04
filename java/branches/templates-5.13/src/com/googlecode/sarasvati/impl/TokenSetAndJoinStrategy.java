@@ -47,6 +47,17 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
     return tokenSetMemberShips.isEmpty() ? null : tokenSetMemberShips.get( 0 ).getTokenSet();
   }
 
+  /**
+   * Called if the node token is not a member of a suitable token set.
+   * Throws {@link IllegalStateException} by default, but this behavior
+   * may be overridden in a subclass.
+   *
+   * @param engine The engine performing the join
+   * @param process The currently executing process.
+   * @param token The token being join on.
+   *
+   * @return
+   */
   public JoinResult performFallbackJoin (Engine engine, GraphProcess process, ArcToken token)
   {
     throw new IllegalStateException( "Token " + token + " does not belong to the appropriate token set" );
