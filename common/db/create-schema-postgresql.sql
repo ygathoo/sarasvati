@@ -1,4 +1,7 @@
 -- DROP EXISTING TABLES
+drop table if exists wf_token_set_arcmem cascade;
+drop table if exists wf_token_set_nodemem cascade;
+drop table if exists wf_token_set cascade;
 drop table if exists wf_token_attr cascade;
 drop table if exists wf_process_attr cascade;
 drop table if exists wf_node_token_parent cascade;
@@ -98,6 +101,7 @@ create table wf_node_join_type
 insert into wf_node_join_type values ( 0, 'Or: Join is completed whenever any arc token arrives at the node' );
 insert into wf_node_join_type values ( 1, 'And: Join is completed when there are arc tokens on all incoming arcs to a node' );
 insert into wf_node_join_type values ( 2, 'Label And: Join is completed when there are arc tokens on all incoming arcs with the same name as that of the arc that the current incoming arc token is on.' );
+insert into wf_node_join_type values ( 3, 'TokenSet And: Join is completed when all active arc tokens in the token set arrive and there are no active node tokens.' );
 
 create table wf_node
 (

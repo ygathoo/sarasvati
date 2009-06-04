@@ -30,8 +30,11 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.example.ApprovalNode;
+import com.googlecode.sarasvati.example.ApprovalSetupNode;
 import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
+import com.googlecode.sarasvati.example.MessageNode;
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
@@ -87,6 +90,9 @@ public class HibExampleConsole
     HibTestSetup.init(false);
 
     DefaultNodeFactory.addGlobalCustomType( "customTest", CustomTestNode.class );
+    DefaultNodeFactory.addGlobalCustomType( "approval", ApprovalNode.class );
+    DefaultNodeFactory.addGlobalCustomType( "approvalSetup", ApprovalSetupNode.class );
+    DefaultNodeFactory.addGlobalCustomType( "message", MessageNode.class );
 
     while ( true )
     {
