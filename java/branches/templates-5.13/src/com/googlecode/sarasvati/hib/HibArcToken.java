@@ -22,6 +22,7 @@
 package com.googlecode.sarasvati.hib;
 
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -34,10 +35,12 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -88,6 +91,10 @@ public class HibArcToken implements ArcToken
   @Column (name="execution_type")
   protected ExecutionType executionType;
 
+  @OneToMany (mappedBy="token", targetEntity=HibArcTokenSetMember.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
+  protected List<ArcTokenSetMember> tokenSetMemberships;
+
   public HibArcToken () { /* Default constructor for hibernate */ }
 
   public HibArcToken (HibGraphProcess process, HibArc arc, ExecutionType executionType, HibNodeToken parentToken)
@@ -98,6 +105,7 @@ public class HibArcToken implements ArcToken
     this.parentToken   = parentToken;
     this.createDate    = new Date();
     this.pending       = true;
+    this.tokenSetMemberships = new LinkedList<ArcTokenSetMember>();
   }
 
   public Long getId ()
@@ -217,7 +225,12 @@ public class HibArcToken implements ArcToken
   @Override
   public List<ArcTokenSetMember> getTokenSetMemberships ()
   {
-    return null;
+    return tokenSetMemberships;
+  }
+
+  public void setTokenSetMembers (List<ArcTokenSetMember> tokenSetMemberships)
+  {
+    this.tokenSetMemberships = tokenSetMemberships;
   }
 
   @Override
