@@ -41,6 +41,6 @@ public class InitNode extends CustomNode
 
     env.setLongAttribute( "iter", ++iter );
     env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 }

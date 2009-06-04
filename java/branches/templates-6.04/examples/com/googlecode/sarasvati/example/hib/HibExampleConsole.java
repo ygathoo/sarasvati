@@ -75,6 +75,15 @@ public class HibExampleConsole
       }
     });
 
+    repository.registerPredicate( "Approved", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( Engine engine, NodeToken token )
+      {
+        return true;
+      }
+    });
+
     HibTestSetup.init(false);
 
     DefaultNodeFactory.addGlobalCustomType( "customTest", CustomTestNode.class );
@@ -240,14 +249,14 @@ public class HibExampleConsole
         {
           System.out.println( "Completing task" );
           t.setState( TaskState.Completed );
-          engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
+          engine.complete( t.getNodeToken(), Arc.DEFAULT_ARC );
         }
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
         t.setState( TaskState.Rejected );
-        engine.completeExecution( t.getNodeToken(), "reject" );
+        engine.complete( t.getNodeToken(), "reject" );
       }
       else
       {

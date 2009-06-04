@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati;
 
@@ -131,6 +131,17 @@ public interface NodeToken extends Token
    * Marks this token as being complete, in the sense that it no longer
    * represents an active part of the process. Once a token is marked
    * complete, it is generally only of historical interest.
+   * <p>
+   * This method is also responsible for removing the arc token from
+   * the active lists of each {@link TokenSet} that it is a member of.
+   *
+   * @param engine The engine executing the current process.
    */
   void markComplete (Engine engine);
+
+  TokenSet getTokenSet (String name);
+
+  NodeTokenSetMember getTokenSetMember (String name);
+
+  List<NodeTokenSetMember> getTokenSetMemberships ();
 }

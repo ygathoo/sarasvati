@@ -16,27 +16,16 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.impl;
 
-import java.util.Collections;
+package com.googlecode.sarasvati.mem;
 
-import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.JoinResult;
-import com.googlecode.sarasvati.JoinStrategy;
+import com.googlecode.sarasvati.ArcTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
 
-/**
- * Implements a join strategy where a node will complete a join
- * whenever any arc token arrives.
- *
- * @author Paul Lorenz
- */
-public class OrJoinStrategy implements JoinStrategy
+public class MemArcTokenSetMember extends MemTokenSetMember<MemArcToken> implements ArcTokenSetMember
 {
-  @Override
-  public JoinResult performJoin (Engine engine, GraphProcess process, ArcToken token)
+  public MemArcTokenSetMember (TokenSet tokenSet, MemArcToken token, int memberIndex)
   {
-    return new CompleteJoinResult( Collections.singletonList( token ) );
+    super( tokenSet, token, memberIndex );
   }
 }

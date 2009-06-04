@@ -111,6 +111,6 @@ public class CustomTestNode extends CustomNode
     System.out.println( "Inner value:" + inner.getValue() );
     System.out.println( "Inner test:" + inner.getTest() );
 
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 }

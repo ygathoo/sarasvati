@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.load;
 
@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
@@ -30,6 +31,8 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
 
 public interface GraphFactory<G extends Graph>
 {
@@ -148,6 +151,11 @@ public interface GraphFactory<G extends Graph>
    * @return A new {@link ArcToken}
    */
   ArcToken newArcToken (GraphProcess process, Arc arc, ExecutionType executionType, NodeToken parent);
+
+  TokenSet newTokenSet (GraphProcess process, String name);
+
+  ArcTokenSetMember newArcTokenSetMember (TokenSet tokenSet, ArcToken token, int memberIndex);
+  NodeTokenSetMember newNodeTokenSetMember (TokenSet tokenSet, NodeToken token, int memberIndex);
 
   /**
    * Adds the type to the {@link GraphFactory} for this engine. Specifies
