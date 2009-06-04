@@ -24,7 +24,10 @@ import java.io.FilenameFilter;
 
 import org.hibernate.Session;
 
+import com.googlecode.sarasvati.example.ApprovalNode;
+import com.googlecode.sarasvati.example.ApprovalSetupNode;
 import com.googlecode.sarasvati.example.CustomTestNode;
+import com.googlecode.sarasvati.example.MessageNode;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.load.GraphLoader;
@@ -48,6 +51,9 @@ public class TestHibLoad
     engine.addNodeType( "init", InitNode.class );
     engine.addNodeType( "dump", DumpNode.class );
     engine.addNodeType( "customTest", CustomTestNode.class );
+    engine.addNodeType( "approval", ApprovalNode.class );
+    engine.addNodeType( "approvalSetup", ApprovalSetupNode.class );
+    engine.addNodeType( "message", MessageNode.class );
 
     GraphLoader<HibGraph> wfLoader = engine.getLoader();
 

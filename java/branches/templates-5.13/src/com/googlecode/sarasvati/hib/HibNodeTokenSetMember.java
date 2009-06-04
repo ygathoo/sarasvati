@@ -32,7 +32,7 @@ import javax.persistence.Table;
 import com.googlecode.sarasvati.NodeTokenSetMember;
 
 @Entity
-@Table(name="wf_token_set_arcmem")
+@Table(name="wf_token_set_nodemem")
 public class HibNodeTokenSetMember implements NodeTokenSetMember
 {
   @Id

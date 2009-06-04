@@ -173,7 +173,6 @@ create table wf_node_token
   guard_action    int       NULL     REFERENCES wf_guard_action,
   execution_type  int       NOT NULL REFERENCES wf_execution_type,
   complete_date   timestamp NULL
-
 );
 
 ALTER TABLE wf_process
@@ -208,3 +207,27 @@ create table wf_token_attr
 
 ALTER TABLE wf_token_attr
   ADD PRIMARY KEY (attr_set_id, name);
+
+create table wf_token_set
+(
+  id            serial  NOT NULL PRIMARY KEY,
+  process_id    int     NOT NULL REFERENCES wf_process,
+  name          text    NOT NULL,
+  complete      char(1) NOT NULL
+);
+
+create table wf_token_set_arcmem
+(
+  id            serial  NOT NULL PRIMARY KEY,
+  token_set_id  int     NOT NULL REFERENCES wf_process,
+  token_id      int     NOT NULL REFERENCES wf_arc_token,
+  member_index  int     NOT NULL
+);
+
+create table wf_token_set_nodemem
+(
+  id            serial  NOT NULL PRIMARY KEY,
+  token_set_id  int     NOT NULL REFERENCES wf_process,
+  token_id      int     NOT NULL REFERENCES wf_node_token,
+  member_index  int     NOT NULL
+);

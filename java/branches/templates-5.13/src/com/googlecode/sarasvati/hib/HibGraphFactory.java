@@ -243,8 +243,9 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   public TokenSet newTokenSet (final GraphProcess process,
                                final String name)
   {
-    // TODO Auto-generated method stub
-    return null;
+    HibTokenSet tokenSet = new HibTokenSet( (HibGraphProcess)process, name );
+    session.save( tokenSet );
+    return tokenSet;
   }
 
   @Override
@@ -252,8 +253,11 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
                                                  final ArcToken token,
                                                  final int memberIndex)
   {
-    // TODO Auto-generated method stub
-    return null;
+    HibArcTokenSetMember setMember =
+      new HibArcTokenSetMember( (HibTokenSet)tokenSet, (HibArcToken)token, memberIndex );
+
+    session.save( setMember );
+    return setMember;
   }
 
   @Override
@@ -261,7 +265,10 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
                                                    final NodeToken token,
                                                    final int memberIndex)
   {
-    // TODO Auto-generated method stub
-    return null;
+    HibNodeTokenSetMember setMember =
+      new HibNodeTokenSetMember( (HibTokenSet)tokenSet, (HibNodeToken)token, memberIndex );
+
+    session.save( setMember );
+    return setMember;
   }
 }

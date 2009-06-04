@@ -74,6 +74,15 @@ public class HibExampleConsole
       }
     });
 
+    repository.registerPredicate( "Approved", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( Engine engine, NodeToken token )
+      {
+        return true;
+      }
+    });
+
     HibTestSetup.init();
 
     DefaultNodeFactory.addGlobalCustomType( "customTest", CustomTestNode.class );
