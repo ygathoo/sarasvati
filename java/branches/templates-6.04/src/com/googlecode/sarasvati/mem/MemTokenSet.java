@@ -22,10 +22,10 @@ package com.googlecode.sarasvati.mem;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.googlecode.sarasvati.ArcTokenSetMember;
+import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.TokenSet;
 
 public class MemTokenSet implements TokenSet
@@ -35,8 +35,8 @@ public class MemTokenSet implements TokenSet
 
   protected boolean complete = false;
 
-  protected List<ArcTokenSetMember> activeArcTokenSetMembers = new LinkedList<ArcTokenSetMember>();
-  protected List<NodeTokenSetMember> activeNodeTokenSetMembers = new LinkedList<NodeTokenSetMember>();
+  protected List<ArcToken> activeArcTokens = new LinkedList<ArcToken>();
+  protected List<NodeToken> activeNodeTokens = new LinkedList<NodeToken>();
 
   public MemTokenSet (final GraphProcess process, final String name)
   {
@@ -57,15 +57,15 @@ public class MemTokenSet implements TokenSet
   }
 
   @Override
-  public List<ArcTokenSetMember> getActiveArcTokenSetMembers ()
+  public List<ArcToken> getActiveArcTokens ()
   {
-    return activeArcTokenSetMembers;
+    return activeArcTokens;
   }
 
   @Override
-  public List<NodeTokenSetMember> getActiveNodeTokenSetMembers ()
+  public List<NodeToken> getActiveNodeTokens ()
   {
-    return activeNodeTokenSetMembers;
+    return activeNodeTokens;
   }
 
   @Override

@@ -18,7 +18,6 @@
 */
 package com.googlecode.sarasvati.impl;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -73,22 +72,17 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
       return performFallbackJoin( engine, process, token );
     }
 
-    if ( !tokenSet.getActiveNodeTokenSetMembers().isEmpty() )
+    if ( !tokenSet.getActiveNodeTokens().isEmpty() )
     {
       return JoinResult.INCOMPLETE_JOIN_RESULT;
     }
 
     Node targetNode = token.getArc().getEndNode();
-    List<ArcTokenSetMember> activeMembers = tokenSet.getActiveArcTokenSetMembers();
+    List<ArcToken> activeMembers = tokenSet.getActiveArcTokens();
 
-    List<ArcToken> tokens = new ArrayList<ArcToken>( activeMembers.size() );
-
-    for ( ArcTokenSetMember setMember : activeMembers )
+    for ( ArcToken setMember : activeMembers )
     {
-      ArcToken arcToken = setMember.getToken();
-      tokens.add( arcToken );
-
-      if ( !arcToken.getArc().getEndNode().equals( targetNode ) )
+      if ( !setMember.getArc().getEndNode().equals( targetNode ) )
       {
         return JoinResult.INCOMPLETE_JOIN_RESULT;
       }
@@ -96,6 +90,6 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
 
     tokenSet.markComplete( engine );
 
-    return new CompleteJoinResult( tokens );
+    return new CompleteJoinResult( activeMembers );
   }
 }

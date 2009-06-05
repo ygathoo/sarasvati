@@ -30,6 +30,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -38,9 +39,9 @@ import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.Where;
 
-import com.googlecode.sarasvati.ArcTokenSetMember;
+import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.TokenSet;
 
 @Entity
@@ -62,15 +63,26 @@ public class HibTokenSet implements TokenSet
   @Column( name="complete")
   protected boolean complete = false;
 
-  @OneToMany (mappedBy="tokenSet", targetEntity=HibArcTokenSetMember.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+  @OneToMany (targetEntity=HibArcToken.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+  @JoinTable( name="wf_token_set_arcmem",
+              joinColumns=@JoinColumn(name="token_set_id"),
+              inverseJoinColumns=@JoinColumn(name="token_id"))
   @Cascade( org.hibernate.annotations.CascadeType.LOCK )
-  @Where( clause="token.completeDate is null" )
-  protected List<ArcTokenSetMember> activeArcTokenSetMembers = new LinkedList<ArcTokenSetMember>();
+  @Where( clause="complete_date is null" )
+  protected List<ArcToken> activeArcTokens = new LinkedList<ArcToken>();
 
-  @OneToMany (mappedBy="tokenSet", targetEntity=HibNodeTokenSetMember.class, fetch=FetchType.LAZY)
+  @OneToMany (targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
+  @JoinTable( name="wf_token_set_nodemem",
+              joinColumns=@JoinColumn(name="token_set_id"),
+              inverseJoinColumns=@JoinColumn(name="token_id"))
   @Cascade( org.hibernate.annotations.CascadeType.LOCK )
-  @Where( clause="token.completeDate is null" )
-  protected List<NodeTokenSetMember> activeNodeTokenSetMembers = new LinkedList<NodeTokenSetMember>();
+  @Where( clause="complete_date is null" )
+  protected List<NodeToken> activeNodeTokens = new LinkedList<NodeToken>();
+
+  protected HibTokenSet ()
+  {
+    /* default constructor for hibernate */
+  }
 
   public HibTokenSet (final HibGraphProcess process,
                       final String name)
@@ -112,15 +124,15 @@ public class HibTokenSet implements TokenSet
   }
 
   @Override
-  public List<ArcTokenSetMember> getActiveArcTokenSetMembers ()
+  public List<ArcToken> getActiveArcTokens ()
   {
-    return activeArcTokenSetMembers;
+    return activeArcTokens;
   }
 
   @Override
-  public List<NodeTokenSetMember> getActiveNodeTokenSetMembers ()
+  public List<NodeToken> getActiveNodeTokens ()
   {
-    return activeNodeTokenSetMembers;
+    return activeNodeTokens;
   }
 
   @Override

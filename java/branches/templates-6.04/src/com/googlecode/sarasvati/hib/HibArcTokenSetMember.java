@@ -40,15 +40,20 @@ public class HibArcTokenSetMember implements ArcTokenSetMember
   protected Long    id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "token_set_id")
+  @JoinColumn(name = "token_set_id", nullable=false)
   protected HibTokenSet tokenSet;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "token_id")
+  @JoinColumn(name = "token_id", nullable=false)
   protected HibArcToken token;
 
-  @Column(name="member_index")
+  @Column(name="member_index", nullable=false)
   protected int memberIndex;
+
+  protected HibArcTokenSetMember ()
+  {
+    /* default constructor for hibernate */
+  }
 
   public HibArcTokenSetMember (HibTokenSet tokenSet, HibArcToken token, int memberIndex)
   {
