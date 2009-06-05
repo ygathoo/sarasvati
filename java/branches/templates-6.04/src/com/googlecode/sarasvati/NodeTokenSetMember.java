@@ -19,7 +19,16 @@
 
 package com.googlecode.sarasvati;
 
+/**
+ * Extends the TokenSetMember interface to narrow the Token
+ * to a NodeToken.
+ *
+ * @author Paul Lorenz
+ */
 public interface NodeTokenSetMember extends TokenSetMember
 {
+  /**
+   * @see com.googlecode.sarasvati.TokenSetMember#getToken()
+   */
   NodeToken getToken ();
 }

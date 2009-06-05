@@ -21,9 +21,11 @@ package com.googlecode.sarasvati.mem;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
@@ -52,7 +54,7 @@ public class MemNodeToken implements NodeToken
   protected Date completeDate;
   protected ExecutionType executionType;
 
-  protected List<NodeTokenSetMember> tokenSetMemberships = new LinkedList<NodeTokenSetMember>();
+  protected Set<NodeTokenSetMember> tokenSetMemberships = null;
 
   protected Map<String, String> attributes = new HashMap<String, String>();
 
@@ -68,6 +70,7 @@ public class MemNodeToken implements NodeToken
     this.executionType = executionType;
     this.childTokens = new LinkedList<ArcToken>();
     this.createDate = new Date();
+    tokenSetMemberships = new HashSet<NodeTokenSetMember>();
   }
 
   @Override
@@ -183,7 +186,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public List<NodeTokenSetMember> getTokenSetMemberships ()
+  public Set<NodeTokenSetMember> getTokenSetMemberships ()
   {
     return tokenSetMemberships;
   }

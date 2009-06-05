@@ -57,13 +57,13 @@ public class MemTokenSet implements TokenSet
   }
 
   @Override
-  public List<ArcToken> getActiveArcTokens ()
+  public List<ArcToken> getActiveArcTokens (Engine engine)
   {
     return activeArcTokens;
   }
 
   @Override
-  public List<NodeToken> getActiveNodeTokens ()
+  public List<NodeToken> getActiveNodeTokens (Engine engine)
   {
     return activeNodeTokens;
   }

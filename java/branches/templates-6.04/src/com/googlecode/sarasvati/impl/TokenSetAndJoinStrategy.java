@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.impl;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -42,8 +43,8 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
 {
   public TokenSet getTokenSet (ArcToken token)
   {
-    List<ArcTokenSetMember> tokenSetMemberShips = token.getTokenSetMemberships();
-    return tokenSetMemberShips.isEmpty() ? null : tokenSetMemberShips.get( 0 ).getTokenSet();
+    Collection<ArcTokenSetMember> tokenSetMemberShips = token.getTokenSetMemberships();
+    return tokenSetMemberShips.isEmpty() ? null : tokenSetMemberShips.iterator().next().getTokenSet();
   }
 
   /**
@@ -72,13 +73,13 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
       return performFallbackJoin( engine, process, token );
     }
 
-    if ( !tokenSet.getActiveNodeTokens().isEmpty() )
+    if ( !tokenSet.getActiveNodeTokens( engine ).isEmpty() )
     {
       return JoinResult.INCOMPLETE_JOIN_RESULT;
     }
 
     Node targetNode = token.getArc().getEndNode();
-    List<ArcToken> activeMembers = tokenSet.getActiveArcTokens();
+    List<ArcToken> activeMembers = tokenSet.getActiveArcTokens( engine );
 
     for ( ArcToken setMember : activeMembers )
     {

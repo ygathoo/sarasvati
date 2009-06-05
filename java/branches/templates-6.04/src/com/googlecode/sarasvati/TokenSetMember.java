@@ -19,9 +19,33 @@
 
 package com.googlecode.sarasvati;
 
+/**
+ * Represents the link between a {@link Token} and {@link TokenSet}.
+ * This mainly exists as a separate entity in order to track the
+ * member index.
+ *
+ * @author Paul Lorenz
+ */
 public interface TokenSetMember
 {
+  /**
+   * Returns the token set
+   *
+   * @return The token set
+   */
   TokenSet getTokenSet ();
+
+  /**
+   * Returns the token.
+   *
+   * @return The token
+   */
   Token getToken ();
+
+  /**
+   * Returns the index assigned to the token within the token set.
+   *
+   * @return The index assigned to the token within the token set.
+   */
   int getMemberIndex ();
 }

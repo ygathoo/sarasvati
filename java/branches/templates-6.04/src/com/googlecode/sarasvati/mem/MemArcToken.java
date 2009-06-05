@@ -20,8 +20,8 @@
 package com.googlecode.sarasvati.mem;
 
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
@@ -42,7 +42,7 @@ public class MemArcToken implements ArcToken
   protected Date completeDate;
   protected ExecutionType executionType;
 
-  protected List<ArcTokenSetMember> tokenSetMemberships = new LinkedList<ArcTokenSetMember>();
+  protected Set<ArcTokenSetMember> tokenSetMemberships = new HashSet<ArcTokenSetMember>();
 
   public MemArcToken (Arc arc, GraphProcess process, ExecutionType executionType, NodeToken parentToken)
   {
@@ -121,7 +121,7 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public List<ArcTokenSetMember> getTokenSetMemberships ()
+  public Set<ArcTokenSetMember> getTokenSetMemberships ()
   {
     return tokenSetMemberships;
   }

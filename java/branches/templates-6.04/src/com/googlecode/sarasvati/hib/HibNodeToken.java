@@ -21,9 +21,11 @@ package com.googlecode.sarasvati.hib;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -120,7 +122,7 @@ public class HibNodeToken implements NodeToken
 
   @OneToMany (mappedBy="token", targetEntity=HibNodeTokenSetMember.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
   @Cascade( org.hibernate.annotations.CascadeType.LOCK )
-  protected List<NodeTokenSetMember> tokenSetMemberships;
+  protected Set<NodeTokenSetMember> tokenSetMemberships;
 
   public HibNodeToken () { /* Default constructor for Hibernate */ }
 
@@ -142,7 +144,7 @@ public class HibNodeToken implements NodeToken
     this.createDate    = new Date();
 
     this.transientAttributes = transientAttributes;
-    this.tokenSetMemberships = new LinkedList<NodeTokenSetMember>();
+    this.tokenSetMemberships = new HashSet<NodeTokenSetMember>();
   }
 
   public Long getId ()
@@ -295,12 +297,12 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public List<NodeTokenSetMember> getTokenSetMemberships ()
+  public Set<NodeTokenSetMember> getTokenSetMemberships ()
   {
     return tokenSetMemberships;
   }
 
-  public void setTokenSetMemberships (List<NodeTokenSetMember> tokenSetMemberships)
+  public void setTokenSetMemberships (Set<NodeTokenSetMember> tokenSetMemberships)
   {
     this.tokenSetMemberships = tokenSetMemberships;
   }

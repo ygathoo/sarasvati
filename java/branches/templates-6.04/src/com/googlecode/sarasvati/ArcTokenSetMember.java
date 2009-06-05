@@ -19,7 +19,16 @@
 
 package com.googlecode.sarasvati;
 
+/**
+ * Extends the TokenSetMember interface to narrow the Token
+ * to an ArcToken.
+ *
+ * @author Paul Lorenz
+ */
 public interface ArcTokenSetMember extends TokenSetMember
 {
+  /**
+   * @see com.googlecode.sarasvati.TokenSetMember#getToken()
+   */
   ArcToken getToken ();
 }

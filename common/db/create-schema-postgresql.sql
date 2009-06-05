@@ -223,7 +223,7 @@ create table wf_token_set
 create table wf_token_set_arcmem
 (
   id            serial  NOT NULL PRIMARY KEY,
-  token_set_id  int     NOT NULL REFERENCES wf_process,
+  token_set_id  int     NOT NULL REFERENCES wf_token_set,
   token_id      int     NOT NULL REFERENCES wf_arc_token,
   member_index  int     NOT NULL
 );
@@ -231,7 +231,7 @@ create table wf_token_set_arcmem
 create table wf_token_set_nodemem
 (
   id            serial  NOT NULL PRIMARY KEY,
-  token_set_id  int     NOT NULL REFERENCES wf_process,
+  token_set_id  int     NOT NULL REFERENCES wf_token_set,
   token_id      int     NOT NULL REFERENCES wf_node_token,
   member_index  int     NOT NULL
 );

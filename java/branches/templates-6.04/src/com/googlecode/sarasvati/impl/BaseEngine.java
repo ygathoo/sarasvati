@@ -171,7 +171,7 @@ public abstract class BaseEngine implements Engine
         {
           tokenSets.add( tokenSet );
           NodeTokenSetMember newSetMember = getFactory().newNodeTokenSetMember( tokenSet, nodeToken, setMember.getMemberIndex() );
-          tokenSet.getActiveNodeTokens().add( nodeToken );
+          tokenSet.getActiveNodeTokens( this ).add( nodeToken );
           nodeToken.getTokenSetMemberships().add( newSetMember );
         }
       }
@@ -273,7 +273,7 @@ public abstract class BaseEngine implements Engine
           ArcToken arcToken = generateArcToken( process, arc, token );
 
           ArcTokenSetMember setMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, memberIndex );
-          tokenSet.getActiveArcTokens().add( arcToken );
+          tokenSet.getActiveArcTokens( this ).add( arcToken );
           arcToken.getTokenSetMemberships().add( setMember );
 
           finishNewArcTokenProcessing( process, arcToken, asynchronous );
@@ -308,7 +308,7 @@ public abstract class BaseEngine implements Engine
 
     for ( NodeTokenSetMember setMember : token.getTokenSetMemberships() )
     {
-      setMember.getTokenSet().getActiveNodeTokens().remove( setMember );
+      setMember.getTokenSet().getActiveNodeTokens( this ).remove( setMember );
     }
   }
 
@@ -318,7 +318,7 @@ public abstract class BaseEngine implements Engine
 
     for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
     {
-      setMember.getTokenSet().getActiveArcTokens().remove( setMember );
+      setMember.getTokenSet().getActiveArcTokens( this ).remove( setMember );
     }
   }
 
@@ -350,7 +350,7 @@ public abstract class BaseEngine implements Engine
       if ( !tokenSet.isComplete() )
       {
         ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
-        tokenSet.getActiveArcTokens().add( arcToken );
+        tokenSet.getActiveArcTokens( this ).add( arcToken );
         arcToken.getTokenSetMemberships().add( newSetMember );
       }
     }

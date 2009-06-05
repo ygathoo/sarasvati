@@ -19,7 +19,7 @@
 
 package com.googlecode.sarasvati;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Arc tokens point to arcs in the graph. Arc tokens may be active
@@ -102,5 +102,5 @@ public interface ArcToken extends Token
    * Returns the set members for each token set that this
    * token is tied to.
    */
-  List<ArcTokenSetMember> getTokenSetMemberships ();
+  Set<ArcTokenSetMember> getTokenSetMemberships ();
 }
