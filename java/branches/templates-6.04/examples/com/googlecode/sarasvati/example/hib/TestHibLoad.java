@@ -44,7 +44,7 @@ public class TestHibLoad
 {
   public static void main (String[] args) throws Exception
   {
-    HibTestSetup.init(true);
+    HibTestSetup.init( false );
 
     Session sess = HibTestSetup.openSession();
     sess.beginTransaction();

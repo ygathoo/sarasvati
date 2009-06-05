@@ -182,6 +182,12 @@ public class HibExampleConsole
             }
             break;
           }
+          else if ( "p".equalsIgnoreCase( input ) )
+          {
+            engine.executeQueuedArcTokens( p );
+            System.out.println( "Queued arc tokens processed" );
+            break;
+          }
           else
           {
             int line = Integer.parseInt( input );

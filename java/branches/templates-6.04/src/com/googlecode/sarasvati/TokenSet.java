@@ -26,8 +26,8 @@ public interface TokenSet
   GraphProcess getProcess ();
   String getName ();
 
-  List<ArcTokenSetMember> getActiveArcTokenSetMembers ();
-  List<NodeTokenSetMember> getActiveNodeTokenSetMembers ();
+  List<ArcToken> getActiveArcTokens ();
+  List<NodeToken> getActiveNodeTokens ();
 
   boolean isComplete ();
 

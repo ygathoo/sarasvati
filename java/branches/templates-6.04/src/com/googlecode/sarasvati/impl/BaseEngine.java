@@ -171,7 +171,7 @@ public abstract class BaseEngine implements Engine
         {
           tokenSets.add( tokenSet );
           NodeTokenSetMember newSetMember = getFactory().newNodeTokenSetMember( tokenSet, nodeToken, setMember.getMemberIndex() );
-          tokenSet.getActiveNodeTokenSetMembers().add( newSetMember );
+          tokenSet.getActiveNodeTokens().add( nodeToken );
           nodeToken.getTokenSetMemberships().add( newSetMember );
         }
       }
@@ -273,7 +273,7 @@ public abstract class BaseEngine implements Engine
           ArcToken arcToken = generateArcToken( process, arc, token );
 
           ArcTokenSetMember setMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, memberIndex );
-          tokenSet.getActiveArcTokenSetMembers().add( setMember );
+          tokenSet.getActiveArcTokens().add( arcToken );
           arcToken.getTokenSetMemberships().add( setMember );
 
           finishNewArcTokenProcessing( process, arcToken, asynchronous );
@@ -308,7 +308,7 @@ public abstract class BaseEngine implements Engine
 
     for ( NodeTokenSetMember setMember : token.getTokenSetMemberships() )
     {
-      setMember.getTokenSet().getActiveNodeTokenSetMembers().remove( setMember );
+      setMember.getTokenSet().getActiveNodeTokens().remove( setMember );
     }
   }
 
@@ -318,7 +318,7 @@ public abstract class BaseEngine implements Engine
 
     for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
     {
-      setMember.getTokenSet().getActiveArcTokenSetMembers().remove( setMember );
+      setMember.getTokenSet().getActiveArcTokens().remove( setMember );
     }
   }
 
@@ -350,7 +350,7 @@ public abstract class BaseEngine implements Engine
       if ( !tokenSet.isComplete() )
       {
         ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
-        tokenSet.getActiveArcTokenSetMembers().add( newSetMember );
+        tokenSet.getActiveArcTokens().add( arcToken );
         arcToken.getTokenSetMemberships().add( newSetMember );
       }
     }

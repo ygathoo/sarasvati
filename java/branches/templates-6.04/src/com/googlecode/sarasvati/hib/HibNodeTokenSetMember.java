@@ -40,15 +40,20 @@ public class HibNodeTokenSetMember implements NodeTokenSetMember
   protected Long    id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "token_set_id")
+  @JoinColumn(name = "token_set_id", nullable=false)
   protected HibTokenSet tokenSet;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "token_id")
+  @JoinColumn(name = "token_id", nullable=false)
   protected HibNodeToken token;
 
-  @Column(name="member_index")
+  @Column(name="member_index", nullable=false)
   protected int memberIndex;
+
+  protected HibNodeTokenSetMember ()
+  {
+    /* default constructor for hibernate */
+  }
 
   public HibNodeTokenSetMember (HibTokenSet tokenSet, HibNodeToken token, int memberIndex)
   {
