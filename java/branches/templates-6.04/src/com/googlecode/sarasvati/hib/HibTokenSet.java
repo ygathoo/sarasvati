@@ -22,7 +22,6 @@ package com.googlecode.sarasvati.hib;
 import java.util.LinkedList;
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,14 +29,11 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
-import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
-import org.hibernate.annotations.Where;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
@@ -61,23 +57,13 @@ public class HibTokenSet implements TokenSet
 
   @Type (type="yes_no")
   @Column( name="complete")
-  protected boolean complete = false;
+  protected boolean complete;
 
-  @OneToMany (targetEntity=HibArcToken.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
-  @JoinTable( name="wf_token_set_arcmem",
-              joinColumns=@JoinColumn(name="token_set_id"),
-              inverseJoinColumns=@JoinColumn(name="token_id"))
-  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
-  @Where( clause="complete_date is null" )
-  protected List<ArcToken> activeArcTokens = new LinkedList<ArcToken>();
+  @Transient
+  protected List<ArcToken> activeArcTokens;
 
-  @OneToMany (targetEntity=HibNodeToken.class, fetch=FetchType.LAZY)
-  @JoinTable( name="wf_token_set_nodemem",
-              joinColumns=@JoinColumn(name="token_set_id"),
-              inverseJoinColumns=@JoinColumn(name="token_id"))
-  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
-  @Where( clause="complete_date is null" )
-  protected List<NodeToken> activeNodeTokens = new LinkedList<NodeToken>();
+  @Transient
+  protected List<NodeToken> activeNodeTokens;
 
   protected HibTokenSet ()
   {
@@ -89,6 +75,8 @@ public class HibTokenSet implements TokenSet
   {
     this.process = process;
     this.name = name;
+    this.activeArcTokens = new LinkedList<ArcToken>();
+    this.activeNodeTokens = new LinkedList<NodeToken>();
   }
 
   public Long getId ()
@@ -124,14 +112,22 @@ public class HibTokenSet implements TokenSet
   }
 
   @Override
-  public List<ArcToken> getActiveArcTokens ()
+  public List<ArcToken> getActiveArcTokens (Engine engine)
   {
+    if ( activeArcTokens == null )
+    {
+      activeArcTokens = ((HibEngine)engine).getActiveArcTokens( this );
+    }
     return activeArcTokens;
   }
 
   @Override
-  public List<NodeToken> getActiveNodeTokens ()
+  public List<NodeToken> getActiveNodeTokens (Engine engine)
   {
+    if ( activeNodeTokens == null )
+    {
+      activeNodeTokens = ((HibEngine)engine).getActiveNodeTokens( this );
+    }
     return activeNodeTokens;
   }
 

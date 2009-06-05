@@ -22,8 +22,8 @@
 package com.googlecode.sarasvati.hib;
 
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -100,7 +100,7 @@ public class HibArcToken implements ArcToken
 
   @OneToMany (mappedBy="token", targetEntity=HibArcTokenSetMember.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
   @Cascade( org.hibernate.annotations.CascadeType.LOCK )
-  protected List<ArcTokenSetMember> tokenSetMemberships;
+  protected Set<ArcTokenSetMember> tokenSetMemberships;
 
   public HibArcToken () { /* Default constructor for hibernate */ }
 
@@ -112,7 +112,7 @@ public class HibArcToken implements ArcToken
     this.parentToken   = parentToken;
     this.createDate    = new Date();
     this.pending       = true;
-    this.tokenSetMemberships = new LinkedList<ArcTokenSetMember>();
+    this.tokenSetMemberships = new HashSet<ArcTokenSetMember>();
   }
 
   public Long getId ()
@@ -230,12 +230,12 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public List<ArcTokenSetMember> getTokenSetMemberships ()
+  public Set<ArcTokenSetMember> getTokenSetMemberships ()
   {
     return tokenSetMemberships;
   }
 
-  public void setTokenSetMembers (List<ArcTokenSetMember> tokenSetMemberships)
+  public void setTokenSetMembers (Set<ArcTokenSetMember> tokenSetMemberships)
   {
     this.tokenSetMemberships = tokenSetMemberships;
   }

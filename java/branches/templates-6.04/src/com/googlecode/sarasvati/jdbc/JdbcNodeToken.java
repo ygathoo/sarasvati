@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
@@ -380,7 +381,7 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
   }
 
   @Override
-  public List<NodeTokenSetMember> getTokenSetMemberships ()
+  public Set<NodeTokenSetMember> getTokenSetMemberships ()
   {
     // TODO Auto-generated method stub
     return null;

@@ -138,6 +138,8 @@ public class HibExampleConsole
 
       if ( p.isComplete() )
       {
+        trans.commit();
+        session.close();
         System.out.println( "Workflow complete" );
         return;
       }

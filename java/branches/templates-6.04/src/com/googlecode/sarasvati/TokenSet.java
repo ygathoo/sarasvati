@@ -21,14 +21,67 @@ package com.googlecode.sarasvati;
 
 import java.util.List;
 
+/**
+ * A token set is way of associating tokens together and allowing them to have
+ * state relative to one another. This takes two forms:
+ *
+ * <ul>
+ *   <li>Each token has an index in the token set. This allows a token in the
+ *       set to be distinguished from other (useful for template style nodes).
+ *   <li>The token set has it's own environment. The token set environment may
+ *       contain attributes visible to all tokens in the set, or just tokens
+ *       with a specific index.
+ * </ul>
+ *
+ * @author Paul Lorenz
+ */
 public interface TokenSet
 {
+  /**
+   * Returns the process that this token set belongs to.
+   *
+   * @return The process that this token set belongs to.
+   */
   GraphProcess getProcess ();
+
+  /**
+   * Returns the name given to this token set.
+   *
+   * @return The name given to this token set.
+   */
   String getName ();
 
-  List<ArcToken> getActiveArcTokens ();
-  List<NodeToken> getActiveNodeTokens ();
+  /**
+   * Returns the list of active (non-completed) arc tokens which
+   * are members of this token set.
+   *
+   * @param engine The engine executing the current process. May
+   *               be required in order to load the token list.
+   *
+   * @return the list of active (non-completed) arc tokens which
+   *         are members of this token set.
+   */
+  List<ArcToken> getActiveArcTokens (Engine engine);
 
+  /**
+   * Returns the list of active (non-completed) node tokens which
+   * are members of this token set.
+   *
+   * @param engine The engine executing the current process. May
+   *               be required in order to load the token list.
+   *
+   * @return the list of active (non-completed) node tokens which
+   *         are members of this token set.
+   */
+  List<NodeToken> getActiveNodeTokens (Engine engine);
+
+  /**
+   * Returns true if the token set has been join on and contains no more
+   * active tokens, and false otherwise.
+   *
+   * @return True if the token set has been join on and contains no more
+   *         active tokens, and false otherwise.
+   */
   boolean isComplete ();
 
   /**

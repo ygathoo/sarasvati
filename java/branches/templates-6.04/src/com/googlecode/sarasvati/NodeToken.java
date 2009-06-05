@@ -20,6 +20,7 @@ package com.googlecode.sarasvati;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Node tokens point to nodes in the graph. Unlike arc tokens,
@@ -162,5 +163,5 @@ public interface NodeToken extends Token
    * Returns the set members for each token set that this
    * token is tied to.
    */
-  List<NodeTokenSetMember> getTokenSetMemberships ();
+  Set<NodeTokenSetMember> getTokenSetMemberships ();
 }

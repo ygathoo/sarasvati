@@ -23,6 +23,7 @@ package com.googlecode.sarasvati.jdbc;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ArcTokenSetMember;
@@ -158,7 +159,7 @@ public class JdbcArcToken implements ArcToken, JdbcObject
   }
 
   @Override
-  public List<ArcTokenSetMember> getTokenSetMemberships ()
+  public Set<ArcTokenSetMember> getTokenSetMemberships ()
   {
     // TODO Auto-generated method stub
     return null;
