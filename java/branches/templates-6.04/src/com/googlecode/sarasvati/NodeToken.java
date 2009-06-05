@@ -131,17 +131,36 @@ public interface NodeToken extends Token
    * Marks this token as being complete, in the sense that it no longer
    * represents an active part of the process. Once a token is marked
    * complete, it is generally only of historical interest.
-   * <p>
-   * This method is also responsible for removing the arc token from
-   * the active lists of each {@link TokenSet} that it is a member of.
    *
    * @param engine The engine executing the current process.
    */
   void markComplete (Engine engine);
 
+  /**
+   * Returns the first {@link TokenSet} of the given name that
+   * this token is tied to, or null if the token is not associated
+   * with a token of this name. As a general principal, tokens
+   * should only belong to one token set with a given name.
+   *
+   * @param name The token set name
+   *
+   * @return the first {@link TokenSet} of the given name that
+   *         this token is tied to, or null if the token is not associated
+   *         with a token of this name.
+   */
   TokenSet getTokenSet (String name);
 
+  /**
+   * Like {@link NodeToken#getTokenSet(String)}, except returns the link
+   * rather than the the token set itself.
+   *
+   * @see NodeToken#getTokenSet(String)
+   */
   NodeTokenSetMember getTokenSetMember (String name);
 
+  /**
+   * Returns the set members for each token set that this
+   * token is tied to.
+   */
   List<NodeTokenSetMember> getTokenSetMemberships ();
 }

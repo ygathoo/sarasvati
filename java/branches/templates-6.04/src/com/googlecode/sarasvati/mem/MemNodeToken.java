@@ -128,11 +128,6 @@ public class MemNodeToken implements NodeToken
   public void markComplete (Engine engine)
   {
     completeDate = new Date();
-
-    for ( NodeTokenSetMember setMember : getTokenSetMemberships() )
-    {
-      setMember.getTokenSet().nodeTokenSetMemberCompleted( setMember );
-    }
   }
 
   @Override

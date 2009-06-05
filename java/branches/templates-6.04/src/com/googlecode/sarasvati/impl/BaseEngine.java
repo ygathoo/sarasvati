@@ -171,7 +171,7 @@ public abstract class BaseEngine implements Engine
         {
           tokenSets.add( tokenSet );
           NodeTokenSetMember newSetMember = getFactory().newNodeTokenSetMember( tokenSet, nodeToken, setMember.getMemberIndex() );
-          tokenSet.addNodeTokenSetMember( newSetMember );
+          tokenSet.getActiveNodeTokenSetMembers().add( newSetMember );
           nodeToken.getTokenSetMemberships().add( newSetMember );
         }
       }
@@ -186,7 +186,7 @@ public abstract class BaseEngine implements Engine
       {
         token.markProcessed( this );
       }
-      token.markComplete( this, nodeToken );
+      markComplete( token, nodeToken );
       fireEvent( ArcTokenEvent.newCompletedEvent( this, token ) );
     }
 
@@ -207,7 +207,7 @@ public abstract class BaseEngine implements Engine
         break;
 
       case DiscardToken :
-        token.markComplete( this );
+        markComplete( token );
         fireEvent( NodeTokenEvent.newDiscardedEvent( this, token ) );
         break;
 
@@ -273,7 +273,7 @@ public abstract class BaseEngine implements Engine
           ArcToken arcToken = generateArcToken( process, arc, token );
 
           ArcTokenSetMember setMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, memberIndex );
-          tokenSet.addArcTokenSetMember( setMember );
+          tokenSet.getActiveArcTokenSetMembers().add( setMember );
           arcToken.getTokenSetMemberships().add( setMember );
 
           finishNewArcTokenProcessing( process, arcToken, asynchronous );
@@ -302,12 +302,32 @@ public abstract class BaseEngine implements Engine
     }
   }
 
+  private void markComplete (NodeToken token)
+  {
+    token.markComplete( this );
+
+    for ( NodeTokenSetMember setMember : token.getTokenSetMemberships() )
+    {
+      setMember.getTokenSet().getActiveNodeTokenSetMembers().remove( setMember );
+    }
+  }
+
+  private void markComplete (ArcToken token, NodeToken child)
+  {
+    token.markComplete( this, child );
+
+    for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
+    {
+      setMember.getTokenSet().getActiveArcTokenSetMembers().remove( setMember );
+    }
+  }
+
   private void completeNodeToken (final GraphProcess process,
                                   final NodeToken token,
                                   final String arcName)
   {
     process.removeActiveNodeToken( token );
-    token.markComplete( this );
+    markComplete( token );
 
     // If the node was skipped, we already sent a 'skipped' event and don't want to
     // send another 'completed' event.
@@ -330,7 +350,7 @@ public abstract class BaseEngine implements Engine
       if ( !tokenSet.isComplete() )
       {
         ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
-        tokenSet.addArcTokenSetMember( newSetMember );
+        tokenSet.getActiveArcTokenSetMembers().add( newSetMember );
         arcToken.getTokenSetMemberships().add( newSetMember );
       }
     }

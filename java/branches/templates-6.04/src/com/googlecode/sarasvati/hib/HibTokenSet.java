@@ -112,30 +112,6 @@ public class HibTokenSet implements TokenSet
   }
 
   @Override
-  public void addArcTokenSetMember (ArcTokenSetMember setMember)
-  {
-    activeArcTokenSetMembers.add( setMember );
-  }
-
-  @Override
-  public void addNodeTokenSetMember (NodeTokenSetMember setMember)
-  {
-    activeNodeTokenSetMembers.add( setMember );
-  }
-
-  @Override
-  public void arcTokenSetMemberCompleted (ArcTokenSetMember setMember)
-  {
-    activeArcTokenSetMembers.remove( setMember );
-  }
-
-  @Override
-  public void nodeTokenSetMemberCompleted (NodeTokenSetMember setMember)
-  {
-    activeNodeTokenSetMembers.remove( setMember );
-  }
-
-  @Override
   public List<ArcTokenSetMember> getActiveArcTokenSetMembers ()
   {
     return activeArcTokenSetMembers;
