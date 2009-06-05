@@ -92,14 +92,15 @@ public interface ArcToken extends Token
    * Marks this token as being complete, in the sense that it no longer
    * represents an active part of the process. Once a token is marked
    * complete, it is generally only of historical interest.
-   * <p>
-   * This method is also responsible for removing the arc token from
-   * the active lists of each {@link TokenSet} that it is a member of.
    *
    * @param engine The Engine completing this arc token
-   * @param token The node token generated from this arc token
+   * @param child The node token generated from this arc token
    */
-  void markComplete (Engine engine, NodeToken token);
+  void markComplete (Engine engine, NodeToken child);
 
+  /**
+   * Returns the set members for each token set that this
+   * token is tied to.
+   */
   List<ArcTokenSetMember> getTokenSetMemberships ();
 }

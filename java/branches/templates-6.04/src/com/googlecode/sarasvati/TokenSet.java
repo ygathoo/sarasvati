@@ -29,12 +29,6 @@ public interface TokenSet
   List<ArcTokenSetMember> getActiveArcTokenSetMembers ();
   List<NodeTokenSetMember> getActiveNodeTokenSetMembers ();
 
-  void addArcTokenSetMember (ArcTokenSetMember setMember);
-  void addNodeTokenSetMember (NodeTokenSetMember setMember);
-
-  void arcTokenSetMemberCompleted (ArcTokenSetMember setMember);
-  void nodeTokenSetMemberCompleted (NodeTokenSetMember setMember);
-
   boolean isComplete ();
 
   /**
