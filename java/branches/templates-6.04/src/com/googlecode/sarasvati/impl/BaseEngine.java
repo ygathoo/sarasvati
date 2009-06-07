@@ -265,7 +265,7 @@ public abstract class BaseEngine implements Engine
 
     if ( !outArcs.isEmpty() )
     {
-      TokenSet tokenSet = getFactory().newTokenSet( process, tokenSetName );
+      TokenSet tokenSet = getFactory().newTokenSet( process, tokenSetName, numberOfTokens );
       for ( int memberIndex = 0; memberIndex < numberOfTokens; memberIndex++ )
       {
         for ( Arc arc : outArcs )

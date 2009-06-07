@@ -245,9 +245,10 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 
   @Override
   public TokenSet newTokenSet (final GraphProcess process,
-                               final String name)
+                               final String name,
+                               final int maxMemberIndex)
   {
-    HibTokenSet tokenSet = new HibTokenSet( (HibGraphProcess)process, name );
+    HibTokenSet tokenSet = new HibTokenSet( (HibGraphProcess)process, name, maxMemberIndex );
     session.save( tokenSet );
     return tokenSet;
   }
@@ -275,7 +276,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     session.save( setMember );
     return setMember;
   }
-  
+
   @Override
   public void addType (final String type, final Class<? extends Node> clazz)
   {
