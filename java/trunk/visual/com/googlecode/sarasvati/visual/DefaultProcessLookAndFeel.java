@@ -65,7 +65,7 @@ public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
   {
     Icon icon = null;
 
-    if ( "task".equals( node.getNode().getType() ) )
+    if ( getTaskType().equals( node.getNode().getType() ) )
     {
       icon = new TaskIcon( node.getNode(), node.getToken() );
     }
@@ -78,4 +78,10 @@ public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
     label.setSize( icon.getIconWidth(), icon.getIconHeight() );
     return new ComponentWidget( scene, label );
   }
+
+  protected String getTaskType ()
+  {
+    return "task";
+  }
+  
 }
