@@ -33,9 +33,22 @@ import com.googlecode.sarasvati.visual.icon.TaskIcon;
  * depending on the type of the node passed in.
  *
  * @author Paul Lorenz
+ * @author chungonn
  */
 public class GraphToImageMapAdapter implements GraphToImageMap
 {
+  
+  private final String taskType;
+
+  public GraphToImageMapAdapter ()
+  {
+    this("task");
+  }
+  
+  public GraphToImageMapAdapter (String taskType){
+    this.taskType = taskType;
+  }
+  
   /**
    * Returns true unless overridden
    * @see com.googlecode.sarasvati.visual.GraphToImageMap#drawArcLabels()
@@ -44,6 +57,16 @@ public class GraphToImageMapAdapter implements GraphToImageMap
   public boolean drawArcLabels ()
   {
     return true;
+  }
+  
+  /**
+   * TaskType default is "task". It is used to determine the type of node icon 
+   * returns by {@link #iconForNode(Node)}
+   * 
+   */
+  public String getTaskType ()
+  {
+    return taskType;
   }
 
   /**
@@ -55,7 +78,7 @@ public class GraphToImageMapAdapter implements GraphToImageMap
   @Override
   public Icon iconForNode (Node node)
   {
-    if ( "task".equalsIgnoreCase( node.getType() ) )
+    if ( taskType.equalsIgnoreCase( node.getType() ) )
     {
       return new TaskIcon( node, null );
     }
