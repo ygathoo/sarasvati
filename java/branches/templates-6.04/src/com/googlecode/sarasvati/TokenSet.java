@@ -76,6 +76,15 @@ public interface TokenSet
   List<NodeToken> getActiveNodeTokens (Engine engine);
 
   /**
+   * Returns the maximum member index that a member of this token
+   * set may have.
+   *
+   * @return the maximum member index that a member of this token
+   *         set may have
+   */
+  int getMaxMemberIndex ();
+
+  /**
    * Returns true if the token set has been join on and contains no more
    * active tokens, and false otherwise.
    *

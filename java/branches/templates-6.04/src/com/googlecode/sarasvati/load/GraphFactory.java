@@ -152,9 +152,37 @@ public interface GraphFactory<G extends Graph>
    */
   ArcToken newArcToken (GraphProcess process, Arc arc, ExecutionType executionType, NodeToken parent);
 
-  TokenSet newTokenSet (GraphProcess process, String name);
+  /**
+   * Creates a new token set.
+   *
+   * @param process The process that the token set belongs to
+   * @param name The name given to the token set
+   * @param maxMemberIndex The maximum member index (which should equals the number of initial members in the set)
+   *
+   * @return The newly created token set
+   */
+  TokenSet newTokenSet (GraphProcess process, String name, int maxMemberIndex);
 
+  /**
+   * Creates a new membership of a token in a token set.
+   *
+   * @param tokenSet The token set the given token is to be added to
+   * @param token The token being added to the given token set
+   * @param memberIndex The member index of the token within the token set.
+   *
+   * @return The new arc token set member
+   */
   ArcTokenSetMember newArcTokenSetMember (TokenSet tokenSet, ArcToken token, int memberIndex);
+
+  /**
+   * Creates a new membership of a token in a token set.
+   *
+   * @param tokenSet The token set the given token is to be added to
+   * @param token The token being added to the given token set
+   * @param memberIndex The member index of the token within the token set.
+   *
+   * @return The new node token set member
+   */
   NodeTokenSetMember newNodeTokenSetMember (TokenSet tokenSet, NodeToken token, int memberIndex);
 
   /**

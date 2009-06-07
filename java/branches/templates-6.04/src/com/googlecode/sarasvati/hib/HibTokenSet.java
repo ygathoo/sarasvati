@@ -21,7 +21,9 @@ package com.googlecode.sarasvati.hib;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -30,9 +32,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -49,15 +53,23 @@ public class HibTokenSet implements TokenSet
   protected Long    id;
 
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "process_id")
+  @JoinColumn(name = "process_id", nullable=false)
   protected HibGraphProcess process;
 
-  @Column(name="name")
+  @Column(name="name", nullable=false)
   protected String name;
 
+  @Column(name="max_member_index", nullable=false)
+  protected int maxMemberIndex;
+
   @Type (type="yes_no")
-  @Column( name="complete")
+  @Column( name="complete", nullable=false)
   protected boolean complete;
+
+  @OneToMany (fetch=FetchType.LAZY, mappedBy="tokenSet", cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE } )
+  @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
+            org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
+  protected Set<HibTokenSetProperty>     properties;
 
   @Transient
   protected List<ArcToken> activeArcTokens;
@@ -71,10 +83,12 @@ public class HibTokenSet implements TokenSet
   }
 
   public HibTokenSet (final HibGraphProcess process,
-                      final String name)
+                      final String name,
+                      final int maxMemberIndex)
   {
     this.process = process;
     this.name = name;
+    this.maxMemberIndex = maxMemberIndex;
     this.activeArcTokens = new LinkedList<ArcToken>();
     this.activeNodeTokens = new LinkedList<NodeToken>();
   }
@@ -109,6 +123,26 @@ public class HibTokenSet implements TokenSet
   public void setProcess (final HibGraphProcess process)
   {
     this.process = process;
+  }
+
+  public int getMaxMemberIndex ()
+  {
+    return maxMemberIndex;
+  }
+
+  public void setMaxMemberIndex (int maxMemberIndex)
+  {
+    this.maxMemberIndex = maxMemberIndex;
+  }
+
+  public Set<HibTokenSetProperty> getProperties ()
+  {
+    return properties;
+  }
+
+  public void setProperties (Set<HibTokenSetProperty> properties)
+  {
+    this.properties = properties;
   }
 
   @Override
@@ -149,7 +183,7 @@ public class HibTokenSet implements TokenSet
   }
 
   @Override
-  public int hashCode()
+  public int hashCode ()
   {
     final int prime = 31;
     int result = 1;
@@ -158,7 +192,7 @@ public class HibTokenSet implements TokenSet
   }
 
   @Override
-  public boolean equals( Object obj )
+  public boolean equals (Object obj)
   {
     if (this == obj)
       return true;

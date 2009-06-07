@@ -32,16 +32,17 @@ public class MemTokenSet implements TokenSet
 {
   protected final GraphProcess process;
   protected final String name;
-
+  protected final int maxMemberIndex;
   protected boolean complete = false;
 
   protected List<ArcToken> activeArcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> activeNodeTokens = new LinkedList<NodeToken>();
 
-  public MemTokenSet (final GraphProcess process, final String name)
+  public MemTokenSet (final GraphProcess process, final String name, int maxMemberIndex)
   {
     this.process = process;
     this.name = name;
+    this.maxMemberIndex = maxMemberIndex;
   }
 
   @Override
@@ -66,6 +67,12 @@ public class MemTokenSet implements TokenSet
   public List<NodeToken> getActiveNodeTokens (Engine engine)
   {
     return activeNodeTokens;
+  }
+
+  @Override
+  public int getMaxMemberIndex()
+  {
+    return maxMemberIndex;
   }
 
   @Override
