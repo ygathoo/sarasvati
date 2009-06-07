@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.visual.common;
 import java.awt.Point;
 import java.util.List;
 
+import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.draw2d.graph.Path;
 import org.eclipse.draw2d.graph.ShortestPathRouter;
@@ -68,12 +69,39 @@ public class ShortestPathRouterAdapter implements Router
 
   public void addPath (Path path)
   {
+    System.out.println("Add Path ");
+    
+    //TODO - need a better solution
+    //Check for overlapping path, If there are overlapping paths
+    //Force path to bend. 
+    //NB: Have not tested if more than one overlapped path.
+    List<Path> solve = router.solve();
+    for(Path existPath : solve){
+      
+      if(existPath.getEndPoint().equals( path.getStartPoint() )
+          && existPath.getStartPoint().equals( path.getEndPoint() )){
+        PointList bendPoints = new PointList();
+        int x = (path.getEndPoint().x + path.getStartPoint().x) / 2; //+ 25;
+        //Add an Offset to x if Path is a vertical line
+        x = x == path.getEndPoint().x ? x + 25 : x ;
+        
+        //Add a vertical Offset if y is a horizontal line
+        int y = (path.getEndPoint().y + path.getStartPoint().y) / 2;
+        y = y == path.getEndPoint().y ? y + 25 : y;
+        
+        bendPoints.addPoint( x, y );
+        //Add a new obstacle
+        path.setBendPoints( bendPoints  );
+      }
+    }
+    
     router.addPath( path );
     dirty = true;
   }
-
+  
   public void removePath (Path path)
   {
+    System.out.println("Remove Path");
     router.removePath( path );
     dirty = true;
   }
@@ -81,6 +109,7 @@ public class ShortestPathRouterAdapter implements Router
   @Override
   public List<Point> routeConnection (ConnectionWidget conn)
   {
+    System.out.println("RouteConnection  " + conn);
     PathTrackingConnectionWidget pathTrackingCW = (PathTrackingConnectionWidget)conn;
     pathTrackingCW.ensurePathCurrent();
 
@@ -96,6 +125,7 @@ public class ShortestPathRouterAdapter implements Router
 
   public void redrawConnections (Widget source)
   {
+    System.out.println("Redraw Connections " + source);
     for ( Widget widget : scene.getConnectionLayer().getChildren() )
     {
       if ( widget != source && widget instanceof PathTrackingConnectionWidget)
@@ -119,6 +149,7 @@ public class ShortestPathRouterAdapter implements Router
     public Rectangle getNewBounds ()
     {
       java.awt.Rectangle newBounds = widget.getBounds();
+      System.out.println("Get new bounds " + newBounds);
       if (newBounds == null )
       {
         return null;
@@ -143,6 +174,7 @@ public class ShortestPathRouterAdapter implements Router
     @Override
     public void revalidateDependency ()
     {
+      System.out.println("RevalidateDependency");
       Rectangle newBounds = getNewBounds();
 
       if ( bounds == null )
@@ -167,6 +199,7 @@ public class ShortestPathRouterAdapter implements Router
 
     public void cleanup ()
     {
+      System.out.println("Cleanup");
       if ( bounds != null )
       {
         router.removeObstacle( bounds );
