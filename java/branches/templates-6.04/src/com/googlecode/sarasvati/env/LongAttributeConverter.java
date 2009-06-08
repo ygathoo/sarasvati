@@ -16,17 +16,23 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.env;
 
-public class AttributeConverters
+/**
+ * Attribute converter for String <--> Long
+ *
+ * @author Paul Lorenz
+ */
+public final class LongAttributeConverter extends AbstractStringValueOfAttributeConverter
 {
-  public static String objectToString (Object object)
+  /**
+   * Converts the given string to a Long
+   *
+   * @see com.googlecode.sarasvati.env.AttributeConverter#stringToObject(java.lang.String, java.lang.Class)
+   */
+  @Override
+  public Object stringToObject (String string, Class<?> object)
   {
-    return null;
-  }
-
-  public static <T> T stringToObject (String string, Class<T> type)
-  {
-    return null;
+    return Long.valueOf( string );
   }
 }

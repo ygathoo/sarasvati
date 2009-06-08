@@ -23,8 +23,8 @@ import java.util.Random;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.Env;
 
 public class InitNode extends CustomNode
 {

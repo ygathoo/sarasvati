@@ -30,8 +30,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.impl.TokenSetMemberEnvAdapter;
 
 @Entity

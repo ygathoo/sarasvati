@@ -31,7 +31,7 @@ import com.googlecode.sarasvati.impl.AbstractTokenSetMemberEnv;
 public class HibTokenSetMemberEnv extends AbstractTokenSetMemberEnv
 {
   protected final HibTokenSet tokenSet;
-  protected final Map<String,HibTokenSetMemberAttributes>[] attrs;
+  protected final Map<String,HibTokenSetMemberAttribute>[] attrs;
 
   @SuppressWarnings("unchecked")
   public HibTokenSetMemberEnv (final HibTokenSet tokenSet)
@@ -42,10 +42,10 @@ public class HibTokenSetMemberEnv extends AbstractTokenSetMemberEnv
 
     for ( int i = 0; i< tokenSet.getMaxMemberIndex(); i++ )
     {
-      attrs[i] = new HashMap<String, HibTokenSetMemberAttributes>();
+      attrs[i] = new HashMap<String, HibTokenSetMemberAttribute>();
     }
 
-    for ( HibTokenSetMemberAttributes property : tokenSet.getProperties() )
+    for ( HibTokenSetMemberAttribute property : tokenSet.getMemberAttributes() )
     {
       attrs[ property.memberIndex ].put( property.getName(), property );
     }
@@ -60,7 +60,7 @@ public class HibTokenSetMemberEnv extends AbstractTokenSetMemberEnv
       return null;
     }
 
-    HibTokenSetMemberAttributes property = attrs[ memberIndex ].get( name );
+    HibTokenSetMemberAttribute property = attrs[ memberIndex ].get( name );
     return property == null ? null : property.getValue();
   }
 
@@ -97,18 +97,18 @@ public class HibTokenSetMemberEnv extends AbstractTokenSetMemberEnv
       throw new IllegalArgumentException( "Given memberIndex of " + memberIndex + " is out of valid range" );
     }
 
-    Map<String, HibTokenSetMemberAttributes> map = attrs[memberIndex];
-    HibTokenSetMemberAttributes property = map.get( name );
+    Map<String, HibTokenSetMemberAttribute> map = attrs[memberIndex];
+    HibTokenSetMemberAttribute property = map.get( name );
 
     if ( property == null )
     {
-      property = new HibTokenSetMemberAttributes( tokenSet, memberIndex, name, value );
+      property = new HibTokenSetMemberAttribute( tokenSet, memberIndex, name, value );
       map.put( name, property );
-      tokenSet.getProperties().add( property );
+      tokenSet.getMemberAttributes().add( property );
     }
     else
     {
-      tokenSet.getProperties().remove( property );
+      tokenSet.getMemberAttributes().remove( property );
     }
   }
 
@@ -120,13 +120,13 @@ public class HibTokenSetMemberEnv extends AbstractTokenSetMemberEnv
       throw new IllegalArgumentException( "Given memberIndex of " + memberIndex + " is out of valid range" );
     }
 
-    Map<String, HibTokenSetMemberAttributes> map = attrs[memberIndex];
-    HibTokenSetMemberAttributes property = map.get( name );
+    Map<String, HibTokenSetMemberAttribute> map = attrs[memberIndex];
+    HibTokenSetMemberAttribute property = map.get( name );
 
     if ( property != null )
     {
       map.remove( name );
-      tokenSet.getProperties().remove( property );
+      tokenSet.getMemberAttributes().remove( property );
     }
   }
 }

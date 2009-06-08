@@ -18,6 +18,10 @@
 */
 package com.googlecode.sarasvati;
 
+import java.util.List;
+import java.util.Map;
+
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
@@ -131,7 +135,10 @@ public interface Engine
   void completeWithNewTokenSet (NodeToken token,
                                 String arcName,
                                 String tokenSetName,
-                                int numberOfTokens);
+                                int numberOfTokens,
+                                boolean asynchronous,
+                                Env initialEnv,
+                                Map<String, List<?>> initialMemberEnv );
 
   /**
    * If this process has any {@link ArcToken}s queued for execution, this method

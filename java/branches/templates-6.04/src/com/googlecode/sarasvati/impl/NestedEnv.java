@@ -21,8 +21,8 @@ package com.googlecode.sarasvati.impl;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.googlecode.sarasvati.AttributeConverters;
-import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.env.AttributeConverters;
+import com.googlecode.sarasvati.env.Env;
 
 public class NestedEnv implements Env
 {

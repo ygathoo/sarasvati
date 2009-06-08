@@ -18,10 +18,17 @@
 */
 package com.googlecode.sarasvati.example;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.Env;
+import com.googlecode.sarasvati.impl.MapEnv;
 
 /**
  * Example node to generate approvals
@@ -33,6 +40,12 @@ public class ApprovalSetupNode extends CustomNode
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    engine.completeWithNewTokenSet( token, Arc.DEFAULT_ARC, "approvals", 3 );
+    Env initialEnv = new MapEnv();
+    initialEnv.setAttribute( "access", 1 );
+
+    Map<String,List<?>> initialMemberEnv = new HashMap<String, List<?>>();
+    initialMemberEnv.put( "group", Arrays.asList( new String[] { "Operations Approval", "Business Approval", "Vendor Approval" } ) );
+
+    engine.completeWithNewTokenSet( token, Arc.DEFAULT_ARC, "approvals", 3, true, initialEnv, initialMemberEnv );
   }
 }

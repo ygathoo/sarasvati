@@ -32,14 +32,14 @@ import org.hibernate.annotations.ForeignKey;
 
 @Entity
 @Table (name="wf_token_set_member_attr")
-public class HibTokenSetMemberAttributes
+public class HibTokenSetMemberAttribute
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long id;
 
   @ForeignKey( name="FK_token_set_mbr_attr" )
-  @ManyToOne (fetch=FetchType.LAZY)
+  @ManyToOne (fetch=FetchType.LAZY, optional=false)
   @JoinColumn (name="token_set_id", nullable=false)
   protected HibTokenSet tokenSet;
 
@@ -52,9 +52,9 @@ public class HibTokenSetMemberAttributes
   @Column( name="value", nullable=true)
   protected String value;
 
-  protected HibTokenSetMemberAttributes () { /* Default constructor for hibernate */ }
+  protected HibTokenSetMemberAttribute () { /* Default constructor for hibernate */ }
 
-  protected HibTokenSetMemberAttributes (HibTokenSet tokenSet, Integer memberIndex, String name, String value)
+  protected HibTokenSetMemberAttribute (HibTokenSet tokenSet, Integer memberIndex, String name, String value)
   {
    this.tokenSet = tokenSet;
    this.memberIndex = memberIndex;
@@ -117,8 +117,9 @@ public class HibTokenSetMemberAttributes
   {
     final int prime = 31;
     int result = 1;
-    result = prime * result + ( ( id == null )
-        ? 0 : id.hashCode() );
+    result = prime * result + ( ( memberIndex == null ) ? 0 : memberIndex.hashCode() );
+    result = prime * result + ( ( name == null ) ? 0 : name.hashCode() );
+    result = prime * result + ( ( tokenSet == null ) ? 0 : tokenSet.hashCode() );
     return result;
   }
 
@@ -127,13 +128,23 @@ public class HibTokenSetMemberAttributes
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof HibTokenSetMemberAttributes ) ) return false;
-    final HibTokenSetMemberAttributes other = (HibTokenSetMemberAttributes)obj;
-    if ( id == null )
+    if ( !( obj instanceof HibTokenSetMemberAttribute ) ) return false;
+    HibTokenSetMemberAttribute other = (HibTokenSetMemberAttribute)obj;
+    if ( memberIndex == null )
     {
-      if ( other.getId() != null ) return false;
+      if ( other.getMemberIndex() != null ) return false;
     }
-    else if ( !id.equals( other.getId() ) ) return false;
+    else if ( !memberIndex.equals( other.getMemberIndex() ) ) return false;
+    if ( name == null )
+    {
+      if ( other.getName() != null ) return false;
+    }
+    else if ( !name.equals( other.getName() ) ) return false;
+    if ( tokenSet == null )
+    {
+      if ( other.tokenSet != null ) return false;
+    }
+    else if ( !tokenSet.equals( other.getTokenSet() ) ) return false;
     return true;
   }
 }

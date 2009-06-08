@@ -21,8 +21,8 @@ package com.googlecode.sarasvati.impl;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.googlecode.sarasvati.AttributeConverters;
-import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.env.AttributeConverters;
+import com.googlecode.sarasvati.env.Env;
 
 /**
  * Implements {@link Env} using a Map

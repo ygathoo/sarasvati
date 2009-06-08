@@ -22,7 +22,8 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.TokenSetMember;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.env.Env;
 
 /**
  * Example node to generate approvals
@@ -34,8 +35,16 @@ public class ApprovalNode extends CustomNode
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    TokenSetMember setMember = token.getTokenSetMember( "approvals" );
-    System.out.println( "Hit approval " + setMember.getMemberIndex() );
+    NodeTokenSetMember setMember = token.getTokenSetMember( "approvals" );
+
+    Env tokenSetEnv = setMember.getTokenSet().getEnv();
+    int accessCount = tokenSetEnv.getAttribute( "access", Integer.class );
+    tokenSetEnv.setAttribute( "access", accessCount + 1 );
+    System.out.println( "TokenSet env accesses " + accessCount );
+    System.out.println( "Requesting approval from " + setMember.getEnv().getAttribute( "group" ) );
+
+    setMember.getEnv().removeAttribute( "group" );
+
     engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
   }
 }

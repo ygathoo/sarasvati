@@ -19,16 +19,16 @@
 
 package com.googlecode.sarasvati.mem;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.TokenSet;
-import com.googlecode.sarasvati.TokenSetMemberEnv;
+import com.googlecode.sarasvati.env.Env;
+import com.googlecode.sarasvati.env.TokenSetMemberEnv;
 import com.googlecode.sarasvati.impl.MapEnv;
 
 public class MemTokenSet implements TokenSet
@@ -38,8 +38,8 @@ public class MemTokenSet implements TokenSet
   protected final int maxMemberIndex;
   protected boolean complete = false;
 
-  protected List<ArcToken> activeArcTokens = new LinkedList<ArcToken>();
-  protected List<NodeToken> activeNodeTokens = new LinkedList<NodeToken>();
+  protected Set<ArcToken> activeArcTokens = new HashSet<ArcToken>();
+  protected Set<NodeToken> activeNodeTokens = new HashSet<NodeToken>();
 
   protected Env env = new MapEnv();
   protected TokenSetMemberEnv memberEnv;
@@ -64,13 +64,13 @@ public class MemTokenSet implements TokenSet
   }
 
   @Override
-  public List<ArcToken> getActiveArcTokens (Engine engine)
+  public Set<ArcToken> getActiveArcTokens (Engine engine)
   {
     return activeArcTokens;
   }
 
   @Override
-  public List<NodeToken> getActiveNodeTokens (Engine engine)
+  public Set<NodeToken> getActiveNodeTokens (Engine engine)
   {
     return activeNodeTokens;
   }

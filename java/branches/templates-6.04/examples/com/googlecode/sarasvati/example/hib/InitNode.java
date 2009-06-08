@@ -25,8 +25,8 @@ import javax.persistence.Entity;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.hib.HibNode;
 
 @Entity

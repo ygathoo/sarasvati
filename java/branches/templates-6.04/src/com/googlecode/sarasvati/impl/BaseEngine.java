@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.googlecode.sarasvati.Arc;
@@ -41,6 +42,8 @@ import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.env.Env;
+import com.googlecode.sarasvati.env.TokenSetMemberEnv;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEvent;
@@ -239,18 +242,12 @@ public abstract class BaseEngine implements Engine
   }
 
   public void completeWithNewTokenSet (final NodeToken token,
-                                       final String arcName,
-                                       final String tokenSetName,
-                                       final int numberOfTokens)
-  {
-    completeNodeExecutionWithNewTokenSet( token, arcName, tokenSetName, numberOfTokens, false );
-  }
-
-  protected void completeNodeExecutionWithNewTokenSet (final NodeToken token,
-                                                       final String    arcName,
-                                                       final String    tokenSetName,
-                                                       final int       numberOfTokens,
-                                                       final boolean   asynchronous)
+                                       final String    arcName,
+                                       final String    tokenSetName,
+                                       final int       numberOfTokens,
+                                       final boolean   asynchronous,
+                                       final Env       initialEnv,
+                                       final Map<String,List<?>> initialMemberEnv)
   {
     GraphProcess process = token.getProcess();
 
@@ -266,6 +263,21 @@ public abstract class BaseEngine implements Engine
     if ( !outArcs.isEmpty() )
     {
       TokenSet tokenSet = getFactory().newTokenSet( process, tokenSetName, numberOfTokens );
+
+      if ( initialEnv != null )
+      {
+        tokenSet.getEnv().importEnv( initialEnv );
+      }
+
+      if ( initialMemberEnv != null )
+      {
+        TokenSetMemberEnv memberEnv = tokenSet.getMemberEnv();
+        for ( Map.Entry<String, List<?>> entry : initialMemberEnv.entrySet() )
+        {
+          memberEnv.setAttribute( entry.getKey(), entry.getValue() );
+        }
+      }
+
       for ( int memberIndex = 0; memberIndex < numberOfTokens; memberIndex++ )
       {
         for ( Arc arc : outArcs )
@@ -308,7 +320,7 @@ public abstract class BaseEngine implements Engine
 
     for ( NodeTokenSetMember setMember : token.getTokenSetMemberships() )
     {
-      setMember.getTokenSet().getActiveNodeTokens( this ).remove( setMember );
+      setMember.getTokenSet().getActiveNodeTokens( this ).remove( token );
     }
   }
 
@@ -318,7 +330,7 @@ public abstract class BaseEngine implements Engine
 
     for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
     {
-      setMember.getTokenSet().getActiveArcTokens( this ).remove( setMember );
+      setMember.getTokenSet().getActiveArcTokens( this ).remove( token );
     }
   }
 

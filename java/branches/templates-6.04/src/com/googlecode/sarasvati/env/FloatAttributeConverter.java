@@ -16,30 +16,23 @@
 
     Copyright 2009 Paul Lorenz
 */
+package com.googlecode.sarasvati.env;
 
-package com.googlecode.sarasvati.mem;
-
-import com.googlecode.sarasvati.NodeTokenSetMember;
-import com.googlecode.sarasvati.TokenSet;
-import com.googlecode.sarasvati.env.Env;
-import com.googlecode.sarasvati.impl.TokenSetMemberEnvAdapter;
-
-public class MemNodeTokenSetMember extends MemTokenSetMember<MemNodeToken> implements NodeTokenSetMember
+/**
+ * Attribute converter for String <--> Float
+ *
+ * @author Paul Lorenz
+ */
+public final class FloatAttributeConverter extends AbstractStringValueOfAttributeConverter
 {
-  protected Env env;
-
-  public MemNodeTokenSetMember (TokenSet tokenSet, MemNodeToken token, int memberIndex)
-  {
-    super( tokenSet, token, memberIndex );
-  }
-
+  /**
+   * Converts the given string to a Float
+   *
+   * @see com.googlecode.sarasvati.env.AttributeConverter#stringToObject(java.lang.String, java.lang.Class)
+   */
   @Override
-  public Env getEnv ()
+  public Object stringToObject (String string, Class<?> object)
   {
-    if ( env == null )
-    {
-      env = new TokenSetMemberEnvAdapter( getTokenSet().getMemberEnv(), memberIndex );
-    }
-    return env;
+    return Float.valueOf( string );
   }
 }

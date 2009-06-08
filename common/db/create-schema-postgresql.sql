@@ -1,4 +1,6 @@
 -- DROP EXISTING TABLES
+drop table if exists wf_token_set_attr cascade;
+drop table if exists wf_token_set_member_attr cascade;
 drop table if exists wf_token_set_arcmem cascade;
 drop table if exists wf_token_set_nodemem cascade;
 drop table if exists wf_token_set cascade;
@@ -214,11 +216,22 @@ ALTER TABLE wf_token_attr
 
 create table wf_token_set
 (
-  id            serial  NOT NULL PRIMARY KEY,
-  process_id    int     NOT NULL REFERENCES wf_process,
-  name          text    NOT NULL,
-  complete      char(1) NOT NULL
+  id               serial  NOT NULL PRIMARY KEY,
+  process_id       int     NOT NULL REFERENCES wf_process,
+  name             text    NOT NULL,
+  max_member_index int     NOT NULL,
+  complete         char(1) NOT NULL
 );
+
+create table wf_token_set_attr
+(
+  token_set_id  int  NOT NULL REFERENCES wf_token_set,
+  name        text NOT NULL,
+  value       text NULL
+);
+
+ALTER TABLE wf_token_set_attr
+  ADD PRIMARY KEY (token_set_id, name);
 
 create table wf_token_set_arcmem
 (
@@ -234,4 +247,13 @@ create table wf_token_set_nodemem
   token_set_id  int     NOT NULL REFERENCES wf_token_set,
   token_id      int     NOT NULL REFERENCES wf_node_token,
   member_index  int     NOT NULL
+);
+
+create table wf_token_set_member_attr
+(
+  id            serial  NOT NULL PRIMARY KEY,
+  token_set_id  int  NOT NULL REFERENCES wf_token_set,
+  member_index  int NOT NULL,
+  name          text NOT NULL,
+  value         text NULL
 );

@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati;
 
+import com.googlecode.sarasvati.env.Env;
+
 /**
  * Extends the TokenSetMember interface to narrow the Token
  * to a NodeToken.

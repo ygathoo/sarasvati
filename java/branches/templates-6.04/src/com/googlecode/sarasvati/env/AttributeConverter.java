@@ -16,30 +16,11 @@
 
     Copyright 2009 Paul Lorenz
 */
+package com.googlecode.sarasvati.env;
 
-package com.googlecode.sarasvati.mem;
-
-import com.googlecode.sarasvati.NodeTokenSetMember;
-import com.googlecode.sarasvati.TokenSet;
-import com.googlecode.sarasvati.env.Env;
-import com.googlecode.sarasvati.impl.TokenSetMemberEnvAdapter;
-
-public class MemNodeTokenSetMember extends MemTokenSetMember<MemNodeToken> implements NodeTokenSetMember
+public interface AttributeConverter
 {
-  protected Env env;
+  String objectToString (Object object);
 
-  public MemNodeTokenSetMember (TokenSet tokenSet, MemNodeToken token, int memberIndex)
-  {
-    super( tokenSet, token, memberIndex );
-  }
-
-  @Override
-  public Env getEnv ()
-  {
-    if ( env == null )
-    {
-      env = new TokenSetMemberEnvAdapter( getTokenSet().getMemberEnv(), memberIndex );
-    }
-    return env;
-  }
+  Object stringToObject (String string, Class<?> object);
 }

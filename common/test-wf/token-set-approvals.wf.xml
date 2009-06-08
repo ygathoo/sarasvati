@@ -8,7 +8,22 @@
   </node>
 
   <node name="approval" type="approval" >
+    <arc to="show-approval"/>
+  </node>
+
+  <node name="show-approval" type="script" >
     <arc to="finish-approval"/>
+
+    <custom>
+      <execute type="js">
+        <![CDATA[
+          var group = token.getTokenSetMember( "approvals" ).getEnv().getAttribute( "group" );
+          java.lang.System.out.println( "Group: " + group );
+          engine.complete( token, null );
+        ]]>
+      </execute>
+    </custom>
+
   </node>
 
   <node name="finish-approval" type="node" joinType="tokenSetAnd">
