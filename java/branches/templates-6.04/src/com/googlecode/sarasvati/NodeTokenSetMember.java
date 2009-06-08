@@ -31,4 +31,13 @@ public interface NodeTokenSetMember extends TokenSetMember
    * @see com.googlecode.sarasvati.TokenSetMember#getToken()
    */
   NodeToken getToken ();
+
+  /**
+   * Each TokenSet can set attributes specific to a given memberIndex. The
+   * {@link Env} returned from a token set member will access only attributes
+   * that are specific to the its member index.
+   *
+   * @return The environment for this token set member
+   */
+  Env getEnv ();
 }

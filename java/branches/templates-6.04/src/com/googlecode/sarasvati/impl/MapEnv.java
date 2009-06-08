@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.impl;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.googlecode.sarasvati.AttributeConverters;
 import com.googlecode.sarasvati.Env;
 
 /**
@@ -55,6 +56,13 @@ public class MapEnv implements Env
   }
 
   @Override
+  public <T> T getAttribute (String name, Class<T> type)
+  {
+    String value = getAttribute( name );
+    return AttributeConverters.stringToObject( value, type );
+  }
+
+  @Override
   public boolean hasAttribute (String name)
   {
     return attributes.containsKey( name );
@@ -67,9 +75,15 @@ public class MapEnv implements Env
   }
 
   @Override
-  public void setAttribute (String name, Object value)
+  public void setAttribute (String name, String value)
   {
     attributes.put( name, value );
+  }
+
+  public void setAttribute (final String name,
+                            final Object value)
+  {
+    setAttribute( name, AttributeConverters.objectToString( value ) );
   }
 
   @Override

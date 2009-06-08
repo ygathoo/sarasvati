@@ -21,61 +21,88 @@
  */
 package com.googlecode.sarasvati.hib;
 
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
+import com.googlecode.sarasvati.impl.AbstractTokenSetMemberEnv;
 
-public class HibTokenSetEnv
+
+public class HibTokenSetMemberEnv extends AbstractTokenSetMemberEnv
 {
   protected final HibTokenSet tokenSet;
-  protected final Map<String,HibTokenSetProperty>[] props;
+  protected final Map<String,HibTokenSetMemberAttributes>[] attrs;
 
   @SuppressWarnings("unchecked")
-  public HibTokenSetEnv (final HibTokenSet tokenSet)
+  public HibTokenSetMemberEnv (final HibTokenSet tokenSet)
   {
+    super( tokenSet.getMaxMemberIndex() );
     this.tokenSet = tokenSet;
-    this.props = new Map[ tokenSet.getMaxMemberIndex() ];
+    this.attrs = new Map[ tokenSet.getMaxMemberIndex() ];
 
     for ( int i = 0; i< tokenSet.getMaxMemberIndex(); i++ )
     {
-      props[i] = new HashMap<String, HibTokenSetProperty>();
+      attrs[i] = new HashMap<String, HibTokenSetMemberAttributes>();
     }
 
-    for ( HibTokenSetProperty property : tokenSet.getProperties() )
+    for ( HibTokenSetMemberAttributes property : tokenSet.getProperties() )
     {
-      props[ property.memberIndex ].put( property.getName(), property );
+      attrs[ property.memberIndex ].put( property.getName(), property );
     }
   }
 
+  @Override
   public String getAttribute (final int memberIndex,
                               final String name)
   {
-    if ( memberIndex < 0 || memberIndex >= props.length )
+    if ( memberIndex < 0 || memberIndex >= attrs.length )
     {
       return null;
     }
 
-    HibTokenSetProperty property = props[ memberIndex ].get( name );
+    HibTokenSetMemberAttributes property = attrs[ memberIndex ].get( name );
     return property == null ? null : property.getValue();
   }
 
+  @Override
+  public Iterable<String> getAttributeNames (final int memberIndex)
+  {
+    if ( memberIndex < 0 || memberIndex >= attrs.length )
+    {
+      return Collections.emptyList();
+    }
+
+    return Collections.unmodifiableSet( attrs[memberIndex].keySet() );
+  }
+
+  @Override
+  public boolean hasAttribute (final int memberIndex,
+                               final String name)
+  {
+    if ( memberIndex < 0 || memberIndex >= attrs.length )
+    {
+      return false;
+    }
+
+    return attrs[memberIndex].containsKey( name );
+  }
+
+  @Override
   public void setAttribute (final int memberIndex,
                             final String name,
-                            final Object value)
+                            final String value)
   {
-    if ( memberIndex < 0 || memberIndex >= props.length )
+    if ( memberIndex < 0 || memberIndex >= attrs.length )
     {
       throw new IllegalArgumentException( "Given memberIndex of " + memberIndex + " is out of valid range" );
     }
 
-    Map<String, HibTokenSetProperty> map = props[memberIndex];
-    HibTokenSetProperty property = map.get( name );
+    Map<String, HibTokenSetMemberAttributes> map = attrs[memberIndex];
+    HibTokenSetMemberAttributes property = map.get( name );
 
     if ( property == null )
     {
-      property = new HibTokenSetProperty( tokenSet, memberIndex, name, value );
+      property = new HibTokenSetMemberAttributes( tokenSet, memberIndex, name, value );
       map.put( name, property );
       tokenSet.getProperties().add( property );
     }
@@ -85,41 +112,21 @@ public class HibTokenSetEnv
     }
   }
 
-  public void setAttribute (final String name,
-                            final List<String> values)
-  {
-    int idx = 0;
-    Iterator<String> iter = values.iterator();
-    while ( iter.hasNext() && idx < props.length )
-    {
-      setAttribute( idx, name, iter.next() );
-      idx++;
-    }
-  }
-
   public void removeAttribute (final int memberIndex,
                                final String name)
   {
-    if ( memberIndex < 0 || memberIndex >= props.length )
+    if ( memberIndex < 0 || memberIndex >= attrs.length )
     {
       throw new IllegalArgumentException( "Given memberIndex of " + memberIndex + " is out of valid range" );
     }
 
-    Map<String, HibTokenSetProperty> map = props[memberIndex];
-    HibTokenSetProperty property = map.get( name );
+    Map<String, HibTokenSetMemberAttributes> map = attrs[memberIndex];
+    HibTokenSetMemberAttributes property = map.get( name );
 
     if ( property != null )
     {
       map.remove( name );
       tokenSet.getProperties().remove( property );
-    }
-  }
-
-  public void removeAttribute (final String name)
-  {
-    for ( int index = 0; index < props.length; index++ )
-    {
-      removeAttribute( index, name );
     }
   }
 }

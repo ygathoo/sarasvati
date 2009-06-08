@@ -14,13 +14,13 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008-2009 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 package com.googlecode.sarasvati;
 
-public interface AttributeConverter
+public interface AttributeConverter<T>
 {
-  String objectToString (Object object);
+  String objectToString (T object);
 
-  Object stringToObject (String string);
+  T stringToObject (String string);
 }

@@ -14,13 +14,14 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.impl;
 
 import java.util.HashSet;
 import java.util.Set;
 
+import com.googlecode.sarasvati.AttributeConverters;
 import com.googlecode.sarasvati.Env;
 
 public class NestedEnv implements Env
@@ -28,7 +29,8 @@ public class NestedEnv implements Env
   protected Env outerEnv;
   protected Env innerEnv;
 
-  public NestedEnv (Env outerEnv, Env innerEnv)
+  public NestedEnv (final Env outerEnv,
+                    final Env innerEnv)
   {
     this.outerEnv = outerEnv;
     this.innerEnv = innerEnv;
@@ -53,57 +55,67 @@ public class NestedEnv implements Env
   }
 
   @Override
-  public String getAttribute (String name)
+  public String getAttribute (final String name)
   {
     return outerEnv.hasAttribute( name ) ? outerEnv.getAttribute( name ) :
                                            innerEnv.getAttribute( name );
   }
 
   @Override
-  public <T> T getAttribute (String name, Class<T> type)
+  public <T> T getAttribute (final String name,
+                             final Class<T> type)
   {
     return outerEnv.hasAttribute( name ) ? outerEnv.getAttribute( name, type ) :
                                            innerEnv.getAttribute( name, type );
   }
 
   @Override
-  public boolean hasAttribute (String name)
+  public boolean hasAttribute (final String name)
   {
     return outerEnv.hasAttribute( name ) || innerEnv.hasAttribute( name );
   }
 
   @Override
-  public void removeAttribute (String name)
+  public void removeAttribute (final String name)
   {
     outerEnv.removeAttribute( name );
   }
 
   @Override
-  public void setAttribute (String name, Object value)
+  public void setAttribute (final String name,
+                            final String value)
   {
     outerEnv.setAttribute(name, value);
   }
 
   @Override
-  public void setTransientAttribute (String name, Object value)
+  public void setAttribute (final String name,
+                            final Object value)
+  {
+    setAttribute( name, AttributeConverters.objectToString( value ) );
+  }
+
+  @Override
+  public void setTransientAttribute (final String name,
+                                     final Object value)
   {
     outerEnv.setTransientAttribute( name, value );
   }
 
   @Override
-  public boolean hasTransientAttribute (String name)
+  public boolean hasTransientAttribute (final String name)
   {
     return outerEnv.hasAttribute( name ) || innerEnv.hasAttribute( name );
   }
 
   @Override
-  public Object getTransientAttribute (String name)
+  public Object getTransientAttribute (final String name)
   {
     return outerEnv.hasAttribute( name ) ? outerEnv.getTransientAttribute( name ) : innerEnv.getTransientAttribute( name );
   }
 
   @Override
-  public void removeTransientAttribute (String name)
+  public void removeTransientAttribute (final String name)
   {
     outerEnv.removeTransientAttribute( name );
   }
@@ -130,7 +142,7 @@ public class NestedEnv implements Env
    * Imports the given env into the outer env
    */
   @Override
-  public void importEnv(Env env)
+  public void importEnv(final Env env)
   {
     outerEnv.importEnv( env );
   }

@@ -98,4 +98,24 @@ public interface TokenSet
    * token set join has been performed on the token set.
    */
   void markComplete (Engine engine);
+
+  /**
+   * A token set provides an environment into which attributes can be stored.
+   * This environment is shared across all tokens which are members of the
+   * environment.
+   *
+   * @return The token set environment
+   */
+  Env getEnv ();
+
+  /**
+   * In addition to provide an environment which is shared across all members
+   * of the token set (see {@link TokenSet#getEnv()}), the token set also
+   * provides an environment which allows setting attributes per member index.
+   * <p>
+   * The member environment also allows setting attributes per index via list.
+   *
+   * @return The token set member environment.
+   */
+  TokenSetMemberEnv getMemberEnv ();
 }
