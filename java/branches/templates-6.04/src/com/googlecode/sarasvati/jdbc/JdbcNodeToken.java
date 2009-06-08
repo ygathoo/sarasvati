@@ -215,7 +215,7 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
     }
 
     @Override
-    public String getStringAttribute( String name )
+    public String getAttribute( String name )
     {
       if ( attrSetToken == null )
       {
@@ -223,7 +223,7 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
       }
       else if ( !isAttributeSetLocal() )
       {
-        return attrSetToken.getEnv().getStringAttribute( name );
+        return attrSetToken.getEnv().getAttribute( name );
       }
       else
       {
@@ -251,48 +251,10 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
     }
 
     @Override
-    public void setStringAttribute( String name, String value )
+    public void setAttribute( String name, Object value )
     {
       copyOnWrite();
       attrMap.put( name, value );
-    }
-
-    @Override
-    public boolean getBooleanAttribute( String name )
-    {
-      return "true".equals( getStringAttribute( name ) );
-    }
-
-    @Override
-    public long getLongAttribute( String name )
-    {
-      String value = getStringAttribute( name );
-
-      if ( value == null )
-      {
-        return 0;
-      }
-
-      try
-      {
-        return Long.parseLong( value );
-      }
-      catch (NumberFormatException nfe )
-      {
-        return 0;
-      }
-    }
-
-    @Override
-    public void setBooleanAttribute( String name, boolean value )
-    {
-      setStringAttribute( name, String.valueOf( value ) );
-    }
-
-    @Override
-    public void setLongAttribute( String name, long value )
-    {
-      setStringAttribute( name, String.valueOf( value ) );
     }
 
     @Override
@@ -364,7 +326,7 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
     {
       for ( String name : copyEnv.getAttributeNames() )
       {
-        setStringAttribute( name, copyEnv.getStringAttribute( name ) );
+        setAttribute( name, copyEnv.getAttribute( name ) );
       }
 
       for ( String name : copyEnv.getTransientAttributeNames() )

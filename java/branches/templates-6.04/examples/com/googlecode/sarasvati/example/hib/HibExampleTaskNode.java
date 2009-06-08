@@ -97,9 +97,9 @@ public class HibExampleTaskNode extends HibNode
     session.save( newTask );
 
     Env env = token.getEnv();
-    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
+    env.setAttribute( newTask.getName(), env.getAttribute( newTask.getName(), Integer.class ) + 1 );
 
     env = token.getProcess().getEnv();
-    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
+    env.setAttribute( newTask.getName(), env.getAttribute( newTask.getName(), Integer.class ) + 1 );
   }
 }

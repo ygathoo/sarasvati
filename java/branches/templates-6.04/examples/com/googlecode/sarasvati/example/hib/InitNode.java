@@ -42,11 +42,11 @@ public class InitNode extends HibNode
 
     if ( env.hasAttribute( "iter" ) )
     {
-      iter = env.getLongAttribute( "iter" );
+      iter = env.getAttribute( "iter", Long.class );
     }
 
-    env.setLongAttribute( "iter", ++iter );
-    env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
+    env.setAttribute( "iter", ++iter );
+    env.setAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
 
     if ( token.getProcess().getParentToken() != null )
     {

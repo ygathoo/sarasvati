@@ -35,7 +35,7 @@ public class NestedEnv implements Env
   }
 
   @Override
-  public Iterable<String> getAttributeNames()
+  public Iterable<String> getAttributeNames ()
   {
     Set<String> names = new HashSet<String>();
 
@@ -53,54 +53,35 @@ public class NestedEnv implements Env
   }
 
   @Override
-  public boolean getBooleanAttribute(String name)
+  public String getAttribute (String name)
   {
-    return outerEnv.hasAttribute( name ) ? outerEnv.getBooleanAttribute( name ) :
-                                           innerEnv.getBooleanAttribute( name );
+    return outerEnv.hasAttribute( name ) ? outerEnv.getAttribute( name ) :
+                                           innerEnv.getAttribute( name );
   }
 
   @Override
-  public long getLongAttribute(String name)
+  public <T> T getAttribute (String name, Class<T> type)
   {
-    return outerEnv.hasAttribute( name ) ? outerEnv.getLongAttribute( name ) :
-                                           innerEnv.getLongAttribute( name );
+    return outerEnv.hasAttribute( name ) ? outerEnv.getAttribute( name, type ) :
+                                           innerEnv.getAttribute( name, type );
   }
 
   @Override
-  public String getStringAttribute(String name)
-  {
-    return outerEnv.hasAttribute( name ) ? outerEnv.getStringAttribute( name ) :
-                                           innerEnv.getStringAttribute( name );
-  }
-
-  @Override
-  public boolean hasAttribute(String name)
+  public boolean hasAttribute (String name)
   {
     return outerEnv.hasAttribute( name ) || innerEnv.hasAttribute( name );
   }
 
   @Override
-  public void removeAttribute(String name)
+  public void removeAttribute (String name)
   {
     outerEnv.removeAttribute( name );
   }
 
   @Override
-  public void setBooleanAttribute(String name, boolean value)
+  public void setAttribute (String name, Object value)
   {
-    outerEnv.setBooleanAttribute(name, value);
-  }
-
-  @Override
-  public void setLongAttribute(String name, long value)
-  {
-    outerEnv.setLongAttribute(name, value);
-  }
-
-  @Override
-  public void setStringAttribute(String name, String value)
-  {
-    outerEnv.setStringAttribute(name, value);
+    outerEnv.setAttribute(name, value);
   }
 
   @Override
