@@ -131,6 +131,13 @@ public class MemExampleConsole
 
         try
         {
+          if ( "p".equalsIgnoreCase( input ) )
+          {
+            System.out.println( "Processing asynchronous tokens" );
+            engine.executeQueuedArcTokens( process );
+            break;
+          }
+
           int line = Integer.parseInt( input );
           if ( line > 0 && line <= tasks.size() )
           {

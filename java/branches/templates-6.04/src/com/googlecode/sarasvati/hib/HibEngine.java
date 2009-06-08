@@ -170,6 +170,7 @@ public class HibEngine extends BaseEngine
     config.addAnnotatedClass( HibArcTokenSetMember.class );
     config.addAnnotatedClass( HibNodeTokenSetMember.class );
     config.addAnnotatedClass( HibNodeType.class );
+    config.addAnnotatedClass( HibTokenSetMemberAttribute.class );
 
     if (enableCaching )
     {

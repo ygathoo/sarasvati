@@ -17,38 +17,98 @@
     Copyright 2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.env;
 
 import java.util.List;
 
+/**
+ * Similar to {@link Env}, except that attributes can be tied
+ * to the specific member index of a token set member.
+ *
+ * @author Paul Lorenz
+ */
 public interface TokenSetMemberEnv
 {
+  /**
+   * @see Env#getAttribute(String)
+   */
   String getAttribute (final int memberIndex, final String name);
 
+  /**
+   * @see Env#getAttribute(String, Class)
+   */
   <T> T getAttribute (final int memberIndex, final String name, final Class<T> type);
 
+  /**
+   * @see Env#getAttributeNames()
+   */
   Iterable<String> getAttributeNames (final int memberIndex);
 
+  /**
+   * @see Env#hasAttribute(String)
+   */
   boolean hasAttribute (final int memberIndex, final String name);
 
+  /**
+   * @see Env#setAttribute(String, String)
+   */
   void setAttribute (final int memberIndex, final String name, final String value);
 
+  /**
+   * @see Env#setAttribute(String, Object)
+   */
   void setAttribute (final int memberIndex, final String name, final Object value);
 
-  void setAttribute (final String name, final List< ? > values);
+  /**
+   * Sets the values for the given attribute name on each memberIndex. Values
+   * in the list past the number of member indices will be ignored.
+   *
+   * @param name The attribute name
+   * @param values The list of values to set, one per memberIndex
+   */
+  void setAttribute (final String name, final List<?> values);
 
+  /**
+   * @see Env#removeAttribute(String)
+   */
   void removeAttribute (final int memberIndex, final String name);
 
+  /**
+   * Removes the given attribute from all member indices.
+   *
+   * @param name The attribute to remove
+   */
   void removeAttribute (final String name);
 
+  /**
+   * @see Env#getTransientAttribute(String)
+   */
   Object getTransientAttribute (final int memberIndex, final String name);
 
+  /**
+   * @see Env#getTransientAttributeNames()
+   */
   Iterable<String> getTransientAttributeNames (final int memberIndex);
 
+  /**
+   * @see Env#hasTransientAttribute(String)
+   */
   boolean hasTransientAttribute (final int memberIndex, final String name);
 
+  /**
+   * @see Env#removeTransientAttribute(String)
+   */
   void removeTransientAttribute (final int memberIndex, final String name);
 
-  void setTransientAttribute (final int memberIndex, final String name, final Object value);
+  /**
+   * Removes the given transient attribute from all member indices.
+   *
+   * @param name The attribute to remove
+   */
+  void removeTransientAttribute (final String name);
 
+  /**
+   * @see Env#setTransientAttribute(String, Object)
+   */
+  void setTransientAttribute (final int memberIndex, final String name, final Object value);
 }

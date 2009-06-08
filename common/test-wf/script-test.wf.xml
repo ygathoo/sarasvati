@@ -11,7 +11,7 @@
           java.lang.System.out.println( "Hello" );
           java.lang.System.out.println( "token: " + token );
 
-          engine.completeExecution( token, null );
+          engine.complete( token, null );
         ]]>
       </execute>
     </custom>

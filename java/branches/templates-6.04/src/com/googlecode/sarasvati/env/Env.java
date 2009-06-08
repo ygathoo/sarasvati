@@ -16,7 +16,10 @@
 
     Copyright 2008-2009 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.env;
+
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
 
 /**
  * An Env is a container for variables. The variables are likely all stored as strings,

@@ -19,7 +19,10 @@
 
 package com.googlecode.sarasvati;
 
-import java.util.List;
+import java.util.Collection;
+
+import com.googlecode.sarasvati.env.Env;
+import com.googlecode.sarasvati.env.TokenSetMemberEnv;
 
 /**
  * A token set is way of associating tokens together and allowing them to have
@@ -58,10 +61,10 @@ public interface TokenSet
    * @param engine The engine executing the current process. May
    *               be required in order to load the token list.
    *
-   * @return the list of active (non-completed) arc tokens which
+   * @return the collection of active (non-completed) arc tokens which
    *         are members of this token set.
    */
-  List<ArcToken> getActiveArcTokens (Engine engine);
+  Collection<ArcToken> getActiveArcTokens (Engine engine);
 
   /**
    * Returns the list of active (non-completed) node tokens which
@@ -73,7 +76,7 @@ public interface TokenSet
    * @return the list of active (non-completed) node tokens which
    *         are members of this token set.
    */
-  List<NodeToken> getActiveNodeTokens (Engine engine);
+  Collection<NodeToken> getActiveNodeTokens (Engine engine);
 
   /**
    * Returns the maximum member index that a member of this token

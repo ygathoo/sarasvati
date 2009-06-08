@@ -16,11 +16,23 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.env;
 
-public interface AttributeConverter<T>
+/**
+ * Attribute converter for String <--> Boolean
+ *
+ * @author Paul Lorenz
+ */
+public final class BooleanAttributeConverter extends AbstractStringValueOfAttributeConverter
 {
-  String objectToString (T object);
-
-  T stringToObject (String string);
+  /**
+   * Converts the given string to a Boolean
+   *
+   * @see com.googlecode.sarasvati.env.AttributeConverter#stringToObject(java.lang.String, java.lang.Class)
+   */
+  @Override
+  public Object stringToObject (String string, Class<?> object)
+  {
+    return Boolean.valueOf( string );
+  }
 }

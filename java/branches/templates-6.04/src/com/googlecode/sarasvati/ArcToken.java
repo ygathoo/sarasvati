@@ -101,6 +101,9 @@ public interface ArcToken extends Token
   /**
    * Returns the set members for each token set that this
    * token is tied to.
+   *
+   * @return the set members for each token set that this
+   *         token is tied to.
    */
   Set<ArcTokenSetMember> getTokenSetMemberships ();
 }

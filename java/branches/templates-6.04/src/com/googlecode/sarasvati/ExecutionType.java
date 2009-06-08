@@ -19,14 +19,64 @@
 
 package com.googlecode.sarasvati;
 
+/**
+ * Specifies the different execution types. During normal
+ * execution, only {@link ExecutionType#Forward} is used.
+ * The other execution types are using when backtracking
+ * (see {@link Engine#backtrack(NodeToken)}.
+ *
+ * @author Paul Lorenz
+ */
 public enum ExecutionType
 {
+  /**
+   * Indicates that the associated token was
+   * generated via normal execution and has
+   * not been backtracked.
+   */
   Forward,
+
+  /**
+   * Indicates that the associated token was
+   * generated via normal execution but has
+   * since been backtracked.
+   */
   ForwardBacktracked,
+
+  /**
+   * Indicates that the associated token was
+   * generated during a backtracking operation,
+   * as part of the reverse execution.
+   */
   Backtracked,
+
+  /**
+   * Indicates that the associated token was
+   * generated during a backtracking operation,
+   * on an arc token which was backtracked
+   * but not as far as the previous node. Execution
+   * on this arc therefore looks somewhat like a
+   * u-turn, where entry and exit are both on the
+   * exit side.
+   */
   UTurn,
+
+  /**
+   * Indicates that the associated token was
+   * generated during a backtracking operation,
+   * as a U-turn and has now been backtracked
+   * as part of a second backtrack operation.
+   */
   UTurnBacktracked;
 
+  /**
+   * Returns the backtracked version of the execution type, or itself
+   * if the execution type is already a backtracking type.
+   *
+   * @param isComplete Indicates if the associated token is complete
+   *
+   * @return The backtracked version of the execution type.
+   */
   public ExecutionType getCorrespondingBacktracked (boolean isComplete)
   {
     if ( this == Forward )
@@ -42,6 +92,13 @@ public enum ExecutionType
     return this;
   }
 
+  /**
+   * Returns true if the execution type indicates that the token
+   * has been backtracked and false otherwise.
+
+   * @return True if the execution type indicates that the token
+   *         has been backtracked and false otherwise.
+   */
   public boolean isBacktracked ()
   {
     return this == ForwardBacktracked ||

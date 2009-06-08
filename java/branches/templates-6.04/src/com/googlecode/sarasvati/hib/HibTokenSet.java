@@ -19,8 +19,8 @@
 
 package com.googlecode.sarasvati.hib;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -45,10 +45,10 @@ import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.TokenSet;
-import com.googlecode.sarasvati.TokenSetMemberEnv;
+import com.googlecode.sarasvati.env.Env;
+import com.googlecode.sarasvati.env.TokenSetMemberEnv;
 import com.googlecode.sarasvati.impl.MapEnv;
 
 @Entity
@@ -73,15 +73,17 @@ public class HibTokenSet implements TokenSet
   @Column( name="complete", nullable=false)
   protected boolean complete;
 
-  @OneToMany (fetch=FetchType.LAZY, mappedBy="tokenSet", cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE } )
+  @OneToMany (fetch=FetchType.LAZY,
+              mappedBy="tokenSet",
+              cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE } )
   @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
             org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-  protected Set<HibTokenSetMemberAttributes>     properties;
+  protected Set<HibTokenSetMemberAttribute>     memberAttributes;
 
   @ForeignKey(name="FK_token_set_attr")
   @CollectionOfElements
-  @JoinTable( name="wf_token_set_attr", joinColumns={@JoinColumn( name="token_set_id")})
-  @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
+  @JoinTable( name="wf_token_set_attr", joinColumns={@JoinColumn(name="token_set_id", nullable=false)})
+  @org.hibernate.annotations.MapKey( columns={@Column(name="name", nullable=false)})
   @Column( name="value")
   @Cascade( org.hibernate.annotations.CascadeType.DELETE )
   protected Map<String, String> attrMap;
@@ -93,10 +95,10 @@ public class HibTokenSet implements TokenSet
   protected TokenSetMemberEnv memberEnv;
 
   @Transient
-  protected List<ArcToken> activeArcTokens;
+  protected Set<ArcToken> activeArcTokens;
 
   @Transient
-  protected List<NodeToken> activeNodeTokens;
+  protected Set<NodeToken> activeNodeTokens;
 
   protected HibTokenSet ()
   {
@@ -110,8 +112,10 @@ public class HibTokenSet implements TokenSet
     this.process = process;
     this.name = name;
     this.maxMemberIndex = maxMemberIndex;
-    this.activeArcTokens = new LinkedList<ArcToken>();
-    this.activeNodeTokens = new LinkedList<NodeToken>();
+    this.attrMap = new HashMap<String, String>();
+    this.memberAttributes = new HashSet<HibTokenSetMemberAttribute>();
+    this.activeArcTokens = new HashSet<ArcToken>();
+    this.activeNodeTokens = new HashSet<NodeToken>();
   }
 
   public Long getId ()
@@ -186,32 +190,32 @@ public class HibTokenSet implements TokenSet
     return memberEnv;
   }
 
-  public Set<HibTokenSetMemberAttributes> getProperties ()
+  public Set<HibTokenSetMemberAttribute> getMemberAttributes ()
   {
-    return properties;
+    return memberAttributes;
   }
 
-  public void setProperties (Set<HibTokenSetMemberAttributes> properties)
+  public void setMemberAttributes (Set<HibTokenSetMemberAttribute> memberAttributes)
   {
-    this.properties = properties;
+    this.memberAttributes = memberAttributes;
   }
 
   @Override
-  public List<ArcToken> getActiveArcTokens (Engine engine)
+  public Set<ArcToken> getActiveArcTokens (Engine engine)
   {
     if ( activeArcTokens == null )
     {
-      activeArcTokens = ((HibEngine)engine).getActiveArcTokens( this );
+      activeArcTokens = new HashSet<ArcToken>( ((HibEngine)engine).getActiveArcTokens( this ) );
     }
     return activeArcTokens;
   }
 
   @Override
-  public List<NodeToken> getActiveNodeTokens (Engine engine)
+  public Set<NodeToken> getActiveNodeTokens (Engine engine)
   {
     if ( activeNodeTokens == null )
     {
-      activeNodeTokens = ((HibEngine)engine).getActiveNodeTokens( this );
+      activeNodeTokens = new HashSet<NodeToken>( ((HibEngine)engine).getActiveNodeTokens( this ) );
     }
     return activeNodeTokens;
   }

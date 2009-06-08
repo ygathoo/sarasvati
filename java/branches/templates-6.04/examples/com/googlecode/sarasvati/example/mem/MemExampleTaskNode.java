@@ -19,8 +19,8 @@
 package com.googlecode.sarasvati.example.mem;
 
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.mem.MemNode;
 
