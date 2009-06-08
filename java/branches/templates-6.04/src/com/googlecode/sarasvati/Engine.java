@@ -122,7 +122,7 @@ public interface Engine
   void complete (NodeToken token, String arcName);
 
   /**
-   * Marks the given node completed and generates the next set of arc tokens.
+   * Marks the given node token completed and generates the next set of arc tokens.
    * However, these arc tokens will not be processed. Execution may be
    * continued later with a call to {@link Engine#executeQueuedArcTokens(GraphProcess)}.
    *
@@ -132,6 +132,20 @@ public interface Engine
    */
   void completeAsynchronous (NodeToken token, String arcName);
 
+  /**
+   * Marks the given node token, creates new token set and generates the next set
+   * of arc tokens as members of that new token set.
+   *
+   * @param token The node token to complete
+   * @param arcName The name of the {@link Arc} (or arcs, as more than one {@link Arc} can
+   *                have the same name) to generate ArcTokens on.
+   * @param tokenSetName The token set name
+   * @param numberOfTokens The number of tokens to generate on each arc
+   * @param asynchronous If true, the engine will return after creating the arc tokens.
+   *                     If false, the new arc tokens will be processed immediately.
+   * @param initialEnv The initial environment for the new token set. May be null.
+   * @param initialMemberEnv The initial environment for the new token set members. May be null.
+   */
   void completeWithNewTokenSet (NodeToken token,
                                 String arcName,
                                 String tokenSetName,
