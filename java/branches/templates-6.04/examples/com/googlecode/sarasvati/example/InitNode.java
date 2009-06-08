@@ -36,11 +36,11 @@ public class InitNode extends CustomNode
     Env env = token.getEnv();
     if ( env.hasAttribute( "iter" ) )
     {
-      iter = env.getLongAttribute( "iter" );
+      iter = env.getAttribute( "iter", Long.class );
     }
 
-    env.setLongAttribute( "iter", ++iter );
-    env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
+    env.setAttribute( "iter", ++iter );
+    env.setAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
     engine.complete( token, Arc.DEFAULT_ARC );
   }
 }

@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati;
 
@@ -23,8 +23,8 @@ import java.util.List;
 /**
  * An TokenSetEnv stores attributes related to a token set and it's member tokens.
  * Unlike a normal {@link Env}, for each attribute, it may store a many values,
- * each with a different member index.  
- * 
+ * each with a different member index.
+ *
  * @author Paul Lorenz
  */
 public interface TokenSetEnv extends Env
@@ -33,12 +33,12 @@ public interface TokenSetEnv extends Env
    * Gets the attributes as a String. If there is no value set for
    * the attribute, null will be returned.
    *
-   * @param index The index of the attribute. 
+   * @param index The index of the attribute.
    * @param name The name of the attribute to get
    * @return The value of attribute or null if no value is set for the attribute.
    *
    */
-  List<String> getStringAttributes (String name);
+  List<String> getAttributes (String name);
 
   /**
    * Sets the attribute of the given name to the given string value.
@@ -46,47 +46,7 @@ public interface TokenSetEnv extends Env
    * @param name The name of the attribute to set.
    * @param value The value to set the attribute to
    */
-  void setStringAttributes (String name, List<String> values);
-
-  /**
-   * Gets an attribute as a long. If there is no value set for
-   * the attribute or if the attribute can not be read as a long,
-   * 0 will be returned.
-   *
-   * @param name The name of the attribute to get
-   * @return The value of attribute or 0 if no value is set for the attribute or
-   *         the value cannot be interpreted as a long
-   *
-   */
-  List<Long> getLongAttributes (String name);
-
-  /**
-   * Sets the attribute of the given name to the given long value.
-   *
-   * @param name The name of the attribute to set.
-   * @param value The value to set the attribute to
-   */
-  void setLongAttribute (String name, long value);
-
-  /**
-   * Gets an attribute as a boolean. If there is no value set for
-   * the attribute or if the attribute can not be read as a boolean,
-   * false will be returned.
-   *
-   * @param name The name of the attribute to get
-   * @return The value of attribute or false if no value is set for the attribute or
-   *         the value cannot be interpreted as a boolean.
-   *
-   */
-  boolean getBooleanAttribute (String name);
-
-  /**
-   * Sets the attribute of the given name to the given boolean value.
-   *
-   * @param name The name of the attribute to set.
-   * @param value The value to set the attribute to
-   */
-  void setBooleanAttribute (String name, boolean value);
+  void setAttributes (String name, List<?> values);
 
   /**
    * Unsets any attribute with the given name.

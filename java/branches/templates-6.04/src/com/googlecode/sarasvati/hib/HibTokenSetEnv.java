@@ -49,8 +49,8 @@ public class HibTokenSetEnv
     }
   }
 
-  public String getStringAttribute (final int memberIndex,
-                                    final String name)
+  public String getAttribute (final int memberIndex,
+                              final String name)
   {
     if ( memberIndex < 0 || memberIndex >= props.length )
     {
@@ -61,35 +61,9 @@ public class HibTokenSetEnv
     return property == null ? null : property.getValue();
   }
 
-  public boolean getBooleanAttribute (final int memberIndex,
-                                      final String name)
-  {
-    return Boolean.valueOf( getStringAttribute( memberIndex, name ) );
-  }
-
-  public long getLongAttribute (final int memberIndex,
-                                final String name)
-  {
-    String val = getStringAttribute( memberIndex, name );
-
-    if ( val == null )
-    {
-      return 0;
-    }
-
-    try
-    {
-      return Long.parseLong( val );
-    }
-    catch (NumberFormatException nfe)
-    {
-      return 0;
-    }
-  }
-
-  public void setStringAttribute (final int memberIndex,
-                                  final String name,
-                                  final String value)
+  public void setAttribute (final int memberIndex,
+                            final String name,
+                            final Object value)
   {
     if ( memberIndex < 0 || memberIndex >= props.length )
     {
@@ -111,14 +85,14 @@ public class HibTokenSetEnv
     }
   }
 
-  public void setStringAttribute (final String name,
-                                  final List<String> values)
+  public void setAttribute (final String name,
+                            final List<String> values)
   {
     int idx = 0;
     Iterator<String> iter = values.iterator();
     while ( iter.hasNext() && idx < props.length )
     {
-      setStringAttribute( idx, name, iter.next() );
+      setAttribute( idx, name, iter.next() );
       idx++;
     }
   }

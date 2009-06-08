@@ -56,7 +56,7 @@ public class HibExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 1;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 1;
       }
     });
 
@@ -65,7 +65,7 @@ public class HibExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 0;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 0;
       }
     });
 
@@ -74,7 +74,7 @@ public class HibExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "iter" ) == 10;
+        return token.getEnv().getAttribute( "iter", Long.class ) == 10;
       }
     });
 

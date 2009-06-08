@@ -107,8 +107,8 @@ public class JdbcExampleTaskNode extends JdbcNode
     factory.newInsertTaskAction( task ).execute( jdbcEngine );
 
     Env env = token.getEnv();
-    env.setLongAttribute( task.getName(), env.getLongAttribute( task.getName() ) + 1 );
+    env.setAttribute( task.getName(), env.getAttribute( task.getName(), Long.class ) + 1 );
     env = token.getProcess().getEnv();
-    env.setLongAttribute( task.getName(), env.getLongAttribute( task.getName() ) + 1 );
+    env.setAttribute( task.getName(), env.getAttribute( task.getName(), Long.class ) + 1 );
   }
 }

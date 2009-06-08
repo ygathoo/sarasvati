@@ -16,19 +16,7 @@ public class TokenSetMemberEnv implements Env
   }
 
   @Override
-  public boolean getBooleanAttribute (String name)
-  {
-    return tokenSetEnv.getBooleanAttribute( memberIndex, name );
-  }
-
-  @Override
-  public long getLongAttribute (String name)
-  {
-    return tokenSetEnv.getLongAttribute( memberIndex, name );
-  }
-
-  @Override
-  public String getStringAttribute (String name)
+  public String getAttribute (String name)
   {
     return tokenSetEnv.getStringAttribute( memberIndex, name );
   }
@@ -82,23 +70,9 @@ public class TokenSetMemberEnv implements Env
   }
 
   @Override
-  public void setBooleanAttribute (String name, boolean value)
+  public void setAttribute (String name, Object value)
   {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void setLongAttribute (String name, long value)
-  {
-    // TODO Auto-generated method stub
-
-  }
-
-  @Override
-  public void setStringAttribute (String name, String value)
-  {
-    tokenSetEnv.setStringAttribute( memberIndex, name, value );
+    tokenSetEnv.setAttribute( memberIndex, name, value );
   }
 
   @Override

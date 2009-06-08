@@ -62,7 +62,7 @@ public class MemExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 1;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 1;
       }
     });
 
@@ -71,7 +71,7 @@ public class MemExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 0;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 0;
       }
     });
 
@@ -80,8 +80,8 @@ public class MemExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        System.out.println( "iter: " + token.getEnv().getLongAttribute( "iter" ) );
-        return token.getEnv().getLongAttribute( "iter" ) == 1000;
+        System.out.println( "iter: " + token.getEnv().getAttribute( "iter", Long.class ) );
+        return token.getEnv().getAttribute( "iter", Long.class ) == 1000;
       }
     });
 
