@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.hib;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -31,18 +32,24 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CollectionOfElements;
+import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.TokenSetMemberEnv;
+import com.googlecode.sarasvati.impl.MapEnv;
 
 @Entity
 @Table(name="wf_token_set")
@@ -69,7 +76,21 @@ public class HibTokenSet implements TokenSet
   @OneToMany (fetch=FetchType.LAZY, mappedBy="tokenSet", cascade={CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REMOVE } )
   @Cascade({org.hibernate.annotations.CascadeType.SAVE_UPDATE,
             org.hibernate.annotations.CascadeType.DELETE_ORPHAN})
-  protected Set<HibTokenSetProperty>     properties;
+  protected Set<HibTokenSetMemberAttributes>     properties;
+
+  @ForeignKey(name="FK_token_set_attr")
+  @CollectionOfElements
+  @JoinTable( name="wf_token_set_attr", joinColumns={@JoinColumn( name="token_set_id")})
+  @org.hibernate.annotations.MapKey( columns={@Column(name="name")})
+  @Column( name="value")
+  @Cascade( org.hibernate.annotations.CascadeType.DELETE )
+  protected Map<String, String> attrMap;
+
+  @Transient
+  protected Env env;
+
+  @Transient
+  protected TokenSetMemberEnv memberEnv;
 
   @Transient
   protected List<ArcToken> activeArcTokens;
@@ -135,12 +156,42 @@ public class HibTokenSet implements TokenSet
     this.maxMemberIndex = maxMemberIndex;
   }
 
-  public Set<HibTokenSetProperty> getProperties ()
+  public Map<String, String> getAttrMap ()
+  {
+    return attrMap;
+  }
+
+  public void setAttrMap (Map<String, String> attrMap)
+  {
+    this.attrMap = attrMap;
+  }
+
+  @Override
+  public Env getEnv ()
+  {
+    if (env == null)
+    {
+      env = new MapEnv( getAttrMap() );
+    }
+    return env;
+  }
+
+  @Override
+  public TokenSetMemberEnv getMemberEnv ()
+  {
+    if (memberEnv == null)
+    {
+      memberEnv = new HibTokenSetMemberEnv( this );
+    }
+    return memberEnv;
+  }
+
+  public Set<HibTokenSetMemberAttributes> getProperties ()
   {
     return properties;
   }
 
-  public void setProperties (Set<HibTokenSetProperty> properties)
+  public void setProperties (Set<HibTokenSetMemberAttributes> properties)
   {
     this.properties = properties;
   }

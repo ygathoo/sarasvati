@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.hib;
 
@@ -48,6 +48,7 @@ import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.AttributeConverters;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
@@ -308,7 +309,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public Env getFullEnv()
+  public Env getFullEnv ()
   {
     if ( fullEnv == null )
     {
@@ -318,7 +319,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public Env getEnv()
+  public Env getEnv ()
   {
     if ( env == null )
     {
@@ -340,7 +341,7 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public String getAttribute( String name )
+    public String getAttribute (final String name)
     {
       if ( attrSetToken == null )
       {
@@ -356,6 +357,14 @@ public class HibNodeToken implements NodeToken
       }
     }
 
+    @Override
+    public <T> T getAttribute (final String name,
+                               final Class<T> type)
+    {
+      String value = getAttribute( name );
+      return AttributeConverters.stringToObject( value, type );
+    }
+
     protected void copyOnWrite ()
     {
       if ( !isAttributeSetLocal() )
@@ -369,21 +378,29 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public void removeAttribute( String name )
+    public void removeAttribute (final String name)
     {
       copyOnWrite();
       attrMap.remove( name );
     }
 
     @Override
-    public void setAttribute( String name, Object value )
+    public void setAttribute (final String name,
+                              final String value )
     {
       copyOnWrite();
       attrMap.put( name, value );
     }
 
     @Override
-    public boolean hasAttribute( String name )
+    public void setAttribute (final String name,
+                              final Object value )
+    {
+      setAttribute( name, AttributeConverters.objectToString( value ) );
+    }
+
+    @Override
+    public boolean hasAttribute (final String name)
     {
       if ( attrSetToken == null )
       {
@@ -400,7 +417,7 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public Iterable<String> getAttributeNames()
+    public Iterable<String> getAttributeNames ()
     {
       if ( attrSetToken == null )
       {
@@ -441,13 +458,13 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public Iterable<String> getTransientAttributeNames()
+    public Iterable<String> getTransientAttributeNames ()
     {
       return transientAttributes.keySet();
     }
 
     @Override
-    public void importEnv(Env copyEnv)
+    public void importEnv (Env copyEnv)
     {
       for ( String name : copyEnv.getAttributeNames() )
       {
@@ -486,7 +503,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public String toString()
+  public String toString ()
   {
     return "[HibNodeToken id=" + id + " action=" + guardAction + "]";
   }

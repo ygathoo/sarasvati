@@ -31,14 +31,14 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ForeignKey;
 
 @Entity
-@Table (name="wf_token_set_property")
-public class HibTokenSetProperty
+@Table (name="wf_token_set_member_attr")
+public class HibTokenSetMemberAttributes
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long id;
 
-  @ForeignKey( name="FK_token_set_prop" )
+  @ForeignKey( name="FK_token_set_mbr_attr" )
   @ManyToOne (fetch=FetchType.LAZY)
   @JoinColumn (name="token_set_id", nullable=false)
   protected HibTokenSet tokenSet;
@@ -49,12 +49,12 @@ public class HibTokenSetProperty
   @Column( name="name", nullable=false)
   protected String name;
 
+  @Column( name="value", nullable=true)
   protected String value;
 
+  protected HibTokenSetMemberAttributes () { /* Default constructor for hibernate */ }
 
-  protected HibTokenSetProperty () { /* Default constructor for hibernate */ }
-
-  protected HibTokenSetProperty (HibTokenSet tokenSet, Integer memberIndex, String name, String value)
+  protected HibTokenSetMemberAttributes (HibTokenSet tokenSet, Integer memberIndex, String name, String value)
   {
    this.tokenSet = tokenSet;
    this.memberIndex = memberIndex;
@@ -127,8 +127,8 @@ public class HibTokenSetProperty
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
-    if ( !( obj instanceof HibTokenSetProperty ) ) return false;
-    final HibTokenSetProperty other = (HibTokenSetProperty)obj;
+    if ( !( obj instanceof HibTokenSetMemberAttributes ) ) return false;
+    final HibTokenSetMemberAttributes other = (HibTokenSetMemberAttributes)obj;
     if ( id == null )
     {
       if ( other.getId() != null ) return false;

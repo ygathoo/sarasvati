@@ -24,9 +24,12 @@ import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.TokenSetMemberEnv;
+import com.googlecode.sarasvati.impl.MapEnv;
 
 public class MemTokenSet implements TokenSet
 {
@@ -37,6 +40,9 @@ public class MemTokenSet implements TokenSet
 
   protected List<ArcToken> activeArcTokens = new LinkedList<ArcToken>();
   protected List<NodeToken> activeNodeTokens = new LinkedList<NodeToken>();
+
+  protected Env env = new MapEnv();
+  protected TokenSetMemberEnv memberEnv;
 
   public MemTokenSet (final GraphProcess process, final String name, int maxMemberIndex)
   {
@@ -85,5 +91,20 @@ public class MemTokenSet implements TokenSet
   public void markComplete (Engine engine)
   {
     complete = true;
+  }
+
+  @Override
+  public Env getEnv ()
+  {
+    return env;
+  }
+
+  public TokenSetMemberEnv getMemberEnv ()
+  {
+    if ( memberEnv == null )
+    {
+      memberEnv = new MemTokenSetMemberEnv( this );
+    }
+    return memberEnv;
   }
 }

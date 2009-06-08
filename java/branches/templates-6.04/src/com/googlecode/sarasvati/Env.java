@@ -50,6 +50,14 @@ public interface Env
   <T> T getAttribute (String name, Class<T> type);
 
   /**
+   * Sets the attribute of the given name to the given string value.
+   *
+   * @param name The name of the attribute to set.
+   * @param value The value to set the attribute to
+   */
+  void setAttribute (String name, String value);
+
+  /**
    * Sets the attribute of the given name to the given value.
    *
    * @param name The name of the attribute to set.

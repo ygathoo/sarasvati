@@ -28,8 +28,11 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
+import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.impl.TokenSetMemberEnvAdapter;
 
 @Entity
 @Table(name="wf_token_set_nodemem")
@@ -49,6 +52,9 @@ public class HibNodeTokenSetMember implements NodeTokenSetMember
 
   @Column(name="member_index", nullable=false)
   protected int memberIndex;
+
+  @Transient
+  protected Env env;
 
   protected HibNodeTokenSetMember ()
   {
@@ -103,6 +109,16 @@ public class HibNodeTokenSetMember implements NodeTokenSetMember
   public void setMemberIndex (int memberIndex)
   {
     this.memberIndex = memberIndex;
+  }
+
+  @Override
+  public Env getEnv ()
+  {
+    if ( env == null )
+    {
+      env = new TokenSetMemberEnvAdapter( getTokenSet().getMemberEnv(), memberIndex );
+    }
+    return env;
   }
 
   @Override

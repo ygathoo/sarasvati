@@ -27,6 +27,7 @@ import java.util.Map;
 import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.AttributeConverters;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
@@ -215,7 +216,7 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
     }
 
     @Override
-    public String getAttribute( String name )
+    public String getAttribute (final String name)
     {
       if ( attrSetToken == null )
       {
@@ -230,6 +231,15 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
         return attrMap.get( name );
       }
     }
+
+    @Override
+    public <T> T getAttribute (final String name,
+                               final Class<T> type)
+    {
+      String value = getAttribute( name );
+      return AttributeConverters.stringToObject( value, type );
+    }
+
 
     protected void copyOnWrite ()
     {
@@ -251,10 +261,18 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
     }
 
     @Override
-    public void setAttribute( String name, Object value )
+    public void setAttribute (final String name,
+                              final String value )
     {
       copyOnWrite();
       attrMap.put( name, value );
+    }
+
+    @Override
+    public void setAttribute (final String name,
+                              final Object value )
+    {
+      setAttribute( name, AttributeConverters.objectToString( value ) );
     }
 
     @Override
