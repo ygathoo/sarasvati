@@ -18,13 +18,24 @@
 */
 package com.googlecode.sarasvati.load.properties;
 
+import com.googlecode.sarasvati.env.AttributeConverter;
 import com.googlecode.sarasvati.load.LoadException;
 
-public class StringPropertyMutator extends BasePropertyMutator
+public class AttributeConverterPropertyMutator extends BasePropertyMutator
 {
+  protected final AttributeConverter converter;
+  protected final Class<?> type;
+
+  public AttributeConverterPropertyMutator (final AttributeConverter converter,
+                                            final Class<?> type)
+  {
+    this.converter = converter;
+    this.type = type;
+  }
+
   @Override
   public void setFromText (String text) throws LoadException
   {
-    setValue( text );
+    setValue( converter.stringToObject( text, type ) );
   }
 }

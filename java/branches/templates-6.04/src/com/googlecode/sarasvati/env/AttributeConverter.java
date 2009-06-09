@@ -18,9 +18,35 @@
 */
 package com.googlecode.sarasvati.env;
 
+/**
+ * Interface for converting to and from objects and strings. Used for
+ * loading custom data from XML process definitions into nodes as well
+ * as transforming process/token/token set {@link Env} attributes to
+ * and from database friendly strings.
+ * <p>
+ * AttributeConverters should be registered with and used from the
+ * {@link AttributeConverters} class.
+ *
+ * @author Paul Lorenz
+ */
 public interface AttributeConverter
 {
+  /**
+   * Converts the given object into string format.
+   *
+   * @param object The object to converter
+   *
+   * @return The object in string format
+   */
   String objectToString (Object object);
 
-  Object stringToObject (String string, Class<?> object);
+  /**
+   * Converts the given string into an object of the given type.
+   *
+   * @param string The string to be converted into an object
+   * @param type The type to transform the string into
+   *
+   * @return The object produced from the string
+   */
+  Object stringToObject (String string, Class<?> type);
 }
