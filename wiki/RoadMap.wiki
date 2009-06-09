@@ -73,9 +73,14 @@ See [TokenSetsDesign design].
 
 ===Documentation: Not yet started===
  # Documentation needs to be updated for changes. 
+   * Split out external
+   * isJoin => joinType
+   * Env refactoring
+   * hibernate node type handling
+   * Graph validation framework
  # It also need to be shipped with the release, rather than just available on the project WIKI. 
-   * Need to find a WIKI -> HTML compiler. 
-   * Or alternately, need to write documentation in alternate form and repoint the website documentation to generate HTML.
+   * Could use a WIKI -> HTML compiler. 
+   * Alternately, could switch to alternate documentation format, such as DocBook (probably a better long term solution)
 
 === Performance Tuning: Not yet started ===
 
