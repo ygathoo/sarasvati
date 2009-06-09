@@ -5,9 +5,11 @@
 
 Sarasvati is fairly stable at this point, and we are workings towards a 1.0 release. 
 
+<wiki:toc/>
+
 == 1.0 TODO ==
 
-=== Editor ===
+=== Editor: In Progress ===
 
 A graphical editor for process definitions is in progress. 
 
@@ -46,7 +48,7 @@ A graphical editor for process definitions is in progress.
    * Undo/redo: No
  * Cleanup undo/redo MDI interactions: Done
 
-=== Template Node ===
+=== Token Sets/Template Nodes: Completed ===
 
 See [TokenSetsDesign design]. 
 
@@ -67,18 +69,21 @@ See [TokenSetsDesign design].
    * Status: Done
  * Milestone VI
    * Allow specification of a the name of a token set to join on in a TokenSet
-   * Status: Incomplete
+   * Status: Done
 
-===Documentation===
-Documentation needs to be updated for changes. It also need to be shipped with the release, rather than just available on the project WIKI. Need to find a WIKI -> HTML compiler. Or alternately, need to write documentation in alternate form and repoint the website documentation to generate HTML.
+===Documentation: Not yet started===
+ # Documentation needs to be updated for changes. 
+ # It also need to be shipped with the release, rather than just available on the project WIKI. 
+   * Need to find a WIKI -> HTML compiler. 
+   * Or alternately, need to write documentation in alternate form and repoint the website documentation to generate HTML.
 
-=== Performance Tuning ===
+=== Performance Tuning: Not yet started ===
 
 Need to load 1k, 10k, 100k and maybe 1M process definitions, and make sure the hibernate backend still performs well. Will probably need to add indexes in some places.
 
 Will need to run 1k, 10k, 100k and maybe 1M processes through and check performance.
 
-=== Broader Database support ===
+=== Broader Database support: In progress ===
 
   * Investigate if schema can be generate from Hibernate mappings
     * Issue with generating FKs to enum tables
@@ -95,7 +100,7 @@ Will need to run 1k, 10k, 100k and maybe 1M processes through and check performa
       * DB2
       * Some simple file based engine? BerkleyDB?
 
-=== JDBC Backend ===
+=== JDBC Backend: In progress ===
 
 May not get to this pre-1.0 release. However, this would be good as a fall back for users who don't use hibernate. Also, it would make sure that the interfaces are sufficiently flexible.
 
