@@ -189,7 +189,7 @@ public abstract class BaseEngine implements Engine
       {
         token.markProcessed( this );
       }
-      markComplete( token, nodeToken );
+      token.markComplete( this, nodeToken );
       fireEvent( ArcTokenEvent.newCompletedEvent( this, token ) );
     }
 
@@ -210,7 +210,7 @@ public abstract class BaseEngine implements Engine
         break;
 
       case DiscardToken :
-        markComplete( token );
+        token.markComplete( this );
         fireEvent( NodeTokenEvent.newDiscardedEvent( this, token ) );
         break;
 
@@ -314,32 +314,12 @@ public abstract class BaseEngine implements Engine
     }
   }
 
-  private void markComplete (NodeToken token)
-  {
-    token.markComplete( this );
-
-    for ( NodeTokenSetMember setMember : token.getTokenSetMemberships() )
-    {
-      setMember.getTokenSet().getActiveNodeTokens( this ).remove( token );
-    }
-  }
-
-  private void markComplete (ArcToken token, NodeToken child)
-  {
-    token.markComplete( this, child );
-
-    for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
-    {
-      setMember.getTokenSet().getActiveArcTokens( this ).remove( token );
-    }
-  }
-
   private void completeNodeToken (final GraphProcess process,
                                   final NodeToken token,
                                   final String arcName)
   {
     process.removeActiveNodeToken( token );
-    markComplete( token );
+    token.markComplete( this );
 
     // If the node was skipped, we already sent a 'skipped' event and don't want to
     // send another 'completed' event.

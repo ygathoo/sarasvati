@@ -88,6 +88,11 @@ public class MemArcToken implements ArcToken
   {
     this.completeDate = new Date();
     this.childToken = token;
+
+    for ( ArcTokenSetMember setMember : getTokenSetMemberships() )
+    {
+      setMember.getTokenSet().getActiveArcTokens( engine ).remove( this );
+    }
   }
 
   @Override

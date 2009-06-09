@@ -92,6 +92,9 @@ public interface ArcToken extends Token
    * Marks this token as being complete, in the sense that it no longer
    * represents an active part of the process. Once a token is marked
    * complete, it is generally only of historical interest.
+   * <p>
+   * This method must also remove the token from the active sets of
+   * any token sets that it belongs to.
    *
    * @param engine The Engine completing this arc token
    * @param child The node token generated from this arc token

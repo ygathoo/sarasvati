@@ -238,6 +238,12 @@ public class HibTokenSet implements TokenSet
   }
 
   @Override
+  public void reactivateForBacktrack (Engine engine)
+  {
+    complete = false;
+  }
+
+  @Override
   public int hashCode ()
   {
     final int prime = 31;

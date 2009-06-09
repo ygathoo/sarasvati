@@ -94,6 +94,12 @@ public class MemTokenSet implements TokenSet
   }
 
   @Override
+  public void reactivateForBacktrack (Engine engine)
+  {
+    complete = false;
+  }
+
+  @Override
   public Env getEnv ()
   {
     return env;

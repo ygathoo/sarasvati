@@ -144,7 +144,10 @@ public interface NodeToken extends Token
    * this token is tied to, or null if the token is not associated
    * with a token of this name. As a general principal, tokens
    * should only belong to one token set with a given name.
-   *
+   * <p>
+   * This method must also remove the token from the active sets of
+   * any token sets that it belongs to.
+
    * @param name The token set name
    *
    * @return the first {@link TokenSet} of the given name that

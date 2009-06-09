@@ -103,6 +103,14 @@ public interface TokenSet
   void markComplete (Engine engine);
 
   /**
+   * If a node or arc token in a previously completed token set is backtracked
+   * into, the token set should be marked as incomplete again.
+   *
+   * @param engine The engine currently executing
+   */
+  void reactivateForBacktrack (Engine engine);
+
+  /**
    * A token set provides an environment into which attributes can be stored.
    * This environment is shared across all tokens which are members of the
    * environment.
