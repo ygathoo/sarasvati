@@ -14,12 +14,15 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
+
+import com.googlecode.sarasvati.env.Env;
 
 /**
  * Node tokens point to nodes in the graph. Unlike arc tokens,
@@ -131,6 +134,39 @@ public interface NodeToken extends Token
    * Marks this token as being complete, in the sense that it no longer
    * represents an active part of the process. Once a token is marked
    * complete, it is generally only of historical interest.
+   *
+   * @param engine The engine executing the current process.
    */
   void markComplete (Engine engine);
+
+  /**
+   * Returns the first {@link TokenSet} of the given name that
+   * this token is tied to, or null if the token is not associated
+   * with a token of this name. As a general principal, tokens
+   * should only belong to one token set with a given name.
+   * <p>
+   * This method must also remove the token from the active sets of
+   * any token sets that it belongs to.
+
+   * @param name The token set name
+   *
+   * @return the first {@link TokenSet} of the given name that
+   *         this token is tied to, or null if the token is not associated
+   *         with a token of this name.
+   */
+  TokenSet getTokenSet (String name);
+
+  /**
+   * Like {@link NodeToken#getTokenSet(String)}, except returns the link
+   * rather than the the token set itself.
+   *
+   * @see NodeToken#getTokenSet(String)
+   */
+  NodeTokenSetMember getTokenSetMember (String name);
+
+  /**
+   * Returns the set members for each token set that this
+   * token is tied to.
+   */
+  Set<NodeTokenSetMember> getTokenSetMemberships ();
 }

@@ -14,24 +14,15 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.load.properties;
+package com.googlecode.sarasvati.env;
 
-import com.googlecode.sarasvati.load.LoadException;
-
-public class CharPropertyMutator extends BasePropertyMutator
+public abstract class AbstractStringValueOfAttributeConverter implements AttributeConverter
 {
   @Override
-  public void setFromText (String text) throws LoadException
+  public String objectToString (Object object)
   {
-    try
-    {
-      setValue( text == null || text.length() == 0 ? null : text.charAt( 0 ) );
-    }
-    catch (NumberFormatException nfe)
-    {
-      throw new LoadException( "Unable to parse value '" + text + "' to an integer value", nfe );
-    }
+    return String.valueOf( object );
   }
 }

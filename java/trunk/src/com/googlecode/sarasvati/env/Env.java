@@ -14,9 +14,12 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.env;
+
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
 
 /**
  * An Env is a container for variables. The variables are likely all stored as strings,
@@ -35,7 +38,33 @@ public interface Env
    * @return The value of attribute or null if no value is set for the attribute.
    *
    */
-  String getStringAttribute (String name);
+  String getAttribute (String name);
+
+  /**
+   * Returns the given attribute, transformed into the given type.
+   *
+   * @param <T> The type which the attribute should be returned as.
+   *
+   * @param name The name of the attribute to get.
+   * @param type The class type which the attribute should be transformed to.
+   *
+   * @return The attribute value, or null if no value is set for the attribute.
+   */
+  <T> T getAttribute (String name, Class<T> type);
+
+  /**
+   * Returns the given attribute, transformed into the given type. If no value
+   * is set, return the given default.
+   *
+   * @param <T> The type which the attribute should be returned as.
+   *
+   * @param name The name of the attribute to get.
+   * @param type The class type which the attribute should be transformed to.
+   * @param defaultValue The value to return if no value is set.
+   *
+   * @return The attribute value, or null if no value is set for the attribute.
+   */
+  <T> T getAttribute (String name, Class<T> type, T defaultValue);
 
   /**
    * Sets the attribute of the given name to the given string value.
@@ -43,47 +72,15 @@ public interface Env
    * @param name The name of the attribute to set.
    * @param value The value to set the attribute to
    */
-  void setStringAttribute (String name, String value);
+  void setAttribute (String name, String value);
 
   /**
-   * Gets an attribute as a long. If there is no value set for
-   * the attribute or if the attribute can not be read as a long,
-   * 0 will be returned.
-   *
-   * @param name The name of the attribute to get
-   * @return The value of attribute or 0 if no value is set for the attribute or
-   *         the value cannot be interpreted as a long
-   *
-   */
-  long getLongAttribute (String name);
-
-  /**
-   * Sets the attribute of the given name to the given long value.
+   * Sets the attribute of the given name to the given value.
    *
    * @param name The name of the attribute to set.
    * @param value The value to set the attribute to
    */
-  void setLongAttribute (String name, long value);
-
-  /**
-   * Gets an attribute as a boolean. If there is no value set for
-   * the attribute or if the attribute can not be read as a boolean,
-   * false will be returned.
-   *
-   * @param name The name of the attribute to get
-   * @return The value of attribute or false if no value is set for the attribute or
-   *         the value cannot be interpreted as a boolean.
-   *
-   */
-  boolean getBooleanAttribute (String name);
-
-  /**
-   * Sets the attribute of the given name to the given boolean value.
-   *
-   * @param name The name of the attribute to set.
-   * @param value The value to set the attribute to
-   */
-  void setBooleanAttribute (String name, boolean value);
+  void setAttribute (String name, Object value);
 
   /**
    * Unsets any attribute with the given name.

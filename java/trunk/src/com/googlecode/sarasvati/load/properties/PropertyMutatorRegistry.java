@@ -22,47 +22,22 @@ import java.beans.PropertyDescriptor;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.googlecode.sarasvati.env.AttributeConverter;
+import com.googlecode.sarasvati.env.AttributeConverters;
+
 public class PropertyMutatorRegistry
 {
-  protected static Map<Class<?>, Class<?>> mutatorMap = new HashMap<Class<?>, Class<?>>();
+  protected static Map<Class<?>, Class<?>> mutatorCache = new HashMap<Class<?>, Class<?>>();
 
-  static
-  {
-    mutatorMap.put( Boolean.TYPE, BooleanPropertyMutator.class );
-    mutatorMap.put( Boolean.class, BooleanPropertyMutator.class );
-
-    mutatorMap.put( Byte.TYPE, BytePropertyMutator.class );
-    mutatorMap.put( Byte.class, BytePropertyMutator.class );
-
-    mutatorMap.put( Character.TYPE, CharPropertyMutator.class );
-    mutatorMap.put( Character.class, CharPropertyMutator.class );
-
-    mutatorMap.put( Short.TYPE, ShortPropertyMutator.class );
-    mutatorMap.put( Short.class, ShortPropertyMutator.class );
-
-    mutatorMap.put( Integer.TYPE, IntegerPropertyMutator.class );
-    mutatorMap.put( Integer.class, IntegerPropertyMutator.class );
-
-    mutatorMap.put( Long.TYPE, LongPropertyMutator.class );
-    mutatorMap.put( Long.class, LongPropertyMutator.class );
-
-    mutatorMap.put( Float.TYPE, FloatPropertyMutator.class );
-    mutatorMap.put( Float.class, FloatPropertyMutator.class );
-
-    mutatorMap.put( Double.TYPE, DoublePropertyMutator.class );
-    mutatorMap.put( Double.class, DoublePropertyMutator.class );
-
-    mutatorMap.put( String.class, StringPropertyMutator.class );
-  }
 
   public static void registerPropertyMutator (Class<?> targetClass, Class<?> mutatorClass)
   {
-    mutatorMap.put( targetClass, mutatorClass );
+    mutatorCache.put( targetClass, mutatorClass );
   }
 
   public static PropertyMutator getMutator (PropertyDescriptor pd, Object obj, PropertyMutator defaultMutator)
   {
-    Class<?> mutatorClass = mutatorMap.get( pd.getPropertyType() );
+    Class<?> mutatorClass = mutatorCache.get( pd.getPropertyType() );
 
     PropertyMutator mutator = null;
 
@@ -75,6 +50,14 @@ public class PropertyMutatorRegistry
       catch (Throwable t)
       {
         mutator = null; // use the default property mutator
+      }
+    }
+    else
+    {
+      AttributeConverter converter = AttributeConverters.getConverterForType( pd.getPropertyType() );
+      if ( converter != null )
+      {
+        mutator = new AttributeConverterPropertyMutator( converter, pd.getPropertyType() );
       }
     }
 

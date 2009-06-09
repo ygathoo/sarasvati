@@ -14,27 +14,32 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.mem;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.impl.MapEnv;
 import com.googlecode.sarasvati.impl.NestedEnv;
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 public class MemNodeToken implements NodeToken
@@ -48,6 +53,8 @@ public class MemNodeToken implements NodeToken
   protected Date createDate;
   protected Date completeDate;
   protected ExecutionType executionType;
+
+  protected Set<NodeTokenSetMember> tokenSetMemberships = null;
 
   protected Map<String, String> attributes = new HashMap<String, String>();
 
@@ -63,6 +70,7 @@ public class MemNodeToken implements NodeToken
     this.executionType = executionType;
     this.childTokens = new LinkedList<ArcToken>();
     this.createDate = new Date();
+    tokenSetMemberships = new HashSet<NodeTokenSetMember>();
   }
 
   @Override
@@ -123,6 +131,11 @@ public class MemNodeToken implements NodeToken
   public void markComplete (Engine engine)
   {
     completeDate = new Date();
+
+    for ( NodeTokenSetMember setMember : getTokenSetMemberships() )
+    {
+      setMember.getTokenSet().getActiveNodeTokens( engine ).remove( this );
+    }
   }
 
   @Override
@@ -163,6 +176,24 @@ public class MemNodeToken implements NodeToken
   public void markBacktracked (Engine engine)
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
+  }
+
+  @Override
+  public TokenSet getTokenSet (String name)
+  {
+    return SvUtil.getTokenSet( this, name );
+  }
+
+  @Override
+  public NodeTokenSetMember getTokenSetMember (String name)
+  {
+    return (NodeTokenSetMember)SvUtil.getTokenSetMember( this, name );
+  }
+
+  @Override
+  public Set<NodeTokenSetMember> getTokenSetMemberships ()
+  {
+    return tokenSetMemberships;
   }
 
   @Override

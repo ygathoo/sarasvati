@@ -110,6 +110,12 @@ public class JdbcNodeRef implements Node,JdbcObject
   }
 
   @Override
+  public String getJoinParam ()
+  {
+    return node.getJoinParam();
+  }
+
+  @Override
   public JoinStrategy getJoinStrategy ()
   {
     return node.getJoinStrategy();

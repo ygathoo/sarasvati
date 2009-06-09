@@ -13,7 +13,7 @@ public class HelloNode extends CustomNode
   public void execute (Engine engine, NodeToken token)
   {
     System.out.println( "Hello, World!" );
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
   
   public static void main (String[] args)

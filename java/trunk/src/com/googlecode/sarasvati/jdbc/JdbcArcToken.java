@@ -22,8 +22,10 @@
 package com.googlecode.sarasvati.jdbc;
 
 import java.util.Date;
+import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.NodeToken;
@@ -153,6 +155,13 @@ public class JdbcArcToken implements ArcToken, JdbcObject
   public boolean isMutable ()
   {
     return true;
+  }
+
+  @Override
+  public Set<ArcTokenSetMember> getTokenSetMemberships ()
+  {
+    // TODO Auto-generated method stub
+    return null;
   }
 
   @Override

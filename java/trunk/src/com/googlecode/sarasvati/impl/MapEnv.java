@@ -14,14 +14,15 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.env.AttributeConverters;
+import com.googlecode.sarasvati.env.Env;
 
 /**
  * Implements {@link Env} using a Map
@@ -42,72 +43,58 @@ public class MapEnv implements Env
     this.transientAttributes = new HashMap<String,Object>();
   }
 
-  public MapEnv (Map<String,String> attributes)
+  public MapEnv (final Map<String,String> attributes)
   {
     this.attributes = attributes;
     this.transientAttributes = new HashMap<String,Object>();
   }
 
   @Override
-  public boolean getBooleanAttribute (String name)
-  {
-    return Boolean.valueOf( attributes.get( name ) );
-  }
-
-  @Override
-  public long getLongAttribute (String name)
-  {
-    String val = attributes.get( name );
-
-    if ( val == null )
-    {
-      return 0;
-    }
-
-    try
-    {
-      return Long.parseLong( val );
-    }
-    catch (NumberFormatException nfe)
-    {
-      return 0;
-    }
-  }
-
-  @Override
-  public String getStringAttribute (String name)
+  public String getAttribute (final String name)
   {
     return attributes.get( name );
   }
 
   @Override
-  public boolean hasAttribute (String name)
+  public <T> T getAttribute (final String name,
+                             final Class<T> type)
+  {
+    String value = getAttribute( name );
+    return AttributeConverters.stringToObject( value, type );
+  }
+
+  @Override
+  public <T> T getAttribute (final String name,
+                             final Class<T> type,
+                             final T defaultValue)
+  {
+    String value = getAttribute( name );
+    return AttributeConverters.stringToObject( value, type, defaultValue );
+  }
+
+  @Override
+  public boolean hasAttribute (final String name)
   {
     return attributes.containsKey( name );
   }
 
   @Override
-  public void removeAttribute (String name)
+  public void removeAttribute (final String name)
   {
     attributes.remove( name );
   }
 
   @Override
-  public void setBooleanAttribute (String name, boolean value)
-  {
-    attributes.put( name, String.valueOf( value ) );
-  }
-
-  @Override
-  public void setLongAttribute (String name, long value)
-  {
-    attributes.put( name, String.valueOf( value ) );
-  }
-
-  @Override
-  public void setStringAttribute (String name, String value)
+  public void setAttribute (final String name,
+                            final String value)
   {
     attributes.put( name, value );
+  }
+
+  public void setAttribute (final String name,
+                            final Object value)
+  {
+    setAttribute( name, AttributeConverters.objectToString( value ) );
   }
 
   @Override
@@ -117,25 +104,26 @@ public class MapEnv implements Env
   }
 
   @Override
-  public void setTransientAttribute (String name, Object value)
+  public void setTransientAttribute (final String name,
+                                     final Object value)
   {
     transientAttributes.put( name, value );
   }
 
   @Override
-  public boolean hasTransientAttribute (String name)
+  public boolean hasTransientAttribute (final String name)
   {
     return transientAttributes.containsKey( name );
   }
 
   @Override
-  public Object getTransientAttribute (String name)
+  public Object getTransientAttribute (final String name)
   {
     return transientAttributes.get( name );
   }
 
   @Override
-  public void removeTransientAttribute (String name)
+  public void removeTransientAttribute (final String name)
   {
     transientAttributes.remove( name );
   }
@@ -147,11 +135,11 @@ public class MapEnv implements Env
   }
 
   @Override
-  public void importEnv (Env env)
+  public void importEnv (final Env env)
   {
     for ( String name : env.getAttributeNames() )
     {
-      setStringAttribute( name, env.getStringAttribute( name ) );
+      setAttribute( name, env.getAttribute( name ) );
     }
 
     for ( String name : env.getTransientAttributeNames() )

@@ -14,16 +14,18 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.hib;
 
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -47,11 +49,15 @@ import org.hibernate.annotations.ForeignKey;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.env.AttributeConverters;
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.impl.NestedEnv;
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 @Entity
@@ -115,6 +121,10 @@ public class HibNodeToken implements NodeToken
   @Transient
   protected Env fullEnv = null;
 
+  @OneToMany (mappedBy="token", targetEntity=HibNodeTokenSetMember.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE)
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
+  protected Set<NodeTokenSetMember> tokenSetMemberships;
+
   public HibNodeToken () { /* Default constructor for Hibernate */ }
 
   public HibNodeToken (HibGraphProcess process,
@@ -135,6 +145,7 @@ public class HibNodeToken implements NodeToken
     this.createDate    = new Date();
 
     this.transientAttributes = transientAttributes;
+    this.tokenSetMemberships = new HashSet<NodeTokenSetMember>();
   }
 
   public Long getId ()
@@ -254,6 +265,11 @@ public class HibNodeToken implements NodeToken
   public void markComplete (Engine engine)
   {
     this.completeDate = new Date();
+
+    for ( NodeTokenSetMember setMember : getTokenSetMemberships() )
+    {
+      setMember.getTokenSet().getActiveNodeTokens( engine ).remove( this );
+    }
   }
 
   @Override
@@ -275,7 +291,30 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public Env getFullEnv()
+  public TokenSet getTokenSet (String name)
+  {
+    return SvUtil.getTokenSet( this, name );
+  }
+
+  @Override
+  public NodeTokenSetMember getTokenSetMember (String name)
+  {
+    return (NodeTokenSetMember)SvUtil.getTokenSetMember( this, name );
+  }
+
+  @Override
+  public Set<NodeTokenSetMember> getTokenSetMemberships ()
+  {
+    return tokenSetMemberships;
+  }
+
+  public void setTokenSetMemberships (Set<NodeTokenSetMember> tokenSetMemberships)
+  {
+    this.tokenSetMemberships = tokenSetMemberships;
+  }
+
+  @Override
+  public Env getFullEnv ()
   {
     if ( fullEnv == null )
     {
@@ -285,7 +324,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public Env getEnv()
+  public Env getEnv ()
   {
     if ( env == null )
     {
@@ -307,7 +346,7 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public String getStringAttribute( String name )
+    public String getAttribute (final String name)
     {
       if ( attrSetToken == null )
       {
@@ -315,12 +354,29 @@ public class HibNodeToken implements NodeToken
       }
       else if ( !isAttributeSetLocal() )
       {
-        return attrSetToken.getEnv().getStringAttribute( name );
+        return attrSetToken.getEnv().getAttribute( name );
       }
       else
       {
         return attrMap.get( name );
       }
+    }
+
+    @Override
+    public <T> T getAttribute (final String name,
+                               final Class<T> type)
+    {
+      String value = getAttribute( name );
+      return AttributeConverters.stringToObject( value, type );
+    }
+
+    @Override
+    public <T> T getAttribute (final String name,
+                               final Class<T> type,
+                               T defaultValue)
+    {
+      String value = getAttribute( name );
+      return AttributeConverters.stringToObject( value, type, defaultValue );
     }
 
     protected void copyOnWrite ()
@@ -336,59 +392,29 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public void removeAttribute( String name )
+    public void removeAttribute (final String name)
     {
       copyOnWrite();
       attrMap.remove( name );
     }
 
     @Override
-    public void setStringAttribute( String name, String value )
+    public void setAttribute (final String name,
+                              final String value )
     {
       copyOnWrite();
       attrMap.put( name, value );
     }
 
     @Override
-    public boolean getBooleanAttribute( String name )
+    public void setAttribute (final String name,
+                              final Object value )
     {
-      return "true".equals( getStringAttribute( name ) );
+      setAttribute( name, AttributeConverters.objectToString( value ) );
     }
 
     @Override
-    public long getLongAttribute( String name )
-    {
-      String value = getStringAttribute( name );
-
-      if ( value == null )
-      {
-        return 0;
-      }
-
-      try
-      {
-        return Long.parseLong( value );
-      }
-      catch (NumberFormatException nfe )
-      {
-        return 0;
-      }
-    }
-
-    @Override
-    public void setBooleanAttribute( String name, boolean value )
-    {
-      setStringAttribute( name, String.valueOf( value ) );
-    }
-
-    @Override
-    public void setLongAttribute( String name, long value )
-    {
-      setStringAttribute( name, String.valueOf( value ) );
-    }
-
-    @Override
-    public boolean hasAttribute( String name )
+    public boolean hasAttribute (final String name)
     {
       if ( attrSetToken == null )
       {
@@ -405,7 +431,7 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public Iterable<String> getAttributeNames()
+    public Iterable<String> getAttributeNames ()
     {
       if ( attrSetToken == null )
       {
@@ -446,17 +472,17 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public Iterable<String> getTransientAttributeNames()
+    public Iterable<String> getTransientAttributeNames ()
     {
       return transientAttributes.keySet();
     }
 
     @Override
-    public void importEnv(Env copyEnv)
+    public void importEnv (Env copyEnv)
     {
       for ( String name : copyEnv.getAttributeNames() )
       {
-        setStringAttribute( name, copyEnv.getStringAttribute( name ) );
+        setAttribute( name, copyEnv.getAttribute( name ) );
       }
 
       for ( String name : copyEnv.getTransientAttributeNames() )
@@ -491,7 +517,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public String toString()
+  public String toString ()
   {
     return "[HibNodeToken id=" + id + " action=" + guardAction + "]";
   }

@@ -14,24 +14,25 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.load.properties;
+package com.googlecode.sarasvati.env;
 
-import com.googlecode.sarasvati.load.LoadException;
-
-public class LongPropertyMutator extends BasePropertyMutator
+/**
+ * Attribute converter for String <--> Long
+ *
+ * @author Paul Lorenz
+ */
+public final class LongAttributeConverter extends AbstractStringValueOfAttributeConverter
 {
+  /**
+   * Converts the given string to a Long
+   *
+   * @see com.googlecode.sarasvati.env.AttributeConverter#stringToObject(java.lang.String, java.lang.Class)
+   */
   @Override
-  public void setFromText (String text) throws LoadException
+  public Object stringToObject (String string, Class<?> object)
   {
-    try
-    {
-      setValue( Long.parseLong( text ) );
-    }
-    catch (NumberFormatException nfe)
-    {
-      throw new LoadException( "Unable to parse value '" + text + "' to a long value", nfe );
-    }
+    return Long.valueOf( string );
   }
 }

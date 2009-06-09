@@ -82,6 +82,12 @@ public abstract class CustomNode implements Node
   }
 
   @Override
+  public final String getJoinParam ()
+  {
+    return nodeWrapper.getJoinParam();
+  }
+
+  @Override
   public JoinStrategy getJoinStrategy ()
   {
     return nodeWrapper.getJoinStrategy();

@@ -45,7 +45,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[2 nodeB I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -54,7 +54,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[3 nodeC I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+    engine.complete( tokenB, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -76,7 +76,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       tokenD = tmp;
     }
 
-    engine.completeExecution( tokenC, Arc.DEFAULT_ARC );
+    engine.complete( tokenC, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -88,7 +88,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[4 nodeD I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenD, Arc.DEFAULT_ARC );
+    engine.complete( tokenD, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -104,7 +104,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     NodeToken tokenE = p.getActiveNodeTokens().iterator().next();
-    engine.completeExecution( tokenE, Arc.DEFAULT_ARC );
+    engine.complete( tokenE, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -134,7 +134,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       tokenG = tmp;
     }
 
-    engine.completeExecution( tokenF, Arc.DEFAULT_ARC );
+    engine.complete( tokenF, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -275,7 +275,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -288,7 +288,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     NodeToken tokenB = getActiveToken( p, "nodeB" );
     NodeToken tokenC = getActiveToken( p, "nodeC" );
 
-    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+    engine.complete( tokenB, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -299,7 +299,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[3 nodeC I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenC, Arc.DEFAULT_ARC );
+    engine.complete( tokenC, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -377,7 +377,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -390,7 +390,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     NodeToken tokenB = getActiveToken( p, "nodeB" );
     NodeToken tokenC = getActiveToken( p, "nodeC" );
 
-    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+    engine.complete( tokenB, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -401,7 +401,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[3 nodeC I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenC, Arc.DEFAULT_ARC );
+    engine.complete( tokenC, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -431,7 +431,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     tokenC = getActiveToken( p, "nodeC" );
-    engine.completeExecution( tokenC, Arc.DEFAULT_ARC );
+    engine.complete( tokenC, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -471,7 +471,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     tokenB = getActiveToken( p, "nodeB" );
-    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+    engine.complete( tokenB, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -589,7 +589,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -598,7 +598,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     NodeToken tokenB = getActiveToken( p, "nodeB" );
-    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+    engine.complete( tokenB, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -613,7 +613,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     NodeToken tokenC = getActiveToken( p, "nodeC" );
     NodeToken tokenD = getActiveToken( p, "nodeD" );
 
-    engine.completeExecution( tokenC, Arc.DEFAULT_ARC );
+    engine.complete( tokenC, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -626,7 +626,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
       "[4 nodeD I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenD, Arc.DEFAULT_ARC );
+    engine.complete( tokenD, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -660,7 +660,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     tokenD = getActiveToken( p, "nodeD" );
-    engine.completeExecution( tokenD, Arc.DEFAULT_ARC );
+    engine.complete( tokenD, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -704,7 +704,7 @@ public class BacktrackSplitJoinTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     tokenC = getActiveToken( p, "nodeC" );
-    engine.completeExecution( tokenC, Arc.DEFAULT_ARC );
+    engine.complete( tokenC, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +

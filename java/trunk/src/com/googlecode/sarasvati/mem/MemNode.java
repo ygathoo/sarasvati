@@ -35,14 +35,15 @@ public class MemNode implements Node, Cloneable
 {
   protected static AtomicLong idGenerator = new AtomicLong();
 
-  protected Graph graph;
+  protected Graph    graph;
 
-  protected long    id;
-  protected String  name;
-  protected String  type;
+  protected long     id;
+  protected String   name;
+  protected String   type;
   protected JoinType joinType;
-  protected boolean isStart;
-  protected String guard;
+  protected String   joinParam;
+  protected boolean  isStart;
+  protected String   guard;
 
   protected boolean isExternal;
 
@@ -64,7 +65,7 @@ public class MemNode implements Node, Cloneable
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 
   /**
@@ -137,6 +138,17 @@ public class MemNode implements Node, Cloneable
   public void setJoinType (JoinType joinType)
   {
     this.joinType = joinType;
+  }
+
+  @Override
+  public String getJoinParam ()
+  {
+    return joinParam;
+  }
+
+  public void setJoinParam (String joinParam)
+  {
+    this.joinParam = joinParam;
   }
 
   @Override
