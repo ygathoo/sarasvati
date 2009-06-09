@@ -27,11 +27,11 @@ import javax.persistence.SecondaryTable;
 import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.hib.HibNodeToken;
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.example.TaskState;
 
 @Entity
@@ -97,9 +97,9 @@ public class HibExampleTaskNode extends HibNode
     session.save( newTask );
 
     Env env = token.getEnv();
-    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
+    env.setAttribute( newTask.getName(), env.getAttribute( newTask.getName(), Integer.class ) + 1 );
 
     env = token.getProcess().getEnv();
-    env.setLongAttribute( newTask.getName(), env.getLongAttribute( newTask.getName() ) + 1 );
+    env.setAttribute( newTask.getName(), env.getAttribute( newTask.getName(), Integer.class ) + 1 );
   }
 }

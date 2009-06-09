@@ -14,12 +14,12 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
+
 package com.googlecode.sarasvati;
+
+import java.util.Set;
 
 /**
  * Arc tokens point to arcs in the graph. Arc tokens may be active
@@ -92,9 +92,21 @@ public interface ArcToken extends Token
    * Marks this token as being complete, in the sense that it no longer
    * represents an active part of the process. Once a token is marked
    * complete, it is generally only of historical interest.
+   * <p>
+   * This method must also remove the token from the active sets of
+   * any token sets that it belongs to.
    *
    * @param engine The Engine completing this arc token
-   * @param token The node token generated from this arc token
+   * @param child The node token generated from this arc token
    */
-  void markComplete (Engine engine, NodeToken token);
+  void markComplete (Engine engine, NodeToken child);
+
+  /**
+   * Returns the set members for each token set that this
+   * token is tied to.
+   *
+   * @return the set members for each token set that this
+   *         token is tied to.
+   */
+  Set<ArcTokenSetMember> getTokenSetMemberships ();
 }

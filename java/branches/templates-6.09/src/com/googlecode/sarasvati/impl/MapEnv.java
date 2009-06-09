@@ -14,14 +14,15 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.impl;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.googlecode.sarasvati.Env;
+import com.googlecode.sarasvati.env.AttributeConverters;
+import com.googlecode.sarasvati.env.Env;
 
 /**
  * Implements {@link Env} using a Map
@@ -49,35 +50,16 @@ public class MapEnv implements Env
   }
 
   @Override
-  public boolean getBooleanAttribute (String name)
-  {
-    return Boolean.valueOf( attributes.get( name ) );
-  }
-
-  @Override
-  public long getLongAttribute (String name)
-  {
-    String val = attributes.get( name );
-
-    if ( val == null )
-    {
-      return 0;
-    }
-
-    try
-    {
-      return Long.parseLong( val );
-    }
-    catch (NumberFormatException nfe)
-    {
-      return 0;
-    }
-  }
-
-  @Override
-  public String getStringAttribute (String name)
+  public String getAttribute (String name)
   {
     return attributes.get( name );
+  }
+
+  @Override
+  public <T> T getAttribute (String name, Class<T> type)
+  {
+    String value = getAttribute( name );
+    return AttributeConverters.stringToObject( value, type );
   }
 
   @Override
@@ -93,21 +75,15 @@ public class MapEnv implements Env
   }
 
   @Override
-  public void setBooleanAttribute (String name, boolean value)
-  {
-    attributes.put( name, String.valueOf( value ) );
-  }
-
-  @Override
-  public void setLongAttribute (String name, long value)
-  {
-    attributes.put( name, String.valueOf( value ) );
-  }
-
-  @Override
-  public void setStringAttribute (String name, String value)
+  public void setAttribute (String name, String value)
   {
     attributes.put( name, value );
+  }
+
+  public void setAttribute (final String name,
+                            final Object value)
+  {
+    setAttribute( name, AttributeConverters.objectToString( value ) );
   }
 
   @Override
@@ -151,7 +127,7 @@ public class MapEnv implements Env
   {
     for ( String name : env.getAttributeNames() )
     {
-      setStringAttribute( name, env.getStringAttribute( name ) );
+      setAttribute( name, env.getAttribute( name ) );
     }
 
     for ( String name : env.getTransientAttributeNames() )

@@ -22,10 +22,13 @@ package com.googlecode.sarasvati.hib;
 import java.util.Arrays;
 import java.util.List;
 
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.cfg.AnnotationConfiguration;
 
+import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.impl.BaseEngine;
@@ -133,6 +136,24 @@ public class HibEngine extends BaseEngine
     return engine;
   }
 
+  @SuppressWarnings("unchecked")
+  public List<ArcToken> getActiveArcTokens (HibTokenSet tokenSet)
+  {
+    String hql = "select token from HibArcToken token inner join token.tokenSetMemberships as setMember " +
+                 "where token.completeDate is null and setMember.tokenSet = :tokenSet";
+    Query query = session.createQuery( hql ).setEntity( "tokenSet", tokenSet );
+    return query.list();
+  }
+
+  @SuppressWarnings("unchecked")
+  public List<NodeToken> getActiveNodeTokens (HibTokenSet tokenSet)
+  {
+    String hql = "select token from HibNodeToken token inner join token.tokenSetMemberships as setMember " +
+                 "where token.completeDate is null and setMember.tokenSet = :tokenSet";
+    Query query = session.createQuery( hql ).setEntity( "tokenSet", tokenSet );
+    return query.list();
+  }
+
   public static void addToConfiguration (AnnotationConfiguration config, boolean enableCaching)
   {
     config.addAnnotatedClass( HibArc.class );
@@ -145,7 +166,11 @@ public class HibEngine extends BaseEngine
     config.addAnnotatedClass( HibGraphProcess.class );
     config.addAnnotatedClass( HibPropertyNode.class );
     config.addAnnotatedClass( HibCustomNodeWrapper.class );
+    config.addAnnotatedClass( HibTokenSet.class );
+    config.addAnnotatedClass( HibArcTokenSetMember.class );
+    config.addAnnotatedClass( HibNodeTokenSetMember.class );
     config.addAnnotatedClass( HibNodeType.class );
+    config.addAnnotatedClass( HibTokenSetMemberAttribute.class );
 
     if (enableCaching )
     {

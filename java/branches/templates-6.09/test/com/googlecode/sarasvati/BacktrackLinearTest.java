@@ -34,7 +34,7 @@ public class BacktrackLinearTest extends ExecutionTest
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     tokens = p.getActiveNodeTokens();
 
@@ -55,7 +55,7 @@ public class BacktrackLinearTest extends ExecutionTest
     tokens = p.getActiveNodeTokens();
     tokenA = tokens.iterator().next();
 
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     state = "[1 nodeA C FB]" +
             "  (C FB 2)" +
@@ -92,7 +92,7 @@ public class BacktrackLinearTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     NodeToken tokenA = tokens.iterator().next();
-    engine.completeExecution( tokenA, Arc.DEFAULT_ARC );
+    engine.complete( tokenA, Arc.DEFAULT_ARC );
 
     tokens = p.getActiveNodeTokens();
 
@@ -104,7 +104,7 @@ public class BacktrackLinearTest extends ExecutionTest
     tokens = p.getActiveNodeTokens();
     NodeToken tokenB = tokens.iterator().next();
 
-    engine.completeExecution( tokenB, Arc.DEFAULT_ARC );
+    engine.complete( tokenB, Arc.DEFAULT_ARC );
 
     state = "[1 nodeA C F]\n" +
             "  (C F 2)\n" +

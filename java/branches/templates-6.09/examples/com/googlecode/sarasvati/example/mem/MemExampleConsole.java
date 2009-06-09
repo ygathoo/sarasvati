@@ -30,10 +30,13 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.example.ApprovalNode;
+import com.googlecode.sarasvati.example.ApprovalSetupNode;
 import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.DumpNode;
 import com.googlecode.sarasvati.example.InitNode;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
+import com.googlecode.sarasvati.example.MessageNode;
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
@@ -59,7 +62,7 @@ public class MemExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 1;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 1;
       }
     });
 
@@ -68,7 +71,7 @@ public class MemExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 0;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 0;
       }
     });
 
@@ -77,8 +80,17 @@ public class MemExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        System.out.println( "iter: " + token.getEnv().getLongAttribute( "iter" ) );
-        return token.getEnv().getLongAttribute( "iter" ) == 1000;
+        System.out.println( "iter: " + token.getEnv().getAttribute( "iter", Long.class ) );
+        return token.getEnv().getAttribute( "iter", Long.class ) == 1000;
+      }
+    });
+
+    repository.registerPredicate( "Approved", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( Engine engine, NodeToken token )
+      {
+        return true;
       }
     });
 
@@ -119,6 +131,13 @@ public class MemExampleConsole
 
         try
         {
+          if ( "p".equalsIgnoreCase( input ) )
+          {
+            System.out.println( "Processing asynchronous tokens" );
+            engine.executeQueuedArcTokens( process );
+            break;
+          }
+
           int line = Integer.parseInt( input );
           if ( line > 0 && line <= tasks.size() )
           {
@@ -185,14 +204,14 @@ public class MemExampleConsole
         {
           System.out.println( "Completing task" );
           t.setState( TaskState.Completed );
-          engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
+          engine.complete( t.getNodeToken(), Arc.DEFAULT_ARC );
         }
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
         t.setState( TaskState.Rejected );
-        engine.completeExecution( t.getNodeToken(), "reject" );
+        engine.complete( t.getNodeToken(), "reject" );
       }
       else
       {
@@ -270,6 +289,9 @@ public class MemExampleConsole
     engine.addNodeType( "init", InitNode.class );
     engine.addNodeType( "dump", DumpNode.class );
     engine.addNodeType( "customTest", CustomTestNode.class );
+    engine.addNodeType( "approval", ApprovalNode.class );
+    engine.addNodeType( "approvalSetup", ApprovalSetupNode.class );
+    engine.addNodeType( "message", MessageNode.class );
 
     GraphLoader<MemGraph> wfLoader = engine.getLoader();
 
