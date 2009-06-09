@@ -265,6 +265,11 @@ public class HibNodeToken implements NodeToken
   public void markComplete (Engine engine)
   {
     this.completeDate = new Date();
+
+    for ( NodeTokenSetMember setMember : getTokenSetMemberships() )
+    {
+      setMember.getTokenSet().getActiveNodeTokens( engine ).remove( this );
+    }
   }
 
   @Override

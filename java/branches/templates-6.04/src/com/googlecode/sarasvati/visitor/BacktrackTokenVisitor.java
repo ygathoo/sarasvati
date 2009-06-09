@@ -9,10 +9,13 @@ import java.util.Map;
 import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.WorkflowException;
 
 public class BacktrackTokenVisitor implements TokenVisitor
@@ -28,6 +31,8 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
   protected BacktrackMirrors backtrackMirror = new BacktrackMirrors();
   protected Map<NodeToken,NodeToken> parentMap = new HashMap<NodeToken, NodeToken>();
+
+  protected Set<TokenSet> tokenSets = new HashSet<TokenSet>();
 
   public BacktrackTokenVisitor (Engine engine, NodeToken destinationToken)
   {
@@ -140,6 +145,8 @@ public class BacktrackTokenVisitor implements TokenVisitor
       }
     }
 
+    reactivateTokenSets();
+
     return resultToken;
   }
 
@@ -165,6 +172,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
                                         parents,
                                         token );
     token.getProcess().addNodeToken( backtrackToken );
+    shareTokenSets( backtrackToken, token );
 
     for ( ArcToken parent : parents )
     {
@@ -213,6 +221,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
                                          backtrackToken );
 
       backtrackToken.getChildTokens().add( backtrackArcToken );
+      shareTokenSets( backtrackArcToken, parent );
 
       if ( backtrackParent && parent.getExecutionType() != ExecutionType.Forward )
       {
@@ -264,6 +273,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
                                          token );
       token.getChildTokens().add( backtrackArcToken );
       parents.add( backtrackArcToken );
+      shareTokenSets( backtrackArcToken, parent );
     }
 
     NodeToken backtrackToken =
@@ -273,6 +283,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
                                         parents,
                                         token );
     token.getProcess().addNodeToken( backtrackToken );
+    shareTokenSets( backtrackToken, token );
 
     for ( ArcToken parent : parents )
     {
@@ -280,6 +291,47 @@ public class BacktrackTokenVisitor implements TokenVisitor
       parent.markComplete( engine, backtrackToken );
     }
 
+    reactivateTokenSets();
+
     return backtrackToken;
+  }
+
+  private void shareTokenSets (NodeToken newToken, NodeToken origToken)
+  {
+    for ( NodeTokenSetMember setMember : origToken.getTokenSetMemberships() )
+    {
+      TokenSet tokenSet = setMember.getTokenSet();
+      NodeTokenSetMember newSetMember =
+        engine.getFactory().newNodeTokenSetMember( tokenSet, newToken, setMember.getMemberIndex() );
+      newToken.getTokenSetMemberships().add( newSetMember );
+      tokenSet.getActiveNodeTokens( engine ).add( newToken );
+      tokenSets.add( tokenSet );
+    }
+  }
+
+  private void shareTokenSets (ArcToken newToken, ArcToken origToken)
+  {
+    for ( ArcTokenSetMember setMember : origToken.getTokenSetMemberships() )
+    {
+      TokenSet tokenSet = setMember.getTokenSet();
+      ArcTokenSetMember newSetMember =
+        engine.getFactory().newArcTokenSetMember( tokenSet, newToken, setMember.getMemberIndex() );
+      newToken.getTokenSetMemberships().add( newSetMember );
+      tokenSet.getActiveArcTokens( engine ).add( newToken );
+      tokenSets.add( tokenSet );
+    }
+  }
+
+  private void reactivateTokenSets ()
+  {
+    for ( TokenSet tokenSet : tokenSets )
+    {
+      if ( tokenSet.isComplete() &&
+           ( !tokenSet.getActiveArcTokens( engine ).isEmpty() ||
+             !tokenSet.getActiveNodeTokens( engine ).isEmpty() ) )
+      {
+        tokenSet.reactivateForBacktrack( engine );
+      }
+    }
   }
 }
