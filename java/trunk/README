@@ -19,8 +19,14 @@ Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' t
     * Java 1.5+
       Summary  : Sarasvati runs on java. It uses annotations, enums, generics and other JDK 1.5+ features.
       License  : GPL
-      Homepage : java.sun.com
+      Homepage : http://java.sun.com
       Version  : 1.5+
+
+    * Ant (versions >= 1.6.3)
+      Summary  : Project build mechanism
+      License  : Apache License 2.0
+      Homepage : http://ant.apache.org
+      Other    : Optional at runtime. Only required to build Sarasvait
 
     * Hibernate
        Summary : Object relational mapping
