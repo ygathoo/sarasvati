@@ -30,7 +30,8 @@ public enum XmlJoinType
   @XmlEnumValue("or")   OR( JoinType.OR ),
   @XmlEnumValue ("and") AND( JoinType.AND ),
   @XmlEnumValue ("labelAnd") LABEL_AND( JoinType.LABEL_AND ),
-  @XmlEnumValue ("tokenSetAnd") TOKEN_SET_AND( JoinType.TOKEN_SET_AND );
+  @XmlEnumValue ("tokenSetAnd") TOKEN_SET_AND( JoinType.TOKEN_SET_AND ),
+  @XmlEnumValue ("custom") CUSTOM( JoinType.CUSTOM );
 
   private final JoinType joinType;
 

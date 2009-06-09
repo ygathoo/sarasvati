@@ -103,6 +103,7 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
                        final String name,
                        final String type,
                        final JoinType joinType,
+                       final String joinParam,
                        final boolean isStart,
                        final String guard,
                        final List<Object> customList)
@@ -145,6 +146,7 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     node.setType( type );
     node.setStart( isStart );
     node.setJoinType( joinType );
+    node.setJoinParam( joinParam );
     node.setGuard( guard );
 
     getDialect().newNodeInsertAction( node ).execute( engine );

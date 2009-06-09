@@ -69,6 +69,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
                        final String name,
                        final String type,
                        final JoinType joinType,
+                       final String joinParam,
                        final boolean isStart,
                        final String guard,
                        final List<Object> customList)
@@ -94,6 +95,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
     node.setName( name );
     node.setType( type );
     node.setJoinType( joinType );
+    node.setJoinParam( joinParam );
     node.setStart( isStart );
     node.setGuard( guard );
 
