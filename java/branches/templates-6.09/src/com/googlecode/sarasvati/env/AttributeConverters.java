@@ -39,8 +39,8 @@ public class AttributeConverters
     converters.put( Byte.class, new ByteAttributeConverter() );
     converters.put( Byte.TYPE, new ByteAttributeConverter() );
 
-    converters.put( Boolean.class, new ByteAttributeConverter() );
-    converters.put( Boolean.TYPE, new ByteAttributeConverter() );
+    converters.put( Boolean.class, new BooleanAttributeConverter() );
+    converters.put( Boolean.TYPE, new BooleanAttributeConverter() );
 
     converters.put( Short.class, new ShortAttributeConverter() );
     converters.put( Short.TYPE, new ShortAttributeConverter() );
@@ -93,6 +93,19 @@ public class AttributeConverters
     if ( string == null )
     {
       return null;
+    }
+
+    AttributeConverter converter = converters.get( type );
+    Object result = converter == null ? defaultConverter.stringToObject( string, type ) : converter.stringToObject( string, type );
+    return (T)result;
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <T> T stringToObject (String string, Class<T> type, T defaultValue)
+  {
+    if ( string == null )
+    {
+      return defaultValue;
     }
 
     AttributeConverter converter = converters.get( type );

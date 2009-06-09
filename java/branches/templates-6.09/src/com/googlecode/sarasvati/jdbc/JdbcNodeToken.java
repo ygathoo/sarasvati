@@ -240,6 +240,14 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
       return AttributeConverters.stringToObject( value, type );
     }
 
+    @Override
+    public <T> T getAttribute (final String name,
+                               final Class<T> type,
+                               final T defaultValue)
+    {
+      String value = getAttribute( name );
+      return AttributeConverters.stringToObject( value, type, defaultValue );
+    }
 
     protected void copyOnWrite ()
     {

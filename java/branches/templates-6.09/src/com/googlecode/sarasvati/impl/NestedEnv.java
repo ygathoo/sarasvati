@@ -70,6 +70,15 @@ public class NestedEnv implements Env
   }
 
   @Override
+  public <T> T getAttribute (final String name,
+                             final Class<T> type,
+                             final T defaultValue)
+  {
+    return outerEnv.hasAttribute( name ) ? outerEnv.getAttribute( name, type, defaultValue ) :
+                                           innerEnv.getAttribute( name, type, defaultValue );
+  }
+
+  @Override
   public boolean hasAttribute (final String name)
   {
     return outerEnv.hasAttribute( name ) || innerEnv.hasAttribute( name );

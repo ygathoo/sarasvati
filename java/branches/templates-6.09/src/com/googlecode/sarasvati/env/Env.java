@@ -53,6 +53,20 @@ public interface Env
   <T> T getAttribute (String name, Class<T> type);
 
   /**
+   * Returns the given attribute, transformed into the given type. If no value
+   * is set, return the given default.
+   *
+   * @param <T> The type which the attribute should be returned as.
+   *
+   * @param name The name of the attribute to get.
+   * @param type The class type which the attribute should be transformed to.
+   * @param defaultValue The value to return if no value is set.
+   *
+   * @return The attribute value, or null if no value is set for the attribute.
+   */
+  <T> T getAttribute (String name, Class<T> type, T defaultValue);
+
+  /**
    * Sets the attribute of the given name to the given string value.
    *
    * @param name The name of the attribute to set.
