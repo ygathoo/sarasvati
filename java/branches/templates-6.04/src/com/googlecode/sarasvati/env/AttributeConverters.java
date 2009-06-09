@@ -21,6 +21,13 @@ package com.googlecode.sarasvati.env;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Static utility class for registring and using {@link AttributeConverter}s.
+ * Note that registering converts is NOT threadsafe, and should be done at
+ * startup.
+ *
+ * @author Paul Lorenz
+ */
 public class AttributeConverters
 {
   private static Map<Class<?>, AttributeConverter> converters = new HashMap<Class<?>, AttributeConverter>();
@@ -28,13 +35,30 @@ public class AttributeConverters
   static
   {
     converters.put( String.class, new StringAttributeConverter() );
+
     converters.put( Byte.class, new ByteAttributeConverter() );
+    converters.put( Byte.TYPE, new ByteAttributeConverter() );
+
     converters.put( Boolean.class, new ByteAttributeConverter() );
+    converters.put( Boolean.TYPE, new ByteAttributeConverter() );
+
     converters.put( Short.class, new ShortAttributeConverter() );
+    converters.put( Short.TYPE, new ShortAttributeConverter() );
+
+    converters.put( Character.class, new CharacterAttributeConverter() );
+    converters.put( Character.TYPE, new CharacterAttributeConverter() );
+
     converters.put( Integer.class, new IntegerAttributeConverter() );
+    converters.put( Integer.TYPE, new IntegerAttributeConverter() );
+
     converters.put( Long.class, new LongAttributeConverter() );
+    converters.put( Long.TYPE, new LongAttributeConverter() );
+
     converters.put( Float.class, new FloatAttributeConverter() );
+    converters.put( Float.TYPE, new FloatAttributeConverter() );
+
     converters.put( Double.class, new DoubleAttributeConverter() );
+    converters.put( Double.TYPE, new DoubleAttributeConverter() );
   }
 
   private static AttributeConverter defaultConverter = new AttributeConverter()
@@ -79,5 +103,10 @@ public class AttributeConverters
   public static void setDefaultConverter (AttributeConverter converter)
   {
     defaultConverter = converter;
+  }
+
+  public static AttributeConverter getConverterForType (Class<?> type)
+  {
+    return converters.get( type );
   }
 }
