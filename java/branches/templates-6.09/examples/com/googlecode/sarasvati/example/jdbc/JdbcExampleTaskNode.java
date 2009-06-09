@@ -19,8 +19,8 @@
 package com.googlecode.sarasvati.example.jdbc;
 
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
@@ -107,8 +107,8 @@ public class JdbcExampleTaskNode extends JdbcNode
     factory.newInsertTaskAction( task ).execute( jdbcEngine );
 
     Env env = token.getEnv();
-    env.setLongAttribute( task.getName(), env.getLongAttribute( task.getName() ) + 1 );
+    env.setAttribute( task.getName(), env.getAttribute( task.getName(), Long.class ) + 1 );
     env = token.getProcess().getEnv();
-    env.setLongAttribute( task.getName(), env.getLongAttribute( task.getName() ) + 1 );
+    env.setAttribute( task.getName(), env.getAttribute( task.getName(), Long.class ) + 1 );
   }
 }

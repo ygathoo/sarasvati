@@ -14,17 +14,21 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.load.properties;
 
-import com.googlecode.sarasvati.load.LoadException;
+package com.googlecode.sarasvati;
 
-public class BooleanPropertyMutator extends BasePropertyMutator
+/**
+ * Extends the TokenSetMember interface to narrow the Token
+ * to an ArcToken.
+ *
+ * @author Paul Lorenz
+ */
+public interface ArcTokenSetMember extends TokenSetMember
 {
-  @Override
-  public void setFromText (String text) throws LoadException
-  {
-    setValue( Boolean.valueOf( text ) );
-  }
+  /**
+   * @see com.googlecode.sarasvati.TokenSetMember#getToken()
+   */
+  ArcToken getToken ();
 }

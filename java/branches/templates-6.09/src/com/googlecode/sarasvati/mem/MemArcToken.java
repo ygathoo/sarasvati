@@ -14,15 +14,18 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.mem;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
@@ -38,6 +41,8 @@ public class MemArcToken implements ArcToken
   protected boolean pending;
   protected Date completeDate;
   protected ExecutionType executionType;
+
+  protected Set<ArcTokenSetMember> tokenSetMemberships = new HashSet<ArcTokenSetMember>();
 
   public MemArcToken (Arc arc, GraphProcess process, ExecutionType executionType, NodeToken parentToken)
   {
@@ -83,6 +88,11 @@ public class MemArcToken implements ArcToken
   {
     this.completeDate = new Date();
     this.childToken = token;
+
+    for ( ArcTokenSetMember setMember : getTokenSetMemberships() )
+    {
+      setMember.getTokenSet().getActiveArcTokens( engine ).remove( this );
+    }
   }
 
   @Override
@@ -113,6 +123,12 @@ public class MemArcToken implements ArcToken
   public void accept (TokenVisitor visitor)
   {
     visitor.visit( this );
+  }
+
+  @Override
+  public Set<ArcTokenSetMember> getTokenSetMemberships ()
+  {
+    return tokenSetMemberships;
   }
 
   @Override

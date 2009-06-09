@@ -23,8 +23,8 @@ import java.util.Random;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.Env;
 
 public class InitNode extends CustomNode
 {
@@ -36,11 +36,11 @@ public class InitNode extends CustomNode
     Env env = token.getEnv();
     if ( env.hasAttribute( "iter" ) )
     {
-      iter = env.getLongAttribute( "iter" );
+      iter = env.getAttribute( "iter", Long.class );
     }
 
-    env.setLongAttribute( "iter", ++iter );
-    env.setLongAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    env.setAttribute( "iter", ++iter );
+    env.setAttribute( "rand", ( new Random().nextInt() % 2 ) + 1 );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 }

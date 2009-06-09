@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.load;
 
@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
@@ -30,6 +31,8 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
 
 public interface GraphFactory<G extends Graph>
 {
@@ -148,6 +151,39 @@ public interface GraphFactory<G extends Graph>
    * @return A new {@link ArcToken}
    */
   ArcToken newArcToken (GraphProcess process, Arc arc, ExecutionType executionType, NodeToken parent);
+
+  /**
+   * Creates a new token set.
+   *
+   * @param process The process that the token set belongs to
+   * @param name The name given to the token set
+   * @param maxMemberIndex The maximum member index (which should equals the number of initial members in the set)
+   *
+   * @return The newly created token set
+   */
+  TokenSet newTokenSet (GraphProcess process, String name, int maxMemberIndex);
+
+  /**
+   * Creates a new membership of a token in a token set.
+   *
+   * @param tokenSet The token set the given token is to be added to
+   * @param token The token being added to the given token set
+   * @param memberIndex The member index of the token within the token set.
+   *
+   * @return The new arc token set member
+   */
+  ArcTokenSetMember newArcTokenSetMember (TokenSet tokenSet, ArcToken token, int memberIndex);
+
+  /**
+   * Creates a new membership of a token in a token set.
+   *
+   * @param tokenSet The token set the given token is to be added to
+   * @param token The token being added to the given token set
+   * @param memberIndex The member index of the token within the token set.
+   *
+   * @return The new node token set member
+   */
+  NodeTokenSetMember newNodeTokenSetMember (TokenSet tokenSet, NodeToken token, int memberIndex);
 
   /**
    * Adds the type to the {@link GraphFactory} for this engine. Specifies

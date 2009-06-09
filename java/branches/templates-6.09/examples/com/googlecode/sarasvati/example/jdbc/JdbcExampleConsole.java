@@ -62,7 +62,7 @@ public class JdbcExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 1;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 1;
       }
     });
 
@@ -71,7 +71,7 @@ public class JdbcExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 0;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 0;
       }
     });
 
@@ -80,7 +80,7 @@ public class JdbcExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "iter" ) == 10;
+        return token.getEnv().getAttribute( "iter", Long.class ) == 10;
       }
     });
 
@@ -225,7 +225,7 @@ public class JdbcExampleConsole
           System.out.println( "Completing task" );
           t.setState( TaskState.Completed );
           exampleDB.newUpdateTaskAction( t ).execute( engine );
-          engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
+          engine.complete( t.getNodeToken(), Arc.DEFAULT_ARC );
         }
       }
       else if ( line == 2 && t.isRejectable() )
@@ -233,7 +233,7 @@ public class JdbcExampleConsole
         System.out.println( "Rejecting task" );
         t.setState( TaskState.Rejected );
         exampleDB.newUpdateTaskAction( t ).execute( engine );
-        engine.completeExecution( t.getNodeToken(), "reject" );
+        engine.complete( t.getNodeToken(), "reject" );
       }
       else
       {

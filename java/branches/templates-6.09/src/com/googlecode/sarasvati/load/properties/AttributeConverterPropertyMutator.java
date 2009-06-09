@@ -18,20 +18,24 @@
 */
 package com.googlecode.sarasvati.load.properties;
 
+import com.googlecode.sarasvati.env.AttributeConverter;
 import com.googlecode.sarasvati.load.LoadException;
 
-public class BytePropertyMutator extends BasePropertyMutator
+public class AttributeConverterPropertyMutator extends BasePropertyMutator
 {
+  protected final AttributeConverter converter;
+  protected final Class<?> type;
+
+  public AttributeConverterPropertyMutator (final AttributeConverter converter,
+                                            final Class<?> type)
+  {
+    this.converter = converter;
+    this.type = type;
+  }
+
   @Override
   public void setFromText (String text) throws LoadException
   {
-    try
-    {
-      setValue( Byte.parseByte( text ) );
-    }
-    catch (NumberFormatException nfe)
-    {
-      throw new LoadException( "Unable to parse value '" + text + "' to an integer value", nfe );
-    }
+    setValue( converter.stringToObject( text, type ) );
   }
 }

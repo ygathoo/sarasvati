@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati.example.hib;
 
+import java.net.URL;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.AnnotationConfiguration;
@@ -32,46 +34,13 @@ public class HibTestSetup
 
   public static void init (boolean createSchema) throws Exception
   {
-    AnnotationConfiguration config = new AnnotationConfiguration ();
-    
-    /*
-     * Postgres Dialect
-     */
-//    config.setProperty( "hibernate.dialect","org.hibernate.dialect.PostgreSQLDialect" );
-//    config.setProperty( "hibernate.connection.driver_class", "org.postgresql.Driver" );
-//    config.setProperty( "hibernate.connection.url", "jdbc:postgresql://localhost:5432/paul" );
-//    config.setProperty( "hibernate.connection.username", "paul" );
-//    config.setProperty( "hibernate.connection.password", "thesistest56" );
-//    config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );
-//    config.setProperty( "hibernate.cache.use_second_level_cache", "true" );
-    
-    /*
-     * HSQL Dialect
-     */
-//    config.setProperty( "hibernate.dialect","org.hibernate.dialect.HSQLDialect" );
-//    config.setProperty( "hibernate.connection.driver_class", "org.hsqldb.jdbcDriver" );
-//    config.setProperty( "hibernate.connection.url", "jdbc:hsqldb:hsql://localhost/workflowdb;sql.enforce_strict_size=true" );
-//    config.setProperty( "hibernate.connection.username", "sa" );
-//    config.setProperty( "hibernate.connection.password", "" );
-//    config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );
-//    config.setProperty( "hibernate.cache.use_second_level_cache", "true" );
-    
-    /*
-     * MySQL
-     */
+    AnnotationConfiguration config = new AnnotationConfiguration();
 
-    config.setProperty( "hibernate.dialect","org.hibernate.dialect.MySQLDialect" );
-    config.setProperty( "hibernate.connection.driver_class", "com.mysql.jdbc.Driver" );
-    config.setProperty( "hibernate.connection.url", "jdbc:mysql://localhost/workflowdb" );
-    config.setProperty( "hibernate.connection.username", "root" );
-    config.setProperty( "hibernate.connection.password", "password" );
-    config.setProperty( "hibernate.query.substitutions", "true=Y, false=N" );
-    config.setProperty( "hibernate.cache.use_second_level_cache", "true" );
-    
-    if(createSchema){
-      config.setProperty(Environment.HBM2DDL_AUTO, "create-drop");
+    if ( createSchema )
+    {
+      config.setProperty( Environment.HBM2DDL_AUTO, "create-drop" );
     }
-    
+
     //config.setProperty( "hibernate.show_sql", "true" );
     //config.setProperty( "hibernate.format_sql", "true" );
 
@@ -83,6 +52,8 @@ public class HibTestSetup
     config.addAnnotatedClass( DumpNode.class );
     config.addAnnotatedClass( AsyncNode.class );
 
+    URL url = HibTestSetup.class.getClassLoader().getResource( "hibernate.cfg.xml" );
+    config.configure( url );
     sessionFactory = config.buildSessionFactory();
   }
 
@@ -90,8 +61,9 @@ public class HibTestSetup
   {
     return sessionFactory.openSession();
   }
-  
-  public static void main(String[] args) throws Exception{
-    init(true);
+
+  public static void main (String[] args) throws Exception
+  {
+    init( true );
   }
 }

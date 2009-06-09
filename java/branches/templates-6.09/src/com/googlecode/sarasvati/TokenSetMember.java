@@ -14,17 +14,38 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.load.properties;
 
-import com.googlecode.sarasvati.load.LoadException;
+package com.googlecode.sarasvati;
 
-public class StringPropertyMutator extends BasePropertyMutator
+/**
+ * Represents the link between a {@link Token} and {@link TokenSet}.
+ * This mainly exists as a separate entity in order to track the
+ * member index.
+ *
+ * @author Paul Lorenz
+ */
+public interface TokenSetMember
 {
-  @Override
-  public void setFromText (String text) throws LoadException
-  {
-    setValue( text );
-  }
+  /**
+   * Returns the token set
+   *
+   * @return The token set
+   */
+  TokenSet getTokenSet ();
+
+  /**
+   * Returns the token.
+   *
+   * @return The token
+   */
+  Token getToken ();
+
+  /**
+   * Returns the index assigned to the token within the token set.
+   *
+   * @return The index assigned to the token within the token set.
+   */
+  int getMemberIndex ();
 }
