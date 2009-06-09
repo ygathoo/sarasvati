@@ -51,7 +51,7 @@ public class MemExampleConsole
 {
   public static boolean log = false;
 
-  public static void main (String[] args) throws Exception
+  public static void main (String[] args) throws Throwable
   {
     loadWorkflows();
 
@@ -98,7 +98,27 @@ public class MemExampleConsole
     {
       MemEngine engine = new MemEngine();
       GraphProcess process = engine.startProcess( getGraph() );
-      runWorkflow( process );
+      try
+      {
+        runWorkflow( process );
+      }
+      catch (Throwable t)
+      {
+        Throwable current = t;
+        while ( current != null )
+        {
+          current.printStackTrace();
+          if ( current.getCause() != null && current != current.getCause() )
+          {
+            current = current.getCause();
+          }
+          else
+          {
+            current = null;
+          }
+        }
+        throw t;
+      }
     }
   }
 
@@ -295,7 +315,7 @@ public class MemExampleConsole
 
     GraphLoader<MemGraph> wfLoader = engine.getLoader();
 
-    File basePath = new File( "/home/paul/workspace/wf-common/test-wf/" );
+    File basePath = new File( "common/test-wf/" );
     XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, basePath );
 
     FilenameFilter filter = new FilenameFilter()

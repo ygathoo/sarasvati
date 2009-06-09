@@ -370,6 +370,15 @@ public class HibNodeToken implements NodeToken
       return AttributeConverters.stringToObject( value, type );
     }
 
+    @Override
+    public <T> T getAttribute (final String name,
+                               final Class<T> type,
+                               T defaultValue)
+    {
+      String value = getAttribute( name );
+      return AttributeConverters.stringToObject( value, type, defaultValue );
+    }
+
     protected void copyOnWrite ()
     {
       if ( !isAttributeSetLocal() )

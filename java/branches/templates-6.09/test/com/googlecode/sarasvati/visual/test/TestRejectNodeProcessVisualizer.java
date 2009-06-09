@@ -8,7 +8,6 @@ import org.hibernate.Session;
 import com.googlecode.sarasvati.example.hib.HibTestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
-import com.googlecode.sarasvati.hib.HibGraphProcess;
 import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.visual.AbstractProcessVisualizer;
@@ -16,18 +15,16 @@ import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
-
-public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer {
-
-
+public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
+{
   @Override
   public void init () throws Exception
   {
-    HibTestSetup.init(false);
+    HibTestSetup.init( false );
   }
 
   @Override
-  public Session getSession  ()
+  public Session getSession ()
   {
     return HibTestSetup.openSession();
   }
@@ -38,21 +35,22 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer {
     completeProcess();
     new TestRejectNodeProcessVisualizer().run();
   }
-  
-  private static void completeProcess(){
+
+  private static void completeProcess ()
+  {
     Session session = HibTestSetup.openSession();
-    HibEngine engine = new HibEngine(session);
+    HibEngine engine = new HibEngine( session );
 
     /*
      * Select Exam Approval PD graph and start process
      */
-    HibGraph graph = engine.getRepository().getLatestGraph("reject-node");
-    HibGraphProcess process = (HibGraphProcess)engine.startProcess( graph );
-    
+    HibGraph graph = engine.getRepository().getLatestGraph( "reject-node" );
+    engine.startProcess( graph );
   }
-  
-  private static void load() throws Exception{
-    HibTestSetup.init(true);
+
+  private static void load () throws Exception
+  {
+    HibTestSetup.init( true );
 
     Session sess = HibTestSetup.openSession();
     sess.beginTransaction();
@@ -60,19 +58,20 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer {
     HibEngine engine = new HibEngine( sess );
     XmlLoader xmlLoader = new XmlLoader();
 
-    engine.addNodeType( "node", HibNode.class);
+    engine.addNodeType( "node", HibNode.class );
 
     GraphLoader<HibGraph> wfLoader = engine.getLoader();
 
     File baseDir = new File( "test/com/googlecode/sarasvati/visual/test/" );
     assert baseDir.exists() : "Workflow process def dir not found.";
 
-    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
+    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader,
+        baseDir );
 
     FilenameFilter filter = new FilenameFilter()
     {
       @Override
-      public boolean accept( File dir, String name )
+      public boolean accept (File dir, String name)
       {
         return name.endsWith( ".wf.xml" ) && name.equals( "reject-node.wf.xml" );
       }
@@ -98,5 +97,4 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer {
 
     sess.getTransaction().commit();
   }
-
 }

@@ -43,7 +43,7 @@ public class ApprovalNode extends CustomNode
     System.out.println( "TokenSet env accesses " + accessCount );
     System.out.println( "Requesting approval from " + setMember.getEnv().getAttribute( "group" ) );
 
-    setMember.getEnv().removeAttribute( "group" );
+    // setMember.getEnv().removeAttribute( "group" );
 
     engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
   }

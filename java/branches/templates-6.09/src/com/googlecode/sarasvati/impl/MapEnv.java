@@ -43,39 +43,50 @@ public class MapEnv implements Env
     this.transientAttributes = new HashMap<String,Object>();
   }
 
-  public MapEnv (Map<String,String> attributes)
+  public MapEnv (final Map<String,String> attributes)
   {
     this.attributes = attributes;
     this.transientAttributes = new HashMap<String,Object>();
   }
 
   @Override
-  public String getAttribute (String name)
+  public String getAttribute (final String name)
   {
     return attributes.get( name );
   }
 
   @Override
-  public <T> T getAttribute (String name, Class<T> type)
+  public <T> T getAttribute (final String name,
+                             final Class<T> type)
   {
     String value = getAttribute( name );
     return AttributeConverters.stringToObject( value, type );
   }
 
   @Override
-  public boolean hasAttribute (String name)
+  public <T> T getAttribute (final String name,
+                             final Class<T> type,
+                             final T defaultValue)
+  {
+    String value = getAttribute( name );
+    return AttributeConverters.stringToObject( value, type, defaultValue );
+  }
+
+  @Override
+  public boolean hasAttribute (final String name)
   {
     return attributes.containsKey( name );
   }
 
   @Override
-  public void removeAttribute (String name)
+  public void removeAttribute (final String name)
   {
     attributes.remove( name );
   }
 
   @Override
-  public void setAttribute (String name, String value)
+  public void setAttribute (final String name,
+                            final String value)
   {
     attributes.put( name, value );
   }
@@ -93,25 +104,26 @@ public class MapEnv implements Env
   }
 
   @Override
-  public void setTransientAttribute (String name, Object value)
+  public void setTransientAttribute (final String name,
+                                     final Object value)
   {
     transientAttributes.put( name, value );
   }
 
   @Override
-  public boolean hasTransientAttribute (String name)
+  public boolean hasTransientAttribute (final String name)
   {
     return transientAttributes.containsKey( name );
   }
 
   @Override
-  public Object getTransientAttribute (String name)
+  public Object getTransientAttribute (final String name)
   {
     return transientAttributes.get( name );
   }
 
   @Override
-  public void removeTransientAttribute (String name)
+  public void removeTransientAttribute (final String name)
   {
     transientAttributes.remove( name );
   }
@@ -123,7 +135,7 @@ public class MapEnv implements Env
   }
 
   @Override
-  public void importEnv (Env env)
+  public void importEnv (final Env env)
   {
     for ( String name : env.getAttributeNames() )
     {

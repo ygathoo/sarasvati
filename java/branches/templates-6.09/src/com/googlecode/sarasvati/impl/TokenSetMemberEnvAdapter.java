@@ -53,6 +53,15 @@ public class TokenSetMemberEnvAdapter implements Env
   }
 
   @Override
+  public <T> T getAttribute (final String name,
+                             final Class<T> type,
+                             final T defaultValue)
+  {
+    T result = tokenSetEnv.getAttribute( memberIndex, name, type );
+    return result == null ? defaultValue : result;
+  }
+
+  @Override
   public void setAttribute (final String name,
                             final String value)
   {
