@@ -22,7 +22,9 @@ drop table if exists wf_process cascade;
 drop table if exists wf_process_state cascade;
 drop table if exists wf_graph cascade;
 
+-------------------------------------------------------------------------------
 -- CREATE NEW TABLES
+-------------------------------------------------------------------------------
 
 create table wf_graph
 (
