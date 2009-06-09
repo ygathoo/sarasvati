@@ -82,6 +82,14 @@
                     use="optional"
                     default="or"/>
 
+      <xs:attribute name="joinParam" type="xs:string" use="optional">
+        <xs:annotation>
+          <xs:documentation>
+            Join strategies may require additional information, which can be provided in the join parameter.
+          </xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
       <xs:attribute name="type"
                     type="xs:string"
                     use="optional"/>
@@ -208,6 +216,7 @@
         <xs:enumeration value="and"/>
         <xs:enumeration value="labelAnd"/>
         <xs:enumeration value="tokenSetAnd"/>
+        <xs:enumeration value="custom"/>
       </xs:restriction>
     </xs:simpleType>
 

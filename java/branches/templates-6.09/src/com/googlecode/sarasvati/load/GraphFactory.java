@@ -65,6 +65,7 @@ public interface GraphFactory<G extends Graph>
    * @param name  The node name
    * @param type  The node type
    * @param joinType The node's join type
+   * @param joinParam The node's join parameter.
    * @param isStart Indicates whether the node is a start node
    * @param guard  The node guard
    * @param customList A list of custom attributes from the xml file. May be empty or null.
@@ -73,7 +74,7 @@ public interface GraphFactory<G extends Graph>
    *
    * @throws LoadException If an error occurs while load, such as incorrect custom data is given.
    */
-  Node newNode (G graph, String name, String type, JoinType joinType, boolean isStart, String guard, List<Object> customList)
+  Node newNode (G graph, String name, String type, JoinType joinType, String joinParam, boolean isStart, String guard, List<Object> customList)
     throws LoadException;
 
   /**

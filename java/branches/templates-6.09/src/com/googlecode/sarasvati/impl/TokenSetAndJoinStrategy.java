@@ -29,11 +29,18 @@ import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.util.SvUtil;
 
 /**
- * Implements a join strategy in which nodes will wait for arc tokens to be
- * present on all incoming arcs before completing the join. If the incoming
- * arc token does not belong to a token set, an {@link IllegalStateException}
+ * Implements a join strategy in which nodes will wait for for all
+ * active arc tokens in a given token set to arrive at that node,
+ * and for there to be no active node tokens in the token set.
+ * <p>
+ * A specific token set may be specified by name using the joinParam.
+ * If none is specified, the first incomplete token set that the
+ * token is a member of will be selected.
+ *
+ * If the incoming arc token does not belong to a token set, an {@link IllegalStateException}
  * will be thrown. This behavior could be changed in a subclass by overriding
  * {@link TokenSetAndJoinStrategy#performFallbackJoin(Engine, GraphProcess, ArcToken)}.
  *
@@ -43,8 +50,25 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
 {
   public TokenSet getTokenSet (ArcToken token)
   {
-    Collection<ArcTokenSetMember> tokenSetMemberShips = token.getTokenSetMemberships();
-    return tokenSetMemberShips.isEmpty() ? null : tokenSetMemberShips.iterator().next().getTokenSet();
+    String tokenSetName = token.getArc().getEndNode().getJoinParam();
+
+    // If a token set name is specified, wait for that token set
+    if ( !SvUtil.isBlankOrNull( tokenSetName ) )
+    {
+      return SvUtil.getTokenSet( token, tokenSetName );
+    }
+
+    // Otherwise, wait on the first incomplete token set
+    for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
+    {
+      TokenSet tokenSet = setMember.getTokenSet();
+      if ( !tokenSet.isComplete() )
+      {
+        return tokenSet;
+      }
+    }
+
+    return null;
   }
 
   /**

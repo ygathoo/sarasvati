@@ -82,6 +82,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
                        final String name,
                        final String type,
                        final JoinType joinType,
+                       final String joinParam,
                        final boolean isStart,
                        final String guard,
                        final List<Object> customList)
@@ -107,6 +108,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     node.setName( name );
     node.setType( type );
     node.setJoinType( joinType );
+    node.setJoinParam( joinParam );
     node.setStart( isStart );
     node.setGuard( guard );
 

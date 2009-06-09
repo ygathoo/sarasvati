@@ -35,6 +35,7 @@ public class JdbcNode implements Node, JdbcObject
   protected String    guard;
   protected boolean   isStart;
   protected JoinType  joinType;
+  protected String    joinParam;
 
   protected JdbcGraph graph;
 
@@ -108,6 +109,17 @@ public class JdbcNode implements Node, JdbcObject
   public void setJoinType (JoinType joinType)
   {
     this.joinType = joinType;
+  }
+
+  @Override
+  public String getJoinParam ()
+  {
+    return joinParam;
+  }
+
+  public void setJoinParam (String joinParam)
+  {
+    this.joinParam = joinParam;
   }
 
   @Override
