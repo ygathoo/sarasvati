@@ -4,8 +4,12 @@ Sarasvati
 Summary:
   Sarasvati is a graph based, workflow engine.
 
-Authors:
+Project Lead:
   Paul Lorenz
+
+Project Members:
+  Cheong Chung Onn
+  Vincent Kirsch
 
 Homepage:
   http://sarasvati.googlecode.com/
@@ -26,7 +30,7 @@ Dependencies: (NOTE: These are not bundled with Sarasvati. Run 'ant fetchlibs' t
       Summary  : Project build mechanism
       License  : Apache License 2.0
       Homepage : http://ant.apache.org
-      Other    : Optional at runtime. Only required to build Sarasvait
+      Other    : Optional at runtime. Only required to build Sarasvati
 
     * Hibernate
        Summary : Object relational mapping
