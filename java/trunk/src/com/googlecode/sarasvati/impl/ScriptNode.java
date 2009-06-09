@@ -101,7 +101,7 @@ public class ScriptNode extends CustomNode
 
     if ( !token.isComplete() )
     {
-      engine.completeExecution( token, Arc.DEFAULT_ARC );
+      engine.complete( token, Arc.DEFAULT_ARC );
     }
   }
 

@@ -16,6 +16,6 @@ public class TaskNode extends MemNode {
   @Override
   public void execute (Engine engine, NodeToken token) {
     System.out.println( "Job: " + job + " User: " + user );
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 }

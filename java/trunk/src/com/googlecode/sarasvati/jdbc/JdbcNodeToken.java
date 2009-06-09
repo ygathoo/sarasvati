@@ -24,14 +24,19 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.env.AttributeConverters;
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.impl.NestedEnv;
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 public class JdbcNodeToken implements NodeToken, JdbcObject
@@ -211,7 +216,7 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
     }
 
     @Override
-    public String getStringAttribute( String name )
+    public String getAttribute (final String name)
     {
       if ( attrSetToken == null )
       {
@@ -219,12 +224,29 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
       }
       else if ( !isAttributeSetLocal() )
       {
-        return attrSetToken.getEnv().getStringAttribute( name );
+        return attrSetToken.getEnv().getAttribute( name );
       }
       else
       {
         return attrMap.get( name );
       }
+    }
+
+    @Override
+    public <T> T getAttribute (final String name,
+                               final Class<T> type)
+    {
+      String value = getAttribute( name );
+      return AttributeConverters.stringToObject( value, type );
+    }
+
+    @Override
+    public <T> T getAttribute (final String name,
+                               final Class<T> type,
+                               final T defaultValue)
+    {
+      String value = getAttribute( name );
+      return AttributeConverters.stringToObject( value, type, defaultValue );
     }
 
     protected void copyOnWrite ()
@@ -247,48 +269,18 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
     }
 
     @Override
-    public void setStringAttribute( String name, String value )
+    public void setAttribute (final String name,
+                              final String value )
     {
       copyOnWrite();
       attrMap.put( name, value );
     }
 
     @Override
-    public boolean getBooleanAttribute( String name )
+    public void setAttribute (final String name,
+                              final Object value )
     {
-      return "true".equals( getStringAttribute( name ) );
-    }
-
-    @Override
-    public long getLongAttribute( String name )
-    {
-      String value = getStringAttribute( name );
-
-      if ( value == null )
-      {
-        return 0;
-      }
-
-      try
-      {
-        return Long.parseLong( value );
-      }
-      catch (NumberFormatException nfe )
-      {
-        return 0;
-      }
-    }
-
-    @Override
-    public void setBooleanAttribute( String name, boolean value )
-    {
-      setStringAttribute( name, String.valueOf( value ) );
-    }
-
-    @Override
-    public void setLongAttribute( String name, long value )
-    {
-      setStringAttribute( name, String.valueOf( value ) );
+      setAttribute( name, AttributeConverters.objectToString( value ) );
     }
 
     @Override
@@ -360,7 +352,7 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
     {
       for ( String name : copyEnv.getAttributeNames() )
       {
-        setStringAttribute( name, copyEnv.getStringAttribute( name ) );
+        setAttribute( name, copyEnv.getAttribute( name ) );
       }
 
       for ( String name : copyEnv.getTransientAttributeNames() )
@@ -374,6 +366,25 @@ public class JdbcNodeToken implements NodeToken, JdbcObject
   public boolean isMutable ()
   {
     return true;
+  }
+
+  @Override
+  public Set<NodeTokenSetMember> getTokenSetMemberships ()
+  {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  @Override
+  public TokenSet getTokenSet (String name)
+  {
+    return SvUtil.getTokenSet( this, name );
+  }
+
+  @Override
+  public NodeTokenSetMember getTokenSetMember (String name)
+  {
+    return (NodeTokenSetMember)SvUtil.getTokenSetMember( this, name );
   }
 
   @Override

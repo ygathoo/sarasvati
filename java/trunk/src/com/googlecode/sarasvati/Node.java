@@ -83,6 +83,18 @@ public interface Node extends Adaptable
   JoinType getJoinType ();
 
   /**
+   * Each node may specify a parameter to be used by the join strategy.
+   * For example, it can be used to tell a token set join which token
+   * set to join on, by name. For a custom join, it may indicate the
+   * join type, or provide some other information to the join.
+   * <p>
+   * May be null.
+   *
+   * @return The join parameter.
+   */
+  String getJoinParam ();
+
+  /**
    * Returns the {@link JoinStrategy} to be used when an
    * {@link ArcToken} arrives at this Node.
    *
@@ -173,7 +185,7 @@ public interface Node extends Adaptable
   /**
    * Performs Node specific logic. Either from the execute method,
    * or later from outside, the
-   * {@link Engine#completeExecution(NodeToken, String)} method
+   * {@link Engine#complete(NodeToken, String)} method
    * must be called to continue executing the {@link GraphProcess}.
    *
    * @param engine The {@link Engine} which is performing the execution.

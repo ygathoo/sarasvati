@@ -55,18 +55,25 @@ public class HibNode implements Node
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @Column( name="id", nullable=false)
   protected Long   id;
 
   @ForeignKey(name="FK_node_graph")
   @ManyToOne (fetch=FetchType.EAGER)
-  @JoinColumn(name="graph_id")
+  @JoinColumn(name="graph_id", nullable=false)
   protected HibGraph graph;
 
+  @Column( name="name", nullable=false)
   protected String name;
+
+  @Column( name="type", nullable=false)
   protected String type;
 
-  @Column (name="join_type")
+  @Column (name="join_type", nullable=false)
   protected JoinType joinType;
+
+  @Column (name="join_param", nullable=true)
+  protected String joinParam;
 
   @Column (name="is_start")
   @Type (type="yes_no")
@@ -127,6 +134,17 @@ public class HibNode implements Node
   public void setJoinType (JoinType joinType)
   {
     this.joinType = joinType;
+  }
+
+  @Override
+  public String getJoinParam ()
+  {
+    return joinParam;
+  }
+
+  public void setJoinParam (String joinParam)
+  {
+    this.joinParam = joinParam;
   }
 
   @Override
@@ -197,7 +215,7 @@ public class HibNode implements Node
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 
   /**

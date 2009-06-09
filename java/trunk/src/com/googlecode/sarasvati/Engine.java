@@ -18,6 +18,10 @@
 */
 package com.googlecode.sarasvati;
 
+import java.util.List;
+import java.util.Map;
+
+import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
@@ -95,7 +99,7 @@ public interface Engine
   /**
    * Continues execution of a process in a wait state.
    * If a call to {@link Node#execute(Engine, NodeToken)} does not contain a
-   * call to {@link Engine#completeExecution(NodeToken, String)}, then execution
+   * call to {@link Engine#complete(NodeToken, String)}, then execution
    * of the graph will halt at that point. This is generally referred to as a wait
    * state. It may happen, for example, if the action represented by that node
    * must be done by a human or some external system.
@@ -115,10 +119,10 @@ public interface Engine
    *                have the same name) to generate ArcTokens on.
    *
    */
-  void completeExecution (NodeToken token, String arcName);
+  void complete (NodeToken token, String arcName);
 
   /**
-   * Marks the given node completed and generates the next set of arc tokens.
+   * Marks the given node token completed and generates the next set of arc tokens.
    * However, these arc tokens will not be processed. Execution may be
    * continued later with a call to {@link Engine#executeQueuedArcTokens(GraphProcess)}.
    *
@@ -126,7 +130,29 @@ public interface Engine
    * @param arcName The name of the {@link Arc} (or arcs, as more than one {@link Arc} can
    *                have the same name) to generate ArcTokens on.
    */
-  void completeAsynchronous (NodeToken token, String arcName );
+  void completeAsynchronous (NodeToken token, String arcName);
+
+  /**
+   * Marks the given node token, creates new token set and generates the next set
+   * of arc tokens as members of that new token set.
+   *
+   * @param token The node token to complete
+   * @param arcName The name of the {@link Arc} (or arcs, as more than one {@link Arc} can
+   *                have the same name) to generate ArcTokens on.
+   * @param tokenSetName The token set name
+   * @param numberOfTokens The number of tokens to generate on each arc
+   * @param asynchronous If true, the engine will return after creating the arc tokens.
+   *                     If false, the new arc tokens will be processed immediately.
+   * @param initialEnv The initial environment for the new token set. May be null.
+   * @param initialMemberEnv The initial environment for the new token set members. May be null.
+   */
+  void completeWithNewTokenSet (NodeToken token,
+                                String arcName,
+                                String tokenSetName,
+                                int numberOfTokens,
+                                boolean asynchronous,
+                                Env initialEnv,
+                                Map<String, List<?>> initialMemberEnv );
 
   /**
    * If this process has any {@link ArcToken}s queued for execution, this method

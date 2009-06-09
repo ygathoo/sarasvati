@@ -1,5 +1,9 @@
 package com.googlecode.sarasvati.util;
 
+import com.googlecode.sarasvati.Token;
+import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.TokenSetMember;
+
 public class SvUtil
 {
   public static boolean equals (Object o1, Object o2)
@@ -37,5 +41,29 @@ public class SvUtil
     }
 
     return buf.toString();
+  }
+
+  public static TokenSet getTokenSet (Token token, String name)
+  {
+    for ( TokenSetMember setMember : token.getTokenSetMemberships() )
+    {
+      if ( SvUtil.equals( name, setMember.getTokenSet().getName() ) )
+      {
+        return setMember.getTokenSet();
+      }
+    }
+    return null;
+  }
+
+  public static TokenSetMember getTokenSetMember (Token token, String name)
+  {
+    for ( TokenSetMember setMember : token.getTokenSetMemberships() )
+    {
+      if ( SvUtil.equals( name, setMember.getTokenSet().getName() ) )
+      {
+        return setMember;
+      }
+    }
+    return null;
   }
 }

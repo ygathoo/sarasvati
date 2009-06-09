@@ -14,7 +14,8 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
+                        Cheong Chung Onn
 */
 package com.googlecode.sarasvati.visual.common;
 
@@ -67,34 +68,36 @@ public class ShortestPathRouterAdapter implements Router
     }
   }
 
+  @SuppressWarnings("unchecked")
   public void addPath (Path path)
   {
     //Check for overlapping path, If there are overlapping paths
-    //Force path to bend. 
+    //Force path to bend.
     List<Path> solve = router.solve();
-    for(Path existPath : solve){
-      
-      if(existPath.getEndPoint().equals( path.getStartPoint() )
-          && existPath.getStartPoint().equals( path.getEndPoint() )){
+    for ( Path existPath : solve )
+    {
+      if ( existPath.getEndPoint().equals( path.getStartPoint() ) &&
+           existPath.getStartPoint().equals( path.getEndPoint() ) )
+      {
         PointList bendPoints = new PointList();
         int x = (path.getEndPoint().x + path.getStartPoint().x) / 2;
         //Add an Offset to x if Path is a vertical line
         x = x == path.getEndPoint().x ? x + 25 : x ;
-        
+
         //Add a vertical Offset if y is a horizontal line
         int y = (path.getEndPoint().y + path.getStartPoint().y) / 2;
         y = y == path.getEndPoint().y ? y + 25 : y;
-        
+
         bendPoints.addPoint( x, y );
         //Add a new obstacle
         path.setBendPoints( bendPoints  );
       }
     }
-    
+
     router.addPath( path );
     dirty = true;
   }
-  
+
   public void removePath (Path path)
   {
     router.removePath( path );

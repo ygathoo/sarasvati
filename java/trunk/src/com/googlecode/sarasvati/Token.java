@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati;
 
+import java.util.Set;
+
 import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 /**
@@ -70,4 +72,11 @@ public interface Token
    *                execution history.
    */
   void accept (TokenVisitor visitor);
+
+  /**
+   * Returns the set of TokenSetMembers tying this token to a token set.
+   *
+   * @return The set of TokenSetMembers tying this token to a token set.
+   */
+  Set<? extends TokenSetMember> getTokenSetMemberships ();
 }

@@ -35,6 +35,7 @@ public class JdbcNode implements Node, JdbcObject
   protected String    guard;
   protected boolean   isStart;
   protected JoinType  joinType;
+  protected String    joinParam;
 
   protected JdbcGraph graph;
 
@@ -111,6 +112,17 @@ public class JdbcNode implements Node, JdbcObject
   }
 
   @Override
+  public String getJoinParam ()
+  {
+    return joinParam;
+  }
+
+  public void setJoinParam (String joinParam)
+  {
+    this.joinParam = joinParam;
+  }
+
+  @Override
   public JoinStrategy getJoinStrategy ()
   {
     return joinType.getJoinStrategy();
@@ -157,7 +169,7 @@ public class JdbcNode implements Node, JdbcObject
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    engine.completeExecution( token, Arc.DEFAULT_ARC );
+    engine.complete( token, Arc.DEFAULT_ARC );
   }
 
   /**

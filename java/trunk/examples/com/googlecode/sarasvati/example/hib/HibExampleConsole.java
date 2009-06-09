@@ -30,8 +30,11 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.example.ApprovalNode;
+import com.googlecode.sarasvati.example.ApprovalSetupNode;
 import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.LoggingExecutionListener;
+import com.googlecode.sarasvati.example.MessageNode;
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
@@ -53,7 +56,7 @@ public class HibExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 1;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 1;
       }
     });
 
@@ -62,7 +65,7 @@ public class HibExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "rand" ) % 2 == 0;
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 0;
       }
     });
 
@@ -71,13 +74,25 @@ public class HibExampleConsole
       @Override
       public boolean eval( Engine engine, NodeToken token )
       {
-        return token.getEnv().getLongAttribute( "iter" ) == 10;
+        return token.getEnv().getAttribute( "iter", Long.class ) == 10;
+      }
+    });
+
+    repository.registerPredicate( "Approved", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( Engine engine, NodeToken token )
+      {
+        return true;
       }
     });
 
     HibTestSetup.init(false);
 
     DefaultNodeFactory.addGlobalCustomType( "customTest", CustomTestNode.class );
+    DefaultNodeFactory.addGlobalCustomType( "approval", ApprovalNode.class );
+    DefaultNodeFactory.addGlobalCustomType( "approvalSetup", ApprovalSetupNode.class );
+    DefaultNodeFactory.addGlobalCustomType( "message", MessageNode.class );
 
     while ( true )
     {
@@ -123,6 +138,8 @@ public class HibExampleConsole
 
       if ( p.isComplete() )
       {
+        trans.commit();
+        session.close();
         System.out.println( "Workflow complete" );
         return;
       }
@@ -165,6 +182,12 @@ public class HibExampleConsole
             {
               engine.removeExecutionListener( p, new LoggingExecutionListener(), ExecutionEventType.values() );
             }
+            break;
+          }
+          else if ( "p".equalsIgnoreCase( input ) )
+          {
+            engine.executeQueuedArcTokens( p );
+            System.out.println( "Queued arc tokens processed" );
             break;
           }
           else
@@ -240,14 +263,14 @@ public class HibExampleConsole
         {
           System.out.println( "Completing task" );
           t.setState( TaskState.Completed );
-          engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
+          engine.complete( t.getNodeToken(), Arc.DEFAULT_ARC );
         }
       }
       else if ( line == 2 && t.isRejectable() )
       {
         System.out.println( "Rejecting task" );
         t.setState( TaskState.Rejected );
-        engine.completeExecution( t.getNodeToken(), "reject" );
+        engine.complete( t.getNodeToken(), "reject" );
       }
       else
       {

@@ -31,8 +31,8 @@ import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.CustomNode;
-import com.googlecode.sarasvati.Env;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
@@ -40,6 +40,9 @@ import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.annotations.NodeType;
+import com.googlecode.sarasvati.env.Env;
+import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
@@ -79,6 +82,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
                        final String name,
                        final String type,
                        final JoinType joinType,
+                       final String joinParam,
                        final boolean isStart,
                        final String guard,
                        final List<Object> customList)
@@ -104,6 +108,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
     node.setName( name );
     node.setType( type );
     node.setJoinType( joinType );
+    node.setJoinParam( joinParam );
     node.setStart( isStart );
     node.setGuard( guard );
 
@@ -226,17 +231,52 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   public HibGraphProcess newProcess (final Graph graph)
   {
     HibGraphProcess process = new HibGraphProcess( (HibGraph)graph);
-    session.save(  process );
+    session.save( process );
     return process;
   }
 
   @Override
-  public GraphProcess newNestedProcess (final Graph graph, final NodeToken parentToken)
+  public GraphProcess newNestedProcess (final Graph graph,
+                                        final NodeToken parentToken)
   {
     HibGraphProcess process = new HibGraphProcess( (HibGraph)graph);
     process.setParentToken( parentToken );
-    session.save(  process );
+    session.save( process );
     return process;
+  }
+
+  @Override
+  public TokenSet newTokenSet (final GraphProcess process,
+                               final String name,
+                               final int maxMemberIndex)
+  {
+    HibTokenSet tokenSet = new HibTokenSet( (HibGraphProcess)process, name, maxMemberIndex );
+    session.save( tokenSet );
+    return tokenSet;
+  }
+
+  @Override
+  public ArcTokenSetMember newArcTokenSetMember (final TokenSet tokenSet,
+                                                 final ArcToken token,
+                                                 final int memberIndex)
+  {
+    HibArcTokenSetMember setMember =
+      new HibArcTokenSetMember( (HibTokenSet)tokenSet, (HibArcToken)token, memberIndex );
+
+    session.save( setMember );
+    return setMember;
+  }
+
+  @Override
+  public NodeTokenSetMember newNodeTokenSetMember (final TokenSet tokenSet,
+                                                   final NodeToken token,
+                                                   final int memberIndex)
+  {
+    HibNodeTokenSetMember setMember =
+      new HibNodeTokenSetMember( (HibTokenSet)tokenSet, (HibNodeToken)token, memberIndex );
+
+    session.save( setMember );
+    return setMember;
   }
 
   @Override

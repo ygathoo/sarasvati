@@ -36,6 +36,9 @@ public class XmlNode
   @XmlAttribute(name = "joinType", required = false)
   protected XmlJoinType          joinType;
 
+  @XmlAttribute(name="joinParam", required=false)
+  protected String joinParam;
+
   @XmlAttribute(name = "type", required = false)
   protected String               type;
 
@@ -75,6 +78,16 @@ public class XmlNode
   public void setJoinType (XmlJoinType joinType)
   {
     this.joinType = joinType;
+  }
+
+  public String getJoinParam ()
+  {
+    return joinParam;
+  }
+
+  public void setJoinParam (String joinParam)
+  {
+    this.joinParam = joinParam;
   }
 
   public String getType ()
