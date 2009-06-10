@@ -39,6 +39,7 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
   private static void completeProcess ()
   {
     Session session = HibTestSetup.openSession();
+    session.beginTransaction();
     HibEngine engine = new HibEngine( session );
 
     /*
@@ -46,6 +47,7 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
      */
     HibGraph graph = engine.getRepository().getLatestGraph( "reject-node" );
     engine.startProcess( graph );
+    session.getTransaction().commit();
   }
 
   private static void load () throws Exception

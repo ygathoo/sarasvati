@@ -38,11 +38,16 @@ public class ShortestPathRouterAdapter implements Router
   protected ShortestPathRouter router;
   protected boolean dirty = false;
 
-  public ShortestPathRouterAdapter (GraphSceneImpl<?,?> scene)
+  public ShortestPathRouterAdapter (GraphSceneImpl<?,?> scene, int spacing)
   {
     this.scene = scene;
     this.router = new ShortestPathRouter();
-    router.setSpacing( 5 );
+    router.setSpacing( spacing );
+  }
+
+  public void setAdjacentLineSpacing (int spacing)
+  {
+    router.setSpacing( spacing );
   }
 
   public void addNodeWidget (Widget w)
@@ -74,19 +79,25 @@ public class ShortestPathRouterAdapter implements Router
     //Check for overlapping path, If there are overlapping paths
     //Force path to bend.
     List<Path> solve = router.solve();
+
     for ( Path existPath : solve )
     {
-      if ( existPath.getEndPoint().equals( path.getStartPoint() ) &&
+      if ( (existPath.getPoints() == null || existPath.getPoints().size() == 2 ) &&
+           existPath.getEndPoint().equals( path.getStartPoint() ) &&
            existPath.getStartPoint().equals( path.getEndPoint() ) )
       {
         PointList bendPoints = new PointList();
-        int x = (path.getEndPoint().x + path.getStartPoint().x) / 2;
-        //Add an Offset to x if Path is a vertical line
-        x = x == path.getEndPoint().x ? x + 25 : x ;
+        int deltaX = path.getEndPoint().x - path.getStartPoint().x;
+        int y = ((path.getEndPoint().y + path.getStartPoint().y) >> 1 ) + Math.min( Math.abs( deltaX ), router.getSpacing() );
 
-        //Add a vertical Offset if y is a horizontal line
-        int y = (path.getEndPoint().y + path.getStartPoint().y) / 2;
-        y = y == path.getEndPoint().y ? y + 25 : y;
+        int deltaY = path.getEndPoint().y - path.getStartPoint().y;
+        int offset = Math.min( Math.abs( deltaY ), router.getSpacing() );
+        if ( ( deltaX > 0 && deltaY > 0 ) || (deltaX < 0 && deltaY < 0 ) )
+        {
+          offset = -offset;
+        }
+
+        int x = ((path.getEndPoint().x + path.getStartPoint().x) >> 1 ) + offset;
 
         bendPoints.addPoint( x, y );
         //Add a new obstacle
