@@ -84,5 +84,10 @@ public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
   {
     return "task";
   }
-  
+
+  @Override
+  public boolean isBackArc (Arc arc)
+  {
+    return "reject".equalsIgnoreCase( arc.getName() );
+  }
 }

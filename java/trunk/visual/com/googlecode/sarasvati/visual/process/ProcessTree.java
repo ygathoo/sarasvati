@@ -34,9 +34,11 @@ import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.visual.ProcessLookAndFeel;
 
 public class ProcessTree
 {
+  protected ProcessLookAndFeel lookAndFeel;
   protected Map<NodeToken, ProcessTreeNode> nodeTokenMap = new HashMap<NodeToken, ProcessTreeNode>();
   protected Map<Node, ProcessTreeNode>      nodeMap      = new HashMap<Node, ProcessTreeNode>();
 
@@ -158,9 +160,10 @@ public class ProcessTree
    *   a. If it's a node token, process all arc token children
    *   b. If it's a node, process all arc children
    */
-  public ProcessTree (GraphProcess process)
+  public ProcessTree (GraphProcess process, ProcessLookAndFeel lookAndFeel)
   {
     Graph graph = process.getGraph();
+    this.lookAndFeel = lookAndFeel;
 
     for ( NodeToken token : process.getNodeTokens() )
     {
@@ -192,7 +195,7 @@ public class ProcessTree
 
     // We want to set position for all nodes with node tokens first
     // Later we'll go back and add in the rest of the nodes
-    List<ProcessTreeNode> firstLayer = new LinkedList<ProcessTreeNode>();
+    List<ProcessTreeNode> nextLayer = new LinkedList<ProcessTreeNode>();
     List<List<ProcessTreeNode>> layers = new LinkedList<List<ProcessTreeNode>>();
 
     Set<ProcessTreeNode> processed = new HashSet<ProcessTreeNode>();
@@ -202,15 +205,15 @@ public class ProcessTree
       if ( ptNode.isStartTokenNode() )
       {
         ptNode.setDepth( 0 );
-        ptNode.addToLayer( firstLayer );
+        ptNode.addToLayer( nextLayer );
         processed.add( ptNode );
       }
     }
 
     int depth = 1;
 
-    List<ProcessTreeNode> nextLayer = firstLayer;
-
+    // traverse token DAG, adding each processtreenode to the right layer
+    // and setting its depth.
     while ( !nextLayer.isEmpty() )
     {
       layers.add( nextLayer );
@@ -223,9 +226,10 @@ public class ProcessTree
         {
           if ( !processed.contains( ptArc.getChild() ) )
           {
-            ptArc.getChild().setDepth( depth );
-            ptArc.getChild().addToLayer( nextLayer );
-            processed.add( ptArc.getChild() );
+            ProcessTreeNode childNode = ptArc.getChild();
+            childNode.setDepth( depth );
+            childNode.addToLayer( nextLayer );
+            processed.add( childNode );
           }
         }
       }
@@ -249,8 +253,10 @@ public class ProcessTree
       {
         if ( !ptNode.isTokenOnArc( arc ) && !arc.isSelfArc() )
         {
-          // If the node has an active token, we don't want to point to any nodes with tokens on them
-          ProcessTreeNode child = ptNode.getToken().isComplete() ?
+          // If the node has an active token we should point
+          // to a version of the node with no token on it, unless
+          // the arc is a back arc
+          ProcessTreeNode child = ptNode.getToken().isComplete() || lookAndFeel.isBackArc( arc ) ?
                                     getProcessTreeNode( ptNode, arc.getEndNode() ) :
                                     getNonTokenProcessTreeNode( ptNode, arc.getEndNode() );
           ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, child );
@@ -274,10 +280,11 @@ public class ProcessTree
     }
 
     processed.clear();
-    processed.addAll( firstLayer );
+
+    nextLayer = layers.get( 0 );
+    processed.addAll( nextLayer );
 
     // set positioning for nodes that haven't been handled yet
-    nextLayer = firstLayer;
     depth = 1;
 
     while ( !nextLayer.isEmpty() )
@@ -289,19 +296,19 @@ public class ProcessTree
       {
         for ( ProcessTreeArc ptArc : treeNode.getChildren() )
         {
-          if ( !processed.contains( ptArc.getChild() ) &&
-               !( treeNode.isCompletedNodeToken() &&
-                  ptArc.getChild().hasNonCompleteNodeTokenParent() ) &&
+          ProcessTreeNode child = ptArc.getChild();
+          if ( !processed.contains( child ) &&
+               !( treeNode.isCompletedNodeToken() && child.hasNonCompleteNodeTokenParent() ) &&
                !( ptArc.getToken() == null &&
                   treeNode.getToken() != null &&
-                  ptArc.getChild().hasLowerParent( treeNode ) ) )
+                  child.hasLowerParent( treeNode ) ) )
           {
-            if ( ptArc.getChild().getDepth() == -1 )
+            if ( child.getDepth() == -1 )
             {
-              ptArc.getChild().setDepth( depth );
-              ptArc.getChild().addToLayer( nextLayer );
+              child.setDepth( depth );
+              child.addToLayer( nextLayer );
             }
-            processed.add( ptArc.getChild() );
+            processed.add( child );
           }
         }
       }

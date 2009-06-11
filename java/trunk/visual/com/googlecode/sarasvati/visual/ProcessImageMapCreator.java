@@ -96,16 +96,17 @@ public class ProcessImageMapCreator
    * @param process The process to create an image map and image from.
    * @param processToImageMap Controls how the image and image map are constructed.
    */
-  public ProcessImageMapCreator (final GraphProcess process, final ProcessToImageMap processToImageMap)
+  public ProcessImageMapCreator (final GraphProcess process,
+                                 final ProcessToImageMap processToImageMap)
   {
     generateMapAndImage( process, processToImageMap );
   }
 
-  protected void generateMapAndImage (final GraphProcess process, final ProcessToImageMap processToImageMap)
+  protected void generateMapAndImage (final GraphProcess process,
+                                      final ProcessToImageMap processToImageMap)
   {
     final ProcessLookAndFeel lookAndFeelAdapter = new ProcessLookAndFeel ()
     {
-
       @Override
       public boolean drawArcLabels (Arc arc)
       {
@@ -119,6 +120,12 @@ public class ProcessImageMapCreator
       }
 
       @Override
+      public boolean isBackArc (Arc arc)
+      {
+        return processToImageMap.isBackArc( arc );
+      }
+
+      @Override
       public Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene)
       {
         Icon icon = processToImageMap.iconForNode( node );
@@ -126,8 +133,6 @@ public class ProcessImageMapCreator
         label.setSize( icon.getIconWidth(), icon.getIconHeight() );
         return new ComponentWidget( scene, label );
       }
-
-
     };
 
     SarasvatiProcessScene processScene = new SarasvatiProcessScene( process, lookAndFeelAdapter );

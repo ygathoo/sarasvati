@@ -54,7 +54,7 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
 
   private static void load () throws Exception
   {
-    HibTestSetup.init( true );
+    HibTestSetup.init( false );
 
     Session sess = HibTestSetup.openSession();
     sess.beginTransaction();

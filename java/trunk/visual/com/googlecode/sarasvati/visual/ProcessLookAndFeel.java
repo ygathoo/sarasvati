@@ -33,8 +33,9 @@ import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 public interface ProcessLookAndFeel
 {
   /**
-   * Controls if self arcs should be drawn.
-   * @param arc 
+   * Controls if self arcs should be drawn to the given arc.
+   *
+   * @param arc An arc in a process definition
    *
    * @return True if self arcs should be drawn, false otherwise
    */
@@ -42,7 +43,8 @@ public interface ProcessLookAndFeel
 
   /**
    * Controls if arc labels should be drawn.
-   * @param arc 
+   *
+   * @param arc An arc in a process definition
    *
    * @return True if arc labels should be drawn, false otherwise
    */
@@ -53,6 +55,14 @@ public interface ProcessLookAndFeel
    *
    * @return True if arc labels should be drawn, false otherwise
    */
-
   Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene);
+
+  /**
+   * Controls if this arc should point backwards or forwards.
+   *
+   * @param arc An arc in a process definition
+   *
+   * @return True if the the arc is generally traversed going back to a previous point in the workflow
+   */
+  boolean isBackArc (Arc arc);
 }

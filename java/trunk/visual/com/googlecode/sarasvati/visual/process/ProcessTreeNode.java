@@ -177,7 +177,7 @@ public class ProcessTreeNode implements VisualProcessNode
 
       if ( ( currentParent.getDepth() > selectedParent.getDepth() ||
              currentParent.getDepth() == -1 ) &&
-            !isAncestor( selectedParent ) )
+            !isAncestor( currentParent ) )
       {
         return true;
       }
