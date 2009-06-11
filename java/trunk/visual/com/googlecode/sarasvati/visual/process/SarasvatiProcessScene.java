@@ -28,6 +28,7 @@ import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.visual.ProcessLookAndFeel;
@@ -61,7 +62,8 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
       {
         for ( ProcessTreeArc ptArc : node.getChildren() )
         {
-          if ( lookAndFeel.drawSelfArcs() || !ptArc.getParent().equals( ptArc.getChild() ) )
+          Arc arc = ptArc.getArc();
+          if ( lookAndFeel.drawSelfArcs(arc) || !ptArc.getParent().equals( ptArc.getChild() ) )
           {
             ConnectionWidget w = (ConnectionWidget)addEdge( ptArc );
             setEdgeSource( ptArc, ptArc.getParent() );
@@ -87,9 +89,10 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
 
             w.resolveBounds( null, null );
 
-            if ( lookAndFeel.drawArcLabels() && ptArc.getArc().getName() != null )
+
+            if ( arc.getName() != null && lookAndFeel.drawArcLabels(arc) )
             {
-              LabelWidget arcLabel = new LabelWidget( this, ptArc.getArc().getName() );
+              LabelWidget arcLabel = new LabelWidget( this, arc.getName() );
               arcLabel.setFont( ARC_LABEL_FONT );
               arcLabel.setForeground( Color.BLUE );
               arcLabel.setOpaque( true );

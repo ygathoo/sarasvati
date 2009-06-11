@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import org.netbeans.api.visual.widget.ComponentWidget;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.adapter.Function;
@@ -101,13 +102,13 @@ public class GraphImageMapCreator
     final GraphLookAndFeel lookAndFeelAdapter = new GraphLookAndFeel ()
     {
       @Override
-      public boolean drawArcLabels ()
+      public boolean drawArcLabels (Arc arc)
       {
-        return graphToImageMap.drawArcLabels();
+        return graphToImageMap.drawArcLabels(arc);
       }
 
       @Override
-      public boolean drawSelfArcs ()
+      public boolean drawSelfArcs (Arc arc)
       {
         return false;
       }
