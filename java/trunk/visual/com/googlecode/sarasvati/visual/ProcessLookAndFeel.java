@@ -20,6 +20,7 @@ package com.googlecode.sarasvati.visual;
 
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
 import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 
@@ -33,17 +34,19 @@ public interface ProcessLookAndFeel
 {
   /**
    * Controls if self arcs should be drawn.
+   * @param arc 
    *
    * @return True if self arcs should be drawn, false otherwise
    */
-  boolean drawSelfArcs ();
+  boolean drawSelfArcs (Arc arc);
 
   /**
    * Controls if arc labels should be drawn.
+   * @param arc 
    *
    * @return True if arc labels should be drawn, false otherwise
    */
-  boolean drawArcLabels ();
+  boolean drawArcLabels (Arc arc);
 
   /**
    * Controls if arc labels should be drawn.

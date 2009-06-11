@@ -58,7 +58,7 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
 
       for ( Arc arc : graph.getArcs() )
       {
-        if ( lookAndFeel.drawSelfArcs() || !arc.getStartNode().equals( arc.getEndNode() ) )
+        if ( lookAndFeel.drawSelfArcs(arc) || !arc.getStartNode().equals( arc.getEndNode() ) )
         {
           ConnectionWidget widget = (ConnectionWidget)addEdge( arc );
           setEdgeSource( arc, arc.getStartNode() );
@@ -66,7 +66,7 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
 
           widget.resolveBounds( null, null );
 
-          if ( lookAndFeel.drawArcLabels() && arc.getName() != null )
+          if ( arc.getName() != null && lookAndFeel.drawArcLabels(arc) )
           {
             LabelWidget arcLabel = new LabelWidget( this, arc.getName() );
             arcLabel.setFont( ARC_LABEL_FONT );

@@ -24,6 +24,7 @@ import javax.swing.JLabel;
 import org.netbeans.api.visual.widget.ComponentWidget;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
 import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
@@ -49,13 +50,13 @@ public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
   }
 
   @Override
-  public boolean drawArcLabels ()
+  public boolean drawArcLabels (Arc arc)
   {
     return drawArcLabels;
   }
 
   @Override
-  public boolean drawSelfArcs ()
+  public boolean drawSelfArcs (Arc arc)
   {
     return drawSelfArcs;
   }

@@ -20,6 +20,8 @@ package com.googlecode.sarasvati.visual;
 
 import javax.swing.Icon;
 
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
 import com.googlecode.sarasvati.visual.process.VisualProcessArc;
@@ -31,15 +33,29 @@ import com.googlecode.sarasvati.visual.process.VisualProcessNode;
  * null unless overridden.
  *
  * @author Paul Lorenz
+ * @author chungonn
  */
 public class ProcessToImageMapAdapter implements ProcessToImageMap
 {
+  
+  private final String taskType;
+
+  public ProcessToImageMapAdapter ()
+  {
+    this("task");
+  }
+  
+  public ProcessToImageMapAdapter (String taskType)
+  {
+    this.taskType = taskType;
+  }
+  
   /**
    * Returns true unless overridden
-   * @see com.googlecode.sarasvati.visual.ProcessToImageMap#drawArcLabels()
+   * @see com.googlecode.sarasvati.visual.ProcessToImageMap#drawArcLabels(Arc)
    */
   @Override
-  public boolean drawArcLabels ()
+  public boolean drawArcLabels (Arc arc)
   {
     return true;
   }
@@ -53,11 +69,21 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
   @Override
   public Icon iconForNode (VisualProcessNode node)
   {
-    if ( "task".equalsIgnoreCase( node.getNode().getType() ) )
+    if ( getTaskType().equalsIgnoreCase( node.getNode().getType() ) )
     {
       return new TaskIcon( node.getNode(), node.getToken() );
     }
     return new DefaultNodeIcon( node.getNode(), node.getToken() );
+  }
+
+  /**
+   * TaskType default is "task". It is used to determine the type of node icon 
+   * returns by {@link #iconForNode(Node)}
+   * 
+   */
+  public String getTaskType ()
+  {
+    return taskType;
   }
 
   @Override

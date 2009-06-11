@@ -20,6 +20,7 @@ package com.googlecode.sarasvati.visual;
 
 import javax.swing.Icon;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.visual.process.VisualProcessArc;
 import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 
@@ -33,10 +34,11 @@ public interface ProcessToImageMap
 {
   /**
    * Controls drawing of arc labels
+   * @param arc 
    *
    * @return true if arc labels should be rendered, false otherwise
    */
-  boolean drawArcLabels ();
+  boolean drawArcLabels (Arc arc);
 
   /**
    * Each node may have a different {@link Icon} representing

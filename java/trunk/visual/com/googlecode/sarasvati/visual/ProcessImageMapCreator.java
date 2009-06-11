@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import org.netbeans.api.visual.widget.ComponentWidget;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.adapter.Function;
 import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
@@ -104,14 +105,15 @@ public class ProcessImageMapCreator
   {
     final ProcessLookAndFeel lookAndFeelAdapter = new ProcessLookAndFeel ()
     {
+
       @Override
-      public boolean drawArcLabels ()
+      public boolean drawArcLabels (Arc arc)
       {
-        return processToImageMap.drawArcLabels();
+        return processToImageMap.drawArcLabels( arc );
       }
 
       @Override
-      public boolean drawSelfArcs ()
+      public boolean drawSelfArcs (Arc arc)
       {
         return false;
       }
@@ -124,6 +126,8 @@ public class ProcessImageMapCreator
         label.setSize( icon.getIconWidth(), icon.getIconHeight() );
         return new ComponentWidget( scene, label );
       }
+
+
     };
 
     SarasvatiProcessScene processScene = new SarasvatiProcessScene( process, lookAndFeelAdapter );

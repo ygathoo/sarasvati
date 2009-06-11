@@ -33,10 +33,11 @@ public interface GraphToImageMap
 {
   /**
    * Controls drawing of arc labels
+   * @param arc
    *
    * @return true if arc labels should be rendered, false otherwise
    */
-  boolean drawArcLabels ();
+  boolean drawArcLabels (Arc arc);
 
   /**
    * Each node may have a different {@link Icon} representing

@@ -51,10 +51,10 @@ public class GraphToImageMapAdapter implements GraphToImageMap
   
   /**
    * Returns true unless overridden
-   * @see com.googlecode.sarasvati.visual.GraphToImageMap#drawArcLabels()
+   * @see com.googlecode.sarasvati.visual.GraphToImageMap#drawArcLabels(Arc)
    */
   @Override
-  public boolean drawArcLabels ()
+  public boolean drawArcLabels (Arc arc)
   {
     return true;
   }
@@ -78,7 +78,7 @@ public class GraphToImageMapAdapter implements GraphToImageMap
   @Override
   public Icon iconForNode (Node node)
   {
-    if ( taskType.equalsIgnoreCase( node.getType() ) )
+    if ( getTaskType().equalsIgnoreCase( node.getType() ) )
     {
       return new TaskIcon( node, null );
     }

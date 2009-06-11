@@ -23,6 +23,7 @@ import java.awt.Component;
 import org.netbeans.api.visual.widget.ComponentWidget;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
 
@@ -47,13 +48,13 @@ public class DefaultGraphLookAndFeel implements GraphLookAndFeel
   }
 
   @Override
-  public boolean drawArcLabels ()
+  public boolean drawArcLabels (Arc arc)
   {
     return drawArcLabels;
   }
 
   @Override
-  public boolean drawSelfArcs ()
+  public boolean drawSelfArcs (Arc arc)
   {
     return drawSelfArcs;
   }
