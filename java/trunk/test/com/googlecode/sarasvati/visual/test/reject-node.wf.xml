@@ -6,7 +6,7 @@
     <arc to="2"/>
   </node>
 
-  <node name="2" >
+  <node name="2" type="wait" >
   	<arc to="3"/>
 	<arc to="1" name="reject"/>
   </node>

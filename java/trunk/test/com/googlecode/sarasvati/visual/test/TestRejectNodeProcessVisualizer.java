@@ -5,10 +5,12 @@ import java.io.FilenameFilter;
 
 import org.hibernate.Session;
 
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.example.hib.HibTestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.hib.HibNode;
+import com.googlecode.sarasvati.impl.WaitNode;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.visual.AbstractProcessVisualizer;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
@@ -61,6 +63,8 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
     XmlLoader xmlLoader = new XmlLoader();
 
     engine.addNodeType( "node", HibNode.class );
+    engine.addNodeType( "custom", CustomNode.class );
+    engine.addNodeType( "wait", WaitNode.class );
 
     GraphLoader<HibGraph> wfLoader = engine.getLoader();
 
