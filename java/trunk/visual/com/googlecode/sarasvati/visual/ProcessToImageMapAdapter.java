@@ -37,19 +37,18 @@ import com.googlecode.sarasvati.visual.process.VisualProcessNode;
  */
 public class ProcessToImageMapAdapter implements ProcessToImageMap
 {
-  
   private final String taskType;
 
   public ProcessToImageMapAdapter ()
   {
     this("task");
   }
-  
+
   public ProcessToImageMapAdapter (String taskType)
   {
     this.taskType = taskType;
   }
-  
+
   /**
    * Returns true unless overridden
    * @see com.googlecode.sarasvati.visual.ProcessToImageMap#drawArcLabels(Arc)
@@ -58,6 +57,17 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
   public boolean drawArcLabels (Arc arc)
   {
     return true;
+  }
+
+  /**
+   * Returns false for all arcs
+   *
+   * @see com.googlecode.sarasvati.visual.ProcessToImageMap#isBackArc(com.googlecode.sarasvati.Arc)
+   */
+  @Override
+  public boolean isBackArc (Arc arc)
+  {
+    return false;
   }
 
   /**
@@ -77,9 +87,9 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
   }
 
   /**
-   * TaskType default is "task". It is used to determine the type of node icon 
+   * TaskType default is "task". It is used to determine the type of node icon
    * returns by {@link #iconForNode(Node)}
-   * 
+   *
    */
   public String getTaskType ()
   {

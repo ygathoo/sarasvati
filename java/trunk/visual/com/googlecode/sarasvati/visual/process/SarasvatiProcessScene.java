@@ -46,7 +46,7 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
 
     if ( process != null )
     {
-      ProcessTree processTree = new ProcessTree( process );
+      ProcessTree processTree = new ProcessTree( process, lookAndFeel );
       Iterable<ProcessTreeNode> nodes = processTree.getProcessTreeNodes();
 
       for ( ProcessTreeNode node : nodes )

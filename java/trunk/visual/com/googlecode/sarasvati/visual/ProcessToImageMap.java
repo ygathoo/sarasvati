@@ -34,11 +34,20 @@ public interface ProcessToImageMap
 {
   /**
    * Controls drawing of arc labels
-   * @param arc 
+   * @param arc
    *
    * @return true if arc labels should be rendered, false otherwise
    */
   boolean drawArcLabels (Arc arc);
+
+  /**
+   * Controls if this arc should point backwards or forwards.
+   *
+   * @param arc An arc in a process definition
+   *
+   * @return True if the the arc is generally traversed going back to a previous point in the workflow
+   */
+  boolean isBackArc (Arc arc);
 
   /**
    * Each node may have a different {@link Icon} representing
