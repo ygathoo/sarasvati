@@ -61,20 +61,20 @@ public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
     return drawSelfArcs;
   }
 
+  public Icon newIconForNode (VisualProcessNode node, SarasvatiProcessScene scene)
+  {
+    if ( getTaskType().equals( node.getNode().getType() ) )
+    {
+      return new TaskIcon( node.getNode(), node.getToken() );
+    }
+
+    return new DefaultNodeIcon( node.getNode(), node.getToken() );
+  }
+
   @Override
   public Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene)
   {
-    Icon icon = null;
-
-    if ( getTaskType().equals( node.getNode().getType() ) )
-    {
-      icon = new TaskIcon( node.getNode(), node.getToken() );
-    }
-    else
-    {
-      icon = new DefaultNodeIcon( node.getNode(), node.getToken() );
-    }
-
+    Icon icon = newIconForNode( node, scene );
     JLabel label = new JLabel( icon );
     label.setSize( icon.getIconWidth(), icon.getIconHeight() );
     return new ComponentWidget( scene, label );
