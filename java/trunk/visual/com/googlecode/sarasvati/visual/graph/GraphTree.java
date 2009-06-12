@@ -104,7 +104,7 @@ public class GraphTree
   public boolean isBackArc (Arc arc)
   {
     GraphTreeNode startNode = getTreeNode( arc.getStartNode() );
-    GraphTreeNode endNode = getTreeNode( arc.getStartNode() );
+    GraphTreeNode endNode = getTreeNode( arc.getEndNode() );
     return endNode.getDepth() < startNode.getDepth();
   }
 }
