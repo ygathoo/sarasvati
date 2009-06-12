@@ -100,4 +100,11 @@ public class GraphTree
   {
     return nodeMap.get( node );
   }
+
+  public boolean isBackArc (Arc arc)
+  {
+    GraphTreeNode startNode = getTreeNode( arc.getStartNode() );
+    GraphTreeNode endNode = getTreeNode( arc.getStartNode() );
+    return endNode.getDepth() < startNode.getDepth();
+  }
 }

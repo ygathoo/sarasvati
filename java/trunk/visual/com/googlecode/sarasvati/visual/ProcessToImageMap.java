@@ -44,10 +44,11 @@ public interface ProcessToImageMap
    * Controls if this arc should point backwards or forwards.
    *
    * @param arc An arc in a process definition
+   * @param defaultValue True if the arc is calculated to be backwards based on a GraphTree
    *
    * @return True if the the arc is generally traversed going back to a previous point in the workflow
    */
-  boolean isBackArc (Arc arc);
+  boolean isBackArc (Arc arc, boolean defaultValue);
 
   /**
    * Each node may have a different {@link Icon} representing

@@ -61,8 +61,9 @@ public interface ProcessLookAndFeel
    * Controls if this arc should point backwards or forwards.
    *
    * @param arc An arc in a process definition
+   * @param defaultValue The calculated value based on the relative positions in a GraphTree
    *
    * @return True if the the arc is generally traversed going back to a previous point in the workflow
    */
-  boolean isBackArc (Arc arc);
+  boolean isBackArc (Arc arc, boolean defaultValue);
 }
