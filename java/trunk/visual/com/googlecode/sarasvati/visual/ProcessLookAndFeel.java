@@ -51,9 +51,11 @@ public interface ProcessLookAndFeel
   boolean drawArcLabels (Arc arc);
 
   /**
-   * Controls if arc labels should be drawn.
+   * Returns a new Widget to represent the given {@link VisualProcessNode}.
    *
-   * @return True if arc labels should be drawn, false otherwise
+   * @param node The node we need a widget for
+   * @param scene The scene the widget is created in
+   * @return A new widget for the given node
    */
   Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene);
 
