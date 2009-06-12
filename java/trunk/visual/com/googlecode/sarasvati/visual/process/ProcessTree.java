@@ -35,10 +35,13 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visual.ProcessLookAndFeel;
+import com.googlecode.sarasvati.visual.graph.GraphTree;
 
 public class ProcessTree
 {
   protected ProcessLookAndFeel lookAndFeel;
+  protected GraphTree graphTree;
+
   protected Map<NodeToken, ProcessTreeNode> nodeTokenMap = new HashMap<NodeToken, ProcessTreeNode>();
   protected Map<Node, ProcessTreeNode>      nodeMap      = new HashMap<Node, ProcessTreeNode>();
 
@@ -163,6 +166,7 @@ public class ProcessTree
   public ProcessTree (GraphProcess process, ProcessLookAndFeel lookAndFeel)
   {
     Graph graph = process.getGraph();
+    this.graphTree = new GraphTree( graph );
     this.lookAndFeel = lookAndFeel;
 
     for ( NodeToken token : process.getNodeTokens() )
@@ -256,7 +260,7 @@ public class ProcessTree
           // If the node has an active token we should point
           // to a version of the node with no token on it, unless
           // the arc is a back arc
-          ProcessTreeNode child = ptNode.getToken().isComplete() || lookAndFeel.isBackArc( arc ) ?
+          ProcessTreeNode child = ptNode.getToken().isComplete() || lookAndFeel.isBackArc( arc, graphTree.isBackArc( arc ) ) ?
                                     getProcessTreeNode( ptNode, arc.getEndNode() ) :
                                     getNonTokenProcessTreeNode( ptNode, arc.getEndNode() );
           ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, child );

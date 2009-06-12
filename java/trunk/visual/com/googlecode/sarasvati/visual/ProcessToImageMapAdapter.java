@@ -60,14 +60,14 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
   }
 
   /**
-   * Returns false for all arcs
+   * Returns the defaultValue for all arcs
    *
    * @see com.googlecode.sarasvati.visual.ProcessToImageMap#isBackArc(com.googlecode.sarasvati.Arc)
    */
   @Override
-  public boolean isBackArc (Arc arc)
+  public boolean isBackArc (Arc arc, boolean defaultValue)
   {
-    return false;
+    return defaultValue;
   }
 
   /**

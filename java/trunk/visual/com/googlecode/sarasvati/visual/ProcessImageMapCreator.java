@@ -120,9 +120,9 @@ public class ProcessImageMapCreator
       }
 
       @Override
-      public boolean isBackArc (Arc arc)
+      public boolean isBackArc (Arc arc, boolean defaultValue)
       {
-        return processToImageMap.isBackArc( arc );
+        return processToImageMap.isBackArc( arc, defaultValue );
       }
 
       @Override
