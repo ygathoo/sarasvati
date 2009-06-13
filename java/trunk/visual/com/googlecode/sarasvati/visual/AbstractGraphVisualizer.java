@@ -44,6 +44,7 @@ import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.EndNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
 /**
@@ -96,7 +97,10 @@ public abstract class AbstractGraphVisualizer
         {
           @Override public Component apply (Node node)
           {
-            return "task".equals( node.getType() ) ?
+            if( "end".equalsIgnoreCase( node.getType() )){
+              return new JLabel( new EndNodeIcon());
+            }
+            return "task".equalsIgnoreCase( node.getType() ) ?
               new JLabel( new TaskIcon( node, null ) ) :
               new JLabel( new DefaultNodeIcon( node, null ) );
           }

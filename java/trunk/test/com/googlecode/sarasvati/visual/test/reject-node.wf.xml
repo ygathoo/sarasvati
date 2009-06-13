@@ -27,6 +27,9 @@
   
   <node name="6">
   	<arc to="3" name="reject"/>
+	<arc to="end"/>
   </node>
+  
+  <node name="end" type="end"/>
   
 </process-definition>

@@ -26,6 +26,7 @@ import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.EndNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
 import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
 import com.googlecode.sarasvati.visual.process.VisualProcessNode;
@@ -63,9 +64,15 @@ public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
 
   public Icon newIconForNode (VisualProcessNode node, SarasvatiProcessScene scene)
   {
-    if ( getTaskType().equals( node.getNode().getType() ) )
+    String nodeType = node.getNode().getType();
+    if ( nodeType.equalsIgnoreCase( getTaskType() ) )
     {
       return new TaskIcon( node.getNode(), node.getToken() );
+    }
+    
+    else if( nodeType.equalsIgnoreCase( "end" ) )
+    {
+      return new EndNodeIcon();
     }
 
     return new DefaultNodeIcon( node.getNode(), node.getToken() );

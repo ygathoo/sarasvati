@@ -65,7 +65,8 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
     engine.addNodeType( "node", HibNode.class );
     engine.addNodeType( "custom", CustomNode.class );
     engine.addNodeType( "wait", WaitNode.class );
-
+    engine.addNodeType( "end", HibNode.class);
+    
     GraphLoader<HibGraph> wfLoader = engine.getLoader();
 
     File baseDir = new File( "test/com/googlecode/sarasvati/visual/test/" );
