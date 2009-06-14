@@ -23,6 +23,7 @@ import javax.swing.Icon;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.EndNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
 import com.googlecode.sarasvati.visual.process.VisualProcessArc;
 import com.googlecode.sarasvati.visual.process.VisualProcessNode;
@@ -82,6 +83,10 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
     if ( getTaskType().equalsIgnoreCase( node.getNode().getType() ) )
     {
       return new TaskIcon( node.getNode(), node.getToken() );
+    }
+    else if ( node.getNode().getType().equalsIgnoreCase( "end" ) )
+    {
+      return new EndNodeIcon();
     }
     return new DefaultNodeIcon( node.getNode(), node.getToken() );
   }

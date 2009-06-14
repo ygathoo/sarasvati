@@ -23,6 +23,7 @@ import javax.swing.Icon;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.EndNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
 /**
@@ -81,6 +82,10 @@ public class GraphToImageMapAdapter implements GraphToImageMap
     if ( getTaskType().equalsIgnoreCase( node.getType() ) )
     {
       return new TaskIcon( node, null );
+    }
+    else if ( node.getType().equals( "end" ) )
+    {
+      return new EndNodeIcon();
     }
     return new DefaultNodeIcon( node, null );
   }
