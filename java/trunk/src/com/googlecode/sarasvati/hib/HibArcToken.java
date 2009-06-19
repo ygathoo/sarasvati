@@ -72,7 +72,7 @@ public class HibArcToken implements ArcToken
   protected HibArc     arc;
 
   @ForeignKey( name="FK_arctok_parent" )
-  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class)
+  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibNodeToken.class, cascade=CascadeType.REMOVE)
   @JoinColumn (name = "parent_token_id", nullable=false)
   protected NodeToken parentToken;
 
