@@ -29,8 +29,7 @@ public class DefaultFileXmlProcessDefinitionResolver implements
   protected File      basePath;
   protected XmlLoader loader;
 
-  public DefaultFileXmlProcessDefinitionResolver (XmlLoader loader,
-      File basePath)
+  public DefaultFileXmlProcessDefinitionResolver (XmlLoader loader, File basePath)
   {
     this.basePath = basePath;
     this.loader = loader;
