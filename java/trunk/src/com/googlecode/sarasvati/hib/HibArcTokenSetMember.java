@@ -19,6 +19,7 @@
 
 package com.googlecode.sarasvati.hib;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -39,7 +40,7 @@ public class HibArcTokenSetMember implements ArcTokenSetMember
   @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long    id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)
   @JoinColumn(name = "token_set_id", nullable=false)
   protected HibTokenSet tokenSet;
 

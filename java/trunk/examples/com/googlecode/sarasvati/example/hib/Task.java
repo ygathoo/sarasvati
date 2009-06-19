@@ -49,7 +49,7 @@ public class Task
 
   protected String    description;
 
-  @Enumerated(EnumType.STRING)
+  @Enumerated(EnumType.ORDINAL)
   protected TaskState state;
 
   public Task() { /* Default constructor for Hibernate */ }

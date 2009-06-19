@@ -21,8 +21,10 @@ package com.googlecode.sarasvati.example.hib;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 
@@ -138,6 +140,7 @@ public class HibExampleConsole
 
       if ( p.isComplete() )
       {
+        session.delete( p );
         trans.commit();
         session.close();
         System.out.println( "Workflow complete" );
@@ -283,13 +286,25 @@ public class HibExampleConsole
     }
   }
 
+  @SuppressWarnings("unchecked")
   public static HibGraph getGraph (HibEngine engine)
   {
     HibGraph graph = null;
 
     while ( graph == null )
     {
-      List<HibGraph> graphs = engine.getRepository().getGraphs();
+      List<String> graphNames =
+        engine.getSession()
+              .createSQLQuery( "select distinct name from wf_graph order by name" )
+              .addScalar( "name", Hibernate.STRING )
+              .list();
+
+      List<HibGraph> graphs = new ArrayList<HibGraph>( graphNames.size() );
+
+      for ( String graphName : graphNames )
+      {
+        graphs.add( engine.getRepository().getLatestGraph( graphName ) );
+      }
 
       int count = 0;
       for ( HibGraph g : graphs )

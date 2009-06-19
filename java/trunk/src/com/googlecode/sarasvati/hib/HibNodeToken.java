@@ -95,7 +95,7 @@ public class HibNodeToken implements NodeToken
   @OneToMany( fetch=FetchType.LAZY, targetEntity=HibArcToken.class, cascade= {CascadeType.ALL}, mappedBy="childToken" )
   protected List<ArcToken> parentTokens;
 
-  @OneToMany( mappedBy="parentToken", targetEntity=HibArcToken.class, fetch=FetchType.LAZY )
+  @OneToMany( mappedBy="parentToken", targetEntity=HibArcToken.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE )
   protected List<ArcToken> childTokens;
 
   @Temporal(TemporalType.TIMESTAMP)
