@@ -142,6 +142,8 @@ create table wf_node_ref
   instance  text   NOT NULL
 );
 
+create index wf_node_ref_graph_idx on wf_node_ref (graph_id);
+
 create table wf_arc
 (
   id            serial NOT NULL PRIMARY KEY,
@@ -150,6 +152,8 @@ create table wf_arc
   z_node_ref_id int    NOT NULL REFERENCES wf_node_ref,
   name          text   NULL
 );
+
+create index wf_arc_graph_idx on wf_arc (graph_id);
 
 create table wf_guard_action
 (

@@ -41,9 +41,6 @@ public class HibTestSetup
       config.setProperty( Environment.HBM2DDL_AUTO, "create-drop" );
     }
 
-    //config.setProperty( "hibernate.show_sql", "true" );
-    //config.setProperty( "hibernate.format_sql", "true" );
-
     HibEngine.addToConfiguration( config, false );
 
     config.addAnnotatedClass( HibExampleTaskNode.class );

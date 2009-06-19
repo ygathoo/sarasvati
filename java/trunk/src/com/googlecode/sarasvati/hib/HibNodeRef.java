@@ -32,6 +32,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
@@ -53,6 +54,7 @@ public class HibNodeRef implements Node
   @JoinColumn(name="node_id")
   protected HibNode node;
 
+  @Index(name="wf_node_ref_graph_idx")
   @ForeignKey(name="FK_ref_graph")
   @ManyToOne (fetch=FetchType.EAGER)
   @JoinColumn (name="graph_id")
