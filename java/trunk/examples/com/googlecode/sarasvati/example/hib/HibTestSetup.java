@@ -50,6 +50,15 @@ public class HibTestSetup
     config.addAnnotatedClass( AsyncNode.class );
 
     URL url = HibTestSetup.class.getClassLoader().getResource( "hibernate.cfg.xml" );
+
+    if ( url == null )
+    {
+      System.out.println( "ERROR: No hibernate.cfg.xml found in classpath!\n" +
+                          "\tIn order to run the examples, you must create hibernate.cfg.xml in the examples/ directory.\n" +
+                          "\tYou can use the entries in conf/ as a starting point." );
+      System.exit( -1 );
+    }
+
     config.configure( url );
     sessionFactory = config.buildSessionFactory();
   }

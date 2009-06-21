@@ -23,7 +23,7 @@ insert into wf_task_state values ( 3, 'Canceled' );
 create table wf_task
 (
   id            serial NOT NULL PRIMARY KEY,
-  node_token_id int    NOT NULL REFERENCES wf_node_token,
+  node_token_id int    NULL REFERENCES wf_node_token,
   name          text   NOT NULL,
   description   text   NOT NULL,
   state         int    NOT NULL REFERENCES wf_task_state
