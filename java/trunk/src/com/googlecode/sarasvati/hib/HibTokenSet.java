@@ -44,8 +44,10 @@ import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.env.TokenSetMemberEnv;
@@ -87,6 +89,20 @@ public class HibTokenSet implements TokenSet
   @Column( name="value")
   @Cascade( org.hibernate.annotations.CascadeType.DELETE )
   protected Map<String, String> attrMap;
+
+  @OneToMany (mappedBy="tokenSet",
+      targetEntity=HibArcTokenSetMember.class,
+      fetch=FetchType.LAZY,
+      cascade=CascadeType.REMOVE)
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
+  protected Set<ArcTokenSetMember> arcTokenSetMembers;
+
+  @OneToMany (mappedBy="tokenSet",
+      targetEntity=HibNodeTokenSetMember.class,
+      fetch=FetchType.LAZY,
+      cascade=CascadeType.REMOVE)
+  @Cascade( org.hibernate.annotations.CascadeType.LOCK )
+  protected Set<NodeTokenSetMember> nodeTokenSetMembers;
 
   @Transient
   protected Env env;
@@ -168,6 +184,27 @@ public class HibTokenSet implements TokenSet
   public void setAttrMap (Map<String, String> attrMap)
   {
     this.attrMap = attrMap;
+  }
+
+
+  public Set<ArcTokenSetMember> getArcTokenSetMembers ()
+  {
+    return arcTokenSetMembers;
+  }
+
+  public void setArcTokenSetMembers (Set<ArcTokenSetMember> arcTokenSetMembers)
+  {
+    this.arcTokenSetMembers = arcTokenSetMembers;
+  }
+
+  public Set<NodeTokenSetMember> getNodeTokenSetMembers ()
+  {
+    return nodeTokenSetMembers;
+  }
+
+  public void setNodeTokenSetMembers (Set<NodeTokenSetMember> nodeTokenSetMembers)
+  {
+    this.nodeTokenSetMembers = nodeTokenSetMembers;
   }
 
   @Override

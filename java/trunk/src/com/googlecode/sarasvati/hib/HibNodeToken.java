@@ -70,17 +70,17 @@ public class HibNodeToken implements NodeToken
 
   @ForeignKey(name="FK_nodetok_process")
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "process_id")
+  @JoinColumn(name = "process_id", nullable=false)
   protected HibGraphProcess process;
 
   @ForeignKey(name="FK_nodetok_ref")
   @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "node_ref_id")
+  @JoinColumn(name = "node_ref_id", nullable=false)
   protected HibNodeRef nodeRef;
 
   @ForeignKey(name="FK_nodetok_attr_node")
   @ManyToOne(fetch = FetchType.EAGER)
-  @JoinColumn(name = "attr_set_id")
+  @JoinColumn(name = "attr_set_id", nullable=true)
   protected HibNodeToken attrSetToken;
 
   @ForeignKey(name="FK_nodetok_attr")
@@ -92,7 +92,7 @@ public class HibNodeToken implements NodeToken
   protected Map<String, String> attrMap;
 
   @ForeignKey(name="FK_nodetok_parent", inverseName="FK_nodetok_child")
-  @OneToMany( fetch=FetchType.LAZY, targetEntity=HibArcToken.class, cascade= {CascadeType.ALL}, mappedBy="childToken" )
+  @OneToMany( fetch=FetchType.LAZY, targetEntity=HibArcToken.class, cascade=CascadeType.ALL, mappedBy="childToken" )
   protected List<ArcToken> parentTokens;
 
   @OneToMany( mappedBy="parentToken", targetEntity=HibArcToken.class, fetch=FetchType.LAZY, cascade=CascadeType.REMOVE )

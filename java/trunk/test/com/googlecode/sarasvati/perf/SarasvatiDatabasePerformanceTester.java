@@ -183,6 +183,7 @@ public class SarasvatiDatabasePerformanceTester
     perfTester.init();
 
     System.out.println( "================================START========================================" );
-    perfTester.runTest( 1, 1 );
+    perfTester.runTest( 100, 10 );
+    perfTester.dumpStats();
   }
 }

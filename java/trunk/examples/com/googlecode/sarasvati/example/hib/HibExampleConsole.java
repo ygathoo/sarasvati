@@ -140,6 +140,16 @@ public class HibExampleConsole
 
       if ( p.isComplete() )
       {
+        List<Task> tasks =
+          session
+            .createQuery( "from Task where nodeToken.process = :p order by state" )
+            .setEntity( "p", p )
+            .list();
+        for ( Task task : tasks )
+        {
+          task.setNodeToken(  null );
+        }
+
         session.delete( p );
         trans.commit();
         session.close();
