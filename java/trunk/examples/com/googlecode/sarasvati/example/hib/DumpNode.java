@@ -32,10 +32,15 @@ import com.googlecode.sarasvati.hib.HibNode;
 @NodeType( "Print out a message when executed" )
 public class DumpNode extends HibNode
 {
+  public static boolean doPrint = true;
+
   @Override
   public void execute (Engine engine, NodeToken token)
   {
-    System.out.println( "Accepted into: " + getName() );
+    if( doPrint )
+    {
+      System.out.println( "Accepted into: " + getName() );
+    }
 
     if ( token.getProcess().getParentToken() != null )
     {

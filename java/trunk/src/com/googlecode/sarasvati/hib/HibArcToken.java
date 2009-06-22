@@ -44,6 +44,7 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -55,6 +56,7 @@ import com.googlecode.sarasvati.visitor.TokenVisitor;
 
 @Entity
 @Table (name="wf_arc_token")
+@org.hibernate.annotations.Table( appliesTo="wf_arc_token", indexes={@Index(name="wf_arc_token_idx", columnNames={"process_id", "complete_date", "pending"} )} )
 public class HibArcToken implements ArcToken
 {
   @Id

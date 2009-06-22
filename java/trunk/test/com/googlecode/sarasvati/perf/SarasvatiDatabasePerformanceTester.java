@@ -30,8 +30,10 @@ import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.example.ApprovalNode;
 import com.googlecode.sarasvati.example.ApprovalSetupNode;
 import com.googlecode.sarasvati.example.CustomTestNode;
@@ -42,10 +44,13 @@ import com.googlecode.sarasvati.example.hib.HibExampleTaskNode;
 import com.googlecode.sarasvati.example.hib.HibTestSetup;
 import com.googlecode.sarasvati.example.hib.InitNode;
 import com.googlecode.sarasvati.hib.HibEngine;
+import com.googlecode.sarasvati.hib.HibGraphProcess;
 import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.impl.NestedProcessNode;
 import com.googlecode.sarasvati.impl.ScriptNode;
 import com.googlecode.sarasvati.impl.WaitNode;
+import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
+import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
@@ -101,7 +106,7 @@ public class SarasvatiDatabasePerformanceTester
     return engine;
   }
 
-  public long testLoad (String name) throws Exception
+  public long testLoad (final String name) throws Exception
   {
     HibEngine engine = newEngine();
     long start = System.currentTimeMillis();
@@ -139,8 +144,8 @@ public class SarasvatiDatabasePerformanceTester
     engine.getSession().close();
   }
 
-  public void runTest (final int iterations,
-                       final int avgRollover)
+  public void runGraphTest (final int iterations,
+                            final int avgRollover)
     throws Exception
   {
     TestPerfStats.setRollover( avgRollover );
@@ -175,15 +180,81 @@ public class SarasvatiDatabasePerformanceTester
     }
   }
 
-  public static void main (String[] args) throws Exception
+  public void testProcess (final String graphName,
+                           final int iterations)
+    throws Exception
+  {
+    for ( int count = 0; count < iterations; count++ )
+    {
+      HibEngine engine = newEngine();
+      HibGraphProcess p = (HibGraphProcess) engine.startProcess( graphName );
+
+      long processId = p.getId();
+
+      engine.getSession().getTransaction().commit();
+      engine.getSession().close();
+
+      while ( !p.isComplete() )
+      {
+        int iter = 0;
+        engine = newEngine();
+
+        long start = System.currentTimeMillis();
+        p = engine.getRepository().findProcess( processId );
+
+        while ( !p.getExecutionQueue().isEmpty() && iter < 202)
+        {
+          engine.executeQueuedArcTokens( p );
+          iter++;
+        }
+        engine.getSession().getTransaction().commit();
+        engine.getSession().close();
+        System.out.println( "Iteration " + count + ". Execute time: " + (System.currentTimeMillis() - start ) );
+      }
+    }
+  }
+
+  public static void main (final String[] args) throws Exception
   {
     HibTestSetup.init( false );
 
     SarasvatiDatabasePerformanceTester perfTester = new SarasvatiDatabasePerformanceTester();
     perfTester.init();
 
+    DefaultRubricFunctionRepository repository = DefaultRubricFunctionRepository.getGlobalInstance();
+
+    repository.registerPredicate( "isRandOdd", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( Engine engine, NodeToken token )
+      {
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 1;
+      }
+    });
+
+    repository.registerPredicate( "isRandEven", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( Engine engine, NodeToken token )
+      {
+        return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 0;
+      }
+    });
+
+    repository.registerPredicate( "isTenthIteration", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( Engine engine, NodeToken token )
+      {
+        return token.getEnv().getAttribute( "iter", Long.class ) == 100;
+      }
+    });
+
+    DumpNode.doPrint = false;
+
     System.out.println( "================================START========================================" );
-    perfTester.runTest( 100, 10 );
-    perfTester.dumpStats();
+    perfTester.testProcess( "random-guard", 100 );
+    //perfTester.runGraphTest( 100, 10 );
+    //perfTester.dumpStats();
   }
 }

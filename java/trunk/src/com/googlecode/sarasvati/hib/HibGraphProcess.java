@@ -49,6 +49,7 @@ import javax.persistence.Version;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Where;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -67,6 +68,7 @@ import com.googlecode.sarasvati.impl.MapEnv;
 
 @Entity
 @Table (name="wf_process")
+@org.hibernate.annotations.Table( appliesTo="wf_process", indexes={@Index(name="wf_process_idx", columnNames={"graph_id", "state"} )} )
 public class HibGraphProcess implements GraphProcess
 {
   @Id

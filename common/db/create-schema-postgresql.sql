@@ -61,6 +61,8 @@ create table wf_process
   version         int          NOT NULL
 );
 
+create index wf_process_idx on wf_process (graph_id, state);
+
 create table wf_process_attr
 (
   process_id  int  NOT NULL REFERENCES wf_process,
@@ -189,6 +191,8 @@ create table wf_node_token
   complete_date   timestamp NULL
 );
 
+create index wf_node_token_idx on wf_node_token(process_id, complete_date);
+
 ALTER TABLE wf_process
   ADD CONSTRAINT FK_process_parent
     FOREIGN KEY (parent_token_id)
@@ -206,11 +210,20 @@ create table wf_arc_token
   complete_date   timestamp NULL
 );
 
+create index wf_arc_token_idx on wf_arc_token(process_id, complete_date, pending);
+
+create index wf_arc_token_parent_idx on wf_arc_token(parent_token_id);
+
 create table wf_node_token_parent
 (
    node_token_id INT NOT NULL REFERENCES wf_node_token,
    arc_token_id  INT NOT NULL REFERENCES wf_arc_token
 );
+
+ALTER TABLE wf_node_token_parent
+  ADD PRIMARY KEY (node_token_id, arc_token_id);
+
+create index wf_node_token_parent_idx on wf_node_token_parent (arc_token_id);
 
 create table wf_token_attr
 (
@@ -249,6 +262,8 @@ create table wf_token_set_arcmem
   member_index  int     NOT NULL
 );
 
+create index wf_token_set_arcmem_idx on wf_token_set_arcmem(token_id);
+
 create table wf_token_set_nodemem
 (
   id            serial  NOT NULL PRIMARY KEY,
@@ -256,6 +271,8 @@ create table wf_token_set_nodemem
   token_id      int     NOT NULL REFERENCES wf_node_token,
   member_index  int     NOT NULL
 );
+
+create index wf_token_set_nodemem_idx on wf_token_set_nodemem(token_id);
 
 create table wf_token_set_member_attr
 (
