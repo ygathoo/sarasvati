@@ -44,6 +44,20 @@ import com.googlecode.sarasvati.script.ScriptEnv;
 public interface Engine
 {
   /**
+   * Starts an instance of the latest graph with the given name.
+   * Is the equivalent of doing
+   * <code>
+   *  Graph graph = engine.getRepository().getLatestGraph( graphName );
+   *  GraphProcess process = engine.startProcess( graph );
+   * </code>
+   *
+   * @param graphName The name of the graph to execute.
+   *
+   * @return The new GraphProcess.
+   */
+  GraphProcess startProcess (String graphName);
+
+  /**
    * Given a {@link Graph}, creates a new {@link GraphProcess} executing that graph.
    * A {@link NodeToken} will be generated on each start nodes (determined by
    * {@link Graph#getStartNodes()}), and these NodeTokens will be executed.

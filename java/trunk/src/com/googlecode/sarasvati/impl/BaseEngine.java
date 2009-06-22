@@ -75,6 +75,18 @@ public abstract class BaseEngine implements Engine
   protected BaseEngine parentEngine;
 
   @Override
+  public GraphProcess startProcess (String graphName)
+  {
+    Graph graph = getRepository().getLatestGraph( graphName );
+    if ( graph == null )
+    {
+      throw new WorkflowException( "No graph found with name '" + graphName + "'" );
+    }
+
+    return startProcess( graph );
+  }
+
+  @Override
   public GraphProcess startProcess (Graph graph)
   {
     GraphProcess process = getFactory().newProcess( graph );
