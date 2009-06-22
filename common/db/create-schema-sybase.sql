@@ -32,9 +32,9 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_state') drop table wf
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_graph') drop table wf_graph
 go
 
--------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
 -- CREATE NEW TABLES
--------------------------------------------------------------------------------
+-- -----------------------------------------------------------------------------
 
 
 create table wf_graph
