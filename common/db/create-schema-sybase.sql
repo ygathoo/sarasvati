@@ -6,6 +6,13 @@ go
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_task') drop table wf_task
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_task_state') drop table wf_task_state
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_task') drop table wf_node_task
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_set_attr') drop table wf_token_set_attr
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_set_member_attr') drop table wf_token_set_member_attr
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_set_arcmem') drop table wf_token_set_arcmem
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_set_nodemem') drop table wf_token_set_nodemem
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_set') drop table wf_token_set
+
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_token_attr') drop table wf_token_attr
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token_parent') drop table wf_node_token_parent
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc_token') drop table wf_arc_token
@@ -25,7 +32,10 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_state') drop table wf
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_graph') drop table wf_graph
 go
 
+-------------------------------------------------------------------------------
 -- CREATE NEW TABLES
+-------------------------------------------------------------------------------
+
 
 create table wf_graph
 (
@@ -66,6 +76,9 @@ create table wf_process
   create_date     datetime              DEFAULT getDate() NOT NULL,
   version         int                   NOT NULL
 ) with identity_gap = 10
+go
+
+create index wf_process_idx on wf_process (graph_id, state)
 go
 
 create table wf_process_attr
@@ -119,6 +132,8 @@ go
 insert into wf_node_join_type values ( 0, 'Or: Join is completed whenever any arc token arrives at the node' )
 insert into wf_node_join_type values ( 1, 'And: Join is completed when there are arc tokens on all incoming arcs to a node' )
 insert into wf_node_join_type values ( 2, 'Label And: Join is completed when there are arc tokens on all incoming arcs with the same name as that of the arc that the current incoming arc token is on.' )
+insert into wf_node_join_type values ( 3, 'TokenSet And: Join is completed when all active arc tokens in the token set arrive and there are no active node tokens.' )
+insert into wf_node_join_type values ( 4, 'Custom: User defined join type' )
 go
 
 create table wf_node
@@ -127,6 +142,7 @@ create table wf_node
   graph_id        bigint                NOT NULL REFERENCES wf_graph,
   name            varchar(255)          NOT NULL,
   join_type       int                   NOT NULL REFERENCES wf_node_join_type,
+  join_param      varchar(255)         NULL,
   is_start        char(1)               NOT NULL,
   type            varchar(255)          NOT NULL REFERENCES wf_node_type,
   guard           varchar(255)          NULL
@@ -159,6 +175,9 @@ create table wf_node_ref
 ) with identity_gap = 10
 go
 
+create index wf_node_ref_graph_idx on wf_node_ref (graph_id)
+go
+
 create table wf_arc
 (
   id            bigint       IDENTITY NOT NULL PRIMARY KEY,
@@ -167,6 +186,9 @@ create table wf_arc
   z_node_ref_id bigint                NOT NULL REFERENCES wf_node_ref,
   name          varchar(255)          NULL
 ) with identity_gap = 10
+go
+
+create index wf_arc_graph_idx on wf_arc (graph_id)
 go
 
 create table wf_guard_action
@@ -208,6 +230,9 @@ create table wf_node_token
 ) with identity_gap = 100
 go
 
+create index wf_node_token_idx on wf_node_token(process_id, complete_date)
+go
+
 ALTER TABLE wf_process
   ADD CONSTRAINT FK_process_parent
     FOREIGN KEY (parent_token_id)
@@ -227,11 +252,20 @@ create table wf_arc_token
 ) with identity_gap = 100
 go
 
+create index wf_arc_token_idx on wf_arc_token(process_id, complete_date, pending)
+go
+
+create index wf_arc_token_parent_idx on wf_arc_token(parent_token_id)
+go
+
 create table wf_node_token_parent
 (
    node_token_id bigint NOT NULL REFERENCES wf_node_token,
    arc_token_id  bigint NOT NULL REFERENCES wf_arc_token
 )
+go
+
+create index wf_node_token_parent_idx on wf_node_token_parent (arc_token_id)
 go
 
 create table wf_token_attr
@@ -244,4 +278,59 @@ go
 
 ALTER TABLE wf_token_attr
   ADD PRIMARY KEY (attr_set_id, name)
+go
+
+create table wf_token_set
+(
+  id               bigint  IDENTITY NOT NULL PRIMARY KEY,
+  process_id       bigint           NOT NULL REFERENCES wf_process,
+  name             varchar(255)     NOT NULL,
+  max_member_index int              NOT NULL,
+  complete         char(1)          NOT NULL
+) with identity_gap = 100
+go
+
+create table wf_token_set_attr
+(
+  token_set_id  bigint       NOT NULL REFERENCES wf_token_set,
+  name          varchar(64)  NOT NULL,
+  value         varchar(255) NULL
+)
+go
+
+ALTER TABLE wf_token_set_attr
+  ADD PRIMARY KEY (token_set_id, name)
+go
+
+create table wf_token_set_arcmem
+(
+  id            bigint  IDENTITY NOT NULL PRIMARY KEY,
+  token_set_id  bigint           NOT NULL REFERENCES wf_token_set,
+  token_id      bigint           NOT NULL REFERENCES wf_arc_token,
+  member_index  int              NOT NULL
+) with identity_gap = 100
+go
+
+create index wf_token_set_arcmem_idx on wf_token_set_arcmem(token_id)
+go
+
+create table wf_token_set_nodemem
+(
+  id            bigint  IDENTITY NOT NULL PRIMARY KEY,
+  token_set_id  bigint           NOT NULL REFERENCES wf_token_set,
+  token_id      bigint           NOT NULL REFERENCES wf_node_token,
+  member_index  int              NOT NULL
+) with identity_gap = 100
+
+create index wf_token_set_nodemem_idx on wf_token_set_nodemem(token_id)
+go
+
+create table wf_token_set_member_attr
+(
+  id            bigint IDENTITY NOT NULL PRIMARY KEY,
+  token_set_id  bigint          NOT NULL REFERENCES wf_token_set,
+  member_index  int             NOT NULL,
+  name          varchar(64)     NOT NULL,
+  value         varchar(255)    NULL
+)
 go
