@@ -22,6 +22,7 @@ import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RecognizerSharedState;
 import org.antlr.runtime.TokenStream;
 
+import com.googlecode.sarasvati.rubric.RubricCompilationException;
 import com.googlecode.sarasvati.rubric.RubricException;
 
 public class ErrorReportingRubricParser extends RubricParser
@@ -50,7 +51,7 @@ public class ErrorReportingRubricParser extends RubricParser
 
     message += " at line " + re.line + ", character " + re.charPositionInLine;
 
-    RubricException ne = new RubricException( re, message );
+    RubricException ne = new RubricCompilationException( re, message );
 
     if (e == null)
     {

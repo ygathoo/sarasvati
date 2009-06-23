@@ -90,6 +90,7 @@ public class TestHibLoad
 
       try
       {
+        System.out.println( "Starting load of " + name );
         wfLoader.loadWithDependencies( name, resolver );
         System.out.println( "Loaded " + name );
       }

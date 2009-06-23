@@ -2,7 +2,7 @@ package com.googlecode.sarasvati.event;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.SarasvatiException;
 
 public class ListenerCache
 {
@@ -22,7 +22,7 @@ public class ListenerCache
       }
       catch (Exception e)
       {
-        throw new WorkflowException( "Failed to instantiate ExecutionListener of type " + type, e );
+        throw new SarasvatiException( "Failed to instantiate ExecutionListener of type " + type, e );
       }
     }
 

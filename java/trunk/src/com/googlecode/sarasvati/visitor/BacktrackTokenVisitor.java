@@ -16,7 +16,7 @@ import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.TokenSet;
-import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.SarasvatiException;
 
 public class BacktrackTokenVisitor implements TokenVisitor
 {
@@ -45,7 +45,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
   {
     if ( !token.getNode().isBacktrackable( engine, token ) )
     {
-      throw new WorkflowException( "Can not backtrack node name: " +
+      throw new SarasvatiException( "Can not backtrack node name: " +
                                    token.getNode().getName()  +
                                    "id: " + token.getNode().getId() );
     }

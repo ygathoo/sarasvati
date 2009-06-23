@@ -28,10 +28,10 @@ drop table if exists wf_graph cascade;
 
 create table wf_graph
 (
-  id          serial    NOT NULL PRIMARY KEY,
-  name        text      NOT NULL,
-  version     int       NOT NULL,
-  create_date timestamp NOT NULL DEFAULT current_timestamp
+  id              serial    NOT NULL PRIMARY KEY,
+  name            text      NOT NULL,
+  version         int       NOT NULL,
+  create_date     timestamp NOT NULL DEFAULT current_timestamp
 );
 
 ALTER TABLE wf_graph
@@ -67,7 +67,7 @@ create table wf_process_attr
 (
   process_id  int  NOT NULL REFERENCES wf_process,
   name        text NOT NULL,
-  value       text NOT NULL
+  value       text NULL
 );
 
 ALTER TABLE wf_process_attr
@@ -130,7 +130,7 @@ create table wf_node_attr
 (
   node_id  int  NOT NULL REFERENCES wf_node,
   name     text NOT NULL,
-  value    text NOT NULL
+  value    text NULL
 );
 
 ALTER TABLE wf_node_attr
@@ -229,7 +229,7 @@ create table wf_token_attr
 (
   attr_set_id  int  NOT NULL REFERENCES wf_node_token,
   name         text NOT NULL,
-  value        text NOT NULL
+  value        text NULL
 );
 
 ALTER TABLE wf_token_attr
@@ -247,8 +247,8 @@ create table wf_token_set
 create table wf_token_set_attr
 (
   token_set_id  int  NOT NULL REFERENCES wf_token_set,
-  name        text NOT NULL,
-  value       text NULL
+  name          text NOT NULL,
+  value         text NULL
 );
 
 ALTER TABLE wf_token_set_attr
@@ -262,7 +262,8 @@ create table wf_token_set_arcmem
   member_index  int     NOT NULL
 );
 
-create index wf_token_set_arcmem_idx on wf_token_set_arcmem(token_id);
+create index wf_token_set_arcmem_t_idx on wf_token_set_arcmem(token_id);
+create index wf_token_set_arcmem_ts_idx on wf_token_set_arcmem(token_set_id);
 
 create table wf_token_set_nodemem
 (
@@ -272,13 +273,16 @@ create table wf_token_set_nodemem
   member_index  int     NOT NULL
 );
 
-create index wf_token_set_nodemem_idx on wf_token_set_nodemem(token_id);
+create index wf_token_set_nodemem_t_idx on wf_token_set_nodemem(token_id);
+create index wf_token_set_nodemem_ts_idx on wf_token_set_nodemem(token_set_id);
 
 create table wf_token_set_member_attr
 (
-  id            serial  NOT NULL PRIMARY KEY,
-  token_set_id  int  NOT NULL REFERENCES wf_token_set,
-  member_index  int NOT NULL,
-  name          text NOT NULL,
-  value         text NULL
+  id            serial NOT NULL PRIMARY KEY,
+  token_set_id  int    NOT NULL REFERENCES wf_token_set,
+  member_index  int    NOT NULL,
+  name          text   NOT NULL,
+  value         text   NULL
 );
+
+create index wf_token_set_member_attr_idx on wf_token_set_member_attr(token_set_id);

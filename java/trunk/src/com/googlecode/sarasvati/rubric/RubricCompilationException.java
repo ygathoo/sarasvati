@@ -2,17 +2,21 @@ package com.googlecode.sarasvati.rubric;
 
 import org.antlr.runtime.RecognitionException;
 
-public class RubricException extends RuntimeException
+public class RubricCompilationException extends RubricException
 {
   private static final long serialVersionUID = 1L;
 
-  public RubricException (String message)
+  protected RecognitionException re;
+
+  public RubricCompilationException (RecognitionException re, String message)
   {
     super( message );
+    this.re = re;
   }
 
+  @Override
   public RecognitionException getRecognitionException ()
   {
-    return null;
+    return re;
   }
 }

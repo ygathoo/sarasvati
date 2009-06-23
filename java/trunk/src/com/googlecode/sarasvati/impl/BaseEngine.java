@@ -41,7 +41,7 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.TokenSet;
-import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.env.TokenSetMemberEnv;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
@@ -80,7 +80,7 @@ public abstract class BaseEngine implements Engine
     Graph graph = getRepository().getLatestGraph( graphName );
     if ( graph == null )
     {
-      throw new WorkflowException( "No graph found with name '" + graphName + "'" );
+      throw new SarasvatiException( "No graph found with name '" + graphName + "'" );
     }
 
     return startProcess( graph );
@@ -443,12 +443,12 @@ public abstract class BaseEngine implements Engine
   {
     if ( !token.isComplete() )
     {
-      throw new WorkflowException( "Cannot backtrack to a node token which isn't completed." );
+      throw new SarasvatiException( "Cannot backtrack to a node token which isn't completed." );
     }
 
     if ( token.getExecutionType().isBacktracked() )
     {
-      throw new WorkflowException( "Cannot backtrack to a node token which has been backtracked." );
+      throw new SarasvatiException( "Cannot backtrack to a node token which has been backtracked." );
     }
 
     NodeToken resultToken = null;

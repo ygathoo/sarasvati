@@ -21,7 +21,7 @@ package com.googlecode.sarasvati.script;
 import org.apache.bsf.BSFException;
 import org.apache.bsf.BSFManager;
 
-import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.SarasvatiException;
 
 public class BSFManagerEnv implements ScriptEnv
 {
@@ -42,7 +42,7 @@ public class BSFManagerEnv implements ScriptEnv
     }
     catch( BSFException bsfe )
     {
-      throw new WorkflowException( "Failed to set variable: " + name, bsfe );
+      throw new SarasvatiException( "Failed to set variable: " + name, bsfe );
     }
   }
 }

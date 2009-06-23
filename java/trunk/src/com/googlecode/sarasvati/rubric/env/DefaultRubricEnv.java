@@ -24,6 +24,7 @@ import java.util.Date;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.rubric.RubricException;
 
 /**
  * Basic RubricEnv implementation which uses a {@link RubricFunctionRepository}
@@ -49,13 +50,23 @@ public class DefaultRubricEnv implements RubricEnv
   @Override
   public Date evalDateFunction (String dateFunction)
   {
-    return functionRepository.getDateFunction( dateFunction ).eval( engine, token );
+    RubricDateFunction rubricDateFunction = functionRepository.getDateFunction( dateFunction );
+    if ( rubricDateFunction == null )
+    {
+      throw new RubricException( "Evaluation failed. Unknown date function '" + dateFunction + "'" );
+    }
+    return rubricDateFunction.eval( engine, token );
   }
 
   @Override
   public boolean evalPredicate (String predicate)
   {
-    return functionRepository.getPredicate( predicate ).eval( engine, token );
+    RubricPredicate rubricPredicate = functionRepository.getPredicate( predicate );
+    if ( rubricPredicate == null )
+    {
+      throw new RubricException( "Evaluation failed. Unknown predicate '" + predicate + "'" );
+    }
+    return rubricPredicate.eval( engine, token );
   }
 
   @Override

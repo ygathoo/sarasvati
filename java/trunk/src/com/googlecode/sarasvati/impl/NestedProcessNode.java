@@ -23,7 +23,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.SarasvatiException;
 
 /**
  * Node type for nested processes. Stores the name of the graph to be
@@ -52,7 +52,7 @@ public class NestedProcessNode extends CustomNode
 
     if ( subGraph == null )
     {
-      throw new WorkflowException( "No version of graph named '" + graphName + "'. " +
+      throw new SarasvatiException( "No version of graph named '" + graphName + "'. " +
                                    "Used by node " + getName() + " in graph " + getGraph().getName() );
     }
 

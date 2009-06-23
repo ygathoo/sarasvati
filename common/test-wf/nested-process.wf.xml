@@ -24,9 +24,7 @@
 
     <custom>
       <taskName>Test task</taskName>
-      <taskDesc>
-        This is here to provide a wait state
-      </taskDesc>
+      <taskDesc>This is here to provide a wait state</taskDesc>
     </custom>
   </node>
 

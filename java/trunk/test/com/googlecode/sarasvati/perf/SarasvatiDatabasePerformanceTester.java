@@ -58,7 +58,7 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
 public class SarasvatiDatabasePerformanceTester
 {
-  private static final Set<String> allowed = new HashSet<String>();
+  protected static final Set<String> allowed = new HashSet<String>();
 
   static
   {
@@ -250,10 +250,20 @@ public class SarasvatiDatabasePerformanceTester
       }
     });
 
+    repository.registerPredicate( "Approved", new RubricPredicate()
+    {
+      @Override
+      public boolean eval( Engine engine, NodeToken token )
+      {
+        return true;
+      }
+    });
+
+
     DumpNode.doPrint = false;
 
     System.out.println( "================================START========================================" );
-    perfTester.testProcess( "random-guard", 100 );
+    perfTester.testProcess( "random-guard", 1000 );
     //perfTester.runGraphTest( 100, 10 );
     //perfTester.dumpStats();
   }
