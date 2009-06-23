@@ -18,16 +18,16 @@
 */
 package com.googlecode.sarasvati;
 
-public class WorkflowException extends RuntimeException
+public class SarasvatiException extends RuntimeException
 {
   private static final long serialVersionUID = 1L;
 
-  public WorkflowException( String message )
+  public SarasvatiException( String message )
   {
     super( message );
   }
 
-  public WorkflowException( String message, Throwable cause )
+  public SarasvatiException( String message, Throwable cause )
   {
     super( message, cause );
   }

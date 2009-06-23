@@ -23,7 +23,7 @@ import org.apache.bsf.BSFManager;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.SarasvatiException;
 
 public class BSFScriptRunner implements ScriptRunner
 {
@@ -49,7 +49,7 @@ public class BSFScriptRunner implements ScriptRunner
     }
     catch (BSFException e)
     {
-      throw new WorkflowException( "Script of type " + scriptType + " failed to execute. " +
+      throw new SarasvatiException( "Script of type " + scriptType + " failed to execute. " +
                                    "Script content: " + script, e );
     }
   }

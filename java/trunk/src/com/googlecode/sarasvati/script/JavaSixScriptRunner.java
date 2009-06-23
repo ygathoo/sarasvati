@@ -29,7 +29,7 @@ import javax.script.ScriptException;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.WorkflowException;
+import com.googlecode.sarasvati.SarasvatiException;
 
 public class JavaSixScriptRunner implements ScriptRunner
 {
@@ -58,7 +58,7 @@ public class JavaSixScriptRunner implements ScriptRunner
 
       if ( scriptEngine == null )
       {
-        throw new WorkflowException( "No script engine found for type '" + scriptType + "'. " +
+        throw new SarasvatiException( "No script engine found for type '" + scriptType + "'. " +
                                      "Searched by file extension (i.e. js for javascript, rb for ruby, etc..)" );
       }
 
@@ -67,8 +67,8 @@ public class JavaSixScriptRunner implements ScriptRunner
     }
     catch ( ScriptException se )
     {
-      throw new WorkflowException( "Script of type " + scriptType + " failed to execute. " +
-                                   "Script content: " + script, se );
+      throw new SarasvatiException( "Script of type " + scriptType + " failed to execute. " +
+                                    "Script content: \n" + script, se );
     }
   }
 

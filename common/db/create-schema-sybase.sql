@@ -83,9 +83,9 @@ go
 
 create table wf_process_attr
 (
-  process_id   bigint       NOT NULL REFERENCES wf_process,
-  name         varchar(64)  NOT NULL,
-  value        varchar(255) NOT NULL
+  process_id   bigint        NOT NULL REFERENCES wf_process,
+  name         varchar(64)   NOT NULL,
+  value        varchar(2000) NULL
 )
 go
 
@@ -156,9 +156,9 @@ go
 
 create table wf_node_attr
 (
-  node_id  bigint       NOT NULL REFERENCES wf_node,
-  name     varchar(255) NOT NULL,
-  value    varchar(255) NOT NULL
+  node_id  bigint        NOT NULL REFERENCES wf_node,
+  name     varchar(255)  NOT NULL,
+  value    varchar(2000) NULL
 )
 go
 
@@ -270,9 +270,9 @@ go
 
 create table wf_token_attr
 (
-  attr_set_id  bigint       NOT NULL REFERENCES wf_node_token,
-  name         varchar(64)  NOT NULL,
-  value        varchar(255) NOT NULL
+  attr_set_id  bigint        NOT NULL REFERENCES wf_node_token,
+  name         varchar(64)   NOT NULL,
+  value        varchar(2000) NULL
 )
 go
 
@@ -292,9 +292,9 @@ go
 
 create table wf_token_set_attr
 (
-  token_set_id  bigint       NOT NULL REFERENCES wf_token_set,
-  name          varchar(64)  NOT NULL,
-  value         varchar(255) NULL
+  token_set_id  bigint        NOT NULL REFERENCES wf_token_set,
+  name          varchar(64)   NOT NULL,
+  value         varchar(2000) NULL
 )
 go
 
@@ -311,8 +311,10 @@ create table wf_token_set_arcmem
 ) with identity_gap = 100
 go
 
-create index wf_token_set_arcmem_idx on wf_token_set_arcmem(token_id)
+create index wf_token_set_arcmem_t_idx on wf_token_set_arcmem(token_id)
+create index wf_token_set_arcmem_ts_idx on wf_token_set_arcmem(token_set_id)
 go
+
 
 create table wf_token_set_nodemem
 (
@@ -322,15 +324,19 @@ create table wf_token_set_nodemem
   member_index  int              NOT NULL
 ) with identity_gap = 100
 
-create index wf_token_set_nodemem_idx on wf_token_set_nodemem(token_id)
+create index wf_token_set_nodemem_t_idx on wf_token_set_nodemem(token_id)
+create index wf_token_set_nodemem_ts_idx on wf_token_set_nodemem(token_set_id)
 go
 
 create table wf_token_set_member_attr
 (
-  id            bigint IDENTITY NOT NULL PRIMARY KEY,
-  token_set_id  bigint          NOT NULL REFERENCES wf_token_set,
-  member_index  int             NOT NULL,
-  name          varchar(64)     NOT NULL,
-  value         varchar(255)    NULL
+  id            bigint IDENTITY  NOT NULL PRIMARY KEY,
+  token_set_id  bigint           NOT NULL REFERENCES wf_token_set,
+  member_index  int              NOT NULL,
+  name          varchar(64)      NOT NULL,
+  value         varchar(2000)    NULL
 )
+go
+
+create index wf_token_set_member_attr_idx on wf_token_set_member_attr(token_set_id)
 go
