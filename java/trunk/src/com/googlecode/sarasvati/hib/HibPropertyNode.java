@@ -65,10 +65,4 @@ public class HibPropertyNode extends HibNode
       }
     }
   }
-
-  @Override
-  public void create (Session session)
-  {
-    super.create( session );
-  }
 }
