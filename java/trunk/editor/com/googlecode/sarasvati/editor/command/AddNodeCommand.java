@@ -39,7 +39,7 @@ public class AddNodeCommand implements Command
   @Override
   public void performAction ()
   {
-    node.setOrigin( location );
+    node.setOrigin( new Point( location ) );
     scene.addNode( node );
     scene.getGraph().addNode( node );
     scene.validate();

@@ -28,6 +28,17 @@ public class EditorArc
 
   protected String            label;
 
+  public EditorArc ()
+  {
+    /* default constructor */
+  }
+
+  public EditorArc (EditorGraphMember start, EditorGraphMember end)
+  {
+    this.start = start;
+    this.end = end;
+  }
+
   public EditorGraphMember getStart()
   {
     return start;
