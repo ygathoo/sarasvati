@@ -60,7 +60,7 @@ public class SceneAddNodeAction extends WidgetAction.Adapter
       EditorScene scene = (EditorScene)widget.getScene();
       Point location = widget.convertLocalToScene( event.getPoint() );
 
-      CommandStack.nodeAdded( scene, location, node );
+      CommandStack.addNode( scene, location, node );
 
       return State.CONSUMED;
     }

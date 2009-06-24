@@ -22,6 +22,7 @@ import java.awt.Point;
 import java.util.LinkedList;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorScene;
@@ -95,9 +96,30 @@ public class CommandStack
     current.pushCommand( new MoveNodeCommand( scene, member, startLocation, endLocation ) );
   }
 
-  public static void nodeAdded (EditorScene scene, Point location, EditorNode node)
+  public static void addNode (EditorScene scene, Point location, EditorNode node)
   {
-    AddNodeCommand command = new AddNodeCommand( scene, location, node );
+    pushAndPerform( new AddNodeCommand( scene, location, node ) );
+  }
+
+  public static void addArc (EditorScene scene, EditorArc arc)
+  {
+    pushAndPerform( new NewArcCommand( scene, arc ) );
+  }
+
+  public static void deleteArc (EditorScene scene, EditorArc arc)
+  {
+    pushAndPerform( new DeleteArcCommand( scene, arc ) );
+  }
+
+  private static void pushAndPerform (Command command)
+  {
+    current.pushCommand( command );
+    command.performAction();
+  }
+
+  public static void updateArc (EditorScene scene, EditorArc arc, boolean isSource, EditorGraphMember newNode)
+  {
+    ChangeArcCommand command = new ChangeArcCommand( scene, arc, isSource, newNode );
     current.pushCommand( command );
     command.performAction();
   }

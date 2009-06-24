@@ -196,6 +196,7 @@ public class GraphEditor
 
     tabPane.addTab( "Untitled", scrollPane );
     tabPane.setSelectedComponent( scrollPane );
+    tabSelectionChanged();
   }
 
   public void openProcessDefinition (File processDefinitionFile)
@@ -212,6 +213,7 @@ public class GraphEditor
       tabPane.setSelectedComponent( scrollPane );
 
       scrollPane.putClientProperty( "scene", scene );
+      tabSelectionChanged();
     }
     catch (Exception e)
     {

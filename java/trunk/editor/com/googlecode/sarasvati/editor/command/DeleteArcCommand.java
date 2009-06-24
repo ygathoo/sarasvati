@@ -18,51 +18,41 @@
  */
 package com.googlecode.sarasvati.editor.command;
 
-import java.awt.Point;
-
-import org.netbeans.api.visual.widget.Widget;
-
-import com.googlecode.sarasvati.editor.model.EditorGraphMember;
+import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class MoveNodeCommand implements Command
+public class DeleteArcCommand implements Command
 {
   private EditorScene scene;
-  private EditorGraphMember member;
-  private Point startLocation;
-  private Point endLocation;
+  private EditorArc arc;
 
-  public MoveNodeCommand (EditorScene scene, EditorGraphMember member, Point startLocation, Point endLocation)
+  public DeleteArcCommand (EditorScene scene, EditorArc arc)
   {
     this.scene = scene;
-    this.member = member;
-    this.startLocation = startLocation;
-    this.endLocation = endLocation;
+    this.arc   = arc;
   }
 
   @Override
   public void performAction ()
   {
-    member.setOrigin( new Point( endLocation ) );
-    Widget widget = scene.findWidget( member );
-    widget.setPreferredLocation( new Point( endLocation ) );
-    widget.revalidate();
-    widget.getScene().validate();
+    scene.getGraph().removeArc( arc );
+    scene.removeEdge( arc );
+    scene.validate();
   }
 
   @Override
   public void undoAction ()
   {
-    member.setOrigin( new Point( startLocation ) );
-    Widget widget = scene.findWidget( member );
-    widget.setPreferredLocation( new Point( startLocation ) );
-    widget.revalidate();
-    widget.getScene().validate();
+    scene.getGraph().addArc( arc );
+    scene.addEdge( arc );
+    scene.setEdgeSource( arc, arc.getStart() );
+    scene.setEdgeTarget( arc, arc.getEnd() );
+    scene.validate();
   }
 
   @Override
   public String getName ()
   {
-    return "Move";
+    return "Delete Connection";
   }
 }

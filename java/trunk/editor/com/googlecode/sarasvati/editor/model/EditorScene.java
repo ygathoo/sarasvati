@@ -185,15 +185,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 
     public void createConnection (Widget sourceWidget, Widget targetWidget)
     {
-      EditorArc arc = new EditorArc();
-      arc.setStart( source );
-      arc.setEnd( target );
-
-      graph.addArc( arc );
-
-      addEdge( arc );
-      setEdgeSource( arc, source );
-      setEdgeTarget( arc, target );
+      CommandStack.addArc( EditorScene.this, new EditorArc( source, target ) );
     }
   }
 
@@ -254,18 +246,15 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
     {
       if (replacementWidget == null)
       {
-        graph.removeArc( arc );
-        removeEdge( arc );
+        CommandStack.deleteArc( EditorScene.this, arc );
       }
       else if (reconnectingSource)
       {
-        arc.setStart( replacementNode );
-        setEdgeSource( arc, replacementNode );
+        CommandStack.updateArc( EditorScene.this, arc, true, replacementNode );
       }
       else
       {
-        arc.setEnd( replacementNode );
-        setEdgeTarget( arc, replacementNode );
+        CommandStack.updateArc( EditorScene.this, arc, false, replacementNode );
       }
     }
   }
