@@ -82,11 +82,8 @@ See [TokenSetsDesign design].
    * Could use a WIKI -> HTML compiler. 
    * Alternately, could switch to alternate documentation format, such as DocBook (probably a better long term solution)
 
-=== Performance Tuning: Not yet started ===
-
-Need to load 1k, 10k, 100k and maybe 1M process definitions, and make sure the hibernate backend still performs well. Will probably need to add indexes in some places.
-
-Will need to run 1k, 10k, 100k and maybe 1M processes through and check performance.
+=== Performance Tuning: Completed ===
+Analyzed SQL generated from hibernate. Ran explain plan on each statement and made sure that no table scans were being performed. 
 
 === Broader Database support: In progress ===
 
