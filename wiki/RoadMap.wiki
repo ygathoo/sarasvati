@@ -20,32 +20,32 @@ A graphical editor for process definitions is in progress.
    * Implemented: Yes
    * Undo/redo: Yes
  * Delete nodes
-   * Implemented: No
-   * Undo/redo: No
+   * Implemented: *No*
+   * Undo/redo: *No*
  * Add external
-   * Implemented: No
-   * Undo/redo: No
+   * Implemented: *No*
+   * Undo/redo: *No*
  * Delete external
-   * Implemented: No
-   * Undo/redo: No
+   * Implemented: *No*
+   * Undo/redo: *No*
  * Move nodes
    * Implemented: Yes
-   * Undo/redo: No
+   * Undo/redo: Yes
  * Connect nodes
    * Implemented: Yes
-   * Undo/redo: No
+   * Undo/redo: Yes
  * Change connections
    * Implemented: Yes
-   * Undo/redo: No
+   * Undo/redo: Yes
  * Remove connections
    * Implemented: Yes
-   * Undo/redo: No
+   * Undo/redo: Yes
  * Edit node properties
    * Implemented: Started
-   * Undo/redo: No
+   * Undo/redo: *No*
  * Edit arc properties
-   * Implemented: No
-   * Undo/redo: No
+   * Implemented: *No*
+   * Undo/redo: *No*
  * Cleanup undo/redo MDI interactions: Done
 
 === Token Sets/Template Nodes: Completed ===
