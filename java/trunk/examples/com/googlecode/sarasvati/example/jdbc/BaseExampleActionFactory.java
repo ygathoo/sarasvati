@@ -39,11 +39,11 @@ public class BaseExampleActionFactory implements ExampleActionFactory
 
   private static final String SELECT_TASKS_BY_PROCESS_SQL =
     "select t.id, t.node_token_id, t.name, t.description, t.state " +
-    "  from wf_task t join" +
+    "  from wf_task t " +
     "  join wf_node_token nt on t.node_token_id = nt.id " +
     "  join wf_process p on nt.process_id = p.id " +
     " where p.id = ? or " +
-    "       p.parent_token_id in (select nt2.id from wf_node_token nt2 where nt2.process_id = ?";
+    "       p.parent_token_id in (select nt2.id from wf_node_token nt2 where nt2.process_id = ?)";
 
   @Override
   public DatabaseAction newInsertTaskNodeAction (final JdbcExampleTaskNode taskNode)
