@@ -19,12 +19,18 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.awt.Point;
+import java.util.LinkedList;
 
-public abstract class EditorGraphMember
+public abstract class EditorGraphMember<T extends GraphMemberState>
 {
+  private final LinkedList<T> stateStack = new LinkedList<T>();
+
   protected Point  origin = new Point();
 
-  protected String name;
+  public EditorGraphMember (T initialState)
+  {
+    pushState( initialState );
+  }
 
   public int getX ()
   {
@@ -56,14 +62,19 @@ public abstract class EditorGraphMember
     this.origin = origin;
   }
 
-  public String getName ()
+  public void pushState (T memberState)
   {
-    return name;
+    stateStack.push( memberState );
   }
 
-  public void setName (String name)
+  public void popState ()
   {
-    this.name = name;
+    stateStack.pop();
+  }
+
+  protected T getState ()
+  {
+    return stateStack.getFirst();
   }
 
   public abstract boolean isExternal ();

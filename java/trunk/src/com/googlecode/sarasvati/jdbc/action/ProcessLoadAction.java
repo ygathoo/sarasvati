@@ -56,7 +56,7 @@ public class ProcessLoadAction extends AbstractLoadAction<JdbcGraphProcess>
     JdbcGraph graph    = engine.getRepository().getGraph( row.getLong( 1 ) );
 
     ProcessState state = ProcessState.values()[ row.getInt( 2 ) ];
-    long parentTokenId = row.getLong( 3 );
+    /* long parentTokenId = */ row.getLong( 3 );
     Date createDate    = row.getTimestamp( 4 );
     int version        = row.getInt( 5 );
 

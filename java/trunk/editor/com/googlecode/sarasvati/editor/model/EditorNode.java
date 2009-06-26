@@ -18,53 +18,12 @@
  */
 package com.googlecode.sarasvati.editor.model;
 
-import com.googlecode.sarasvati.JoinType;
 
-public class EditorNode extends EditorGraphMember
+public class EditorNode extends EditorGraphMember<NodeState>
 {
-  protected String  type;
-  protected boolean isStart;
-  protected JoinType joinType;
-  protected String  guard;
-
-  public String getType ()
+  public EditorNode (final NodeState initialState)
   {
-    return type;
-  }
-
-  public void setType (String type)
-  {
-    this.type = type;
-  }
-
-  public boolean isStart ()
-  {
-    return isStart;
-  }
-
-  public void setStart (boolean isStart)
-  {
-    this.isStart = isStart;
-  }
-
-  public JoinType getJoinType ()
-  {
-    return joinType;
-  }
-
-  public void setJoinType (JoinType joinType)
-  {
-    this.joinType = joinType;
-  }
-
-  public String getGuard ()
-  {
-    return guard;
-  }
-
-  public void setGuard (String guard)
-  {
-    this.guard = guard;
+    super( initialState );
   }
 
   @Override

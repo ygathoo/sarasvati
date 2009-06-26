@@ -40,12 +40,13 @@ public class EditorGraphFactory
 
     for ( XmlNode xmlNode : xmlProcDef.getNodes() )
     {
-      EditorNode node = new EditorNode();
-      node.setName( xmlNode.getName() );
-      node.setType( xmlNode.getType() );
-      node.setJoinType( xmlNode.getJoinType().getJoinType() );
-      node.setStart( xmlNode.isStart() );
-      node.setGuard( xmlNode.getGuard() );
+      NodeState nodeState = new NodeState( xmlNode.getName(),
+                                           xmlNode.getType(),
+                                           xmlNode.getJoinType().getJoinType(),
+                                           xmlNode.getJoinParam(),
+                                           xmlNode.isStart(),
+                                           xmlNode.getGuard() );
+      EditorNode node = new EditorNode( nodeState );
 
       if ( xmlNode.getX() != null && xmlNode.getY() != null )
       {
@@ -54,14 +55,13 @@ public class EditorGraphFactory
       }
 
       graph.addNode( node );
-      nodeMap.put( node.getName(), node );
+      nodeMap.put( node.getState().getName(), node );
     }
 
     for ( XmlExternal xmlExternal : xmlProcDef.getExternals() )
     {
-      EditorExternal external = new EditorExternal();
-      external.setName( xmlExternal.getName() );
-      external.setGraphName( xmlExternal.getProcessDefinition() );
+      ExternalState externalState = new ExternalState( xmlExternal.getName(), xmlExternal.getProcessDefinition() );
+      EditorExternal external = new EditorExternal( externalState );
 
       if ( xmlExternal.getX() != null && xmlExternal.getY() != null )
       {
@@ -70,14 +70,14 @@ public class EditorGraphFactory
       }
 
       graph.addExternal( external );
-      externalMap.put( external.getName(), external );
+      externalMap.put( external.getState().getName(), external );
     }
 
     for ( XmlNode xmlNode : xmlProcDef.getNodes() )
     {
       for ( XmlArc xmlArc : xmlNode.getArcs() )
       {
-        EditorGraphMember startMember = nodeMap.get( xmlNode.getName() );
+        EditorGraphMember<?> startMember = nodeMap.get( xmlNode.getName() );
 
         EditorArc arc = new EditorArc();
         arc.setStart( startMember );
@@ -99,7 +99,7 @@ public class EditorGraphFactory
 
     for ( XmlExternal xmlExternal : xmlProcDef.getExternals() )
     {
-      EditorGraphMember startMember = nodeMap.get( xmlExternal.getName() );
+      EditorGraphMember<?> startMember = nodeMap.get( xmlExternal.getName() );
 
       for ( XmlExternalArc xmlExternalArc : xmlExternal.getExternalArcs() )
       {
@@ -136,11 +136,12 @@ public class EditorGraphFactory
     for ( EditorNode node : graph.getNodes() )
     {
       XmlNode xmlNode = new XmlNode();
-      xmlNode.setName( node.getName() );
-      xmlNode.setType( node.getType() );
-      xmlNode.setGuard( node.getGuard() );
-      xmlNode.setJoinType( XmlJoinType.getXmlJoinType( node.getJoinType() ) );
-      xmlNode.setStart( node.isStart() );
+      NodeState state = node.getState();
+      xmlNode.setName( state.getName() );
+      xmlNode.setType( state.getType() );
+      xmlNode.setGuard( state.getGuard() );
+      xmlNode.setJoinType( XmlJoinType.getXmlJoinType( state.getJoinType() ) );
+      xmlNode.setStart( state.isStart() );
       xmlNode.setX( node.getX() );
       xmlNode.setY( node.getY() );
 
@@ -151,8 +152,8 @@ public class EditorGraphFactory
     for ( EditorExternal external : graph.getExternals() )
     {
       XmlExternal xmlExternal = new XmlExternal();
-      xmlExternal.setName( external.getName() );
-      xmlExternal.setProcessDefinition( external.getGraphName() );
+      xmlExternal.setName( external.getState().getName() );
+      xmlExternal.setProcessDefinition( external.getState().getGraphName() );
       xmlExternal.setX( external.getX() );
       xmlExternal.setY( external.getY() );
 
@@ -189,7 +190,7 @@ public class EditorGraphFactory
         XmlNode node = nodeMap.get( arc.getStart() );
         XmlArc xmlArc = new XmlArc();
         xmlArc.setName( arc.getLabel() );
-        xmlArc.setTo( arc.getEnd().getName() );
+        xmlArc.setTo( arc.getEnd().getState().getName() );
         node.getArcs().add( xmlArc );
 //      }
     }

@@ -34,7 +34,7 @@ public class CommandStack
   private final LinkedList<Command> commandStack = new LinkedList<Command>();
   private int currentIndex = -1;
 
-  public void pushCommand (Command command)
+  public void pushCommand (final Command command)
   {
     currentIndex++;
     while ( currentIndex < commandStack.size() )
@@ -91,33 +91,43 @@ public class CommandStack
     return canRedo() ? commandStack.get( currentIndex + 1 ).getName() : "";
   }
 
-  public static void nodeMoved (EditorScene scene, EditorGraphMember member, Point startLocation, Point endLocation)
+  public static void nodeMoved (final EditorScene scene,
+                                final EditorGraphMember<?> member,
+                                final Point startLocation,
+                                final Point endLocation)
   {
     current.pushCommand( new MoveNodeCommand( scene, member, startLocation, endLocation ) );
   }
 
-  public static void addNode (EditorScene scene, Point location, EditorNode node)
+  public static void addNode (final EditorScene scene,
+                              final Point location,
+                              final EditorNode node)
   {
     pushAndPerform( new AddNodeCommand( scene, location, node ) );
   }
 
-  public static void addArc (EditorScene scene, EditorArc arc)
+  public static void addArc (final EditorScene scene,
+                             final EditorArc arc)
   {
     pushAndPerform( new NewArcCommand( scene, arc ) );
   }
 
-  public static void deleteArc (EditorScene scene, EditorArc arc)
+  public static void deleteArc (final EditorScene scene,
+                                final EditorArc arc)
   {
     pushAndPerform( new DeleteArcCommand( scene, arc ) );
   }
 
-  private static void pushAndPerform (Command command)
+  private static void pushAndPerform (final Command command)
   {
     current.pushCommand( command );
     command.performAction();
   }
 
-  public static void updateArc (EditorScene scene, EditorArc arc, boolean isSource, EditorGraphMember newNode)
+  public static void updateArc (final EditorScene scene,
+                                final EditorArc arc,
+                                final boolean isSource,
+                                final EditorGraphMember<?> newNode)
   {
     ChangeArcCommand command = new ChangeArcCommand( scene, arc, isSource, newNode );
     current.pushCommand( command );
@@ -129,7 +139,7 @@ public class CommandStack
     return current;
   }
 
-  public static void setCurrent (CommandStack stack)
+  public static void setCurrent (final CommandStack stack)
   {
     current = stack;
   }

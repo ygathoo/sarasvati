@@ -28,11 +28,14 @@ import com.googlecode.sarasvati.editor.model.EditorScene;
 public class MoveNodeCommand implements Command
 {
   private EditorScene scene;
-  private EditorGraphMember member;
+  private EditorGraphMember<?> member;
   private Point startLocation;
   private Point endLocation;
 
-  public MoveNodeCommand (EditorScene scene, EditorGraphMember member, Point startLocation, Point endLocation)
+  public MoveNodeCommand (final EditorScene scene,
+                          final EditorGraphMember<?> member,
+                          final Point startLocation,
+                          final Point endLocation)
   {
     this.scene = scene;
     this.member = member;
