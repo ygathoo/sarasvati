@@ -18,18 +18,11 @@
 */
 package com.googlecode.sarasvati.editor.model;
 
-public class EditorExternal extends EditorGraphMember
+public class EditorExternal extends EditorGraphMember<ExternalState>
 {
-  protected String graphName;
-
-  public String getGraphName()
+  public EditorExternal (ExternalState initialState)
   {
-    return graphName;
-  }
-
-  public void setGraphName( String graphName )
-  {
-    this.graphName = graphName;
+    super( initialState );
   }
 
   @Override

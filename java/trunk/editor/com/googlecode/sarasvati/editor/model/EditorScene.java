@@ -45,7 +45,7 @@ import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 
-public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
+public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 {
   protected final CommandStack commandStack;
   protected final EditorGraph graph;
@@ -61,12 +61,12 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 
     getActions().addAction( SceneAddNodeAction.INSTANCE );
 
-    for ( EditorGraphMember member : graph.getNodes() )
+    for ( EditorGraphMember<?> member : graph.getNodes() )
     {
       addNode( member );
     }
 
-    for ( EditorGraphMember member : graph.getExternals() )
+    for ( EditorGraphMember<?> member : graph.getExternals() )
     {
       addNode( member );
     }
@@ -117,16 +117,16 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
   }
 
   @Override
-  protected Widget widgetForNode (EditorGraphMember node)
+  protected Widget widgetForNode (EditorGraphMember<?> node)
   {
     boolean join = false;
 
     if ( node instanceof EditorNode )
     {
-      join = ((EditorNode)node).getJoinType() != JoinType.OR;
+      join = ((EditorNode)node).getState().getJoinType() != JoinType.OR;
     }
 
-    Icon icon = new DefaultNodeIcon( node.getName(), NodeDrawConfig.NODE_BG_COMPLETED, join );
+    Icon icon = new DefaultNodeIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join );
 
     JLabel label = new JLabel( icon );
     ComponentWidget widget = new ComponentWidget( this, label );
@@ -152,20 +152,20 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
 
   public class SceneConnectProvider implements ConnectProvider
   {
-    private EditorGraphMember source = null;
-    private EditorGraphMember target = null;
+    private EditorGraphMember<?> source = null;
+    private EditorGraphMember<?> target = null;
 
     public boolean isSourceWidget (Widget sourceWidget)
     {
       Object object = findObject (sourceWidget);
-      source = isNode (object) ? (EditorGraphMember) object : null;
+      source = isNode (object) ? (EditorGraphMember<?>) object : null;
       return source != null;
     }
 
     public ConnectorState isTargetWidget (Widget sourceWidget, Widget targetWidget)
     {
       Object object = findObject (targetWidget);
-      target = isNode (object) ? (EditorGraphMember) object : null;
+      target = isNode (object) ? (EditorGraphMember<?>) object : null;
       if (target != null)
       {
         return !source.equals (target) ? ConnectorState.ACCEPT : ConnectorState.REJECT_AND_STOP;
@@ -192,8 +192,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
   public class SceneReconnectProvider implements ReconnectProvider
   {
     private EditorArc arc;
-    private EditorGraphMember originalNode;
-    private EditorGraphMember replacementNode;
+    private EditorGraphMember<?> originalNode;
+    private EditorGraphMember<?> replacementNode;
 
     public void reconnectingStarted (ConnectionWidget connectionWidget, boolean reconnectingSource)
     {
@@ -224,7 +224,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember, EditorArc>
     public ConnectorState isReplacementWidget (ConnectionWidget connectionWidget, Widget replacementWidget, boolean reconnectingSource)
     {
       Object object = findObject (replacementWidget);
-      replacementNode = isNode (object) ? (EditorGraphMember) object : null;
+      replacementNode = isNode (object) ? (EditorGraphMember<?>) object : null;
       if (replacementNode != null)
       {
         return ConnectorState.ACCEPT;

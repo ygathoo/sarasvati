@@ -28,6 +28,7 @@ import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorScene;
+import com.googlecode.sarasvati.editor.model.NodeState;
 
 public class SceneAddNodeAction extends WidgetAction.Adapter
 {
@@ -50,12 +51,8 @@ public class SceneAddNodeAction extends WidgetAction.Adapter
 
     if ( event.getClickCount() == 1 && event.getButton() == MouseEvent.BUTTON1 )
     {
-      EditorNode node = new EditorNode();
-      node.setName( "New Node" );
-      node.setType( "node" );
-      node.setGuard( null );
-      node.setJoinType( JoinType.OR );
-      node.setStart( false );
+      NodeState state = new NodeState( "New Node", "node", JoinType.OR, null, false, null );
+      EditorNode node = new EditorNode( state );
 
       EditorScene scene = (EditorScene)widget.getScene();
       Point location = widget.convertLocalToScene( event.getPoint() );

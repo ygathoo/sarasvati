@@ -20,51 +20,52 @@ package com.googlecode.sarasvati.editor.model;
 
 public class EditorArc
 {
-  protected EditorGraphMember start;
-  protected EditorGraphMember end;
+  protected EditorGraphMember<?> start;
+  protected EditorGraphMember<?> end;
 
-  protected String externalStart;
-  protected String externalEnd;
+  protected String                 externalStart;
+  protected String                 externalEnd;
 
-  protected String            label;
+  protected String                 label;
 
   public EditorArc ()
   {
     /* default constructor */
   }
 
-  public EditorArc (EditorGraphMember start, EditorGraphMember end)
+  public EditorArc (final EditorGraphMember<?> start,
+                    final EditorGraphMember<?> end)
   {
     this.start = start;
     this.end = end;
   }
 
-  public EditorGraphMember getStart()
+  public EditorGraphMember<?> getStart ()
   {
     return start;
   }
 
-  public void setStart( EditorGraphMember start )
+  public void setStart (final EditorGraphMember<?> start)
   {
     this.start = start;
   }
 
-  public EditorGraphMember getEnd()
+  public EditorGraphMember<?> getEnd ()
   {
     return end;
   }
 
-  public void setEnd( EditorGraphMember end )
+  public void setEnd (final EditorGraphMember<?> end)
   {
     this.end = end;
   }
 
-  public String getLabel()
+  public String getLabel ()
   {
     return label;
   }
 
-  public void setLabel( String label )
+  public void setLabel (final String label)
   {
     this.label = label;
   }
@@ -79,22 +80,22 @@ public class EditorArc
     return start.isExternal();
   }
 
-  public String getExternalStart()
+  public String getExternalStart ()
   {
     return externalStart;
   }
 
-  public void setExternalStart( String externalStart )
+  public void setExternalStart (final String externalStart)
   {
     this.externalStart = externalStart;
   }
 
-  public String getExternalEnd()
+  public String getExternalEnd ()
   {
     return externalEnd;
   }
 
-  public void setExternalEnd( String externalEnd )
+  public void setExternalEnd (final String externalEnd)
   {
     this.externalEnd = externalEnd;
   }

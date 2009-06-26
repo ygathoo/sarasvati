@@ -28,13 +28,13 @@ public class ChangeArcCommand implements Command
   private final EditorArc arc;
 
   private final boolean isSource;
-  private final EditorGraphMember oldNode;
-  private final EditorGraphMember newNode;
+  private final EditorGraphMember<?> oldNode;
+  private final EditorGraphMember<?> newNode;
 
   public ChangeArcCommand (final EditorScene scene,
-                                  final EditorArc arc,
-                                  boolean isSource,
-                                  final EditorGraphMember newNode)
+                           final EditorArc arc,
+                           boolean isSource,
+                           final EditorGraphMember<?> newNode)
   {
     this.scene = scene;
     this.arc   = arc;
