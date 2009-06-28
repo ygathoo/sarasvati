@@ -18,10 +18,8 @@
 */
 package com.googlecode.sarasvati.editor;
 
-import javax.swing.BoxLayout;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JPanel;
 import javax.swing.border.BevelBorder;
 
 import com.googlecode.sarasvati.editor.model.EditorNode;
@@ -32,17 +30,19 @@ public class NodePropertiesDialog extends JDialog
 
   protected EditorNode node;
 
-  public NodePropertiesDialog (JFrame frame, EditorNode node)
+  public NodePropertiesDialog (final JFrame frame,
+                               final EditorNode node)
   {
     super( frame, "Node Properties", false );
     this.node = node;
 
-    setUndecorated( true );
+    setUndecorated( false );
 
-    JPanel panel = new NodePropertiesPanel();
+    NodePropertiesPanel panel = new NodePropertiesPanel();
+    panel.setValuesFromNode( node );
+    panel.setupCancel( this );
+    panel.setupApply( this, node );
     panel.setBorder( new BevelBorder( BevelBorder.RAISED ) );
-    BoxLayout layout = new BoxLayout( panel, BoxLayout.PAGE_AXIS );
-    panel.setLayout( layout );
     getContentPane().add( panel );
 
     if ( isAlwaysOnTopSupported() )
