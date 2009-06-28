@@ -72,7 +72,7 @@ public abstract class EditorGraphMember<T extends GraphMemberState>
     stateStack.pop();
   }
 
-  protected T getState ()
+  public T getState ()
   {
     return stateStack.getFirst();
   }
