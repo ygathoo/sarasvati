@@ -105,6 +105,17 @@ public class ShortestPathRouterAdapter implements Router
       }
     }
 
+    if ( path.getStartPoint().equals( path.getEndPoint() ) )
+    {
+      int offset = 50;
+      PointList bendPoints = new PointList();
+      bendPoints.addPoint( path.getStartPoint().x + 10, path.getStartPoint().y + offset );
+      bendPoints.addPoint( path.getStartPoint().x, path.getStartPoint().y + offset );
+      //bendPoints.addPoint( path.getStartPoint().x + offset, path.getStartPoint().y + offset );
+      // bendPoints.addPoint( path.getStartPoint().x + offset, path.getStartPoint().y );
+      path.setBendPoints( bendPoints );
+    }
+
     router.addPath( path );
     dirty = true;
   }
