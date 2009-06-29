@@ -204,6 +204,7 @@ public class GraphEditor
     {
       XmlProcessDefinition xmlProcDef = xmlLoader.loadProcessDefinition( processDefinitionFile );
       EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef );
+      graph.setFile( processDefinitionFile );
       EditorScene scene = new EditorScene( graph );
 
       JScrollPane scrollPane = new JScrollPane();

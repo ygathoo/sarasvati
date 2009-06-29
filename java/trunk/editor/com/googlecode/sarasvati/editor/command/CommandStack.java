@@ -97,6 +97,7 @@ public class CommandStack
                                 final Point startLocation,
                                 final Point endLocation)
   {
+    member.setOrigin( new Point( endLocation ) );
     current.pushCommand( new MoveNodeCommand( scene, member, startLocation, endLocation ) );
   }
 

@@ -142,11 +142,12 @@ public class EditorGraphFactory
       xmlNode.setGuard( state.getGuard() );
       xmlNode.setJoinType( XmlJoinType.getXmlJoinType( state.getJoinType() ) );
       xmlNode.setStart( state.isStart() );
+
       xmlNode.setX( node.getX() );
       xmlNode.setY( node.getY() );
 
       xmlProcDef.getNodes().add( xmlNode );
-      nodeMap.put(  node, xmlNode );
+      nodeMap.put( node, xmlNode );
     }
 
     for ( EditorExternal external : graph.getExternals() )
