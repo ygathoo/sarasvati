@@ -39,8 +39,8 @@ public class MoveNodeCommand implements Command
   {
     this.scene = scene;
     this.member = member;
-    this.startLocation = startLocation;
-    this.endLocation = endLocation;
+    this.startLocation = new Point( startLocation );
+    this.endLocation = new Point( endLocation );
   }
 
   @Override

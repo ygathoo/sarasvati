@@ -58,6 +58,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
   private final WidgetAction nodePropertiesAction = new NodePropertiesAction();
 
+  private boolean loading = true;
+
   public EditorScene (EditorGraph graph)
   {
     this.graph = graph;
@@ -81,6 +83,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       setEdgeSource( arc, arc.getStart() );
       setEdgeTarget( arc, arc.getEnd() );
     }
+
+    loading = false;
   }
 
   public CommandStack getCommandStack ()
@@ -145,11 +149,14 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     final JLabel label = new JLabel( icon );
     final ComponentWidget widget = new ComponentWidget( this, label );
 
-    int xOffset = icon.getIconWidth() >> 1;
-    int yOffset = icon.getIconHeight() >> 1;
+    if ( !loading )
+    {
+      int xOffset = icon.getIconWidth() >> 1;
+      int yOffset = icon.getIconHeight() >> 1;
 
-    node.setX( node.getX() - xOffset );
-    node.setY( node.getY() - yOffset );
+      node.setX( node.getX() - xOffset );
+      node.setY( node.getY() - yOffset );
+    }
 
     widget.setPreferredLocation( node.getOrigin() );
 

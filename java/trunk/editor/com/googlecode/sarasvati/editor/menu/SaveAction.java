@@ -94,12 +94,10 @@ public class SaveAction extends AbstractAction
         editor.setLastFile( fileChooser.getSelectedFile() );
         editor.saveProcessDefinition( graph, fileChooser.getSelectedFile() );
       }
-      else
-      {
-        return;
-      }
     }
-
-    editor.saveProcessDefinition( graph, graph.getFile() );
+    else
+    {
+      editor.saveProcessDefinition( graph, graph.getFile() );
+    }
   }
 }
