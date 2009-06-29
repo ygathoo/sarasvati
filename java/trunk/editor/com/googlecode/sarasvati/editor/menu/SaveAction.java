@@ -20,10 +20,12 @@ package com.googlecode.sarasvati.editor.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
@@ -59,6 +61,24 @@ public class SaveAction extends AbstractAction
     }
 
     EditorGraph graph = scene.getGraph();
+
+    List<String> errors = graph.validateGraph();
+
+    if ( !errors.isEmpty() )
+    {
+      StringBuilder buf = new StringBuilder ();
+      for ( String error : errors )
+      {
+        buf.append( error );
+        buf.append( "\n" );
+      }
+
+      JOptionPane.showMessageDialog( GraphEditor.getInstance().getMainWindow(),
+                                     buf.toString(),
+                                     "Invalid Process Definition",
+                                     JOptionPane.ERROR_MESSAGE );
+      return;
+    }
 
     GraphEditor editor = GraphEditor.getInstance();
 

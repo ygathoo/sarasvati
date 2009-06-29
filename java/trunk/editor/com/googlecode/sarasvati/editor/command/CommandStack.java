@@ -26,6 +26,7 @@ import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorScene;
+import com.googlecode.sarasvati.editor.model.GraphMemberState;
 
 public class CommandStack
 {
@@ -116,6 +117,13 @@ public class CommandStack
                                 final EditorArc arc)
   {
     pushAndPerform( new DeleteArcCommand( scene, arc ) );
+  }
+
+  public static <T extends GraphMemberState> void editNode (final EditorScene scene,
+                                                            final EditorGraphMember<T> graphMember,
+                                                            final T newState)
+  {
+    pushAndPerform( new EditNodeCommand<T>( scene, graphMember, newState ) );
   }
 
   private static void pushAndPerform (final Command command)

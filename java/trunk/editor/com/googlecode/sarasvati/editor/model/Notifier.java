@@ -16,20 +16,25 @@
 
     Copyright 2009 Paul Lorenz
 */
-
 package com.googlecode.sarasvati.editor.model;
 
-public class GraphMemberState
-{
-  private final String name;
+import java.util.ArrayList;
+import java.util.List;
 
-  public GraphMemberState (final String name)
+public class Notifier<T>
+{
+  private List<ModelListener<T>> listeners = new ArrayList<ModelListener<T>>();
+
+  public synchronized void addListener (ModelListener<T> listener)
   {
-    this.name = name;
+    listeners.add( listener );
   }
 
-  public String getName ()
+  public synchronized void notify (T instance)
   {
-    return name;
+    for ( ModelListener<T> listener : listeners )
+    {
+      listener.modelChanged( instance );
+    }
   }
 }

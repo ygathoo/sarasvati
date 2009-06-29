@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
  */
 package com.googlecode.sarasvati.editor.model;
 
@@ -24,11 +24,5 @@ public class EditorNode extends EditorGraphMember<NodeState>
   public EditorNode (final NodeState initialState)
   {
     super( initialState );
-  }
-
-  @Override
-  public boolean isExternal()
-  {
-    return false;
   }
 }

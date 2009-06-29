@@ -33,7 +33,7 @@ public class NodePropertiesDialog extends JDialog
   public NodePropertiesDialog (final JFrame frame,
                                final EditorNode node)
   {
-    super( frame, "Node Properties", false );
+    super( frame, node.getState().getName() + " properties", false );
     this.node = node;
 
     setUndecorated( false );
