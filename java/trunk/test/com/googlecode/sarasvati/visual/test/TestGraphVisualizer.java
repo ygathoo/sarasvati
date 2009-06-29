@@ -22,9 +22,18 @@ import org.hibernate.Session;
 
 import com.googlecode.sarasvati.example.hib.HibTestSetup;
 import com.googlecode.sarasvati.visual.AbstractGraphVisualizer;
+import com.googlecode.sarasvati.visual.DefaultGraphLookAndFeel;
+import com.googlecode.sarasvati.visual.GraphLookAndFeel;
 
 public class TestGraphVisualizer extends AbstractGraphVisualizer
 {
+
+  @Override
+  public GraphLookAndFeel getWidgetFactory ()
+  {
+    return new DefaultGraphLookAndFeel( true, true );
+  }
+
   @Override
   public void init () throws Exception
   {
