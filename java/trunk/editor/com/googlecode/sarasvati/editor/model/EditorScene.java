@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.editor.model;
 
@@ -37,6 +37,7 @@ import org.netbeans.api.visual.widget.Widget;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.EditorMode;
 import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.MoveTrackAction;
 import com.googlecode.sarasvati.editor.NodePropertiesAction;
 import com.googlecode.sarasvati.editor.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.CommandStack;
@@ -44,6 +45,7 @@ import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
+import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
 public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 {
@@ -53,6 +55,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   private final WidgetAction moveAction = new MoveTrackAction( ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null ) );
   private final WidgetAction connectAction = ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() );
   private final WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
+
+  private final WidgetAction nodePropertiesAction = new NodePropertiesAction();
 
   public EditorScene (EditorGraph graph)
   {
@@ -116,20 +120,30 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     return widget;
   }
 
-  @Override
-  protected Widget widgetForNode (EditorGraphMember<?> node)
+  protected Icon getIconForMember (final EditorGraphMember<?> node)
   {
     boolean join = false;
+    boolean isTask = false;
 
     if ( node instanceof EditorNode )
     {
       join = ((EditorNode)node).getState().getJoinType() != JoinType.OR;
+      isTask = "task".equalsIgnoreCase( ((EditorNode)node).getState().getType() );
     }
 
-    Icon icon = new DefaultNodeIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join );
+    Icon icon = isTask ? new TaskIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join  ) :
+                         new DefaultNodeIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join );
 
-    JLabel label = new JLabel( icon );
-    ComponentWidget widget = new ComponentWidget( this, label );
+    return icon;
+  }
+
+  @Override
+  protected Widget widgetForNode (final EditorGraphMember<?> node)
+  {
+    final Icon icon = getIconForMember( node );
+
+    final JLabel label = new JLabel( icon );
+    final ComponentWidget widget = new ComponentWidget( this, label );
 
     int xOffset = icon.getIconWidth() >> 1;
     int yOffset = icon.getIconHeight() >> 1;
@@ -139,13 +153,22 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
     widget.setPreferredLocation( node.getOrigin() );
 
-    widget.getActions().addAction( new NodePropertiesAction() );
+    widget.getActions().addAction( nodePropertiesAction );
     widget.getActions().addAction( moveAction );
 
     if ( GraphEditor.getInstance().getMode() == EditorMode.AddNode )
     {
       widget.getActions().addAction( connectAction );
     }
+
+    node.addListener( new ModelListener<EditorGraphMember<?>> ()
+    {
+      @Override
+      public void modelChanged (EditorGraphMember<?> modelInstance)
+      {
+        label.setIcon( getIconForMember( node ) );
+      }
+    });
 
     return widget;
   }

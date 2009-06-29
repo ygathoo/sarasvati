@@ -19,17 +19,7 @@
 
 package com.googlecode.sarasvati.editor.model;
 
-public class GraphMemberState
+public interface ModelListener<T>
 {
-  private final String name;
-
-  public GraphMemberState (final String name)
-  {
-    this.name = name;
-  }
-
-  public String getName ()
-  {
-    return name;
-  }
+  void modelChanged (T modelInstance);
 }
