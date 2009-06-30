@@ -239,6 +239,9 @@ public class GraphEditor
       XmlProcessDefinition xmlProcDef = EditorGraphFactory.exportToXml( graph );
       xmlLoader.saveProcessDefinition( xmlProcDef, outputFile );
       graph.setFile( outputFile );
+      JOptionPane.showMessageDialog( mainWindow,
+                                     "Process definition successfully saved to: '" + outputFile.getPath() + "'",
+                                     "Save", JOptionPane.INFORMATION_MESSAGE );
     }
     catch ( Exception e )
     {
