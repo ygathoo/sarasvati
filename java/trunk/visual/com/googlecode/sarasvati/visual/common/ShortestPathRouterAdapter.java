@@ -74,7 +74,7 @@ public class ShortestPathRouterAdapter implements Router
   }
 
   @SuppressWarnings("unchecked")
-  public void addPath (Path path)
+  public void addPath (Path path, boolean isSelfArc)
   {
     //Check for overlapping path, If there are overlapping paths
     //Force path to bend.
@@ -105,14 +105,13 @@ public class ShortestPathRouterAdapter implements Router
       }
     }
 
-    if ( path.getStartPoint().equals( path.getEndPoint() ) )
+    if ( isSelfArc )
     {
-      int offset = 50;
+      int offset = 15;
       PointList bendPoints = new PointList();
-      bendPoints.addPoint( path.getStartPoint().x + 10, path.getStartPoint().y + offset );
       bendPoints.addPoint( path.getStartPoint().x, path.getStartPoint().y + offset );
-      //bendPoints.addPoint( path.getStartPoint().x + offset, path.getStartPoint().y + offset );
-      // bendPoints.addPoint( path.getStartPoint().x + offset, path.getStartPoint().y );
+      bendPoints.addPoint( path.getEndPoint().x + offset, path.getStartPoint().y + offset );
+      bendPoints.addPoint( path.getEndPoint().x + offset, path.getEndPoint().y );
       path.setBendPoints( bendPoints );
     }
 
