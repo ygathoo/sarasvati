@@ -198,7 +198,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       target = isNode (object) ? (EditorGraphMember<?>) object : null;
       if (target != null)
       {
-        return !source.equals (target) ? ConnectorState.ACCEPT : ConnectorState.REJECT_AND_STOP;
+        return ConnectorState.ACCEPT;
       }
       return object != null ? ConnectorState.REJECT_AND_STOP : ConnectorState.REJECT;
     }

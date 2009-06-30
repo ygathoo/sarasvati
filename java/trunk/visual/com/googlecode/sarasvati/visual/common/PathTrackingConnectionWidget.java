@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.visual.common;
 
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -55,8 +56,23 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
 
     if ( sourceAnchor != null && targetAnchor != null )
     {
-      Point newStart = sourceAnchor.compute( getSourceAnchorEntry() ).getAnchorSceneLocation();
-      Point newEnd = targetAnchor.compute( getTargetAnchorEntry() ).getAnchorSceneLocation();
+      Point newStart = null;
+      Point newEnd = null;
+
+      boolean isSelfArc = sourceAnchor.getRelatedWidget().equals( targetAnchor.getRelatedWidget() );
+      if ( isSelfArc )
+      {
+        Point origin = sourceAnchor.getRelatedWidget().getLocation();
+        Rectangle bounds = sourceAnchor.getRelatedWidget().getBounds();
+        newStart = new Point( origin.x + (bounds.width >> 1 ), origin.y + bounds.height );
+        newEnd = new Point( origin.x + bounds.width, origin.y + (bounds.height >> 1 ) );
+      }
+      else
+      {
+        newStart = sourceAnchor.compute( getSourceAnchorEntry() ).getAnchorSceneLocation();
+        newEnd = targetAnchor.compute( getTargetAnchorEntry() ).getAnchorSceneLocation();
+      }
+
       boolean pathChange = path == null || !start.equals( newStart ) || !end.equals( newEnd );
       if ( path != null && pathChange )
       {
@@ -67,7 +83,7 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
         start = newStart;
         end   = newEnd;
         path = new Path( ConvertUtil.awtToSwt( start ), ConvertUtil.awtToSwt( end ) );
-        router.addPath( path );
+        router.addPath( path, isSelfArc );
         resetControlPoints = true;
       }
     }
