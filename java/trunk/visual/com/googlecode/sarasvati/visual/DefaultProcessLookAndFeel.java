@@ -44,32 +44,33 @@ public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
   protected boolean drawSelfArcs;
   protected boolean drawArcLabels;
 
-  public DefaultProcessLookAndFeel (boolean drawSelfArcs, boolean drawArcLabels)
+  public DefaultProcessLookAndFeel (final boolean drawSelfArcs,
+                                    final boolean drawArcLabels)
   {
     this.drawSelfArcs = drawSelfArcs;
     this.drawArcLabels = drawArcLabels;
   }
 
   @Override
-  public boolean drawArcLabels (Arc arc)
+  public boolean drawArcLabels (final Arc arc)
   {
     return drawArcLabels;
   }
 
   @Override
-  public boolean drawSelfArcs (Arc arc)
+  public boolean drawSelfArcs (final Arc arc)
   {
     return drawSelfArcs;
   }
 
-  public Icon newIconForNode (VisualProcessNode node, SarasvatiProcessScene scene)
+  public Icon newIconForNode (final VisualProcessNode node)
   {
     String nodeType = node.getNode().getType();
     if ( nodeType.equalsIgnoreCase( getTaskType() ) )
     {
       return new TaskIcon( node.getNode(), node.getToken() );
     }
-    
+
     else if( nodeType.equalsIgnoreCase( "end" ) )
     {
       return new EndNodeIcon();
@@ -79,9 +80,10 @@ public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
   }
 
   @Override
-  public Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene)
+  public Widget newWidget (final VisualProcessNode node,
+                           final SarasvatiProcessScene scene)
   {
-    Icon icon = newIconForNode( node, scene );
+    Icon icon = newIconForNode( node );
     JLabel label = new JLabel( icon );
     label.setSize( icon.getIconWidth(), icon.getIconHeight() );
     return new ComponentWidget( scene, label );
@@ -93,7 +95,8 @@ public class DefaultProcessLookAndFeel implements ProcessLookAndFeel
   }
 
   @Override
-  public boolean isBackArc (Arc arc, boolean defaultValue)
+  public boolean isBackArc (final Arc arc,
+                            final boolean defaultValue)
   {
     return defaultValue;
   }
