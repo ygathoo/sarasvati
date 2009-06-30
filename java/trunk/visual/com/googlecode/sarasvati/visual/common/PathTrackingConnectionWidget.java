@@ -28,7 +28,6 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.graph.Path;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.ConnectionWidget;
-import org.netbeans.api.visual.widget.Scene;
 
 import com.googlecode.sarasvati.visual.util.ConvertUtil;
 
@@ -43,7 +42,7 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
   protected Path path;
   protected boolean resetControlPoints = false;
 
-  public PathTrackingConnectionWidget (ShortestPathRouterAdapter router, Scene scene)
+  public PathTrackingConnectionWidget (ShortestPathRouterAdapter router, GraphSceneImpl<?,?> scene)
   {
     super( scene );
     this.router = router;

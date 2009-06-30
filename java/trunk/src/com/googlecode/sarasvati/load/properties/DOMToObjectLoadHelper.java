@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.load.properties;
 
@@ -22,11 +22,19 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -37,6 +45,20 @@ import com.googlecode.sarasvati.util.SvUtil;
 
 public class DOMToObjectLoadHelper
 {
+  public static final Object EDITOR_LOAD = new Object();
+
+  public static void loadCustomIntoMap (List<Object> customList, Map<String, String> map)
+    throws LoadException
+  {
+    for ( Object custom : customList )
+    {
+      if ( custom instanceof Element )
+      {
+        DOMToObjectLoadHelper.setBeanValues( EDITOR_LOAD, (Element)custom, null, map );
+      }
+    }
+  }
+
   public static Map<String, String> setBeanValues (Object obj, Node node) throws LoadException
   {
     Map<String, String> beanProperties = new HashMap<String, String>();
@@ -133,6 +155,11 @@ public class DOMToObjectLoadHelper
 
   public static PropertyMutator getMutatorForProperty (Object obj, String name) throws LoadException
   {
+    if ( obj == EDITOR_LOAD )
+    {
+      return EditorLoadPropertyMutator.INSTANCE;
+    }
+
     BeanInfo beanInfo = null;
 
     try
@@ -176,5 +203,89 @@ public class DOMToObjectLoadHelper
       }
       mutator.setFromText( entry.getValue() );
     }
+  }
+
+  public static List<Object> mapToDOM (Map<String, String> properties) throws IOException
+  {
+    Document doc = null;
+
+    try
+    {
+      doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+    }
+    catch ( ParserConfigurationException pce )
+    {
+      throw new IOException( "XML configuration error", pce );
+    }
+
+    if ( properties == null || properties.isEmpty() )
+    {
+      return Collections.emptyList();
+    }
+
+    List<Object> elements = new ArrayList<Object>( properties.size() );
+
+    Map<String, Element> elemMap = new HashMap<String,Element>();
+
+    for ( Map.Entry<String, String> entry : properties.entrySet() )
+    {
+      Element parentElement = null;
+      String key = entry.getKey();
+      int index = key.lastIndexOf( '.' );
+      String name = null;
+      if ( index < 1)
+      {
+        name = key;
+      }
+      else
+      {
+        name = key.substring( index + 1 );
+        String prefix = key.substring( 0, index );
+        parentElement = elemMap.get( prefix );
+        if ( parentElement == null )
+        {
+          StringBuilder fullName = new StringBuilder();
+          String[] path = prefix.split( "\\." );
+          for ( String pathElement : path )
+          {
+            if ( fullName.length() > 0 )
+            {
+              fullName.append( "." );
+            }
+            fullName.append( pathElement );
+
+            Element element = elemMap.get( fullName );
+            if ( element == null )
+            {
+              element = doc.createElement( pathElement );
+              if ( parentElement != null )
+              {
+                parentElement.appendChild( element );
+              }
+              else
+              {
+                elements.add( element );
+              }
+              elemMap.put( fullName.toString(), element );
+            }
+            parentElement = element;
+          }
+        }
+      }
+
+      Element element = doc.createElement( name );
+      element.appendChild( doc.createTextNode( entry.getValue() ) );
+      if ( parentElement != null )
+      {
+        parentElement.appendChild( element );
+      }
+      else
+      {
+        elements.add( element );
+      }
+      elemMap.put( key, element );
+    }
+
+    return elements;
   }
 }
