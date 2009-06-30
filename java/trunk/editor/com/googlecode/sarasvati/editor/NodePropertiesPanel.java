@@ -20,6 +20,9 @@ package com.googlecode.sarasvati.editor;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Arrays;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
@@ -66,8 +69,8 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
         applyButton = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
         jPanel3 = new javax.swing.JPanel();
-        jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
+        addPropertyButton = new javax.swing.JButton();
+        deletePropertyButton = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
         guardInput = new javax.swing.JTextArea();
         guardLabel = new javax.swing.JLabel();
@@ -111,9 +114,9 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
         applyButton.setPreferredSize(new java.awt.Dimension(100, 25));
         jPanel1.add(applyButton);
 
-        jButton3.setText(org.openide.util.NbBundle.getMessage(NodePropertiesPanel.class, "NodePropertiesPanel.jButton3.text")); // NOI18N
+        addPropertyButton.setText(org.openide.util.NbBundle.getMessage(NodePropertiesPanel.class, "NodePropertiesPanel.addPropertyButton.text")); // NOI18N
 
-        jButton4.setText(org.openide.util.NbBundle.getMessage(NodePropertiesPanel.class, "NodePropertiesPanel.jButton4.text")); // NOI18N
+        deletePropertyButton.setText(org.openide.util.NbBundle.getMessage(NodePropertiesPanel.class, "NodePropertiesPanel.deletePropertyButton.text")); // NOI18N
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -122,17 +125,17 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton4)
-                    .addComponent(jButton3))
+                    .addComponent(deletePropertyButton)
+                    .addComponent(addPropertyButton))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jButton3)
+                .addComponent(addPropertyButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 26, Short.MAX_VALUE)
-                .addComponent(jButton4)
+                .addComponent(deletePropertyButton)
                 .addContainerGap())
         );
 
@@ -236,14 +239,14 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton addPropertyButton;
     private javax.swing.JButton applyButton;
     private javax.swing.JButton cancelButton;
     private javax.swing.JTable customPropertiesInput;
     private javax.swing.JLabel customPropertiesLabel;
+    private javax.swing.JButton deletePropertyButton;
     private javax.swing.JTextArea guardInput;
     private javax.swing.JLabel guardLabel;
-    private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane2;
@@ -272,11 +275,12 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
     public TableModel getCustomNodeProperties ()
     {
-      DefaultTableModel tableModel = new DefaultTableModel( new String[] { "key", "value" }, 0 );
       return tableModel;
     }
 
-    public void setupCancel (final JDialog dialog)
+    private final DefaultTableModel tableModel = new DefaultTableModel( new String[] { "name", "value" }, 0 );
+
+    public void setup (final JDialog dialog, final EditorNode node)
     {
       cancelButton.addActionListener( new ActionListener()
       {
@@ -286,34 +290,70 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
           dialog.setVisible( false );
         }
       });
-    }
 
-    public void setValuesFromNode (final EditorNode node)
-    {
-      NodeState state = node.getState();
-      nodeNameInput.setText( state.getName() );
-      nodeTypeInput.setSelectedItem( state.getType() );
-      joinTypeInput.setSelectedItem( state.getJoinType() );
-      joinParamInput.setText( SvUtil.nullIfBlank( state.getJoinParam() ) );
-      guardInput.setText( SvUtil.nullIfBlank( state.getGuard() ) );
-    }
-
-    public void setupApply (final JDialog dialog, final EditorNode node)
-    {
       applyButton.addActionListener( new ActionListener()
       {
         @Override
         public void actionPerformed (final ActionEvent e)
         {
+          Map<String,String> customProperties = new LinkedHashMap<String,String> ();
+
+          for ( int row = 0; row < tableModel.getRowCount(); row++ )
+          {
+            customProperties.put( (String)tableModel.getValueAt( row, 0 ), (String)tableModel.getValueAt( row, 1 ) );
+          }
+
           NodeState newState =
             new NodeState( nodeNameInput.getText(),
                            (String)nodeTypeInput.getSelectedItem(),
                            (JoinType)joinTypeInput.getSelectedItem(),
                            joinParamInput.getText(),
                            startNodeInput.isSelected(),
-                           guardInput.getText() );
+                           guardInput.getText(),
+                           customProperties );
           CommandStack.editNode( GraphEditor.getInstance().getCurrentScene(), node, newState );
           dialog.setVisible( false );
+        }
+      });
+
+      NodeState state = node.getState();
+      nodeNameInput.setText( state.getName() );
+      nodeTypeInput.setSelectedItem( state.getType() );
+      joinTypeInput.setSelectedItem( state.getJoinType() );
+      joinParamInput.setText( SvUtil.nullIfBlank( state.getJoinParam() ) );
+      guardInput.setText( SvUtil.nullIfBlank( state.getGuard() ) );
+      startNodeInput.setSelected( state.isStart() );
+
+      if ( state.getCustomProperties() != null )
+      {
+        for ( Map.Entry<String,String> entry : state.getCustomProperties().entrySet() )
+        {
+          tableModel.addRow( new String[] { entry.getKey(), entry.getValue() } );
+        }
+      }
+
+      this.customPropertiesInput.setModel( tableModel );
+
+      addPropertyButton.addActionListener( new ActionListener()
+      {
+        @Override
+        public void actionPerformed (ActionEvent e)
+        {
+          tableModel.addRow( new String[] { "", "" } );
+        }
+      });
+
+      deletePropertyButton.addActionListener( new ActionListener()
+      {
+        @Override
+        public void actionPerformed (ActionEvent e)
+        {
+          int [] indices = customPropertiesInput.getSelectedRows();
+          Arrays.sort( indices );
+          for ( int i = indices.length - 1; i >= 0; i-- )
+          {
+            tableModel.removeRow( indices[i] );
+          }
         }
       });
     }

@@ -192,20 +192,13 @@ public class ShortestPathRouterAdapter implements Router
     {
       Rectangle newBounds = getNewBounds();
 
-      if ( bounds == null )
-      {
-        if ( newBounds != null )
-        {
-          router.addObstacle( newBounds );
-        }
-      }
-      else if ( newBounds == null )
+      if ( bounds != null )
       {
         router.removeObstacle( bounds );
       }
-      else
+      if ( newBounds != null )
       {
-        router.updateObstacle( bounds, newBounds );
+        router.addObstacle( newBounds );
       }
 
       bounds = newBounds;

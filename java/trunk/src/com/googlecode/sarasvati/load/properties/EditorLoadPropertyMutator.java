@@ -14,34 +14,46 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.rubric;
+package com.googlecode.sarasvati.load.properties;
 
-import java.util.Date;
+import java.beans.PropertyDescriptor;
 
-import com.googlecode.sarasvati.rubric.env.RubricEnv;
+import com.googlecode.sarasvati.load.LoadException;
 
-public class TestRubricEnv implements RubricEnv
+public class EditorLoadPropertyMutator implements PropertyMutator
 {
-  public static final TestRubricEnv INSTANCE = new TestRubricEnv();
+  public static final EditorLoadPropertyMutator INSTANCE = new EditorLoadPropertyMutator();
 
   @Override
-  public Date evalDateFunction (String dateFunction)
+  public Object getCurrentValue () throws LoadException
   {
-    return null;
+    return this;
   }
 
   @Override
-  public boolean evalPredicate (String predicate)
+  public void setFromText (String text) throws LoadException
   {
-    return false;
+    // does nothing
   }
 
   @Override
-  public Date evalRelativeDate (Date date, boolean business, int offset, int unit)
+  public void setPropertyDescriptor (PropertyDescriptor pd)
   {
-    return null;
+    // does nothing
+  }
+
+  @Override
+  public void setTarget (Object target)
+  {
+    // does nothing
+  }
+
+  @Override
+  public void setValue (Object value) throws LoadException
+  {
+    // does nothing
   }
 }

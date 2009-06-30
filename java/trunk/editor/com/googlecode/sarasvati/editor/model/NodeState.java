@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati.editor.model;
 
+import java.util.Map;
+
 import com.googlecode.sarasvati.JoinType;
 
 public class NodeState extends GraphMemberState
@@ -29,12 +31,15 @@ public class NodeState extends GraphMemberState
   private final boolean isStart;
   private final String  guard;
 
+  private final Map<String,String> customProperties;
+
   public NodeState (final String name,
                     final String type,
                     final JoinType joinType,
                     final String joinParam,
                     final boolean isStart,
-                    final String guard)
+                    final String guard,
+                    final Map<String, String> customProperties)
   {
     super( name );
     this.type = type;
@@ -42,6 +47,7 @@ public class NodeState extends GraphMemberState
     this.joinParam = joinParam;
     this.isStart = isStart;
     this.guard = guard;
+    this.customProperties = customProperties;
   }
 
   public String getType ()
@@ -67,5 +73,10 @@ public class NodeState extends GraphMemberState
   public String getGuard ()
   {
     return guard;
+  }
+
+  public Map<String, String> getCustomProperties ()
+  {
+    return customProperties;
   }
 }

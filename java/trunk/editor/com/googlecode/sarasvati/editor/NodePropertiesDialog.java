@@ -39,9 +39,7 @@ public class NodePropertiesDialog extends JDialog
     setUndecorated( false );
 
     NodePropertiesPanel panel = new NodePropertiesPanel();
-    panel.setValuesFromNode( node );
-    panel.setupCancel( this );
-    panel.setupApply( this, node );
+    panel.setup( this, node );
     panel.setBorder( new BevelBorder( BevelBorder.RAISED ) );
     getContentPane().add( panel );
 

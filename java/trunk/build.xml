@@ -37,7 +37,7 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/commons-collections-3.2.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/commons-logging.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/dom4j.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/eclipse-draw2d-3.4.0.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/eclipse-draw2d-3.5.0.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/ejb3-persistence.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-3.2.6.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-annotations-3.3.1.jar"/>

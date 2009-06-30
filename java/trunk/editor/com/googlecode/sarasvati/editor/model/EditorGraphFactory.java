@@ -18,10 +18,17 @@
 */
 package com.googlecode.sarasvati.editor.model;
 
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
+import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;
+import com.googlecode.sarasvati.xml.XmlCustom;
 import com.googlecode.sarasvati.xml.XmlExternal;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
 import com.googlecode.sarasvati.xml.XmlJoinType;
@@ -30,7 +37,7 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class EditorGraphFactory
 {
-  public static EditorGraph loadFromXml (XmlProcessDefinition xmlProcDef)
+  public static EditorGraph loadFromXml (XmlProcessDefinition xmlProcDef) throws LoadException
   {
     EditorGraph graph = new EditorGraph();
     graph.setName( xmlProcDef.getName() );
@@ -40,12 +47,20 @@ public class EditorGraphFactory
 
     for ( XmlNode xmlNode : xmlProcDef.getNodes() )
     {
+      XmlCustom custom = xmlNode.getCustom();
+      Map<String,String> customProperties = new LinkedHashMap<String,String>();
+      if ( custom != null && custom.getCustom() != null )
+      {
+        DOMToObjectLoadHelper.loadCustomIntoMap( custom.getCustom(), customProperties );
+      }
+
       NodeState nodeState = new NodeState( xmlNode.getName(),
                                            xmlNode.getType(),
                                            xmlNode.getJoinType().getJoinType(),
                                            xmlNode.getJoinParam(),
                                            xmlNode.isStart(),
-                                           xmlNode.getGuard() );
+                                           xmlNode.getGuard(),
+                                           customProperties );
       EditorNode node = new EditorNode( nodeState );
 
       if ( xmlNode.getX() != null && xmlNode.getY() != null )
@@ -125,7 +140,7 @@ public class EditorGraphFactory
     return graph;
   }
 
-  public static XmlProcessDefinition exportToXml (EditorGraph graph)
+  public static XmlProcessDefinition exportToXml (EditorGraph graph) throws IOException
   {
     XmlProcessDefinition xmlProcDef = new XmlProcessDefinition();
     xmlProcDef.setName( graph.getName() );
@@ -139,12 +154,25 @@ public class EditorGraphFactory
       NodeState state = node.getState();
       xmlNode.setName( state.getName() );
       xmlNode.setType( state.getType() );
-      xmlNode.setGuard( state.getGuard() );
+      xmlNode.setGuard( SvUtil.nullIfBlank( state.getGuard() ) );
       xmlNode.setJoinType( XmlJoinType.getXmlJoinType( state.getJoinType() ) );
-      xmlNode.setStart( state.isStart() );
+
+      if ( state.isStart() )
+      {
+        xmlNode.setStart( true );
+      }
 
       xmlNode.setX( node.getX() );
       xmlNode.setY( node.getY() );
+
+      List<Object> customList = DOMToObjectLoadHelper.mapToDOM( state.getCustomProperties() );
+
+      if ( !customList.isEmpty() )
+      {
+        XmlCustom custom = new XmlCustom();
+        custom.setCustom( customList );
+        xmlNode.setCustom( custom );
+      }
 
       xmlProcDef.getNodes().add( xmlNode );
       nodeMap.put( node, xmlNode );
