@@ -44,6 +44,6 @@
     <arc to="nodeJ"/>
   </node>
 
-  <node name="nodeJ" isJoin="true"/>
+  <node name="nodeJ" joinType="and"/>
 
 </process-definition>

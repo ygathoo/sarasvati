@@ -22,7 +22,7 @@
     <arc to="nodeE"/>
   </node>
 
-  <node name="nodeE" type="wait" isJoin="true">
+  <node name="nodeE" type="wait" joinType="and">
   </node>
 
 </process-definition>
