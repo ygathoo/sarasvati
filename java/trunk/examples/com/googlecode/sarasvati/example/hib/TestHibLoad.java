@@ -24,9 +24,9 @@ import java.io.FilenameFilter;
 
 import org.hibernate.Session;
 
+import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.example.ApprovalNode;
 import com.googlecode.sarasvati.example.ApprovalSetupNode;
-import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.example.CustomTestNode;
 import com.googlecode.sarasvati.example.MessageNode;
 import com.googlecode.sarasvati.hib.HibEngine;
@@ -36,9 +36,9 @@ import com.googlecode.sarasvati.impl.NestedProcessNode;
 import com.googlecode.sarasvati.impl.ScriptNode;
 import com.googlecode.sarasvati.impl.WaitNode;
 import com.googlecode.sarasvati.load.GraphLoader;
+import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
-import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
 public class TestHibLoad
 {
@@ -72,7 +72,7 @@ public class TestHibLoad
     File baseDir = new File( "common/test-wf/" );
     assert baseDir.exists() : "Workflow process def dir not found.";
 
-    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
+    ProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
 
     FilenameFilter filter = new FilenameFilter()
     {

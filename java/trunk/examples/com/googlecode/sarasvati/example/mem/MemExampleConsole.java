@@ -39,13 +39,13 @@ import com.googlecode.sarasvati.example.LoggingExecutionListener;
 import com.googlecode.sarasvati.example.MessageNode;
 import com.googlecode.sarasvati.example.TaskState;
 import com.googlecode.sarasvati.load.GraphLoader;
+import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
-import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
 public class MemExampleConsole
 {
@@ -316,7 +316,7 @@ public class MemExampleConsole
     GraphLoader<MemGraph> wfLoader = engine.getLoader();
 
     File basePath = new File( "common/test-wf/" );
-    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, basePath );
+    ProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, basePath );
 
     FilenameFilter filter = new FilenameFilter()
     {

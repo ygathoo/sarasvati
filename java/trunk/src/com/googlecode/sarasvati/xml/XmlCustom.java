@@ -24,12 +24,15 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAnyElement;
 
+import com.googlecode.sarasvati.load.definition.CustomDefinition;
+
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlCustom
+public class XmlCustom implements CustomDefinition
 {
   @XmlAnyElement(lax = true)
   protected List<Object> custom;
 
+  @Override
   public List<Object> getCustom ()
   {
     return custom;

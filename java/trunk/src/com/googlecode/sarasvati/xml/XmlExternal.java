@@ -27,8 +27,11 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import com.googlecode.sarasvati.load.definition.ExternalArcDefinition;
+import com.googlecode.sarasvati.load.definition.ExternalDefinition;
+
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlExternal
+public class XmlExternal implements ExternalDefinition
 {
   @XmlAttribute(name = "processDefinition", required = true)
   protected String  processDefinition;
@@ -37,14 +40,15 @@ public class XmlExternal
   protected String  name;
 
   @XmlAttribute(name = "x", required = false)
-  protected Integer x;
+  public Integer x;
 
   @XmlAttribute(name = "y", required = false)
-  protected Integer y;
+  public Integer y;
 
   @XmlElement(name = "arc", required = false)
   protected List<XmlExternalArc> externalArcs = new ArrayList<XmlExternalArc>();
 
+  @Override
   public String getProcessDefinition ()
   {
     return processDefinition;
@@ -55,6 +59,7 @@ public class XmlExternal
     this.processDefinition = processDefinition;
   }
 
+  @Override
   public String getName ()
   {
     return name;
@@ -85,6 +90,7 @@ public class XmlExternal
     this.y = y;
   }
 
+  @Override
   public List<XmlExternalArc> getExternalArcs()
   {
     return externalArcs;
@@ -118,7 +124,7 @@ public class XmlExternal
 
     buf.append( ">\n" );
 
-    for (XmlExternalArc arc : externalArcs)
+    for (ExternalArcDefinition arc : externalArcs)
     {
       buf.append( arc );
       buf.append( "\n" );

@@ -39,7 +39,6 @@ import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.xml.bind.JAXBException;
 
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.menu.ExitAction;
@@ -52,6 +51,7 @@ import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
@@ -77,7 +77,7 @@ public class GraphEditor
   protected EditorMode  mode;
   protected File        lastFile;
 
-  public GraphEditor () throws JAXBException, LoadException
+  public GraphEditor () throws LoadException
   {
     INSTANCE = this;
     xmlLoader = new XmlLoader();
@@ -228,7 +228,7 @@ public class GraphEditor
   {
     try
     {
-      XmlProcessDefinition xmlProcDef = xmlLoader.loadProcessDefinition( processDefinitionFile );
+      ProcessDefinition xmlProcDef = xmlLoader.translate( processDefinitionFile );
       EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef );
       graph.setFile( processDefinitionFile );
       EditorScene scene = new EditorScene( graph );

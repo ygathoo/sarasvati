@@ -28,9 +28,13 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.googlecode.sarasvati.load.definition.ExternalDefinition;
+import com.googlecode.sarasvati.load.definition.NodeDefinition;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
+
 @XmlRootElement(name = "process-definition")
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlProcessDefinition
+public class XmlProcessDefinition implements ProcessDefinition
 {
   @XmlAttribute(name = "name", required = true)
   protected String            name;
@@ -41,6 +45,7 @@ public class XmlProcessDefinition
   @XmlElement(name = "external")
   protected List<XmlExternal> externals = new ArrayList<XmlExternal>();
 
+  @Override
   public String getName ()
   {
     return name;
@@ -51,6 +56,7 @@ public class XmlProcessDefinition
     this.name = name;
   }
 
+  @Override
   public List<XmlNode> getNodes ()
   {
     return nodes;
@@ -61,6 +67,7 @@ public class XmlProcessDefinition
     this.nodes = nodes;
   }
 
+  @Override
   public List<XmlExternal> getExternals ()
   {
     return externals;
@@ -79,13 +86,13 @@ public class XmlProcessDefinition
     buf.append( getName() );
     buf.append( "\">\n" );
 
-    for (XmlNode node : nodes)
+    for (NodeDefinition node : nodes)
     {
       buf.append( node );
       buf.append( "\n" );
     }
 
-    for (XmlExternal external : externals)
+    for (ExternalDefinition external : externals)
     {
       buf.append( external );
       buf.append( "\n" );

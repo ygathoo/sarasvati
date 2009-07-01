@@ -27,6 +27,7 @@ import org.junit.Before;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
+import com.googlecode.sarasvati.xml.XmlLoader;
 
 public class ExecutionTest
 {
@@ -46,7 +47,9 @@ public class ExecutionTest
 
     if ( !loader.isLoaded( name ) )
     {
-      loader.load( new File( basePath, name + ".wf.xml" ) );
+      loader.loadDefinition( new XmlLoader(), new File( basePath, name + ".wf.xml" ) );
+      // OR:
+      //loader.loadDefinition( new XmlLoader().translate( new File( basePath, name + ".wf.xml" ) ) );
     }
     return engine.getRepository().getLatestGraph( name );
   }

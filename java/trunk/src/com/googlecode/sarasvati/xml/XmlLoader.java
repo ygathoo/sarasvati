@@ -14,7 +14,8 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
+                        Vincent Kirsch
  */
 
 package com.googlecode.sarasvati.xml;
@@ -23,7 +24,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Reader;
 
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -34,12 +34,13 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
-import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.ProcessDefinitionTranslator;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 
-public class XmlLoader
+public class XmlLoader implements ProcessDefinitionTranslator<File>
 {
   protected JAXBContext context;
   protected Schema      schema;
@@ -50,8 +51,7 @@ public class XmlLoader
     loadSchema();
   }
 
-  public XmlLoader (String... extraPackages) throws JAXBException,
-      LoadException
+  public XmlLoader (String... extraPackages) throws LoadException
   {
     String packages = "com.googlecode.sarasvati.xml";
 
@@ -61,7 +61,14 @@ public class XmlLoader
         packages += ":" + p;
     }
 
-    this.context = JAXBContext.newInstance( packages );
+    try
+    {
+      this.context = JAXBContext.newInstance( packages );
+    }
+    catch (JAXBException e)
+    {
+      throw new LoadException( "Error while creating JAXB context", e );
+    }
     loadSchema();
   }
 
@@ -118,28 +125,20 @@ public class XmlLoader
     return m;
   }
 
-  public XmlProcessDefinition loadProcessDefinition (File file)
-      throws JAXBException
+  private XmlProcessDefinition loadProcessDefinition (File file)
+      throws LoadException
   {
-    return (XmlProcessDefinition) getUnmarshaller().unmarshal( file );
-  }
-
-  public XmlProcessDefinition loadProcessDefinition (InputStream in)
-      throws JAXBException
-  {
-    return (XmlProcessDefinition) getUnmarshaller().unmarshal( in );
-  }
-
-  public XmlProcessDefinition loadProcessDefinition (Reader in)
-      throws JAXBException
-  {
-    return (XmlProcessDefinition) getUnmarshaller().unmarshal( in );
-  }
-
-  public XmlProcessDefinition loadProcessDefinition (InputSource in)
-      throws JAXBException
-  {
-    return (XmlProcessDefinition) getUnmarshaller().unmarshal( in );
+    XmlProcessDefinition def = null;
+    try
+    {
+      def = (XmlProcessDefinition) getUnmarshaller().unmarshal( file );
+    }
+    catch(JAXBException e)
+    {
+      throw new LoadException("Error while unmarshmalling " + file, e);
+    }
+    
+    return def;
   }
 
   public void saveProcessDefinition (XmlProcessDefinition xmlProcDef, File file)
@@ -155,5 +154,11 @@ public class XmlLoader
     {
       fOut.close();
     }
+  }
+
+  @Override
+  public ProcessDefinition translate (File source) throws LoadException
+  {
+    return loadProcessDefinition( source );
   }
 }
