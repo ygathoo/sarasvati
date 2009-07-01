@@ -86,7 +86,7 @@ public class JdbcCustomNodeWrapper extends JdbcPropertyNode implements CustomNod
     }
     catch ( LoadException le )
     {
-      throw new SarasvatiException( "Unabled to create CustomNode of type: " + getType(), le );
+      throw new SarasvatiException( "Unable to create CustomNode of type: " + getType(), le );
     }
   }
 }
