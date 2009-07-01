@@ -44,6 +44,11 @@ public class SvUtil
     return isBlankOrNull( str ) ? null : str;
   }
 
+  public static boolean falseIfNull (Boolean value)
+  {
+    return value != null && value;
+  }
+
   public static String normalizeQuotedString (String string)
   {
     if ( string == null )

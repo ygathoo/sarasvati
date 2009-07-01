@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
  */
 package com.googlecode.sarasvati.editor.command;
 
@@ -22,6 +22,7 @@ import java.awt.Point;
 import java.util.LinkedList;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.model.ArcState;
 import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorNode;
@@ -101,6 +102,14 @@ public class CommandStack
     current.pushCommand( new MoveNodeCommand( scene, member, startLocation, endLocation ) );
   }
 
+  public static void moveNode (final EditorScene scene,
+                               final EditorGraphMember<?> member,
+                               final Point startLocation,
+                               final Point endLocation)
+  {
+    pushAndPerform( new MoveNodeCommand( scene, member, startLocation, endLocation ) );
+  }
+
   public static void addNode (final EditorScene scene,
                               final Point location,
                               final EditorNode node)
@@ -127,7 +136,14 @@ public class CommandStack
     pushAndPerform( new EditNodeCommand<T>( scene, graphMember, newState ) );
   }
 
-  private static void pushAndPerform (final Command command)
+  public static void editArc (final EditorScene scene,
+                              final EditorArc arc,
+                              final ArcState newState)
+  {
+    pushAndPerform( new EditArcCommand( scene, arc, newState ) );
+  }
+
+  public static void pushAndPerform (final Command command)
   {
     current.pushCommand( command );
     command.performAction();

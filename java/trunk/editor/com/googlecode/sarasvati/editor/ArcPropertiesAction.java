@@ -14,45 +14,38 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Paul Lorenz
- */
-package com.googlecode.sarasvati.editor.command;
+    Copyright 2008 Paul Lorenz
+*/
+package com.googlecode.sarasvati.editor;
+
+import java.awt.event.MouseEvent;
+
+import javax.swing.JDialog;
+
+import org.netbeans.api.visual.action.WidgetAction.Adapter;
+import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class NewArcCommand implements Command
+public class ArcPropertiesAction extends Adapter
 {
-  private EditorScene scene;
-  private EditorArc arc;
-
-  public NewArcCommand (EditorScene scene, EditorArc arc)
-  {
-    this.scene = scene;
-    this.arc   = arc;
-  }
-
   @Override
-  public void performAction ()
+  public State mouseClicked (Widget widget, WidgetMouseEvent event)
   {
-    scene.getGraph().addArc( arc );
-    scene.addEdge( arc );
-    scene.setEdgeSource( arc, arc.getStart() );
-    scene.setEdgeTarget( arc, arc.getEnd() );
-    scene.validate();
+    if ( event.getClickCount() == 1 && event.getButton() == MouseEvent.BUTTON3 )
+    {
+      EditorScene scene = (EditorScene)widget.getScene();
+      EditorArc arc = (EditorArc) scene.findObject( widget );
+
+      JDialog dialog = DialogFactory.newArcPropertiesDialog( arc );
+      dialog.setLocation( widget.convertLocalToScene( event.getPoint() ) );
+      dialog.setVisible( true );
+
+      return State.CONSUMED;
+    }
+
+    return State.REJECTED;
   }
 
-  @Override
-  public void undoAction ()
-  {
-    scene.getGraph().removeArc( arc );
-    scene.removeEdge( arc );
-    scene.validate();
-  }
-
-  @Override
-  public String getName ()
-  {
-    return "Add Connection";
-  }
 }

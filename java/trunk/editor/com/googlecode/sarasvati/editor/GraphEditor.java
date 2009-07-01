@@ -20,6 +20,8 @@ package com.googlecode.sarasvati.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.io.File;
 
@@ -49,8 +51,6 @@ import com.googlecode.sarasvati.editor.menu.UndoAction;
 import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
 import com.googlecode.sarasvati.editor.model.EditorScene;
-import com.googlecode.sarasvati.editor.toolbar.AddNodeModeAction;
-import com.googlecode.sarasvati.editor.toolbar.MoveModeAction;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
@@ -122,16 +122,42 @@ public class GraphEditor
     toolBar.setFloatable( true );
 
     JButton moveButton = new JButton( "Move" );
-    moveButton.setAction( new MoveModeAction( this ) );
+    moveButton.addActionListener( new ActionListener()
+    {
+      @Override
+      public void actionPerformed (ActionEvent e)
+      {
+        modeMove();
+      }
+    });
 
     toolBar.add( moveButton );
     toolBar.add( new JButton( "Edit Arcs" ) );
 
     JButton addNodeButton = new JButton( "Add Nodes" );
-    addNodeButton.setAction( new AddNodeModeAction( this ) );
+    addNodeButton.addActionListener( new ActionListener()
+    {
+      @Override
+      public void actionPerformed (ActionEvent e)
+      {
+        modeAddNode();
+      }
+    });
+
     toolBar.add( addNodeButton );
     toolBar.add( new JButton( "Add External" ) );
-    toolBar.add( new JButton( "Add Tasks" ) );
+
+    JButton autoLayoutButton = new JButton( "Auto-Layout" );
+    autoLayoutButton.addActionListener( new ActionListener()
+    {
+      @Override
+      public void actionPerformed (ActionEvent e)
+      {
+        getCurrentScene().autoLayout();
+      }
+    });
+
+    toolBar.add( autoLayoutButton );
 
     tabPane = new JTabbedPane( JTabbedPane.TOP );
     tabPane.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );

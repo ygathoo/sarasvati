@@ -14,31 +14,30 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.visual.graph;
 
 import java.util.List;
 
-import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 
-public class GraphTreeNode
+public class GraphLayoutNode<N>
 {
-  protected Node    node;
+  protected N       node;
   protected int     depth;
   protected int     index;
 
   protected int     originX;
   protected int     originY;
 
-  public GraphTreeNode (int depth, Node node)
+  public GraphLayoutNode (int depth, N node)
   {
     this.node = node;
     this.depth = depth;
   }
 
-  public Node getNode ()
+  public N getNode ()
   {
     return node;
   }
@@ -58,7 +57,7 @@ public class GraphTreeNode
     this.index = index;
   }
 
-  public void addToLayer (List<GraphTreeNode> layer)
+  public void addToLayer (List<GraphLayoutNode<N>> layer)
   {
     this.index = layer.size();
     layer.add( this );

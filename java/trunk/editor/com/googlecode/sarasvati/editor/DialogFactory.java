@@ -14,13 +14,14 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.editor;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 
+import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 
 public class DialogFactory
@@ -32,8 +33,13 @@ public class DialogFactory
     DialogFactory.frame = frame;
   }
 
-  public static JDialog newPropertiesDialog (EditorNode node)
+  public static JDialog newNodePropertiesDialog (EditorNode node)
   {
     return new NodePropertiesDialog( frame, node );
+  }
+
+  public static JDialog newArcPropertiesDialog (EditorArc arc)
+  {
+    return new ArcPropertiesDialog( frame, arc );
   }
 }

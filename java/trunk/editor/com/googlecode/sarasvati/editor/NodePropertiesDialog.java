@@ -28,13 +28,10 @@ public class NodePropertiesDialog extends JDialog
 {
   private static final long serialVersionUID = 1L;
 
-  protected EditorNode node;
-
   public NodePropertiesDialog (final JFrame frame,
                                final EditorNode node)
   {
     super( frame, node.getState().getName() + " properties", false );
-    this.node = node;
 
     setUndecorated( false );
 

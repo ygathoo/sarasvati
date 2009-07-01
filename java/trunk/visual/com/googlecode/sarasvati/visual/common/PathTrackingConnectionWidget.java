@@ -29,6 +29,7 @@ import org.eclipse.draw2d.graph.Path;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visual.util.ConvertUtil;
 
 public class PathTrackingConnectionWidget extends ConnectionWidget
@@ -58,7 +59,8 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
       Point newStart = null;
       Point newEnd = null;
 
-      boolean isSelfArc = sourceAnchor.getRelatedWidget().equals( targetAnchor.getRelatedWidget() );
+      boolean isSelfArc = sourceAnchor.getRelatedWidget() != null &&
+                          SvUtil.equals( sourceAnchor.getRelatedWidget(), targetAnchor.getRelatedWidget() );
       if ( isSelfArc )
       {
         Point origin = sourceAnchor.getRelatedWidget().getLocation();

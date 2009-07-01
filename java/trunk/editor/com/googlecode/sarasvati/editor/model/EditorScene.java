@@ -18,7 +18,11 @@
 */
 package com.googlecode.sarasvati.editor.model;
 
+import java.awt.Color;
+import java.awt.Font;
 import java.awt.Point;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -29,26 +33,35 @@ import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.action.ReconnectProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.anchor.PointShape;
+import org.netbeans.api.visual.layout.LayoutFactory.ConnectionWidgetLayoutAlignment;
 import org.netbeans.api.visual.widget.ComponentWidget;
 import org.netbeans.api.visual.widget.ConnectionWidget;
+import org.netbeans.api.visual.widget.LabelWidget;
 import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.JoinType;
+import com.googlecode.sarasvati.editor.ArcPropertiesAction;
 import com.googlecode.sarasvati.editor.EditorMode;
 import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.MoveTrackAction;
 import com.googlecode.sarasvati.editor.NodePropertiesAction;
 import com.googlecode.sarasvati.editor.SceneAddNodeAction;
+import com.googlecode.sarasvati.editor.command.AutoLayoutCommand;
+import com.googlecode.sarasvati.editor.command.Command;
 import com.googlecode.sarasvati.editor.command.CommandStack;
+import com.googlecode.sarasvati.editor.command.MoveNodeCommand;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
+import com.googlecode.sarasvati.visual.graph.GraphLayoutNode;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
 public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 {
+  protected static final Font ARC_LABEL_FONT = Font.decode( "serif bold 11" );
+
   protected final CommandStack commandStack;
   protected final EditorGraph graph;
 
@@ -57,6 +70,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   private final WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
 
   private final WidgetAction nodePropertiesAction = new NodePropertiesAction();
+  private final WidgetAction arcPropertiesAction = new ArcPropertiesAction();
 
   private boolean loading = true;
 
@@ -114,13 +128,31 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   }
 
   @Override
-  protected PathTrackingConnectionWidget attachEdgeWidget (EditorArc edge)
+  protected PathTrackingConnectionWidget attachEdgeWidget (EditorArc arc)
   {
-    PathTrackingConnectionWidget widget = super.attachEdgeWidget( edge );
+    final PathTrackingConnectionWidget widget = super.attachEdgeWidget( arc );
     widget.setEndPointShape (PointShape.SQUARE_FILLED_BIG);
     widget.getActions().addAction( createObjectHoverAction() );
     widget.getActions().addAction( createSelectAction() );
     widget.getActions().addAction( reconnectAction );
+    widget.getActions().addAction( arcPropertiesAction );
+
+    final LabelWidget arcLabel = new LabelWidget( this, arc.getState().getLabel() );
+    arcLabel.setFont( ARC_LABEL_FONT );
+    arcLabel.setForeground( Color.BLUE );
+    arcLabel.setOpaque( true );
+    widget.addChild( arcLabel );
+    widget.setConstraint( arcLabel, ConnectionWidgetLayoutAlignment.CENTER, 30 );
+
+    arc.addListener( new ModelListener<EditorArc>()
+    {
+      @Override
+      public void modelChanged (final EditorArc modelInstance)
+      {
+        arcLabel.setLabel( modelInstance.getState().getLabel() );
+      }
+    });
+
     return widget;
   }
 
@@ -215,7 +247,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
     public void createConnection (Widget sourceWidget, Widget targetWidget)
     {
-      CommandStack.addArc( EditorScene.this, new EditorArc( source, target ) );
+      CommandStack.addArc( EditorScene.this, new EditorArc( new ArcState( null, null, null ), source, target ) );
     }
   }
 
@@ -287,5 +319,28 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
         CommandStack.updateArc( EditorScene.this, arc, false, replacementNode );
       }
     }
+  }
+
+  public void autoLayout ()
+  {
+    EditorGraphLayoutTree layoutTree = new EditorGraphLayoutTree( graph );
+
+    List<Command> commands = new LinkedList<Command>();
+
+    for ( EditorGraphMember<?> member : graph.getNodes() )
+    {
+      GraphLayoutNode<?> layoutNode = layoutTree.getTreeNode( member );
+      Point newOrigin = new Point( layoutNode.getOriginX(), layoutNode.getOriginY() );
+      commands.add( new MoveNodeCommand( this, member, member.getOrigin(), newOrigin ) );
+    }
+
+    for ( EditorGraphMember<?> member : graph.getExternals() )
+    {
+      GraphLayoutNode<?> layoutNode = layoutTree.getTreeNode( member );
+      Point newOrigin = new Point( layoutNode.getOriginX(), layoutNode.getOriginY() );
+      commands.add( new MoveNodeCommand( this, member, member.getOrigin(), newOrigin ) );
+    }
+
+    CommandStack.pushAndPerform( new AutoLayoutCommand( this, commands ) );
   }
 }

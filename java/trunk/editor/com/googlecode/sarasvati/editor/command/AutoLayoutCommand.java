@@ -14,46 +14,48 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Paul Lorenz
+    Copyright 2008 Paul Lorenz
  */
 package com.googlecode.sarasvati.editor.command;
 
-import com.googlecode.sarasvati.editor.model.EditorGraphMember;
-import com.googlecode.sarasvati.editor.model.EditorScene;
-import com.googlecode.sarasvati.editor.model.GraphMemberState;
+import java.util.List;
 
-public class EditNodeCommand<T extends GraphMemberState> implements Command
+import com.googlecode.sarasvati.editor.model.EditorScene;
+
+public class AutoLayoutCommand implements Command
 {
   private final EditorScene scene;
-  private final EditorGraphMember<T> graphMember;
-  private final T                    newState;
+  private final List<Command> commands;
 
-  public EditNodeCommand (final EditorScene scene,
-                          final EditorGraphMember<T> graphMember,
-                          final T newState)
+  public AutoLayoutCommand (EditorScene scene, List<Command> commands)
   {
     this.scene = scene;
-    this.graphMember = graphMember;
-    this.newState = newState;
+    this.commands = commands;
   }
 
   @Override
   public void performAction ()
   {
-    graphMember.pushState( newState );
+    for ( Command command : commands )
+    {
+      command.performAction();
+    }
     scene.validate();
   }
 
   @Override
   public void undoAction ()
   {
-    graphMember.popState();
+    for ( Command command : commands )
+    {
+      command.undoAction();
+    }
     scene.validate();
   }
 
   @Override
   public String getName ()
   {
-    return "Edit Node";
+    return "Auto-Layout";
   }
 }

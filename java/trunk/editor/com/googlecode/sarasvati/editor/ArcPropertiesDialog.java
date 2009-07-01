@@ -14,28 +14,36 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
- */
-package com.googlecode.sarasvati.editor.toolbar;
+    Copyright 2009 Paul Lorenz
+*/
+package com.googlecode.sarasvati.editor;
 
-import java.awt.event.ActionEvent;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.border.BevelBorder;
 
-import javax.swing.AbstractAction;
+import com.googlecode.sarasvati.editor.model.EditorArc;
 
-import com.googlecode.sarasvati.editor.GraphEditor;
-
-public class MoveModeAction extends AbstractAction
+public class ArcPropertiesDialog extends JDialog
 {
   private static final long serialVersionUID = 1L;
 
-  public MoveModeAction ()
+  public ArcPropertiesDialog (final JFrame frame,
+                              final EditorArc arc)
   {
-    super( "Move" );
-  }
+    super( frame, "Arc Properties", false );
 
-  @Override
-  public void actionPerformed (ActionEvent e)
-  {
-    GraphEditor.getInstance().modeMove();
+    setUndecorated( false );
+
+    ArcPropertiesPanel panel = new ArcPropertiesPanel();
+    panel.setup( this, arc );
+    panel.setBorder( new BevelBorder( BevelBorder.RAISED ) );
+    getContentPane().add( panel );
+
+    if ( isAlwaysOnTopSupported() )
+    {
+      setAlwaysOnTop( true );
+    }
+    pack();
   }
 }
