@@ -59,8 +59,8 @@ public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
     long nodeId       = row.getLong( 3 );
     String name       = row.getString( 4 );
     String type       = row.getString( 5 );
-    boolean isStart   = "Y".equalsIgnoreCase( row.getString( 6 ) );
-    JoinType joinType = JoinType.values()[ row.getInt( 7 ) ];
+    JoinType joinType = JoinType.values()[ row.getInt( 6 ) ];
+    boolean isStart   = "Y".equalsIgnoreCase( row.getString( 7 ) );
     String guard      = row.getString( 8 );
 
     JdbcNode node = nodeMap.get( nodeId );
