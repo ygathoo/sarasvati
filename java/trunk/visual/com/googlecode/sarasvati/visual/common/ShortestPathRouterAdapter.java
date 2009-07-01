@@ -130,27 +130,10 @@ public class ShortestPathRouterAdapter implements Router
   {
     PathTrackingConnectionWidget pathTrackingCW = (PathTrackingConnectionWidget)conn;
     pathTrackingCW.ensurePathCurrent();
-
-    while ( dirty )
-    {
-      router.solve();
-      dirty = false;
-      redrawConnections( conn );
-    }
+    router.solve();
+    dirty = false;
 
     return pathTrackingCW.getRoute();
-  }
-
-  public void redrawConnections (Widget source)
-  {
-    for ( Widget widget : scene.getConnectionLayer().getChildren() )
-    {
-      if ( widget != source && widget instanceof PathTrackingConnectionWidget)
-      {
-        PathTrackingConnectionWidget conn = (PathTrackingConnectionWidget)widget;
-        conn.reroute();
-      }
-    }
   }
 
   public void setDirty ()
@@ -194,6 +177,7 @@ public class ShortestPathRouterAdapter implements Router
 
       if ( bounds != null )
       {
+        System.out.println( "Removed bounds: " + bounds );
         router.removeObstacle( bounds );
       }
       if ( newBounds != null )

@@ -56,7 +56,7 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
     addChild( intrLayer );
     addChild( connLayer );
 
-    router = new ShortestPathRouterAdapter( this, 15 );
+    router = new ShortestPathRouterAdapter( this, 10 );
   }
 
   public void setAdjacentLineSpacing (int spacing)
