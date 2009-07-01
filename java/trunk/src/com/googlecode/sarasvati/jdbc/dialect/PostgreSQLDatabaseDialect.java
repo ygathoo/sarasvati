@@ -26,7 +26,7 @@ public class PostgreSQLDatabaseDialect extends AbstractDatabaseDialect
     "insert into wf_graph (name, version) values ( ?, ? ) returning id";
 
   private static final String NODE_INSERT_SQL =
-    "insert into wf_node (graph_id, name, type, guard, is_start, is_join) values ( ?, ?, ?, ?, ?, ? ) returning id";
+    "insert into wf_node (graph_id, name, type, guard, is_start, join_type) values ( ?, ?, ?, ?, ?, ? ) returning id";
 
   private static final String NODE_REF_INSERT_SQL =
     "insert into wf_node_ref (graph_id, node_id, instance ) values ( ?, ?, ? ) returning id";
