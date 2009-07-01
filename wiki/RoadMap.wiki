@@ -15,7 +15,7 @@ A graphical editor for process definitions is in progress.
 
  * Undo/Redo framework: Done
  * Load: Done
- * Save: 50% done
+ * Save: 90% done
  * Add nodes: 
    * Implemented: Yes
    * Undo/redo: Yes
@@ -41,12 +41,17 @@ A graphical editor for process definitions is in progress.
    * Implemented: Yes
    * Undo/redo: Yes
  * Edit node properties
-   * Implemented: Started
-   * Undo/redo: *No*
+   * Implemented: Yes
+   * Undo/redo: Yes
  * Edit arc properties
-   * Implemented: *No*
+   * Implemented: Started. Need to implement externals interaction.
    * Undo/redo: *No*
  * Cleanup undo/redo MDI interactions: Done
+ * Autolayout
+   * Implemented: Yes
+   * Undo/redo: Yes 
+ * Self arcs: Done
+ * Arc labels: Done
 
 === Token Sets/Template Nodes: Completed ===
 
