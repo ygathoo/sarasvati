@@ -25,6 +25,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.definition.ArcDefinition;
+import com.googlecode.sarasvati.load.definition.CustomDefinition;
+import com.googlecode.sarasvati.load.definition.ExternalArcDefinition;
+import com.googlecode.sarasvati.load.definition.ExternalDefinition;
+import com.googlecode.sarasvati.load.definition.NodeDefinition;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlArc;
@@ -37,102 +43,102 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class EditorGraphFactory
 {
-  public static EditorGraph loadFromXml (XmlProcessDefinition xmlProcDef) throws LoadException
+  public static EditorGraph loadFromXml (ProcessDefinition procDef) throws LoadException
   {
     EditorGraph graph = new EditorGraph();
-    graph.setName( xmlProcDef.getName() );
+    graph.setName( procDef.getName() );
 
     Map<String, EditorNode> nodeMap = new HashMap<String, EditorNode>();
     Map<String, EditorExternal> externalMap = new HashMap<String, EditorExternal>();
 
-    for ( XmlNode xmlNode : xmlProcDef.getNodes() )
+    for ( NodeDefinition nodeDef : procDef.getNodes() )
     {
-      XmlCustom custom = xmlNode.getCustom();
+      CustomDefinition custom = nodeDef.getCustom();
       Map<String,String> customProperties = new LinkedHashMap<String,String>();
       if ( custom != null && custom.getCustom() != null )
       {
         DOMToObjectLoadHelper.loadCustomIntoMap( custom.getCustom(), customProperties );
       }
 
-      NodeState nodeState = new NodeState( xmlNode.getName(),
-                                           xmlNode.getType(),
-                                           xmlNode.getJoinType().getJoinType(),
-                                           xmlNode.getJoinParam(),
-                                           xmlNode.isStart(),
-                                           xmlNode.getGuard(),
+      NodeState nodeState = new NodeState( nodeDef.getName(),
+                                           nodeDef.getType(),
+                                           nodeDef.getJoinType(),
+                                           nodeDef.getJoinParam(),
+                                           nodeDef.isStart(),
+                                           nodeDef.getGuard(),
                                            customProperties );
       EditorNode node = new EditorNode( nodeState );
 
-      if ( xmlNode.getX() != null && xmlNode.getY() != null )
+      if ( nodeDef.getX() != null && nodeDef.getY() != null )
       {
-        node.setX( xmlNode.getX() );
-        node.setY( xmlNode.getY() );
+        node.setX( nodeDef.getX() );
+        node.setY( nodeDef.getY() );
       }
 
       graph.addNode( node );
       nodeMap.put( node.getState().getName(), node );
     }
 
-    for ( XmlExternal xmlExternal : xmlProcDef.getExternals() )
+    for ( ExternalDefinition externalDef : procDef.getExternals() )
     {
-      ExternalState externalState = new ExternalState( xmlExternal.getName(), xmlExternal.getProcessDefinition() );
+      ExternalState externalState = new ExternalState( externalDef.getName(), externalDef.getProcessDefinition() );
       EditorExternal external = new EditorExternal( externalState );
 
-      if ( xmlExternal.getX() != null && xmlExternal.getY() != null )
+      if ( externalDef.getX() != null && externalDef.getY() != null )
       {
-        external.setX( xmlExternal.getX() );
-        external.setY( xmlExternal.getY() );
+        external.setX( externalDef.getX() );
+        external.setY( externalDef.getY() );
       }
 
       graph.addExternal( external );
       externalMap.put( external.getState().getName(), external );
     }
 
-    for ( XmlNode xmlNode : xmlProcDef.getNodes() )
+    for ( NodeDefinition nodeDef : procDef.getNodes() )
     {
-      for ( XmlArc xmlArc : xmlNode.getArcs() )
+      for ( ArcDefinition arcDef : nodeDef.getArcs() )
       {
         String externalEnd = null;
-        EditorGraphMember<?> startMember = nodeMap.get( xmlNode.getName() );
+        EditorGraphMember<?> startMember = nodeMap.get( nodeDef.getName() );
         EditorGraphMember<?> endMember = null;
 
-        if ( xmlArc.isToExternal() )
+        if ( arcDef.isToExternal() )
         {
-          endMember = nodeMap.get( xmlArc.getExternal() );
-          externalEnd = xmlArc.getTo();
+          endMember = nodeMap.get( arcDef.getExternal() );
+          externalEnd = arcDef.getTo();
         }
         else
         {
-          endMember = nodeMap.get( xmlArc.getTo() );
+          endMember = nodeMap.get( arcDef.getTo() );
         }
 
-        ArcState state = new ArcState( xmlArc.getName(), null, externalEnd );
+        ArcState state = new ArcState( arcDef.getName(), null, externalEnd );
         EditorArc arc = new EditorArc( state, startMember, endMember );
 
         graph.addArc( arc );
       }
     }
 
-    for ( XmlExternal xmlExternal : xmlProcDef.getExternals() )
+    for ( ExternalDefinition externalDef : procDef.getExternals() )
     {
-      EditorGraphMember<?> startMember = nodeMap.get( xmlExternal.getName() );
+      EditorGraphMember<?> startMember = nodeMap.get( externalDef.getName() );
 
-      for ( XmlExternalArc xmlExternalArc : xmlExternal.getExternalArcs() )
+      for ( ExternalArcDefinition externalArcDef : externalDef.getExternalArcs() )
       {
         EditorGraphMember<?> endMember = null;
         String externalEnd = null;
 
-        if ( xmlExternalArc.isToExternal() )
+        if ( externalArcDef.isToExternal() )
         {
-          endMember = nodeMap.get( xmlExternalArc.getExternal() );
-          externalEnd = xmlExternalArc.getTo();
+          endMember = nodeMap.get( externalArcDef.getExternal() );
+          externalEnd = externalArcDef.getTo();
         }
         else
         {
-          endMember = nodeMap.get( xmlExternalArc.getTo() );
+          endMember = nodeMap.get( externalArcDef.getTo() );
         }
 
-        ArcState state = new ArcState( xmlExternalArc.getName(), xmlExternalArc.getFrom(), externalEnd );
+        ArcState state = new ArcState( externalArcDef.getName(), externalArcDef.getFrom(), externalEnd );
         EditorArc arc = new EditorArc( state, startMember, endMember );
 
         graph.addArc( arc );

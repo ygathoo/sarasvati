@@ -27,8 +27,12 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import com.googlecode.sarasvati.JoinType;
+import com.googlecode.sarasvati.load.definition.ArcDefinition;
+import com.googlecode.sarasvati.load.definition.NodeDefinition;
+
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlNode
+public class XmlNode implements NodeDefinition
 {
   @XmlAttribute(name = "name", required = true)
   protected String               name;
@@ -60,6 +64,7 @@ public class XmlNode
   @XmlElement(name = "custom")
   protected XmlCustom            custom;
 
+  @Override
   public String getName ()
   {
     return name;
@@ -70,9 +75,10 @@ public class XmlNode
     this.name = name;
   }
 
-  public XmlJoinType getJoinType ()
+  @Override
+  public JoinType getJoinType ()
   {
-    return joinType == null ? XmlJoinType.OR : joinType;
+    return joinType == null ? JoinType.OR : joinType.getJoinType();
   }
 
   public void setJoinType (XmlJoinType joinType)
@@ -80,6 +86,7 @@ public class XmlNode
     this.joinType = joinType;
   }
 
+  @Override
   public String getJoinParam ()
   {
     return joinParam;
@@ -103,11 +110,6 @@ public class XmlNode
   public boolean isStart ()
   {
     return start == null ? false : start;
-  }
-
-  public Boolean getStart ()
-  {
-    return start;
   }
 
   public void setStart (Boolean start)
@@ -135,6 +137,7 @@ public class XmlNode
     this.y = y;
   }
 
+  @Override
   public String getGuard ()
   {
     return guard;
@@ -145,6 +148,7 @@ public class XmlNode
     this.guard = guard;
   }
 
+  @Override
   public List<XmlArc> getArcs ()
   {
     return arcs;
@@ -155,6 +159,7 @@ public class XmlNode
     this.arcs = arcs;
   }
 
+  @Override
   public XmlCustom getCustom ()
   {
     return custom;
@@ -191,7 +196,7 @@ public class XmlNode
 
     buf.append( "\">\n" );
 
-    for (XmlArc arc : arcs)
+    for (ArcDefinition arc : arcs)
     {
       buf.append( arc );
       buf.append( "\n" );

@@ -49,12 +49,12 @@ import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.impl.NestedProcessNode;
 import com.googlecode.sarasvati.impl.ScriptNode;
 import com.googlecode.sarasvati.impl.WaitNode;
+import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
-import com.googlecode.sarasvati.xml.XmlProcessDefinition;
-import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
 public class SarasvatiDatabasePerformanceTester
 {
@@ -131,11 +131,11 @@ public class SarasvatiDatabasePerformanceTester
     File baseDir = new File( "common/test-wf/" );
     assert baseDir.exists() : "Workflow process def dir not found.";
 
-    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
+    ProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
 
     for ( File file : baseDir.listFiles( filter ) )
     {
-      XmlProcessDefinition xmlDef = xmlLoader.loadProcessDefinition( file );
+      ProcessDefinition xmlDef = xmlLoader.translate( file );
       engine.getLoader().loadWithDependencies( xmlDef.getName(), resolver );
       graphs.put( xmlDef.getName(), new TestPerfStats( xmlDef ) );
     }

@@ -20,25 +20,49 @@
 package com.googlecode.sarasvati.xml;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
-import javax.xml.bind.JAXBException;
+import com.googlecode.sarasvati.impl.BaseProcessDefinitionResolver;
 
-public class DefaultFileXmlProcessDefinitionResolver implements
-    XmlProcessDefinitionResolver
+public class DefaultFileXmlProcessDefinitionResolver extends BaseProcessDefinitionResolver<File>
 {
-  protected File      basePath;
-  protected XmlLoader loader;
+  private static final String DEFAULT_SUFFIX = ".wf.xml";
 
   public DefaultFileXmlProcessDefinitionResolver (XmlLoader loader, File basePath)
   {
-    this.basePath = basePath;
-    this.loader = loader;
+    this (loader, basePath, null);
   }
 
-  @Override
-  public XmlProcessDefinition resolve (String name) throws JAXBException
+  public DefaultFileXmlProcessDefinitionResolver (XmlLoader loader, File basePath, String suffix)
   {
-    File defFile = new File( basePath, name + ".wf.xml" );
-    return loader.loadProcessDefinition( defFile );
+    super( loader, getFilesRepository( basePath, suffix ));
+  }
+
+  private static Map<String, File> getFilesRepository (File basePath, String suffix)
+  {
+    String suf = suffix == null? DEFAULT_SUFFIX : suffix;
+    
+    Map<String, File> map = new HashMap<String, File>();
+
+    if ( basePath.isDirectory() )
+    {
+      for ( String fileName : basePath.list() )
+      {
+        if ( fileName.endsWith( suf ) )
+          map.put( fileName.substring( 0, fileName.length() - suf.length() ), new File(
+              basePath, fileName ) );
+        else map.put( fileName, new File( fileName ) );
+      }
+    }
+    else
+    {
+      if ( basePath.getName().endsWith( suf ) )
+        map.put( basePath.getName().substring( 0, basePath.getName().length() - suf.length() ), basePath );
+      else 
+        map.put( basePath.getName(), basePath );
+    }
+
+    return map;
   }
 }

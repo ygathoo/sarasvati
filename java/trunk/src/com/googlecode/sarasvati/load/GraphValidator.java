@@ -14,13 +14,19 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
+                        Vincent Kirsch
 */
 package com.googlecode.sarasvati.load;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.load.definition.ArcDefinition;
+import com.googlecode.sarasvati.load.definition.ExternalArcDefinition;
+import com.googlecode.sarasvati.load.definition.ExternalDefinition;
+import com.googlecode.sarasvati.load.definition.NodeDefinition;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.xml.XmlArc;
 import com.googlecode.sarasvati.xml.XmlExternal;
 import com.googlecode.sarasvati.xml.XmlExternalArc;
@@ -33,6 +39,7 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinition;
  * violates some user constraint.
  *
  * @author Paul Lorenz
+ *         Vincent Kirsch
  */
 public interface GraphValidator
 {
@@ -43,9 +50,9 @@ public interface GraphValidator
    * <p>
    * If a user constraint is violated, a {@link LoadException} should be thrown.
    *
-   * @param xmlProcessDefinition The {@link XmlProcessDefinition} to be validated.
+   * @param processDefinition The {@link XmlProcessDefinition} to be validated.
    */
-  void validateXmlProcessDefinition (XmlProcessDefinition xmlProcessDefinition) throws LoadException;
+  void validateProcessDefinition (ProcessDefinition processDefinition) throws LoadException;
 
   /**
    * Allows user validation of each {@link XmlExternal} in the {@link XmlProcessDefinition} being loaded.
@@ -54,9 +61,9 @@ public interface GraphValidator
    * <p>
    * If a user constraint is violated, a {@link LoadException} should be thrown.
    *
-   * @param xmlExternal The {@link XmlExternal} to be validated.
+   * @param externalDefinition The {@link XmlExternal} to be validated.
    */
-  void validateXmlExternal (XmlExternal xmlExternal) throws LoadException;
+  void validateExternalDefinition (ExternalDefinition externalDefinition) throws LoadException;
 
   /**
    * Allows user validation of each {@link XmlNode} in the {@link XmlProcessDefinition} being loaded.
@@ -65,9 +72,9 @@ public interface GraphValidator
    * <p>
    * If a user constraint is violated, a {@link LoadException} should be thrown.
    *
-   * @param xmlNode The {@link XmlNode} to be validated.
+   * @param nodeDefinition The {@link XmlNode} to be validated.
    */
-  void validateXmlNode (XmlNode xmlNode) throws LoadException;
+  void validateNodeDefinition (NodeDefinition nodeDefinition) throws LoadException;
 
   /**
    * Allows user validation of each {@link XmlArc} in the {@link XmlProcessDefinition} being loaded.
@@ -76,9 +83,9 @@ public interface GraphValidator
    * <p>
    * If a user constraint is violated, a {@link LoadException} should be thrown.
    *
-   * @param xmlArc The {@link XmlArc} to be validated.
+   * @param arcDefinition The {@link XmlArc} to be validated.
    */
-  void validateXmlArc (XmlArc xmlArc) throws LoadException;
+  void validateArcDefinition (ArcDefinition arcDefinition) throws LoadException;
 
   /**
    * Allows user validation of each {@link XmlExternalArc} in the {@link XmlProcessDefinition} being loaded.
@@ -87,9 +94,9 @@ public interface GraphValidator
    * <p>
    * If a user constraint is violated, a {@link LoadException} should be thrown.
    *
-   * @param xmlExternalArc The {@link XmlExternalArc} to be validated.
+   * @param externalArcDefinition The {@link XmlExternalArc} to be validated.
    */
-  void validateXmlExternalArc (XmlExternalArc xmlExternalArc) throws LoadException;
+  void validateExternalArcDefinition (ExternalArcDefinition externalArcDefinition) throws LoadException;
 
   /**
    * Allows user validation of the loaded {@link Graph}, before it is added to the {@link GraphRepository}.

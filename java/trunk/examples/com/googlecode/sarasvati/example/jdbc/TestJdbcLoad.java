@@ -31,9 +31,9 @@ import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.jdbc.dialect.PostgreSQLDatabaseDialect;
 import com.googlecode.sarasvati.load.GraphLoader;
+import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
-import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
 public class TestJdbcLoad
 {
@@ -57,7 +57,7 @@ public class TestJdbcLoad
 
     File baseDir = new File( "/home/paul/workspace/wf-common/test-wf/" );
 
-    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
+    ProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
 
     FilenameFilter filter = new FilenameFilter()
     {

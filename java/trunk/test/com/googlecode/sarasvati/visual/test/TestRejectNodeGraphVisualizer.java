@@ -31,10 +31,10 @@ import com.googlecode.sarasvati.hib.HibGraph;
 import com.googlecode.sarasvati.hib.HibNode;
 import com.googlecode.sarasvati.impl.WaitNode;
 import com.googlecode.sarasvati.load.GraphLoader;
+import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
 import com.googlecode.sarasvati.visual.AbstractGraphVisualizer;
 import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
 import com.googlecode.sarasvati.xml.XmlLoader;
-import com.googlecode.sarasvati.xml.XmlProcessDefinitionResolver;
 
 
 public class TestRejectNodeGraphVisualizer extends AbstractGraphVisualizer {
@@ -77,7 +77,7 @@ public class TestRejectNodeGraphVisualizer extends AbstractGraphVisualizer {
     File baseDir = new File( "test/com/googlecode/sarasvati/visual/test/" );
     assert baseDir.exists() : "Workflow process def dir not found.";
 
-    XmlProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
+    ProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
 
     FilenameFilter filter = new FilenameFilter()
     {

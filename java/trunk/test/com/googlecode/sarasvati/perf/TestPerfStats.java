@@ -21,11 +21,12 @@ package com.googlecode.sarasvati.perf;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class TestPerfStats
 {
-  private XmlProcessDefinition xmlProcDef;
+  private ProcessDefinition xmlProcDef;
 
   private List<Long> insertAvgs = new LinkedList<Long>();
   private List<Long> loadAvgs = new LinkedList<Long>();
@@ -38,7 +39,7 @@ public class TestPerfStats
 
   private static int rollover;
 
-  public TestPerfStats (final XmlProcessDefinition xmlProcDef)
+  public TestPerfStats (final ProcessDefinition xmlProcDef)
   {
     this.xmlProcDef = xmlProcDef;
   }
@@ -74,7 +75,7 @@ public class TestPerfStats
     return xmlProcDef.getName();
   }
 
-  public XmlProcessDefinition getXmlProcDef ()
+  public ProcessDefinition getXmlProcDef ()
   {
     return xmlProcDef;
   }

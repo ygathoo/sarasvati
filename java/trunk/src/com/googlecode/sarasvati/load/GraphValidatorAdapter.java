@@ -14,18 +14,19 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
+                        Vincent Kirsch
 */
 package com.googlecode.sarasvati.load;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.xml.XmlArc;
-import com.googlecode.sarasvati.xml.XmlExternal;
-import com.googlecode.sarasvati.xml.XmlExternalArc;
-import com.googlecode.sarasvati.xml.XmlNode;
-import com.googlecode.sarasvati.xml.XmlProcessDefinition;
+import com.googlecode.sarasvati.load.definition.ArcDefinition;
+import com.googlecode.sarasvati.load.definition.ExternalArcDefinition;
+import com.googlecode.sarasvati.load.definition.ExternalDefinition;
+import com.googlecode.sarasvati.load.definition.NodeDefinition;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 
 /**
  * Provides a base for creating {@link GraphValidator} implementations in
@@ -67,7 +68,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateXmlArc (XmlArc xmlArc) throws LoadException
+  public void validateArcDefinition (ArcDefinition xmlArc) throws LoadException
   {
     // Does nothing
   }
@@ -76,7 +77,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateXmlExternal (XmlExternal xmlExternal)
+  public void validateExternalDefinition (ExternalDefinition xmlExternal)
       throws LoadException
   {
     // Does nothing
@@ -86,7 +87,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateXmlExternalArc (XmlExternalArc xmlExternalArc)
+  public void validateExternalArcDefinition (ExternalArcDefinition xmlExternalArc)
       throws LoadException
   {
     // Does nothing
@@ -96,7 +97,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateXmlNode (XmlNode xmlNode) throws LoadException
+  public void validateNodeDefinition (NodeDefinition xmlNode) throws LoadException
   {
     // Does nothing
   }
@@ -105,7 +106,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateXmlProcessDefinition (XmlProcessDefinition xmlProcessDefinition)
+  public void validateProcessDefinition (ProcessDefinition xmlProcessDefinition)
     throws LoadException
   {
     // Does nothing

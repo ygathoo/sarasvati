@@ -23,10 +23,11 @@ import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 
+import com.googlecode.sarasvati.load.definition.ArcDefinition;
 import com.googlecode.sarasvati.util.SvUtil;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlArc
+public class XmlArc implements ArcDefinition
 {
   @XmlAttribute( name="external", required=false)
   protected String external;
@@ -37,6 +38,7 @@ public class XmlArc
   @XmlAttribute(name = "name", required = false)
   protected String name;
 
+  @Override
   public String getExternal()
   {
     return external;
@@ -47,6 +49,7 @@ public class XmlArc
     this.external = external;
   }
 
+  @Override
   public String getTo ()
   {
     return to;
@@ -57,6 +60,7 @@ public class XmlArc
     this.to = to;
   }
 
+  @Override
   public String getName ()
   {
     return name;
@@ -67,6 +71,7 @@ public class XmlArc
     this.name = name;
   }
 
+  @Override
   public boolean isToExternal ()
   {
     return !SvUtil.isBlankOrNull( external );
