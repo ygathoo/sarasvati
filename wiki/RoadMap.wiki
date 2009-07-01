@@ -11,47 +11,31 @@ Sarasvati is fairly stable at this point, and we are workings towards a 1.0 rele
 
 === Editor: In Progress ===
 
-A graphical editor for process definitions is in progress. 
+A graphical editor for process definitions is in progress. It is now usable for process definitions that don't use externals.
 
  * Undo/Redo framework: Done
  * Load: Done
  * Save: 90% done
- * Add nodes: 
-   * Implemented: Yes
-   * Undo/redo: Yes
- * Delete nodes
-   * Implemented: *No*
-   * Undo/redo: *No*
- * Add external
-   * Implemented: *No*
-   * Undo/redo: *No*
- * Delete external
-   * Implemented: *No*
-   * Undo/redo: *No*
- * Move nodes
-   * Implemented: Yes
-   * Undo/redo: Yes
- * Connect nodes
-   * Implemented: Yes
-   * Undo/redo: Yes
- * Change connections
-   * Implemented: Yes
-   * Undo/redo: Yes
- * Remove connections
-   * Implemented: Yes
-   * Undo/redo: Yes
- * Edit node properties
-   * Implemented: Yes
-   * Undo/redo: Yes
- * Edit arc properties
-   * Implemented: Started. Need to implement externals interaction.
-   * Undo/redo: *No*
+ * Add nodes: Done
+ * Delete nodes: *TODO*
+ * Add external: *TODO*
+ * Delete external: *TODO*
+ * Move nodes: Done
+ * Connect nodes: Done
+ * Change connections: Done
+ * Remove connections: Done
+ * Edit node properties: Done
+ * Edit arc properties: _Started_ *Need to implement externals interaction.*
  * Cleanup undo/redo MDI interactions: Done
- * Autolayout
-   * Implemented: Yes
-   * Undo/redo: Yes 
+ * Autolayout: Done
  * Self arcs: Done
  * Arc labels: Done
+ * Cleanup move/add/reconnect interactions: *TODO*
+ * Check for unsaved: *TODO*
+ * Graph validation on save: _Started_
+ * Preferences: *Needs to be specced. Need just enough for externals for now. Rest wil be Post-1.0*
+ * Select all: *TODO*
+ * Investigate shortestpathrouter weirdness: *Likely post 1.0.*
 
 === Token Sets/Template Nodes: Completed ===
 
