@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.visual.graph;
 
@@ -45,12 +45,12 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
 
     if ( graph != null )
     {
-      GraphTree graphTree = new GraphTree( graph );
+      GraphLayoutTree graphTree = new GraphLayoutTree( graph );
       for ( Node node : graph.getNodes() )
       {
         Widget widget = addNode( node );
 
-        GraphTreeNode treeNode = graphTree.getTreeNode( node );
+        GraphLayoutNode<Node> treeNode = graphTree.getTreeNode( node );
         Point origin = new Point( treeNode.getOriginX(), treeNode.getOriginY() );
         widget.setPreferredLocation( origin );
         widget.resolveBounds( origin, null );

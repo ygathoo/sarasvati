@@ -14,34 +14,36 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.visual.graph;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.Node;
-
-public class GraphTree
+public abstract class AbstractLayoutTree<N>
 {
-  protected Map<Node, GraphTreeNode> nodeMap = new HashMap<Node, GraphTreeNode>();
+  protected Map<N, GraphLayoutNode<N>> nodeMap = new HashMap<N, GraphLayoutNode<N>>();
+
+  protected abstract Collection<N> getNodes ();
+  protected abstract Collection<N> getStartNodes ();
+  protected abstract boolean hasNoInputs(N node);
+  protected abstract Collection<N> getOutputs (N node);
 
   @SuppressWarnings("unchecked")
-  public GraphTree (Graph graph)
+  public void init ()
   {
-    List<GraphTreeNode> nextLayer = new LinkedList<GraphTreeNode>();
+    List<GraphLayoutNode<N>> nextLayer = new LinkedList<GraphLayoutNode<N>>();
 
-    List<Node> startNodes = (List<Node>)graph.getStartNodes();
+    Collection<N> startNodes = getStartNodes();
 
-    for ( Node node : graph.getNodes() )
+    for ( N node : getNodes() )
     {
-      if ( graph.getInputArcs( node ).isEmpty() && !startNodes.contains( node ))
+      if ( hasNoInputs( node ) && !startNodes.contains( node ))
       {
         startNodes.add( node );
       }
@@ -49,44 +51,41 @@ public class GraphTree
 
     if ( startNodes.isEmpty() )
     {
-      List<? extends Node> nodeRefs = graph.getNodes();
+      Collection<N> nodes = getNodes();
 
-      if ( !nodeRefs.isEmpty() )
+      if ( !nodes.isEmpty() )
       {
-        startNodes = new ArrayList<Node>(1);
-        startNodes.add( nodeRefs.get( 0 ) );
+        startNodes = new ArrayList<N>(1);
+        startNodes.add( nodes.iterator().next() );
       }
     }
 
-    for ( Node node : startNodes )
+    for ( N node : startNodes )
     {
-      GraphTreeNode treeNode = new GraphTreeNode( 0, node );
+      GraphLayoutNode<N> treeNode = new GraphLayoutNode<N>( 0, node );
 
       nodeMap.put( node, treeNode );
       treeNode.addToLayer( nextLayer );
     }
 
-    List<GraphTreeNode> layer = null;
+    List<GraphLayoutNode<N>> layer = null;
 
     int depth = 1;
 
     while ( !nextLayer.isEmpty() )
     {
       layer = nextLayer;
-      nextLayer = new LinkedList<GraphTreeNode>();
+      nextLayer = new LinkedList<GraphLayoutNode<N>>();
 
-      for ( GraphTreeNode treeNode : layer )
+      for ( GraphLayoutNode<N> treeNode : layer )
       {
-        List<? extends Arc> arcs = graph.getOutputArcs( treeNode.getNode() );
-
-        for ( Arc arc : arcs )
+        for ( N target : getOutputs( treeNode.getNode() ) )
         {
-          Node target = arc.getEndNode();
-          GraphTreeNode targetTreeNode = nodeMap.get( target );
+          GraphLayoutNode<N> targetTreeNode = nodeMap.get( target );
 
           if (targetTreeNode == null)
           {
-            targetTreeNode = new GraphTreeNode( depth, target );
+            targetTreeNode = new GraphLayoutNode( depth, target );
             nodeMap.put( target, targetTreeNode );
             targetTreeNode.addToLayer( nextLayer );
           }
@@ -96,15 +95,15 @@ public class GraphTree
     }
   }
 
-  public GraphTreeNode getTreeNode (Node node)
+  public GraphLayoutNode<N> getTreeNode (N node)
   {
     return nodeMap.get( node );
   }
 
-  public boolean isBackArc (Arc arc)
+  public boolean isBackArc (N start, N end)
   {
-    GraphTreeNode startNode = getTreeNode( arc.getStartNode() );
-    GraphTreeNode endNode = getTreeNode( arc.getEndNode() );
+    GraphLayoutNode<N> startNode = getTreeNode( start );
+    GraphLayoutNode<N> endNode = getTreeNode( end );
     return endNode.getDepth() < startNode.getDepth();
   }
 }

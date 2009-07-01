@@ -280,7 +280,8 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
     private final DefaultTableModel tableModel = new DefaultTableModel( new String[] { "name", "value" }, 0 );
 
-    public void setup (final JDialog dialog, final EditorNode node)
+    public void setup (final JDialog dialog,
+                       final EditorNode node)
     {
       cancelButton.addActionListener( new ActionListener()
       {

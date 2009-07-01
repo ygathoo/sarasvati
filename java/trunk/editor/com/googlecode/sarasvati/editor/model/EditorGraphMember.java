@@ -19,18 +19,19 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.awt.Point;
-import java.util.LinkedList;
 
-public abstract class EditorGraphMember<T extends GraphMemberState>
+public abstract class EditorGraphMember<T extends GraphMemberState> extends AbstractStateful<T>
 {
-  private final LinkedList<T> stateStack = new LinkedList<T>();
-  private final Notifier<EditorGraphMember<?>> notifier = new Notifier<EditorGraphMember<?>>();
-
   protected Point  origin = new Point();
 
   public EditorGraphMember (T initialState)
   {
-    pushState( initialState );
+    super( initialState );
+  }
+
+  public String getName ()
+  {
+    return getState().getName();
   }
 
   public int getX ()
@@ -63,35 +64,8 @@ public abstract class EditorGraphMember<T extends GraphMemberState>
     this.origin = origin;
   }
 
-  public void pushState (T memberState)
-  {
-    stateStack.push( memberState );
-    stateChanged();
-  }
-
-  public void popState ()
-  {
-    stateStack.pop();
-    stateChanged();
-  }
-
-  public T getState ()
-  {
-    return stateStack.getFirst();
-  }
-
   public boolean isExternal ()
   {
     return false;
-  }
-
-  public void addListener (ModelListener<EditorGraphMember<?>> nodeListener )
-  {
-    notifier.addListener( nodeListener );
-  }
-
-  protected void stateChanged ()
-  {
-    notifier.notify( this );
   }
 }

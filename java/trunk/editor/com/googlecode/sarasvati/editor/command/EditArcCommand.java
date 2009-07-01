@@ -14,46 +14,46 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Paul Lorenz
+    Copyright 2008 Paul Lorenz
  */
 package com.googlecode.sarasvati.editor.command;
 
-import com.googlecode.sarasvati.editor.model.EditorGraphMember;
+import com.googlecode.sarasvati.editor.model.ArcState;
+import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorScene;
-import com.googlecode.sarasvati.editor.model.GraphMemberState;
 
-public class EditNodeCommand<T extends GraphMemberState> implements Command
+public class EditArcCommand implements Command
 {
   private final EditorScene scene;
-  private final EditorGraphMember<T> graphMember;
-  private final T                    newState;
+  private final EditorArc   arc;
+  private final ArcState    newState;
 
-  public EditNodeCommand (final EditorScene scene,
-                          final EditorGraphMember<T> graphMember,
-                          final T newState)
+  public EditArcCommand (final EditorScene scene,
+                         final EditorArc arc,
+                         final ArcState newState)
   {
     this.scene = scene;
-    this.graphMember = graphMember;
+    this.arc = arc;
     this.newState = newState;
   }
 
   @Override
   public void performAction ()
   {
-    graphMember.pushState( newState );
+    arc.pushState( newState );
     scene.validate();
   }
 
   @Override
   public void undoAction ()
   {
-    graphMember.popState();
+    arc.popState();
     scene.validate();
   }
 
   @Override
   public String getName ()
   {
-    return "Edit Node";
+    return "Edit Arc";
   }
 }

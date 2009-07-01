@@ -18,24 +18,17 @@
 */
 package com.googlecode.sarasvati.editor.model;
 
-public class EditorArc
+
+public class EditorArc extends AbstractStateful<ArcState>
 {
   protected EditorGraphMember<?> start;
   protected EditorGraphMember<?> end;
 
-  protected String                 externalStart;
-  protected String                 externalEnd;
-
-  protected String                 label;
-
-  public EditorArc ()
-  {
-    /* default constructor */
-  }
-
-  public EditorArc (final EditorGraphMember<?> start,
+  public EditorArc (final ArcState state,
+                    final EditorGraphMember<?> start,
                     final EditorGraphMember<?> end)
   {
+    super( state );
     this.start = start;
     this.end = end;
   }
@@ -60,16 +53,6 @@ public class EditorArc
     this.end = end;
   }
 
-  public String getLabel ()
-  {
-    return label;
-  }
-
-  public void setLabel (final String label)
-  {
-    this.label = label;
-  }
-
   public boolean isExternalOutArc ()
   {
     return end.isExternal();
@@ -78,25 +61,5 @@ public class EditorArc
   public boolean isExternalInArc ()
   {
     return start.isExternal();
-  }
-
-  public String getExternalStart ()
-  {
-    return externalStart;
-  }
-
-  public void setExternalStart (final String externalStart)
-  {
-    this.externalStart = externalStart;
-  }
-
-  public String getExternalEnd ()
-  {
-    return externalEnd;
-  }
-
-  public void setExternalEnd (final String externalEnd)
-  {
-    this.externalEnd = externalEnd;
   }
 }

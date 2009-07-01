@@ -38,7 +38,7 @@ public class NodePropertiesAction extends Adapter
       EditorScene scene = (EditorScene)widget.getScene();
       EditorNode node = (EditorNode) scene.findObject( widget );
 
-      JDialog dialog = DialogFactory.newPropertiesDialog( node );
+      JDialog dialog = DialogFactory.newNodePropertiesDialog( node );
       dialog.setLocation( widget.convertLocalToScene( event.getPoint() ) );
       dialog.setVisible( true );
 

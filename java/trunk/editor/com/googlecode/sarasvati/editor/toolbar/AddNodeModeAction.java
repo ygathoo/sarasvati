@@ -28,17 +28,14 @@ public class AddNodeModeAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  protected GraphEditor editor;
-
-  public AddNodeModeAction (GraphEditor editor)
+  public AddNodeModeAction ()
   {
     super( "Add Nodes" );
-    this.editor = editor;
   }
 
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    editor.modeAddNode();
+    GraphEditor.getInstance().modeAddNode();
   }
 }
