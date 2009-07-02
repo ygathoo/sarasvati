@@ -177,7 +177,6 @@ public class ShortestPathRouterAdapter implements Router
 
       if ( bounds != null )
       {
-        System.out.println( "Removed bounds: " + bounds );
         router.removeObstacle( bounds );
       }
       if ( newBounds != null )

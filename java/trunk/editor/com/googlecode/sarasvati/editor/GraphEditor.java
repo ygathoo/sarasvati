@@ -35,6 +35,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
+import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
@@ -70,6 +71,10 @@ public class GraphEditor
   protected JToolBar    toolBar;
   protected JTabbedPane tabPane;
 
+  protected JToggleButton moveButton;
+  protected JToggleButton editArcsButton;
+  protected JToggleButton addNodesButton;
+
   protected SaveAction saveAction;
   protected UndoAction undoAction;
   protected RedoAction redoAction;
@@ -95,7 +100,18 @@ public class GraphEditor
 
   public void setMode (EditorMode mode)
   {
-    this.mode = mode;
+    if ( mode == EditorMode.AddNode )
+    {
+      modeAddNode();
+    }
+    else if ( mode == EditorMode.EditArcs )
+    {
+      modeConnect();
+    }
+    else if ( mode == EditorMode.Move )
+    {
+      modeMove();
+    }
   }
 
   public File getLastFile ()
@@ -121,7 +137,7 @@ public class GraphEditor
     toolBar = new JToolBar( "Tools" );
     toolBar.setFloatable( true );
 
-    JButton moveButton = new JButton( "Move" );
+    moveButton = new JToggleButton( "Move" );
     moveButton.addActionListener( new ActionListener()
     {
       @Override
@@ -132,10 +148,21 @@ public class GraphEditor
     });
 
     toolBar.add( moveButton );
-    toolBar.add( new JButton( "Edit Arcs" ) );
 
-    JButton addNodeButton = new JButton( "Add Nodes" );
-    addNodeButton.addActionListener( new ActionListener()
+    editArcsButton = new JToggleButton( "Edit Arcs" );
+    editArcsButton.addActionListener( new ActionListener()
+    {
+      @Override
+      public void actionPerformed (ActionEvent e)
+      {
+        modeConnect();
+      }
+    });
+
+    toolBar.add( editArcsButton );
+
+    addNodesButton = new JToggleButton( "Add Nodes" );
+    addNodesButton.addActionListener( new ActionListener()
     {
       @Override
       public void actionPerformed (ActionEvent e)
@@ -144,7 +171,7 @@ public class GraphEditor
       }
     });
 
-    toolBar.add( addNodeButton );
+    toolBar.add( addNodesButton );
     toolBar.add( new JButton( "Add External" ) );
 
     JButton autoLayoutButton = new JButton( "Auto-Layout" );
@@ -277,33 +304,39 @@ public class GraphEditor
 
   public void modeMove ()
   {
-    SceneAddNodeAction.setEnabled( false );
+    this.mode = EditorMode.Move;
     MoveTrackAction.setEnabled(  true );
-    if ( this.mode != EditorMode.Move )
-    {
-      this.mode = EditorMode.Move;
-      EditorScene scene = getCurrentScene();
-      if ( scene != null )
-      {
-        scene.modeMove();
-      }
-    }
+    SceneAddNodeAction.setEnabled( false );
+    ConnectAction.setEnabled( false );
+
+    moveButton.setSelected( true );
+    addNodesButton.setSelected( false );
+    editArcsButton.setSelected( false );
   }
 
   public void modeAddNode ()
   {
+    this.mode = EditorMode.AddNode;
     SceneAddNodeAction.setEnabled( true );
     MoveTrackAction.setEnabled( false );
+    ConnectAction.setEnabled( false );
 
-    if ( this.mode != EditorMode.AddNode )
-    {
-      this.mode = EditorMode.AddNode;
-      EditorScene scene = getCurrentScene();
-      if ( scene != null )
-      {
-        scene.modeAddNode();
-      }
-    }
+    moveButton.setSelected( false );
+    addNodesButton.setSelected( true );
+    editArcsButton.setSelected( false );
+
+  }
+
+  public void modeConnect ()
+  {
+    this.mode = EditorMode.EditArcs;
+    SceneAddNodeAction.setEnabled( false );
+    MoveTrackAction.setEnabled( false );
+    ConnectAction.setEnabled( true );
+
+    moveButton.setSelected( false );
+    addNodesButton.setSelected( false );
+    editArcsButton.setSelected( true );
   }
 
   public EditorScene getCurrentScene ()
