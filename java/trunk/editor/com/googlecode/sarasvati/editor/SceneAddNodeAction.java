@@ -42,14 +42,14 @@ public class SceneAddNodeAction extends WidgetAction.Adapter
   }
 
   @Override
-  public State mouseClicked (Widget widget, WidgetMouseEvent event)
+  public State mousePressed (Widget widget, WidgetMouseEvent event)
   {
     if( !enabled )
     {
       return State.REJECTED;
     }
 
-    if ( event.getClickCount() == 1 && event.getButton() == MouseEvent.BUTTON1 )
+    if ( event.getButton() == MouseEvent.BUTTON1 )
     {
       NodeState state = new NodeState( "New Node", "node", JoinType.OR, null, false, null, null );
       EditorNode node = new EditorNode( state );

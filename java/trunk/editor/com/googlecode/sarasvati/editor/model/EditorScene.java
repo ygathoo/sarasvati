@@ -42,11 +42,11 @@ import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.ArcPropertiesAction;
-import com.googlecode.sarasvati.editor.EditorMode;
-import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.ConnectAction;
 import com.googlecode.sarasvati.editor.MoveTrackAction;
 import com.googlecode.sarasvati.editor.NodePropertiesAction;
 import com.googlecode.sarasvati.editor.SceneAddNodeAction;
+import com.googlecode.sarasvati.editor.SceneKeyListener;
 import com.googlecode.sarasvati.editor.command.AutoLayoutCommand;
 import com.googlecode.sarasvati.editor.command.Command;
 import com.googlecode.sarasvati.editor.command.CommandStack;
@@ -66,7 +66,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   protected final EditorGraph graph;
 
   private final WidgetAction moveAction = new MoveTrackAction( ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null ) );
-  private final WidgetAction connectAction = ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() );
+  private final WidgetAction connectAction = new ConnectAction( ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() ) );
   private final WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
 
   private final WidgetAction nodePropertiesAction = new NodePropertiesAction();
@@ -79,6 +79,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     this.graph = graph;
     this.commandStack = new CommandStack();
 
+    System.out.println( "Added scene key listener " );
+    getActions().addAction( new SceneKeyListener() );
     getActions().addAction( SceneAddNodeAction.INSTANCE );
 
     for ( EditorGraphMember<?> member : graph.getNodes() )
@@ -109,22 +111,6 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   public EditorGraph getGraph ()
   {
     return graph;
-  }
-
-  public void modeAddNode ()
-  {
-    for ( Widget widget : mainLayer.getChildren() )
-    {
-      widget.getActions().addAction( connectAction );
-    }
-  }
-
-  public void modeMove ()
-  {
-    for ( Widget widget : mainLayer.getChildren() )
-    {
-      widget.getActions().removeAction( connectAction );
-    }
   }
 
   @Override
@@ -194,11 +180,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
     widget.getActions().addAction( nodePropertiesAction );
     widget.getActions().addAction( moveAction );
-
-    if ( GraphEditor.getInstance().getMode() == EditorMode.AddNode )
-    {
-      widget.getActions().addAction( connectAction );
-    }
+    widget.getActions().addAction( connectAction );
 
     node.addListener( new ModelListener<EditorGraphMember<?>> ()
     {
