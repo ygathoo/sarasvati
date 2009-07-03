@@ -14,29 +14,30 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Paul Lorenz
+    Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.editor;
+package com.googlecode.sarasvati.editor.dialog;
 
+import com.googlecode.sarasvati.editor.panel.NodePropertiesPanel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.border.BevelBorder;
 
-import com.googlecode.sarasvati.editor.model.EditorArc;
+import com.googlecode.sarasvati.editor.model.EditorNode;
 
-public class ArcPropertiesDialog extends JDialog
+public class NodePropertiesDialog extends JDialog
 {
   private static final long serialVersionUID = 1L;
 
-  public ArcPropertiesDialog (final JFrame frame,
-                              final EditorArc arc)
+  public NodePropertiesDialog (final JFrame frame,
+                               final EditorNode node)
   {
-    super( frame, "Arc Properties", false );
+    super( frame, node.getState().getName() + " properties", false );
 
     setUndecorated( false );
 
-    ArcPropertiesPanel panel = new ArcPropertiesPanel();
-    panel.setup( this, arc );
+    NodePropertiesPanel panel = new NodePropertiesPanel();
+    panel.setup( this, node );
     panel.setBorder( new BevelBorder( BevelBorder.RAISED ) );
     getContentPane().add( panel );
 

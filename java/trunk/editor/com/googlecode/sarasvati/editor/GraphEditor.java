@@ -44,10 +44,15 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.googlecode.sarasvati.editor.action.ConnectAction;
+import com.googlecode.sarasvati.editor.action.MoveTrackAction;
+import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.CommandStack;
+import com.googlecode.sarasvati.editor.dialog.DialogFactory;
 import com.googlecode.sarasvati.editor.menu.ExitAction;
 import com.googlecode.sarasvati.editor.menu.NewGraphAction;
 import com.googlecode.sarasvati.editor.menu.OpenAction;
+import com.googlecode.sarasvati.editor.menu.PreferencesAction;
 import com.googlecode.sarasvati.editor.menu.RedoAction;
 import com.googlecode.sarasvati.editor.menu.SaveAction;
 import com.googlecode.sarasvati.editor.menu.UndoAction;
@@ -255,6 +260,7 @@ public class GraphEditor
 
     editMenu.add( new JMenuItem( undoAction ) );
     editMenu.add( new JMenuItem( redoAction ) );
+    editMenu.add( new JMenuItem( new PreferencesAction() ) );
 
     menuBar.add( fileMenu );
     menuBar.add( editMenu );

@@ -110,8 +110,8 @@ public class ShortestPathRouterAdapter implements Router
       int offset = 15;
       PointList bendPoints = new PointList();
       bendPoints.addPoint( path.getStartPoint().x, path.getStartPoint().y + offset );
-      bendPoints.addPoint( path.getEndPoint().x + offset, path.getStartPoint().y + offset );
-      bendPoints.addPoint( path.getEndPoint().x + offset, path.getEndPoint().y );
+      bendPoints.addPoint( path.getEndPoint().x - offset, path.getStartPoint().y + offset );
+      bendPoints.addPoint( path.getEndPoint().x - offset, path.getEndPoint().y );
       path.setBendPoints( bendPoints );
     }
 

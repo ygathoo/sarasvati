@@ -14,32 +14,35 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Paul Lorenz
+    Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.editor;
+package com.googlecode.sarasvati.editor.menu;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JDialog;
-import javax.swing.JFrame;
 
-import com.googlecode.sarasvati.editor.model.EditorArc;
-import com.googlecode.sarasvati.editor.model.EditorNode;
+import com.googlecode.sarasvati.editor.dialog.DialogFactory;
 
-public class DialogFactory
+public class PreferencesAction extends AbstractAction
 {
-  protected static JFrame frame = null;
+  private static final long serialVersionUID = 1L;
 
-  public static void setFrame (JFrame frame)
+  public PreferencesAction ()
   {
-    DialogFactory.frame = frame;
+    super( "Preferences" );
+
+    // putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Q, KeyEvent.CTRL_MASK ) );
+    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_P );
   }
 
-  public static JDialog newNodePropertiesDialog (EditorNode node)
+  @Override
+  public void actionPerformed (ActionEvent e)
   {
-    return new NodePropertiesDialog( frame, node );
-  }
-
-  public static JDialog newArcPropertiesDialog (EditorArc arc)
-  {
-    return new ArcPropertiesDialog( frame, arc );
+    JDialog dialog = DialogFactory.newPreferencesDialog();
+    dialog.setVisible( true );
   }
 }

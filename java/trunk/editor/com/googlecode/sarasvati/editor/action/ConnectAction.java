@@ -16,7 +16,7 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.editor;
+package com.googlecode.sarasvati.editor.action;
 
 import org.netbeans.api.visual.action.WidgetAction;
 
