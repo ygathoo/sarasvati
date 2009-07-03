@@ -20,6 +20,9 @@ package com.googlecode.sarasvati.editor;
 
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.KeyEventDispatcher;
+import java.awt.KeyboardFocusManager;
+import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -100,18 +103,36 @@ public class GraphEditor
 
   public void setMode (EditorMode mode)
   {
+    if ( this.mode == mode )
+    {
+      return;
+    }
+
+    MoveTrackAction.setEnabled( false );
+    SceneAddNodeAction.setEnabled( false );
+    ConnectAction.setEnabled( false );
+
+    moveButton.setSelected( false );
+    addNodesButton.setSelected( false );
+    editArcsButton.setSelected( false );
+
     if ( mode == EditorMode.AddNode )
     {
-      modeAddNode();
+      SceneAddNodeAction.setEnabled( true );
+      addNodesButton.setSelected( true );
     }
     else if ( mode == EditorMode.EditArcs )
     {
-      modeConnect();
+      ConnectAction.setEnabled( true );
+      editArcsButton.setSelected( true );
     }
     else if ( mode == EditorMode.Move )
     {
-      modeMove();
+      MoveTrackAction.setEnabled( true );
+      moveButton.setSelected( true );
     }
+
+    this.mode = mode;
   }
 
   public File getLastFile ()
@@ -130,6 +151,7 @@ public class GraphEditor
     mainWindow.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     mainWindow.setMinimumSize( new Dimension( 800, 600 ) );
     mainWindow.setJMenuBar( createMenu() );
+
     mainWindow.setVisible( true );
 
     DialogFactory.setFrame( mainWindow );
@@ -143,7 +165,7 @@ public class GraphEditor
       @Override
       public void actionPerformed (ActionEvent e)
       {
-        modeMove();
+        setMode( EditorMode.Move );
       }
     });
 
@@ -155,7 +177,7 @@ public class GraphEditor
       @Override
       public void actionPerformed (ActionEvent e)
       {
-        modeConnect();
+        setMode( EditorMode.EditArcs );
       }
     });
 
@@ -167,7 +189,7 @@ public class GraphEditor
       @Override
       public void actionPerformed (ActionEvent e)
       {
-        modeAddNode();
+        setMode( EditorMode.AddNode );
       }
     });
 
@@ -206,8 +228,10 @@ public class GraphEditor
 
     mainWindow.setContentPane( mainPanel );
 
+    setupModeKeys();
+
     createNewProcessDefinition();
-    modeAddNode();
+    setMode( EditorMode.Move );
   }
 
   protected JMenuBar createMenu ()
@@ -274,6 +298,33 @@ public class GraphEditor
     }
   }
 
+  public void setupModeKeys ()
+  {
+    final EditorKeyListener keyListener = new EditorKeyListener();
+    final KeyboardFocusManager keyboardFocusManager = KeyboardFocusManager.getCurrentKeyboardFocusManager();
+    keyboardFocusManager.addKeyEventDispatcher( new KeyEventDispatcher()
+    {
+      @Override
+      public boolean dispatchKeyEvent (final KeyEvent event)
+      {
+        Window window = keyboardFocusManager.getActiveWindow();
+
+        if ( window == mainWindow )
+        {
+          if ( event.getID() == KeyEvent.KEY_PRESSED )
+          {
+            keyListener.keyPressed( event );
+          }
+          else if ( event.getID() == KeyEvent.KEY_RELEASED )
+          {
+            keyListener.keyReleased( event );
+          }
+        }
+        return false;
+      }
+    });
+  }
+
   public void saveProcessDefinition (EditorGraph graph, File outputFile)
   {
     String name = outputFile.getName();
@@ -300,43 +351,6 @@ public class GraphEditor
     {
       JOptionPane.showMessageDialog( mainWindow, e.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE );
     }
-  }
-
-  public void modeMove ()
-  {
-    this.mode = EditorMode.Move;
-    MoveTrackAction.setEnabled(  true );
-    SceneAddNodeAction.setEnabled( false );
-    ConnectAction.setEnabled( false );
-
-    moveButton.setSelected( true );
-    addNodesButton.setSelected( false );
-    editArcsButton.setSelected( false );
-  }
-
-  public void modeAddNode ()
-  {
-    this.mode = EditorMode.AddNode;
-    SceneAddNodeAction.setEnabled( true );
-    MoveTrackAction.setEnabled( false );
-    ConnectAction.setEnabled( false );
-
-    moveButton.setSelected( false );
-    addNodesButton.setSelected( true );
-    editArcsButton.setSelected( false );
-
-  }
-
-  public void modeConnect ()
-  {
-    this.mode = EditorMode.EditArcs;
-    SceneAddNodeAction.setEnabled( false );
-    MoveTrackAction.setEnabled( false );
-    ConnectAction.setEnabled( true );
-
-    moveButton.setSelected( false );
-    addNodesButton.setSelected( false );
-    editArcsButton.setSelected( true );
   }
 
   public EditorScene getCurrentScene ()
