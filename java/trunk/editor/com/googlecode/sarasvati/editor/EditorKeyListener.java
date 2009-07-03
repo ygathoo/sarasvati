@@ -19,25 +19,43 @@
 package com.googlecode.sarasvati.editor;
 
 import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-public class EditorKeyListener implements KeyListener
+public class EditorKeyListener
 {
-  @Override
-  public void keyPressed (KeyEvent e)
+  private EditorMode previousMode = null;
+
+  public void keyPressed (KeyEvent event)
   {
-    // TODO
+    EditorMode mode = null;
+
+    if ( event.getKeyChar() == 'a' )
+    {
+      mode = EditorMode.AddNode;
+    }
+    else if ( event.getKeyChar() == 'e' )
+    {
+      mode = EditorMode.EditArcs;
+    }
+
+    if ( mode != null )
+    {
+      GraphEditor editor = GraphEditor.getInstance();
+
+      if ( previousMode == null )
+      {
+        previousMode = editor.getMode();
+      }
+
+      editor.setMode( mode );
+    }
   }
 
-  @Override
-  public void keyReleased (KeyEvent e)
+  public void keyReleased (KeyEvent event)
   {
- // TODO
-  }
-
-  @Override
-  public void keyTyped (KeyEvent e)
-  {
- // TODO
+    if ( previousMode != null )
+    {
+      GraphEditor.getInstance().setMode( previousMode );
+      event.consume();
+    }
   }
 }

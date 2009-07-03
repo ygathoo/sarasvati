@@ -46,7 +46,6 @@ import com.googlecode.sarasvati.editor.ConnectAction;
 import com.googlecode.sarasvati.editor.MoveTrackAction;
 import com.googlecode.sarasvati.editor.NodePropertiesAction;
 import com.googlecode.sarasvati.editor.SceneAddNodeAction;
-import com.googlecode.sarasvati.editor.SceneKeyListener;
 import com.googlecode.sarasvati.editor.command.AutoLayoutCommand;
 import com.googlecode.sarasvati.editor.command.Command;
 import com.googlecode.sarasvati.editor.command.CommandStack;
@@ -79,8 +78,6 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     this.graph = graph;
     this.commandStack = new CommandStack();
 
-    System.out.println( "Added scene key listener " );
-    getActions().addAction( new SceneKeyListener() );
     getActions().addAction( SceneAddNodeAction.INSTANCE );
 
     for ( EditorGraphMember<?> member : graph.getNodes() )
