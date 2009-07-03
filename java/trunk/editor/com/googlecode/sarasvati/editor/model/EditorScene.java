@@ -41,11 +41,11 @@ import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.JoinType;
-import com.googlecode.sarasvati.editor.ArcPropertiesAction;
-import com.googlecode.sarasvati.editor.ConnectAction;
-import com.googlecode.sarasvati.editor.MoveTrackAction;
-import com.googlecode.sarasvati.editor.NodePropertiesAction;
-import com.googlecode.sarasvati.editor.SceneAddNodeAction;
+import com.googlecode.sarasvati.editor.action.ArcPropertiesAction;
+import com.googlecode.sarasvati.editor.action.ConnectAction;
+import com.googlecode.sarasvati.editor.action.MoveTrackAction;
+import com.googlecode.sarasvati.editor.action.NodePropertiesAction;
+import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.AutoLayoutCommand;
 import com.googlecode.sarasvati.editor.command.Command;
 import com.googlecode.sarasvati.editor.command.CommandStack;

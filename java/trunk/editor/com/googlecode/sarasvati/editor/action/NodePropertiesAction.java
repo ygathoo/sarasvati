@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.editor;
+package com.googlecode.sarasvati.editor.action;
 
 import java.awt.event.MouseEvent;
 
@@ -25,6 +25,7 @@ import javax.swing.JDialog;
 import org.netbeans.api.visual.action.WidgetAction.Adapter;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.editor.dialog.DialogFactory;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 

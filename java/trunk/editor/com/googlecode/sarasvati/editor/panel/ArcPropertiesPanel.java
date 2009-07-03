@@ -9,8 +9,9 @@
  * Created on Jun 30, 2009, 8:32:10 PM
  */
 
-package com.googlecode.sarasvati.editor;
+package com.googlecode.sarasvati.editor.panel;
 
+import com.googlecode.sarasvati.editor.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
