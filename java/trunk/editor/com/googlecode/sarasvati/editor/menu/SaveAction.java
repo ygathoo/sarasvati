@@ -20,17 +20,12 @@ package com.googlecode.sarasvati.editor.menu;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.util.List;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 import javax.swing.KeyStroke;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
-import com.googlecode.sarasvati.editor.model.EditorGraph;
-import com.googlecode.sarasvati.editor.model.EditorScene;
 
 public class SaveAction extends AbstractAction
 {
@@ -53,51 +48,6 @@ public class SaveAction extends AbstractAction
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    EditorScene scene = GraphEditor.getInstance().getCurrentScene();
-
-    if ( scene == null )
-    {
-      return;
-    }
-
-    EditorGraph graph = scene.getGraph();
-
-    List<String> errors = graph.validateGraph();
-
-    if ( !errors.isEmpty() )
-    {
-      StringBuilder buf = new StringBuilder ();
-      for ( String error : errors )
-      {
-        buf.append( error );
-        buf.append( "\n" );
-      }
-
-      JOptionPane.showMessageDialog( GraphEditor.getInstance().getMainWindow(),
-                                     buf.toString(),
-                                     "Invalid Process Definition",
-                                     JOptionPane.ERROR_MESSAGE );
-      return;
-    }
-
-    GraphEditor editor = GraphEditor.getInstance();
-
-    if ( isSaveAs || scene.getGraph().getFile() == null )
-    {
-      JFileChooser fileChooser = new JFileChooser();
-      fileChooser.setCurrentDirectory( editor.getLastFile() );
-
-      int retVal = fileChooser.showSaveDialog( GraphEditor.getInstance().getMainWindow() );
-
-      if ( retVal == JFileChooser.APPROVE_OPTION )
-      {
-        editor.setLastFile( fileChooser.getSelectedFile() );
-        editor.saveProcessDefinition( graph, fileChooser.getSelectedFile() );
-      }
-    }
-    else
-    {
-      editor.saveProcessDefinition( graph, graph.getFile() );
-    }
+    GraphEditor.getInstance().saveRequested( isSaveAs );
   }
 }

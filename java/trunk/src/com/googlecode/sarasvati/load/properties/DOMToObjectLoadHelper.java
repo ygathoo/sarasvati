@@ -45,8 +45,6 @@ import com.googlecode.sarasvati.util.SvUtil;
 
 public class DOMToObjectLoadHelper
 {
-  public static final Object EDITOR_LOAD = new Object();
-
   public static void loadCustomIntoMap (List<Object> customList, Map<String, String> map)
     throws LoadException
   {
@@ -54,7 +52,7 @@ public class DOMToObjectLoadHelper
     {
       if ( custom instanceof Element )
       {
-        DOMToObjectLoadHelper.setBeanValues( EDITOR_LOAD, (Element)custom, null, map );
+        DOMToObjectLoadHelper.setBeanValues( EditorLoadPropertyMutator.INSTANCE, (Element)custom, null, map );
       }
     }
   }
@@ -155,7 +153,7 @@ public class DOMToObjectLoadHelper
 
   public static PropertyMutator getMutatorForProperty (Object obj, String name) throws LoadException
   {
-    if ( obj == EDITOR_LOAD )
+    if ( obj == EditorLoadPropertyMutator.INSTANCE )
     {
       return EditorLoadPropertyMutator.INSTANCE;
     }

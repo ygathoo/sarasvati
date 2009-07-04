@@ -34,6 +34,8 @@ public class CommandStack
   private static CommandStack current = new CommandStack ();
 
   private final LinkedList<Command> commandStack = new LinkedList<Command>();
+  private Command lastSavedCommand = null;
+
   private int currentIndex = -1;
 
   public void pushCommand (final Command command)
@@ -44,7 +46,7 @@ public class CommandStack
       commandStack.removeLast();
     }
     commandStack.add( command );
-    GraphEditor.getInstance().updateUndoRedo();
+    GraphEditor.getInstance().updateUndoRedoSave();
   }
 
   public boolean canUndo ()
@@ -67,7 +69,7 @@ public class CommandStack
     Command command = commandStack.get( currentIndex );
     currentIndex--;
     command.undoAction();
-    GraphEditor.getInstance().updateUndoRedo();
+    GraphEditor.getInstance().updateUndoRedoSave();
   }
 
   public void redo ()
@@ -80,7 +82,7 @@ public class CommandStack
     currentIndex++;
     Command command = commandStack.get( currentIndex );
     command.performAction();
-    GraphEditor.getInstance().updateUndoRedo();
+    GraphEditor.getInstance().updateUndoRedoSave();
   }
 
   public String getUndoName ()
@@ -91,6 +93,26 @@ public class CommandStack
   public String getRedoName ()
   {
     return canRedo() ? commandStack.get( currentIndex + 1 ).getName() : "";
+  }
+
+  public void saved ()
+  {
+    if ( currentIndex >= 0 )
+    {
+      lastSavedCommand = commandStack.get( currentIndex );
+    }
+    GraphEditor.getInstance().updateUndoRedoSave();
+  }
+
+  public boolean isSaved ()
+  {
+    return commandStack.isEmpty() ||
+           ( currentIndex >= 0 && commandStack.get( currentIndex ) == lastSavedCommand);
+  }
+
+  public static void markSaved ()
+  {
+    current.saved();
   }
 
   public static void nodeMoved (final EditorScene scene,

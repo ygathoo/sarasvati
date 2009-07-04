@@ -26,10 +26,14 @@ import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -66,7 +70,28 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class GraphEditor
 {
+  private static final String GRAPH_NAME_KEY = "graphName";
   private static GraphEditor INSTANCE;
+
+  private enum SaveResult
+  {
+    SaveCanceled( true ),
+    SaveFailed( true ),
+    SaveNotWanted( false ),
+    SaveSucceeded( false );
+
+    private boolean abortExit;
+
+    private SaveResult (final boolean abortExit)
+    {
+      this.abortExit = abortExit;
+    }
+
+    public boolean isAbortExit ()
+    {
+      return abortExit;
+    }
+  }
 
   public static GraphEditor getInstance ()
   {
@@ -84,6 +109,7 @@ public class GraphEditor
   protected JToggleButton addNodesButton;
 
   protected SaveAction saveAction;
+  protected SaveAction saveAsAction;
   protected UndoAction undoAction;
   protected RedoAction redoAction;
 
@@ -153,7 +179,16 @@ public class GraphEditor
   protected void setup ()
   {
     mainWindow = new JFrame( "Sarasvati Graph Editor" );
-    mainWindow.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
+    mainWindow.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
+    mainWindow.addWindowListener( new WindowAdapter()
+    {
+      @Override
+      public void windowClosing (WindowEvent e)
+      {
+        exitRequested();
+      }
+    });
+
     mainWindow.setMinimumSize( new Dimension( 800, 600 ) );
     mainWindow.setJMenuBar( createMenu() );
 
@@ -246,14 +281,17 @@ public class GraphEditor
     JMenu fileMenu = new JMenu( "File" );
     fileMenu.setMnemonic( KeyEvent.VK_F );
 
+    saveAction = new SaveAction( false );
+    saveAsAction = new SaveAction( true );
+
     fileMenu.add( new JMenuItem( new NewGraphAction() ) );
     fileMenu.add( new JMenuItem( new OpenAction() ) );
-    fileMenu.add( new JMenuItem( new SaveAction( true ) ) );
-    fileMenu.add( new JMenuItem( new SaveAction( false ) ) );
+    fileMenu.add( new JMenuItem( saveAsAction ) );
+    fileMenu.add( new JMenuItem( saveAction ) );
     fileMenu.add( new JMenuItem( new ExitAction() ) );
 
     JMenu editMenu = new JMenu( "Edit" );
-    fileMenu.setMnemonic( KeyEvent.VK_E );
+    editMenu.setMnemonic( KeyEvent.VK_E );
 
     undoAction = new UndoAction();
     redoAction = new RedoAction();
@@ -275,7 +313,7 @@ public class GraphEditor
     final EditorScene scene = new EditorScene( new EditorGraph() );
     scrollPane.setViewportView( scene.createView() );
     scrollPane.putClientProperty( "scene", scene );
-
+    scrollPane.putClientProperty( GRAPH_NAME_KEY, "Untitled" );
     tabPane.addTab( "Untitled", scrollPane );
     tabPane.setSelectedComponent( scrollPane );
     tabSelectionChanged();
@@ -296,10 +334,12 @@ public class GraphEditor
       tabPane.setSelectedComponent( scrollPane );
 
       scrollPane.putClientProperty( "scene", scene );
+      scrollPane.putClientProperty( GRAPH_NAME_KEY, graph.getName() );
       tabSelectionChanged();
     }
     catch (Exception e)
     {
+      e.printStackTrace();
       JOptionPane.showMessageDialog( mainWindow, e.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE );
     }
   }
@@ -331,7 +371,59 @@ public class GraphEditor
     });
   }
 
-  public void saveProcessDefinition (EditorGraph graph, File outputFile)
+  public SaveResult saveRequested (final boolean isSaveAs)
+  {
+    EditorScene scene = getCurrentScene();
+
+    if ( scene == null )
+    {
+      return null;
+    }
+
+    EditorGraph graph = scene.getGraph();
+
+    List<String> errors = graph.validateGraph();
+
+    if ( !errors.isEmpty() )
+    {
+      StringBuilder buf = new StringBuilder ();
+      for ( String error : errors )
+      {
+        buf.append( error );
+        buf.append( "\n" );
+      }
+
+      JOptionPane.showMessageDialog( GraphEditor.getInstance().getMainWindow(),
+                                     buf.toString(),
+                                     "Invalid Process Definition",
+                                     JOptionPane.ERROR_MESSAGE );
+      return SaveResult.SaveFailed;
+    }
+
+    if ( isSaveAs || scene.getGraph().getFile() == null )
+    {
+      JFileChooser fileChooser = new JFileChooser( getLastFile() );
+
+      int retVal = fileChooser.showSaveDialog( mainWindow );
+
+      if ( retVal == JFileChooser.APPROVE_OPTION )
+      {
+        setLastFile( fileChooser.getSelectedFile() );
+        return saveProcessDefinition( graph, fileChooser.getSelectedFile() );
+      }
+      else
+      {
+        return SaveResult.SaveCanceled;
+      }
+    }
+    else
+    {
+      return saveProcessDefinition( graph, graph.getFile() );
+    }
+  }
+
+  public SaveResult saveProcessDefinition (final EditorGraph graph,
+                                           final File outputFile)
   {
     String name = outputFile.getName();
     int firstDot = name.indexOf(  '.' );
@@ -342,6 +434,8 @@ public class GraphEditor
     }
 
     graph.setName( name );
+    JComponent c = (JComponent)tabPane.getSelectedComponent();
+    c.putClientProperty( GRAPH_NAME_KEY, name );
     tabPane.setTitleAt( tabPane.getSelectedIndex(), name );
 
     try
@@ -349,13 +443,18 @@ public class GraphEditor
       XmlProcessDefinition xmlProcDef = EditorGraphFactory.exportToXml( graph );
       xmlLoader.saveProcessDefinition( xmlProcDef, outputFile );
       graph.setFile( outputFile );
+      CommandStack.markSaved();
+
       JOptionPane.showMessageDialog( mainWindow,
                                      "Process definition successfully saved to: '" + outputFile.getPath() + "'",
                                      "Save", JOptionPane.INFORMATION_MESSAGE );
+
+      return SaveResult.SaveSucceeded;
     }
     catch ( Exception e )
     {
       JOptionPane.showMessageDialog( mainWindow, e.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE );
+      return SaveResult.SaveFailed;
     }
   }
 
@@ -369,10 +468,10 @@ public class GraphEditor
   {
     EditorScene current = getCurrentScene();
     CommandStack.setCurrent( current == null ? null : current.getCommandStack() );
-    updateUndoRedo();
+    updateUndoRedoSave();
   }
 
-  public void updateUndoRedo ()
+  public void updateUndoRedoSave ()
   {
     CommandStack currentCommandStack = CommandStack.getCurrent();
 
@@ -405,6 +504,82 @@ public class GraphEditor
       redoAction.setName( "Redo" );
     }
 
+    if ( currentCommandStack != null )
+    {
+      boolean isUnSaved = !currentCommandStack.isSaved();
+      saveAction.setEnabled( isUnSaved );
+      saveAsAction.setEnabled( true );
+
+      JComponent c = (JComponent)tabPane.getSelectedComponent();
+      String title = (String)c.getClientProperty( GRAPH_NAME_KEY );
+      if ( isUnSaved )
+      {
+        tabPane.setTitleAt( tabPane.getSelectedIndex(), "*" + title );
+      }
+      else
+      {
+        tabPane.setTitleAt( tabPane.getSelectedIndex(), title );
+      }
+    }
+    else
+    {
+      saveAction.setEnabled( false );
+      saveAsAction.setEnabled( false );
+    }
+  }
+
+  public void exitRequested ()
+  {
+    if ( tabPane.getSelectedIndex() > 0 )
+    {
+      if ( closeCurrentTab().isAbortExit() )
+      {
+        return;
+      }
+    }
+
+    while ( tabPane.getTabCount() > 0 )
+    {
+      tabPane.setSelectedIndex( 0 );
+      tabSelectionChanged();
+      if ( closeCurrentTab().isAbortExit() )
+      {
+        return;
+      }
+    }
+
+    System.exit( 0 );
+  }
+
+  public SaveResult closeCurrentTab ()
+  {
+    if ( !CommandStack.getCurrent().isSaved() )
+    {
+      JComponent c = (JComponent)tabPane.getSelectedComponent();
+      String title = (String)c.getClientProperty( GRAPH_NAME_KEY );
+      int result =
+        JOptionPane.showConfirmDialog( mainWindow, "Process definition '" + title + "' has unsaved changes. " +
+                                                    "Do you wish to save your work before exiting?" );
+      if ( JOptionPane.YES_OPTION == result )
+      {
+        SaveResult saveResult = saveRequested( false );
+        if ( saveResult == SaveResult.SaveSucceeded )
+        {
+          tabPane.remove( tabPane.getSelectedIndex() );
+        }
+        return saveResult;
+      }
+      else if ( JOptionPane.NO_OPTION == result )
+      {
+        tabPane.remove( tabPane.getSelectedIndex() );
+        return SaveResult.SaveNotWanted;
+      }
+
+      return SaveResult.SaveCanceled;
+    }
+
+    tabPane.remove( tabPane.getSelectedIndex() );
+    return SaveResult.SaveNotWanted;
   }
 
   public static void main( String[] args ) throws Exception
