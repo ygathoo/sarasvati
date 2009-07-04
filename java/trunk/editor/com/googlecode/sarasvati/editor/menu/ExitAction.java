@@ -25,6 +25,8 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.KeyStroke;
 
+import com.googlecode.sarasvati.editor.GraphEditor;
+
 public class ExitAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
@@ -40,6 +42,6 @@ public class ExitAction extends AbstractAction
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    System.exit( 0 );
+    GraphEditor.getInstance().exitRequested();
   }
 }
