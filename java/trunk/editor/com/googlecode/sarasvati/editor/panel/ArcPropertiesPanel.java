@@ -60,10 +60,12 @@ public class ArcPropertiesPanel extends javax.swing.JPanel {
 
         fromLabel.setText(org.openide.util.NbBundle.getMessage(ArcPropertiesPanel.class, "ArcPropertiesPanel.fromLabel.text")); // NOI18N
 
+        fromInput.setEditable(true);
         fromInput.setModel(getFromComboBoxModel());
 
         toLabel.setText(org.openide.util.NbBundle.getMessage(ArcPropertiesPanel.class, "ArcPropertiesPanel.toLabel.text")); // NOI18N
 
+        toInput.setEditable(true);
         toInput.setModel(getToComboBoxModel());
 
         jPanel1.setLayout(new java.awt.FlowLayout(java.awt.FlowLayout.CENTER, 20, 5));
