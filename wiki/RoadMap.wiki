@@ -15,7 +15,7 @@ A graphical editor for process definitions is in progress. It is now usable for 
 
  * Undo/Redo framework: Done
  * Load: Done
- * Save: 90% done
+ * Save: 90%
  * Add nodes: Done
  * Delete nodes: *TODO*
  * Add external: *TODO*
@@ -31,7 +31,7 @@ A graphical editor for process definitions is in progress. It is now usable for 
  * Self arcs: Done
  * Arc labels: Done
  * Cleanup move/add/reconnect interactions: *TODO*
- * Check for unsaved: *TODO*
+ * Check for unsaved:Done
  * Graph validation on save: _Started_
  * Preferences: *Needs to be specced. Need just enough for externals for now. Rest wil be Post-1.0*
  * Select all: *TODO*
