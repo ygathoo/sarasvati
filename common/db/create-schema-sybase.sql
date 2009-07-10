@@ -166,12 +166,34 @@ ALTER TABLE wf_node_attr
   ADD PRIMARY KEY (node_id, name)
 go
 
+create table wf_external
+(
+  id                bigint       IDENTITY NOT NULL PRIMARY KEY,
+  name              varchar(255)          NOT NULL,
+  graph_id          bigint                NOT NULL references wf_graph,
+  external_graph_id bigint                NOT NULL references wf_graph
+)
+go
+
+create table wf_external_attr
+(
+  external_id  bigint        NOT NULL REFERENCES wf_external,
+  name         varchar(255)  NOT NULL,
+  value        varchar(2000) NULL
+)
+go
+
+ALTER TABLE wf_external_attr
+  ADD PRIMARY KEY (external_id, name)
+go
+
 create table wf_node_ref
 (
-  id        bigint       IDENTITY NOT NULL PRIMARY KEY,
-  node_id   bigint                NOT NULL REFERENCES wf_node,
-  graph_id  bigint                NOT NULL REFERENCES wf_graph,
-  instance  varchar(255)          NOT NULL
+  id          bigint       IDENTITY NOT NULL PRIMARY KEY,
+  node_id     bigint                NOT NULL REFERENCES wf_node,
+  graph_id    bigint                NOT NULL REFERENCES wf_graph,
+  parent_id   bigint                NULL REFERENCES wf_node_ref,
+  external_id bigint                NULL REFERENCES wf_external
 ) with identity_gap = 10
 go
 
