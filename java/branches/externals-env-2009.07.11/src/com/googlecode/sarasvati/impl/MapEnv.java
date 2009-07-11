@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.impl;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,6 +32,9 @@ import com.googlecode.sarasvati.env.Env;
  */
 public class MapEnv implements Env
 {
+  public static final MapEnv READONLY_EMPTY_INSTANCE =
+    new MapEnv( Collections.unmodifiableMap( new HashMap<String, String>() ) );
+
   protected Map<String,String> attributes;
   protected Map<String,Object> transientAttributes;
 

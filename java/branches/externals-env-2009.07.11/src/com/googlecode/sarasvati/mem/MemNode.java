@@ -30,6 +30,9 @@ import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
+import com.googlecode.sarasvati.env.ReadEnv;
+import com.googlecode.sarasvati.impl.MapEnv;
+import com.googlecode.sarasvati.impl.NestedReadEnv;
 
 public class MemNode implements Node, Cloneable
 {
@@ -45,7 +48,10 @@ public class MemNode implements Node, Cloneable
   protected boolean  isStart;
   protected String   guard;
 
-  protected boolean isExternal;
+  protected MemNode     originatingExternalNode;
+  protected MemExternal external;
+
+  protected ReadEnv externalEnv;
 
   public MemNode ()
   {
@@ -168,14 +174,9 @@ public class MemNode implements Node, Cloneable
     this.isStart = isStart;
   }
 
-  public boolean isExternal ()
+  public boolean isImportedFromExternal ()
   {
-    return isExternal;
-  }
-
-  public void setExternal (boolean isExternal)
-  {
-    this.isExternal = isExternal;
+    return external != null;
   }
 
   /**
@@ -197,6 +198,49 @@ public class MemNode implements Node, Cloneable
   public boolean isBacktrackable (Engine engine, NodeToken token)
   {
     return true;
+  }
+
+  public MemExternal getExternal ()
+  {
+    return external;
+  }
+
+  public void setExternal (MemExternal external)
+  {
+    this.external = external;
+  }
+
+  public MemNode getOriginatingExternalNode ()
+  {
+    return originatingExternalNode;
+  }
+
+  public void setOriginatingExternalNode (MemNode originatingExternalNode)
+  {
+    this.originatingExternalNode = originatingExternalNode;
+  }
+
+  @Override
+  public ReadEnv getExternalEnv ()
+  {
+    if ( external == null )
+    {
+      return MapEnv.READONLY_EMPTY_INSTANCE;
+    }
+
+    if ( externalEnv == null )
+    {
+      if ( originatingExternalNode == null )
+      {
+        externalEnv = external.getEnv();
+      }
+      else
+      {
+        externalEnv = new NestedReadEnv( external.getEnv(), originatingExternalNode.getExternalEnv() );
+      }
+    }
+
+    return externalEnv;
   }
 
   @Override

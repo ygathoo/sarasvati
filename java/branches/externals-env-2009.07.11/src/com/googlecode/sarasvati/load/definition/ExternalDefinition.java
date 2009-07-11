@@ -26,12 +26,12 @@ import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.ProcessDefinitionTranslator;
 
 /**
- * An ExternalDefinition is the result of the translation of a certain external source containing 
+ * An ExternalDefinition is the result of the translation of a certain external source containing
  * the definition of a process. That external source may contain information indicating it will
- * point to another definition (external), and that information is translated into an ExternalDefinition 
+ * point to another definition (external), and that information is translated into an ExternalDefinition
  * through a {@link ProcessDefinitionTranslator}. This ExternalDefinition will then in its turn be used
  * by the {@link GraphLoader} to create a {@link Graph} through the {@link GraphFactory}.
- * The default kind of external source is an XML file containing &lt;external&gt; tags.   
+ * The default kind of external source is an XML file containing &lt;external&gt; tags.
  */
 public interface ExternalDefinition
 {
@@ -40,6 +40,8 @@ public interface ExternalDefinition
   public String getName ();
 
   public List<? extends ExternalArcDefinition> getExternalArcs ();
+
+  public CustomDefinition getCustom ();
 
   public Integer getX ();
 

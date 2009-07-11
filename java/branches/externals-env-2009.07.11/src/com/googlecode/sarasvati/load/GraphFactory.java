@@ -26,6 +26,7 @@ import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
+import com.googlecode.sarasvati.External;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
@@ -33,6 +34,7 @@ import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.load.definition.CustomDefinition;
 
 public interface GraphFactory<G extends Graph>
 {
@@ -68,25 +70,38 @@ public interface GraphFactory<G extends Graph>
    * @param joinParam The node's join parameter.
    * @param isStart Indicates whether the node is a start node
    * @param guard  The node guard
-   * @param customList A list of custom attributes from the xml file. May be empty or null.
+   * @param customList A list of custom attributes from the process definition. May be empty or null.
    *
    * @return The new Node
    *
-   * @throws LoadException If an error occurs while load, such as incorrect custom data is given.
+   * @throws LoadException If an error occurs while loading, such as incorrect custom data is given.
    */
   Node newNode (G graph, String name, String type, JoinType joinType, String joinParam, boolean isStart, String guard, List<Object> customList)
     throws LoadException;
+
+  /**
+   * Creates a new {@link External}.
+   *
+   * @param name The external name
+   * @param graph The graph the external is defined in
+   * @param externalGraph The graph the external references
+   * @param customDefinition A container for a list of custom attributes. May be empty or null.
+   * @return A new {@link External}
+   *
+   * @throws LoadException If an error occurs while loading, such as invalid custom data.
+   */
+  External newExternal (String name, Graph graph, Graph externalGraph, CustomDefinition customDefinition) throws LoadException;
 
   /**
    * Imports a node from an external graph into the given graph.
    *
    * @param graph The graph to import the node into
    * @param node  The node to import.
-   * @param instanceName The instance name given to the external graph.
+   * @param external The external the node belongs to
    *
    * @return The new, imported node
    */
-  Node importNode (G graph, Node node, String instanceName);
+  Node importNode (G graph, Node node, External external);
 
   /**
    * Generates a new {@link GraphProcess} for the given {@link Graph}. Execution
