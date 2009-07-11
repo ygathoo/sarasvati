@@ -20,6 +20,7 @@ package com.googlecode.sarasvati.jdbc.action;
 
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.sql.Types;
 
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
 
@@ -35,6 +36,23 @@ public class NodeRefInsertAction extends AbstractInsertAction<JdbcNodeRef>
   {
     stmt.setLong( 1, value.getGraph().getId() );
     stmt.setLong( 2, value.getNode().getId() );
-    stmt.setString( 3, value.getInstance() );
+
+    if ( value.getOriginatingExternalNode() == null )
+    {
+      stmt.setNull( 3, Types.INTEGER );
+    }
+    else
+    {
+      stmt.setLong( 3, value.getOriginatingExternalNode().getId() );
+    }
+
+    if ( value.getExternal() == null )
+    {
+      stmt.setNull( 4, Types.INTEGER );
+    }
+    else
+    {
+      stmt.setLong( 4, value.getExternal().getId() );
+    }
   }
 }

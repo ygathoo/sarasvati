@@ -24,6 +24,9 @@ import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.ReadEnv;
+import com.googlecode.sarasvati.impl.MapEnv;
+import com.googlecode.sarasvati.impl.NestedReadEnv;
 
 public class JdbcNodeRef implements Node,JdbcObject
 {
@@ -31,20 +34,30 @@ public class JdbcNodeRef implements Node,JdbcObject
 
   protected JdbcNode node;
   protected JdbcGraph graph;
+  protected JdbcNodeRef originatingExternalNode;
+  protected JdbcExternal external;
 
-  protected String instance;
+  protected ReadEnv externalEnv;
 
-  public JdbcNodeRef (JdbcGraph graph, JdbcNode node, String instance )
+  public JdbcNodeRef (final JdbcGraph graph,
+                      final JdbcNode node,
+                      final JdbcNodeRef originatingExternalNode,
+                      final JdbcExternal external)
   {
-    this( null, graph, node, instance );
+    this( null, graph, node, originatingExternalNode, external );
   }
 
-  public JdbcNodeRef (Long id, JdbcGraph graph, JdbcNode node, String instance )
+  public JdbcNodeRef (final Long id,
+                      final JdbcGraph graph,
+                      final JdbcNode node,
+                      final JdbcNodeRef originatingExternalNode,
+                      final JdbcExternal external )
   {
     this.id       = id;
     this.graph    = graph;
     this.node     = node;
-    this.instance = instance;
+    this.originatingExternalNode = originatingExternalNode;
+    this.external = external;
   }
 
   public Long getId ()
@@ -83,14 +96,26 @@ public class JdbcNodeRef implements Node,JdbcObject
     return node.getGuard();
   }
 
-  public String getInstance ()
+  @Override
+  public JdbcNodeRef getOriginatingExternalNode ()
   {
-    return instance;
+    return originatingExternalNode;
   }
 
-  public void setInstance (String instance)
+  public void setOriginatingExternalNode (JdbcNodeRef originatingExternalNode)
   {
-    this.instance = instance;
+    this.originatingExternalNode = originatingExternalNode;
+  }
+
+  @Override
+  public JdbcExternal getExternal ()
+  {
+    return external;
+  }
+
+  public void setExternal (JdbcExternal external)
+  {
+    this.external = external;
   }
 
   public String getName ()
@@ -119,6 +144,29 @@ public class JdbcNodeRef implements Node,JdbcObject
   public JoinStrategy getJoinStrategy ()
   {
     return node.getJoinStrategy();
+  }
+
+  @Override
+  public ReadEnv getExternalEnv ()
+  {
+    if ( external == null )
+    {
+      return MapEnv.READONLY_EMPTY_INSTANCE;
+    }
+
+    if ( externalEnv == null )
+    {
+      if ( originatingExternalNode == null )
+      {
+        externalEnv = external.getEnv();
+      }
+      else
+      {
+        externalEnv = new NestedReadEnv( external.getEnv(), originatingExternalNode.getExternalEnv() );
+      }
+    }
+
+    return externalEnv;
   }
 
   @Override
