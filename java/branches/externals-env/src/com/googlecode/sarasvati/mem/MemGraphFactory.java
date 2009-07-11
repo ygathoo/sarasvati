@@ -127,7 +127,11 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
     MemNode newNode = memNode.clone();
     newNode.setGraph( graph );
     newNode.setExternal( (MemExternal)external );
-    newNode.setOriginatingExternalNode( (MemNode)node );
+
+    if ( node.getExternal() != null )
+    {
+      newNode.setOriginatingExternalNode( (MemNode)node );
+    }
 
     graph.getNodes().add( newNode );
 

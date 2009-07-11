@@ -171,8 +171,9 @@ public class HibEngine extends BaseEngine
     config.addAnnotatedClass( HibNodeTokenSetMember.class );
     config.addAnnotatedClass( HibNodeType.class );
     config.addAnnotatedClass( HibTokenSetMemberAttribute.class );
+    config.addAnnotatedClass( HibExternal.class );
 
-    if (enableCaching )
+    if ( enableCaching )
     {
       config.setCacheConcurrencyStrategy( HibGraph.class.getName(),"read-only" );
       config.setCacheConcurrencyStrategy( HibNode.class.getName(),"read-only" );
