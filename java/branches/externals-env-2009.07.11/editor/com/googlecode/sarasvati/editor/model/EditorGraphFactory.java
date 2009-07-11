@@ -55,10 +55,7 @@ public class EditorGraphFactory
     {
       CustomDefinition custom = nodeDef.getCustom();
       Map<String,String> customProperties = new LinkedHashMap<String,String>();
-      if ( custom != null && custom.getCustom() != null )
-      {
-        DOMToObjectLoadHelper.loadCustomIntoMap( custom.getCustom(), customProperties );
-      }
+      DOMToObjectLoadHelper.loadCustomIntoMap( custom, customProperties );
 
       NodeState nodeState = new NodeState( nodeDef.getName(),
                                            nodeDef.getType(),

@@ -41,18 +41,22 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.definition.CustomDefinition;
 import com.googlecode.sarasvati.util.SvUtil;
 
 public class DOMToObjectLoadHelper
 {
-  public static void loadCustomIntoMap (List<Object> customList, Map<String, String> map)
+  public static void loadCustomIntoMap (CustomDefinition customDefinition, Map<String, String> map)
     throws LoadException
   {
-    for ( Object custom : customList )
+    if ( customDefinition != null && customDefinition.getCustom() != null )
     {
-      if ( custom instanceof Element )
+      for ( Object custom : customDefinition.getCustom() )
       {
-        DOMToObjectLoadHelper.setBeanValues( EditorLoadPropertyMutator.INSTANCE, (Element)custom, null, map );
+        if ( custom instanceof Element )
+        {
+          DOMToObjectLoadHelper.setBeanValues( EditorLoadPropertyMutator.INSTANCE, (Element)custom, null, map );
+        }
       }
     }
   }

@@ -48,6 +48,9 @@ public class XmlExternal implements ExternalDefinition
   @XmlElement(name = "arc", required = false)
   protected List<XmlExternalArc> externalArcs = new ArrayList<XmlExternalArc>();
 
+  @XmlElement(name = "custom")
+  protected XmlCustom            custom;
+
   @Override
   public String getProcessDefinition ()
   {
@@ -102,6 +105,17 @@ public class XmlExternal implements ExternalDefinition
   }
 
   @Override
+  public XmlCustom getCustom ()
+  {
+    return custom;
+  }
+
+  public void setCustom (XmlCustom custom)
+  {
+    this.custom = custom;
+  }
+
+  @Override
   public String toString ()
   {
     StringBuilder buf = new StringBuilder();
@@ -127,6 +141,12 @@ public class XmlExternal implements ExternalDefinition
     for (ExternalArcDefinition arc : externalArcs)
     {
       buf.append( arc );
+      buf.append( "\n" );
+    }
+
+    if (custom != null)
+    {
+      buf.append( custom );
       buf.append( "\n" );
     }
 

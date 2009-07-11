@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.External;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.load.definition.ArcDefinition;
@@ -38,7 +39,7 @@ import com.googlecode.sarasvati.util.SvUtil;
 /**
  * Given a {@link GraphFactory} to construct the {@link Graph} parts,
  * a {@link GraphRepository} and a {@link ProcessDefinitionTranslator} to translate the
- * "raw" definition (for example an XML file) into a ProcessDefinition it can understand, 
+ * "raw" definition (for example an XML file) into a ProcessDefinition it can understand,
  * the GraphLoader will load process definitions into that repository.
  *
  * This class is *not* thread safe
@@ -126,10 +127,10 @@ public class GraphLoader<G extends Graph>
 
   protected void importExternals (ProcessDefinition procDef) throws LoadException
   {
-    for ( ExternalDefinition external : procDef.getExternals() )
+    for ( ExternalDefinition externalDefinition : procDef.getExternals() )
     {
-      Map<String,Node> instance = importInstance( external.getProcessDefinition(), external.getName() );
-      instanceCache.put( external.getName(), instance );
+      Map<String,Node> instance = importInstance( externalDefinition );
+      instanceCache.put( externalDefinition.getName(), instance );
     }
   }
 
@@ -181,24 +182,29 @@ public class GraphLoader<G extends Graph>
     }
   }
 
-  protected Map<String,Node> importInstance (String externalName, String instanceName) throws LoadException
+  protected Map<String,Node> importInstance (ExternalDefinition externalDefinition) throws LoadException
   {
     Map<String, Node> nodeMap = new HashMap<String, Node>();
-    Graph instanceGraph = repository.getLatestGraph( externalName );
+    Graph instanceGraph = repository.getLatestGraph( externalDefinition.getProcessDefinition() );
 
     if ( instanceGraph == null )
     {
-      throw new LoadException( "Referenced external '" + externalName + "' not found in database" );
+      throw new LoadException( "Referenced external '" + externalDefinition.getProcessDefinition() + "' not found in database" );
     }
+
+    External external = factory.newExternal( externalDefinition.getName(),
+                                             graph,
+                                             instanceGraph,
+                                             externalDefinition.getCustom() );
 
     Map<Node,Node> lookupMap = new HashMap<Node, Node>();
 
     for ( Node node : instanceGraph.getNodes() )
     {
-      Node newNode = factory.importNode( graph, node, instanceName);
+      Node newNode = factory.importNode( graph, node, external );
 
       lookupMap.put( node, newNode );
-      if ( !node.isExternal() )
+      if ( !node.isImportedFromExternal() )
       {
         nodeMap.put( node.getName(), newNode );
       }
@@ -218,14 +224,14 @@ public class GraphLoader<G extends Graph>
   {
     loadDefinition( translator, source, null );
   }
-  
-  public <T> void loadDefinition (ProcessDefinitionTranslator<T> translator, T source, GraphValidator validator) 
+
+  public <T> void loadDefinition (ProcessDefinitionTranslator<T> translator, T source, GraphValidator validator)
     throws LoadException
   {
     ProcessDefinition def = translator.translate( source );
     loadDefinition( def, validator );
   }
-  
+
   public void loadDefinition (ProcessDefinition procDef) throws LoadException
   {
     loadDefinition( procDef, null );

@@ -35,6 +35,7 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.ExecutionType;
+import com.googlecode.sarasvati.External;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
@@ -47,6 +48,8 @@ import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
+import com.googlecode.sarasvati.load.definition.CustomDefinition;
+import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
 public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 {
@@ -133,7 +136,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 
     node.create( session );
 
-    HibNodeRef nodeRef = new HibNodeRef( graph, node, "" );
+    HibNodeRef nodeRef = new HibNodeRef( graph, node, null, null );
     session.save( nodeRef );
     graph.getNodes().add( nodeRef );
 
@@ -154,15 +157,29 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   }
 
   @Override
+  public HibExternal newExternal (final String name,
+                                  final Graph graph,
+                                  final Graph externalGraph,
+                                  final CustomDefinition customDefinition)
+    throws LoadException
+  {
+    Map<String, String> attrMap = new HashMap<String, String>();
+    DOMToObjectLoadHelper.loadCustomIntoMap( customDefinition, attrMap );
+    HibExternal external = new HibExternal( name, (HibGraph)graph, (HibGraph)externalGraph, attrMap );
+    session.save( external );
+    return external;
+  }
+
+  @Override
   public Node importNode (final HibGraph graph,
                           final Node node,
-                          final String instanceName)
+                          final External external)
   {
     HibNodeRef nodeRef = (HibNodeRef)node;
 
-    String label = getInstance( nodeRef.getInstance(), instanceName );
+    HibNodeRef origNode = node.getExternal() == null ? null : (HibNodeRef)node;
 
-    HibNodeRef newRef = new HibNodeRef( graph, nodeRef.getNode(), label );
+    HibNodeRef newRef = new HibNodeRef( graph, nodeRef.getNode(), origNode, (HibExternal)external );
     session.save( newRef );
     graph.getNodes().add( newRef );
 

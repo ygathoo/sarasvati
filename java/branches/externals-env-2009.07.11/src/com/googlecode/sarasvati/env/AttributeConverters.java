@@ -22,8 +22,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Static utility class for registring and using {@link AttributeConverter}s.
- * Note that registering converts is NOT threadsafe, and should be done at
+ * Static utility class for registering and using {@link AttributeConverter}s.
+ * Note that registering converts is NOT thread-safe, and should be done at
  * startup.
  *
  * @author Paul Lorenz
@@ -121,5 +121,10 @@ public class AttributeConverters
   public static AttributeConverter getConverterForType (Class<?> type)
   {
     return converters.get( type );
+  }
+
+  public static void setConverterForType (Class<?> type, AttributeConverter converter)
+  {
+    converters.put( type, converter );
   }
 }

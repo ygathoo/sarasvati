@@ -30,6 +30,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
@@ -40,6 +41,9 @@ import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.env.ReadEnv;
+import com.googlecode.sarasvati.impl.MapEnv;
+import com.googlecode.sarasvati.impl.NestedReadEnv;
 
 @Entity
 @Table (name="wf_node_ref")
@@ -60,15 +64,27 @@ public class HibNodeRef implements Node
   @JoinColumn (name="graph_id")
   protected HibGraph graph;
 
-  protected String instance;
+  @ForeignKey(name="FK_ref_orig")
+  @ManyToOne (fetch=FetchType.LAZY)
+  @JoinColumn (name="parent_id")
+  protected HibNodeRef originatingExternalNode;
+
+  @ForeignKey(name="FK_ref_ext")
+  @ManyToOne (fetch=FetchType.EAGER)
+  @JoinColumn (name="external_id")
+  protected HibExternal external;
+
+  @Transient
+  protected ReadEnv externalEnv;
 
   protected HibNodeRef () { /* Default constructor for Hibernate */ }
 
-  protected HibNodeRef (HibGraph graph, HibNode node, String instance )
+  protected HibNodeRef (HibGraph graph, HibNode node, HibNodeRef originatingExternalNode, HibExternal external )
   {
     this.graph    = graph;
     this.node     = node;
-    this.instance = instance;
+    this.originatingExternalNode = originatingExternalNode;
+    this.external = external;
   }
 
   public Long getId ()
@@ -107,14 +123,49 @@ public class HibNodeRef implements Node
     return node.getGuard();
   }
 
-  public String getInstance ()
+  @Override
+  public HibNodeRef getOriginatingExternalNode ()
   {
-    return instance;
+    return originatingExternalNode;
   }
 
-  public void setInstance (String instance)
+  public void setOriginatingExternalNode (HibNodeRef originatingExternalNode)
   {
-    this.instance = instance;
+    this.originatingExternalNode = originatingExternalNode;
+  }
+
+  @Override
+  public HibExternal getExternal ()
+  {
+    return external;
+  }
+
+  public void setExternal (HibExternal external)
+  {
+    this.external = external;
+  }
+
+  @Override
+  public ReadEnv getExternalEnv ()
+  {
+    if ( external == null )
+    {
+      return MapEnv.READONLY_EMPTY_INSTANCE;
+    }
+
+    if ( externalEnv == null )
+    {
+      if ( originatingExternalNode == null )
+      {
+        externalEnv = external.getEnv();
+      }
+      else
+      {
+        externalEnv = new NestedReadEnv( external.getEnv(), originatingExternalNode.getExternalEnv() );
+      }
+    }
+
+    return externalEnv;
   }
 
   public String getName ()
@@ -176,9 +227,9 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public boolean isExternal ()
+  public boolean isImportedFromExternal ()
   {
-    return !graph.equals( getNode().getGraph() );
+    return external != null;
   }
 
   @Override
