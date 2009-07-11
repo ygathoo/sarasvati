@@ -28,20 +28,20 @@ drop table if exists wf_graph cascade;
 
 create table wf_graph
 (
-  id              serial    NOT NULL PRIMARY KEY,
-  name            text      NOT NULL,
-  version         int       NOT NULL,
-  create_date     timestamp NOT NULL DEFAULT current_timestamp
+  id          serial       NOT NULL PRIMARY KEY,
+  name        varchar(255) NOT NULL,
+  version     int          NOT NULL,
+  create_date timestamp    NOT NULL DEFAULT current_timestamp
 );
 
 ALTER TABLE wf_graph
   ADD CONSTRAINT wf_graph_unique
-    UNIQUE(name,version);
+    UNIQUE (name,version);
 
 create table wf_process_state
 (
-  id int NOT NULL PRIMARY KEY,
-  description text NOT NULL
+  id          int           NOT NULL PRIMARY KEY,
+  description varchar(255) NOT NULL
 );
 
 insert into wf_process_state values ( 0, 'Created' );
@@ -65,9 +65,9 @@ create index wf_process_idx on wf_process (graph_id, state);
 
 create table wf_process_attr
 (
-  process_id  int  NOT NULL REFERENCES wf_process,
-  name        text NOT NULL,
-  value       text NULL
+  process_id  int          NOT NULL REFERENCES wf_process,
+  name        varchar(64)  NOT NULL,
+  value       varchar(2000) NOT NULL
 );
 
 ALTER TABLE wf_process_attr
@@ -75,10 +75,10 @@ ALTER TABLE wf_process_attr
 
 create table wf_process_listener
 (
-  id              serial NOT NULL PRIMARY KEY,
-  type            text   NOT NULL,
-  event_type      int    NOT NULL,
-  process_id      int    NOT NULL REFERENCES wf_process
+  id              serial       NOT NULL PRIMARY KEY,
+  type            varchar(255) NOT NULL,
+  event_type      int          NOT NULL,
+  process_id      int          NOT NULL REFERENCES wf_process
 );
 
 ALTER TABLE wf_process_listener
@@ -87,9 +87,9 @@ ALTER TABLE wf_process_listener
 
 create table wf_node_type
 (
-  id          text NOT NULL PRIMARY KEY,
-  description text NOT NULL,
-  behaviour   text NOT NULL REFERENCES wf_node_type
+  id          varchar(255) NOT NULL PRIMARY KEY,
+  description varchar(255) NOT NULL,
+  behaviour   varchar(255) NOT NULL REFERENCES wf_node_type
 );
 
 insert into wf_node_type values ( 'node', 'Generic node allowing for many inputs, many outputs and guards', 'node' );
@@ -100,8 +100,8 @@ insert into wf_node_type values ( 'nested', 'Node which executes a nested proces
 
 create table wf_node_join_type
 (
-  id int NOT NULL PRIMARY KEY,
-  description text NOT NULL
+  id          int          NOT NULL PRIMARY KEY,
+  description varchar(255) NOT NULL
 );
 
 insert into wf_node_join_type values ( 0, 'Or: Join is completed whenever any arc token arrives at the node' );
@@ -112,14 +112,14 @@ insert into wf_node_join_type values ( 4, 'Custom: User defined join type' );
 
 create table wf_node
 (
-  id              serial  NOT NULL PRIMARY KEY,
-  graph_id        int     NOT NULL REFERENCES wf_graph,
-  name            text    NOT NULL,
-  join_type       int     NOT NULL REFERENCES wf_node_join_type,
-  join_param      text    NULL,
-  is_start        char(1) NOT NULL,
-  type            text    NOT NULL REFERENCES wf_node_type,
-  guard           text    NULL
+  id              serial       NOT NULL PRIMARY KEY,
+  graph_id        int          NOT NULL REFERENCES wf_graph,
+  name            varchar(255) NOT NULL,
+  join_type       int          NOT NULL REFERENCES wf_node_join_type,
+  join_param      varchar(255) NULL,
+  is_start        char(1)      NOT NULL,
+  type            varchar(255) NOT NULL REFERENCES wf_node_type,
+  guard           varchar(255) NULL
 );
 
 ALTER TABLE wf_node
@@ -128,39 +128,58 @@ ALTER TABLE wf_node
 
 create table wf_node_attr
 (
-  node_id  int  NOT NULL REFERENCES wf_node,
-  name     text NOT NULL,
-  value    text NULL
+  node_id  int           NOT NULL REFERENCES wf_node,
+  name     varchar(64)   NOT NULL,
+  value    varchar(2000) NOT NULL
 );
 
 ALTER TABLE wf_node_attr
   ADD PRIMARY KEY (node_id, name);
 
+create table wf_external
+(
+  id                serial   NOT NULL PRIMARY KEY,
+  name              text     NOT NULL,
+  graph_id          int      NOT NULL references wf_graph,
+  external_graph_id int      NOT NULL references wf_graph
+);
+
+create table wf_external_attr
+(
+  external_id  int           NOT NULL REFERENCES wf_external,
+  name         varchar(255)  NOT NULL,
+  value        varchar(2000) NULL
+);
+
+ALTER TABLE wf_external_attr
+  ADD PRIMARY KEY (external_id, name);
+
 create table wf_node_ref
 (
-  id        serial NOT NULL PRIMARY KEY,
-  node_id   int    NOT NULL REFERENCES wf_node,
-  graph_id  int    NOT NULL REFERENCES wf_graph,
-  instance  text   NOT NULL
+  id          serial      NOT NULL PRIMARY KEY,
+  node_id     int         NOT NULL REFERENCES wf_node,
+  graph_id    int         NOT NULL REFERENCES wf_graph,
+  parent_id   int         NULL REFERENCES wf_node_ref,
+  external_id int         NULL REFERENCES wf_external
 );
 
 create index wf_node_ref_graph_idx on wf_node_ref (graph_id);
 
 create table wf_arc
 (
-  id            serial NOT NULL PRIMARY KEY,
-  graph_id      int    NOT NULL REFERENCES wf_graph,
-  a_node_ref_id int    NOT NULL REFERENCES wf_node_ref,
-  z_node_ref_id int    NOT NULL REFERENCES wf_node_ref,
-  name          text   NULL
+  id            serial       NOT NULL PRIMARY KEY,
+  graph_id      int          NOT NULL REFERENCES wf_graph,
+  a_node_ref_id int          NOT NULL REFERENCES wf_node_ref,
+  z_node_ref_id int          NOT NULL REFERENCES wf_node_ref,
+  name          varchar(255) NULL
 );
 
 create index wf_arc_graph_idx on wf_arc (graph_id);
 
 create table wf_guard_action
 (
-  id           int  NOT NULL PRIMARY KEY,
-  name         text NOT NULL
+  id           int         NOT NULL PRIMARY KEY,
+  name         varchar(50) NOT NULL
 );
 
 insert into wf_guard_action values ( 0, 'Accept Token' );
@@ -169,8 +188,8 @@ insert into wf_guard_action values ( 2, 'Skip Node' );
 
 create table wf_execution_type
 (
-  id            int  NOT NULL PRIMARY KEY,
-  name          text NOT NULL
+  id            int          NOT NULL PRIMARY KEY,
+  name          varchar(255) NOT NULL
 );
 
 insert into wf_execution_type values ( 0, 'Forward' );
@@ -227,9 +246,9 @@ create index wf_node_token_parent_idx on wf_node_token_parent (arc_token_id);
 
 create table wf_token_attr
 (
-  attr_set_id  int  NOT NULL REFERENCES wf_node_token,
-  name         text NOT NULL,
-  value        text NULL
+  attr_set_id  int          NOT NULL REFERENCES wf_node_token,
+  name         varchar(64)  NOT NULL,
+  value        varchar(2000) NOT NULL
 );
 
 ALTER TABLE wf_token_attr
@@ -237,18 +256,18 @@ ALTER TABLE wf_token_attr
 
 create table wf_token_set
 (
-  id               serial  NOT NULL PRIMARY KEY,
-  process_id       int     NOT NULL REFERENCES wf_process,
-  name             text    NOT NULL,
-  max_member_index int     NOT NULL,
-  complete         char(1) NOT NULL
+  id               serial       NOT NULL PRIMARY KEY,
+  process_id       int          NOT NULL REFERENCES wf_process,
+  name             varchar(255) NOT NULL,
+  max_member_index int          NOT NULL,
+  complete         char(1)      NOT NULL
 );
 
 create table wf_token_set_attr
 (
-  token_set_id  int  NOT NULL REFERENCES wf_token_set,
-  name          text NOT NULL,
-  value         text NULL
+  token_set_id  int          NOT NULL REFERENCES wf_token_set,
+  name          varchar(64)  NOT NULL,
+  value         varchar(2000) NULL
 );
 
 ALTER TABLE wf_token_set_attr
@@ -278,11 +297,11 @@ create index wf_token_set_nodemem_ts_idx on wf_token_set_nodemem(token_set_id);
 
 create table wf_token_set_member_attr
 (
-  id            serial NOT NULL PRIMARY KEY,
-  token_set_id  int    NOT NULL REFERENCES wf_token_set,
-  member_index  int    NOT NULL,
-  name          text   NOT NULL,
-  value         text   NULL
+  id            serial       NOT NULL PRIMARY KEY,
+  token_set_id  int          NOT NULL REFERENCES wf_token_set,
+  member_index  int          NOT NULL,
+  name          varchar(64)  NOT NULL,
+  value         varchar(2000) NULL
 );
 
 create index wf_token_set_member_attr_idx on wf_token_set_member_attr(token_set_id);

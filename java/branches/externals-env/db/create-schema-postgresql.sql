@@ -136,12 +136,31 @@ create table wf_node_attr
 ALTER TABLE wf_node_attr
   ADD PRIMARY KEY (node_id, name);
 
+create table wf_external
+(
+  id                serial   NOT NULL PRIMARY KEY,
+  name              text     NOT NULL,
+  graph_id          int      NOT NULL references wf_graph,
+  external_graph_id int      NOT NULL references wf_graph
+);
+
+create table wf_external_attr
+(
+  external_id  int        NOT NULL REFERENCES wf_external,
+  name         text       NOT NULL,
+  value        text       NULL
+);
+
+ALTER TABLE wf_external_attr
+  ADD PRIMARY KEY (external_id, name);
+
 create table wf_node_ref
 (
-  id        serial NOT NULL PRIMARY KEY,
-  node_id   int    NOT NULL REFERENCES wf_node,
-  graph_id  int    NOT NULL REFERENCES wf_graph,
-  instance  text   NOT NULL
+  id          serial      NOT NULL PRIMARY KEY,
+  node_id     int         NOT NULL REFERENCES wf_node,
+  graph_id    int         NOT NULL REFERENCES wf_graph,
+  parent_id   int         NULL REFERENCES wf_node_ref,
+  external_id int         NULL REFERENCES wf_external
 );
 
 create index wf_node_ref_graph_idx on wf_node_ref (graph_id);
