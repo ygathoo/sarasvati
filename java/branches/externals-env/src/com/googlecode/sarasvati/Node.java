@@ -204,8 +204,14 @@ public interface Node extends Adaptable
   /**
    * If a node is defined in an external, this will return the node as
    * defined in the external graph. Otherwise it will return null. Generally,
-   * this is only useful if you wish to examine the external associateed with the
+   * this is only useful if you wish to examine the external associated with the
    * originating node.
+   * <p>
+   * Note: If the originating node is the original node, it will not have an external
+   *       associated with it. Since this method exists to allow access to multiple
+   *       levels of external, this method may return null instead of the original
+   *       node.
+   *
    * <p>
    * For example, given the following three graphs, where graph II uses graph I and
    * graph III uses graph II, you could look up different values defined in the externals.
@@ -256,8 +262,12 @@ public interface Node extends Adaptable
   public Node getOriginatingExternalNode ();
 
   /**
+   * Returns a read-only environment containing all attributes defined for
+   * all associated externals. See {@link Node#getOriginatingExternalNode()}
+   * for examples usage.
    *
-   * @return A read-only environment containing all attributes.
+   * @return A read-only environment containing all attributes defined for
+   *         associated externals.
    */
   public ReadEnv getExternalEnv ();
 }
