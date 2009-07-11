@@ -27,6 +27,7 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.ExecutionType;
+import com.googlecode.sarasvati.External;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
@@ -39,6 +40,8 @@ import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
+import com.googlecode.sarasvati.load.definition.CustomDefinition;
+import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
 public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
 {
@@ -63,13 +66,13 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
   @Override
   public Node importNode (final JdbcGraph graph,
                           final Node node,
-                          final String instanceName)
+                          final External external)
   {
     JdbcNodeRef nodeRef = (JdbcNodeRef)node;
 
-    String label = getInstance( nodeRef.getInstance(), instanceName );
+    JdbcNodeRef origNode = node.getExternal() == null ? null : (JdbcNodeRef)node;
 
-    JdbcNodeRef newRef = new JdbcNodeRef( graph, nodeRef.getNode(), label );
+    JdbcNodeRef newRef = new JdbcNodeRef( graph, nodeRef.getNode(), origNode, (JdbcExternal)external );
     getDialect().newNodeRefInsertAction( newRef ).execute( engine );
     graph.getNodes().add( newRef );
     return newRef;
@@ -153,7 +156,7 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
 
     node.afterCreate( engine );
 
-    JdbcNodeRef nodeRef = new JdbcNodeRef( graph, node, "" );
+    JdbcNodeRef nodeRef = new JdbcNodeRef( graph, node, null, null );
     getDialect().newNodeRefInsertAction( nodeRef ).execute( engine );
     return nodeRef;
   }
@@ -251,7 +254,20 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
     return token;
   }
 
-    @Override
+  @Override
+  public External newExternal (final String name,
+                               final Graph graph,
+                               final Graph externalGraph,
+                               final CustomDefinition customDefinition)
+    throws LoadException
+  {
+    Map<String, String> attrMap = new HashMap<String, String>();
+    DOMToObjectLoadHelper.loadCustomIntoMap( customDefinition, attrMap );
+    JdbcExternal external = new JdbcExternal( name, (JdbcGraph)graph, (JdbcGraph)externalGraph, attrMap );
+    return external;
+  }
+
+  @Override
   public TokenSet newTokenSet (final GraphProcess process,
                                final String name,
                                final int maxMemberIndex)
