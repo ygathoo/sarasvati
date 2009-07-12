@@ -22,10 +22,14 @@ package com.googlecode.sarasvati.visual.test;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.Collection;
 
 import org.hibernate.Session;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.example.hib.HibTestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.hib.HibGraph;
@@ -68,7 +72,23 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
      * Select Exam Approval PD graph and start process
      */
     HibGraph graph = engine.getRepository().getLatestGraph( "reject-node" );
-    engine.startProcess( graph );
+    GraphProcess process = engine.startProcess( graph );
+    
+    //Do a complete at the 3rd Node
+    {
+      Collection<? extends NodeToken> activeNodeTokens = process.getActiveNodeTokens();
+      NodeToken activeToken = activeNodeTokens.iterator().next();
+      engine.complete( activeToken, Arc.DEFAULT_ARC );
+      
+    }
+    
+    //Do a reject at the 5th Node
+    {
+      Collection<? extends NodeToken> activeNodeTokens = process.getActiveNodeTokens();
+      NodeToken activeToken = activeNodeTokens.iterator().next();
+      engine.complete( activeToken, "reject" );
+    }
+    
     session.getTransaction().commit();
   }
 

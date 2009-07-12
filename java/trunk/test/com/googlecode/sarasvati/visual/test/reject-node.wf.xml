@@ -6,12 +6,12 @@
     <arc to="2"/>
   </node>
 
-  <node name="2" type="wait" >
+  <node name="2" >
   	<arc to="3"/>
 	<arc to="1" name="reject"/>
   </node>
   
-  <node name="3" >
+  <node name="3" type="wait" >
   	<arc to="4"/>
   </node>
   
@@ -20,7 +20,7 @@
 	<arc to="3" name="reject"/>
   </node>
   
-  <node name="5">
+  <node name="5" type="wait" >
   	<arc to="6"/>
 	<arc to="3" name="reject"/>
   </node>
