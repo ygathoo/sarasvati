@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati;
 
+import com.googlecode.sarasvati.env.ReadEnv;
+
 /**
  * CustomNode provides a superclass for user defined nodes
  * that are portable across all engines.
@@ -70,9 +72,9 @@ public abstract class CustomNode implements Node
   }
 
   @Override
-  public final boolean isExternal ()
+  public final boolean isImportedFromExternal ()
   {
-    return nodeWrapper.isExternal();
+    return nodeWrapper.isImportedFromExternal();
   }
 
   @Override
@@ -97,6 +99,24 @@ public abstract class CustomNode implements Node
   public final boolean isStart ()
   {
     return nodeWrapper.isStart();
+  }
+
+  @Override
+  public final External getExternal ()
+  {
+    return nodeWrapper.getExternal();
+  }
+
+  @Override
+  public final ReadEnv getExternalEnv ()
+  {
+    return nodeWrapper.getExternalEnv();
+  }
+
+  @Override
+  public Node getOriginatingExternalNode ()
+  {
+    return nodeWrapper.getOriginatingExternalNode();
   }
 
   /**

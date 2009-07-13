@@ -20,12 +20,15 @@ package com.googlecode.sarasvati.jdbc;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.External;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
+import com.googlecode.sarasvati.env.ReadEnv;
+import com.googlecode.sarasvati.impl.MapEnv;
 
 public class JdbcNode implements Node, JdbcObject
 {
@@ -139,6 +142,24 @@ public class JdbcNode implements Node, JdbcObject
     this.graph = graph;
   }
 
+  @Override
+  public External getExternal ()
+  {
+    return null;
+  }
+
+  @Override
+  public ReadEnv getExternalEnv ()
+  {
+    return MapEnv.READONLY_EMPTY_INSTANCE;
+  }
+
+  @Override
+  public Node getOriginatingExternalNode ()
+  {
+    return null;
+  }
+
   /**
    * Does nothing by default. Can be overridden by subclasses.
    * @see Node#backtrack(Engine, NodeToken)
@@ -185,7 +206,7 @@ public class JdbcNode implements Node, JdbcObject
   }
 
   @Override
-  public boolean isExternal ()
+  public boolean isImportedFromExternal ()
   {
     return false;
   }

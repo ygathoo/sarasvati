@@ -55,7 +55,7 @@ public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
   protected JdbcNodeRef loadObject (ResultSet row) throws SQLException, LoadException
   {
     long nodeRefId    = row.getLong( 1 );
-    String instance   = row.getString( 2 );
+    // String instance   = row.getString( 2 );
     long nodeId       = row.getLong( 3 );
     String name       = row.getString( 4 );
     String type       = row.getString( 5 );
@@ -94,7 +94,7 @@ public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
       nodeMap.put( nodeId, node );
     }
 
-    JdbcNodeRef nodeRef = new JdbcNodeRef( nodeRefId, graph, node, instance );
+    JdbcNodeRef nodeRef = new JdbcNodeRef( nodeRefId, graph, node, null, null );
 
     graph.getNodes().add( nodeRef );
     return nodeRef;
