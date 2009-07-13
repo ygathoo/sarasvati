@@ -22,6 +22,7 @@ import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.ArcState;
 import com.googlecode.sarasvati.editor.model.EditorArc;
+import com.googlecode.sarasvati.util.SvUtil;
 
 /**
  *
@@ -157,8 +158,29 @@ public class ArcPropertiesPanel extends javax.swing.JPanel {
         @Override
         public void actionPerformed (final ActionEvent e)
         {
-          ArcState newState = new ArcState( arcNameInput.getText(), null, null );
-          CommandStack.editArc( GraphEditor.getInstance().getCurrentScene(), arc, newState );
+          String fromNode = null;
+          String toNode = null;
+
+          if ( arc.isExternalInArc() )
+          {
+            fromNode = SvUtil.nullIfBlank( (String)fromInput.getSelectedItem());
+            if ( arc.isExternalOutArc() )
+            {
+              toNode = SvUtil.nullIfBlank( (String)toInput.getSelectedItem());
+            }
+          }
+          else if ( arc.isExternalOutArc() )
+          {
+            toNode = SvUtil.nullIfBlank( (String)fromInput.getSelectedItem());
+          }
+
+          ArcState newState = new ArcState( SvUtil.nullIfBlank( arcNameInput.getText() ), fromNode, toNode );
+
+          if ( !newState.equals( arc.getState() ) )
+          {
+            CommandStack.editArc( GraphEditor.getInstance().getCurrentScene(), arc, newState );
+          }
+
           dialog.setVisible( false );
         }
       });
@@ -166,22 +188,26 @@ public class ArcPropertiesPanel extends javax.swing.JPanel {
       ArcState state = arc.getState();
       arcNameInput.setText( state.getLabel() );
 
-      if ( !arc.isExternalInArc() )
+      if ( arc.isExternalInArc() )
       {
+        fromInput.setSelectedItem( state.getExternalStart() );
         if ( arc.isExternalOutArc() )
         {
-          fromLabel.setText( "To" );
-          toLabel.setVisible( false );
-          toInput.setVisible( false );
-        }
-        else
-        {
-          fromLabel.setVisible( false );
-          fromInput.setVisible( false );
+          toInput.setSelectedItem( state.getExternalEnd() );
         }
       }
+      else if ( arc.isExternalOutArc() )
+      {
+        fromLabel.setText( "To" );
+        fromInput.setSelectedItem( state.getExternalEnd() );
+      }
+      else
+      {
+        fromLabel.setVisible( false );
+        fromInput.setVisible( false );
+      }
 
-      if ( !arc.isExternalOutArc() )
+      if ( !arc.isExternalOutArc() || !arc.isExternalInArc() )
       {
         toLabel.setVisible( false );
         toInput.setVisible( false );
