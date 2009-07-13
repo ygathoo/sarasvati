@@ -45,6 +45,7 @@ import com.googlecode.sarasvati.editor.action.ArcPropertiesAction;
 import com.googlecode.sarasvati.editor.action.ConnectAction;
 import com.googlecode.sarasvati.editor.action.MoveTrackAction;
 import com.googlecode.sarasvati.editor.action.NodePropertiesAction;
+import com.googlecode.sarasvati.editor.action.SceneAddExternalAction;
 import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.AutoLayoutCommand;
 import com.googlecode.sarasvati.editor.command.Command;
@@ -79,6 +80,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     this.commandStack = new CommandStack();
 
     getActions().addAction( SceneAddNodeAction.INSTANCE );
+    getActions().addAction( SceneAddExternalAction.INSTANCE );
 
     for ( EditorGraphMember<?> member : graph.getNodes() )
     {
@@ -144,16 +146,20 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     boolean join = false;
     boolean isTask = false;
 
+    if ( node instanceof EditorExternal )
+    {
+      return new DefaultNodeIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_SKIPPED, false );
+    }
+
     if ( node instanceof EditorNode )
     {
       join = ((EditorNode)node).getState().getJoinType() != JoinType.OR;
       isTask = "task".equalsIgnoreCase( ((EditorNode)node).getState().getType() );
     }
 
-    Icon icon = isTask ? new TaskIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join  ) :
-                         new DefaultNodeIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join );
+    return isTask ? new TaskIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join  ) :
+                    new DefaultNodeIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join );
 
-    return icon;
   }
 
   @Override

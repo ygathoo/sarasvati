@@ -31,8 +31,6 @@ public class NodeState extends GraphMemberState
   private final boolean isStart;
   private final String  guard;
 
-  private final Map<String,String> customProperties;
-
   public NodeState (final String name,
                     final String type,
                     final JoinType joinType,
@@ -41,13 +39,12 @@ public class NodeState extends GraphMemberState
                     final String guard,
                     final Map<String, String> customProperties)
   {
-    super( name );
+    super( name, customProperties );
     this.type = type;
     this.joinType = joinType;
     this.joinParam = joinParam;
     this.isStart = isStart;
     this.guard = guard;
-    this.customProperties = customProperties;
   }
 
   public String getType ()
@@ -75,8 +72,85 @@ public class NodeState extends GraphMemberState
     return guard;
   }
 
-  public Map<String, String> getCustomProperties ()
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode ()
   {
-    return customProperties;
+    final int prime = 31;
+    int result = super.hashCode();
+    result = prime * result + ((guard == null) ? 0 : guard.hashCode());
+    result = prime * result + (isStart ? 1231 : 1237);
+    result = prime * result + ((joinParam == null) ? 0 : joinParam.hashCode());
+    result = prime * result + ((joinType == null) ? 0 : joinType.hashCode());
+    result = prime * result + ((type == null) ? 0 : type.hashCode());
+    return result;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals (Object obj)
+  {
+    if (this == obj)
+    {
+      return true;
+    }
+    if (!super.equals( obj ))
+    {
+      return false;
+    }
+    if (!(obj instanceof NodeState))
+    {
+      return false;
+    }
+    NodeState other = (NodeState) obj;
+    if (guard == null)
+    {
+      if (other.guard != null)
+      {
+        return false;
+      }
+    } else if (!guard.equals( other.guard ))
+    {
+      return false;
+    }
+    if (isStart != other.isStart)
+    {
+      return false;
+    }
+    if (joinParam == null)
+    {
+      if (other.joinParam != null)
+      {
+        return false;
+      }
+    } else if (!joinParam.equals( other.joinParam ))
+    {
+      return false;
+    }
+    if (joinType == null)
+    {
+      if (other.joinType != null)
+      {
+        return false;
+      }
+    } else if (!joinType.equals( other.joinType ))
+    {
+      return false;
+    }
+    if (type == null)
+    {
+      if (other.type != null)
+      {
+        return false;
+      }
+    } else if (!type.equals( other.type ))
+    {
+      return false;
+    }
+    return true;
   }
 }

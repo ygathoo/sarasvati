@@ -11,7 +11,6 @@
 
 package com.googlecode.sarasvati.editor.panel;
 
-import com.googlecode.sarasvati.editor.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -19,6 +18,7 @@ import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 
+import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.ArcState;
 import com.googlecode.sarasvati.editor.model.EditorArc;
@@ -166,10 +166,23 @@ public class ArcPropertiesPanel extends javax.swing.JPanel {
       ArcState state = arc.getState();
       arcNameInput.setText( state.getLabel() );
 
-      if ( !arc.isExternalInArc() && !arc.isExternalOutArc() )
+      if ( !arc.isExternalInArc() )
       {
-        fromLabel.setVisible( false );
-        fromInput.setVisible( false );
+        if ( arc.isExternalOutArc() )
+        {
+          fromLabel.setText( "To" );
+          toLabel.setVisible( false );
+          toInput.setVisible( false );
+        }
+        else
+        {
+          fromLabel.setVisible( false );
+          fromInput.setVisible( false );
+        }
+      }
+
+      if ( !arc.isExternalOutArc() )
+      {
         toLabel.setVisible( false );
         toInput.setVisible( false );
       }

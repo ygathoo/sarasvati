@@ -30,11 +30,19 @@ public class EditorKeyListener
 
     if ( event.getKeyChar() == 'a' )
     {
-      mode = EditorMode.AddNode;
+      mode = EditorMode.Move;
     }
-    else if ( event.getKeyChar() == 'e' )
+    else if ( event.getKeyChar() == 's' )
     {
       mode = EditorMode.EditArcs;
+    }
+    else if ( event.getKeyChar() == 'd' )
+    {
+      mode = EditorMode.AddNode;
+    }
+    else if ( event.getKeyChar() == 'f' )
+    {
+      mode = EditorMode.AddExternal;
     }
 
     if ( mode != null )

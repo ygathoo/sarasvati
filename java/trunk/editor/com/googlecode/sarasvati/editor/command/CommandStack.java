@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.model.ArcState;
 import com.googlecode.sarasvati.editor.model.EditorArc;
+import com.googlecode.sarasvati.editor.model.EditorExternal;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorScene;
@@ -137,6 +138,13 @@ public class CommandStack
                               final EditorNode node)
   {
     pushAndPerform( new AddNodeCommand( scene, location, node ) );
+  }
+
+  public static void addExternal (final EditorScene scene,
+                                  final Point location,
+                                  final EditorExternal external)
+  {
+    pushAndPerform( new AddExternalCommand( scene, location, external ) );
   }
 
   public static void addArc (final EditorScene scene,

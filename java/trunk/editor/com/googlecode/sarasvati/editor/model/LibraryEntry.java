@@ -14,36 +14,24 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
-*/
-package com.googlecode.sarasvati.editor.dialog;
+    Copyright 2008-2009 Paul Lorenz
+ */
+package com.googlecode.sarasvati.editor.model;
 
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.border.BevelBorder;
+import java.io.File;
 
-import com.googlecode.sarasvati.editor.panel.PreferencesPanel;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 
-public class PreferencesDialog extends JDialog
+public class LibraryEntry
 {
-  private static final long serialVersionUID = 1L;
+  protected String name;
+  protected File path;
+  protected ProcessDefinition processDefinition;
 
-  public PreferencesDialog (final JFrame frame)
+  public LibraryEntry (final String name,
+                       final File path )
   {
-    super( frame, "Preferences", true );
-
-    setUndecorated( false );
-
-    PreferencesPanel panel = new PreferencesPanel();
-    panel.setup();
-    panel.setBorder( new BevelBorder( BevelBorder.RAISED ) );
-    getContentPane().add( panel );
-
-    if ( isAlwaysOnTopSupported() )
-    {
-      setAlwaysOnTop( true );
-    }
-
-    pack();
+    this.name = name;
+    this.path = path;
   }
 }
