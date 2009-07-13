@@ -1,7 +1,5 @@
 <project name="sarasvati">
 
-  <taskdef name="antlr3" classname="org.apache.tools.ant.antlr.ANTLR3"/>
-
   <property name="version" value="1.0.0-rc3"/>
 
   <property name="dist.dir" value="dist"/>
@@ -21,6 +19,8 @@
     </fileset>
   </path>
 
+  <taskdef name="antlr3" classname="org.apache.tools.ant.antlr.ANTLR3" classpathref="classpath"/>
+
   <available file="${fetch.indicator}" property="libs.notfetched"/>
   <available file="lib/rubric.jar" property="rubric.jar.exists"/>
 
@@ -30,7 +30,6 @@
       <resources>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/antlr-3.1.1.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/antlr-3.1.1-runtime.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/antlr3-ant.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/asm.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/bsf-2.4.0.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/cglib.jar"/>
@@ -132,6 +131,7 @@
         <include name="examples/**"/>
         <include name="lang/**"/>
         <include name="lib/*.txt"/>
+        <include name="lib/antlr3-ant.jar"/>
         <include name="README"/>
         <include name="script/run**"/>
         <exclude name="**/.svn/**"/>
