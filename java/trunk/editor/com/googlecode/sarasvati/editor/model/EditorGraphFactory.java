@@ -78,7 +78,10 @@ public class EditorGraphFactory
 
     for ( ExternalDefinition externalDef : procDef.getExternals() )
     {
-      ExternalState externalState = new ExternalState( externalDef.getName(), externalDef.getProcessDefinition(), null );
+      Map<String,String> customProperties = new LinkedHashMap<String,String>();
+      DOMToObjectLoadHelper.loadCustomIntoMap( externalDef.getCustom(), customProperties );
+
+      ExternalState externalState = new ExternalState( externalDef.getName(), externalDef.getProcessDefinition(), customProperties );
       EditorExternal external = new EditorExternal( externalState );
 
       if ( externalDef.getX() != null && externalDef.getY() != null )
@@ -101,7 +104,7 @@ public class EditorGraphFactory
 
         if ( arcDef.isToExternal() )
         {
-          endMember = nodeMap.get( arcDef.getExternal() );
+          endMember = externalMap.get( arcDef.getExternal() );
           externalEnd = arcDef.getTo();
         }
         else
@@ -109,7 +112,9 @@ public class EditorGraphFactory
           endMember = nodeMap.get( arcDef.getTo() );
         }
 
-        ArcState state = new ArcState( arcDef.getName(), null, externalEnd );
+        ArcState state = new ArcState( SvUtil.nullIfBlank( arcDef.getName() ),
+                                       null,
+                                       SvUtil.nullIfBlank( externalEnd ) );
         EditorArc arc = new EditorArc( state, startMember, endMember );
 
         graph.addArc( arc );
@@ -118,7 +123,7 @@ public class EditorGraphFactory
 
     for ( ExternalDefinition externalDef : procDef.getExternals() )
     {
-      EditorGraphMember<?> startMember = nodeMap.get( externalDef.getName() );
+      EditorGraphMember<?> startMember = externalMap.get( externalDef.getName() );
 
       for ( ExternalArcDefinition externalArcDef : externalDef.getExternalArcs() )
       {
@@ -127,7 +132,7 @@ public class EditorGraphFactory
 
         if ( externalArcDef.isToExternal() )
         {
-          endMember = nodeMap.get( externalArcDef.getExternal() );
+          endMember = externalMap.get( externalArcDef.getExternal() );
           externalEnd = externalArcDef.getTo();
         }
         else
@@ -135,7 +140,9 @@ public class EditorGraphFactory
           endMember = nodeMap.get( externalArcDef.getTo() );
         }
 
-        ArcState state = new ArcState( externalArcDef.getName(), externalArcDef.getFrom(), externalEnd );
+        ArcState state = new ArcState( SvUtil.nullIfBlank( externalArcDef.getName() ),
+                                       SvUtil.nullIfBlank( externalArcDef.getFrom() ),
+                                       SvUtil.nullIfBlank( externalEnd ) );
         EditorArc arc = new EditorArc( state, startMember, endMember );
 
         graph.addArc( arc );
@@ -201,7 +208,7 @@ public class EditorGraphFactory
 
       if ( arc.isExternalInArc() )
       {
-        XmlExternal external = externalMap.get( arc.getStart().getState().getName() );
+        XmlExternal external = externalMap.get( arc.getStart() );
         XmlExternalArc xmlExternalArc = new XmlExternalArc();
         xmlExternalArc.setFrom( state.getExternalStart() );
         xmlExternalArc.setName( state.getLabel() );

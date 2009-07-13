@@ -473,6 +473,7 @@ public class GraphEditor
     }
     catch ( Exception e )
     {
+      e.printStackTrace();
       JOptionPane.showMessageDialog( mainWindow, e.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE );
       return SaveResult.SaveFailed;
     }

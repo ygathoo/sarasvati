@@ -68,4 +68,10 @@ public abstract class EditorGraphMember<T extends GraphMemberState> extends Abst
   {
     return false;
   }
+
+  @Override
+  public String toString ()
+  {
+    return "[" + getClass().getSimpleName() + ": " + getName() + "]";
+  }
 }

@@ -47,6 +47,11 @@ public class EditorGraphLayoutTree extends AbstractLayoutTree<EditorGraphMember<
       outputMap.put( node, new LinkedList<EditorGraphMember<?>>() );
     }
 
+    for ( EditorExternal external : graph.getExternals() )
+    {
+      outputMap.put( external, new LinkedList<EditorGraphMember<?>>() );
+    }
+
     for ( EditorArc arc : graph.getArcs() )
     {
       hasInputMap.put( arc.getEnd(), true );

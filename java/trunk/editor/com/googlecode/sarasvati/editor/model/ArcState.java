@@ -27,4 +27,43 @@ public class ArcState
   {
     return label;
   }
+
+  @Override
+  public int hashCode ()
+  {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ( ( externalEnd == null )
+        ? 0 : externalEnd.hashCode() );
+    result = prime * result + ( ( externalStart == null )
+        ? 0 : externalStart.hashCode() );
+    result = prime * result + ( ( label == null )
+        ? 0 : label.hashCode() );
+    return result;
+  }
+
+  @Override
+  public boolean equals (Object obj)
+  {
+    if ( this == obj ) return true;
+    if ( obj == null ) return false;
+    if ( !( obj instanceof ArcState ) ) return false;
+    ArcState other = (ArcState)obj;
+    if ( externalEnd == null )
+    {
+      if ( other.externalEnd != null ) return false;
+    }
+    else if ( !externalEnd.equals( other.externalEnd ) ) return false;
+    if ( externalStart == null )
+    {
+      if ( other.externalStart != null ) return false;
+    }
+    else if ( !externalStart.equals( other.externalStart ) ) return false;
+    if ( label == null )
+    {
+      if ( other.label != null ) return false;
+    }
+    else if ( !label.equals( other.label ) ) return false;
+    return true;
+  }
 }
