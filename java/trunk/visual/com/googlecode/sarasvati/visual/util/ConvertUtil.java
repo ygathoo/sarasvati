@@ -27,7 +27,18 @@ public class ConvertUtil
 {
   public static Rectangle awtToSwt (java.awt.Rectangle r)
   {
-    return r == null ? null : new Rectangle( r.x, r.y, r.width, r.height );
+    if ( r == null )
+    {
+      return null;
+    }
+
+    Rectangle swtRect = new Rectangle();
+    swtRect.x = r.x;
+    swtRect.y = r.y;
+    swtRect.width = r.width;
+    swtRect.height = r.height;
+
+    return swtRect;
   }
 
   public static Point awtToSwt (java.awt.Point point)

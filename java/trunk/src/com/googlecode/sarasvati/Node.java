@@ -14,11 +14,12 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati;
 
 import com.googlecode.sarasvati.adapter.Adaptable;
+import com.googlecode.sarasvati.env.ReadEnv;
 
 /**
  * A node corresponds to an action in a process definition.
@@ -137,7 +138,7 @@ public interface Node extends Adaptable
    *
    * @return True if this node was imported from an external process definition.
    */
-  boolean isExternal ();
+  boolean isImportedFromExternal ();
 
   /**
    * Returns true if the specific execution of this Node by the given
@@ -192,4 +193,81 @@ public interface Node extends Adaptable
    * @param token The {@link NodeToken} which is currently executing in this node.
    */
   void execute (Engine engine, NodeToken token);
+
+  /**
+   * If the node is defined in an external, returns the external and null otherwise.
+   *
+   * @return If the node is defined in an external, returns the external and null otherwise.
+   */
+  public External getExternal ();
+
+  /**
+   * If a node is defined in an external, this will return the node as
+   * defined in the external graph. Otherwise it will return null. Generally,
+   * this is only useful if you wish to examine the external associated with the
+   * originating node.
+   * <p>
+   * Note: If the originating node is the original node, it will not have an external
+   *       associated with it. Since this method exists to allow access to multiple
+   *       levels of external, this method may return null instead of the original
+   *       node.
+   *
+   * <p>
+   * For example, given the following three graphs, where graph II uses graph I and
+   * graph III uses graph II, you could look up different values defined in the externals.
+   *
+   * <pre>
+   *  <process-definition name="Graph I">
+   *    <node name="A"/>
+   *  </process-definition>
+   *
+   *  <process-definition name="Graph II">
+   *    <external name="G1" processDefinition="Graph I">
+   *      <custom>
+   *        <foo>bar</foo>
+   *        <hello>world</hello>
+   *      </custom>
+   *    </external>
+   *
+   *    <node name="B">
+   *      <arc external="G1" to="A"/>
+   *    </node>
+   *  </process-definition>
+   *
+   *  <process-definition name="Graph III">
+   *    <external name="G2" processDefinition="Graph II">
+   *      <custom>
+   *        <foo>baz</foo>
+   *      </custom>
+   *    </external>
+   *
+   *    <node name="C">
+   *      <arc external="G2" to="B"/>
+   *    </node>
+   *  </process-definition>
+   *
+   * If you get node A from graph III, you can observe the following:
+   *
+   *   Node nodeA = ...;
+   *   nodeA.getExternalEnv().getAttribute( "foo" ) // returns "baz"
+   *   nodeA.getExternalEnv().getAttribute( "hello" ) // returns "world"
+   *   nodeA.getExternal().getEnv().getAttribute( "foo" ) // returns "baz"
+   *   nodeA.getExternal().getEnv().getAttribute( "hello" ) // returns null
+   *   nodeA.getOriginatingExternalNode().getExternal().getEnv().getAttribute( "foo" ) // returns "bar"
+   *   nodeA.getOriginatingExternalNode().getExternal().getEnv().getAttribute( "hello" ) // returns "world"
+   * </pre>
+   *
+   * @return If node is an external node, returns the node as defined in the external, otherwise returns null.
+   */
+  public Node getOriginatingExternalNode ();
+
+  /**
+   * Returns a read-only environment containing all attributes defined for
+   * all associated externals. See {@link Node#getOriginatingExternalNode()}
+   * for examples usage.
+   *
+   * @return A read-only environment containing all attributes defined for
+   *         associated externals.
+   */
+  public ReadEnv getExternalEnv ();
 }

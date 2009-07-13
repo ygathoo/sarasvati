@@ -22,50 +22,13 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 
 /**
- * An Env is a container for variables. The variables are likely all stored as strings,
- * to allow simple database storage, but they may be retrieved and set as strings,
- * longs and booleans for convenience.
+ * Env extends {@link ReadEnv} to allow add/changed/removing attributes. It also
+ * allows getting/setting transient attributes.
  *
  * @author Paul Lorenz
  */
-public interface Env
+public interface Env extends ReadEnv
 {
-  /**
-   * Gets an attribute as a String. If there is no value set for
-   * the attribute, null will be returned.
-   *
-   * @param name The name of the attribute to get
-   * @return The value of attribute or null if no value is set for the attribute.
-   *
-   */
-  String getAttribute (String name);
-
-  /**
-   * Returns the given attribute, transformed into the given type.
-   *
-   * @param <T> The type which the attribute should be returned as.
-   *
-   * @param name The name of the attribute to get.
-   * @param type The class type which the attribute should be transformed to.
-   *
-   * @return The attribute value, or null if no value is set for the attribute.
-   */
-  <T> T getAttribute (String name, Class<T> type);
-
-  /**
-   * Returns the given attribute, transformed into the given type. If no value
-   * is set, return the given default.
-   *
-   * @param <T> The type which the attribute should be returned as.
-   *
-   * @param name The name of the attribute to get.
-   * @param type The class type which the attribute should be transformed to.
-   * @param defaultValue The value to return if no value is set.
-   *
-   * @return The attribute value, or null if no value is set for the attribute.
-   */
-  <T> T getAttribute (String name, Class<T> type, T defaultValue);
-
   /**
    * Sets the attribute of the given name to the given string value.
    *
@@ -88,21 +51,6 @@ public interface Env
    * @param name The name of the attribute to remove
    */
   void removeAttribute (String name);
-
-  /**
-   * Checks if the given attribute is present.
-   *
-   * @param name Name of the attribute to check for
-   * @return True if the given attribute is present, false otherwise.
-   */
-  boolean hasAttribute (String name);
-
-  /**
-   * Returns an Iterable of attribute names.
-   *
-   * @return Iterable of attribute names
-   */
-  Iterable<String> getAttributeNames ();
 
   /**
    * Set a transient attribute of the environment. The attribute will
