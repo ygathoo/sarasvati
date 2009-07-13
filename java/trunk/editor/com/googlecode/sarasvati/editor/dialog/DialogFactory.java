@@ -30,9 +30,12 @@ public class DialogFactory
 {
   protected static JFrame frame = null;
 
+  private static JDialog preferencesDialog = null;
+
   public static void setFrame (JFrame frame)
   {
     DialogFactory.frame = frame;
+    preferencesDialog = new PreferencesDialog( frame );
   }
 
   public static JDialog newNodePropertiesDialog (EditorNode node)
@@ -47,9 +50,8 @@ public class DialogFactory
 
   public static JDialog newPreferencesDialog ()
   {
-    PreferencesDialog dialog = new PreferencesDialog( frame );
     Point location = frame.getLocation();
-    dialog.setLocation( location.x + 50, location.y + 10 );
-    return dialog;
+    preferencesDialog.setLocation( location.x + 50, location.y + 10 );
+    return preferencesDialog;
   }
 }

@@ -50,6 +50,7 @@ import javax.swing.event.ChangeListener;
 
 import com.googlecode.sarasvati.editor.action.ConnectAction;
 import com.googlecode.sarasvati.editor.action.MoveTrackAction;
+import com.googlecode.sarasvati.editor.action.SceneAddExternalAction;
 import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
@@ -107,6 +108,7 @@ public class GraphEditor
   protected JToggleButton moveButton;
   protected JToggleButton editArcsButton;
   protected JToggleButton addNodesButton;
+  protected JToggleButton addExternalsButton;
 
   protected SaveAction saveAction;
   protected SaveAction saveAsAction;
@@ -141,16 +143,23 @@ public class GraphEditor
 
     MoveTrackAction.setEnabled( false );
     SceneAddNodeAction.setEnabled( false );
+    SceneAddExternalAction.setEnabled( false );
     ConnectAction.setEnabled( false );
 
     moveButton.setSelected( false );
     addNodesButton.setSelected( false );
+    addExternalsButton.setSelected( false );
     editArcsButton.setSelected( false );
 
     if ( mode == EditorMode.AddNode )
     {
       SceneAddNodeAction.setEnabled( true );
       addNodesButton.setSelected( true );
+    }
+    else if ( mode == EditorMode.AddExternal )
+    {
+      SceneAddExternalAction.setEnabled( true );
+      addExternalsButton.setSelected( true );
     }
     else if ( mode == EditorMode.EditArcs )
     {
@@ -234,7 +243,18 @@ public class GraphEditor
     });
 
     toolBar.add( addNodesButton );
-    toolBar.add( new JButton( "Add External" ) );
+
+    addExternalsButton = new JToggleButton( "Add Externals" );
+    addExternalsButton.addActionListener( new ActionListener()
+    {
+      @Override
+      public void actionPerformed (ActionEvent e)
+      {
+        setMode( EditorMode.AddExternal );
+      }
+    });
+
+    toolBar.add( addExternalsButton );
 
     JButton autoLayoutButton = new JButton( "Auto-Layout" );
     autoLayoutButton.addActionListener( new ActionListener()

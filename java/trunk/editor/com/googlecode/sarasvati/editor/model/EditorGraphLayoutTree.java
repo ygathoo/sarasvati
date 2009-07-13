@@ -53,6 +53,14 @@ public class EditorGraphLayoutTree extends AbstractLayoutTree<EditorGraphMember<
       outputMap.get( arc.getStart() ).add( arc.getEnd() );
     }
 
+    for ( EditorNode node : graph.getNodes() )
+    {
+      if ( !startNodes.contains( node ) && hasNoInputs( node ) )
+      {
+        startNodes.add( node );
+      }
+    }
+
     init();
   }
 

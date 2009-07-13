@@ -20,44 +20,44 @@ package com.googlecode.sarasvati.editor.command;
 
 import java.awt.Point;
 
-import com.googlecode.sarasvati.editor.model.EditorNode;
+import com.googlecode.sarasvati.editor.model.EditorExternal;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class AddNodeCommand implements Command
+public class AddExternalCommand implements Command
 {
   private final EditorScene scene;
   private final Point location;
-  private final EditorNode node;
+  private final EditorExternal external;
 
-  public AddNodeCommand (final EditorScene scene,
-                         final Point location,
-                         final EditorNode node)
+  public AddExternalCommand (final EditorScene scene,
+                             final Point location,
+                             final EditorExternal external)
   {
     this.scene = scene;
     this.location = location;
-    this.node = node;
+    this.external = external;
   }
 
   @Override
   public void performAction ()
   {
-    node.setOrigin( new Point( location ) );
-    scene.addNode( node );
-    scene.getGraph().addNode( node );
+    external.setOrigin( new Point( location ) );
+    scene.addNode( external );
+    scene.getGraph().addExternal( external );
     scene.validate();
   }
 
   @Override
   public void undoAction ()
   {
-    scene.removeNode( node );
-    scene.getGraph().removeNode( node );
+    scene.removeNode( external );
+    scene.getGraph().removeExternal( external );
     scene.validate();
   }
 
   @Override
   public String getName ()
   {
-    return "Add Node";
+    return "Add External";
   }
 }

@@ -39,7 +39,7 @@ public class EditorGraph
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -49,7 +49,7 @@ public class EditorGraph
     return file;
   }
 
-  public void setFile (File file)
+  public void setFile (final File file)
   {
     this.file = file;
   }
@@ -59,17 +59,17 @@ public class EditorGraph
     return nodes;
   }
 
-  public void setNodes (List<EditorNode> nodes)
+  public void setNodes (final List<EditorNode> nodes)
   {
     this.nodes = nodes;
   }
 
-  public void addNode (EditorNode node)
+  public void addNode (final EditorNode node)
   {
     nodes.add( node );
   }
 
-  public void removeNode (EditorNode node)
+  public void removeNode (final EditorNode node)
   {
     nodes.remove( node );
   }
@@ -79,14 +79,19 @@ public class EditorGraph
     return externals;
   }
 
-  public void setExternals( List<EditorExternal> externals )
+  public void setExternals (final List<EditorExternal> externals )
   {
     this.externals = externals;
   }
 
-  public void addExternal (EditorExternal external)
+  public void addExternal (final EditorExternal external)
   {
     externals.add( external );
+  }
+
+  public void removeExternal (final EditorExternal external)
+  {
+    externals.remove( external );
   }
 
   public List<EditorArc> getArcs()
@@ -94,17 +99,17 @@ public class EditorGraph
     return arcs;
   }
 
-  public void setArcs( List<EditorArc> arcs )
+  public void setArcs (final List<EditorArc> arcs )
   {
     this.arcs = arcs;
   }
 
-  public void addArc (EditorArc arc)
+  public void addArc (final EditorArc arc)
   {
     arcs.add( arc );
   }
 
-  public void removeArc (EditorArc arc)
+  public void removeArc (final EditorArc arc)
   {
     arcs.remove( arc );
   }

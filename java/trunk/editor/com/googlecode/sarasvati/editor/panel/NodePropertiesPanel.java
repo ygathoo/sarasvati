@@ -18,7 +18,6 @@
 */
 package com.googlecode.sarasvati.editor.panel;
 
-import com.googlecode.sarasvati.editor.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Arrays;
@@ -32,6 +31,7 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import com.googlecode.sarasvati.JoinType;
+import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.NodeState;
@@ -313,7 +313,12 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
                            startNodeInput.isSelected(),
                            guardInput.getText(),
                            customProperties );
-          CommandStack.editNode( GraphEditor.getInstance().getCurrentScene(), node, newState );
+
+          if ( !newState.equals( node.getState() ) )
+          {
+            CommandStack.editNode( GraphEditor.getInstance().getCurrentScene(), node, newState );
+          }
+
           dialog.setVisible( false );
         }
       });

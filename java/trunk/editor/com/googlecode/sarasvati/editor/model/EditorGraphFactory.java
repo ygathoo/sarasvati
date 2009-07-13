@@ -81,7 +81,7 @@ public class EditorGraphFactory
 
     for ( ExternalDefinition externalDef : procDef.getExternals() )
     {
-      ExternalState externalState = new ExternalState( externalDef.getName(), externalDef.getProcessDefinition() );
+      ExternalState externalState = new ExternalState( externalDef.getName(), externalDef.getProcessDefinition(), null );
       EditorExternal external = new EditorExternal( externalState );
 
       if ( externalDef.getX() != null && externalDef.getY() != null )

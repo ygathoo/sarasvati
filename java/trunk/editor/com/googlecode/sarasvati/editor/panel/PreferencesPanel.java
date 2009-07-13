@@ -11,6 +11,13 @@
 
 package com.googlecode.sarasvati.editor.panel;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.swing.event.TreeSelectionEvent;
+import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreeSelectionModel;
+
 /**
  *
  * @author paul
@@ -34,15 +41,15 @@ public class PreferencesPanel extends javax.swing.JPanel {
 
         splitPane = new javax.swing.JSplitPane();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTree1 = new javax.swing.JTree();
+        prefsTree = new javax.swing.JTree();
 
         javax.swing.tree.DefaultMutableTreeNode treeNode1 = new javax.swing.tree.DefaultMutableTreeNode("Preferences");
         javax.swing.tree.DefaultMutableTreeNode treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("General");
         treeNode1.add(treeNode2);
         treeNode2 = new javax.swing.tree.DefaultMutableTreeNode("Node Types");
         treeNode1.add(treeNode2);
-        jTree1.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
-        jScrollPane1.setViewportView(jTree1);
+        prefsTree.setModel(new javax.swing.tree.DefaultTreeModel(treeNode1));
+        jScrollPane1.setViewportView(prefsTree);
 
         splitPane.setLeftComponent(jScrollPane1);
 
@@ -61,8 +68,41 @@ public class PreferencesPanel extends javax.swing.JPanel {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTree jTree1;
+    private javax.swing.JTree prefsTree;
     private javax.swing.JSplitPane splitPane;
     // End of variables declaration//GEN-END:variables
 
+    protected List<BasePrefsPage> prefPages = new ArrayList<BasePrefsPage>( 3 );
+
+    public void setup ()
+    {
+      jScrollPane1.setMinimumSize( jScrollPane1.getPreferredSize() );
+      prefPages.add( new BasePrefsPage() );
+      prefPages.add( new GeneralPreferencesPanel() );
+      prefPages.add( new NodeTypePreferences() );
+
+      splitPane.setRightComponent( prefPages.get( 0 ) );
+
+      prefsTree.getSelectionModel().setSelectionMode( TreeSelectionModel.SINGLE_TREE_SELECTION );
+      prefsTree.getSelectionModel().addTreeSelectionListener( new TreeSelectionListener()
+      {
+        @Override
+        public void valueChanged (TreeSelectionEvent e)
+        {
+          int[] rows = prefsTree.getSelectionModel().getSelectionRows();
+          BasePrefsPage prefsPage = null;
+          if ( rows == null || rows.length == 0 )
+          {
+            prefsPage = prefPages.get( 0 );
+          }
+          else
+          {
+            prefsPage = prefPages.get( rows[0] );
+          }
+
+          splitPane.setRightComponent( prefsPage );
+          prefsPage.setup();
+        }
+      });
+    }
 }

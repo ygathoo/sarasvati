@@ -19,17 +19,72 @@
 
 package com.googlecode.sarasvati.editor.model;
 
+import java.util.Map;
+
 public class GraphMemberState
 {
   private final String name;
+  private final Map<String,String> customProperties;
 
-  public GraphMemberState (final String name)
+  public GraphMemberState (final String name,
+                           final Map<String,String> customProperties)
   {
     this.name = name;
+    this.customProperties = customProperties;
   }
 
   public String getName ()
   {
     return name;
+  }
+
+  /**
+   * @return the customProperties
+   */
+  public Map<String, String> getCustomProperties ()
+  {
+    return customProperties;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#hashCode()
+   */
+  @Override
+  public int hashCode ()
+  {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result
+        + ((customProperties == null) ? 0 : customProperties.hashCode());
+    result = prime * result + ((name == null) ? 0 : name.hashCode());
+    return result;
+  }
+
+  /* (non-Javadoc)
+   * @see java.lang.Object#equals(java.lang.Object)
+   */
+  @Override
+  public boolean equals (Object obj)
+  {
+    if (this == obj)
+      return true;
+    if (obj == null)
+      return false;
+    if (!(obj instanceof GraphMemberState))
+      return false;
+    GraphMemberState other = (GraphMemberState) obj;
+    if (customProperties == null)
+    {
+      if (other.customProperties != null)
+        return false;
+    } else if (!customProperties.equals( other.customProperties ))
+      return false;
+    if (name == null)
+    {
+      if (other.name != null)
+        return false;
+    } else if (!name.equals( other.name ))
+      return false;
+    return true;
   }
 }
