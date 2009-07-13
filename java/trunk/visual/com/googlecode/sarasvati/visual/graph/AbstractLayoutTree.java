@@ -79,9 +79,6 @@ public abstract class AbstractLayoutTree<N>
 
       for ( GraphLayoutNode<N> treeNode : layer )
       {
-        System.out.println( treeNode );
-        System.out.println( treeNode.getNode() );
-        System.out.println( getOutputs( treeNode.getNode() ) );
         for ( N target : getOutputs( treeNode.getNode() ) )
         {
           GraphLayoutNode<N> targetTreeNode = nodeMap.get( target );
