@@ -116,21 +116,21 @@ public class CommandStack
     current.saved();
   }
 
-  public static void nodeMoved (final EditorScene scene,
-                                final EditorGraphMember<?> member,
-                                final Point startLocation,
-                                final Point endLocation)
+  public static void graphMemberMoved (final EditorScene scene,
+                                       final EditorGraphMember<?> member,
+                                       final Point startLocation,
+                                       final Point endLocation)
   {
     member.setOrigin( new Point( endLocation ) );
-    current.pushCommand( new MoveNodeCommand( scene, member, startLocation, endLocation ) );
+    current.pushCommand( new MoveGraphMemberCommand( scene, member, startLocation, endLocation ) );
   }
 
-  public static void moveNode (final EditorScene scene,
-                               final EditorGraphMember<?> member,
-                               final Point startLocation,
-                               final Point endLocation)
+  public static void moveGraphMember (final EditorScene scene,
+                                      final EditorGraphMember<?> member,
+                                      final Point startLocation,
+                                      final Point endLocation)
   {
-    pushAndPerform( new MoveNodeCommand( scene, member, startLocation, endLocation ) );
+    pushAndPerform( new MoveGraphMemberCommand( scene, member, startLocation, endLocation ) );
   }
 
   public static void addNode (final EditorScene scene,
@@ -159,11 +159,11 @@ public class CommandStack
     pushAndPerform( new DeleteArcCommand( scene, arc ) );
   }
 
-  public static <T extends GraphMemberState> void editNode (final EditorScene scene,
-                                                            final EditorGraphMember<T> graphMember,
-                                                            final T newState)
+  public static <T extends GraphMemberState> void editGraphMember (final EditorScene scene,
+                                                                   final EditorGraphMember<T> graphMember,
+                                                                   final T newState)
   {
-    pushAndPerform( new EditNodeCommand<T>( scene, graphMember, newState ) );
+    pushAndPerform( new EditGraphMemberCommand<T>( scene, graphMember, newState ) );
   }
 
   public static void editArc (final EditorScene scene,

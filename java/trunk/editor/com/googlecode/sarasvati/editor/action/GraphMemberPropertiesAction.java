@@ -26,10 +26,10 @@ import org.netbeans.api.visual.action.WidgetAction.Adapter;
 import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
-import com.googlecode.sarasvati.editor.model.EditorNode;
+import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class NodePropertiesAction extends Adapter
+public class GraphMemberPropertiesAction extends Adapter
 {
   @Override
   public State mouseClicked (Widget widget, WidgetMouseEvent event)
@@ -37,9 +37,9 @@ public class NodePropertiesAction extends Adapter
     if ( event.getClickCount() == 1 && event.getButton() == MouseEvent.BUTTON3 )
     {
       EditorScene scene = (EditorScene)widget.getScene();
-      EditorNode node = (EditorNode) scene.findObject( widget );
+      EditorGraphMember<?> graphMember = (EditorGraphMember<?>) scene.findObject( widget );
 
-      JDialog dialog = DialogFactory.newNodePropertiesDialog( node );
+      JDialog dialog = DialogFactory.newGraphMemberPropertiesDialog( graphMember );
       dialog.setLocation( widget.convertLocalToScene( event.getPoint() ) );
       dialog.setVisible( true );
 

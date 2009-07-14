@@ -94,7 +94,7 @@ public class MoveTrackAction extends WidgetActionDecorator
     {
       EditorScene scene = (EditorScene)widget.getScene();
       EditorGraphMember<?> member = (EditorGraphMember<?>) scene.findObject( widget );
-      CommandStack.nodeMoved( scene, member, startLocation, widget.getLocation() );
+      CommandStack.graphMemberMoved( scene, member, startLocation, widget.getLocation() );
     }
     return state;
   }

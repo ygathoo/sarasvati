@@ -25,17 +25,17 @@ import org.netbeans.api.visual.widget.Widget;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class MoveNodeCommand implements Command
+public class MoveGraphMemberCommand implements Command
 {
   private EditorScene scene;
   private EditorGraphMember<?> member;
   private Point startLocation;
   private Point endLocation;
 
-  public MoveNodeCommand (final EditorScene scene,
-                          final EditorGraphMember<?> member,
-                          final Point startLocation,
-                          final Point endLocation)
+  public MoveGraphMemberCommand (final EditorScene scene,
+                                 final EditorGraphMember<?> member,
+                                 final Point startLocation,
+                                 final Point endLocation)
   {
     this.scene = scene;
     this.member = member;
@@ -66,6 +66,6 @@ public class MoveNodeCommand implements Command
   @Override
   public String getName ()
   {
-    return "Move";
+    return "Move " + (member.isExternal() ? "External" : "Node");
   }
 }

@@ -22,15 +22,15 @@ import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 import com.googlecode.sarasvati.editor.model.GraphMemberState;
 
-public class EditNodeCommand<T extends GraphMemberState> implements Command
+public class EditGraphMemberCommand<T extends GraphMemberState> implements Command
 {
   private final EditorScene scene;
   private final EditorGraphMember<T> graphMember;
   private final T                    newState;
 
-  public EditNodeCommand (final EditorScene scene,
-                          final EditorGraphMember<T> graphMember,
-                          final T newState)
+  public EditGraphMemberCommand (final EditorScene scene,
+                                 final EditorGraphMember<T> graphMember,
+                                 final T newState)
   {
     this.scene = scene;
     this.graphMember = graphMember;
@@ -54,6 +54,6 @@ public class EditNodeCommand<T extends GraphMemberState> implements Command
   @Override
   public String getName ()
   {
-    return "Edit Node";
+    return "Edit " + (graphMember.isExternal() ? "External" : "Node");
   }
 }

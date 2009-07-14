@@ -493,7 +493,6 @@ public class GraphEditor
 
   public void tabSelectionChanged ()
   {
-    System.out.println( "called" );
     EditorScene current = getCurrentScene();
     CommandStack.setCurrent( current == null ? null : current.getCommandStack() );
     updateUndoRedoSave();
@@ -546,7 +545,7 @@ public class GraphEditor
       }
       else
       {
-        updateTabTitle( tabPane.getSelectedIndex(), "*" + title );
+        updateTabTitle( tabPane.getSelectedIndex(), title );
       }
     }
     else

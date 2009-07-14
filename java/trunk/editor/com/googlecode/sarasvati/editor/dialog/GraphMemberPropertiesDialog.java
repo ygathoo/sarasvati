@@ -18,28 +18,41 @@
 */
 package com.googlecode.sarasvati.editor.dialog;
 
+import com.googlecode.sarasvati.editor.panel.ExternalPropertiesPanel;
 import com.googlecode.sarasvati.editor.panel.NodePropertiesPanel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.border.BevelBorder;
 
+import com.googlecode.sarasvati.editor.model.EditorExternal;
+import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 
-public class NodePropertiesDialog extends JDialog
+public class GraphMemberPropertiesDialog extends JDialog
 {
   private static final long serialVersionUID = 1L;
 
-  public NodePropertiesDialog (final JFrame frame,
-                               final EditorNode node)
+  public GraphMemberPropertiesDialog (final JFrame frame,
+                                      final EditorGraphMember<?> graphMember)
   {
-    super( frame, node.getState().getName() + " properties", false );
+    super( frame, graphMember.getState().getName() + " properties", false );
 
     setUndecorated( false );
 
-    NodePropertiesPanel panel = new NodePropertiesPanel();
-    panel.setup( this, node );
-    panel.setBorder( new BevelBorder( BevelBorder.RAISED ) );
-    getContentPane().add( panel );
+    if ( graphMember.isExternal() )
+    {
+      ExternalPropertiesPanel panel = new ExternalPropertiesPanel();
+      panel.setup( this, (EditorExternal)graphMember );
+      panel.setBorder( new BevelBorder( BevelBorder.RAISED ) );
+      getContentPane().add( panel );
+    }
+    else
+    {
+      NodePropertiesPanel panel = new NodePropertiesPanel();
+      panel.setup( this, (EditorNode)graphMember );
+      panel.setBorder( new BevelBorder( BevelBorder.RAISED ) );
+      getContentPane().add( panel );
+    }
 
     if ( isAlwaysOnTopSupported() )
     {
