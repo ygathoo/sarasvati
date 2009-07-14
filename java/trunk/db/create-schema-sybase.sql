@@ -18,6 +18,12 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token_parent') drop tabl
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc_token') drop table wf_arc_token
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_token') drop table wf_node_token
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_execution_type') drop table wf_execution_type
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_attr') drop table wf_process_attr
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_listener') drop table wf_process_listener
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process') drop table wf_process
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_state') drop table wf_process_state
+
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_arc') drop table wf_arc
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_ref') drop table wf_node_ref
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_attr') drop table wf_node_attr
@@ -25,10 +31,10 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node') drop table wf_node
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_type') drop table wf_node_type
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_node_join_type') drop table wf_node_join_type
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_guard_action') drop table wf_guard_action
-IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_attr') drop table wf_process_attr
-IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_listener') drop table wf_process_listener
-IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process') drop table wf_process
-IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_process_state') drop table wf_process_state
+
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_external_attr') drop table wf_external_attr
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_external') drop table wf_external
+
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_graph') drop table wf_graph
 go
 
@@ -85,7 +91,7 @@ create table wf_process_attr
 (
   process_id   bigint        NOT NULL REFERENCES wf_process,
   name         varchar(64)   NOT NULL,
-  value        varchar(2000) NULL
+  value        varchar(1800) NULL
 )
 go
 
@@ -157,8 +163,8 @@ go
 create table wf_node_attr
 (
   node_id  bigint        NOT NULL REFERENCES wf_node,
-  name     varchar(255)  NOT NULL,
-  value    varchar(2000) NULL
+  name     varchar(140)  NOT NULL,
+  value    varchar(1800) NULL
 )
 go
 
@@ -178,8 +184,8 @@ go
 create table wf_external_attr
 (
   external_id  bigint        NOT NULL REFERENCES wf_external,
-  name         varchar(255)  NOT NULL,
-  value        varchar(2000) NULL
+  name         varchar(140)  NOT NULL,
+  value        varchar(1800) NULL
 )
 go
 
@@ -294,7 +300,7 @@ create table wf_token_attr
 (
   attr_set_id  bigint        NOT NULL REFERENCES wf_node_token,
   name         varchar(64)   NOT NULL,
-  value        varchar(2000) NULL
+  value        varchar(1800) NULL
 )
 go
 
@@ -316,7 +322,7 @@ create table wf_token_set_attr
 (
   token_set_id  bigint        NOT NULL REFERENCES wf_token_set,
   name          varchar(64)   NOT NULL,
-  value         varchar(2000) NULL
+  value         varchar(1800) NULL
 )
 go
 
@@ -356,7 +362,7 @@ create table wf_token_set_member_attr
   token_set_id  bigint           NOT NULL REFERENCES wf_token_set,
   member_index  int              NOT NULL,
   name          varchar(64)      NOT NULL,
-  value         varchar(2000)    NULL
+  value         varchar(1800)    NULL
 )
 go
 
