@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.editor;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
@@ -334,9 +335,14 @@ public class GraphEditor
     scrollPane.setViewportView( scene.createView() );
     scrollPane.putClientProperty( "scene", scene );
     scrollPane.putClientProperty( GRAPH_NAME_KEY, "Untitled" );
-    tabPane.addTab( "Untitled", scrollPane );
-    tabPane.setSelectedComponent( scrollPane );
-    tabSelectionChanged();
+    addTab( "Untitled", scrollPane );
+  }
+
+  private void addTab (String name, JComponent component)
+  {
+    tabPane.addTab( name, component );
+    tabPane.setTabComponentAt( tabPane.getTabCount() - 1, new TabComponent( tabPane, name ) );
+    tabPane.setSelectedComponent( component );
   }
 
   public void openProcessDefinition (File processDefinitionFile)
@@ -350,8 +356,7 @@ public class GraphEditor
 
       JScrollPane scrollPane = new JScrollPane();
       scrollPane.setViewportView( scene.createView() );
-      tabPane.addTab( graph.getName(), scrollPane );
-      tabPane.setSelectedComponent( scrollPane );
+      addTab( graph.getName(), scrollPane );
 
       scrollPane.putClientProperty( "scene", scene );
       scrollPane.putClientProperty( GRAPH_NAME_KEY, graph.getName() );
@@ -456,7 +461,7 @@ public class GraphEditor
     graph.setName( name );
     JComponent c = (JComponent)tabPane.getSelectedComponent();
     c.putClientProperty( GRAPH_NAME_KEY, name );
-    tabPane.setTitleAt( tabPane.getSelectedIndex(), name );
+    updateTabTitle( tabPane.getSelectedIndex(), name );
 
     try
     {
@@ -535,17 +540,27 @@ public class GraphEditor
       String title = (String)c.getClientProperty( GRAPH_NAME_KEY );
       if ( isUnSaved )
       {
-        tabPane.setTitleAt( tabPane.getSelectedIndex(), "*" + title );
+        updateTabTitle( tabPane.getSelectedIndex(), "*" + title );
       }
       else
       {
-        tabPane.setTitleAt( tabPane.getSelectedIndex(), title );
+        updateTabTitle( tabPane.getSelectedIndex(), "*" + title );
       }
     }
     else
     {
       saveAction.setEnabled( false );
       saveAsAction.setEnabled( false );
+    }
+  }
+
+  private void updateTabTitle (int index, String label)
+  {
+    tabPane.setTitleAt( index, label );
+    TabComponent tabComp = (TabComponent) tabPane.getTabComponentAt( tabPane.getSelectedIndex() );
+    if ( tabComp != null )
+    {
+      tabComp.setLabelText( label );
     }
   }
 
@@ -570,6 +585,26 @@ public class GraphEditor
     }
 
     System.exit( 0 );
+  }
+
+  public void closeTab (int index)
+  {
+    Component previous = tabPane.getSelectedComponent();
+    boolean returnToPrev = tabPane.getSelectedIndex() != index;
+
+    if ( !returnToPrev )
+    {
+      tabPane.setSelectedIndex( index );
+      tabSelectionChanged();
+    }
+
+    SaveResult result = closeCurrentTab();
+
+    if ( returnToPrev && !result.isAbortExit() )
+    {
+      tabPane.setSelectedComponent( previous );
+      tabSelectionChanged();
+    }
   }
 
   public SaveResult closeCurrentTab ()
