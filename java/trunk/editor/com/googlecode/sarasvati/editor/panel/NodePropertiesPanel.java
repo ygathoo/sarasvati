@@ -316,7 +316,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
           if ( !newState.equals( node.getState() ) )
           {
-            CommandStack.editNode( GraphEditor.getInstance().getCurrentScene(), node, newState );
+            CommandStack.editGraphMember( GraphEditor.getInstance().getCurrentScene(), node, newState );
           }
 
           dialog.setVisible( false );

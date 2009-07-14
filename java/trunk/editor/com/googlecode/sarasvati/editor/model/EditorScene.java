@@ -44,13 +44,13 @@ import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.action.ArcPropertiesAction;
 import com.googlecode.sarasvati.editor.action.ConnectAction;
 import com.googlecode.sarasvati.editor.action.MoveTrackAction;
-import com.googlecode.sarasvati.editor.action.NodePropertiesAction;
+import com.googlecode.sarasvati.editor.action.GraphMemberPropertiesAction;
 import com.googlecode.sarasvati.editor.action.SceneAddExternalAction;
 import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.AutoLayoutCommand;
 import com.googlecode.sarasvati.editor.command.Command;
 import com.googlecode.sarasvati.editor.command.CommandStack;
-import com.googlecode.sarasvati.editor.command.MoveNodeCommand;
+import com.googlecode.sarasvati.editor.command.MoveGraphMemberCommand;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
@@ -69,7 +69,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   private final WidgetAction connectAction = new ConnectAction( ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() ) );
   private final WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
 
-  private final WidgetAction nodePropertiesAction = new NodePropertiesAction();
+  private final WidgetAction graphMemberPropertiesAction = new GraphMemberPropertiesAction();
   private final WidgetAction arcPropertiesAction = new ArcPropertiesAction();
 
   private boolean loading = true;
@@ -181,7 +181,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
     widget.setPreferredLocation( node.getOrigin() );
 
-    widget.getActions().addAction( nodePropertiesAction );
+    widget.getActions().addAction( graphMemberPropertiesAction );
     widget.getActions().addAction( moveAction );
     widget.getActions().addAction( connectAction );
 
@@ -316,14 +316,14 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     {
       GraphLayoutNode<?> layoutNode = layoutTree.getTreeNode( member );
       Point newOrigin = new Point( layoutNode.getOriginX(), layoutNode.getOriginY() );
-      commands.add( new MoveNodeCommand( this, member, member.getOrigin(), newOrigin ) );
+      commands.add( new MoveGraphMemberCommand( this, member, member.getOrigin(), newOrigin ) );
     }
 
     for ( EditorGraphMember<?> member : graph.getExternals() )
     {
       GraphLayoutNode<?> layoutNode = layoutTree.getTreeNode( member );
       Point newOrigin = new Point( layoutNode.getOriginX(), layoutNode.getOriginY() );
-      commands.add( new MoveNodeCommand( this, member, member.getOrigin(), newOrigin ) );
+      commands.add( new MoveGraphMemberCommand( this, member, member.getOrigin(), newOrigin ) );
     }
 
     CommandStack.pushAndPerform( new AutoLayoutCommand( this, commands ) );

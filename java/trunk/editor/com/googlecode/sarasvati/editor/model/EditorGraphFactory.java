@@ -193,10 +193,20 @@ public class EditorGraphFactory
     for ( EditorExternal external : graph.getExternals() )
     {
       XmlExternal xmlExternal = new XmlExternal();
-      xmlExternal.setName( external.getState().getName() );
-      xmlExternal.setProcessDefinition( external.getState().getGraphName() );
+      ExternalState state = external.getState();
+      xmlExternal.setName( state.getName() );
+      xmlExternal.setProcessDefinition( state.getGraphName() );
       xmlExternal.setX( external.getX() );
       xmlExternal.setY( external.getY() );
+
+      List<Object> customList = DOMToObjectLoadHelper.mapToDOM( state.getCustomProperties() );
+
+      if ( !customList.isEmpty() )
+      {
+        XmlCustom custom = new XmlCustom();
+        custom.setCustom( customList );
+        xmlExternal.setCustom( custom );
+      }
 
       xmlProcDef.getExternals().add( xmlExternal );
       externalMap.put( external, xmlExternal );

@@ -24,7 +24,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import com.googlecode.sarasvati.editor.model.EditorArc;
-import com.googlecode.sarasvati.editor.model.EditorNode;
+import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 
 public class DialogFactory
 {
@@ -38,9 +38,9 @@ public class DialogFactory
     preferencesDialog = new PreferencesDialog( frame );
   }
 
-  public static JDialog newNodePropertiesDialog (EditorNode node)
+  public static JDialog newGraphMemberPropertiesDialog (EditorGraphMember<?> graphMember)
   {
-    return new NodePropertiesDialog( frame, node );
+    return new GraphMemberPropertiesDialog( frame, graphMember );
   }
 
   public static JDialog newArcPropertiesDialog (EditorArc arc)
