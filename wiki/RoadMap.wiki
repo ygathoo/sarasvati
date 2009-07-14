@@ -18,24 +18,26 @@ A graphical editor for process definitions is in progress. It is now usable for 
  * Save: 90%
  * Add nodes: Done
  * Delete nodes: *TODO*
- * Add external: *TODO*
+ * Add external: Done
  * Delete external: *TODO*
  * Move nodes: Done
  * Connect nodes: Done
  * Change connections: Done
  * Remove connections: Done
  * Edit node properties: Done
- * Edit arc properties: _Started_ *Need to implement externals interaction.*
+ * Edit external properties: *TODO*
+ * Edit arc properties: Done
  * Cleanup undo/redo MDI interactions: Done
  * Autolayout: Done
  * Self arcs: Done
  * Arc labels: Done
- * Cleanup move/add/reconnect interactions: *TODO*
+ * Cleanup move/add/reconnect interactions: Done
  * Check for unsaved:Done
  * Graph validation on save: _Started_
  * Preferences: *Needs to be specced. Need just enough for externals for now. Rest wil be Post-1.0*
  * Select all: *TODO*
  * Investigate shortestpathrouter weirdness: *Likely post 1.0.*
+ * Library concept: _Post 1.0.0-rc3*
 
 === Token Sets/Template Nodes: Completed ===
 
