@@ -38,16 +38,17 @@ public class TabComponent extends JPanel
 
   public TabComponent (final JTabbedPane pane, final String labelText)
   {
+    setBorder( BorderFactory.createEmptyBorder( 2, 0, 0, 0 ) );
     label = new JLabel( labelText );
     label.setBorder( BorderFactory.createEmptyBorder( 0, 10, 0, 5 ) );
 
     setLayout( new BorderLayout() );
-    setOpaque( false );
+    setOpaque( true );
     add( label, BorderLayout.CENTER );
 
     JButton closeButton = new JButton ( "X" );
     closeButton.setBorder( BorderFactory.createEtchedBorder( EtchedBorder.LOWERED ) );
-    closeButton.setFont( Font.decode( "sans bold 11" ) );
+    closeButton.setFont( Font.decode( "sans bold 9" ) );
 
     closeButton.addActionListener( new ActionListener()
     {
@@ -64,5 +65,10 @@ public class TabComponent extends JPanel
   public void setLabelText (final String text)
   {
     label.setText( text );
+  }
+
+  @Override
+  public void updateUI ()
+  {
   }
 }

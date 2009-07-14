@@ -270,7 +270,7 @@ public class GraphEditor
     toolBar.add( autoLayoutButton );
 
     tabPane = new JTabbedPane( JTabbedPane.TOP );
-    tabPane.setTabLayoutPolicy( JTabbedPane.SCROLL_TAB_LAYOUT );
+    tabPane.setTabLayoutPolicy( JTabbedPane.WRAP_TAB_LAYOUT );
 
     tabPane.addChangeListener( new ChangeListener()
     {
@@ -292,6 +292,7 @@ public class GraphEditor
     setupModeKeys();
 
     createNewProcessDefinition();
+    tabSelectionChanged();
     setMode( EditorMode.Move );
   }
 
@@ -492,6 +493,7 @@ public class GraphEditor
 
   public void tabSelectionChanged ()
   {
+    System.out.println( "called" );
     EditorScene current = getCurrentScene();
     CommandStack.setCurrent( current == null ? null : current.getCommandStack() );
     updateUndoRedoSave();
@@ -592,10 +594,9 @@ public class GraphEditor
     Component previous = tabPane.getSelectedComponent();
     boolean returnToPrev = tabPane.getSelectedIndex() != index;
 
-    if ( !returnToPrev )
+    if ( returnToPrev )
     {
       tabPane.setSelectedIndex( index );
-      tabSelectionChanged();
     }
 
     SaveResult result = closeCurrentTab();
@@ -603,7 +604,6 @@ public class GraphEditor
     if ( returnToPrev && !result.isAbortExit() )
     {
       tabPane.setSelectedComponent( previous );
-      tabSelectionChanged();
     }
   }
 
