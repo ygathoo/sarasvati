@@ -31,7 +31,7 @@ public class DialogFactory
 {
   protected static JFrame frame = null;
 
-  private static JDialog preferencesDialog = null;
+  private static PreferencesDialog preferencesDialog = null;
 
   public static void setFrame (JFrame frame)
   {
@@ -54,10 +54,16 @@ public class DialogFactory
     JOptionPane.showMessageDialog( frame, error, "Error", JOptionPane.ERROR_MESSAGE );
   }
 
+  public static void showInfo (String msg)
+  {
+    JOptionPane.showMessageDialog( frame, msg, "Info", JOptionPane.INFORMATION_MESSAGE );
+  }
+
   public static JDialog newPreferencesDialog ()
   {
     Point location = frame.getLocation();
     preferencesDialog.setLocation( location.x + 50, location.y + 10 );
+    preferencesDialog.selectGeneral();
     return preferencesDialog;
   }
 }

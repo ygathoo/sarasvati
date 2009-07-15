@@ -16,6 +16,7 @@ import java.util.List;
 
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.tree.TreePath;
 import javax.swing.tree.TreeSelectionModel;
 
 /**
@@ -57,11 +58,11 @@ public class PreferencesPanel extends javax.swing.JPanel {
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 596, Short.MAX_VALUE)
+            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 682, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 543, Short.MAX_VALUE)
+            .addComponent(splitPane, javax.swing.GroupLayout.DEFAULT_SIZE, 601, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
 
@@ -101,8 +102,22 @@ public class PreferencesPanel extends javax.swing.JPanel {
           }
 
           splitPane.setRightComponent( prefsPage );
-          prefsPage.setup();
+
+          if ( !prefsPage.isSetupDone() )
+          {
+            prefsPage.setup();
+            prefsPage.setSetupDone( true );
+          }
+          prefsPage.displayPage();
         }
       });
+    }
+
+    public void selectGeneral ()
+    {
+      Object root = prefsTree.getModel().getRoot();
+      Object general = prefsTree.getModel().getChild( root, 0 );
+      TreePath path = new TreePath( new Object[] { root, general } );
+      prefsTree.addSelectionPath( path );
     }
 }
