@@ -34,6 +34,7 @@ import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -64,6 +65,7 @@ import com.googlecode.sarasvati.editor.menu.SaveAction;
 import com.googlecode.sarasvati.editor.menu.UndoAction;
 import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
+import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
@@ -294,6 +296,18 @@ public class GraphEditor
     createNewProcessDefinition();
     tabSelectionChanged();
     setMode( EditorMode.Move );
+
+    EditorPreferences prefs = EditorPreferences.getInstance();
+    prefs.loadPreferences();
+
+    if ( prefs.isFirstRun() )
+    {
+      DialogFactory.showInfo( "This is the first time the Sarasvati editor has been run. \n" +
+                              "You may wish to configure a process definition library and custom node types" );
+
+      JDialog dialog = DialogFactory.newPreferencesDialog();
+      dialog.setVisible( true );
+    }
   }
 
   protected JMenuBar createMenu ()

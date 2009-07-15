@@ -18,6 +18,7 @@
  */
 package com.googlecode.sarasvati.editor.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class EditorNodeType
@@ -25,6 +26,14 @@ public class EditorNodeType
   private final String name;
   private final boolean allowNonSpecifiedAttributes;
   private final List<EditorNodeTypeAttribute> attributes;
+
+  public EditorNodeType (final String name,
+                         final boolean allowNonSpecifiedAttributes)
+  {
+    this.name = name;
+    this.allowNonSpecifiedAttributes = allowNonSpecifiedAttributes;
+    this.attributes = new LinkedList<EditorNodeTypeAttribute>();
+  }
 
   public EditorNodeType (final String name,
                          final boolean allowNonSpecifiedAttributes,
@@ -63,5 +72,15 @@ public class EditorNodeType
   public String toString ()
   {
     return name;
+  }
+
+  public EditorNodeType copy ()
+  {
+    List<EditorNodeTypeAttribute> attributesCopy = new LinkedList<EditorNodeTypeAttribute>();
+    for ( EditorNodeTypeAttribute attr : attributes )
+    {
+      attributesCopy.add( attr.copy() );
+    }
+    return new EditorNodeType( name, allowNonSpecifiedAttributes, attributesCopy );
   }
 }

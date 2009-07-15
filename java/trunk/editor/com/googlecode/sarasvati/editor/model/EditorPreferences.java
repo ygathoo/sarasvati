@@ -53,29 +53,39 @@ public class EditorPreferences
 
   protected List<EditorNodeType> nodeTypes;
 
-  public void load ()
+  protected boolean firstRun = false;
+
+  public void loadPreferences ()
   {
     Preferences prefs = Preferences.userNodeForPackage( getClass() );
     libraryPath = prefs.get( LIBRARY_PATH_KEY, null );
     recurseLibrary = prefs.getBoolean( RECURSE_LIBRARY_KEY, false );
+
+    try
+    {
+      loadNodeTypes();
+    }
+    catch ( BackingStoreException bse )
+    {
+      bse.printStackTrace();
+      DialogFactory.showError( "Failed to load preferences: " + bse.getMessage() );
+      nodeTypes = getDefaultNodeTypes();
+    }
+    catch ( RuntimeException re )
+    {
+      re.printStackTrace();
+      DialogFactory.showError( "Failed to load preferences: " + re.getMessage() );
+      nodeTypes = getDefaultNodeTypes();
+    }
+  }
+
+  public boolean isFirstRun ()
+  {
+    return firstRun;
   }
 
   public List<EditorNodeType> getNodeTypes ()
   {
-    if ( nodeTypes == null )
-    {
-      try
-      {
-        loadNodeTypes ();
-      }
-      catch ( BackingStoreException bse )
-      {
-        bse.printStackTrace();
-        DialogFactory.showError( "Failed to load preferences: " + bse.getMessage() );
-        return Collections.emptyList();
-      }
-    }
-
     return nodeTypes;
   }
 
@@ -90,6 +100,7 @@ public class EditorPreferences
 
     if ( childrenNames.length == 0 )
     {
+      firstRun = true;
       importDefaultNodeTypes();
     }
     else
@@ -101,6 +112,14 @@ public class EditorPreferences
     }
 
     nodeTypes = newNodeTypes;
+  }
+
+  public void clearPreferences () throws BackingStoreException
+  {
+    Preferences baseNode = Preferences.userNodeForPackage( getClass() );
+    Preferences parent = baseNode.parent();
+    baseNode.removeNode();
+    parent.flush();
   }
 
   public EditorNodeType loadNodeType (Preferences typeNode) throws BackingStoreException
@@ -115,7 +134,7 @@ public class EditorPreferences
     {
       Preferences attrNode = attributesNode.node( child );
       String attrName = attrNode.get( NODE_TYPE_ATTR_NAME, "<error loading attr>" );
-      String defaultValue = attrNode.get( NODE_TYPE_ATTR_DEFAULT_VALUE, null );
+      String defaultValue = attrNode.get( NODE_TYPE_ATTR_DEFAULT_VALUE, "" );
       boolean useCDATA = attrNode.getBoolean( NODE_TYPE_ATTR_USE_CDATA, false );
       attributes.add( new EditorNodeTypeAttribute( attrName, defaultValue, useCDATA ) );
     }
@@ -123,7 +142,7 @@ public class EditorPreferences
     return new EditorNodeType( name, allowCustom, attributes );
   }
 
-  public void importDefaultNodeTypes () throws BackingStoreException
+  public List<EditorNodeType> getDefaultNodeTypes ()
   {
     List<EditorNodeType> newNodeTypes = new LinkedList<EditorNodeType>();
     List<EditorNodeTypeAttribute> emptyAttributes = Collections.emptyList();
@@ -132,10 +151,15 @@ public class EditorPreferences
 
     List<EditorNodeTypeAttribute> attributes = new LinkedList<EditorNodeTypeAttribute>();
     attributes.add( new EditorNodeTypeAttribute( "scriptType", "js", false ) );
-    attributes.add( new EditorNodeTypeAttribute( "script", null, true ) );
+    attributes.add( new EditorNodeTypeAttribute( "script", "", true ) );
 
     newNodeTypes.add( new EditorNodeType( "script", false, attributes ) );
-    saveNodeTypes( newNodeTypes );
+    return newNodeTypes;
+  }
+
+  public void importDefaultNodeTypes () throws BackingStoreException
+  {
+    saveNodeTypes( getDefaultNodeTypes() );
   }
 
   public void saveNodeTypes (List<EditorNodeType> newNodeTypes) throws BackingStoreException
@@ -154,6 +178,8 @@ public class EditorPreferences
       count++;
     }
     nodeTypes = newNodeTypes;
+
+    baseNode.flush();
   }
 
   private void persistNodeType (Preferences typesNode, String nodeName, EditorNodeType nodeType)

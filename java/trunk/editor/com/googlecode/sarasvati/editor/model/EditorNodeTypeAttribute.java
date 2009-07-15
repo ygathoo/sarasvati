@@ -20,9 +20,9 @@ package com.googlecode.sarasvati.editor.model;
 
 public class EditorNodeTypeAttribute
 {
-  private final String name;
-  private final String defaultValue;
-  private final boolean useCDATA;
+  private String name;
+  private String defaultValue;
+  private boolean useCDATA;
 
   public EditorNodeTypeAttribute (final String name,
                                   final String defaultValue,
@@ -55,5 +55,25 @@ public class EditorNodeTypeAttribute
   public boolean isUseCDATA ()
   {
     return useCDATA;
+  }
+
+  public void setName (String name)
+  {
+    this.name = name;
+  }
+
+  public void setDefaultValue (String defaultValue)
+  {
+    this.defaultValue = defaultValue;
+  }
+
+  public void setUseCDATA (boolean useCDATA)
+  {
+    this.useCDATA = useCDATA;
+  }
+
+  public EditorNodeTypeAttribute copy ()
+  {
+    return new EditorNodeTypeAttribute( name, defaultValue, useCDATA );
   }
 }
