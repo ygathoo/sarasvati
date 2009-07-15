@@ -22,6 +22,7 @@ import java.awt.Point;
 
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
@@ -46,6 +47,11 @@ public class DialogFactory
   public static JDialog newArcPropertiesDialog (EditorArc arc)
   {
     return new ArcPropertiesDialog( frame, arc );
+  }
+
+  public static void showError (String error)
+  {
+    JOptionPane.showMessageDialog( frame, error, "Error", JOptionPane.ERROR_MESSAGE );
   }
 
   public static JDialog newPreferencesDialog ()

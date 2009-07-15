@@ -284,6 +284,8 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
     public void setup (final JDialog dialog,
                        final EditorNode node)
     {
+      customPropertiesInput.putClientProperty( "terminateEditOnFocusLost", Boolean.TRUE );
+
       cancelButton.addActionListener( new ActionListener()
       {
         @Override
