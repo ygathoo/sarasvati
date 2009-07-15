@@ -196,6 +196,8 @@ public class ExternalPropertiesPanel extends javax.swing.JPanel {
     public void setup (final JDialog dialog,
                        final EditorExternal external)
     {
+      customPropertiesInput.putClientProperty( "terminateEditOnFocusLost", Boolean.TRUE );
+
       cancelButton.addActionListener( new ActionListener()
       {
         @Override
