@@ -141,6 +141,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     return widget;
   }
 
+  // TODO: Add drop-down in node type preferences for icon
   protected Icon getIconForMember (final EditorGraphMember<?> node)
   {
     boolean join = false;
@@ -154,7 +155,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     if ( node instanceof EditorNode )
     {
       join = ((EditorNode)node).getState().getJoinType() != JoinType.OR;
-      isTask = "task".equalsIgnoreCase( ((EditorNode)node).getState().getType().getName() );
+      String typeName = ((EditorNode)node).getState().getType();
+      isTask = "task".equalsIgnoreCase( typeName ) || "activity".equalsIgnoreCase( typeName );
     }
 
     return isTask ? new TaskIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join  ) :

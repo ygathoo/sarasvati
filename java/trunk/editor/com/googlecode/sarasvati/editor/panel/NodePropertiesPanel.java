@@ -35,6 +35,7 @@ import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorNodeType;
+import com.googlecode.sarasvati.editor.model.EditorNodeTypeAttribute;
 import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.NodeState;
 import com.googlecode.sarasvati.util.SvUtil;
@@ -311,7 +312,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
           NodeState newState =
             new NodeState( nodeNameInput.getText(),
-                           (EditorNodeType)nodeTypeInput.getSelectedItem(),
+                           ((EditorNodeType)nodeTypeInput.getSelectedItem()).getName(),
                            (JoinType)joinTypeInput.getSelectedItem(),
                            joinParamInput.getText(),
                            startNodeInput.isSelected(),
@@ -327,23 +328,22 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
         }
       });
 
+      nodeTypeInput.addActionListener( new ActionListener()
+      {
+        @Override
+        public void actionPerformed (ActionEvent e)
+        {
+          nodeTypeChanged( node );
+        }
+      });
+
       NodeState state = node.getState();
       nodeNameInput.setText( state.getName() );
-      nodeTypeInput.setSelectedItem( state.getType() );
+      nodeTypeInput.setSelectedItem( state.getEditorNodeType() );
       joinTypeInput.setSelectedItem( state.getJoinType() );
       joinParamInput.setText( SvUtil.nullIfBlank( state.getJoinParam() ) );
       guardInput.setText( SvUtil.nullIfBlank( state.getGuard() ) );
       startNodeInput.setSelected( state.isStart() );
-
-      if ( state.getCustomProperties() != null )
-      {
-        for ( Map.Entry<String,String> entry : state.getCustomProperties().entrySet() )
-        {
-          tableModel.addRow( new String[] { entry.getKey(), entry.getValue() } );
-        }
-      }
-
-      this.customPropertiesInput.setModel( tableModel );
 
       addPropertyButton.addActionListener( new ActionListener()
       {
@@ -367,5 +367,42 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
           }
         }
       });
+    }
+
+    public void nodeTypeChanged (final EditorNode node)
+    {
+      EditorNodeType nodeType = (EditorNodeType)nodeTypeInput.getSelectedItem();
+
+      addPropertyButton.setEnabled( nodeType.isAllowNonSpecifiedAttributes() );
+      deletePropertyButton.setEnabled( nodeType.isAllowNonSpecifiedAttributes() );
+
+      Map<String, String> props = new LinkedHashMap<String, String>();
+
+      for ( EditorNodeTypeAttribute attr : nodeType.getAttributes() )
+      {
+        props.put( attr.getName(), attr.getDefaultValue() );
+      }
+
+      NodeState state = node.getState();
+      if ( state.getCustomProperties() != null )
+      {
+        for ( Map.Entry<String,String> entry : state.getCustomProperties().entrySet() )
+        {
+          if ( nodeType.isAllowNonSpecifiedAttributes() || props.containsKey( entry.getKey() ) )
+          {
+            props.put( entry.getKey(), entry.getValue() );
+          }
+        }
+      }
+
+      while ( tableModel.getRowCount() > 0 )
+      {
+        tableModel.removeRow( tableModel.getRowCount() - 1 );
+      }
+
+      for ( Map.Entry<String,String> entry : props.entrySet() )
+      {
+        tableModel.addRow( new String[] { entry.getKey(), entry.getValue() } );
+      }
     }
 }

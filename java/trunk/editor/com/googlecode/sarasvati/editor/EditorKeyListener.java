@@ -63,6 +63,7 @@ public class EditorKeyListener
     if ( previousMode != null )
     {
       GraphEditor.getInstance().setMode( previousMode );
+      previousMode = null;
       event.consume();
     }
   }

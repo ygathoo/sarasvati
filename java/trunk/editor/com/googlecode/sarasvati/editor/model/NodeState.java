@@ -25,14 +25,14 @@ import com.googlecode.sarasvati.JoinType;
 
 public class NodeState extends GraphMemberState
 {
-  private final EditorNodeType type;
+  private final String type;
   private final JoinType joinType;
   private final String joinParam;
   private final boolean isStart;
   private final String  guard;
 
   public NodeState (final String name,
-                    final EditorNodeType type,
+                    final String type,
                     final JoinType joinType,
                     final String joinParam,
                     final boolean isStart,
@@ -47,9 +47,14 @@ public class NodeState extends GraphMemberState
     this.guard = guard;
   }
 
-  public EditorNodeType getType ()
+  public String getType ()
   {
     return type;
+  }
+
+  public EditorNodeType getEditorNodeType ()
+  {
+    return EditorPreferences.getInstance().getTypeByName( type );
   }
 
   public JoinType getJoinType ()

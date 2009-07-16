@@ -293,7 +293,6 @@ public class GraphEditor
 
     setupModeKeys();
 
-    createNewProcessDefinition();
     tabSelectionChanged();
     setMode( EditorMode.Move );
 

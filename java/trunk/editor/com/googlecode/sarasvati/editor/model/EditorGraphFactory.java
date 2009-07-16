@@ -47,7 +47,6 @@ public class EditorGraphFactory
 {
   public static EditorGraph loadFromXml (ProcessDefinition procDef) throws LoadException
   {
-    EditorPreferences editorPrefs = EditorPreferences.getInstance();
     EditorGraph graph = new EditorGraph();
     graph.setName( procDef.getName() );
 
@@ -61,7 +60,7 @@ public class EditorGraphFactory
       DOMToObjectLoadHelper.loadCustomIntoMap( custom, customProperties );
 
       NodeState nodeState = new NodeState( nodeDef.getName(),
-                                           editorPrefs.getTypeByName( nodeDef.getType() ),
+                                           nodeDef.getType(),
                                            nodeDef.getJoinType(),
                                            nodeDef.getJoinParam(),
                                            nodeDef.isStart(),
@@ -168,7 +167,7 @@ public class EditorGraphFactory
       XmlNode xmlNode = new XmlNode();
       NodeState state = node.getState();
       xmlNode.setName( state.getName() );
-      xmlNode.setType( state.getType().getName() );
+      xmlNode.setType( state.getType() );
       xmlNode.setGuard( SvUtil.nullIfBlank( state.getGuard() ) );
       xmlNode.setJoinType( XmlJoinType.getXmlJoinType( state.getJoinType() ) );
 
@@ -180,8 +179,13 @@ public class EditorGraphFactory
       xmlNode.setX( node.getX() );
       xmlNode.setY( node.getY() );
 
-      List<Object> customList = DOMToObjectLoadHelper.mapToDOM( state.getCustomProperties(),
-                                                                state.getType().getCDataTypes() );
+      EditorNodeType nodeType = state.getEditorNodeType();
+      Set<String> cdataTypes = Collections.emptySet();
+      if ( nodeType != null )
+      {
+        cdataTypes = nodeType.getCDataTypes();
+      }
+      List<Object> customList = DOMToObjectLoadHelper.mapToDOM( state.getCustomProperties(), cdataTypes );
 
       if ( !customList.isEmpty() )
       {
