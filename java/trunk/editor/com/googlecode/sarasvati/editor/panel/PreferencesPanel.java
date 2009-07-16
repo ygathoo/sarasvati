@@ -80,7 +80,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
       jScrollPane1.setMinimumSize( jScrollPane1.getPreferredSize() );
       prefPages.add( new BasePrefsPage() );
       prefPages.add( new GeneralPreferencesPanel() );
-      prefPages.add( new NodeTypePreferences() );
+      prefPages.add( new NodeTypePreferencesPanel() );
 
       splitPane.setRightComponent( prefPages.get( 0 ) );
 

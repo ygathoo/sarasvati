@@ -11,8 +11,16 @@
 
 package com.googlecode.sarasvati.editor.panel;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.prefs.BackingStoreException;
+
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JOptionPane;
+
+import com.googlecode.sarasvati.editor.model.EditorNodeType;
+import com.googlecode.sarasvati.editor.model.EditorPreferences;
 
 /**
  *
@@ -37,8 +45,8 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
 
         defaultNodeTypeLabel = new javax.swing.JLabel();
         defaultNodeTypeInput = new javax.swing.JComboBox();
-        jButton2 = new javax.swing.JButton();
-        jButton3 = new javax.swing.JButton();
+        applyButton = new javax.swing.JButton();
+        revertButton = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         checkLibraryRecursiveInput = new javax.swing.JCheckBox();
@@ -49,9 +57,9 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
 
         defaultNodeTypeInput.setModel(getNodeTypesModel());
 
-        jButton2.setText(org.openide.util.NbBundle.getMessage(GeneralPreferencesPanel.class, "GeneralPreferencesPanel.jButton2.text")); // NOI18N
+        applyButton.setText(org.openide.util.NbBundle.getMessage(GeneralPreferencesPanel.class, "GeneralPreferencesPanel.applyButton.text")); // NOI18N
 
-        jButton3.setText(org.openide.util.NbBundle.getMessage(GeneralPreferencesPanel.class, "GeneralPreferencesPanel.jButton3.text")); // NOI18N
+        revertButton.setText(org.openide.util.NbBundle.getMessage(GeneralPreferencesPanel.class, "GeneralPreferencesPanel.revertButton.text")); // NOI18N
 
         jPanel1.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -76,7 +84,7 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(libraryBrowseButton))
                     .addComponent(jLabel1))
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -105,9 +113,9 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(defaultNodeTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(jButton3)
+                        .addComponent(revertButton)
                         .addGap(18, 18, 18)
-                        .addComponent(jButton2)))
+                        .addComponent(applyButton)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -119,35 +127,97 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(defaultNodeTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(defaultNodeTypeLabel))
-                .addGap(296, 296, 296)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 354, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jButton2)
-                    .addComponent(jButton3))
+                    .addComponent(applyButton)
+                    .addComponent(revertButton))
                 .addContainerGap())
         );
     }// </editor-fold>//GEN-END:initComponents
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton applyButton;
     private javax.swing.JCheckBox checkLibraryRecursiveInput;
     private javax.swing.JComboBox defaultNodeTypeInput;
     private javax.swing.JLabel defaultNodeTypeLabel;
-    private javax.swing.JButton jButton2;
-    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton libraryBrowseButton;
     private javax.swing.JTextField libraryInput;
+    private javax.swing.JButton revertButton;
     // End of variables declaration//GEN-END:variables
+
+    private final DefaultComboBoxModel nodeTypesModel = new DefaultComboBoxModel();
 
     public ComboBoxModel getNodeTypesModel ()
     {
-      return new DefaultComboBoxModel( new String[] { "node", "script", "wait", "task" } );
+      return nodeTypesModel;
     }
 
     @Override
     public void setup ()
     {
-      // does nothing yet
+      revertButton.addActionListener( new ActionListener()
+      {
+        @Override
+        public void actionPerformed (ActionEvent e)
+        {
+          if ( JOptionPane.YES_OPTION ==
+               JOptionPane.showConfirmDialog( GeneralPreferencesPanel.this,
+                                              "Revert all changes?",
+                                              "Confirm",
+                                              JOptionPane.YES_NO_OPTION ) )
+          {
+            loadPage();
+          }
+        }
+      });
+
+      applyButton.addActionListener( new ActionListener()
+      {
+        @Override
+        public void actionPerformed (final ActionEvent event)
+        {
+          try
+          {
+            String libraryPath = libraryInput.getText();
+            boolean recurseLibrary = checkLibraryRecursiveInput.isSelected();
+            EditorNodeType defaultNodeType = (EditorNodeType)defaultNodeTypeInput.getSelectedItem();
+            EditorPreferences.getInstance().saveGeneralPreferences( libraryPath, recurseLibrary, defaultNodeType );
+            JOptionPane.showMessageDialog( GeneralPreferencesPanel.this,
+                                           "Changes saved", "Info",
+                                           JOptionPane.INFORMATION_MESSAGE );
+          }
+          catch (final BackingStoreException e)
+          {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog( GeneralPreferencesPanel.this,
+                                           "Failed to save preferences: " + e.getMessage(),
+                                           "Error", JOptionPane.ERROR_MESSAGE );
+          }
+        }
+      });
+    }
+
+    public void loadPage ()
+    {
+      EditorPreferences prefs = EditorPreferences.getInstance();
+      libraryInput.setText( prefs.getLibraryPath() );
+      checkLibraryRecursiveInput.setSelected( prefs.isRecurseLibrary() );
+
+      nodeTypesModel.removeAllElements();
+      for ( EditorNodeType nodeType : prefs.getNodeTypes() )
+      {
+        nodeTypesModel.addElement( nodeType );
+      }
+
+      nodeTypesModel.setSelectedItem( prefs.getDefaultNodeType() );
+    }
+
+    @Override
+    public void displayPage ()
+    {
+      loadPage();
     }
 }

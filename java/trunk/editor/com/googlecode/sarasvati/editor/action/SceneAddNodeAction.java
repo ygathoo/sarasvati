@@ -43,6 +43,8 @@ public class SceneAddNodeAction extends WidgetAction.Adapter
     SceneAddNodeAction.enabled = enabled;
   }
 
+  protected int counter = 0;
+
   @Override
   public State mousePressed (Widget widget, WidgetMouseEvent event)
   {
@@ -53,8 +55,15 @@ public class SceneAddNodeAction extends WidgetAction.Adapter
 
     if ( event.getButton() == MouseEvent.BUTTON1 )
     {
+      counter++;
       EditorNodeType type = EditorPreferences.getInstance().getDefaultNodeType();
-      NodeState state = new NodeState( "New Node", type, JoinType.OR, null, false, null, null );
+      NodeState state = new NodeState( "Node_" + counter,
+                                       type == null ? "node" : type.getName(),
+                                       JoinType.OR,
+                                       null,
+                                       false,
+                                       null,
+                                       null );
       EditorNode node = new EditorNode( state );
 
       EditorScene scene = (EditorScene)widget.getScene();

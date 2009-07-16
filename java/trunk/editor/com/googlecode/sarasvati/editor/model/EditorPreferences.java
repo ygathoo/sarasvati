@@ -39,6 +39,7 @@ public class EditorPreferences
 
   private static final String LIBRARY_PATH_KEY = "libraryPath";
   private static final String RECURSE_LIBRARY_KEY = "recurseLibrary";
+  private static final String DEFAULT_NODE_TYPE_KEY = "defaultNodeType";
   private static final String NODE_TYPES_KEY = "nodeTypes";
   private static final String ATTRIBUTES_KEY = "attributes";
 
@@ -55,15 +56,12 @@ public class EditorPreferences
 
   protected Map<String,EditorNodeType> typesByName = new HashMap<String, EditorNodeType>();
   protected List<EditorNodeType> nodeTypes;
+  protected EditorNodeType defaultNodeType;
 
   protected boolean firstRun = false;
 
   public void loadPreferences ()
   {
-    Preferences prefs = Preferences.userNodeForPackage( getClass() );
-    libraryPath = prefs.get( LIBRARY_PATH_KEY, null );
-    recurseLibrary = prefs.getBoolean( RECURSE_LIBRARY_KEY, false );
-
     try
     {
       loadNodeTypes();
@@ -80,6 +78,17 @@ public class EditorPreferences
       DialogFactory.showError( "Failed to load preferences: " + re.getMessage() );
       setNodeTypes( getDefaultNodeTypes() );
     }
+
+    Preferences prefs = Preferences.userNodeForPackage( getClass() );
+    libraryPath = prefs.get( LIBRARY_PATH_KEY, null );
+    recurseLibrary = prefs.getBoolean( RECURSE_LIBRARY_KEY, false );
+
+
+    defaultNodeType = getTypeByName( prefs.get( DEFAULT_NODE_TYPE_KEY, "node" ) );
+    if ( defaultNodeType == null && nodeTypes != null && !nodeTypes.isEmpty() )
+    {
+      defaultNodeType = nodeTypes.get( 0 );
+    }
   }
 
   public boolean isFirstRun ()
@@ -89,7 +98,17 @@ public class EditorPreferences
 
   public EditorNodeType getDefaultNodeType ()
   {
-    return getTypeByName( "node" );
+    return defaultNodeType;
+  }
+
+  public String getLibraryPath ()
+  {
+    return libraryPath;
+  }
+
+  public boolean isRecurseLibrary ()
+  {
+    return recurseLibrary;
   }
 
   private void setNodeTypes (List<EditorNodeType> nodeTypes)
@@ -146,7 +165,8 @@ public class EditorPreferences
     parent.flush();
   }
 
-  public EditorNodeType loadNodeType (Preferences typeNode) throws BackingStoreException
+  public EditorNodeType loadNodeType (final Preferences typeNode)
+    throws BackingStoreException
   {
     String name = typeNode.get( NODE_TYPE_NAME, "<error loading type name>" );
     boolean allowCustom = typeNode.getBoolean( NODE_TYPE_ALLOW_CUSTOM, false );
@@ -174,8 +194,12 @@ public class EditorPreferences
     newNodeTypes.add( new EditorNodeType( "wait", true, emptyAttributes ) );
 
     List<EditorNodeTypeAttribute> attributes = new LinkedList<EditorNodeTypeAttribute>();
-    attributes.add( new EditorNodeTypeAttribute( "scriptType", "js", false ) );
-    attributes.add( new EditorNodeTypeAttribute( "script", "", true ) );
+    attributes.add( new EditorNodeTypeAttribute( "execute", "", true ) );
+    attributes.add( new EditorNodeTypeAttribute( "executeType", "js", false ) );
+    attributes.add( new EditorNodeTypeAttribute( "backtrack", "", true ) );
+    attributes.add( new EditorNodeTypeAttribute( "backtrackType", "js", false ) );
+
+    newNodeTypes.add( new EditorNodeType( "script", false, attributes ) );
 
     attributes = new LinkedList<EditorNodeTypeAttribute>();
     attributes.add( new EditorNodeTypeAttribute( "graphName", "", false ) );
@@ -189,7 +213,8 @@ public class EditorPreferences
     saveNodeTypes( getDefaultNodeTypes() );
   }
 
-  public void saveNodeTypes (List<EditorNodeType> newNodeTypes) throws BackingStoreException
+  public void saveNodeTypes (final List<EditorNodeType> newNodeTypes)
+    throws BackingStoreException
   {
     Preferences baseNode = Preferences.userNodeForPackage( getClass() );
     Preferences typesNode = baseNode.node( NODE_TYPES_KEY );
@@ -210,7 +235,9 @@ public class EditorPreferences
     baseNode.flush();
   }
 
-  private void persistNodeType (Preferences typesNode, String nodeName, EditorNodeType nodeType)
+  private void persistNodeType (final Preferences typesNode,
+                                final String nodeName,
+                                final EditorNodeType nodeType)
   {
     Preferences typeNode = typesNode.node( nodeName );
     typeNode.put( NODE_TYPE_NAME, nodeType.getName() );
@@ -228,5 +255,21 @@ public class EditorPreferences
       attrNode.putBoolean( NODE_TYPE_ATTR_USE_CDATA, attr.isUseCDATA() );
       count++;
     }
+  }
+
+  public void saveGeneralPreferences (final String newLibraryPath,
+                                      final boolean newRecurseLibrary,
+                                      final EditorNodeType newDefaultNodeType)
+    throws BackingStoreException
+  {
+    Preferences prefs = Preferences.userNodeForPackage( getClass() );
+    prefs.put( LIBRARY_PATH_KEY, newLibraryPath );
+    prefs.putBoolean( RECURSE_LIBRARY_KEY, newRecurseLibrary );
+    prefs.put( DEFAULT_NODE_TYPE_KEY, newDefaultNodeType.getName() );
+    prefs.flush();
+
+    this.libraryPath = newLibraryPath;
+    this.recurseLibrary = newRecurseLibrary;
+    this.defaultNodeType = newDefaultNodeType;
   }
 }

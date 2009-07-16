@@ -34,12 +34,12 @@ import com.googlecode.sarasvati.editor.model.EditorPreferences;
  *
  * @author paul
  */
-public class NodeTypePreferences extends BasePrefsPage {
+public class NodeTypePreferencesPanel extends BasePrefsPage {
 
     private static final long serialVersionUID = 1L;
 
     /** Creates new form NodeTypePreferences */
-    public NodeTypePreferences() {
+    public NodeTypePreferencesPanel() {
         initComponents();
     }
 
@@ -74,32 +74,32 @@ public class NodeTypePreferences extends BasePrefsPage {
         nodeTypeList.setPreferredSize(new java.awt.Dimension(200, 100));
         jScrollPane1.setViewportView(nodeTypeList);
 
-        jLabel1.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.jLabel1.text")); // NOI18N
+        jLabel1.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.jLabel1.text")); // NOI18N
 
-        nodeTypeNameInput.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.nodeTypeNameInput.text")); // NOI18N
+        nodeTypeNameInput.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.nodeTypeNameInput.text")); // NOI18N
 
-        jLabel2.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.jLabel2.text")); // NOI18N
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.jLabel2.text")); // NOI18N
 
-        jLabel3.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.jLabel3.text")); // NOI18N
+        jLabel3.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.jLabel3.text")); // NOI18N
 
-        jLabel4.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.jLabel4.text")); // NOI18N
+        jLabel4.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.jLabel4.text")); // NOI18N
 
         propertiesTable.setModel(getPropertiesTableModel());
         jScrollPane2.setViewportView(propertiesTable);
 
-        allowCustomInput.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.allowCustomInput.text")); // NOI18N
+        allowCustomInput.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.allowCustomInput.text")); // NOI18N
 
-        newTypeButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.newTypeButton.text")); // NOI18N
+        newTypeButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.newTypeButton.text")); // NOI18N
 
-        deleteTypeButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.deleteTypeButton.text")); // NOI18N
+        deleteTypeButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.deleteTypeButton.text")); // NOI18N
 
-        newPropertyButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.newPropertyButton.text")); // NOI18N
+        newPropertyButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.newPropertyButton.text")); // NOI18N
 
-        deletePropertyButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.deletePropertyButton.text")); // NOI18N
+        deletePropertyButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.deletePropertyButton.text")); // NOI18N
 
-        revertButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.revertButton.text")); // NOI18N
+        revertButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.revertButton.text")); // NOI18N
 
-        applyButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferences.class, "NodeTypePreferences.applyButton.text")); // NOI18N
+        applyButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.applyButton.text")); // NOI18N
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
@@ -363,7 +363,14 @@ public class NodeTypePreferences extends BasePrefsPage {
         @Override
         public void actionPerformed (ActionEvent e)
         {
-          reloadList();
+          if ( JOptionPane.YES_OPTION ==
+               JOptionPane.showConfirmDialog( NodeTypePreferencesPanel.this,
+                                              "Revert all changes?",
+                                              "Confirm",
+                                              JOptionPane.YES_NO_OPTION ) )
+          {
+            reloadList();
+          }
         }
       });
 
@@ -382,12 +389,12 @@ public class NodeTypePreferences extends BasePrefsPage {
           try
           {
             EditorPreferences.getInstance().saveNodeTypes( newNodeTypes );
-            JOptionPane.showMessageDialog( NodeTypePreferences.this, "Changes saved", "Info", JOptionPane.INFORMATION_MESSAGE );
+            JOptionPane.showMessageDialog( NodeTypePreferencesPanel.this, "Changes saved", "Info", JOptionPane.INFORMATION_MESSAGE );
           }
           catch (final BackingStoreException e)
           {
             e.printStackTrace();
-            JOptionPane.showMessageDialog( NodeTypePreferences.this,
+            JOptionPane.showMessageDialog( NodeTypePreferencesPanel.this,
                                            "Failed to save preferences: " + e.getMessage(),
                                            "Error", JOptionPane.ERROR_MESSAGE );
           }
