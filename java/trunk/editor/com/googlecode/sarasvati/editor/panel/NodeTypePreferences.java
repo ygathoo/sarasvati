@@ -13,10 +13,16 @@ package com.googlecode.sarasvati.editor.panel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.prefs.BackingStoreException;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JOptionPane;
 import javax.swing.ListModel;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
@@ -201,6 +207,7 @@ public class NodeTypePreferences extends BasePrefsPage {
 
     private final DefaultListModel nodeTypeListModel = new DefaultListModel();
     private final EditorNodeTypeTableModel propertiesTableModel = new EditorNodeTypeTableModel();
+    private final NameChangeListener nameChangeListener = new NameChangeListener();
 
     public ListModel getNodeTypeListModel ()
     {
@@ -212,15 +219,92 @@ public class NodeTypePreferences extends BasePrefsPage {
       return propertiesTableModel;
     }
 
+    protected class NameChangeListener implements DocumentListener
+    {
+      private int index;
+      private EditorNodeType nodeType;
+
+      /**
+       * @return the nodeType
+       */
+      public EditorNodeType getNodeType ()
+      {
+        return nodeType;
+      }
+
+      /**
+       * @param nodeType the nodeType to set
+       */
+      public void setNodeType (EditorNodeType nodeType)
+      {
+        this.nodeType = nodeType;
+      }
+
+      /**
+       * @return the index
+       */
+      public int getIndex ()
+      {
+        return index;
+      }
+
+      /**
+       * @param index the index to set
+       */
+      public void setIndex (int index)
+      {
+        this.index = index;
+      }
+
+      @Override
+      public void changedUpdate (DocumentEvent e)
+      {
+        nameUpdated();
+      }
+
+      @Override
+      public void insertUpdate (DocumentEvent e)
+      {
+        nameUpdated();
+      }
+
+      @Override
+      public void removeUpdate (DocumentEvent e)
+      {
+        nameUpdated();
+      }
+
+      public void nameUpdated ()
+      {
+        if ( nodeType != null )
+        {
+          nodeType.setName( nodeTypeNameInput.getText() );
+          nodeTypeListModel.set( index, nodeType );
+        }
+      }
+    }
+
+
     @Override
     public void setup ()
     {
       propertiesTable.putClientProperty( "terminateEditOnFocusLost", Boolean.TRUE );
 
-      for ( EditorNodeType nodeType :  EditorPreferences.getInstance().getNodeTypes() )
+      reloadList();
+
+      nodeTypeNameInput.getDocument().addDocumentListener( nameChangeListener );
+      allowCustomInput.addActionListener( new ActionListener()
       {
-        nodeTypeListModel.addElement( nodeType.copy() );
-      }
+        @Override
+        public void actionPerformed (ActionEvent e)
+        {
+          EditorNodeType nodeType = (EditorNodeType)nodeTypeList.getSelectedValue();
+          if ( nodeType != null )
+          {
+            nodeType.setAllowNonSpecifiedAttributes( allowCustomInput.isSelected() );
+          }
+        }
+      });
 
       nodeTypeList.getSelectionModel().addListSelectionListener( new ListSelectionListener()
       {
@@ -279,18 +363,51 @@ public class NodeTypePreferences extends BasePrefsPage {
         @Override
         public void actionPerformed (ActionEvent e)
         {
-          nodeTypeListModel.removeAllElements();
-          for ( EditorNodeType nodeType :  EditorPreferences.getInstance().getNodeTypes() )
+          reloadList();
+        }
+      });
+
+      applyButton.addActionListener( new ActionListener()
+      {
+        @Override
+        public void actionPerformed (final ActionEvent event)
+        {
+          List<EditorNodeType> newNodeTypes = new ArrayList<EditorNodeType>( nodeTypeListModel.size() );
+
+          for ( int i = 0; i < nodeTypeListModel.size(); i++ )
           {
-            nodeTypeListModel.addElement( nodeType.copy() );
+            newNodeTypes.add( (EditorNodeType)nodeTypeListModel.get( i ) );
+          }
+
+          try
+          {
+            EditorPreferences.getInstance().saveNodeTypes( newNodeTypes );
+            JOptionPane.showMessageDialog( NodeTypePreferences.this, "Changes saved", "Info", JOptionPane.INFORMATION_MESSAGE );
+          }
+          catch (final BackingStoreException e)
+          {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog( NodeTypePreferences.this,
+                                           "Failed to save preferences: " + e.getMessage(),
+                                           "Error", JOptionPane.ERROR_MESSAGE );
           }
         }
       });
     }
 
+    public void reloadList ()
+    {
+      nodeTypeListModel.removeAllElements();
+      for ( EditorNodeType nodeType :  EditorPreferences.getInstance().getNodeTypes() )
+      {
+        nodeTypeListModel.addElement( nodeType.copy() );
+      }
+    }
+
     @Override
     public void displayPage ()
     {
+      reloadList();
       clearEdit ();
     }
 
@@ -311,9 +428,12 @@ public class NodeTypePreferences extends BasePrefsPage {
 
     public void editType (EditorNodeType nodeType)
     {
+      propertiesTableModel.setNodeType( nodeType );
+      nameChangeListener.setIndex( nodeTypeList.getSelectedIndex() );
+      nameChangeListener.setNodeType( nodeType );
+
       nodeTypeNameInput.setText( nodeType.getName() );
       allowCustomInput.setSelected( nodeType.isAllowNonSpecifiedAttributes() );
-      propertiesTableModel.setNodeType( nodeType );
     }
 
     protected void ensureEnabled ()
@@ -332,10 +452,11 @@ public class NodeTypePreferences extends BasePrefsPage {
 
     public void clearEdit ()
     {
+      propertiesTableModel.setNodeType( null );
+      nameChangeListener.setNodeType( null );
+
       nodeTypeNameInput.setText( "" );
       allowCustomInput.setSelected( false );
-
-      propertiesTableModel.setNodeType( null );
 
       nodeTypeNameInput.setEnabled( false );
       allowCustomInput.setEnabled( false );

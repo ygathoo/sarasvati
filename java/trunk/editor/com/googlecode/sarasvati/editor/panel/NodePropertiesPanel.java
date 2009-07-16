@@ -34,6 +34,8 @@ import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.EditorNode;
+import com.googlecode.sarasvati.editor.model.EditorNodeType;
+import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.NodeState;
 import com.googlecode.sarasvati.util.SvUtil;
 
@@ -266,7 +268,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
     public ComboBoxModel getNodeTypesModel ()
     {
-      return new DefaultComboBoxModel( new String[] { "node", "wait", "script", "nested", "task" } );
+      return new DefaultComboBoxModel( EditorPreferences.getInstance().getNodeTypes().toArray() );
     }
 
     public ComboBoxModel getJoinTypesModel ()
@@ -279,7 +281,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
       return tableModel;
     }
 
-    private final DefaultTableModel tableModel = new DefaultTableModel( new String[] { "name", "value" }, 0 );
+    private final DefaultTableModel tableModel = new DefaultTableModel( new String[] { "Name", "Value" }, 0 );
 
     public void setup (final JDialog dialog,
                        final EditorNode node)
@@ -309,7 +311,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
           NodeState newState =
             new NodeState( nodeNameInput.getText(),
-                           (String)nodeTypeInput.getSelectedItem(),
+                           (EditorNodeType)nodeTypeInput.getSelectedItem(),
                            (JoinType)joinTypeInput.getSelectedItem(),
                            joinParamInput.getText(),
                            startNodeInput.isSelected(),

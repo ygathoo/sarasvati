@@ -43,8 +43,8 @@ import org.netbeans.api.visual.widget.Widget;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.action.ArcPropertiesAction;
 import com.googlecode.sarasvati.editor.action.ConnectAction;
-import com.googlecode.sarasvati.editor.action.MoveTrackAction;
 import com.googlecode.sarasvati.editor.action.GraphMemberPropertiesAction;
+import com.googlecode.sarasvati.editor.action.MoveTrackAction;
 import com.googlecode.sarasvati.editor.action.SceneAddExternalAction;
 import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.AutoLayoutCommand;
@@ -154,7 +154,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     if ( node instanceof EditorNode )
     {
       join = ((EditorNode)node).getState().getJoinType() != JoinType.OR;
-      isTask = "task".equalsIgnoreCase( ((EditorNode)node).getState().getType() );
+      isTask = "task".equalsIgnoreCase( ((EditorNode)node).getState().getType().getName() );
     }
 
     return isTask ? new TaskIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join  ) :
