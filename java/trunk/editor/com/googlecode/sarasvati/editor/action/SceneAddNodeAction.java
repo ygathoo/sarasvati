@@ -27,6 +27,8 @@ import org.netbeans.api.visual.widget.Widget;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.EditorNode;
+import com.googlecode.sarasvati.editor.model.EditorNodeType;
+import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 import com.googlecode.sarasvati.editor.model.NodeState;
 
@@ -51,7 +53,8 @@ public class SceneAddNodeAction extends WidgetAction.Adapter
 
     if ( event.getButton() == MouseEvent.BUTTON1 )
     {
-      NodeState state = new NodeState( "New Node", "node", JoinType.OR, null, false, null, null );
+      EditorNodeType type = EditorPreferences.getInstance().getDefaultNodeType();
+      NodeState state = new NodeState( "New Node", type, JoinType.OR, null, false, null, null );
       EditorNode node = new EditorNode( state );
 
       EditorScene scene = (EditorScene)widget.getScene();

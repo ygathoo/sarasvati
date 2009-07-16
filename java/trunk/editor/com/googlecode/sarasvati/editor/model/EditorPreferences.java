@@ -19,8 +19,10 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
@@ -51,6 +53,7 @@ public class EditorPreferences
 
   protected boolean recurseLibrary;
 
+  protected Map<String,EditorNodeType> typesByName = new HashMap<String, EditorNodeType>();
   protected List<EditorNodeType> nodeTypes;
 
   protected boolean firstRun = false;
@@ -69,13 +72,13 @@ public class EditorPreferences
     {
       bse.printStackTrace();
       DialogFactory.showError( "Failed to load preferences: " + bse.getMessage() );
-      nodeTypes = getDefaultNodeTypes();
+      setNodeTypes( getDefaultNodeTypes() );
     }
     catch ( RuntimeException re )
     {
       re.printStackTrace();
       DialogFactory.showError( "Failed to load preferences: " + re.getMessage() );
-      nodeTypes = getDefaultNodeTypes();
+      setNodeTypes( getDefaultNodeTypes() );
     }
   }
 
@@ -84,9 +87,31 @@ public class EditorPreferences
     return firstRun;
   }
 
+  public EditorNodeType getDefaultNodeType ()
+  {
+    return getTypeByName( "node" );
+  }
+
+  private void setNodeTypes (List<EditorNodeType> nodeTypes)
+  {
+    this.nodeTypes = nodeTypes;
+
+    typesByName.clear();
+
+    for ( EditorNodeType type : nodeTypes )
+    {
+      typesByName.put( type.getName(), type );
+    }
+  }
+
   public List<EditorNodeType> getNodeTypes ()
   {
     return nodeTypes;
+  }
+
+  public EditorNodeType getTypeByName (String name)
+  {
+    return typesByName.get( name );
   }
 
   public void loadNodeTypes () throws BackingStoreException
@@ -109,9 +134,8 @@ public class EditorPreferences
       {
         newNodeTypes.add( loadNodeType( typesNode.node( nodeType ) ) );
       }
+      setNodeTypes( newNodeTypes );
     }
-
-    nodeTypes = newNodeTypes;
   }
 
   public void clearPreferences () throws BackingStoreException
@@ -153,7 +177,10 @@ public class EditorPreferences
     attributes.add( new EditorNodeTypeAttribute( "scriptType", "js", false ) );
     attributes.add( new EditorNodeTypeAttribute( "script", "", true ) );
 
-    newNodeTypes.add( new EditorNodeType( "script", false, attributes ) );
+    attributes = new LinkedList<EditorNodeTypeAttribute>();
+    attributes.add( new EditorNodeTypeAttribute( "graphName", "", false ) );
+
+    newNodeTypes.add( new EditorNodeType( "nested", false, attributes ) );
     return newNodeTypes;
   }
 
@@ -177,7 +204,8 @@ public class EditorPreferences
       persistNodeType( typesNode, "nodeType" + count, nodeType );
       count++;
     }
-    nodeTypes = newNodeTypes;
+
+    setNodeTypes( newNodeTypes );
 
     baseNode.flush();
   }

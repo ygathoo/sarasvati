@@ -19,10 +19,12 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.definition.ArcDefinition;
@@ -45,6 +47,7 @@ public class EditorGraphFactory
 {
   public static EditorGraph loadFromXml (ProcessDefinition procDef) throws LoadException
   {
+    EditorPreferences editorPrefs = EditorPreferences.getInstance();
     EditorGraph graph = new EditorGraph();
     graph.setName( procDef.getName() );
 
@@ -58,7 +61,7 @@ public class EditorGraphFactory
       DOMToObjectLoadHelper.loadCustomIntoMap( custom, customProperties );
 
       NodeState nodeState = new NodeState( nodeDef.getName(),
-                                           nodeDef.getType(),
+                                           editorPrefs.getTypeByName( nodeDef.getType() ),
                                            nodeDef.getJoinType(),
                                            nodeDef.getJoinParam(),
                                            nodeDef.isStart(),
@@ -165,7 +168,7 @@ public class EditorGraphFactory
       XmlNode xmlNode = new XmlNode();
       NodeState state = node.getState();
       xmlNode.setName( state.getName() );
-      xmlNode.setType( state.getType() );
+      xmlNode.setType( state.getType().getName() );
       xmlNode.setGuard( SvUtil.nullIfBlank( state.getGuard() ) );
       xmlNode.setJoinType( XmlJoinType.getXmlJoinType( state.getJoinType() ) );
 
@@ -177,7 +180,8 @@ public class EditorGraphFactory
       xmlNode.setX( node.getX() );
       xmlNode.setY( node.getY() );
 
-      List<Object> customList = DOMToObjectLoadHelper.mapToDOM( state.getCustomProperties() );
+      List<Object> customList = DOMToObjectLoadHelper.mapToDOM( state.getCustomProperties(),
+                                                                state.getType().getCDataTypes() );
 
       if ( !customList.isEmpty() )
       {
@@ -199,7 +203,8 @@ public class EditorGraphFactory
       xmlExternal.setX( external.getX() );
       xmlExternal.setY( external.getY() );
 
-      List<Object> customList = DOMToObjectLoadHelper.mapToDOM( state.getCustomProperties() );
+      Set<String> emptySet = Collections.emptySet();
+      List<Object> customList = DOMToObjectLoadHelper.mapToDOM( state.getCustomProperties(), emptySet );
 
       if ( !customList.isEmpty() )
       {

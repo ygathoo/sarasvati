@@ -28,6 +28,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -207,7 +208,9 @@ public class DOMToObjectLoadHelper
     }
   }
 
-  public static List<Object> mapToDOM (Map<String, String> properties) throws IOException
+  public static List<Object> mapToDOM (final Map<String, String> properties,
+                                       final Set<String> cdataTypes)
+    throws IOException
   {
     Document doc = null;
 
@@ -229,7 +232,7 @@ public class DOMToObjectLoadHelper
 
     Map<String, Element> elemMap = new HashMap<String,Element>();
 
-    for ( Map.Entry<String, String> entry : properties.entrySet() )
+    for ( final Map.Entry<String, String> entry : properties.entrySet() )
     {
       Element parentElement = null;
       String key = entry.getKey();
@@ -276,7 +279,16 @@ public class DOMToObjectLoadHelper
       }
 
       Element element = doc.createElement( name );
-      element.appendChild( doc.createTextNode( entry.getValue() ) );
+
+      if ( cdataTypes.contains( entry.getKey() ) )
+      {
+        element.appendChild( doc.createCDATASection( entry.getValue() ) );
+      }
+      else
+      {
+        element.appendChild( doc.createTextNode( entry.getValue() ) );
+      }
+
       if ( parentElement != null )
       {
         parentElement.appendChild( element );

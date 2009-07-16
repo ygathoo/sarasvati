@@ -18,13 +18,15 @@
  */
 package com.googlecode.sarasvati.editor.model;
 
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
 
 public class EditorNodeType
 {
-  private final String name;
-  private final boolean allowNonSpecifiedAttributes;
+  private String name;
+  private boolean allowNonSpecifiedAttributes;
   private final List<EditorNodeTypeAttribute> attributes;
 
   public EditorNodeType (final String name,
@@ -72,6 +74,37 @@ public class EditorNodeType
   public String toString ()
   {
     return name;
+  }
+
+
+  /**
+   * @param name the name to set
+   */
+  public void setName (String name)
+  {
+    this.name = name;
+  }
+
+  /**
+   * @param allowNonSpecifiedAttributes the allowNonSpecifiedAttributes to set
+   */
+  public void setAllowNonSpecifiedAttributes (boolean allowNonSpecifiedAttributes)
+  {
+    this.allowNonSpecifiedAttributes = allowNonSpecifiedAttributes;
+  }
+
+  public Set<String> getCDataTypes ()
+  {
+    Set<String> set = new HashSet<String>();
+
+    for ( EditorNodeTypeAttribute attr : attributes )
+    {
+      if ( attr.isUseCDATA() )
+      {
+        set.add( attr.getName() );
+      }
+    }
+    return set;
   }
 
   public EditorNodeType copy ()
