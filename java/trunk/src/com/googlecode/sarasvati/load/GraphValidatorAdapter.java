@@ -68,7 +68,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateArcDefinition (ArcDefinition xmlArc) throws LoadException
+  public void validateArcDefinition (ArcDefinition arcDefinition) throws LoadException
   {
     // Does nothing
   }
@@ -77,7 +77,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateExternalDefinition (ExternalDefinition xmlExternal)
+  public void validateExternalDefinition (ExternalDefinition externalDefinition)
       throws LoadException
   {
     // Does nothing
@@ -97,7 +97,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateNodeDefinition (NodeDefinition xmlNode) throws LoadException
+  public void validateNodeDefinition (NodeDefinition nodeDefinition) throws LoadException
   {
     // Does nothing
   }
@@ -106,7 +106,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateProcessDefinition (ProcessDefinition xmlProcessDefinition)
+  public void validateProcessDefinition (ProcessDefinition processDefinition)
     throws LoadException
   {
     // Does nothing
