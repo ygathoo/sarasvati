@@ -108,6 +108,7 @@ public class CommandStack
   public boolean isSaved ()
   {
     return commandStack.isEmpty() ||
+           currentIndex < 0 ||
            ( currentIndex >= 0 && commandStack.get( currentIndex ) == lastSavedCommand);
   }
 
