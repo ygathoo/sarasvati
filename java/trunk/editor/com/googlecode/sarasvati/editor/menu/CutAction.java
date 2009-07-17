@@ -28,27 +28,26 @@ import javax.swing.KeyStroke;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
 
-public class SaveAction extends AbstractAction
+public class CutAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  private final boolean isSaveAs;
-
-  public SaveAction (boolean isSaveAs)
+  public CutAction ()
   {
-    super( isSaveAs ? "Save As.." : "Save" );
-    this.isSaveAs = isSaveAs;
+    super( "Cut" );
 
-    if ( !isSaveAs )
-    {
-      putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK ) );
-      putValue( Action.MNEMONIC_KEY, KeyEvent.VK_S );
-    }
+    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_X, InputEvent.CTRL_DOWN_MASK ) );
+    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_T );
   }
 
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    GraphEditor.getInstance().saveRequested( isSaveAs );
+    GraphEditor.getInstance().editCut();
+  }
+
+  public void setName (String name)
+  {
+    putValue( Action.NAME, name );
   }
 }

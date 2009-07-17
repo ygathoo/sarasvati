@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.editor.menu;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
@@ -35,7 +36,7 @@ public class NewGraphAction extends AbstractAction
   {
     super( "New Process Definition" );
 
-    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_N, KeyEvent.CTRL_MASK ) );
+    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_N, InputEvent.CTRL_DOWN_MASK ) );
     putValue( Action.MNEMONIC_KEY, KeyEvent.VK_N );
   }
 

@@ -21,19 +21,28 @@ package com.googlecode.sarasvati.editor.model;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
-import javax.swing.Icon;
 import javax.swing.JLabel;
 
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.action.ConnectProvider;
 import org.netbeans.api.visual.action.ConnectorState;
+import org.netbeans.api.visual.action.MoveProvider;
 import org.netbeans.api.visual.action.ReconnectProvider;
+import org.netbeans.api.visual.action.SelectProvider;
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.anchor.PointShape;
 import org.netbeans.api.visual.layout.LayoutFactory.ConnectionWidgetLayoutAlignment;
+import org.netbeans.api.visual.model.ObjectSceneEvent;
+import org.netbeans.api.visual.model.ObjectSceneEventType;
 import org.netbeans.api.visual.widget.ComponentWidget;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.LabelWidget;
@@ -41,20 +50,30 @@ import org.netbeans.api.visual.widget.Scene;
 import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.JoinType;
+import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.action.ArcPropertiesAction;
+import com.googlecode.sarasvati.editor.action.ArcSelectAction;
 import com.googlecode.sarasvati.editor.action.ConnectAction;
+import com.googlecode.sarasvati.editor.action.GraphMemberMoveAction;
 import com.googlecode.sarasvati.editor.action.GraphMemberPropertiesAction;
+import com.googlecode.sarasvati.editor.action.GraphMemberSelectAction;
 import com.googlecode.sarasvati.editor.action.MoveTrackAction;
+import com.googlecode.sarasvati.editor.action.ObjectSceneListenerAdapter;
 import com.googlecode.sarasvati.editor.action.SceneAddExternalAction;
 import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
-import com.googlecode.sarasvati.editor.command.AutoLayoutCommand;
 import com.googlecode.sarasvati.editor.command.Command;
 import com.googlecode.sarasvati.editor.command.CommandStack;
+import com.googlecode.sarasvati.editor.command.DeleteArcCommand;
+import com.googlecode.sarasvati.editor.command.DeleteExternalCommand;
+import com.googlecode.sarasvati.editor.command.DeleteNodeCommand;
 import com.googlecode.sarasvati.editor.command.MoveGraphMemberCommand;
+import com.googlecode.sarasvati.editor.command.MultiCommand;
+import com.googlecode.sarasvati.editor.command.MultiDeleteCommand;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
 import com.googlecode.sarasvati.visual.graph.GraphLayoutNode;
+import com.googlecode.sarasvati.visual.icon.AbstractNodeIcon;
 import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
 import com.googlecode.sarasvati.visual.icon.TaskIcon;
 
@@ -65,14 +84,22 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   protected final CommandStack commandStack;
   protected final EditorGraph graph;
 
-  private final WidgetAction moveAction = new MoveTrackAction( ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null ) );
+
+  private final WidgetAction singleMoveAction = new MoveTrackAction( ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null ) );
+  private final WidgetAction multiMoveAction = ActionFactory.createMoveAction( null, new MultiMoveProvider() );
+
+  private final GraphMemberMoveAction moveAction = new GraphMemberMoveAction( singleMoveAction );
+
   private final WidgetAction connectAction = new ConnectAction( ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() ) );
   private final WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
 
   private final WidgetAction graphMemberPropertiesAction = new GraphMemberPropertiesAction();
   private final WidgetAction arcPropertiesAction = new ArcPropertiesAction();
 
-  private boolean loading = true;
+  private final WidgetAction arcSelectAction = new ArcSelectAction( createSelectAction() );
+  private final WidgetAction graphMemberSelectAction = new GraphMemberSelectAction( createSelectAction() );
+
+  private boolean offsetAddedNodes = false;
 
   public EditorScene (EditorGraph graph)
   {
@@ -81,6 +108,21 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
     getActions().addAction( SceneAddNodeAction.INSTANCE );
     getActions().addAction( SceneAddExternalAction.INSTANCE );
+    getActions().addAction( ActionFactory.createRectangularSelectAction( this, this.mainLayer ) );
+
+    addObjectSceneListener( new ObjectSceneListenerAdapter()
+    {
+      @Override
+      public void selectionChanged (final ObjectSceneEvent event,
+                                    final Set<Object> previousSelection,
+                                    final Set<Object> newSelection)
+      {
+        setGraphMemberSelection( previousSelection, false );
+        setGraphMemberSelection( newSelection, true );
+        GraphEditor.getInstance().updateCutCopyPaste( EditorScene.this );
+      }
+    },
+    ObjectSceneEventType.OBJECT_SELECTION_CHANGED );
 
     for ( EditorGraphMember<?> member : graph.getNodes() )
     {
@@ -99,7 +141,29 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       setEdgeTarget( arc, arc.getEnd() );
     }
 
-    loading = false;
+    offsetAddedNodes = true;
+  }
+
+  public void setGraphMemberSelection (Set<Object> selection, boolean selected)
+  {
+    int count = 0;
+    for ( Object obj : selection )
+    {
+      if ( obj instanceof EditorGraphMember )
+      {
+        ((EditorGraphMember<?>)obj).setSelected( selected );
+        count++;
+      }
+    }
+
+    if ( selected && count > 1 )
+    {
+      moveAction.setAction( multiMoveAction );
+    }
+    else
+    {
+      moveAction.setAction( singleMoveAction );
+    }
   }
 
   public CommandStack getCommandStack ()
@@ -112,13 +176,74 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     return graph;
   }
 
+  public void editCut ()
+  {
+    removeSelected( "Cut" );
+  }
+
+  public void editDelete ()
+  {
+    removeSelected( "Delete" );
+  }
+
+  public boolean isOffsetAddedNodes ()
+  {
+    return offsetAddedNodes;
+  }
+
+  public void setOffsetAddedNodes (boolean offsetAddedNodes)
+  {
+    this.offsetAddedNodes = offsetAddedNodes;
+  }
+
+  public void removeSelected (final String action)
+  {
+    Set<?> selected = getSelectedObjects();
+    List<Command> commands = new ArrayList<Command>( selected.size() );
+
+    Set<EditorArc> arcs = new HashSet<EditorArc>();
+
+    for ( Object obj : getSelectedObjects() )
+    {
+      if ( obj instanceof EditorNode )
+      {
+        commands.add( new DeleteNodeCommand( action, this, (EditorNode)obj ) );
+      }
+      else if ( obj instanceof EditorExternal )
+      {
+        commands.add( new DeleteExternalCommand( action, this, (EditorExternal)obj ) );
+      }
+      else if ( obj instanceof EditorArc )
+      {
+        EditorArc arc = (EditorArc)obj;
+        commands.add( new DeleteArcCommand( this, arc ) );
+        arcs.add( arc );
+      }
+    }
+
+    for ( EditorArc arc : graph.getArcs() )
+    {
+      if ( !arcs.contains( arc ) &&
+           (selected.contains( arc.getStart() ) ||
+            selected.contains( arc.getEnd() ) ) )
+      {
+        commands.add( new DeleteArcCommand( this, arc ) );
+        arcs.add( arc );
+      }
+    }
+
+    Collections.sort( commands );
+
+    CommandStack.pushAndPerform( new MultiDeleteCommand( action, this, commands ) );
+  }
+
   @Override
-  protected PathTrackingConnectionWidget attachEdgeWidget (EditorArc arc)
+  protected PathTrackingConnectionWidget attachEdgeWidget (final EditorArc arc)
   {
     final PathTrackingConnectionWidget widget = super.attachEdgeWidget( arc );
     widget.setEndPointShape (PointShape.SQUARE_FILLED_BIG);
     widget.getActions().addAction( createObjectHoverAction() );
-    widget.getActions().addAction( createSelectAction() );
+    widget.getActions().addAction( arcSelectAction );
     widget.getActions().addAction( reconnectAction );
     widget.getActions().addAction( arcPropertiesAction );
 
@@ -142,14 +267,17 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   }
 
   // TODO: Add drop-down in node type preferences for icon
-  protected Icon getIconForMember (final EditorGraphMember<?> node)
+  protected AbstractNodeIcon getIconForMember (final EditorGraphMember<?> node)
   {
     boolean join = false;
     boolean isTask = false;
 
     if ( node instanceof EditorExternal )
     {
-      return new DefaultNodeIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_SKIPPED, false );
+      return new DefaultNodeIcon( node.getState().getName(),
+                                  NodeDrawConfig.NODE_BG_SKIPPED,
+                                  false,
+                                  node.isSelected() );
     }
 
     if ( node instanceof EditorNode )
@@ -159,40 +287,47 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       isTask = "task".equalsIgnoreCase( typeName ) || "activity".equalsIgnoreCase( typeName );
     }
 
-    return isTask ? new TaskIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join  ) :
-                    new DefaultNodeIcon( node.getState().getName(), NodeDrawConfig.NODE_BG_COMPLETED, join );
+    return isTask ? new TaskIcon( node.getState().getName(),
+                                  NodeDrawConfig.NODE_BG_COMPLETED,
+                                  join,
+                                  node.isSelected() ) :
+                    new DefaultNodeIcon( node.getState().getName(),
+                                         NodeDrawConfig.NODE_BG_COMPLETED,
+                                         join,
+                                         node.isSelected() );
 
   }
 
   @Override
-  protected Widget widgetForNode (final EditorGraphMember<?> node)
+  protected Widget widgetForNode (final EditorGraphMember<?> graphMember)
   {
-    final Icon icon = getIconForMember( node );
+    final AbstractNodeIcon icon = getIconForMember( graphMember );
 
     final JLabel label = new JLabel( icon );
     final ComponentWidget widget = new ComponentWidget( this, label );
 
-    if ( !loading )
+    if ( offsetAddedNodes )
     {
       int xOffset = icon.getIconWidth() >> 1;
       int yOffset = icon.getIconHeight() >> 1;
 
-      node.setX( node.getX() - xOffset );
-      node.setY( node.getY() - yOffset );
+      graphMember.setX( graphMember.getX() - xOffset );
+      graphMember.setY( graphMember.getY() - yOffset );
     }
 
-    widget.setPreferredLocation( node.getOrigin() );
+    widget.setPreferredLocation( graphMember.getOrigin() );
 
+    widget.getActions().addAction( graphMemberSelectAction );
     widget.getActions().addAction( graphMemberPropertiesAction );
     widget.getActions().addAction( moveAction );
     widget.getActions().addAction( connectAction );
 
-    node.addListener( new ModelListener<EditorGraphMember<?>> ()
+    graphMember.addListener( new ModelListener<EditorGraphMember<?>> ()
     {
       @Override
       public void modelChanged (EditorGraphMember<?> modelInstance)
       {
-        label.setIcon( getIconForMember( node ) );
+        label.setIcon( getIconForMember( graphMember ) );
       }
     });
 
@@ -329,6 +464,96 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       commands.add( new MoveGraphMemberCommand( this, member, member.getOrigin(), newOrigin ) );
     }
 
-    CommandStack.pushAndPerform( new AutoLayoutCommand( this, commands ) );
+    CommandStack.pushAndPerform( new MultiCommand( "Auto-Layout", this, commands ) );
+  }
+
+  public class EditorSelectProvider implements SelectProvider
+  {
+    @Override
+    public boolean isAimingAllowed (Widget widget, Point localLocation, boolean invertSelection)
+    {
+      return true;
+    }
+
+    @Override
+    public boolean isSelectionAllowed (Widget widget, Point localLocation, boolean invertSelection)
+    {
+      return true;
+    }
+
+    @Override
+    public void select (Widget widget, Point localLocation, boolean invertSelection)
+    {
+      if ( invertSelection )
+      {
+        System.out.println( "Deselected: " + findObject( widget ) );
+      }
+      else
+      {
+        System.out.println( "Selected: " + findObject( widget  ) );
+      }
+    }
+  }
+
+  private class MultiMoveProvider implements MoveProvider
+  {
+    private Map<Widget, Point> originals = new HashMap<Widget, Point>();
+    private Point              original;
+
+    public void movementStarted (Widget widget)
+    {
+      Object object = findObject( widget );
+      if ( isNode( object ) )
+      {
+        for ( Object o : getSelectedObjects() )
+        {
+          if ( isNode( o ) )
+          {
+            Widget w = findWidget( o );
+            if ( w != null ) originals.put( w, w.getPreferredLocation() );
+          }
+        }
+      }
+      else
+      {
+        originals.put( widget, widget.getPreferredLocation() );
+      }
+    }
+
+    public void movementFinished (Widget widget)
+    {
+      List<Command> commands = new ArrayList<Command>( originals.size() );
+      for ( Map.Entry<Widget, Point> entry : originals.entrySet() )
+      {
+        Point startLocation = new Point( entry.getValue() );
+        Point endLocation   = new Point( entry.getKey().getLocation() );
+
+        EditorGraphMember<?> member = (EditorGraphMember<?>) findObject( entry.getKey() );
+        member.setOrigin( endLocation );
+        commands.add( new MoveGraphMemberCommand( EditorScene.this, member, startLocation, endLocation ) );
+      }
+
+      commandStack.pushCommand( new MultiCommand( "Move", EditorScene.this, commands ) );
+
+      originals.clear();
+      original = null;
+    }
+
+    public Point getOriginalLocation (Widget widget)
+    {
+      original = widget.getPreferredLocation();
+      return original;
+    }
+
+    public void setNewLocation (Widget widget, Point location)
+    {
+      int dx = location.x - original.x;
+      int dy = location.y - original.y;
+      for ( Map.Entry<Widget, Point> entry : originals.entrySet() )
+      {
+        Point point = entry.getValue();
+        entry.getKey().setPreferredLocation( new Point( point.x + dx, point.y + dy ) );
+      }
+    }
   }
 }

@@ -50,12 +50,16 @@ import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import com.googlecode.sarasvati.editor.action.ArcSelectAction;
 import com.googlecode.sarasvati.editor.action.ConnectAction;
-import com.googlecode.sarasvati.editor.action.MoveTrackAction;
+import com.googlecode.sarasvati.editor.action.GraphMemberMoveAction;
+import com.googlecode.sarasvati.editor.action.GraphMemberSelectAction;
 import com.googlecode.sarasvati.editor.action.SceneAddExternalAction;
 import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
+import com.googlecode.sarasvati.editor.menu.CutAction;
+import com.googlecode.sarasvati.editor.menu.DeleteAction;
 import com.googlecode.sarasvati.editor.menu.ExitAction;
 import com.googlecode.sarasvati.editor.menu.NewGraphAction;
 import com.googlecode.sarasvati.editor.menu.OpenAction;
@@ -113,10 +117,13 @@ public class GraphEditor
   protected JToggleButton addNodesButton;
   protected JToggleButton addExternalsButton;
 
-  protected SaveAction saveAction;
-  protected SaveAction saveAsAction;
-  protected UndoAction undoAction;
-  protected RedoAction redoAction;
+  protected SaveAction    saveAction;
+  protected SaveAction    saveAsAction;
+
+  protected DeleteAction  deleteAction;
+  protected CutAction     cutAction;
+  protected UndoAction    undoAction;
+  protected RedoAction    redoAction;
 
   protected EditorMode  mode;
   protected File        lastFile;
@@ -144,10 +151,12 @@ public class GraphEditor
       return;
     }
 
-    MoveTrackAction.setEnabled( false );
+    GraphMemberMoveAction.setEnabled( false );
     SceneAddNodeAction.setEnabled( false );
     SceneAddExternalAction.setEnabled( false );
     ConnectAction.setEnabled( false );
+    ArcSelectAction.setEnabled( false );
+    GraphMemberSelectAction.setEnabled( false );
 
     moveButton.setSelected( false );
     addNodesButton.setSelected( false );
@@ -167,11 +176,15 @@ public class GraphEditor
     else if ( mode == EditorMode.EditArcs )
     {
       ConnectAction.setEnabled( true );
+      ArcSelectAction.setEnabled( true );
       editArcsButton.setSelected( true );
+
     }
     else if ( mode == EditorMode.Move )
     {
-      MoveTrackAction.setEnabled( true );
+      GraphMemberMoveAction.setEnabled( true );
+      GraphMemberSelectAction.setEnabled( true );
+      ArcSelectAction.setEnabled( true );
       moveButton.setSelected( true );
     }
 
@@ -328,9 +341,13 @@ public class GraphEditor
     JMenu editMenu = new JMenu( "Edit" );
     editMenu.setMnemonic( KeyEvent.VK_E );
 
+    deleteAction = new DeleteAction();
+    cutAction = new CutAction();
     undoAction = new UndoAction();
     redoAction = new RedoAction();
 
+    editMenu.add( new JMenuItem( deleteAction ) );
+    editMenu.add( new JMenuItem( cutAction ) );
     editMenu.add( new JMenuItem( undoAction ) );
     editMenu.add( new JMenuItem( redoAction ) );
     editMenu.add( new JMenuItem( new PreferencesAction() ) );
@@ -508,10 +525,10 @@ public class GraphEditor
   {
     EditorScene current = getCurrentScene();
     CommandStack.setCurrent( current == null ? null : current.getCommandStack() );
-    updateUndoRedoSave();
+    updateMenu();
   }
 
-  public void updateUndoRedoSave ()
+  public void updateMenu ()
   {
     CommandStack currentCommandStack = CommandStack.getCurrent();
 
@@ -566,6 +583,25 @@ public class GraphEditor
       saveAction.setEnabled( false );
       saveAsAction.setEnabled( false );
     }
+
+    updateCutCopyPaste();
+  }
+
+  public void updateCutCopyPaste ()
+  {
+    EditorScene scene = getCurrentScene();
+    if (scene == null )
+    {
+      deleteAction.setEnabled( false );
+      cutAction.setEnabled( false );
+    }
+  }
+
+  public void updateCutCopyPaste (EditorScene scene)
+  {
+    boolean hasSelection = !scene.getSelectedObjects().isEmpty();
+    deleteAction.setEnabled( hasSelection );
+    cutAction.setEnabled( hasSelection );
   }
 
   private void updateTabTitle (int index, String label)
@@ -660,5 +696,23 @@ public class GraphEditor
         graphEditor.setup();
       }
     });
+  }
+
+  public void editCut ()
+  {
+    EditorScene scene = getCurrentScene();
+    if ( scene != null )
+    {
+      scene.editCut();
+    }
+  }
+
+  public void editDelete ()
+  {
+    EditorScene scene = getCurrentScene();
+    if ( scene != null )
+    {
+      scene.editDelete();
+    }
   }
 }

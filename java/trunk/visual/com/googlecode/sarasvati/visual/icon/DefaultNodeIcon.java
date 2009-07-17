@@ -35,6 +35,7 @@ public class DefaultNodeIcon extends AbstractNodeIcon
   protected boolean isJoin;
   protected String label;
   protected Color color;
+  protected boolean isSelected;
 
   public DefaultNodeIcon (Node node, NodeToken token)
   {
@@ -48,11 +49,12 @@ public class DefaultNodeIcon extends AbstractNodeIcon
     redrawImage();
   }
 
-  public DefaultNodeIcon (String label, Color color, boolean isJoin)
+  public DefaultNodeIcon (String label, Color color, boolean isJoin, boolean isSelected)
   {
     this.label = label;
     this.color = color;
     this.isJoin = isJoin;
+    this.isSelected = isSelected;
     redrawImage();
   }
 
@@ -65,7 +67,14 @@ public class DefaultNodeIcon extends AbstractNodeIcon
     g.fillOval( 0, 0, WIDTH - 1, HEIGHT - 1 );
 
     //g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER : NodeDrawConfig.NODE_BORDER);
-    g.setColor( NodeDrawConfig.NODE_BORDER);
+    if ( isSelected )
+    {
+      g.setColor( NodeDrawConfig.NODE_BORDER_SELECTED );
+    }
+    else
+    {
+      g.setColor( NodeDrawConfig.NODE_BORDER );
+    }
 
     float[] dashes = isJoin ? new float[] { 10, 5 } : null;
 

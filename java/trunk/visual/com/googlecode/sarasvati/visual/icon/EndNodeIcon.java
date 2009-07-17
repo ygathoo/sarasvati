@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.visual.icon;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.RenderingHints;
 import java.awt.geom.Ellipse2D;
 
 public class EndNodeIcon extends AbstractNodeIcon
@@ -33,13 +34,14 @@ public class EndNodeIcon extends AbstractNodeIcon
   @Override
   public void redrawImage (Graphics2D g)
   {
+    g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
+
     double diameter = Math.min( WIDTH, HEIGHT );
     double outerCircle = diameter * 0.7;
     double innerCircle = diameter * 0.5;
 
     g.setColor( Color.BLACK.brighter() );
-    BasicStroke stroke = new BasicStroke( 3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10,
-        null, 0 );
+    BasicStroke stroke = new BasicStroke( 3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, null, 0 );
     g.setStroke( stroke );
     int offset = 1;
     g.translate(( WIDTH - outerCircle ) / 2 , offset );
@@ -47,7 +49,5 @@ public class EndNodeIcon extends AbstractNodeIcon
     g.translate( (outerCircle - innerCircle) / 2  , ( outerCircle - innerCircle ) / 2 );
     g.fill( new Ellipse2D.Double( 0, 0, innerCircle, innerCircle ) );
     g.dispose();
-
   }
-
 }

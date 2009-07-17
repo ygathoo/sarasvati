@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.editor.menu;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
@@ -35,7 +36,7 @@ public class UndoAction extends AbstractAction
   {
     super( "Undo" );
 
-    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Z, KeyEvent.CTRL_MASK ) );
+    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Z, InputEvent.CTRL_DOWN_MASK ) );
     putValue( Action.MNEMONIC_KEY, KeyEvent.VK_U );
   }
 

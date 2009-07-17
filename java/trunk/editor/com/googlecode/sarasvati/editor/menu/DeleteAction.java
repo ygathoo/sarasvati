@@ -19,7 +19,6 @@
 package com.googlecode.sarasvati.editor.menu;
 
 import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
@@ -28,27 +27,26 @@ import javax.swing.KeyStroke;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
 
-public class SaveAction extends AbstractAction
+public class DeleteAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  private final boolean isSaveAs;
-
-  public SaveAction (boolean isSaveAs)
+  public DeleteAction ()
   {
-    super( isSaveAs ? "Save As.." : "Save" );
-    this.isSaveAs = isSaveAs;
+    super( "Delete" );
 
-    if ( !isSaveAs )
-    {
-      putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_S, InputEvent.CTRL_DOWN_MASK ) );
-      putValue( Action.MNEMONIC_KEY, KeyEvent.VK_S );
-    }
+    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_DELETE, 0 ) );
+    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_D );
   }
 
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    GraphEditor.getInstance().saveRequested( isSaveAs );
+    GraphEditor.getInstance().editDelete();
+  }
+
+  public void setName (String name)
+  {
+    putValue( Action.NAME, name );
   }
 }

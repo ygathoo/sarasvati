@@ -30,13 +30,6 @@ import com.googlecode.sarasvati.editor.model.EditorScene;
 
 public class MoveTrackAction extends WidgetActionDecorator
 {
-  protected static boolean enabled = false;
-
-  public static void setEnabled (boolean enabled)
-  {
-    MoveTrackAction.enabled = enabled;
-  }
-
   protected Widget currentWidget = null;
   protected Point startLocation = null;
 
@@ -48,11 +41,6 @@ public class MoveTrackAction extends WidgetActionDecorator
   @Override
   public State mousePressed (Widget widget, WidgetMouseEvent event)
   {
-    if ( !enabled )
-    {
-      return State.REJECTED;
-    }
-
     if ( event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 1 )
     {
       currentWidget = widget;
@@ -67,11 +55,6 @@ public class MoveTrackAction extends WidgetActionDecorator
   @Override
   public State mouseDragged (Widget widget, WidgetMouseEvent event)
   {
-    if ( !enabled )
-    {
-      return State.REJECTED;
-    }
-
     if ( currentWidget == widget )
     {
       super.mouseDragged( widget, event );
@@ -84,11 +67,6 @@ public class MoveTrackAction extends WidgetActionDecorator
   @Override
   public State mouseReleased (Widget widget, WidgetMouseEvent event)
   {
-    if ( !enabled )
-    {
-      return State.REJECTED;
-    }
-
     State state = getAction().mouseReleased( widget, event );
     if ( currentWidget == widget )
     {

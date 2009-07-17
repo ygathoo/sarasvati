@@ -14,48 +14,58 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
  */
 package com.googlecode.sarasvati.editor.command;
 
-import java.util.List;
+import java.awt.Point;
 
+import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class AutoLayoutCommand implements Command
+public class DeleteNodeCommand extends AbstractCommand
 {
+  private final String action;
   private final EditorScene scene;
-  private final List<Command> commands;
+  private final Point location;
+  private final EditorNode node;
 
-  public AutoLayoutCommand (EditorScene scene, List<Command> commands)
+  public DeleteNodeCommand (final String action,
+                            final EditorScene scene,
+                            final EditorNode node)
   {
+    this.action = action;
     this.scene = scene;
-    this.commands = commands;
+    this.location = node.getOrigin();
+    this.node = node;
   }
 
   @Override
   public void performAction ()
   {
-    for ( Command command : commands )
-    {
-      command.performAction();
-    }
+    scene.removeNode( node );
+    scene.getGraph().removeNode( node );
     scene.validate();
   }
 
   @Override
   public void undoAction ()
   {
-    for ( Command command : commands )
-    {
-      command.undoAction();
-    }
+    node.setOrigin( new Point( location ) );
+    scene.addNode( node );
+    scene.getGraph().addNode( node );
     scene.validate();
+  }
+
+  @Override
+  public int getUndoOrder ()
+  {
+    return 10;
   }
 
   @Override
   public String getName ()
   {
-    return "Auto-Layout";
+    return action + " Node";
   }
 }

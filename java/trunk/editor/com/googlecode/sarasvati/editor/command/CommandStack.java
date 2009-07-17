@@ -47,7 +47,7 @@ public class CommandStack
       commandStack.removeLast();
     }
     commandStack.add( command );
-    GraphEditor.getInstance().updateUndoRedoSave();
+    GraphEditor.getInstance().updateMenu();
   }
 
   public boolean canUndo ()
@@ -70,7 +70,7 @@ public class CommandStack
     Command command = commandStack.get( currentIndex );
     currentIndex--;
     command.undoAction();
-    GraphEditor.getInstance().updateUndoRedoSave();
+    GraphEditor.getInstance().updateMenu();
   }
 
   public void redo ()
@@ -83,7 +83,7 @@ public class CommandStack
     currentIndex++;
     Command command = commandStack.get( currentIndex );
     command.performAction();
-    GraphEditor.getInstance().updateUndoRedoSave();
+    GraphEditor.getInstance().updateMenu();
   }
 
   public String getUndoName ()
@@ -102,7 +102,7 @@ public class CommandStack
     {
       lastSavedCommand = commandStack.get( currentIndex );
     }
-    GraphEditor.getInstance().updateUndoRedoSave();
+    GraphEditor.getInstance().updateMenu();
   }
 
   public boolean isSaved ()
