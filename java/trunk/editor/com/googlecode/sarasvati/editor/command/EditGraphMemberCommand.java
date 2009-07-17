@@ -22,7 +22,7 @@ import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 import com.googlecode.sarasvati.editor.model.GraphMemberState;
 
-public class EditGraphMemberCommand<T extends GraphMemberState> implements Command
+public class EditGraphMemberCommand<T extends GraphMemberState> extends AbstractCommand
 {
   private final EditorScene scene;
   private final EditorGraphMember<T> graphMember;

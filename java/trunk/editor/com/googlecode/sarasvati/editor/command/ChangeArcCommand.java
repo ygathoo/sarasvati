@@ -22,7 +22,7 @@ import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class ChangeArcCommand implements Command
+public class ChangeArcCommand extends AbstractCommand
 {
   private final EditorScene scene;
   private final EditorArc arc;

@@ -14,45 +14,59 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Paul Lorenz
+    Copyright 2008 Paul Lorenz
  */
 package com.googlecode.sarasvati.editor.command;
 
-import com.googlecode.sarasvati.editor.model.EditorArc;
+import java.util.List;
+import java.util.ListIterator;
+
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class NewArcCommand extends AbstractCommand
+public class MultiCommand extends AbstractCommand
 {
-  private EditorScene scene;
-  private EditorArc arc;
+  private final String name;
+  private final EditorScene scene;
+  private final List<Command> commands;
 
-  public NewArcCommand (EditorScene scene, EditorArc arc)
+  public MultiCommand (final String name,
+                       final EditorScene scene,
+                       final List<Command> commands)
   {
+    this.name = name;
     this.scene = scene;
-    this.arc   = arc;
+    this.commands = commands;
   }
 
   @Override
   public void performAction ()
   {
-    scene.getGraph().addArc( arc );
-    scene.addEdge( arc );
-    scene.setEdgeSource( arc, arc.getStart() );
-    scene.setEdgeTarget( arc, arc.getEnd() );
+    for ( Command command : commands )
+    {
+      command.performAction();
+    }
     scene.validate();
   }
 
   @Override
   public void undoAction ()
   {
-    scene.getGraph().removeArc( arc );
-    scene.removeEdge( arc );
+    ListIterator<Command> iter = commands.listIterator( commands.size() );
+    while (iter.hasPrevious() )
+    {
+      iter.previous().undoAction();
+    }
     scene.validate();
+  }
+
+  public EditorScene getScene ()
+  {
+    return scene;
   }
 
   @Override
   public String getName ()
   {
-    return "Add Connection";
+    return name;
   }
 }

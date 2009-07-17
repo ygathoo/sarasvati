@@ -25,7 +25,7 @@ import org.netbeans.api.visual.widget.Widget;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class MoveGraphMemberCommand implements Command
+public class MoveGraphMemberCommand extends AbstractCommand
 {
   private EditorScene scene;
   private EditorGraphMember<?> member;

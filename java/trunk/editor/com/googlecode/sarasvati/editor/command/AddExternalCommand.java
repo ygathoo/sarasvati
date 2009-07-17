@@ -23,7 +23,7 @@ import java.awt.Point;
 import com.googlecode.sarasvati.editor.model.EditorExternal;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class AddExternalCommand implements Command
+public class AddExternalCommand extends AbstractCommand
 {
   private final EditorScene scene;
   private final Point location;

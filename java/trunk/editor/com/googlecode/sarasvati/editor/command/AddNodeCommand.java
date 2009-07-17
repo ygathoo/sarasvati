@@ -23,7 +23,7 @@ import java.awt.Point;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class AddNodeCommand implements Command
+public class AddNodeCommand extends AbstractCommand
 {
   private final EditorScene scene;
   private final Point location;

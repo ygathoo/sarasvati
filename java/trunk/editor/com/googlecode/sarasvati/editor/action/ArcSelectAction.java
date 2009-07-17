@@ -14,35 +14,29 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.editor.menu;
+package com.googlecode.sarasvati.editor.action;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.InputEvent;
-import java.awt.event.KeyEvent;
+import org.netbeans.api.visual.action.WidgetAction;
 
-import javax.swing.AbstractAction;
-import javax.swing.Action;
-import javax.swing.KeyStroke;
-
-import com.googlecode.sarasvati.editor.GraphEditor;
-
-public class ExitAction extends AbstractAction
+public class ArcSelectAction extends ToggledWidgetActionDecorator
 {
-  private static final long serialVersionUID = 1L;
+  protected static boolean enabled = false;
 
-  public ExitAction ()
+  public static void setEnabled (boolean enabled)
   {
-    super( "Exit" );
+    ArcSelectAction.enabled = enabled;
+  }
 
-    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_Q, InputEvent.CTRL_DOWN_MASK ) );
-    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_X );
+  public ArcSelectAction (WidgetAction action)
+  {
+    super( action );
   }
 
   @Override
-  public void actionPerformed (ActionEvent e)
+  public boolean isEnabled ()
   {
-    GraphEditor.getInstance().exitRequested();
+    return enabled;
   }
 }

@@ -34,6 +34,7 @@ public class TaskIcon extends AbstractNodeIcon
   protected boolean isJoin;
   protected String label;
   protected Color color;
+  protected boolean isSelected;
 
   public TaskIcon (Node node, NodeToken token)
   {
@@ -43,11 +44,12 @@ public class TaskIcon extends AbstractNodeIcon
     redrawImage();
   }
 
-  public TaskIcon (String label, Color color, boolean isJoin)
+  public TaskIcon (String label, Color color, boolean isJoin, boolean isSelected)
   {
     this.label = label;
     this.color = color;
     this.isJoin = isJoin;
+    this.isSelected = isSelected;
     redrawImage();
   }
 
@@ -67,7 +69,15 @@ public class TaskIcon extends AbstractNodeIcon
     g.setStroke( stroke );
 
     //g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER: NodeDrawConfig.NODE_BORDER );
-    g.setColor( NodeDrawConfig.NODE_BORDER );
+
+    if ( isSelected )
+    {
+      g.setColor( NodeDrawConfig.NODE_BORDER_SELECTED );
+    }
+    else
+    {
+      g.setColor( NodeDrawConfig.NODE_BORDER );
+    }
 
     int width = WIDTH - ((offset << 1) + 1);
     int height = HEIGHT - ((offset<< 1) + 1);

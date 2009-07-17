@@ -23,6 +23,7 @@ import java.awt.Point;
 public abstract class EditorGraphMember<T extends GraphMemberState> extends AbstractStateful<T>
 {
   protected Point  origin = new Point();
+  protected boolean selected = false;
 
   public EditorGraphMember (T initialState)
   {
@@ -67,6 +68,17 @@ public abstract class EditorGraphMember<T extends GraphMemberState> extends Abst
   public boolean isExternal ()
   {
     return false;
+  }
+
+  public boolean isSelected ()
+  {
+    return selected;
+  }
+
+  public void setSelected (boolean selected)
+  {
+    this.selected = selected;
+    stateChanged();
   }
 
   @Override

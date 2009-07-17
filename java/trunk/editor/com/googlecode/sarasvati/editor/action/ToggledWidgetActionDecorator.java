@@ -37,183 +37,202 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action;
   }
 
-  public State dragEnter( Widget arg0, WidgetDropTargetDragEvent arg1 )
+  public void setAction (WidgetAction action)
   {
-    if ( !isEnabled() )
-    {
-      return State.REJECTED;
-    }
-
-    return action.dragEnter( arg0, arg1 );
+    this.action = action;
   }
 
-  public State dragExit( Widget arg0, WidgetDropTargetEvent arg1 )
+  public State dragEnter (final Widget widget, final WidgetDropTargetDragEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.dragExit( arg0, arg1 );
+    return action.dragEnter( widget, event );
   }
 
-  public State dragOver( Widget arg0, WidgetDropTargetDragEvent arg1 )
+  public State dragExit (final Widget widget, final WidgetDropTargetEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.dragOver( arg0, arg1 );
+    return action.dragExit( widget, event );
   }
 
-  public State drop( Widget arg0, WidgetDropTargetDropEvent arg1 )
+  public State dragOver (final Widget widget, final WidgetDropTargetDragEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.drop( arg0, arg1 );
+    return action.dragOver( widget, event );
   }
 
-  public State dropActionChanged( Widget arg0, WidgetDropTargetDragEvent arg1 )
+  public State drop (final Widget widget, final WidgetDropTargetDropEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.dropActionChanged( arg0, arg1 );
+    return action.drop( widget, event );
   }
 
-  public State focusGained( Widget arg0, WidgetFocusEvent arg1 )
+  public State dropActionChanged (final Widget widget,
+                                  final WidgetDropTargetDragEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.focusGained( arg0, arg1 );
+    return action.dropActionChanged( widget, event );
   }
 
-  public State focusLost( Widget arg0, WidgetFocusEvent arg1 )
+  public State focusGained (final Widget widget,
+                            final WidgetFocusEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.focusLost( arg0, arg1 );
+    return action.focusGained( widget, event );
   }
 
-  public State keyPressed( Widget arg0, WidgetKeyEvent arg1 )
+  public State focusLost (final Widget widget,
+                          final WidgetFocusEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.keyPressed( arg0, arg1 );
+    return action.focusLost( widget, event );
   }
 
-  public State keyReleased( Widget arg0, WidgetKeyEvent arg1 )
+  public State keyPressed (final Widget widget,
+                           final WidgetKeyEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.keyReleased( arg0, arg1 );
+    return action.keyPressed( widget, event );
   }
 
-  public State keyTyped( Widget arg0, WidgetKeyEvent arg1 )
+  public State keyReleased (final Widget widget,
+                            final WidgetKeyEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.keyTyped( arg0, arg1 );
+    return action.keyReleased( widget, event );
   }
 
-  public State mouseClicked( Widget arg0, WidgetMouseEvent arg1 )
+  public State keyTyped (final Widget widget,
+                         final WidgetKeyEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.mouseClicked( arg0, arg1 );
+    return action.keyTyped( widget, event );
   }
 
-  public State mouseDragged( Widget arg0, WidgetMouseEvent arg1 )
+  public State mouseClicked (final Widget widget,
+                             final WidgetMouseEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.mouseDragged( arg0, arg1 );
+    return action.mouseClicked( widget, event );
   }
 
-  public State mouseEntered( Widget arg0, WidgetMouseEvent arg1 )
+  public State mouseDragged (final Widget widget,
+                             final WidgetMouseEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.mouseEntered( arg0, arg1 );
+    return action.mouseDragged( widget, event );
   }
 
-  public State mouseExited( Widget arg0, WidgetMouseEvent arg1 )
+  public State mouseEntered (final Widget widget,
+                             final WidgetMouseEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.mouseExited( arg0, arg1 );
+    return action.mouseEntered( widget, event );
   }
 
-  public State mouseMoved( Widget arg0, WidgetMouseEvent arg1 )
+  public State mouseExited (final Widget widget,
+                            final WidgetMouseEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.mouseMoved( arg0, arg1 );
+    return action.mouseExited( widget, event );
   }
 
-  public State mousePressed( Widget arg0, WidgetMouseEvent arg1 )
+  public State mouseMoved (final Widget widget,
+                           final WidgetMouseEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.mousePressed( arg0, arg1 );
+    return action.mouseMoved( widget, event );
   }
 
-  public State mouseReleased( Widget arg0, WidgetMouseEvent arg1 )
+  public State mousePressed (final Widget widget,
+                             final WidgetMouseEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.mouseReleased( arg0, arg1 );
+    return action.mousePressed( widget, event );
   }
 
-  public State mouseWheelMoved( Widget arg0, WidgetMouseWheelEvent arg1 )
+  public State mouseReleased (final Widget widget,
+                              final WidgetMouseEvent event)
   {
     if ( !isEnabled() )
     {
       return State.REJECTED;
     }
 
-    return action.mouseWheelMoved( arg0, arg1 );
+    return action.mouseReleased( widget, event );
+  }
+
+  public State mouseWheelMoved (final Widget widget,
+                                final WidgetMouseWheelEvent event)
+  {
+    if ( !isEnabled() )
+    {
+      return State.REJECTED;
+    }
+
+    return action.mouseWheelMoved( widget, event );
   }
 }

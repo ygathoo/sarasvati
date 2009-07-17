@@ -18,11 +18,13 @@
  */
 package com.googlecode.sarasvati.editor.command;
 
-public interface Command
+public interface Command extends Comparable<Command>
 {
   void performAction ();
 
   void undoAction ();
 
   String getName ();
+
+  int getUndoOrder ();
 }

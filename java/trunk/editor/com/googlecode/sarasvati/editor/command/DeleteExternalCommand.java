@@ -18,41 +18,54 @@
  */
 package com.googlecode.sarasvati.editor.command;
 
-import com.googlecode.sarasvati.editor.model.EditorArc;
+import java.awt.Point;
+
+import com.googlecode.sarasvati.editor.model.EditorExternal;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class NewArcCommand extends AbstractCommand
+public class DeleteExternalCommand extends AbstractCommand
 {
-  private EditorScene scene;
-  private EditorArc arc;
+  private final String action;
+  private final EditorScene scene;
+  private final Point location;
+  private final EditorExternal external;
 
-  public NewArcCommand (EditorScene scene, EditorArc arc)
+  public DeleteExternalCommand (final String action,
+                                final EditorScene scene,
+                                final EditorExternal external)
   {
+    this.action = action;
     this.scene = scene;
-    this.arc   = arc;
+    this.location = external.getOrigin();
+    this.external = external;
   }
 
   @Override
   public void performAction ()
   {
-    scene.getGraph().addArc( arc );
-    scene.addEdge( arc );
-    scene.setEdgeSource( arc, arc.getStart() );
-    scene.setEdgeTarget( arc, arc.getEnd() );
+    scene.removeNode( external );
+    scene.getGraph().removeExternal( external );
     scene.validate();
   }
 
   @Override
   public void undoAction ()
   {
-    scene.getGraph().removeArc( arc );
-    scene.removeEdge( arc );
+    external.setOrigin( new Point( location ) );
+    scene.addNode( external );
+    scene.getGraph().addExternal( external );
     scene.validate();
+  }
+
+  @Override
+  public int getUndoOrder ()
+  {
+    return 10;
   }
 
   @Override
   public String getName ()
   {
-    return "Add Connection";
+    return action + " External";
   }
 }

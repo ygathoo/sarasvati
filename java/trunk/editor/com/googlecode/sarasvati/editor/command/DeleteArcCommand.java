@@ -21,7 +21,7 @@ package com.googlecode.sarasvati.editor.command;
 import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class DeleteArcCommand implements Command
+public class DeleteArcCommand extends AbstractCommand
 {
   private EditorScene scene;
   private EditorArc arc;
