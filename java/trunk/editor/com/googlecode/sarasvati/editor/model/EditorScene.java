@@ -275,7 +275,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     if ( node instanceof EditorExternal )
     {
       return new DefaultNodeIcon( node.getState().getName(),
-                                  NodeDrawConfig.NODE_BG_SKIPPED,
+                                  NodeDrawConfig.NODE_BG_ACTIVE,
                                   false,
                                   node.isSelected() );
     }

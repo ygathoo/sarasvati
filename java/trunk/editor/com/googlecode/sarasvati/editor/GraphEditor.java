@@ -336,6 +336,7 @@ public class GraphEditor
     fileMenu.add( new JMenuItem( new OpenAction() ) );
     fileMenu.add( new JMenuItem( saveAsAction ) );
     fileMenu.add( new JMenuItem( saveAction ) );
+    fileMenu.addSeparator();
     fileMenu.add( new JMenuItem( new ExitAction() ) );
 
     JMenu editMenu = new JMenu( "Edit" );
@@ -348,8 +349,10 @@ public class GraphEditor
 
     editMenu.add( new JMenuItem( deleteAction ) );
     editMenu.add( new JMenuItem( cutAction ) );
+    editMenu.addSeparator();
     editMenu.add( new JMenuItem( undoAction ) );
     editMenu.add( new JMenuItem( redoAction ) );
+    editMenu.addSeparator();
     editMenu.add( new JMenuItem( new PreferencesAction() ) );
 
     menuBar.add( fileMenu );
