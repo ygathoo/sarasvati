@@ -44,6 +44,11 @@ public class SvUtil
     return isBlankOrNull( str ) ? null : str;
   }
 
+  public static String blankIfNull (String str)
+  {
+    return isBlankOrNull( str ) ? "" : str;
+  }
+
   public static boolean falseIfNull (Boolean value)
   {
     return value != null && value;

@@ -234,7 +234,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
     public void createConnection (Widget sourceWidget, Widget targetWidget)
     {
-      CommandStack.addArc( EditorScene.this, new EditorArc( new ArcState( null, null, null ), source, target ) );
+      String arcLabel = sourceWidget == targetWidget ? EditorPreferences.getInstance().getDefalutSelfArcsLabel() : null;
+      CommandStack.addArc( EditorScene.this, new EditorArc( new ArcState( arcLabel, null, null ), source, target ) );
     }
   }
 
