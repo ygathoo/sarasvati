@@ -15,7 +15,7 @@ A graphical editor for process definitions is in progress. It is now usable for 
 
  * Undo/Redo framework: Done
  * Load: Done
- * Save: 90%
+ * Save: Done
  * Add nodes: Done
  * Delete nodes: *TODO*
  * Add external: Done
@@ -25,19 +25,27 @@ A graphical editor for process definitions is in progress. It is now usable for 
  * Change connections: Done
  * Remove connections: Done
  * Edit node properties: Done
- * Edit external properties: *TODO*
+ * Edit external properties: Done
  * Edit arc properties: Done
  * Cleanup undo/redo MDI interactions: Done
  * Autolayout: Done
  * Self arcs: Done
  * Arc labels: Done
  * Cleanup move/add/reconnect interactions: Done
- * Check for unsaved:Done
+ * Check for unsaved: Done
  * Graph validation on save: _Started_
- * Preferences: *Needs to be specced. Need just enough for externals for now. Rest wil be Post-1.0*
- * Select all: *TODO*
+ * Preferences
+   * Node Types
+     * Basic node type management: Done
+     * Select icon type: *TODO*
+     * Select icon color: *TODO*
+ * Select
+   * Select single for delete: *TODO*
+   * Selected multiple for delete: *TODO*
+   * Select multipe for move: *TODO*
  * Investigate shortestpathrouter weirdness: *Likely post 1.0.*
- * Library concept: _Post 1.0.0-rc3*
+ * Process Definition Library: *TODO*
+ * Guard Editor: *TODO*
 
 === Token Sets/Template Nodes: Completed ===
 
