@@ -52,6 +52,8 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
         checkLibraryRecursiveInput = new javax.swing.JCheckBox();
         libraryInput = new javax.swing.JTextField();
         libraryBrowseButton = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
+        defaultSelfArcsLabelInput = new javax.swing.JTextField();
 
         defaultNodeTypeLabel.setText(org.openide.util.NbBundle.getMessage(GeneralPreferencesPanel.class, "GeneralPreferencesPanel.defaultNodeTypeLabel.text")); // NOI18N
 
@@ -100,6 +102,10 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
                 .addGap(28, 28, 28))
         );
 
+        jLabel2.setText(org.openide.util.NbBundle.getMessage(GeneralPreferencesPanel.class, "GeneralPreferencesPanel.jLabel2.text")); // NOI18N
+
+        defaultSelfArcsLabelInput.setText(org.openide.util.NbBundle.getMessage(GeneralPreferencesPanel.class, "GeneralPreferencesPanel.defaultSelfArcsLabelInput.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
@@ -108,12 +114,19 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(defaultNodeTypeLabel)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(defaultNodeTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addComponent(revertButton)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(defaultNodeTypeLabel))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(defaultNodeTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(37, 37, 37))
+                                    .addComponent(defaultSelfArcsLabelInput, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)))
+                            .addComponent(revertButton))
                         .addGap(18, 18, 18)
                         .addComponent(applyButton)))
                 .addContainerGap())
@@ -125,9 +138,13 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(defaultNodeTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(defaultNodeTypeLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 354, Short.MAX_VALUE)
+                    .addComponent(defaultNodeTypeLabel)
+                    .addComponent(defaultNodeTypeInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(defaultSelfArcsLabelInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 323, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(applyButton)
                     .addComponent(revertButton))
@@ -141,7 +158,9 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
     private javax.swing.JCheckBox checkLibraryRecursiveInput;
     private javax.swing.JComboBox defaultNodeTypeInput;
     private javax.swing.JLabel defaultNodeTypeLabel;
+    private javax.swing.JTextField defaultSelfArcsLabelInput;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton libraryBrowseButton;
     private javax.swing.JTextField libraryInput;
@@ -181,10 +200,14 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
         {
           try
           {
-            String libraryPath = libraryInput.getText();
-            boolean recurseLibrary = checkLibraryRecursiveInput.isSelected();
-            EditorNodeType defaultNodeType = (EditorNodeType)defaultNodeTypeInput.getSelectedItem();
-            EditorPreferences.getInstance().saveGeneralPreferences( libraryPath, recurseLibrary, defaultNodeType );
+            final String libraryPath = libraryInput.getText();
+            final boolean recurseLibrary = checkLibraryRecursiveInput.isSelected();
+            final EditorNodeType defaultNodeType = (EditorNodeType)defaultNodeTypeInput.getSelectedItem();
+            final String defaultSelfArcsLabel = defaultSelfArcsLabelInput.getText();
+            EditorPreferences.getInstance().saveGeneralPreferences( libraryPath,
+                                                                    recurseLibrary,
+                                                                    defaultNodeType,
+                                                                    defaultSelfArcsLabel );
             JOptionPane.showMessageDialog( GeneralPreferencesPanel.this,
                                            "Changes saved", "Info",
                                            JOptionPane.INFORMATION_MESSAGE );
@@ -213,6 +236,7 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
       }
 
       nodeTypesModel.setSelectedItem( prefs.getDefaultNodeType() );
+      defaultSelfArcsLabelInput.setText( prefs.getDefalutSelfArcsLabel() );
     }
 
     @Override

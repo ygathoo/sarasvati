@@ -27,6 +27,7 @@ import java.util.prefs.BackingStoreException;
 import java.util.prefs.Preferences;
 
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
+import com.googlecode.sarasvati.util.SvUtil;
 
 public class EditorPreferences
 {
@@ -40,6 +41,7 @@ public class EditorPreferences
   private static final String LIBRARY_PATH_KEY = "libraryPath";
   private static final String RECURSE_LIBRARY_KEY = "recurseLibrary";
   private static final String DEFAULT_NODE_TYPE_KEY = "defaultNodeType";
+  private static final String DEFAULT_SELF_ARCS_LABEL_KEY = "defaultSelfArcsLabel";
   private static final String NODE_TYPES_KEY = "nodeTypes";
   private static final String ATTRIBUTES_KEY = "attributes";
 
@@ -51,8 +53,8 @@ public class EditorPreferences
   private static final String NODE_TYPE_ATTR_USE_CDATA = "nodeTypeAttrUseCDATA";
 
   protected String libraryPath;
-
   protected boolean recurseLibrary;
+  protected String defaultSelfArcsLabel;
 
   protected Map<String,EditorNodeType> typesByName = new HashMap<String, EditorNodeType>();
   protected List<EditorNodeType> nodeTypes;
@@ -82,7 +84,7 @@ public class EditorPreferences
     Preferences prefs = Preferences.userNodeForPackage( getClass() );
     libraryPath = prefs.get( LIBRARY_PATH_KEY, null );
     recurseLibrary = prefs.getBoolean( RECURSE_LIBRARY_KEY, false );
-
+    defaultSelfArcsLabel = SvUtil.nullIfBlank( prefs.get( DEFAULT_SELF_ARCS_LABEL_KEY, null ) );
 
     defaultNodeType = getTypeByName( prefs.get( DEFAULT_NODE_TYPE_KEY, "node" ) );
     if ( defaultNodeType == null && nodeTypes != null && !nodeTypes.isEmpty() )
@@ -109,6 +111,11 @@ public class EditorPreferences
   public boolean isRecurseLibrary ()
   {
     return recurseLibrary;
+  }
+
+  public String getDefalutSelfArcsLabel ()
+  {
+    return defaultSelfArcsLabel;
   }
 
   private void setNodeTypes (List<EditorNodeType> nodeTypes)
@@ -259,17 +266,20 @@ public class EditorPreferences
 
   public void saveGeneralPreferences (final String newLibraryPath,
                                       final boolean newRecurseLibrary,
-                                      final EditorNodeType newDefaultNodeType)
+                                      final EditorNodeType newDefaultNodeType,
+                                      final String newDefaultSelfArcsLabel)
     throws BackingStoreException
   {
     Preferences prefs = Preferences.userNodeForPackage( getClass() );
     prefs.put( LIBRARY_PATH_KEY, newLibraryPath );
     prefs.putBoolean( RECURSE_LIBRARY_KEY, newRecurseLibrary );
     prefs.put( DEFAULT_NODE_TYPE_KEY, newDefaultNodeType.getName() );
+    prefs.put( DEFAULT_SELF_ARCS_LABEL_KEY, SvUtil.blankIfNull( newDefaultSelfArcsLabel ) );
     prefs.flush();
 
     this.libraryPath = newLibraryPath;
     this.recurseLibrary = newRecurseLibrary;
     this.defaultNodeType = newDefaultNodeType;
+    this.defaultSelfArcsLabel = newDefaultSelfArcsLabel;
   }
 }
