@@ -17,9 +17,9 @@ A graphical editor for process definitions is in progress. It is now usable for 
  * Load: Done
  * Save: Done
  * Add nodes: Done
- * Delete nodes: *TODO*
+ * Delete nodes: Done
  * Add external: Done
- * Delete external: *TODO*
+ * Delete external: Done
  * Move nodes: Done
  * Connect nodes: Done
  * Change connections: Done
@@ -40,9 +40,12 @@ A graphical editor for process definitions is in progress. It is now usable for 
      * Select icon type: *TODO*
      * Select icon color: *TODO*
  * Select
-   * Select single for delete: *TODO*
-   * Selected multiple for delete: *TODO*
-   * Select multipe for move: *TODO*
+   * Select single for delete: Done
+   * Selected multiple for delete: Done
+   * Select multipe for move: Done
+   * Cut: *Started*
+   * Copy: *TODO*
+   * Paste: *TODO*
  * Investigate shortestpathrouter weirdness: *Likely post 1.0.*
  * Process Definition Library: *TODO*
  * Guard Editor: *TODO*
