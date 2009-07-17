@@ -42,7 +42,7 @@ public class ProcessTreeNode implements VisualProcessNode
   protected int       originY;
 
   private List<ProcessTreeArc> children = new LinkedList<ProcessTreeArc>();
-  private List<ProcessTreeNode> parents  = new LinkedList<ProcessTreeNode>();
+  private List<ProcessTreeArc> parents  = new LinkedList<ProcessTreeArc>();
 
   public ProcessTreeNode (ProcessTreeNode parent, Node node)
   {
@@ -50,9 +50,9 @@ public class ProcessTreeNode implements VisualProcessNode
     this.node = node;
   }
 
-  public void addParent (ProcessTreeNode parentNode)
+  public void addParent (ProcessTreeArc parentArc)
   {
-    parents.add( parentNode );
+    parents.add( parentArc );
   }
 
   public ProcessTreeNode (NodeToken token)
@@ -156,8 +156,9 @@ public class ProcessTreeNode implements VisualProcessNode
 
   public boolean hasNonCompleteNodeTokenParent ()
   {
-    for ( ProcessTreeNode currentParent : parents )
+    for ( ProcessTreeArc parentArc : parents )
     {
+      ProcessTreeNode currentParent = parentArc.getParent();
       if ( currentParent != null && currentParent.getToken() != null && !currentParent.getToken().isComplete() )
       {
         return true;
@@ -166,10 +167,11 @@ public class ProcessTreeNode implements VisualProcessNode
     return false;
   }
 
-  public boolean hasLowerParent (ProcessTreeNode selectedParent)
+  public boolean hasLowerParent (ProcessTreeNode selectedParent, ProcessTree tree)
   {
-    for ( ProcessTreeNode currentParent : parents )
+    for ( ProcessTreeArc parentArc : parents )
     {
+      ProcessTreeNode currentParent = parentArc.getParent();
       if ( currentParent == selectedParent || currentParent == this )
       {
         continue;
@@ -177,7 +179,7 @@ public class ProcessTreeNode implements VisualProcessNode
 
       if ( ( currentParent.getDepth() > selectedParent.getDepth() ||
              currentParent.getDepth() == -1 ) &&
-            !isAncestor( currentParent ) )
+            !isAncestor( currentParent, tree ) )
       {
         return true;
       }
@@ -185,7 +187,7 @@ public class ProcessTreeNode implements VisualProcessNode
     return false;
   }
 
-  public boolean isAncestor (ProcessTreeNode ptNode)
+  public boolean isAncestor (ProcessTreeNode ptNode, ProcessTree tree)
   {
     Set<ProcessTreeNode> visited = new HashSet<ProcessTreeNode>();
 
@@ -194,13 +196,21 @@ public class ProcessTreeNode implements VisualProcessNode
 
     while( !queue.isEmpty() )
     {
-      for ( ProcessTreeNode selectedParent : queue.remove().parents )
+      for ( ProcessTreeArc currentArc : queue.remove().parents )
       {
+        ProcessTreeNode selectedParent = currentArc.getParent();
         if ( visited.contains( selectedParent ) )
         {
           continue;
         }
         visited.add( selectedParent );
+
+        // Ignore back arcs in calculating ancestry
+        if ( tree.isBackArc( currentArc.getArc() ) )
+        {
+          continue;
+        }
+
         if ( selectedParent == this )
         {
           return true;
