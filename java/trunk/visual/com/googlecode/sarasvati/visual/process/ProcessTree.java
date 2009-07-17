@@ -156,6 +156,11 @@ public class ProcessTree
     return endNode;
   }
 
+  public boolean isBackArc (Arc arc)
+  {
+    return lookAndFeel.isBackArc( arc, graphTree.isBackArc( arc.getStartNode(), arc.getEndNode() ) );
+  }
+
   /*
    * 1. Find start node tokens
    * 2. Add start node tokens to first layer
@@ -193,7 +198,7 @@ public class ProcessTree
         ProcessTreeNode parentNode = nodeTokenMap.get( parentArc.getParentToken() );
         ProcessTreeArc processTreeArc = new ProcessTreeArc( parentArc, parentNode, childNode );
         parentNode.addChild( processTreeArc );
-        childNode.addParent( parentNode );
+        childNode.addParent( processTreeArc );
       }
     }
 
@@ -216,7 +221,7 @@ public class ProcessTree
 
     int depth = 1;
 
-    // traverse token DAG, adding each processtreenode to the right layer
+    // traverse token DAG, adding each process tree node to the right layer
     // and setting its depth.
     while ( !nextLayer.isEmpty() )
     {
@@ -247,7 +252,7 @@ public class ProcessTree
       ProcessTreeNode childNode  = getNonTokenProcessTreeNode( parentNode, arcToken.getArc().getEndNode() );
       ProcessTreeArc ptArc = new ProcessTreeArc( arcToken, parentNode, childNode );
       parentNode.addChild( ptArc );
-      childNode.addParent( parentNode );
+      childNode.addParent( ptArc );
     }
 
     // Process all arcs which don't have arc tokens on them
@@ -260,12 +265,12 @@ public class ProcessTree
           // If the node has an active token we should point
           // to a version of the node with no token on it, unless
           // the arc is a back arc
-          ProcessTreeNode child = ptNode.getToken().isComplete() || lookAndFeel.isBackArc( arc, graphTree.isBackArc( arc.getStartNode(), arc.getEndNode() ) ) ?
+          ProcessTreeNode child = ptNode.getToken().isComplete() || isBackArc( arc ) ?
                                     getProcessTreeNode( ptNode, arc.getEndNode() ) :
                                     getNonTokenProcessTreeNode( ptNode, arc.getEndNode() );
           ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, child );
           ptNode.addChild( arcTokenWrapper );
-          child.addParent( ptNode );
+          child.addParent( arcTokenWrapper );
         }
       }
     }
@@ -276,10 +281,22 @@ public class ProcessTree
       ProcessTreeNode ptNode = queue.remove( 0 );
       for ( Arc arc : graph.getOutputArcs( ptNode.getNode() ) )
       {
-        ProcessTreeNode child = arc.isSelfArc() ? ptNode : getProcessTreeNode( ptNode, arc.getEndNode() );
+        ProcessTreeNode child = null;
+        if ( arc.isSelfArc()  )
+        {
+          child = ptNode;
+        }
+        else if ( isBackArc( arc ) )
+        {
+          child = getProcessTreeNode( ptNode, arc.getEndNode() );
+        }
+        else
+        {
+          child = getNonTokenProcessTreeNode( ptNode, arc.getEndNode() );
+        }
         ProcessTreeArc arcTokenWrapper = new ProcessTreeArc( arc, ptNode, child );
         ptNode.addChild( arcTokenWrapper );
-        child.addParent( ptNode );
+        child.addParent( arcTokenWrapper );
       }
     }
 
@@ -305,7 +322,7 @@ public class ProcessTree
                !( treeNode.isCompletedNodeToken() && child.hasNonCompleteNodeTokenParent() ) &&
                !( ptArc.getToken() == null &&
                   treeNode.getToken() != null &&
-                  child.hasLowerParent( treeNode ) ) )
+                  child.hasLowerParent( treeNode, this ) ) )
           {
             if ( child.getDepth() == -1 )
             {
