@@ -19,19 +19,27 @@
 
 package com.googlecode.sarasvati.xml;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
+import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.definition.ExternalArcDefinition;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
+import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
+import com.googlecode.sarasvati.util.SvUtil;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlExternal implements ExternalDefinition
+public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
 {
   @XmlAttribute(name = "processDefinition", required = true)
   protected String  processDefinition;
@@ -113,6 +121,52 @@ public class XmlExternal implements ExternalDefinition
   public void setCustom (XmlCustom custom)
   {
     this.custom = custom;
+  }
+
+  public void addToDigest (final MessageDigest digest)
+    throws LoadException
+  {
+    if ( !SvUtil.isBlankOrNull( name ) )
+    {
+      digest.update( name.getBytes() );
+    }
+
+    if ( !SvUtil.isBlankOrNull( processDefinition ) )
+    {
+      digest.update( processDefinition.getBytes() );
+    }
+
+    Map<String, String> customProps = new TreeMap<String, String>();
+    DOMToObjectLoadHelper.loadCustomIntoMap( custom, customProps );
+
+    for ( Entry<String, String> entry : customProps.entrySet() )
+    {
+      digest.update( entry.getKey().getBytes() );
+      if ( !SvUtil.isBlankOrNull( entry.getValue() ) )
+      {
+        digest.update( entry.getValue().getBytes() );
+      }
+    }
+
+    Collections.sort( externalArcs );
+
+    if ( externalArcs != null )
+    {
+      for ( XmlExternalArc arc : externalArcs )
+      {
+        arc.addToDigest( digest );
+      }
+    }
+  }
+
+  @Override
+  public int compareTo (XmlExternal o)
+  {
+    if ( o == null )
+    {
+      return 1;
+    }
+    return SvUtil.compare( name, o.getName() );
   }
 
   @Override

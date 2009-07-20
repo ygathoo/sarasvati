@@ -38,7 +38,6 @@ import org.xml.sax.SAXException;
 
 import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.ProcessDefinitionTranslator;
-import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 
 public class XmlLoader implements ProcessDefinitionTranslator<File>
 {
@@ -90,18 +89,20 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
 
     try
     {
-      SchemaFactory factory = SchemaFactory
-          .newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
+      SchemaFactory factory = SchemaFactory.newInstance( XMLConstants.W3C_XML_SCHEMA_NS_URI );
       schema = factory.newSchema( new StreamSource( is ) );
-    } catch (SAXException se)
+    }
+    catch (SAXException se)
     {
       throw new LoadException( "Failed to load schema", se );
-    } finally
+    }
+    finally
     {
       try
       {
         is.close();
-      } catch (IOException ioe)
+      }
+      catch (IOException ioe)
       {
         // ignore
       }
@@ -126,7 +127,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
   }
 
   private XmlProcessDefinition loadProcessDefinition (File file)
-      throws LoadException
+    throws LoadException
   {
     XmlProcessDefinition def = null;
     try
@@ -137,7 +138,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
     {
       throw new LoadException("Error while unmarshmalling " + file, e);
     }
-    
+
     return def;
   }
 
@@ -157,7 +158,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
   }
 
   @Override
-  public ProcessDefinition translate (File source) throws LoadException
+  public XmlProcessDefinition translate (File source) throws LoadException
   {
     return loadProcessDefinition( source );
   }

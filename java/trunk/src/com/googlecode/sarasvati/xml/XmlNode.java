@@ -19,8 +19,13 @@
 
 package com.googlecode.sarasvati.xml;
 
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.Map.Entry;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -28,11 +33,14 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import com.googlecode.sarasvati.JoinType;
+import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.definition.ArcDefinition;
 import com.googlecode.sarasvati.load.definition.NodeDefinition;
+import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
+import com.googlecode.sarasvati.util.SvUtil;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlNode implements NodeDefinition
+public class XmlNode implements NodeDefinition, Comparable<XmlNode>
 {
   @XmlAttribute(name = "name", required = true)
   protected String               name;
@@ -168,6 +176,69 @@ public class XmlNode implements NodeDefinition
   public void setCustom (XmlCustom custom)
   {
     this.custom = custom;
+  }
+
+  public void addToDigest (final MessageDigest digest)
+    throws LoadException
+  {
+    if ( !SvUtil.isBlankOrNull( name ) )
+    {
+      digest.update( name.getBytes() );
+    }
+
+    if ( !SvUtil.isBlankOrNull( type ) )
+    {
+      digest.update( type.getBytes() );
+    }
+
+    if ( joinType != null )
+    {
+      digest.update( (byte)joinType.getJoinType().ordinal() );
+    }
+
+    if ( !SvUtil.isBlankOrNull( joinParam ) )
+    {
+      digest.update( joinParam.getBytes() );
+    }
+
+    if ( !SvUtil.isBlankOrNull( guard ) )
+    {
+      digest.update( guard.getBytes() );
+    }
+
+    digest.update( (byte)(isStart() ? 1 : 0) );
+
+    Map<String, String> customProps = new TreeMap<String, String>();
+    DOMToObjectLoadHelper.loadCustomIntoMap( custom, customProps );
+
+    for ( Entry<String, String> entry : customProps.entrySet() )
+    {
+      digest.update( entry.getKey().getBytes() );
+      if ( !SvUtil.isBlankOrNull( entry.getValue() ) )
+      {
+        digest.update( entry.getValue().getBytes() );
+      }
+    }
+
+    Collections.sort( arcs );
+
+    if ( arcs != null )
+    {
+      for ( XmlArc arc : arcs )
+      {
+        arc.addToDigest( digest );
+      }
+    }
+  }
+
+  @Override
+  public int compareTo (XmlNode o)
+  {
+    if ( o == null )
+    {
+      return 1;
+    }
+    return SvUtil.compare( name, o.getName() );
   }
 
   @Override

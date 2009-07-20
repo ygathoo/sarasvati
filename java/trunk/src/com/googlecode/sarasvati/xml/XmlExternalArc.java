@@ -19,6 +19,8 @@
 
 package com.googlecode.sarasvati.xml;
 
+import java.security.MessageDigest;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
@@ -27,7 +29,7 @@ import com.googlecode.sarasvati.load.definition.ExternalArcDefinition;
 import com.googlecode.sarasvati.util.SvUtil;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-public class XmlExternalArc implements ExternalArcDefinition
+public class XmlExternalArc implements ExternalArcDefinition, Comparable<XmlExternalArc>
 {
   @XmlAttribute(name = "from", required = true)
   protected String from;
@@ -89,6 +91,56 @@ public class XmlExternalArc implements ExternalArcDefinition
   public boolean isToExternal ()
   {
     return !SvUtil.isBlankOrNull( external );
+  }
+
+  public void addToDigest (final MessageDigest digest)
+  {
+    if ( !SvUtil.isBlankOrNull( name ) )
+    {
+      digest.update( name.getBytes() );
+    }
+
+    if ( !SvUtil.isBlankOrNull( to ) )
+    {
+      digest.update( to.getBytes() );
+    }
+
+    if ( !SvUtil.isBlankOrNull( from ) )
+    {
+      digest.update( from.getBytes() );
+    }
+
+    if ( !SvUtil.isBlankOrNull( external ) )
+    {
+      digest.update( external.getBytes() );
+    }
+  }
+
+  @Override
+  public int compareTo (XmlExternalArc o)
+  {
+    if ( o == null )
+    {
+      return 1;
+    }
+
+    int c = SvUtil.compare( name, o.getName() );
+
+    if ( c != 0 )
+    {
+      return c;
+    }
+
+    c = SvUtil.compare( to, o.getTo() );
+
+    if ( c != 0 )
+    {
+      return c;
+    }
+
+    c = SvUtil.compare( from, o.getFrom() );
+
+    return c != 0 ? c : SvUtil.compare( external, o.getExternal() );
   }
 
   @Override
