@@ -2,30 +2,30 @@
 <process-definition xmlns="http://sarasvati.googlecode.com/ProcessDefinition" name="editor-generated">
     <node y="170" x="547" type="task" joinType="labelAnd" name="Marketing">
         <custom>
-            <taskName xmlns:ns2="http://sarasvati.googlecode.com/ProcessDefinition" xmlns="">Marketing</taskName>
-            <taskDesc xmlns:ns2="http://sarasvati.googlecode.com/ProcessDefinition" xmlns="">Send special offers to customer</taskDesc>
+            <taskName>Marketing</taskName>
+            <taskDesc>Send special offers to customer</taskDesc>
         </custom>
     </node>
     <node y="170" x="88" isStart="true" type="task" joinType="or" name="Check Order">
         <arc to="Bill Customer"/>
         <arc to="Fulfill Order"/>
         <custom>
-            <taskName xmlns:ns2="http://sarasvati.googlecode.com/ProcessDefinition" xmlns="">Check Order</taskName>
-            <taskDesc xmlns:ns2="http://sarasvati.googlecode.com/ProcessDefinition" xmlns="">Check the order for accuracy</taskDesc>
+            <taskName>Check Order</taskName>
+            <taskDesc>Check the order for accuracy</taskDesc>
         </custom>
     </node>
     <node y="71" x="322" type="task" joinType="or" name="Bill Customer">
         <arc to="Marketing"/>
         <custom>
-            <taskName xmlns:ns2="http://sarasvati.googlecode.com/ProcessDefinition" xmlns="">Bill Customer</taskName>
-            <taskDesc xmlns:ns2="http://sarasvati.googlecode.com/ProcessDefinition" xmlns="">Bill the customer for the order</taskDesc>
+            <taskName>Bill Customer</taskName>
+            <taskDesc>Bill the customer for the order</taskDesc>
         </custom>
     </node>
-    <node y="277" x="322" type="task" joinType="or" name="Fulfill Order">
+    <node y="294" x="322" type="task" joinType="or" name="Fulfill Order">
         <arc to="Marketing"/>
         <custom>
-            <taskName xmlns:ns2="http://sarasvati.googlecode.com/ProcessDefinition" xmlns="">Fulfill Order</taskName>
-            <taskDesc xmlns:ns2="http://sarasvati.googlecode.com/ProcessDefinition" xmlns="">Pack order items in warehouse and ship them</taskDesc>
+            <taskName>Fulfill Order</taskName>
+            <taskDesc>Pack order items in warehouse and ship them</taskDesc>
         </custom>
     </node>
 </process-definition>

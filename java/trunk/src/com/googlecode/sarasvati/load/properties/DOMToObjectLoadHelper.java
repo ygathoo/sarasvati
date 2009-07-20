@@ -216,7 +216,10 @@ public class DOMToObjectLoadHelper
 
     try
     {
-      doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+      DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
+      builderFactory.setNamespaceAware( false );
+      doc = builderFactory.newDocumentBuilder().newDocument();
+      doc.setDocumentURI( null );
     }
     catch ( ParserConfigurationException pce )
     {
@@ -262,7 +265,7 @@ public class DOMToObjectLoadHelper
             Element element = elemMap.get( fullName );
             if ( element == null )
             {
-              element = doc.createElement( pathElement );
+              element = doc.createElementNS( "http://sarasvati.googlecode.com/ProcessDefinition", pathElement );
               if ( parentElement != null )
               {
                 parentElement.appendChild( element );
@@ -278,7 +281,7 @@ public class DOMToObjectLoadHelper
         }
       }
 
-      Element element = doc.createElement( name );
+      Element element = doc.createElementNS( "http://sarasvati.googlecode.com/ProcessDefinition", name );
 
       if ( cdataTypes.contains( entry.getKey() ) )
       {
