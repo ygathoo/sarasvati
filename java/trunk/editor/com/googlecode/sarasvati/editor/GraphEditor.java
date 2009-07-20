@@ -382,7 +382,8 @@ public class GraphEditor
 
   public void openProcessDefinition (File processDefinitionFile)
   {
-    if ( getCurrentScene().getGraph().getFile() == null &&
+    if ( getCurrentScene() != null &&
+         getCurrentScene().getGraph().getFile() == null &&
          CommandStack.getCurrent().isEmpty() )
     {
       closeCurrentTab();
