@@ -53,7 +53,7 @@ public class SceneAddExternalAction extends WidgetAction.Adapter
     if ( event.getButton() == MouseEvent.BUTTON1 )
     {
       counter++;
-      ExternalState state = new ExternalState( "External-" + counter, "", null );
+      ExternalState state = new ExternalState( "External_" + counter, "", null );
       EditorExternal external = new EditorExternal( state );
 
       EditorScene scene = (EditorScene)widget.getScene();
