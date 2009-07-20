@@ -19,8 +19,8 @@
 package com.googlecode.sarasvati.event;
 
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
 
 public class NodeTokenEvent extends ExecutionEvent
 {

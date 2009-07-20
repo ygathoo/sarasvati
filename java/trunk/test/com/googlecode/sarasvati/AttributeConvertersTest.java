@@ -20,9 +20,9 @@ package com.googlecode.sarasvati;
 
 import junit.framework.Assert;
 
-import com.googlecode.sarasvati.impl.MapEnv;
-
 import org.junit.Test;
+
+import com.googlecode.sarasvati.impl.MapEnv;
 
 public class AttributeConvertersTest
 {

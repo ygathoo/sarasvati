@@ -18,8 +18,6 @@
 */
 package com.googlecode.sarasvati.editor.dialog;
 
-import com.googlecode.sarasvati.editor.panel.ExternalPropertiesPanel;
-import com.googlecode.sarasvati.editor.panel.NodePropertiesPanel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.border.BevelBorder;
@@ -27,6 +25,8 @@ import javax.swing.border.BevelBorder;
 import com.googlecode.sarasvati.editor.model.EditorExternal;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorNode;
+import com.googlecode.sarasvati.editor.panel.ExternalPropertiesPanel;
+import com.googlecode.sarasvati.editor.panel.NodePropertiesPanel;
 
 public class GraphMemberPropertiesDialog extends JDialog
 {

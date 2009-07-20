@@ -21,20 +21,20 @@ package com.googlecode.sarasvati.load.properties;
 
 import java.beans.PropertyDescriptor;
 
-import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.SarasvatiLoadException;
 
 public class EditorLoadPropertyMutator implements PropertyMutator
 {
   public static final EditorLoadPropertyMutator INSTANCE = new EditorLoadPropertyMutator();
 
   @Override
-  public Object getCurrentValue () throws LoadException
+  public Object getCurrentValue () throws SarasvatiLoadException
   {
     return this;
   }
 
   @Override
-  public void setFromText (String text) throws LoadException
+  public void setFromText (String text) throws SarasvatiLoadException
   {
     // does nothing
   }
@@ -52,7 +52,7 @@ public class EditorLoadPropertyMutator implements PropertyMutator
   }
 
   @Override
-  public void setValue (Object value) throws LoadException
+  public void setValue (Object value) throws SarasvatiLoadException
   {
     // does nothing
   }

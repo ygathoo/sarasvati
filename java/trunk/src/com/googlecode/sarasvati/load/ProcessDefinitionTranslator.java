@@ -37,5 +37,5 @@ import com.googlecode.sarasvati.load.definition.ProcessDefinition;
  */
 public interface ProcessDefinitionTranslator<T>
 {
-  ProcessDefinition translate (T source) throws LoadException;
+  ProcessDefinition translate (T source) throws SarasvatiLoadException;
 }

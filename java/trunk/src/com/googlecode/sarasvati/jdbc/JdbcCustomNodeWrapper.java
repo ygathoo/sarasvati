@@ -24,8 +24,6 @@ import com.googlecode.sarasvati.CustomNodeWrapper;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.SarasvatiException;
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
 public class JdbcCustomNodeWrapper extends JdbcPropertyNode implements CustomNodeWrapper
@@ -79,14 +77,6 @@ public class JdbcCustomNodeWrapper extends JdbcPropertyNode implements CustomNod
   public void afterLoad (final JdbcEngine engine)
   {
     super.afterLoad( engine );
-
-    try
-    {
-      DOMToObjectLoadHelper.setValues( customNode, attrMap );
-    }
-    catch ( LoadException le )
-    {
-      throw new SarasvatiException( "Unable to create CustomNode of type: " + getType(), le );
-    }
+    DOMToObjectLoadHelper.setValues( customNode, attrMap );
   }
 }

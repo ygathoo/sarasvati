@@ -25,8 +25,6 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.googlecode.sarasvati.load.LoadException;
-
 public abstract class AbstractLoadAction<T> extends AbstractDatabaseAction implements DatabaseLoadAction<T>
 {
   private final List<T> result;
@@ -40,7 +38,7 @@ public abstract class AbstractLoadAction<T> extends AbstractDatabaseAction imple
   }
 
   @Override
-  public void doWork () throws SQLException, LoadException
+  public void doWork () throws SQLException
   {
     setParameters( getStatement() );
     executeQuery();
@@ -63,7 +61,7 @@ public abstract class AbstractLoadAction<T> extends AbstractDatabaseAction imple
   }
 
   protected abstract void setParameters (PreparedStatement stmt) throws SQLException;
-  protected abstract T loadObject (ResultSet row) throws SQLException, LoadException;
+  protected abstract T loadObject (ResultSet row) throws SQLException;
 
   @SuppressWarnings("unchecked")
   public List<T> getResult ()

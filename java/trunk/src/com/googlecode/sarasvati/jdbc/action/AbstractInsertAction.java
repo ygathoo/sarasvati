@@ -22,8 +22,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import com.googlecode.sarasvati.jdbc.JdbcObject;
 import com.googlecode.sarasvati.jdbc.JdbcLoadException;
+import com.googlecode.sarasvati.jdbc.JdbcObject;
 
 public abstract class AbstractInsertAction<T extends JdbcObject> extends AbstractDatabaseAction
 {

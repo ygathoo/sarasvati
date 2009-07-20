@@ -29,9 +29,9 @@ public interface NodeFactory
    * Creates a new node of the given type
    * @return The new node
    *
-   * @throws LoadException If a node of the given type cannot be instantiated
+   * @throws SarasvatiLoadException If a node of the given type cannot be instantiated
    */
-  Node newNode (String type) throws LoadException;
+  Node newNode (String type) throws SarasvatiLoadException;
 
   /**
    * Loads the custom data into the node. Returns a map of the data loaded, keyed
@@ -51,7 +51,7 @@ public interface NodeFactory
    *         if the node is a {@link CustomNode}
    *
    *
-   * @throws LoadException If custom data is incorrect.
+   * @throws SarasvatiLoadException If custom data is incorrect.
    */
-  Map<String,String> loadCustom (Node node, Object custom) throws LoadException;
+  Map<String,String> loadCustom (Node node, Object custom) throws SarasvatiLoadException;
 }

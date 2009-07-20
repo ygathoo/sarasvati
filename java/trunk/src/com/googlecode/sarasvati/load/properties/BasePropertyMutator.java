@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.load.properties;
 
 import java.beans.PropertyDescriptor;
 
-import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.SarasvatiLoadException;
 
 public class BasePropertyMutator implements PropertyMutator
 {
@@ -40,7 +40,7 @@ public class BasePropertyMutator implements PropertyMutator
   }
 
   @Override
-  public Object getCurrentValue () throws LoadException
+  public Object getCurrentValue ()
   {
     try
     {
@@ -48,17 +48,17 @@ public class BasePropertyMutator implements PropertyMutator
     }
     catch (Exception e)
     {
-      throw new LoadException( "Unabled to read property " + propertyDescriptor.getName(), e );
+      throw new SarasvatiLoadException( "Unabled to read property " + propertyDescriptor.getName(), e );
     }
   }
 
   @Override
-  public void setFromText (String text) throws LoadException
+  public void setFromText (String text)
   {
     throw new UnsupportedOperationException( "Writes are not supported to the property " + propertyDescriptor.getName() + " on class " + target.getClass().getName() );
   }
 
-  public void setValue (Object value) throws LoadException
+  public void setValue (Object value)
   {
     try
     {
@@ -66,7 +66,7 @@ public class BasePropertyMutator implements PropertyMutator
     }
     catch (Exception e)
     {
-      throw new LoadException( "Unabled to read property " + propertyDescriptor.getName(), e );
+      throw new SarasvatiLoadException( "Unabled to read property " + propertyDescriptor.getName(), e );
     }
   }
 }

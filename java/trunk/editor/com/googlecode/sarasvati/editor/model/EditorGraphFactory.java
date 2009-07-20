@@ -26,7 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.definition.ArcDefinition;
 import com.googlecode.sarasvati.load.definition.CustomDefinition;
 import com.googlecode.sarasvati.load.definition.ExternalArcDefinition;
@@ -45,7 +44,7 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class EditorGraphFactory
 {
-  public static EditorGraph loadFromXml (ProcessDefinition procDef) throws LoadException
+  public static EditorGraph loadFromXml (ProcessDefinition procDef)
   {
     EditorGraph graph = new EditorGraph();
     graph.setName( procDef.getName() );

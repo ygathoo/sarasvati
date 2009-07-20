@@ -18,12 +18,12 @@
 */
 package com.googlecode.sarasvati.editor.dialog;
 
-import com.googlecode.sarasvati.editor.panel.ArcPropertiesPanel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.border.BevelBorder;
 
 import com.googlecode.sarasvati.editor.model.EditorArc;
+import com.googlecode.sarasvati.editor.panel.ArcPropertiesPanel;
 
 public class ArcPropertiesDialog extends JDialog
 {

@@ -27,7 +27,6 @@ import java.util.Map;
 import com.googlecode.sarasvati.jdbc.JdbcArc;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
-import com.googlecode.sarasvati.load.LoadException;
 
 public class ArcLoadAction extends AbstractLoadAction<JdbcArc>
 {
@@ -47,7 +46,7 @@ public class ArcLoadAction extends AbstractLoadAction<JdbcArc>
   }
 
   @Override
-  protected JdbcArc loadObject (ResultSet row) throws SQLException, LoadException
+  protected JdbcArc loadObject (ResultSet row) throws SQLException
   {
     long arcId       = row.getLong( 1 );
     long startRefId  = row.getLong( 2 );

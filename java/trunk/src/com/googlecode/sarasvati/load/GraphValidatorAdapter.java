@@ -41,7 +41,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateArc (Arc arc) throws LoadException
+  public void validateArc (Arc arc) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -50,7 +50,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateGraph (Graph graph) throws LoadException
+  public void validateGraph (Graph graph) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -59,7 +59,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateNode (Node node) throws LoadException
+  public void validateNode (Node node) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -68,7 +68,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateArcDefinition (ArcDefinition arcDefinition) throws LoadException
+  public void validateArcDefinition (ArcDefinition arcDefinition) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -78,7 +78,7 @@ public class GraphValidatorAdapter implements GraphValidator
    */
   @Override
   public void validateExternalDefinition (ExternalDefinition externalDefinition)
-      throws LoadException
+      throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -88,7 +88,7 @@ public class GraphValidatorAdapter implements GraphValidator
    */
   @Override
   public void validateExternalArcDefinition (ExternalArcDefinition xmlExternalArc)
-      throws LoadException
+      throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -97,7 +97,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateNodeDefinition (NodeDefinition nodeDefinition) throws LoadException
+  public void validateNodeDefinition (NodeDefinition nodeDefinition) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -107,7 +107,7 @@ public class GraphValidatorAdapter implements GraphValidator
    */
   @Override
   public void validateProcessDefinition (ProcessDefinition processDefinition)
-    throws LoadException
+    throws SarasvatiLoadException
   {
     // Does nothing
   }

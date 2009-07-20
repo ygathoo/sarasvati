@@ -51,7 +51,7 @@ public interface Engine
    *  GraphProcess process = engine.startProcess( graph );
    * </code>
    *
-   * If no process definition exists for the given name, as {@link SarasvatiException}
+   * If no process definition exists for the given name, a {@link SarasvatiException}
    * will be thrown.
    *
    * @param graphName The name of the graph to execute.

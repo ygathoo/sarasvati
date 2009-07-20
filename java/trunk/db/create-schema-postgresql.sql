@@ -31,6 +31,7 @@ create table wf_graph
   id              serial    NOT NULL PRIMARY KEY,
   name            text      NOT NULL,
   version         int       NOT NULL,
+  custom_id       text      NULL,
   create_date     timestamp NOT NULL DEFAULT current_timestamp
 );
 

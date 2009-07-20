@@ -37,6 +37,6 @@ public abstract class AbstractGraphLoadAction extends AbstractLoadAction<JdbcGra
     String graphName = row.getString( 2 );
     int version = row.getInt( 3 );
 
-    return new JdbcGraph( graphId, graphName, version );
+    return new JdbcGraph( graphId, graphName, version, null );
   }
 }

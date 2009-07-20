@@ -46,7 +46,6 @@ import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.annotations.NodeType;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
 import com.googlecode.sarasvati.load.definition.CustomDefinition;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
@@ -64,9 +63,11 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   }
 
   @Override
-  public HibGraph newGraph (final String name, final int version)
+  public HibGraph newGraph (final String name,
+                            final int version,
+                            final String customId)
   {
-    HibGraph newGraph = new HibGraph( name, version );
+    HibGraph newGraph = new HibGraph( name, version, customId );
     session.save( newGraph );
     return newGraph;
   }
@@ -92,7 +93,6 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
                        final boolean isStart,
                        final String guard,
                        final List<Object> customList)
-    throws LoadException
   {
     NodeFactory nodeFactory = getNodeFactory( type );
     Node newNode = nodeFactory.newNode( type );
@@ -161,7 +161,6 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
                                   final Graph graph,
                                   final Graph externalGraph,
                                   final CustomDefinition customDefinition)
-    throws LoadException
   {
     Map<String, String> attrMap = new HashMap<String, String>();
     DOMToObjectLoadHelper.loadCustomIntoMap( customDefinition, attrMap );

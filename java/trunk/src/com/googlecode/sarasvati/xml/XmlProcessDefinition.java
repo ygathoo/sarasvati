@@ -19,7 +19,6 @@
 
 package com.googlecode.sarasvati.xml;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
@@ -31,12 +30,14 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 import com.googlecode.sarasvati.SarasvatiException;
-import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
 import com.googlecode.sarasvati.load.definition.NodeDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
+import com.googlecode.sarasvati.util.SvUtil;
 
 @XmlRootElement(name = "process-definition")
 @XmlAccessorType(XmlAccessType.FIELD)
@@ -50,6 +51,9 @@ public class XmlProcessDefinition implements ProcessDefinition
 
   @XmlElement(name = "external")
   protected List<XmlExternal> externals = new ArrayList<XmlExternal>();
+
+  @XmlTransient
+  protected String messageDigest = null;
 
   @Override
   public String getName ()
@@ -84,36 +88,37 @@ public class XmlProcessDefinition implements ProcessDefinition
     this.externals = externals;
   }
 
-  public String getMessageDigest () throws LoadException
+  public String getMessageDigest () throws SarasvatiLoadException
   {
-    Collections.sort( nodes );
-    Collections.sort( externals );
-
-    try
+    if ( messageDigest == null )
     {
-      MessageDigest digest = MessageDigest.getInstance( "SHA1" );
-      digest.update( name.getBytes() );
+      Collections.sort( nodes );
+      Collections.sort( externals );
 
-      for ( XmlNode node : nodes )
+      try
       {
-        node.addToDigest( digest );
-      }
+        MessageDigest digest = MessageDigest.getInstance( "SHA1" );
+        digest.update( name.getBytes() );
 
-      for ( XmlExternal external : externals )
+        for ( XmlNode node : nodes )
+        {
+          node.addToDigest( digest );
+        }
+
+        for ( XmlExternal external : externals )
+        {
+          external.addToDigest( digest );
+        }
+
+        messageDigest = SvUtil.getHexString( digest.digest() );
+      }
+      catch( NoSuchAlgorithmException nsae )
       {
-        external.addToDigest( digest );
+        throw new SarasvatiException( "Unable to load SHA1 algorithm", nsae );
       }
+    }
 
-      return new String( digest.digest(), "UTF-8" );
-    }
-    catch ( UnsupportedEncodingException uee )
-    {
-      throw new SarasvatiException( "UTF-8 charset not found", uee );
-    }
-    catch( NoSuchAlgorithmException nsae )
-    {
-      throw new SarasvatiException( "Unable to load SHA1 algorithm", nsae );
-    }
+    return messageDigest;
   }
 
   @Override

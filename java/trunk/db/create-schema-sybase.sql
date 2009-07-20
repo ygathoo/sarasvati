@@ -48,6 +48,7 @@ create table wf_graph
   id          bigint       IDENTITY NOT NULL PRIMARY KEY,
   name        varchar(255)          NOT NULL,
   version     int                   NOT NULL,
+  custom_id   varchar(255)          NOT NULL,
   create_date datetime              DEFAULT getDate() NOT NULL
 ) with identity_gap = 10
 go

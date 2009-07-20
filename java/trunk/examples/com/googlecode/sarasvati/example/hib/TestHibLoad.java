@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.example.hib;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.List;
 
 import org.hibernate.Session;
 
@@ -36,9 +37,7 @@ import com.googlecode.sarasvati.impl.NestedProcessNode;
 import com.googlecode.sarasvati.impl.ScriptNode;
 import com.googlecode.sarasvati.impl.WaitNode;
 import com.googlecode.sarasvati.load.GraphLoader;
-import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
-import com.googlecode.sarasvati.xml.DefaultFileXmlProcessDefinitionResolver;
-import com.googlecode.sarasvati.xml.XmlLoader;
+import com.googlecode.sarasvati.load.LoadResult;
 
 public class TestHibLoad
 {
@@ -50,7 +49,6 @@ public class TestHibLoad
     sess.beginTransaction();
 
     HibEngine engine = new HibEngine( sess );
-    XmlLoader xmlLoader = new XmlLoader();
 
     engine.addNodeType( "node", HibNode.class);
     engine.addNodeType( "task", HibExampleTaskNode.class );
@@ -72,8 +70,6 @@ public class TestHibLoad
     File baseDir = new File( "common/test-wf/" );
     assert baseDir.exists() : "Workflow process def dir not found.";
 
-    ProcessDefinitionResolver resolver = new DefaultFileXmlProcessDefinitionResolver( xmlLoader, baseDir );
-
     FilenameFilter filter = new FilenameFilter()
     {
       @Override
@@ -83,23 +79,11 @@ public class TestHibLoad
       }
     };
 
-    for ( File file : baseDir.listFiles( filter ) )
-    {
-      String name = file.getName();
-      name = name.substring( 0, name.length() - ".wf.xml".length() );
+    List<LoadResult> results = wfLoader.loadNewAndChanged( baseDir, filter, null );
 
-      try
-      {
-        System.out.println( "Starting load of " + name );
-        wfLoader.loadWithDependencies( name, resolver );
-        System.out.println( "Loaded " + name );
-      }
-      catch ( Exception t )
-      {
-        System.out.println( "Failed to load: " + name + "  because: " + t.getMessage() );
-        t.printStackTrace();
-        return;
-      }
+    for ( LoadResult result : results )
+    {
+      System.out.println( result );
     }
 
     sess.getTransaction().commit();

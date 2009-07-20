@@ -19,9 +19,21 @@
 
 package com.googlecode.sarasvati.util;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+
 import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.TokenSetMember;
+import com.googlecode.sarasvati.load.definition.ExternalDefinition;
+import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class SvUtil
 {
@@ -108,5 +120,95 @@ public class SvUtil
       return s2 == null ? 0 : -1;
     }
     return s2 == null ? 1 : s1.compareTo( s2 );
+  }
+
+  public static void visitRecursive (File basePath, FileVisitor visitor)
+    throws IOException
+  {
+    Queue<File> dirs = new LinkedList<File>();
+    dirs.add( basePath );
+
+    while ( !dirs.isEmpty() )
+    {
+      File dir = dirs.remove();
+
+      for ( File file : dir.listFiles() )
+      {
+        if ( file.isDirectory() )
+        {
+          dirs.add( file );
+        }
+        else if ( visitor.accept( dir, file.getName() ) )
+        {
+          visitor.accept( file );
+        }
+      }
+    }
+  }
+
+  public static Collection<XmlProcessDefinition> getSorted (final Map<String, XmlProcessDefinition> processDefsByName)
+  {
+    Set<XmlProcessDefinition> processed = new LinkedHashSet<XmlProcessDefinition>( processDefsByName.size() );
+
+    for ( XmlProcessDefinition def : processDefsByName.values() )
+    {
+      if ( !processed.contains( def ) )
+      {
+        addWithPrerequisites( def, processed, processDefsByName );
+      }
+    }
+
+    return processed;
+  }
+
+  private static void addWithPrerequisites (final XmlProcessDefinition def,
+                                            final Set<XmlProcessDefinition> processed,
+                                            final Map<String, XmlProcessDefinition> processDefsByName)
+  {
+    for ( ExternalDefinition external : def.getExternals() )
+    {
+      XmlProcessDefinition externalPD = processDefsByName.get( external.getProcessDefinition() );
+      if ( !processed.contains( externalPD ) )
+      {
+        addWithPrerequisites( externalPD, processed, processDefsByName );
+      }
+    }
+
+    processed.add( def );
+  }
+
+  /**
+   * From http://www.rgagnon.com/javadetails/java-0596.html
+   */
+  private static final byte[] HEX_CHAR_TABLE = {
+    (byte)'0', (byte)'1', (byte)'2', (byte)'3',
+    (byte)'4', (byte)'5', (byte)'6', (byte)'7',
+    (byte)'8', (byte)'9', (byte)'a', (byte)'b',
+    (byte)'c', (byte)'d', (byte)'e', (byte)'f'
+  };
+
+  /**
+   * From http://www.rgagnon.com/javadetails/java-0596.html
+   */
+  public static String getHexString (byte[] raw)
+  {
+    byte[] hex = new byte[2 * raw.length];
+    int index = 0;
+
+    for (byte b : raw)
+    {
+      int v = b & 0xFF;
+      hex[index++] = HEX_CHAR_TABLE[v >>> 4];
+      hex[index++] = HEX_CHAR_TABLE[v & 0xF];
+    }
+
+    try
+    {
+      return new String(hex, "ASCII");
+    }
+    catch ( UnsupportedEncodingException uee )
+    {
+      throw new RuntimeException( uee );
+    }
   }
 }

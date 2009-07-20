@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.ProcessDefinitionResolver;
 import com.googlecode.sarasvati.load.ProcessDefinitionTranslator;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
@@ -109,7 +108,7 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
    * @see com.googlecode.sarasvati.load.ProcessDefinitionResolver#resolve(java.lang.String)
    */
   @Override
-  public ProcessDefinition resolve (String name) throws LoadException
+  public ProcessDefinition resolve (String name)
   {
     return sourcesRepository.get(name) == null? null : translator.translate( sourcesRepository.get( name ) );
   }
