@@ -149,7 +149,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     int count = 0;
     for ( Object obj : selection )
     {
-      if ( obj instanceof EditorGraphMember )
+      if ( obj instanceof EditorGraphMember<?> )
       {
         ((EditorGraphMember<?>)obj).setSelected( selected );
         count++;

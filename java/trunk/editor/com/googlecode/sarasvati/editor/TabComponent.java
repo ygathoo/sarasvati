@@ -70,5 +70,6 @@ public class TabComponent extends JPanel
   @Override
   public void updateUI ()
   {
+    // does nothing
   }
 }
