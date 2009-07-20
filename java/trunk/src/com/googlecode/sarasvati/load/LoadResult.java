@@ -25,8 +25,8 @@ public class LoadResult
   private String dependency;
 
   private LoadResult (final String name,
-                     final boolean isNew,
-                     final String dependency)
+                      final boolean isNew,
+                      final String dependency)
   {
     this.name = name;
     this.isNew = isNew;
