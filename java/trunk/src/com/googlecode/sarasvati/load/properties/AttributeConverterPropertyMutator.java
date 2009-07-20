@@ -19,7 +19,6 @@
 package com.googlecode.sarasvati.load.properties;
 
 import com.googlecode.sarasvati.env.AttributeConverter;
-import com.googlecode.sarasvati.load.LoadException;
 
 public class AttributeConverterPropertyMutator extends BasePropertyMutator
 {
@@ -34,7 +33,7 @@ public class AttributeConverterPropertyMutator extends BasePropertyMutator
   }
 
   @Override
-  public void setFromText (String text) throws LoadException
+  public void setFromText (String text)
   {
     setValue( converter.stringToObject( text, type ) );
   }

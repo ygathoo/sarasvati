@@ -48,6 +48,16 @@ public interface Graph
   int getVersion ();
 
   /**
+   * Users may associate custom ids with a graph. This may be used to
+   * aid in determining if a graph has changed. For example, it may store
+   * a hash of the process definition file. Or it might be a version number
+   * set and incremented by an editor.
+   *
+   * @return The custom id (if any) associated with the graph
+   */
+  String getCustomId ();
+
+  /**
    * Returns a list of all arcs in the graph.
    *
    * @return A list of arcs

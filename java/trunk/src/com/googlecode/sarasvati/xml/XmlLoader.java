@@ -36,21 +36,21 @@ import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
 
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.ProcessDefinitionTranslator;
+import com.googlecode.sarasvati.load.SarasvatiLoadException;
 
 public class XmlLoader implements ProcessDefinitionTranslator<File>
 {
   protected JAXBContext context;
   protected Schema      schema;
 
-  public XmlLoader (JAXBContext context) throws LoadException
+  public XmlLoader (JAXBContext context) throws SarasvatiLoadException
   {
     this.context = context;
     loadSchema();
   }
 
-  public XmlLoader (String... extraPackages) throws LoadException
+  public XmlLoader (String... extraPackages) throws SarasvatiLoadException
   {
     String packages = "com.googlecode.sarasvati.xml";
 
@@ -66,12 +66,12 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
     }
     catch (JAXBException e)
     {
-      throw new LoadException( "Error while creating JAXB context", e );
+      throw new SarasvatiLoadException( "Error while creating JAXB context", e );
     }
     loadSchema();
   }
 
-  private void loadSchema () throws LoadException
+  private void loadSchema () throws SarasvatiLoadException
   {
     InputStream is = getClass().getClassLoader().getResourceAsStream(
         "com/googlecode/sarasvati/ProcessDefinition.xsd" );
@@ -84,7 +84,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
 
     if (is == null)
     {
-      throw new LoadException( "ProcessDefinition.xsd not found in classpath" );
+      throw new SarasvatiLoadException( "ProcessDefinition.xsd not found in classpath" );
     }
 
     try
@@ -94,7 +94,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
     }
     catch (SAXException se)
     {
-      throw new LoadException( "Failed to load schema", se );
+      throw new SarasvatiLoadException( "Failed to load schema", se );
     }
     finally
     {
@@ -127,7 +127,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
   }
 
   private XmlProcessDefinition loadProcessDefinition (File file)
-    throws LoadException
+    throws SarasvatiLoadException
   {
     XmlProcessDefinition def = null;
     try
@@ -136,7 +136,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
     }
     catch(JAXBException e)
     {
-      throw new LoadException("Error while unmarshmalling " + file, e);
+      throw new SarasvatiLoadException("Error while unmarshmalling " + file, e);
     }
 
     return def;
@@ -158,7 +158,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
   }
 
   @Override
-  public XmlProcessDefinition translate (File source) throws LoadException
+  public XmlProcessDefinition translate (File source) throws SarasvatiLoadException
   {
     return loadProcessDefinition( source );
   }

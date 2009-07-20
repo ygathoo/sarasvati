@@ -28,9 +28,7 @@ import com.googlecode.sarasvati.CustomNodeWrapper;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.annotations.NodeType;
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
@@ -54,17 +52,10 @@ public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeW
   {
     if ( customNode == null )
     {
-      try
-      {
-        NodeFactory factory = engine.getFactory().getNodeFactory( getType() );
-        customNode = (CustomNode)factory.newNode( getType() );
-        customNode.setNodeWrapper( this );
-        DOMToObjectLoadHelper.setValues( customNode, attrMap );
-      }
-      catch ( LoadException le )
-      {
-        throw new SarasvatiException( "Unabled to create CustomNode of type: " + getType(), le );
-      }
+      NodeFactory factory = engine.getFactory().getNodeFactory( getType() );
+      customNode = (CustomNode)factory.newNode( getType() );
+      customNode.setNodeWrapper( this );
+      DOMToObjectLoadHelper.setValues( customNode, attrMap );
     }
     return customNode;
   }

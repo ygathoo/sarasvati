@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.load.properties;
 
 import java.beans.PropertyDescriptor;
 
-import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.SarasvatiLoadException;
 
 public interface PropertyMutator
 {
@@ -28,9 +28,9 @@ public interface PropertyMutator
 
   void setTarget (Object target);
 
-  Object getCurrentValue () throws LoadException;
+  Object getCurrentValue () throws SarasvatiLoadException;
 
-  void setValue (Object value) throws LoadException;
+  void setValue (Object value) throws SarasvatiLoadException;
 
-  void setFromText (String text) throws LoadException;
+  void setFromText (String text) throws SarasvatiLoadException;
 }

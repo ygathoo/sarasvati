@@ -14,19 +14,20 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Vincent Kirsch
- */
+    Copyright 2009 Paul Lorenz
+*/
+package com.googlecode.sarasvati.util;
 
-package com.googlecode.sarasvati.load;
-
-import com.googlecode.sarasvati.load.definition.ProcessDefinition;
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
 
 /**
- * ProcessDefinitionResolver will map a name to a {@link ProcessDefinition}, 
- * which can possibly be obtained by a call to {@link ProcessDefinitionTranslator}
+ * Interface for traversing a directory structure.
+ *
+ * @author Paul Lorenz
  */
-
-public interface ProcessDefinitionResolver
+public interface FileVisitor extends FilenameFilter
 {
-  ProcessDefinition resolve (String name) throws SarasvatiLoadException;
+  void accept (File file) throws IOException;
 }

@@ -19,9 +19,9 @@
 
 package com.googlecode.sarasvati.rubric;
 
-import org.junit.Test;
-
 import junit.framework.Assert;
+
+import org.junit.Test;
 
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.visitor.DropNotToAboveLeavesVisitor;

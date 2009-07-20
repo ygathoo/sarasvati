@@ -51,7 +51,7 @@ public class DefaultNodeFactory implements NodeFactory
   }
 
   @Override
-  public Map<String, String> loadCustom (Node node, Object custom) throws LoadException
+  public Map<String, String> loadCustom (Node node, Object custom)
   {
     if ( custom == null )
     {
@@ -64,13 +64,13 @@ public class DefaultNodeFactory implements NodeFactory
     }
     else
     {
-      throw new LoadException( "Expected DOM Element, but got instance of " + custom.getClass().getName() +
+      throw new SarasvatiLoadException( "Expected DOM Element, but got instance of " + custom.getClass().getName() +
                                " while loading node of type " + node.getType() );
     }
   }
 
   @Override
-  public Node newNode (String type) throws LoadException
+  public Node newNode (String type)
   {
     Class<? extends Node> clazz = typeMap.get( type );
 
@@ -90,11 +90,11 @@ public class DefaultNodeFactory implements NodeFactory
     }
     catch ( InstantiationException e )
     {
-      throw new LoadException( "Unable to create new instance for type '" + type + "'", e );
+      throw new SarasvatiLoadException( "Unable to create new instance for type '" + type + "'", e );
     }
     catch ( IllegalAccessException e )
     {
-      throw new LoadException( "Unable to create new instance for type '" + type + "'", e );
+      throw new SarasvatiLoadException( "Unable to create new instance for type '" + type + "'", e );
     }
   }
 }

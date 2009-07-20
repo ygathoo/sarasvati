@@ -71,7 +71,7 @@ import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
 import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.EditorScene;
-import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.xml.XmlLoader;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
@@ -128,7 +128,7 @@ public class GraphEditor
   protected EditorMode  mode;
   protected File        lastFile;
 
-  public GraphEditor () throws LoadException
+  public GraphEditor () throws SarasvatiLoadException
   {
     INSTANCE = this;
     xmlLoader = new XmlLoader();

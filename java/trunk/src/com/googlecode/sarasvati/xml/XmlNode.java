@@ -33,7 +33,6 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 
 import com.googlecode.sarasvati.JoinType;
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.definition.ArcDefinition;
 import com.googlecode.sarasvati.load.definition.NodeDefinition;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
@@ -179,7 +178,6 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
   }
 
   public void addToDigest (final MessageDigest digest)
-    throws LoadException
   {
     if ( !SvUtil.isBlankOrNull( name ) )
     {

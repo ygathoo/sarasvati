@@ -38,7 +38,6 @@ import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.jdbc.dialect.DatabaseDialect;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
 import com.googlecode.sarasvati.load.definition.CustomDefinition;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
@@ -94,9 +93,10 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
 
   @Override
   public JdbcGraph newGraph (final String name,
-                             final int version)
+                             final int version,
+                             final String customId)
   {
-    JdbcGraph graph = new JdbcGraph( name, version );
+    JdbcGraph graph = new JdbcGraph( name, version, customId );
     getDialect().newGraphInsertAction( graph ).execute( engine );
     return graph;
   }
@@ -110,7 +110,6 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
                        final boolean isStart,
                        final String guard,
                        final List<Object> customList)
-    throws LoadException
   {
     NodeFactory nodeFactory = getNodeFactory( type );
     Node newNode = nodeFactory.newNode( type );
@@ -259,7 +258,6 @@ public class JdbcGraphFactory extends AbstractGraphFactory<JdbcGraph>
                                final Graph graph,
                                final Graph externalGraph,
                                final CustomDefinition customDefinition)
-    throws LoadException
   {
     Map<String, String> attrMap = new HashMap<String, String>();
     DOMToObjectLoadHelper.loadCustomIntoMap( customDefinition, attrMap );

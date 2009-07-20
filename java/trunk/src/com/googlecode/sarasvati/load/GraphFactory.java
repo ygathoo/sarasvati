@@ -43,9 +43,11 @@ public interface GraphFactory<G extends Graph>
    *
    * @param name The name of the graph to create
    * @param version The version of the graph to create
+   * @param customId The custom id of the graph.
+   *
    * @return A new {@link Graph}
    */
-  G newGraph (String name, int version);
+  G newGraph (String name, int version, String customId);
 
   /**
    * Creates a new {@link Arc} with given start node, end node and node name.
@@ -56,9 +58,9 @@ public interface GraphFactory<G extends Graph>
    *
    * @return The new Arc
    *
-   * @throws LoadException If the arc can not be created, or if it is passed invalid data.
+   * @throws SarasvatiLoadException If the arc can not be created, or if it is passed invalid data.
    */
-  Arc newArc (G graph, Node startNode, Node endNode, String name) throws LoadException;
+  Arc newArc (G graph, Node startNode, Node endNode, String name) throws SarasvatiLoadException;
 
   /**
    * Creates a new {@link Node}.
@@ -74,10 +76,10 @@ public interface GraphFactory<G extends Graph>
    *
    * @return The new Node
    *
-   * @throws LoadException If an error occurs while loading, such as incorrect custom data is given.
+   * @throws SarasvatiLoadException If an error occurs while loading, such as incorrect custom data is given.
    */
   Node newNode (G graph, String name, String type, JoinType joinType, String joinParam, boolean isStart, String guard, List<Object> customList)
-    throws LoadException;
+    throws SarasvatiLoadException;
 
   /**
    * Creates a new {@link External}.
@@ -88,9 +90,9 @@ public interface GraphFactory<G extends Graph>
    * @param customDefinition A container for a list of custom attributes. May be empty or null.
    * @return A new {@link External}
    *
-   * @throws LoadException If an error occurs while loading, such as invalid custom data.
+   * @throws SarasvatiLoadException If an error occurs while loading, such as invalid custom data.
    */
-  External newExternal (String name, Graph graph, Graph externalGraph, CustomDefinition customDefinition) throws LoadException;
+  External newExternal (String name, Graph graph, Graph externalGraph, CustomDefinition customDefinition) throws SarasvatiLoadException;
 
   /**
    * Imports a node from an external graph into the given graph.

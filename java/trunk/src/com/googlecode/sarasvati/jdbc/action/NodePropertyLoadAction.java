@@ -23,7 +23,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.googlecode.sarasvati.jdbc.JdbcPropertyNode;
-import com.googlecode.sarasvati.load.LoadException;
 
 public class NodePropertyLoadAction extends AbstractLoadAction<Object>
 {
@@ -36,7 +35,7 @@ public class NodePropertyLoadAction extends AbstractLoadAction<Object>
   }
 
   @Override
-  protected Object loadObject (ResultSet row) throws SQLException, LoadException
+  protected Object loadObject (ResultSet row) throws SQLException
   {
     node.setProperty( row.getString( 1 ), row.getString( 2 ) );
     return null;

@@ -39,6 +39,7 @@ public class MemNode implements Node, Cloneable
   protected static AtomicLong idGenerator = new AtomicLong();
 
   protected Graph    graph;
+  protected Graph    definingGraph;
 
   protected long     id;
   protected String   name;
@@ -85,16 +86,25 @@ public class MemNode implements Node, Cloneable
     return NodeAdapterManager.getAdaptor( this, clazz );
   }
 
-
   @Override
   public Graph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (Graph graph)
+  public void setGraph (final Graph graph)
   {
     this.graph = graph;
+  }
+
+  public Graph getDefiningGraph ()
+  {
+    return definingGraph;
+  }
+
+  public void setDefiningGraph (final Graph definingGraph)
+  {
+    this.definingGraph = definingGraph;
   }
 
   @Override
@@ -103,7 +113,7 @@ public class MemNode implements Node, Cloneable
     return guard;
   }
 
-  public void setGuard (String guard)
+  public void setGuard (final String guard)
   {
     this.guard = guard;
   }
@@ -114,7 +124,7 @@ public class MemNode implements Node, Cloneable
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -125,13 +135,13 @@ public class MemNode implements Node, Cloneable
     return type;
   }
 
-  public void setType (String type)
+  public void setType (final String type)
   {
     this.type = type;
   }
 
   @Override
-  public GuardResponse guard (Engine engine, NodeToken token)
+  public GuardResponse guard (final Engine engine, final NodeToken token)
   {
     return engine.evaluateGuard( token, guard );
   }
@@ -141,7 +151,7 @@ public class MemNode implements Node, Cloneable
     return joinType;
   }
 
-  public void setJoinType (JoinType joinType)
+  public void setJoinType (final JoinType joinType)
   {
     this.joinType = joinType;
   }
@@ -152,7 +162,7 @@ public class MemNode implements Node, Cloneable
     return joinParam;
   }
 
-  public void setJoinParam (String joinParam)
+  public void setJoinParam (final String joinParam)
   {
     this.joinParam = joinParam;
   }
@@ -169,7 +179,7 @@ public class MemNode implements Node, Cloneable
     return isStart;
   }
 
-  public void setStart (boolean isStart)
+  public void setStart (final boolean isStart)
   {
     this.isStart = isStart;
   }
@@ -184,7 +194,8 @@ public class MemNode implements Node, Cloneable
    * @see Node#backtrack(Engine, NodeToken)
    */
   @Override
-  public void backtrack (Engine engine, NodeToken token)
+  public void backtrack (final Engine engine,
+                         final NodeToken token)
   {
     // does nothing by default. Can be overridden by subclasses.
   }
@@ -195,7 +206,8 @@ public class MemNode implements Node, Cloneable
    * @see Node#isBacktrackable(Engine, NodeToken)
    */
   @Override
-  public boolean isBacktrackable (Engine engine, NodeToken token)
+  public boolean isBacktrackable (final Engine engine,
+                                  final NodeToken token)
   {
     return true;
   }
@@ -215,7 +227,7 @@ public class MemNode implements Node, Cloneable
     return originatingExternalNode;
   }
 
-  public void setOriginatingExternalNode (MemNode originatingExternalNode)
+  public void setOriginatingExternalNode (final MemNode originatingExternalNode)
   {
     this.originatingExternalNode = originatingExternalNode;
   }

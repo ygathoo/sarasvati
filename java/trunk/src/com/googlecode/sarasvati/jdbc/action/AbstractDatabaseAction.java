@@ -25,7 +25,6 @@ import java.sql.SQLException;
 
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcLoadException;
-import com.googlecode.sarasvati.load.LoadException;
 
 public abstract class AbstractDatabaseAction implements DatabaseAction
 {
@@ -109,5 +108,5 @@ public abstract class AbstractDatabaseAction implements DatabaseAction
     return resultSet;
   }
 
-  protected abstract void doWork () throws SQLException, LoadException;
+  protected abstract void doWork () throws SQLException;
 }

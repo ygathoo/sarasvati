@@ -42,6 +42,7 @@ public class GraphHashTest
 
   public static void scanForChanges () throws Exception
   {
+    long start = System.currentTimeMillis();
     XmlLoader xmlLoader = new XmlLoader();
 
     File basePath = new File( "common/test-wf/" );
@@ -55,6 +56,10 @@ public class GraphHashTest
       }
     };
 
+    int count = 0;
+
+    for ( int i = 0 ; i < 10; i++ )
+    {
     for ( File file : basePath.listFiles( filter ) )
     {
       XmlProcessDefinition pd = xmlLoader.translate( file );
@@ -74,7 +79,12 @@ public class GraphHashTest
           hashesMap.put( pd.getName(), current );
         }
       }
+      count++;
     }
+
+    }
+
+    System.out.println( "Scan took " + (System.currentTimeMillis() - start) + "ms to scan " + count + " files" );
   }
 
   public static void main (String[] args) throws Exception

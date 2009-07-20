@@ -27,14 +27,16 @@ import com.googlecode.sarasvati.impl.AbstractGraph;
 public class MemGraph extends AbstractGraph
 {
   protected String        name;
+  protected String        customId;
   protected List<MemNode> nodes;
   protected List<MemArc>  arcs;
 
-  public MemGraph (String name)
+  public MemGraph (String name, String customId)
   {
-    this.name  = name;
-    this.nodes = new LinkedList<MemNode>();
-    this.arcs  = new LinkedList<MemArc>();
+    this.name     = name;
+    this.customId = customId;
+    this.nodes    = new LinkedList<MemNode>();
+    this.arcs     = new LinkedList<MemArc>();
   }
 
   public List<MemNode> getNodes ()
@@ -57,5 +59,24 @@ public class MemGraph extends AbstractGraph
   public int getVersion ()
   {
     return 1;
+  }
+
+  @Override
+  public String getCustomId ()
+  {
+    return customId;
+  }
+
+  public boolean usesExternal (String graphName)
+  {
+    for ( MemNode node : getNodes() )
+    {
+      if ( name.equals( node.getDefiningGraph().getName() ) )
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 }

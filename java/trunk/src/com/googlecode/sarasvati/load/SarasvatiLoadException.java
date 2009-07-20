@@ -19,16 +19,18 @@
 
 package com.googlecode.sarasvati.load;
 
-public class LoadException extends Exception
+import com.googlecode.sarasvati.SarasvatiException;
+
+public class SarasvatiLoadException extends SarasvatiException
 {
   private static final long serialVersionUID = 1L;
 
-  public LoadException (String message, Throwable cause)
+  public SarasvatiLoadException (String message, Throwable cause)
   {
     super( message, cause );
   }
 
-  public LoadException( String message )
+  public SarasvatiLoadException( String message )
   {
     super( message );
   }

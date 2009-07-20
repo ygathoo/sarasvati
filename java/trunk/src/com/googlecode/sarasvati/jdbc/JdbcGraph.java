@@ -28,22 +28,29 @@ public class JdbcGraph extends AbstractGraph implements JdbcObject
   protected Long   id;
   protected String name;
   protected int    version;
+  protected String customId;
 
   protected List<JdbcNodeRef> nodes;
   protected List<JdbcArc> arcs;
 
-  public JdbcGraph (String name, int version)
+  public JdbcGraph (final String name,
+                    final int version,
+                    final String customId)
   {
-    this( null, name, version );
+    this( null, name, version, customId );
   }
 
-  public JdbcGraph (Long id, String name, int version)
+  public JdbcGraph (final Long id,
+                    final String name,
+                    final int version,
+                    final String customId)
   {
-    this.id      = id;
-    this.name    = name;
-    this.version = version;
-    this.nodes   = new LinkedList<JdbcNodeRef>();
-    this.arcs    = new LinkedList<JdbcArc>();
+    this.id       = id;
+    this.name     = name;
+    this.version  = version;
+    this.customId = customId;
+    this.nodes    = new LinkedList<JdbcNodeRef>();
+    this.arcs     = new LinkedList<JdbcArc>();
   }
 
   public Long getId ()
@@ -78,6 +85,12 @@ public class JdbcGraph extends AbstractGraph implements JdbcObject
   public int getVersion ()
   {
     return version;
+  }
+
+  @Override
+  public String getCustomId ()
+  {
+    return customId;
   }
 
   @Override

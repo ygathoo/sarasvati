@@ -20,10 +20,10 @@
 package com.googlecode.sarasvati.mem;
 
 import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.CustomNodeWrapper;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.CustomNodeWrapper;
 
 public class MemCustomNodeWrapper extends MemNode implements CustomNodeWrapper
 {

@@ -27,7 +27,6 @@ import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.JdbcGraphProcess;
-import com.googlecode.sarasvati.load.LoadException;
 
 /**
  * Assumes database is in the form
@@ -51,7 +50,7 @@ public class ProcessLoadAction extends AbstractLoadAction<JdbcGraphProcess>
   }
 
   @Override
-  protected JdbcGraphProcess loadObject (ResultSet row) throws SQLException, LoadException
+  protected JdbcGraphProcess loadObject (ResultSet row) throws SQLException
   {
     JdbcGraph graph    = engine.getRepository().getGraph( row.getLong( 1 ) );
 

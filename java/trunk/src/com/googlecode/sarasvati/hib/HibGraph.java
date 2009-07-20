@@ -49,16 +49,20 @@ public class HibGraph extends AbstractGraph
   protected String name;
   protected int    version;
 
+  @Column (name="custom_id")
+  protected String customId;
+
   @Column (name="create_date", updatable=false)
   @Temporal (TemporalType.TIMESTAMP)
   protected Date   createDate;
 
   protected HibGraph () { /* Default constructor for hibernate */ }
 
-  protected HibGraph (String name, int version)
+  protected HibGraph (String name, int version, String customId)
   {
     this.name = name;
     this.version = version;
+    this.customId = customId;
     this.createDate = new Date();
     this.nodes = new LinkedList<HibNodeRef>();
     this.arcs = new LinkedList<HibArc>();
@@ -99,6 +103,17 @@ public class HibGraph extends AbstractGraph
   public void setVersion (int version)
   {
     this.version = version;
+  }
+
+  @Override
+  public String getCustomId ()
+  {
+    return customId;
+  }
+
+  public void setCustomId (String customId)
+  {
+    this.customId = customId;
   }
 
   public Date getCreateDate()

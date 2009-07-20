@@ -32,7 +32,6 @@ import com.googlecode.sarasvati.jdbc.JdbcEngine;
 import com.googlecode.sarasvati.jdbc.JdbcGraph;
 import com.googlecode.sarasvati.jdbc.JdbcNode;
 import com.googlecode.sarasvati.jdbc.JdbcNodeRef;
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
 
 public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
@@ -52,7 +51,7 @@ public class NodeLoadAction extends AbstractLoadAction<JdbcNodeRef>
   }
 
   @Override
-  protected JdbcNodeRef loadObject (ResultSet row) throws SQLException, LoadException
+  protected JdbcNodeRef loadObject (ResultSet row) throws SQLException
   {
     long nodeRefId    = row.getLong( 1 );
     // String instance   = row.getString( 2 );

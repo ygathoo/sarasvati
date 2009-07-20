@@ -18,7 +18,6 @@ import com.googlecode.sarasvati.jdbc.action.AbstractInsertAction;
 import com.googlecode.sarasvati.jdbc.action.AbstractLoadAction;
 import com.googlecode.sarasvati.jdbc.action.DatabaseAction;
 import com.googlecode.sarasvati.jdbc.action.DatabaseLoadAction;
-import com.googlecode.sarasvati.load.LoadException;
 
 public class BaseExampleActionFactory implements ExampleActionFactory
 {
@@ -66,7 +65,7 @@ public class BaseExampleActionFactory implements ExampleActionFactory
     return new AbstractLoadAction<Object>( SELECT_TASK_NODE_SQL, false )
     {
       @Override
-      protected Object loadObject (ResultSet row) throws SQLException, LoadException
+      protected Object loadObject (ResultSet row) throws SQLException
       {
         taskNode.setTaskName( row.getString( 1 ) );
         taskNode.setTaskDesc( row.getString( 2 ) );
@@ -110,7 +109,7 @@ public class BaseExampleActionFactory implements ExampleActionFactory
     return new AbstractLoadAction<JdbcExampleTask>( SELECT_TASK_BY_TOKEN_SQL, true )
     {
       @Override
-      protected JdbcExampleTask loadObject (ResultSet row) throws SQLException, LoadException
+      protected JdbcExampleTask loadObject (ResultSet row) throws SQLException
       {
         long id = row.getLong( 1 );
         String name = row.getString( 2 );
@@ -141,7 +140,7 @@ public class BaseExampleActionFactory implements ExampleActionFactory
     return new AbstractLoadAction<JdbcExampleTask>( SELECT_TASKS_BY_PROCESS_SQL, true )
     {
       @Override
-      protected JdbcExampleTask loadObject (ResultSet row) throws SQLException, LoadException
+      protected JdbcExampleTask loadObject (ResultSet row) throws SQLException
       {
         long id = row.getLong( 1 );
         String name = row.getString( 2 );

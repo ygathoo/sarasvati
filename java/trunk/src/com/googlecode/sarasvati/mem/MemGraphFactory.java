@@ -37,7 +37,6 @@ import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.impl.MapEnv;
 import com.googlecode.sarasvati.load.AbstractGraphFactory;
-import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.NodeFactory;
 import com.googlecode.sarasvati.load.definition.CustomDefinition;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
@@ -53,9 +52,10 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
 
   @Override
   public MemGraph newGraph (final String name,
-                            final int version)
+                            final int version,
+                            final String customId)
   {
-    return new MemGraph( name );
+    return new MemGraph( name, customId );
   }
 
   @Override
@@ -63,7 +63,6 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
                      final Node startNode,
                      final Node endNode,
                      final String name)
-      throws LoadException
   {
     MemArc arc = new MemArc( name, startNode, endNode );
     graph.getArcs().add( arc );
@@ -79,7 +78,6 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
                        final boolean isStart,
                        final String guard,
                        final List<Object> customList)
-    throws LoadException
   {
     NodeFactory nodeFactory = getNodeFactory( type );
 
@@ -98,6 +96,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
 
     node.initId();
     node.setGraph( graph );
+    node.setDefiningGraph( graph );
     node.setName( name );
     node.setType( type );
     node.setJoinType( joinType );
@@ -143,7 +142,6 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
                                final Graph graph,
                                final Graph externalGraph,
                                CustomDefinition customDefinition)
-    throws LoadException
   {
     HashMap<String, String> attributes = new HashMap<String, String> ();
     DOMToObjectLoadHelper.loadCustomIntoMap( customDefinition, attributes );

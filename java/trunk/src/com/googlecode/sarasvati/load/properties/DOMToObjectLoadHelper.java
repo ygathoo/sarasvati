@@ -41,14 +41,14 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.googlecode.sarasvati.load.LoadException;
+import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.CustomDefinition;
 import com.googlecode.sarasvati.util.SvUtil;
 
 public class DOMToObjectLoadHelper
 {
   public static void loadCustomIntoMap (CustomDefinition customDefinition, Map<String, String> map)
-    throws LoadException
+    throws SarasvatiLoadException
   {
     if ( customDefinition != null && customDefinition.getCustom() != null )
     {
@@ -62,14 +62,14 @@ public class DOMToObjectLoadHelper
     }
   }
 
-  public static Map<String, String> setBeanValues (Object obj, Node node) throws LoadException
+  public static Map<String, String> setBeanValues (Object obj, Node node) throws SarasvatiLoadException
   {
     Map<String, String> beanProperties = new HashMap<String, String>();
     setBeanValues( obj, node, null, beanProperties );
     return beanProperties;
   }
 
-  public static void setBeanValues (Object obj, Node node, String name, Map<String, String> beanProperties) throws LoadException
+  public static void setBeanValues (Object obj, Node node, String name, Map<String, String> beanProperties) throws SarasvatiLoadException
   {
     PropertyMutator editor = null;
     Object currentValue = null;
@@ -156,7 +156,7 @@ public class DOMToObjectLoadHelper
     return prefix == null ? name : prefix + "." + name;
   }
 
-  public static PropertyMutator getMutatorForProperty (Object obj, String name) throws LoadException
+  public static PropertyMutator getMutatorForProperty (Object obj, String name) throws SarasvatiLoadException
   {
     if ( obj == EditorLoadPropertyMutator.INSTANCE )
     {
@@ -171,7 +171,7 @@ public class DOMToObjectLoadHelper
     }
     catch( IntrospectionException ie )
     {
-      throw new LoadException( "Could not introspect obj " + obj, ie );
+      throw new SarasvatiLoadException( "Could not introspect obj " + obj, ie );
     }
 
     PropertyDescriptor attr = null;
@@ -187,13 +187,13 @@ public class DOMToObjectLoadHelper
 
     if ( attr == null )
     {
-      throw new LoadException( obj.getClass().getName() + " has no attribute named " + name );
+      throw new SarasvatiLoadException( obj.getClass().getName() + " has no attribute named " + name );
     }
 
     return PropertyMutatorRegistry.getMutator( attr, obj, new BasePropertyMutator() );
   }
 
-  public static void setValues (Object obj, Map<String, String> values) throws LoadException
+  public static void setValues (Object obj, Map<String, String> values) throws SarasvatiLoadException
   {
     for (Entry<String, String> entry : values.entrySet() )
     {
