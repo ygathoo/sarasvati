@@ -100,4 +100,13 @@ public class SvUtil
     }
     return null;
   }
+
+  public static int compare (final String s1, final String s2)
+  {
+    if ( s1 == null )
+    {
+      return s2 == null ? 0 : -1;
+    }
+    return s2 == null ? 1 : s1.compareTo( s2 );
+  }
 }

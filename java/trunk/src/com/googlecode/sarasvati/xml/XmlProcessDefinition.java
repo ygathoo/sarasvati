@@ -19,7 +19,11 @@
 
 package com.googlecode.sarasvati.xml;
 
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
@@ -28,6 +32,8 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
+import com.googlecode.sarasvati.SarasvatiException;
+import com.googlecode.sarasvati.load.LoadException;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
 import com.googlecode.sarasvati.load.definition.NodeDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
@@ -76,6 +82,38 @@ public class XmlProcessDefinition implements ProcessDefinition
   public void setExternals (List<XmlExternal> externals)
   {
     this.externals = externals;
+  }
+
+  public String getMessageDigest () throws LoadException
+  {
+    Collections.sort( nodes );
+    Collections.sort( externals );
+
+    try
+    {
+      MessageDigest digest = MessageDigest.getInstance( "SHA1" );
+      digest.update( name.getBytes() );
+
+      for ( XmlNode node : nodes )
+      {
+        node.addToDigest( digest );
+      }
+
+      for ( XmlExternal external : externals )
+      {
+        external.addToDigest( digest );
+      }
+
+      return new String( digest.digest(), "UTF-8" );
+    }
+    catch ( UnsupportedEncodingException uee )
+    {
+      throw new SarasvatiException( "UTF-8 charset not found", uee );
+    }
+    catch( NoSuchAlgorithmException nsae )
+    {
+      throw new SarasvatiException( "Unable to load SHA1 algorithm", nsae );
+    }
   }
 
   @Override
