@@ -306,6 +306,7 @@ public class GraphEditor
 
     setupModeKeys();
 
+    createNewProcessDefinition();
     tabSelectionChanged();
     setMode( EditorMode.Move );
 
@@ -381,6 +382,12 @@ public class GraphEditor
 
   public void openProcessDefinition (File processDefinitionFile)
   {
+    if ( getCurrentScene().getGraph().getFile() == null &&
+         CommandStack.getCurrent().isEmpty() )
+    {
+      closeCurrentTab();
+    }
+
     try
     {
       ProcessDefinition xmlProcDef = xmlLoader.translate( processDefinitionFile );

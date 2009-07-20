@@ -112,6 +112,11 @@ public class CommandStack
            ( currentIndex >= 0 && commandStack.get( currentIndex ) == lastSavedCommand);
   }
 
+  public boolean isEmpty ()
+  {
+    return commandStack.isEmpty();
+  }
+
   public static void markSaved ()
   {
     current.saved();
