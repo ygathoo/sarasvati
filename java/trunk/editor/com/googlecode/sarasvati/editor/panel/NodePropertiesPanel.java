@@ -373,6 +373,11 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
     {
       EditorNodeType nodeType = (EditorNodeType)nodeTypeInput.getSelectedItem();
 
+      if ( nodeType == null )
+      {
+        nodeType = new EditorNodeType( "node", false );
+      }
+
       addPropertyButton.setEnabled( nodeType.isAllowNonSpecifiedAttributes() );
       deletePropertyButton.setEnabled( nodeType.isAllowNonSpecifiedAttributes() );
 

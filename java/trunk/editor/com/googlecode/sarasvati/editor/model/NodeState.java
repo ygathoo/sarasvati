@@ -54,7 +54,8 @@ public class NodeState extends GraphMemberState
 
   public EditorNodeType getEditorNodeType ()
   {
-    return EditorPreferences.getInstance().getTypeByName( type );
+    EditorNodeType editorNodeType = EditorPreferences.getInstance().getTypeByName( type );
+    return editorNodeType == null ? EditorPreferences.getInstance().getTypeByName( "node" ) : editorNodeType;
   }
 
   public JoinType getJoinType ()
