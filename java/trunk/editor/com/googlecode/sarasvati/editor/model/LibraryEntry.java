@@ -19,19 +19,78 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.io.File;
+import java.lang.ref.SoftReference;
 
+import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
+import com.googlecode.sarasvati.util.SvUtil;
 
-public class LibraryEntry
+public class LibraryEntry implements Comparable<LibraryEntry>
 {
   protected String name;
   protected File path;
-  protected ProcessDefinition processDefinition;
+  protected SoftReference<ProcessDefinition> pdRef;
 
   public LibraryEntry (final String name,
                        final File path )
   {
     this.name = name;
     this.path = path;
+  }
+
+  /**
+   * @return the name
+   */
+  public String getName ()
+  {
+    return name;
+  }
+
+  /**
+   * @param name the name to set
+   */
+  public void setName (String name)
+  {
+    this.name = name;
+  }
+
+  /**
+   * @return the path
+   */
+  public File getPath ()
+  {
+    return path;
+  }
+
+  /**
+   * @param path the path to set
+   */
+  public void setPath (File path)
+  {
+    this.path = path;
+  }
+
+  public ProcessDefinition getProcessDefinition ()
+  {
+    ProcessDefinition processDefinition = pdRef == null ? null : pdRef.get();
+
+    if ( processDefinition == null )
+    {
+      processDefinition = GraphEditor.getInstance().getXmlLoader().translate( path );
+      pdRef = new SoftReference<ProcessDefinition>( processDefinition );
+    }
+
+    return processDefinition;
+  }
+
+  @Override
+  public int compareTo (LibraryEntry o)
+  {
+    if ( o == null )
+    {
+      return 1;
+    }
+
+    return SvUtil.compare( name, o.getName() );
   }
 }

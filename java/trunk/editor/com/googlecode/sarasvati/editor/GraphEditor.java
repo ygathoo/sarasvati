@@ -144,6 +144,11 @@ public class GraphEditor
     return mode;
   }
 
+  public XmlLoader getXmlLoader ()
+  {
+    return xmlLoader;
+  }
+
   public void setMode (EditorMode mode)
   {
     if ( this.mode == mode )

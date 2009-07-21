@@ -66,17 +66,4 @@ public class MemGraph extends AbstractGraph
   {
     return customId;
   }
-
-  public boolean usesExternal (String graphName)
-  {
-    for ( MemNode node : getNodes() )
-    {
-      if ( name.equals( node.getDefiningGraph().getName() ) )
-      {
-        return true;
-      }
-    }
-
-    return false;
-  }
 }

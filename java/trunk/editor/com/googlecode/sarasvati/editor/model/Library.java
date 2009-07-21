@@ -18,15 +18,84 @@
  */
 package com.googlecode.sarasvati.editor.model;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.io.File;
+import java.util.Collection;
+import java.util.Map;
+import java.util.TreeMap;
+
+import com.googlecode.sarasvati.util.FileVisitor;
+import com.googlecode.sarasvati.util.SvUtil;
 
 public class Library
 {
-  protected List<LibraryEntry> entries = new LinkedList<LibraryEntry>();
+  private static final Library INSTANCE = new Library ();
 
-  public void loadFromPath (String path, boolean recurse)
+  public static Library getInstance ()
   {
+    return INSTANCE;
+  }
 
+  private Map<String, LibraryEntry> entries;
+  private File basePath;
+
+  public Library ()
+  {
+    emptyLibrary();
+  }
+
+  public void loadFromPath (final String path,
+                            final boolean recurse)
+  {
+    entries = new TreeMap<String, LibraryEntry>();
+    basePath = new File( path );
+
+    FileVisitor visitor = new FileVisitor()
+    {
+
+      @Override
+      public boolean accept (final File dir, final String name)
+      {
+        return name.endsWith( ".wf.xml" );
+      }
+
+      @Override
+      public void accept (final File file)
+      {
+        String name = file.getName();
+        name = name.substring( 0, name.length() - 7 );
+        entries.put( name, new LibraryEntry( name, file ) );
+      }
+    };
+
+    SvUtil.visitRecursive( basePath, visitor, recurse );
+  }
+
+  public void emptyLibrary ()
+  {
+    entries = new TreeMap<String, LibraryEntry>();
+    basePath = new File( ".") ;
+  }
+
+  public Collection<LibraryEntry> getEntries ()
+  {
+    return entries.values();
+  }
+
+  public Collection<String> getNames ()
+  {
+    return entries.keySet();
+  }
+
+  public LibraryEntry getEntry (final String name)
+  {
+    return entries.get( name );
+  }
+
+  /**
+   * @return the basePath
+   */
+  public File getBasePath ()
+  {
+    return basePath;
   }
 }

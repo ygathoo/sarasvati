@@ -20,7 +20,6 @@ package com.googlecode.sarasvati.util;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 
 /**
  * Interface for traversing a directory structure.
@@ -29,5 +28,5 @@ import java.io.IOException;
  */
 public interface FileVisitor extends FilenameFilter
 {
-  void accept (File file) throws IOException;
+  void accept (File file);
 }

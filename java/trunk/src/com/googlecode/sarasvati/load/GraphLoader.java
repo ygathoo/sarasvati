@@ -22,7 +22,6 @@ package com.googlecode.sarasvati.load;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -458,14 +457,7 @@ public class GraphLoader<G extends Graph>
 
     Set<String> updated = new HashSet<String>();
 
-    try
-    {
-      SvUtil.visitRecursive( basePath, visitor );
-    }
-    catch (IOException ioe)
-    {
-      throw new SarasvatiLoadException( "Error loading workflows", ioe );
-    }
+    SvUtil.visitRecursive( basePath, visitor, true );
 
     List<LoadResult> loadResults = new LinkedList<LoadResult>();
 
