@@ -21,7 +21,6 @@ package com.googlecode.sarasvati.visual.common;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.draw2d.geometry.PointList;
@@ -39,17 +38,17 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
   protected Point start = null;
   protected Point end   = null;
 
-  protected Path oldPath = null;
   protected Path path;
-  protected boolean resetControlPoints = false;
+  protected List<Point> route;
 
-  public PathTrackingConnectionWidget (ShortestPathRouterAdapter router, GraphSceneImpl<?,?> scene)
+  public PathTrackingConnectionWidget (final ShortestPathRouterAdapter router,
+                                       final GraphSceneImpl<?,?> scene)
   {
     super( scene );
     this.router = router;
   }
 
-  public void ensurePathCurrent ()
+  public boolean ensurePathCurrent ()
   {
     Anchor sourceAnchor = getSourceAnchor();
     Anchor targetAnchor = getTargetAnchor();
@@ -75,18 +74,20 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
       }
 
       boolean pathChange = path == null || !start.equals( newStart ) || !end.equals( newEnd );
-      if ( path != null && pathChange )
-      {
-        router.removePath( path );
-      }
       if ( pathChange )
       {
+        if ( path != null )
+        {
+          router.removePath( path );
+        }
+
         start = newStart;
         end   = newEnd;
         path = new Path( ConvertUtil.awtToSwt( start ), ConvertUtil.awtToSwt( end ) );
+        path.data = this;
         router.addPath( path, isSelfArc );
-        resetControlPoints = true;
       }
+      return pathChange;
     }
     else
     {
@@ -95,27 +96,35 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
       end   = null;
       path  = null;
     }
+
+    return true;
   }
 
-  public List<Point> getRoute ()
+  public Point getStart ()
   {
-    if ( path == null )
-    {
-      return Collections.emptyList();
-    }
+    return start;
+  }
 
+  public Point getEnd ()
+  {
+    return end;
+  }
+
+  public void updateRoute ()
+  {
     PointList pointList = path.getPoints();
 
-    // Route is apparently not cache-able, b/c when I try,
-    // connections no longer route properly.
-    ArrayList<Point> route = new ArrayList<Point>( pointList.size() );
+    route = new ArrayList<Point>( pointList.size() );
 
     for ( int i = 0; i < pointList.size(); i++ )
     {
       Point point = ConvertUtil.swtToAwt( pointList.getPoint( i ) );
       route.add( point );
     }
+  }
 
+  public List<Point> getRoute ()
+  {
     return route;
   }
 }
