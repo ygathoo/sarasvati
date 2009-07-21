@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.editor.menu;
 import java.awt.event.ActionEvent;
 import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
+import java.io.File;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -28,6 +29,7 @@ import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.model.Library;
 
 public class OpenAction extends AbstractAction
 {
@@ -47,7 +49,15 @@ public class OpenAction extends AbstractAction
     GraphEditor editor = GraphEditor.getInstance();
 
     JFileChooser fileChooser = new JFileChooser();
-    fileChooser.setCurrentDirectory( editor.getLastFile() );
+
+    File path = editor.getLastFile();
+
+    if ( path == null )
+    {
+      path = Library.getInstance().getBasePath();
+    }
+
+    fileChooser.setCurrentDirectory( path );
 
     int retVal = fileChooser.showOpenDialog( editor.getMainWindow() );
 

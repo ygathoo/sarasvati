@@ -27,6 +27,7 @@ import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.EditorExternal;
 import com.googlecode.sarasvati.editor.model.ExternalState;
+import com.googlecode.sarasvati.editor.model.Library;
 
 /**
  *
@@ -232,6 +233,11 @@ public class ExternalPropertiesPanel extends javax.swing.JPanel {
           dialog.setVisible( false );
         }
       });
+
+      for ( final String name : Library.getInstance().getNames() )
+      {
+        processDefinitionsModel.addElement( name );
+      }
 
       ExternalState state = external.getState();
       nameInput.setText( state.getName() );

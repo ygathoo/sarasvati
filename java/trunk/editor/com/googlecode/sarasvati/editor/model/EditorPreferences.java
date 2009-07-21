@@ -91,6 +91,20 @@ public class EditorPreferences
     {
       defaultNodeType = nodeTypes.get( 0 );
     }
+
+    reloadLibrary();
+  }
+
+  public void reloadLibrary()
+  {
+    if ( SvUtil.isBlankOrNull( libraryPath ) )
+    {
+      Library.getInstance().emptyLibrary();
+    }
+    else
+    {
+      Library.getInstance().loadFromPath( libraryPath, recurseLibrary );
+    }
   }
 
   public boolean isFirstRun ()
@@ -281,5 +295,7 @@ public class EditorPreferences
     this.recurseLibrary = newRecurseLibrary;
     this.defaultNodeType = newDefaultNodeType;
     this.defaultSelfArcsLabel = newDefaultSelfArcsLabel;
+
+    reloadLibrary();
   }
 }

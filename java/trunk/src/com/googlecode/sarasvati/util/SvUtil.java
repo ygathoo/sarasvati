@@ -20,7 +20,6 @@
 package com.googlecode.sarasvati.util;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
 import java.util.LinkedHashSet;
@@ -122,11 +121,16 @@ public class SvUtil
     return s2 == null ? 1 : s1.compareTo( s2 );
   }
 
-  public static void visitRecursive (File basePath, FileVisitor visitor)
-    throws IOException
+  public static void visitRecursive (final File basePath,
+                                     final FileVisitor visitor,
+                                     final boolean recurse)
   {
     Queue<File> dirs = new LinkedList<File>();
-    dirs.add( basePath );
+
+    if ( basePath.isDirectory() )
+    {
+      dirs.add( basePath );
+    }
 
     while ( !dirs.isEmpty() )
     {
@@ -134,7 +138,7 @@ public class SvUtil
 
       for ( File file : dir.listFiles() )
       {
-        if ( file.isDirectory() )
+        if ( recurse && file.isDirectory() )
         {
           dirs.add( file );
         }
