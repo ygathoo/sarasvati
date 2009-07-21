@@ -57,6 +57,21 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
     addChild( connLayer );
 
     router = new ShortestPathRouterAdapter( this, 10 );
+
+    addSceneListener( new SceneListener()
+    {
+      @Override
+      public void sceneValidating () { /* does nothing */ }
+
+      @Override
+      public void sceneValidated () { /* does nothing */ }
+
+      @Override
+      public void sceneRepaint ()
+      {
+        router.sceneValidated();
+      }
+    });
   }
 
   public void setAdjacentLineSpacing (int spacing)
@@ -74,7 +89,6 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   {
     ConnectionWidget edgeWidget = (ConnectionWidget) findWidget( edge );
     edgeWidget.setSourceAnchor( anchorMap.get( sourceNode ) );
-    router.setDirty();
   }
 
   @Override
@@ -82,7 +96,6 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   {
     ConnectionWidget edgeWidget = (ConnectionWidget) findWidget( edge );
     edgeWidget.setTargetAnchor( anchorMap.get( targetNode ) );
-    router.setDirty();
   }
 
   @Override

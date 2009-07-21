@@ -20,7 +20,9 @@
 package com.googlecode.sarasvati.visual.common;
 
 import java.awt.Point;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.geometry.Rectangle;
@@ -30,78 +32,83 @@ import org.netbeans.api.visual.router.Router;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Widget;
 
+import com.googlecode.sarasvati.util.SvGraphicsUtil;
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visual.util.ConvertUtil;
 
 public class ShortestPathRouterAdapter implements Router
 {
   protected GraphSceneImpl<?, ?> scene;
   protected ShortestPathRouter router;
-  protected boolean dirty = false;
 
-  public ShortestPathRouterAdapter (GraphSceneImpl<?,?> scene, int spacing)
+  protected Map<Widget, WidgetBoundsTracker> widgetMap = new HashMap<Widget, WidgetBoundsTracker>();
+
+  public ShortestPathRouterAdapter (final GraphSceneImpl<?,?> scene, int spacing)
   {
     this.scene = scene;
     this.router = new ShortestPathRouter();
     router.setSpacing( spacing );
   }
 
-  public void setAdjacentLineSpacing (int spacing)
+  public void setAdjacentLineSpacing (final int spacing)
   {
     router.setSpacing( spacing );
   }
 
-  public void addNodeWidget (Widget w)
+  public void addNodeWidget (final Widget w)
   {
-    w.addDependency( new WidgetListener( w ) );
+    widgetMap.put( w, new WidgetBoundsTracker( w ) );
   }
 
-  public void removeNodeWidget (Widget w)
+  public void removeNodeWidget (final Widget w)
   {
-    WidgetListener widgetListener = null;
-    for (Widget.Dependency dependency : w.getDependencies() )
+    WidgetBoundsTracker boundsTracker = widgetMap.remove( w );
+    if ( boundsTracker != null )
     {
-      if ( dependency instanceof WidgetListener )
-      {
-        widgetListener = (WidgetListener)dependency;
-      }
-    }
-
-    if ( widgetListener != null )
-    {
-      w.removeDependency( widgetListener );
-      widgetListener.cleanup();
+      boundsTracker.cleanup();
     }
   }
 
-  @SuppressWarnings("unchecked")
-  public void addPath (Path path, boolean isSelfArc)
+  public void sceneValidated ()
+  {
+    boolean updates = false;
+    for ( WidgetBoundsTracker boundsTracker : widgetMap.values() )
+    {
+      updates |= boundsTracker.checkBounds();
+    }
+
+    if ( updates )
+    {
+      updateRoutes();
+      scene.revalidate();
+    }
+  }
+
+  public void addPath (final Path path, final boolean isSelfArc)
   {
     //Check for overlapping path, If there are overlapping paths
     //Force path to bend.
-    List<Path> solve = router.solve();
-
-    for ( Path existPath : solve )
+    for ( Widget w : scene.connLayer.getChildren() )
     {
-      if ( (existPath.getPoints() == null || existPath.getPoints().size() == 2 ) &&
-           existPath.getEndPoint().equals( path.getStartPoint() ) &&
-           existPath.getStartPoint().equals( path.getEndPoint() ) )
+      if ( path.data == w || !(w instanceof PathTrackingConnectionWidget ) )
       {
-        PointList bendPoints = new PointList();
-        int deltaX = path.getEndPoint().x - path.getStartPoint().x;
-        int y = ((path.getEndPoint().y + path.getStartPoint().y) >> 1 ) + Math.min( Math.abs( deltaX ), router.getSpacing() );
+        continue;
+      }
 
-        int deltaY = path.getEndPoint().y - path.getStartPoint().y;
-        int offset = Math.min( Math.abs( deltaY ), router.getSpacing() );
-        if ( ( deltaX > 0 && deltaY > 0 ) || (deltaX < 0 && deltaY < 0 ) )
-        {
-          offset = -offset;
-        }
+      PathTrackingConnectionWidget conn = (PathTrackingConnectionWidget)w;
 
-        int x = ((path.getEndPoint().x + path.getStartPoint().x) >> 1 ) + offset;
+      if ( conn.getStart() == null | conn.getEnd() == null )
+      {
+        continue;
+      }
 
-        bendPoints.addPoint( x, y );
-        //Add a new obstacle
-        path.setBendPoints( bendPoints  );
+      List<Point> route = conn.getRoute();
+      if ( route != null && route.size() == 2 &&
+           ConvertUtil.awtToSwt( conn.getStart() ).equals( path.getStartPoint() ) &&
+           ConvertUtil.awtToSwt( conn.getEnd() ).equals( path.getEndPoint() ) )
+      {
+        SvGraphicsUtil.addOffsetBendToPath( path, router.getSpacing() );
+        break;
       }
     }
 
@@ -116,35 +123,46 @@ public class ShortestPathRouterAdapter implements Router
     }
 
     router.addPath( path );
-    dirty = true;
   }
 
-  public void removePath (Path path)
+  public void removePath (final Path path)
   {
     router.removePath( path );
-    dirty = true;
+  }
+
+  @SuppressWarnings("unchecked")
+  public void updateRoutes ()
+  {
+    List<Path> paths = router.solve();
+    for ( Path p : paths )
+    {
+      PathTrackingConnectionWidget pathTrackingCW = (PathTrackingConnectionWidget)p.data;
+      pathTrackingCW.updateRoute();
+      pathTrackingCW.revalidate();
+    }
   }
 
   @Override
-  public List<Point> routeConnection (ConnectionWidget conn)
+  public List<Point> routeConnection (final ConnectionWidget conn)
   {
     PathTrackingConnectionWidget pathTrackingCW = (PathTrackingConnectionWidget)conn;
-    pathTrackingCW.ensurePathCurrent();
-    router.solve();
-    dirty = false;
+    if ( pathTrackingCW.ensurePathCurrent() )
+    {
+      updateRoutes();
+    }
 
     return pathTrackingCW.getRoute();
   }
 
-  public void setDirty ()
-  {
-    this.dirty = true;
-  }
-
-  public class WidgetListener implements Widget.Dependency
+  public class WidgetBoundsTracker
   {
     private Widget widget;
     private Rectangle bounds;
+
+    public WidgetBoundsTracker (final Widget widget)
+    {
+      this.widget = widget;
+    }
 
     public Rectangle getNewBounds ()
     {
@@ -157,35 +175,33 @@ public class ShortestPathRouterAdapter implements Router
       return ConvertUtil.awtToSwt( newBounds );
     }
 
-    public WidgetListener (Widget widget)
-    {
-      this.widget = widget;
-      this.bounds = getNewBounds();
-
-      if ( bounds != null )
-      {
-        router.addObstacle( bounds );
-      }
-
-      dirty = true;
-    }
-
-    @Override
-    public void revalidateDependency ()
+    public boolean checkBounds ()
     {
       Rectangle newBounds = getNewBounds();
 
-      if ( bounds != null )
+      if ( SvUtil.equals( bounds, newBounds ) )
+      {
+        return false;
+      }
+
+      if ( bounds == null )
+      {
+        if ( newBounds != null )
+        {
+          router.addObstacle( newBounds );
+        }
+      }
+      else if ( newBounds == null )
       {
         router.removeObstacle( bounds );
       }
-      if ( newBounds != null )
+      else
       {
-        router.addObstacle( newBounds );
+        router.updateObstacle( bounds, newBounds );
       }
 
       bounds = newBounds;
-      dirty = true;
+      return true;
     }
 
     public void cleanup ()
@@ -193,7 +209,6 @@ public class ShortestPathRouterAdapter implements Router
       if ( bounds != null )
       {
         router.removeObstacle( bounds );
-        dirty = true;
       }
     }
   }
