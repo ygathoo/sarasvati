@@ -40,8 +40,8 @@ import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.ProcessState;
-import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.env.TokenSetMemberEnv;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
@@ -108,6 +108,7 @@ public abstract class BaseEngine implements Engine
       {
         NodeToken startToken = getFactory().newNodeToken( process, startNode,
                                                           new ArrayList<ArcToken>(0) );
+        fireEvent( NodeTokenEvent.newCreatedEvent(this, startToken));
         process.addNodeToken( startToken );
         executeNode( process, startToken );
       }
