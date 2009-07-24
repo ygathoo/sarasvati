@@ -23,6 +23,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.util.FileVisitor;
 import com.googlecode.sarasvati.util.SvUtil;
 
@@ -97,5 +98,11 @@ public class Library
   public File getBasePath ()
   {
     return basePath;
+  }
+
+  public ProcessDefinition getProcessDefinition (final String name)
+  {
+    LibraryEntry entry = getEntry( name );
+    return entry == null ? null :entry.getProcessDefinition();
   }
 }

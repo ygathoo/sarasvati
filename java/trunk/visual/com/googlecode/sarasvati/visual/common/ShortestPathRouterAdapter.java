@@ -97,15 +97,16 @@ public class ShortestPathRouterAdapter implements Router
 
       PathTrackingConnectionWidget conn = (PathTrackingConnectionWidget)w;
 
-      if ( conn.getStart() == null | conn.getEnd() == null )
+      if ( conn.getStart() == null || conn.getEnd() == null )
       {
         continue;
       }
 
       List<Point> route = conn.getRoute();
+
       if ( route != null && route.size() == 2 &&
-           ConvertUtil.awtToSwt( conn.getStart() ).equals( path.getStartPoint() ) &&
-           ConvertUtil.awtToSwt( conn.getEnd() ).equals( path.getEndPoint() ) )
+           ConvertUtil.awtToSwt( conn.getEnd() ).equals( path.getStartPoint() ) &&
+           ConvertUtil.awtToSwt( conn.getStart() ).equals( path.getEndPoint() ) )
       {
         SvGraphicsUtil.addOffsetBendToPath( path, router.getSpacing() );
         break;

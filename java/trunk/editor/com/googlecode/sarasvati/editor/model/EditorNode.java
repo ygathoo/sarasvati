@@ -25,4 +25,10 @@ public class EditorNode extends EditorGraphMember<NodeState>
   {
     super( initialState );
   }
+
+  @Override
+  public EditorNode asNode ()
+  {
+    return this;
+  }
 }
