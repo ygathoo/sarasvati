@@ -54,7 +54,8 @@ public enum ExecutionEventType
 
   public boolean isNodeTokenEvent ()
   {
-    return this == NODE_TOKEN_ACCEPTED  ||
+    return this == NODE_TOKEN_CREATED   ||
+    	   this == NODE_TOKEN_ACCEPTED  ||
            this == NODE_TOKEN_COMPLETED ||
            this == NODE_TOKEN_ACCEPTED  ||
            this == NODE_TOKEN_DISCARDED ||
