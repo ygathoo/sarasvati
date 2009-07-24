@@ -30,4 +30,10 @@ public class EditorExternal extends EditorGraphMember<ExternalState>
   {
     return true;
   }
+
+  @Override
+  public EditorExternal asExternal ()
+  {
+    return this;
+  }
 }

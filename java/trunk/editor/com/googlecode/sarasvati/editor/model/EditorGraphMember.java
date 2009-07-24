@@ -81,6 +81,16 @@ public abstract class EditorGraphMember<T extends GraphMemberState> extends Abst
     stateChanged();
   }
 
+  public EditorExternal asExternal ()
+  {
+    return null;
+  }
+
+  public EditorNode asNode ()
+  {
+    return null;
+  }
+
   @Override
   public String toString ()
   {
