@@ -38,6 +38,8 @@ public interface RubricStmt
 
   boolean isResult ();
 
+  boolean isStringSymbol ();
+
   RubricStmtDateSymbol asDateSymbol ();
 
   RubricStmtIf asIf ();
@@ -45,4 +47,6 @@ public interface RubricStmt
   RubricStmtRelativeDate asRelativeDate ();
 
   RubricStmtResult asResult ();
+
+  RubricStmtStringSymbol asStringSymbol ();
 }

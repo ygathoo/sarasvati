@@ -71,6 +71,23 @@ public class RubricTest
 
         throw new IllegalArgumentException( "No such named date: " + dateFunction );
       }
+
+      @Override
+      public String evalStringFunction (String stringFunction)
+      {
+        if ( "hello".equals( stringFunction ) )
+        {
+          return "world";
+        }
+        if ( "ping".equals( stringFunction ) )
+        {
+          return "pong";
+        }
+
+        throw new IllegalArgumentException( "No such named string: " + stringFunction );
+      }
+
+
     };
 
     System.out.println( stmt.eval( env ) );
@@ -98,8 +115,9 @@ public class RubricTest
                        "if ( test1 and test2 ) then if test3 then Accept else Skip else Skip reject",
                        "if not ( test1 and test2 ) then if test3 then Accept else Skip else Skip reject",
                        "if ( not test1 and not test2 ) or (test3 and test4) then Discard else Skip",
-                       "if (a or b then Accept else Discard",
-                       "if (a or b) and c then 0 else 1"};
+                       "if (a or b) then Accept else Discard",
+                       "if (a or b) and c then 0 else 1",
+                       "if a then @hello else @ping"};
 
     for ( String test : tests )
     {

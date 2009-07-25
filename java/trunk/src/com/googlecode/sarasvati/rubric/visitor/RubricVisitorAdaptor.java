@@ -27,6 +27,7 @@ import com.googlecode.sarasvati.rubric.lang.RubricStmtDateSymbol;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtIf;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtRelativeDate;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtResult;
+import com.googlecode.sarasvati.rubric.lang.RubricStmtStringSymbol;
 
 public class RubricVisitorAdaptor implements RubricVisitor
 {
@@ -38,6 +39,12 @@ public class RubricVisitorAdaptor implements RubricVisitor
 
   @Override
   public void visit (RubricStmtDateSymbol dateSymbolStmt)
+  {
+    // does nothing by default
+  }
+
+  @Override
+  public void visit (RubricStmtStringSymbol stringSymbolStmt)
   {
     // does nothing by default
   }

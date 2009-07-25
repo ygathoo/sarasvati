@@ -16,69 +16,59 @@
 
     Copyright 2008 Paul Lorenz
 */
+
 package com.googlecode.sarasvati.rubric.lang;
 
+import com.googlecode.sarasvati.rubric.env.RubricEnv;
+import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
+import com.googlecode.sarasvati.util.SvUtil;
 
-public abstract class AbstractRubricStmt implements RubricStmt
+public class RubricStmtStringSymbol extends AbstractRubricStmt
 {
-  @Override
-  public RubricStmtDateSymbol asDateSymbol ()
+  protected String symbol;
+
+  public RubricStmtStringSymbol (String symbol)
   {
-    return null;
+    this.symbol = symbol;
+  }
+
+  public String getSymbol ()
+  {
+    return symbol;
+  }
+
+  public void setSymbol (String symbol)
+  {
+    this.symbol = symbol;
   }
 
   @Override
-  public RubricStmtIf asIf ()
+  public String eval (RubricEnv env)
   {
-    return null;
+    return env.evalStringFunction( symbol );
   }
 
   @Override
-  public RubricStmtRelativeDate asRelativeDate ()
+  public void traverse (RubricVisitor visitor)
   {
-    return null;
+    visitor.visit( this );
   }
 
   @Override
-  public RubricStmtResult asResult ()
+  public boolean isEqualTo (RubricStmt stmt)
   {
-    return null;
+    return stmt.isStringSymbol() && SvUtil.equals( symbol, stmt.asStringSymbol().getSymbol() );
   }
 
   @Override
   public RubricStmtStringSymbol asStringSymbol ()
   {
-    // TODO Auto-generated method stub
-    return null;
+    return this;
   }
 
   @Override
   public boolean isStringSymbol ()
   {
-    return false;
-  }
-
-  @Override
-  public boolean isDateSymbol ()
-  {
-    return false;
-  }
-
-  @Override
-  public boolean isIf ()
-  {
-    return false;
-  }
-
-  @Override
-  public boolean isRelativeDate ()
-  {
-    return false;
-  }
-
-  @Override
-  public boolean isResult ()
-  {
-    return false;
+    return true;
   }
 }

@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008, 2009 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.rubric.env;
@@ -31,25 +31,36 @@ public class DefaultRubricFunctionRepository implements RubricFunctionRepository
     return GLOBAL_INSTANCE;
   }
 
-  protected Map<String, RubricPredicate> predicateMap = new HashMap<String, RubricPredicate>();
-  protected Map<String, RubricDateFunction> dateFunctionMap = new HashMap<String, RubricDateFunction>();
+  protected final Map<String, RubricPredicate> predicateMap = new HashMap<String, RubricPredicate>();
+  protected final Map<String, RubricDateFunction> dateFunctionMap = new HashMap<String, RubricDateFunction>();
+  protected final Map<String, RubricStringFunction> stringFunctionMap = new HashMap<String, RubricStringFunction>();
 
-  public void registerPredicate (String name, RubricPredicate predicate)
+  public void registerPredicate (final String name, final RubricPredicate predicate)
   {
     predicateMap.put( name, predicate );
   }
 
-  public void unregisterPredicate (String name)
+  public void unregisterPredicate (final String name)
   {
     predicateMap.remove( name );
   }
 
-  public void registerDateFunction (String name, RubricDateFunction dateFunction)
+  public void registerDateFunction (final String name, final RubricDateFunction dateFunction)
   {
     dateFunctionMap.put( name, dateFunction );
   }
 
-  public void unregisterDateFunction (String name)
+  public void unregisterDateFunction (final String name)
+  {
+    dateFunctionMap.remove( name );
+  }
+
+  public void registerStringFunction (final String name, final RubricStringFunction stringFunction)
+  {
+    stringFunctionMap.put( name, stringFunction );
+  }
+
+  public void unregisterStringFunction (final String name)
   {
     dateFunctionMap.remove( name );
   }
@@ -57,7 +68,7 @@ public class DefaultRubricFunctionRepository implements RubricFunctionRepository
   /**
    * @see com.googlecode.sarasvati.rubric.env.RubricFunctionRepository#getPredicate(java.lang.String)
    */
-  public RubricPredicate getPredicate (String predicate)
+  public RubricPredicate getPredicate (final String predicate)
   {
     return predicateMap.get( predicate );
   }
@@ -65,8 +76,17 @@ public class DefaultRubricFunctionRepository implements RubricFunctionRepository
   /**
    * @see com.googlecode.sarasvati.rubric.env.RubricFunctionRepository#getDateFunction(java.lang.String)
    */
-  public RubricDateFunction getDateFunction (String dateFunction)
+  public RubricDateFunction getDateFunction (final String dateFunction)
   {
     return dateFunctionMap.get( dateFunction );
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.rubric.env.RubricFunctionRepository#getStringFunction(java.lang.String)
+   */
+  @Override
+  public RubricStringFunction getStringFunction (final String functionName)
+  {
+    return stringFunctionMap.get( functionName );
   }
 }

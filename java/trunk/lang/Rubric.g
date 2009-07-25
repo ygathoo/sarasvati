@@ -103,14 +103,19 @@ expr returns [RubricExpr value]
          ;
 
 result returns [RubricStmt value]
-         :  guardResult { $value = new RubricStmtResult( $guardResult.value ); }
-         |  NUMBER      { $value = new RubricStmtResult( Integer.parseInt( $NUMBER.text ) ); }
-         |  STRING      { $value = new RubricStmtResult( SvUtil.normalizeQuotedString( $STRING.text ) ); }
-         |  dateResult  { $value = $dateResult.value; }
+         :  guardResult  { $value = new RubricStmtResult( $guardResult.value ); }
+         |  NUMBER       { $value = new RubricStmtResult( Integer.parseInt( $NUMBER.text ) ); }
+         |  STRING       { $value = new RubricStmtResult( SvUtil.normalizeQuotedString( $STRING.text ) ); }
+         |  dateResult   { $value = $dateResult.value; }
+         |  stringResult { $value = $stringResult.value; }
          ;
 
 dateResult returns [RubricStmt value]
          :  '('! dateSpec ')'! { $value = $dateSpec.value; }
+         ;
+
+stringResult returns [RubricStmt value]
+         : '@' ID { $value = new RubricStmtStringSymbol( $ID.text ); }
          ;
 
 dateSpec returns [RubricStmt value]

@@ -27,10 +27,13 @@ import com.googlecode.sarasvati.rubric.lang.RubricStmtDateSymbol;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtIf;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtRelativeDate;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtResult;
+import com.googlecode.sarasvati.rubric.lang.RubricStmtStringSymbol;
 
 public interface RubricVisitor
 {
   void visit (RubricStmtIf ifStmt);
+
+  void visit (RubricStmtStringSymbol stringSymbolStmt);
 
   void visit (RubricStmtDateSymbol dateSymbolStmt);
 
