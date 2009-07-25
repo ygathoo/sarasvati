@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008, 2009 Paul Lorenz
  */
 
 package com.googlecode.sarasvati.rubric.env;
@@ -40,7 +40,9 @@ public class DefaultRubricEnv implements RubricEnv
   protected NodeToken                token;
   protected RubricFunctionRepository functionRepository;
 
-  public DefaultRubricEnv (Engine engine, NodeToken token, RubricFunctionRepository functionRepository)
+  public DefaultRubricEnv (final Engine engine,
+                           final NodeToken token,
+                           final RubricFunctionRepository functionRepository)
   {
     this.engine = engine;
     this.token = token;
@@ -48,7 +50,7 @@ public class DefaultRubricEnv implements RubricEnv
   }
 
   @Override
-  public Date evalDateFunction (String dateFunction)
+  public Date evalDateFunction (final String dateFunction)
   {
     RubricDateFunction rubricDateFunction = functionRepository.getDateFunction( dateFunction );
     if ( rubricDateFunction == null )
@@ -56,6 +58,17 @@ public class DefaultRubricEnv implements RubricEnv
       throw new RubricException( "Evaluation failed. Unknown date function '" + dateFunction + "'" );
     }
     return rubricDateFunction.eval( engine, token );
+  }
+
+  @Override
+  public String evalStringFunction (final String stringFunction)
+  {
+    RubricStringFunction rubricStringFunction = functionRepository.getStringFunction( stringFunction );
+    if ( rubricStringFunction == null )
+    {
+      throw new RubricException( "Evaluation failed. Unknown string function '" + stringFunction + "'" );
+    }
+    return rubricStringFunction.eval( engine, token );
   }
 
   @Override

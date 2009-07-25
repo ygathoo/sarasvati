@@ -50,6 +50,15 @@ public interface RubricEnv
   Date evalDateFunction (String dateFunction);
 
   /**
+   * Evaluates the given string function (function returning a string value).
+   *
+   * @param stringFunction The name of the string function to evaluate
+   *
+   * @return The result of the string function
+   */
+  String evalStringFunction (String stringFunction);
+
+  /**
    * Calculates a date, offset by the given amount to the passed in date.
    * The units parameter will correspond to one of
    *

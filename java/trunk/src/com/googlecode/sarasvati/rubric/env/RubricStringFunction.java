@@ -14,16 +14,15 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008-2009 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 
 package com.googlecode.sarasvati.rubric.env;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
 
-public interface RubricFunctionRepository
+
+public interface RubricStringFunction
 {
-  RubricPredicate getPredicate (String predicate);
-
-  RubricDateFunction getDateFunction (String functionName);
-
-  RubricStringFunction getStringFunction (String functionName);
+  String eval (Engine engine, NodeToken token);
 }
