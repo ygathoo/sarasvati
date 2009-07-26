@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.editor.menu;
 
 import java.awt.event.ActionEvent;
+import java.awt.event.InputEvent;
 import java.awt.event.KeyEvent;
 
 import javax.swing.AbstractAction;
@@ -27,21 +28,21 @@ import javax.swing.KeyStroke;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
 
-public class DeleteAction extends AbstractAction
+public class CopyAction extends AbstractAction
 {
   private static final long serialVersionUID = 1L;
 
-  public DeleteAction ()
+  public CopyAction ()
   {
-    super( "Delete" );
+    super( "Copy" );
 
-    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_DELETE, 0 ) );
-    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_D );
+    putValue( Action.ACCELERATOR_KEY, KeyStroke.getKeyStroke( KeyEvent.VK_C, InputEvent.CTRL_DOWN_MASK ) );
+    putValue( Action.MNEMONIC_KEY, KeyEvent.VK_C);
   }
 
   @Override
   public void actionPerformed (ActionEvent e)
   {
-    GraphEditor.getInstance().editDelete();
+    GraphEditor.getInstance().editCopy();
   }
 }

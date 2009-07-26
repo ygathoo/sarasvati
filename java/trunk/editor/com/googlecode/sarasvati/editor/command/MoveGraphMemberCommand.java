@@ -50,7 +50,6 @@ public class MoveGraphMemberCommand extends AbstractCommand
     Widget widget = scene.findWidget( member );
     widget.setPreferredLocation( new Point( endLocation ) );
     widget.revalidate();
-    widget.getScene().validate();
   }
 
   @Override
@@ -60,7 +59,6 @@ public class MoveGraphMemberCommand extends AbstractCommand
     Widget widget = scene.findWidget( member );
     widget.setPreferredLocation( new Point( startLocation ) );
     widget.revalidate();
-    widget.getScene().validate();
   }
 
   @Override

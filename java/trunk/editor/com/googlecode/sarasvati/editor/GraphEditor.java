@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -58,11 +59,13 @@ import com.googlecode.sarasvati.editor.action.SceneAddExternalAction;
 import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
+import com.googlecode.sarasvati.editor.menu.CopyAction;
 import com.googlecode.sarasvati.editor.menu.CutAction;
 import com.googlecode.sarasvati.editor.menu.DeleteAction;
 import com.googlecode.sarasvati.editor.menu.ExitAction;
 import com.googlecode.sarasvati.editor.menu.NewGraphAction;
 import com.googlecode.sarasvati.editor.menu.OpenAction;
+import com.googlecode.sarasvati.editor.menu.PasteAction;
 import com.googlecode.sarasvati.editor.menu.PreferencesAction;
 import com.googlecode.sarasvati.editor.menu.RedoAction;
 import com.googlecode.sarasvati.editor.menu.SaveAction;
@@ -122,6 +125,8 @@ public class GraphEditor
 
   protected DeleteAction  deleteAction;
   protected CutAction     cutAction;
+  protected CopyAction    copyAction;
+  protected PasteAction   pasteAction;
   protected UndoAction    undoAction;
   protected RedoAction    redoAction;
 
@@ -349,12 +354,16 @@ public class GraphEditor
     editMenu.setMnemonic( KeyEvent.VK_E );
 
     deleteAction = new DeleteAction();
-    cutAction = new CutAction();
-    undoAction = new UndoAction();
-    redoAction = new RedoAction();
+    cutAction    = new CutAction();
+    copyAction   = new CopyAction();
+    pasteAction  = new PasteAction();
+    undoAction   = new UndoAction();
+    redoAction   = new RedoAction();
 
     editMenu.add( new JMenuItem( deleteAction ) );
     editMenu.add( new JMenuItem( cutAction ) );
+    editMenu.add( new JMenuItem( copyAction ) );
+    editMenu.add( new JMenuItem( pasteAction ) );
     editMenu.addSeparator();
     editMenu.add( new JMenuItem( undoAction ) );
     editMenu.add( new JMenuItem( redoAction ) );
@@ -610,17 +619,25 @@ public class GraphEditor
     {
       deleteAction.setEnabled( false );
       cutAction.setEnabled( false );
+      copyAction.setEnabled( false );
+      pasteAction.setEnabled( false );
+    }
+    else
+    {
+      updateCutCopyPaste( scene );
     }
   }
 
-  public void updateCutCopyPaste (EditorScene scene)
+  public void updateCutCopyPaste (final EditorScene scene)
   {
     boolean hasSelection = !scene.getSelectedObjects().isEmpty();
     deleteAction.setEnabled( hasSelection );
     cutAction.setEnabled( hasSelection );
+    copyAction.setEnabled( hasSelection );
+    pasteAction.setEnabled( scene.isClipboardPasteable() );
   }
 
-  private void updateTabTitle (int index, String label)
+  private void updateTabTitle (final int index, final String label)
   {
     tabPane.setTitleAt( index, label );
     TabComponent tabComp = (TabComponent) tabPane.getTabComponentAt( tabPane.getSelectedIndex() );
@@ -712,6 +729,24 @@ public class GraphEditor
         graphEditor.setup();
       }
     });
+  }
+
+  public void editPaste ()
+  {
+    EditorScene scene = getCurrentScene();
+    if ( scene != null )
+    {
+      scene.editPaste( new Point( 0, 0 ) );
+    }
+  }
+
+  public void editCopy ()
+  {
+    EditorScene scene = getCurrentScene();
+    if ( scene != null )
+    {
+      scene.editCopy();
+    }
   }
 
   public void editCut ()

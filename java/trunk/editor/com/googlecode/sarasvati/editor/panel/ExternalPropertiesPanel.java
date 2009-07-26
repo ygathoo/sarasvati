@@ -23,7 +23,6 @@ import javax.swing.JDialog;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
-import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.EditorExternal;
 import com.googlecode.sarasvati.editor.model.ExternalState;
@@ -227,7 +226,7 @@ public class ExternalPropertiesPanel extends javax.swing.JPanel {
 
           if ( !newState.equals( external.getState() ) )
           {
-            CommandStack.editGraphMember( GraphEditor.getInstance().getCurrentScene(), external, newState );
+            CommandStack.editGraphMember( external, newState );
           }
 
           dialog.setVisible( false );

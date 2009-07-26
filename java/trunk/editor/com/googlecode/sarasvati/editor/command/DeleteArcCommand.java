@@ -37,7 +37,6 @@ public class DeleteArcCommand extends AbstractCommand
   {
     scene.getGraph().removeArc( arc );
     scene.removeEdge( arc );
-    scene.validate();
   }
 
   @Override
@@ -47,7 +46,6 @@ public class DeleteArcCommand extends AbstractCommand
     scene.addEdge( arc );
     scene.setEdgeSource( arc, arc.getStart() );
     scene.setEdgeTarget( arc, arc.getEnd() );
-    scene.validate();
   }
 
   @Override

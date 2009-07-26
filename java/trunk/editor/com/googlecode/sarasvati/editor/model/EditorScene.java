@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.editor.model;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -30,12 +31,16 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JLabel;
+import javax.swing.JPopupMenu;
 
 import org.netbeans.api.visual.action.ActionFactory;
 import org.netbeans.api.visual.action.ConnectProvider;
 import org.netbeans.api.visual.action.ConnectorState;
 import org.netbeans.api.visual.action.MoveProvider;
+import org.netbeans.api.visual.action.PopupMenuProvider;
 import org.netbeans.api.visual.action.ReconnectProvider;
 import org.netbeans.api.visual.action.SelectProvider;
 import org.netbeans.api.visual.action.WidgetAction;
@@ -61,6 +66,9 @@ import com.googlecode.sarasvati.editor.action.MoveTrackAction;
 import com.googlecode.sarasvati.editor.action.ObjectSceneListenerAdapter;
 import com.googlecode.sarasvati.editor.action.SceneAddExternalAction;
 import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
+import com.googlecode.sarasvati.editor.command.AddArcCommand;
+import com.googlecode.sarasvati.editor.command.AddExternalCommand;
+import com.googlecode.sarasvati.editor.command.AddNodeCommand;
 import com.googlecode.sarasvati.editor.command.Command;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.command.DeleteArcCommand;
@@ -69,6 +77,7 @@ import com.googlecode.sarasvati.editor.command.DeleteNodeCommand;
 import com.googlecode.sarasvati.editor.command.MoveGraphMemberCommand;
 import com.googlecode.sarasvati.editor.command.MultiCommand;
 import com.googlecode.sarasvati.editor.command.MultiDeleteCommand;
+import com.googlecode.sarasvati.editor.command.PasteCommand;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
@@ -101,6 +110,9 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
   private boolean offsetAddedNodes = false;
 
+  private Set<Object> clipboard = new HashSet<Object> ();
+  private boolean clipboardPasteable = false;
+
   public EditorScene (EditorGraph graph)
   {
     this.graph = graph;
@@ -109,6 +121,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     getActions().addAction( SceneAddNodeAction.INSTANCE );
     getActions().addAction( SceneAddExternalAction.INSTANCE );
     getActions().addAction( ActionFactory.createRectangularSelectAction( this, this.mainLayer ) );
+    getActions().addAction( ActionFactory.createPopupMenuAction( new EditorPopupMenuProvider() ) );
 
     addObjectSceneListener( new ObjectSceneListenerAdapter()
     {
@@ -178,7 +191,18 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
   public void editCut ()
   {
+    clipboard.clear();
+    clipboard.addAll( getSelectedObjects() );
+    calculateClipboardPasteable();
     removeSelected( "Cut" );
+  }
+
+  public void editCopy ()
+  {
+    clipboard.clear();
+    clipboard.addAll( getSelectedObjects() );
+    calculateClipboardPasteable();
+    GraphEditor.getInstance().updateCutCopyPaste( this );
   }
 
   public void editDelete ()
@@ -186,12 +210,106 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     removeSelected( "Delete" );
   }
 
+  private void calculateClipboardPasteable ()
+  {
+    for ( Object o : clipboard )
+    {
+      if ( o instanceof EditorGraphMember<?> )
+      {
+        clipboardPasteable = true;
+        return;
+      }
+    }
+
+    clipboardPasteable = false;
+  }
+
+  /**
+   * @return the clipboardPasteable
+   */
+  public boolean isClipboardPasteable ()
+  {
+    return clipboardPasteable;
+  }
+
+  public void editPaste (final Point location)
+  {
+    int xOffset = Integer.MAX_VALUE;
+    int yOffset = Integer.MAX_VALUE;
+
+    for ( Object o : clipboard )
+    {
+      if ( o instanceof EditorGraphMember<?> )
+      {
+        EditorGraphMember<?> member = (EditorGraphMember<?>)o;
+        if ( member.getX() < xOffset )
+        {
+          xOffset = member.getX();
+        }
+        if (member.getY() < yOffset )
+        {
+          yOffset = member.getY();
+        }
+      }
+    }
+
+    xOffset = -xOffset + location.x;
+    yOffset = -yOffset + location.y;
+
+    Map<EditorGraphMember<?>, EditorGraphMember<?>> oldNewMap = new HashMap<EditorGraphMember<?>, EditorGraphMember<?>>();
+    List<EditorArc> arcs = new LinkedList<EditorArc>();
+
+    List<Command> commands = new ArrayList<Command>( clipboard.size() );
+
+    for ( Object o : clipboard )
+    {
+      if ( o instanceof EditorNode )
+      {
+        EditorNode node = (EditorNode)o;
+        EditorNode newNode = new EditorNode( node.getState().copy() );
+        Point origin = new Point( node.getX() + xOffset, node.getY() + yOffset );
+        oldNewMap.put( node, newNode );
+        commands.add( new AddNodeCommand( this, origin, newNode ) );
+      }
+      else if ( o instanceof EditorExternal )
+      {
+        EditorExternal external = (EditorExternal)o;
+        EditorExternal newExternal = new EditorExternal( external.getState().copy() );
+        Point origin = new Point( external.getX() + xOffset, external.getY() + yOffset );
+        oldNewMap.put( external, newExternal );
+        commands.add( new AddExternalCommand( this, origin, newExternal ) );
+      }
+      else if ( o instanceof EditorArc )
+      {
+        EditorArc arc = (EditorArc)o;
+        if ( clipboard.contains( arc.getStart() ) &&
+             clipboard.contains( arc.getEnd() ) )
+        {
+          arcs.add( arc );
+        }
+      }
+    }
+
+    for ( EditorArc arc : arcs )
+    {
+      EditorGraphMember<?> start = oldNewMap.get( arc.getStart() );
+      EditorGraphMember<?> end = oldNewMap.get( arc.getEnd() );
+      EditorArc newArc = new EditorArc( arc.getState(), start, end );
+      commands.add( new AddArcCommand( this, newArc ) );
+    }
+
+    if ( !commands.isEmpty() )
+    {
+      CommandStack.pushAndPerform( new PasteCommand( this, commands ) );
+    }
+  }
+
   public boolean isOffsetAddedNodes ()
   {
     return offsetAddedNodes;
   }
 
-  public void setOffsetAddedNodes (boolean offsetAddedNodes)
+  public void setOffsetAddedNodes (final boolean offsetAddedNodes)
   {
     this.offsetAddedNodes = offsetAddedNodes;
   }
@@ -380,17 +498,19 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     private EditorGraphMember<?> originalNode;
     private EditorGraphMember<?> replacementNode;
 
-    public void reconnectingStarted (ConnectionWidget connectionWidget, boolean reconnectingSource)
+    public void reconnectingStarted (final ConnectionWidget connectionWidget,
+                                     final boolean reconnectingSource)
     {
       // does nothing
     }
 
-    public void reconnectingFinished (ConnectionWidget connectionWidget, boolean reconnectingSource)
+    public void reconnectingFinished (final ConnectionWidget connectionWidget,
+                                      final boolean reconnectingSource)
     {
       // does nothing
     }
 
-    public boolean isSourceReconnectable (ConnectionWidget connectionWidget)
+    public boolean isSourceReconnectable (final ConnectionWidget connectionWidget)
     {
       Object object = findObject (connectionWidget);
       arc = isEdge (object) ? (EditorArc) object : null;
@@ -398,7 +518,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return originalNode != null;
     }
 
-    public boolean isTargetReconnectable (ConnectionWidget connectionWidget)
+    public boolean isTargetReconnectable (final ConnectionWidget connectionWidget)
     {
       Object object = findObject (connectionWidget);
       arc = isEdge (object) ? (EditorArc) object : null;
@@ -406,7 +526,9 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return originalNode != null;
     }
 
-    public ConnectorState isReplacementWidget (ConnectionWidget connectionWidget, Widget replacementWidget, boolean reconnectingSource)
+    public ConnectorState isReplacementWidget (final ConnectionWidget connectionWidget,
+                                               final Widget replacementWidget,
+                                               final boolean reconnectingSource)
     {
       Object object = findObject (replacementWidget);
       replacementNode = isNode (object) ? (EditorGraphMember<?>) object : null;
@@ -417,17 +539,19 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return object != null ? ConnectorState.REJECT_AND_STOP : ConnectorState.REJECT;
     }
 
-    public boolean hasCustomReplacementWidgetResolver (Scene scene)
+    public boolean hasCustomReplacementWidgetResolver (final Scene scene)
     {
         return false;
     }
 
-    public Widget resolveReplacementWidget (Scene scene, Point sceneLocation)
+    public Widget resolveReplacementWidget (final Scene scene, final Point sceneLocation)
     {
         return null;
     }
 
-    public void reconnect (ConnectionWidget connectionWidget, Widget replacementWidget, boolean reconnectingSource)
+    public void reconnect (final ConnectionWidget connectionWidget,
+                           final Widget replacementWidget,
+                           final boolean reconnectingSource)
     {
       if (replacementWidget == null)
       {
@@ -470,19 +594,25 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   public class EditorSelectProvider implements SelectProvider
   {
     @Override
-    public boolean isAimingAllowed (Widget widget, Point localLocation, boolean invertSelection)
+    public boolean isAimingAllowed (final Widget widget,
+                                    final Point localLocation,
+                                    final boolean invertSelection)
     {
       return true;
     }
 
     @Override
-    public boolean isSelectionAllowed (Widget widget, Point localLocation, boolean invertSelection)
+    public boolean isSelectionAllowed (final Widget widget,
+                                       final Point localLocation,
+                                       final boolean invertSelection)
     {
       return true;
     }
 
     @Override
-    public void select (Widget widget, Point localLocation, boolean invertSelection)
+    public void select (final Widget widget,
+                        final Point localLocation,
+                        final boolean invertSelection)
     {
       if ( invertSelection )
       {
@@ -500,7 +630,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     private Map<Widget, Point> originals = new HashMap<Widget, Point>();
     private Point              original;
 
-    public void movementStarted (Widget widget)
+    public void movementStarted (final Widget widget)
     {
       Object object = findObject( widget );
       if ( isNode( object ) )
@@ -520,7 +650,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       }
     }
 
-    public void movementFinished (Widget widget)
+    public void movementFinished (final Widget widget)
     {
       List<Command> commands = new ArrayList<Command>( originals.size() );
       for ( Map.Entry<Widget, Point> entry : originals.entrySet() )
@@ -539,13 +669,13 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       original = null;
     }
 
-    public Point getOriginalLocation (Widget widget)
+    public Point getOriginalLocation (final Widget widget)
     {
       original = widget.getPreferredLocation();
       return original;
     }
 
-    public void setNewLocation (Widget widget, Point location)
+    public void setNewLocation (final Widget widget, final Point location)
     {
       int dx = location.x - original.x;
       int dy = location.y - original.y;
@@ -554,6 +684,33 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
         Point point = entry.getValue();
         entry.getKey().setPreferredLocation( new Point( point.x + dx, point.y + dy ) );
       }
+    }
+  }
+
+  protected class EditorPopupMenuProvider implements PopupMenuProvider
+  {
+    @Override
+    public JPopupMenu getPopupMenu (final Widget widget,
+                                    final Point localLocation)
+    {
+      JPopupMenu menu = new JPopupMenu();
+      menu.setLocation( localLocation );
+
+      Action pasteAction = new AbstractAction( "Paste" )
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          editPaste( localLocation );
+        }
+      };
+
+      pasteAction.setEnabled( isClipboardPasteable() );
+
+      menu.add( pasteAction );
+      return menu;
     }
   }
 }

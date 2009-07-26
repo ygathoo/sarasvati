@@ -14,45 +14,27 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2009 Paul Lorenz
+    Copyright 2008 Paul Lorenz
  */
 package com.googlecode.sarasvati.editor.command;
 
-import com.googlecode.sarasvati.editor.model.EditorArc;
+import java.util.List;
+
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class NewArcCommand extends AbstractCommand
+public class PasteCommand extends MultiCommand
 {
-  private EditorScene scene;
-  private EditorArc arc;
-
-  public NewArcCommand (EditorScene scene, EditorArc arc)
+  public PasteCommand (final EditorScene scene,
+                       final List<Command> commands)
   {
-    this.scene = scene;
-    this.arc   = arc;
+    super( "Paste", scene, commands );
   }
 
   @Override
   public void performAction ()
   {
-    scene.getGraph().addArc( arc );
-    scene.addEdge( arc );
-    scene.setEdgeSource( arc, arc.getStart() );
-    scene.setEdgeTarget( arc, arc.getEnd() );
-    scene.validate();
-  }
-
-  @Override
-  public void undoAction ()
-  {
-    scene.getGraph().removeArc( arc );
-    scene.removeEdge( arc );
-    scene.validate();
-  }
-
-  @Override
-  public String getName ()
-  {
-    return "Add Connection";
+    getScene().setOffsetAddedNodes( false );
+    super.performAction();
+    getScene().setOffsetAddedNodes( true );
   }
 }

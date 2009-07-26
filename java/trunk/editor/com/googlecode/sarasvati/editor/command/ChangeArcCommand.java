@@ -56,7 +56,6 @@ public class ChangeArcCommand extends AbstractCommand
       arc.setEnd( newNode );
       scene.setEdgeTarget( arc, arc.getEnd() );
     }
-    scene.validate();
   }
 
   @Override
@@ -72,7 +71,6 @@ public class ChangeArcCommand extends AbstractCommand
       arc.setEnd( oldNode );
       scene.setEdgeTarget( arc, arc.getEnd() );
     }
-    scene.validate();
   }
 
   @Override

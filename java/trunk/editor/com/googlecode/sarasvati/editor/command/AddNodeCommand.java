@@ -44,7 +44,6 @@ public class AddNodeCommand extends AbstractCommand
     node.setOrigin( new Point( location ) );
     scene.addNode( node );
     scene.getGraph().addNode( node );
-    scene.validate();
   }
 
   @Override
@@ -52,7 +51,6 @@ public class AddNodeCommand extends AbstractCommand
   {
     scene.removeNode( node );
     scene.getGraph().removeNode( node );
-    scene.validate();
   }
 
   @Override

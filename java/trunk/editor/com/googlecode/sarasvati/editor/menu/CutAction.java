@@ -45,9 +45,4 @@ public class CutAction extends AbstractAction
   {
     GraphEditor.getInstance().editCut();
   }
-
-  public void setName (String name)
-  {
-    putValue( Action.NAME, name );
-  }
 }

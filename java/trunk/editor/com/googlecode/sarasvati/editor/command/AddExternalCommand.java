@@ -44,7 +44,6 @@ public class AddExternalCommand extends AbstractCommand
     external.setOrigin( new Point( location ) );
     scene.addNode( external );
     scene.getGraph().addExternal( external );
-    scene.validate();
   }
 
   @Override
@@ -52,7 +51,6 @@ public class AddExternalCommand extends AbstractCommand
   {
     scene.removeNode( external );
     scene.getGraph().removeExternal( external );
-    scene.validate();
   }
 
   @Override

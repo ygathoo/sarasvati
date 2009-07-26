@@ -70,7 +70,9 @@ public class CommandStack
     Command command = commandStack.get( currentIndex );
     currentIndex--;
     command.undoAction();
-    GraphEditor.getInstance().updateMenu();
+    GraphEditor editor = GraphEditor.getInstance();
+    editor.updateMenu();
+    editor.getCurrentScene().validate();
   }
 
   public void redo ()
@@ -83,7 +85,9 @@ public class CommandStack
     currentIndex++;
     Command command = commandStack.get( currentIndex );
     command.performAction();
-    GraphEditor.getInstance().updateMenu();
+    GraphEditor editor = GraphEditor.getInstance();
+    editor.updateMenu();
+    editor.getCurrentScene().validate();
   }
 
   public String getUndoName ()
@@ -156,7 +160,7 @@ public class CommandStack
   public static void addArc (final EditorScene scene,
                              final EditorArc arc)
   {
-    pushAndPerform( new NewArcCommand( scene, arc ) );
+    pushAndPerform( new AddArcCommand( scene, arc ) );
   }
 
   public static void deleteArc (final EditorScene scene,
@@ -165,24 +169,23 @@ public class CommandStack
     pushAndPerform( new DeleteArcCommand( scene, arc ) );
   }
 
-  public static <T extends GraphMemberState> void editGraphMember (final EditorScene scene,
-                                                                   final EditorGraphMember<T> graphMember,
+  public static <T extends GraphMemberState> void editGraphMember (final EditorGraphMember<T> graphMember,
                                                                    final T newState)
   {
-    pushAndPerform( new EditGraphMemberCommand<T>( scene, graphMember, newState ) );
+    pushAndPerform( new EditGraphMemberCommand<T>( graphMember, newState ) );
   }
 
-  public static void editArc (final EditorScene scene,
-                              final EditorArc arc,
+  public static void editArc (final EditorArc arc,
                               final ArcState newState)
   {
-    pushAndPerform( new EditArcCommand( scene, arc, newState ) );
+    pushAndPerform( new EditArcCommand( arc, newState ) );
   }
 
   public static void pushAndPerform (final Command command)
   {
     current.pushCommand( command );
     command.performAction();
+    GraphEditor.getInstance().getCurrentScene().validate();
   }
 
   public static void updateArc (final EditorScene scene,
