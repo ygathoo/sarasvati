@@ -20,19 +20,15 @@ package com.googlecode.sarasvati.editor.command;
 
 import com.googlecode.sarasvati.editor.model.ArcState;
 import com.googlecode.sarasvati.editor.model.EditorArc;
-import com.googlecode.sarasvati.editor.model.EditorScene;
 
 public class EditArcCommand extends AbstractCommand
 {
-  private final EditorScene scene;
   private final EditorArc   arc;
   private final ArcState    newState;
 
-  public EditArcCommand (final EditorScene scene,
-                         final EditorArc arc,
+  public EditArcCommand (final EditorArc arc,
                          final ArcState newState)
   {
-    this.scene = scene;
     this.arc = arc;
     this.newState = newState;
   }
@@ -41,14 +37,12 @@ public class EditArcCommand extends AbstractCommand
   public void performAction ()
   {
     arc.pushState( newState );
-    scene.validate();
   }
 
   @Override
   public void undoAction ()
   {
     arc.popState();
-    scene.validate();
   }
 
   @Override

@@ -20,7 +20,6 @@ import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.ArcState;
 import com.googlecode.sarasvati.editor.model.EditorArc;
@@ -206,7 +205,7 @@ public class ArcPropertiesPanel extends javax.swing.JPanel {
 
           if ( !newState.equals( arc.getState() ) )
           {
-            CommandStack.editArc( GraphEditor.getInstance().getCurrentScene(), arc, newState );
+            CommandStack.editArc( arc, newState );
           }
 
           dialog.setVisible( false );

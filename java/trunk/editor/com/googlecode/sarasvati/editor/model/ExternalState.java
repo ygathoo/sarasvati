@@ -38,6 +38,11 @@ public class ExternalState extends GraphMemberState
     return graphName;
   }
 
+  public ExternalState copy ()
+  {
+    return new ExternalState( getName() + "-1", graphName, getCustomProperties() );
+  }
+
   @Override
   public int hashCode ()
   {

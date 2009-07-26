@@ -78,6 +78,11 @@ public class NodeState extends GraphMemberState
     return guard;
   }
 
+  public NodeState copy ()
+  {
+    return new NodeState( getName() + "-1", type, joinType, joinParam, isStart, guard, getCustomProperties() );
+  }
+
   /* (non-Javadoc)
    * @see java.lang.Object#hashCode()
    */

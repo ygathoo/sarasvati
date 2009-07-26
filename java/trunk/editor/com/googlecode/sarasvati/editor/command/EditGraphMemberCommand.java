@@ -19,20 +19,16 @@
 package com.googlecode.sarasvati.editor.command;
 
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
-import com.googlecode.sarasvati.editor.model.EditorScene;
 import com.googlecode.sarasvati.editor.model.GraphMemberState;
 
 public class EditGraphMemberCommand<T extends GraphMemberState> extends AbstractCommand
 {
-  private final EditorScene scene;
   private final EditorGraphMember<T> graphMember;
   private final T                    newState;
 
-  public EditGraphMemberCommand (final EditorScene scene,
-                                 final EditorGraphMember<T> graphMember,
+  public EditGraphMemberCommand (final EditorGraphMember<T> graphMember,
                                  final T newState)
   {
-    this.scene = scene;
     this.graphMember = graphMember;
     this.newState = newState;
   }
@@ -41,14 +37,12 @@ public class EditGraphMemberCommand<T extends GraphMemberState> extends Abstract
   public void performAction ()
   {
     graphMember.pushState( newState );
-    scene.validate();
   }
 
   @Override
   public void undoAction ()
   {
     graphMember.popState();
-    scene.validate();
   }
 
   @Override

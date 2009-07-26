@@ -31,7 +31,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import com.googlecode.sarasvati.JoinType;
-import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorNodeType;
@@ -321,7 +320,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
           if ( !newState.equals( node.getState() ) )
           {
-            CommandStack.editGraphMember( GraphEditor.getInstance().getCurrentScene(), node, newState );
+            CommandStack.editGraphMember( node, newState );
           }
 
           dialog.setVisible( false );
