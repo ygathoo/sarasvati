@@ -506,12 +506,20 @@ public class GraphEditor
   public SaveResult saveProcessDefinition (final EditorGraph graph,
                                            final File outputFile)
   {
+    File saveFile = null;
+
     String name = outputFile.getName();
-    int firstDot = name.indexOf(  '.' );
+
+    int firstDot = name.indexOf( '.' );
 
     if ( firstDot > 0 )
     {
       name = name.substring( 0, firstDot );
+      saveFile = outputFile;
+    }
+    else
+    {
+      saveFile = new File( outputFile.getParentFile(), name + ".wf.xml" );
     }
 
     graph.setName( name );
@@ -522,12 +530,12 @@ public class GraphEditor
     try
     {
       XmlProcessDefinition xmlProcDef = EditorGraphFactory.exportToXml( graph );
-      xmlLoader.saveProcessDefinition( xmlProcDef, outputFile );
+      xmlLoader.saveProcessDefinition( xmlProcDef, saveFile );
       graph.setFile( outputFile );
       CommandStack.markSaved();
 
       JOptionPane.showMessageDialog( mainWindow,
-                                     "Process definition successfully saved to: '" + outputFile.getPath() + "'",
+                                     "Process definition successfully saved to: '" + saveFile.getPath() + "'",
                                      "Save", JOptionPane.INFORMATION_MESSAGE );
 
       return SaveResult.SaveSucceeded;
