@@ -18,6 +18,7 @@
  */
 package com.googlecode.sarasvati.editor.model;
 
+import java.awt.Color;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -28,21 +29,26 @@ public class EditorNodeType
   private String name;
   private boolean allowNonSpecifiedAttributes;
   private final List<EditorNodeTypeAttribute> attributes;
+  private Color iconColor;
 
   public EditorNodeType (final String name,
-                         final boolean allowNonSpecifiedAttributes)
+                         final boolean allowNonSpecifiedAttributes,
+                         final Color iconColor)
   {
     this.name = name;
     this.allowNonSpecifiedAttributes = allowNonSpecifiedAttributes;
     this.attributes = new LinkedList<EditorNodeTypeAttribute>();
+    this.iconColor = iconColor;
   }
 
   public EditorNodeType (final String name,
                          final boolean allowNonSpecifiedAttributes,
+                         final Color iconColor,
                          final List<EditorNodeTypeAttribute> attributes)
   {
     this.name = name;
     this.allowNonSpecifiedAttributes = allowNonSpecifiedAttributes;
+    this.iconColor = iconColor;
     this.attributes = attributes;
   }
 
@@ -86,6 +92,22 @@ public class EditorNodeType
   }
 
   /**
+   * @return the color
+   */
+  public Color getIconColor ()
+  {
+    return iconColor;
+  }
+
+  /**
+   * @param iconColor the color to set
+   */
+  public void setIconColor (Color iconColor)
+  {
+    this.iconColor = iconColor;
+  }
+
+  /**
    * @param allowNonSpecifiedAttributes the allowNonSpecifiedAttributes to set
    */
   public void setAllowNonSpecifiedAttributes (boolean allowNonSpecifiedAttributes)
@@ -114,6 +136,6 @@ public class EditorNodeType
     {
       attributesCopy.add( attr.copy() );
     }
-    return new EditorNodeType( name, allowNonSpecifiedAttributes, attributesCopy );
+    return new EditorNodeType( name, allowNonSpecifiedAttributes, iconColor, attributesCopy );
   }
 }

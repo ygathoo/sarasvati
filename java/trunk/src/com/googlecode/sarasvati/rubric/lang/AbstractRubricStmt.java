@@ -48,7 +48,6 @@ public abstract class AbstractRubricStmt implements RubricStmt
   @Override
   public RubricStmtStringSymbol asStringSymbol ()
   {
-    // TODO Auto-generated method stub
     return null;
   }
 
