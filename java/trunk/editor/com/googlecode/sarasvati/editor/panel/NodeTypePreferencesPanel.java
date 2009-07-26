@@ -11,6 +11,7 @@
 
 package com.googlecode.sarasvati.editor.panel;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.prefs.BackingStoreException;
 
 import javax.swing.DefaultListModel;
+import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
 import javax.swing.ListModel;
 import javax.swing.event.DocumentEvent;
@@ -29,6 +31,7 @@ import javax.swing.table.TableModel;
 
 import com.googlecode.sarasvati.editor.model.EditorNodeType;
 import com.googlecode.sarasvati.editor.model.EditorPreferences;
+import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 
 /**
  *
@@ -68,6 +71,10 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
         deletePropertyButton = new javax.swing.JButton();
         revertButton = new javax.swing.JButton();
         applyButton = new javax.swing.JButton();
+        jLabel5 = new javax.swing.JLabel();
+        iconInput = new javax.swing.JComboBox();
+        iconColorLabel = new javax.swing.JLabel();
+        iconColorButton = new javax.swing.JButton();
 
         nodeTypeList.setModel(getNodeTypeListModel());
         nodeTypeList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -101,50 +108,67 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
 
         applyButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.applyButton.text")); // NOI18N
 
+        jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        jLabel5.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.jLabel5.text")); // NOI18N
+
+        iconInput.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+
+        iconColorLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        iconColorLabel.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.iconColorLabel.text_1")); // NOI18N
+
+        iconColorButton.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.iconColorButton.text")); // NOI18N
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 457, Short.MAX_VALUE)
+            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 465, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel4)
-                .addContainerGap(348, Short.MAX_VALUE))
+                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 453, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(292, Short.MAX_VALUE)
+                .addComponent(revertButton)
+                .addGap(18, 18, 18)
+                .addComponent(applyButton)
+                .addContainerGap())
             .addGroup(layout.createSequentialGroup()
+                .addGap(17, 17, 17)
+                .addComponent(iconColorLabel)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(iconColorButton)
+                .addContainerGap(334, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(newTypeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(deleteTypeButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jLabel1)
-                    .addComponent(jLabel2))
-                .addContainerGap(60, Short.MAX_VALUE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGap(32, 32, 32)
+                        .addComponent(newPropertyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(deletePropertyButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(allowCustomInput, javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(jLabel5, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLabel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(iconInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(nodeTypeNameInput, javax.swing.GroupLayout.DEFAULT_SIZE, 304, Short.MAX_VALUE))))
+                .addGap(68, 68, 68))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(44, 44, 44)
-                .addComponent(newPropertyButton, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(deletePropertyButton)
-                .addContainerGap(137, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(allowCustomInput)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(nodeTypeNameInput, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 352, Short.MAX_VALUE)))
-                .addContainerGap(68, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(284, Short.MAX_VALUE)
-                .addComponent(revertButton)
-                .addGap(18, 18, 18)
-                .addComponent(applyButton)
-                .addContainerGap())
+                .addComponent(jLabel4)
+                .addContainerGap(356, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -163,20 +187,28 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(nodeTypeNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nodeTypeNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(iconInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(iconColorLabel)
+                    .addComponent(iconColorButton))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 137, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(newPropertyButton)
                     .addComponent(deletePropertyButton))
                 .addGap(18, 18, 18)
                 .addComponent(allowCustomInput)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 43, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(applyButton)
                     .addComponent(revertButton))
@@ -190,10 +222,14 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
     private javax.swing.JButton applyButton;
     private javax.swing.JButton deletePropertyButton;
     private javax.swing.JButton deleteTypeButton;
+    private javax.swing.JButton iconColorButton;
+    private javax.swing.JLabel iconColorLabel;
+    private javax.swing.JComboBox iconInput;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JSeparator jSeparator1;
@@ -320,7 +356,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
         @Override
         public void actionPerformed (ActionEvent e)
         {
-          EditorNodeType newNodeType = new EditorNodeType( "new-node-type", false );
+          EditorNodeType newNodeType = new EditorNodeType( "new-node-type", false, NodeDrawConfig.NODE_BG_ACTIVE );
           nodeTypeListModel.addElement( newNodeType );
           nodeTypeList.setSelectedValue( newNodeType, true );
         }
@@ -400,6 +436,26 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
           }
         }
       });
+
+      iconColorButton.setText( " " );
+      iconColorButton.addActionListener( new ActionListener()
+      {
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          final EditorNodeType nodeType = (EditorNodeType)nodeTypeList.getSelectedValue();
+          if ( nodeType != null )
+          {
+            Color color = JColorChooser.showDialog( NodeTypePreferencesPanel.this, "Icon color", nodeType.getIconColor() );
+
+            if ( color != null )
+            {
+              nodeType.setIconColor( color );
+              iconColorButton.setBackground( color );
+            }
+          }
+        }
+      });
     }
 
     public void reloadList ()
@@ -433,7 +489,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       }
     }
 
-    public void editType (EditorNodeType nodeType)
+    public void editType (final EditorNodeType nodeType)
     {
       propertiesTableModel.setNodeType( nodeType );
       nameChangeListener.setIndex( nodeTypeList.getSelectedIndex() );
@@ -441,6 +497,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
 
       nodeTypeNameInput.setText( nodeType.getName() );
       allowCustomInput.setSelected( nodeType.isAllowNonSpecifiedAttributes() );
+      iconColorButton.setBackground( nodeType.getIconColor() );
     }
 
     protected void ensureEnabled ()
@@ -454,6 +511,8 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
         deletePropertyButton.setEnabled( true );
         allowCustomInput.setEnabled( true );
         deleteTypeButton.setEnabled( true );
+        iconInput.setEnabled( true );
+        iconColorButton.setEnabled( true );
       }
     }
 
@@ -473,5 +532,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       allowCustomInput.setEnabled( false );
 
       deleteTypeButton.setEnabled( false );
+      iconInput.setEnabled( false );
+      iconColorButton.setEnabled( false );
     }
 }

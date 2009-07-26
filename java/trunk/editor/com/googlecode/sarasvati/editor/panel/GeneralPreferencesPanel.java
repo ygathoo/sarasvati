@@ -13,10 +13,12 @@ package com.googlecode.sarasvati.editor.panel;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.util.prefs.BackingStoreException;
 
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 import com.googlecode.sarasvati.editor.model.EditorNodeType;
@@ -177,6 +179,24 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
     @Override
     public void setup ()
     {
+      libraryBrowseButton.addActionListener( new ActionListener()
+      {
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          File currentDir = new File( libraryInput.getText() );
+          JFileChooser dirChooser = new JFileChooser( currentDir );
+          dirChooser.setFileSelectionMode( JFileChooser.DIRECTORIES_ONLY );
+
+          int retVal = dirChooser.showDialog( GeneralPreferencesPanel.this, "Select" );
+
+          if ( retVal == JFileChooser.APPROVE_OPTION )
+          {
+            libraryInput.setText( dirChooser.getSelectedFile().getAbsolutePath() );
+          }
+        }
+      });
+
       revertButton.addActionListener( new ActionListener()
       {
         @Override
