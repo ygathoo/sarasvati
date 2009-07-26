@@ -46,14 +46,14 @@ A graphical editor for process definitions is in progress. It is now usable for 
    * Cut: Done
    * Copy: Done
    * Paste: Done
- * Investigate shortestpathrouter weirdness: *Likely post 1.0.*
+ * Investigate shortestpathrouter weirdness: *Post 1.0.*
  * Process Definition Library: Done
- * Autoset file extension: *TODO*
+ * Autoset file extension: Done
  * Start with new PD on startup. If a file is opened and new PD is untouched, replace it with edit: Done
  * Use right click context menu for nodes/externals for cut/copy/delete/edit properties: *TODO*
  * Move layout info to `<editor>` section of PD file: *TODO*
  * Don't output namespace for `<custom>`: Done
- * Guard Editor: *TODO*
+ * Guard Editor: *Post 1.0*
 
 === Token Sets/Template Nodes: Completed ===
 
