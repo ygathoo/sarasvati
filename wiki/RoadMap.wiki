@@ -33,7 +33,7 @@ A graphical editor for process definitions is in progress. It is now usable for 
  * Arc labels: Done
  * Cleanup move/add/reconnect interactions: Done
  * Check for unsaved: Done
- * Graph validation on save: _Started_
+ * Graph validation on save: *Started*
  * Preferences
    * Node Types
      * Basic node type management: Done
@@ -43,11 +43,11 @@ A graphical editor for process definitions is in progress. It is now usable for 
    * Select single for delete: Done
    * Selected multiple for delete: Done
    * Select multipe for move: Done
-   * Cut: *Started*
-   * Copy: *TODO*
-   * Paste: *TODO*
+   * Cut: Done
+   * Copy: Done
+   * Paste: Done
  * Investigate shortestpathrouter weirdness: *Likely post 1.0.*
- * Process Definition Library: *TODO*
+ * Process Definition Library: Done
  * Autoset file extension: *TODO*
  * Start with new PD on startup. If a file is opened and new PD is untouched, replace it with edit: Done
  * Use right click context menu for nodes/externals for cut/copy/delete/edit properties: *TODO*
