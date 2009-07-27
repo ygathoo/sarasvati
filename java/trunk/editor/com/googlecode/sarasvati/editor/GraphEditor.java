@@ -774,4 +774,20 @@ public class GraphEditor
       scene.editDelete();
     }
   }
+
+  public void nodeTypesChanged ()
+  {
+    for ( Component component : tabPane.getComponents() )
+    {
+      if ( component instanceof JComponent )
+      {
+        JComponent jComponent = (JComponent)component;
+        EditorScene scene = (EditorScene)jComponent.getClientProperty( "scene" );
+        if ( scene != null )
+        {
+          scene.nodeTypesUpdated();
+        }
+      }
+    }
+  }
 }

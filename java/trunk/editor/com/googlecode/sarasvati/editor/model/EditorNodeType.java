@@ -24,30 +24,37 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.googlecode.sarasvati.visual.icon.NodeIconType;
+
 public class EditorNodeType
 {
   private String name;
   private boolean allowNonSpecifiedAttributes;
   private final List<EditorNodeTypeAttribute> attributes;
+  private NodeIconType nodeIconType;
   private Color iconColor;
 
   public EditorNodeType (final String name,
                          final boolean allowNonSpecifiedAttributes,
+                         final NodeIconType nodeIconType,
                          final Color iconColor)
   {
     this.name = name;
     this.allowNonSpecifiedAttributes = allowNonSpecifiedAttributes;
     this.attributes = new LinkedList<EditorNodeTypeAttribute>();
+    this.nodeIconType = nodeIconType;
     this.iconColor = iconColor;
   }
 
   public EditorNodeType (final String name,
                          final boolean allowNonSpecifiedAttributes,
+                         final NodeIconType nodeIconType,
                          final Color iconColor,
                          final List<EditorNodeTypeAttribute> attributes)
   {
     this.name = name;
     this.allowNonSpecifiedAttributes = allowNonSpecifiedAttributes;
+    this.nodeIconType = nodeIconType;
     this.iconColor = iconColor;
     this.attributes = attributes;
   }
@@ -89,6 +96,22 @@ public class EditorNodeType
   public void setName (String name)
   {
     this.name = name;
+  }
+
+  /**
+   * @return the nodeIconType
+   */
+  public NodeIconType getNodeIconType ()
+  {
+    return nodeIconType;
+  }
+
+  /**
+   * @param nodeIconType the nodeIconType to set
+   */
+  public void setNodeIconType (NodeIconType nodeIconType)
+  {
+    this.nodeIconType = nodeIconType;
   }
 
   /**
@@ -136,6 +159,6 @@ public class EditorNodeType
     {
       attributesCopy.add( attr.copy() );
     }
-    return new EditorNodeType( name, allowNonSpecifiedAttributes, iconColor, attributesCopy );
+    return new EditorNodeType( name, allowNonSpecifiedAttributes, nodeIconType, iconColor, attributesCopy );
   }
 }

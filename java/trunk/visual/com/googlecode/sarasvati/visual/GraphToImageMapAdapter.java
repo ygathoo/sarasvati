@@ -22,15 +22,15 @@ import javax.swing.Icon;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
-import com.googlecode.sarasvati.visual.icon.EndNodeIcon;
-import com.googlecode.sarasvati.visual.icon.TaskIcon;
+import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
+import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
+import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
 
 /**
  * Provides default implementations for methods in the
  * {@link GraphToImageMap} interface. All methods return
  * null unless overridden except the iconForNode method,
- * which returns either a {@link TaskIcon} or {@link DefaultNodeIcon}
+ * which returns either a {@link RectangularNodeIcon} or {@link OvalNodeIcon}
  * depending on the type of the node passed in.
  *
  * @author Paul Lorenz
@@ -71,8 +71,8 @@ public class GraphToImageMapAdapter implements GraphToImageMap
   }
 
   /**
-   * Returns a {@link TaskIcon} for nodes with type of 'task' and a
-   * {@link DefaultNodeIcon} for all other nodes.
+   * Returns a {@link RectangularNodeIcon} for nodes with type of 'task' and a
+   * {@link OvalNodeIcon} for all other nodes.
    *
    * @see com.googlecode.sarasvati.visual.GraphToImageMap#iconForNode(com.googlecode.sarasvati.Node)
    */
@@ -81,13 +81,13 @@ public class GraphToImageMapAdapter implements GraphToImageMap
   {
     if ( getTaskType().equalsIgnoreCase( node.getType() ) )
     {
-      return new TaskIcon( node, null );
+      return new RectangularNodeIcon( node, null );
     }
     else if ( node.getType().equals( "end" ) )
     {
-      return new EndNodeIcon();
+      return new SmallCircleNodeIcon();
     }
-    return new DefaultNodeIcon( node, null );
+    return new OvalNodeIcon( node, null );
   }
 
   /**

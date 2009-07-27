@@ -47,7 +47,10 @@ public abstract class AbstractNodeIcon implements Icon
   }
 
   @Override
-  public void paintIcon(Component c, Graphics g, int x, int y)
+  public void paintIcon(final Component c,
+                        final Graphics g,
+                        final int x,
+                        final int y)
   {
     g.drawImage( image, x, y, c );
   }
@@ -60,5 +63,5 @@ public abstract class AbstractNodeIcon implements Icon
     g.dispose();
   }
 
-  public abstract void redrawImage (Graphics2D g);
+  public abstract void redrawImage (final Graphics2D g);
 }

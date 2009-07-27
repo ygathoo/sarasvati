@@ -16,7 +16,7 @@
 
     Copyright 2009 Paul Lorenz
  */
-package com.googlecode.sarasvati.editor.icon;
+package com.googlecode.sarasvati.visual.icon;
 
 import java.awt.Color;
 
@@ -24,5 +24,5 @@ import javax.swing.Icon;
 
 public interface IconFactory
 {
-  Icon newIcon (String name, boolean selected, Color backgroundColor);
+  Icon newIcon (String label, Color backgroundColor, boolean isJoin, boolean isSelected);
 }

@@ -43,9 +43,9 @@ import com.googlecode.sarasvati.adapter.Function;
 import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
-import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
-import com.googlecode.sarasvati.visual.icon.EndNodeIcon;
-import com.googlecode.sarasvati.visual.icon.TaskIcon;
+import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
+import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
+import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
 
 /**
  * Base class for a standalone graph visualizer. Will show a list of
@@ -98,11 +98,11 @@ public abstract class AbstractGraphVisualizer
           @Override public Component apply (Node node)
           {
             if( "end".equalsIgnoreCase( node.getType() )){
-              return new JLabel( new EndNodeIcon());
+              return new JLabel( new SmallCircleNodeIcon());
             }
             return "task".equalsIgnoreCase( node.getType() ) ?
-              new JLabel( new TaskIcon( node, null ) ) :
-              new JLabel( new DefaultNodeIcon( node, null ) );
+              new JLabel( new RectangularNodeIcon( node, null ) ) :
+              new JLabel( new OvalNodeIcon( node, null ) );
           }
         });
 
