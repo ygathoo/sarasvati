@@ -110,18 +110,20 @@ Analyzed SQL generated from hibernate. Ran explain plan on each statement and ma
       * DB2
       * Some simple file based engine? BerkleyDB?
 
-=== JDBC Backend: In progress ===
-
-May not get to this pre-1.0 release. However, this would be good as a fall back for users who don't use hibernate. Also, it would make sure that the interfaces are sufficiently flexible.
-
-Implementation started in trunk.
-
 ==Post 1.0 Release==
 
+=== JDBC Backend: In progress ===
+
+This would be good as a fall back for users who don't use hibernate. Also, it would make sure that the interfaces are sufficiently flexible.
+
+Implementation started.
+
+=== Other ===
 Possibilities:
 
   * Improve Editor (expression editor?)
   * Improve visualizations
-  * Additional backends?
+  * Additional backends
+    * Google AppEngine/Bigtable?
   * Porting to .NET/Python/Ruby?
     * Porting to C# is a priority, based on request.
