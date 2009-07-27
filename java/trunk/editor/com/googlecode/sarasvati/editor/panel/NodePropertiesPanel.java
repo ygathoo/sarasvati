@@ -39,6 +39,7 @@ import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.NodeState;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
+import com.googlecode.sarasvati.visual.icon.NodeIconType;
 
 /**
  *
@@ -375,7 +376,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
       if ( nodeType == null )
       {
-        nodeType = new EditorNodeType( "node", false, NodeDrawConfig.NODE_BG_ACTIVE );
+        nodeType = new EditorNodeType( "node", false, NodeIconType.Oval, NodeDrawConfig.NODE_BG_ACTIVE );
       }
 
       addPropertyButton.setEnabled( nodeType.isAllowNonSpecifiedAttributes() );

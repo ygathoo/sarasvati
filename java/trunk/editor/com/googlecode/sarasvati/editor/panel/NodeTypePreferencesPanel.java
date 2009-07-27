@@ -19,6 +19,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.prefs.BackingStoreException;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListModel;
 import javax.swing.JColorChooser;
 import javax.swing.JOptionPane;
@@ -29,9 +30,11 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.TableModel;
 
+import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.model.EditorNodeType;
 import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
+import com.googlecode.sarasvati.visual.icon.NodeIconType;
 
 /**
  *
@@ -111,7 +114,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
         jLabel5.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLabel5.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.jLabel5.text")); // NOI18N
 
-        iconInput.setModel(new javax.swing.DefaultComboBoxModel(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        iconInput.setModel(getIconTypesModel());
 
         iconColorLabel.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         iconColorLabel.setText(org.openide.util.NbBundle.getMessage(NodeTypePreferencesPanel.class, "NodeTypePreferencesPanel.iconColorLabel.text_1")); // NOI18N
@@ -137,7 +140,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
                 .addComponent(iconColorLabel)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(iconColorButton)
-                .addContainerGap(334, Short.MAX_VALUE))
+                .addContainerGap(338, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -242,6 +245,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
     // End of variables declaration//GEN-END:variables
 
     private final DefaultListModel nodeTypeListModel = new DefaultListModel();
+    private final DefaultComboBoxModel iconTypesModel = new DefaultComboBoxModel();
     private final EditorNodeTypeTableModel propertiesTableModel = new EditorNodeTypeTableModel();
     private final NameChangeListener nameChangeListener = new NameChangeListener();
 
@@ -253,6 +257,11 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
     public TableModel getPropertiesTableModel ()
     {
       return propertiesTableModel;
+    }
+
+    public DefaultComboBoxModel getIconTypesModel ()
+    {
+      return iconTypesModel;
     }
 
     protected class NameChangeListener implements DocumentListener
@@ -321,12 +330,18 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
     }
 
 
+
     @Override
     public void setup ()
     {
       propertiesTable.putClientProperty( "terminateEditOnFocusLost", Boolean.TRUE );
 
       reloadList();
+
+      for ( NodeIconType iconType : NodeIconType.values() )
+      {
+        iconTypesModel.addElement( iconType );
+      }
 
       nodeTypeNameInput.getDocument().addDocumentListener( nameChangeListener );
       allowCustomInput.addActionListener( new ActionListener()
@@ -356,7 +371,10 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
         @Override
         public void actionPerformed (ActionEvent e)
         {
-          EditorNodeType newNodeType = new EditorNodeType( "new-node-type", false, NodeDrawConfig.NODE_BG_ACTIVE );
+          EditorNodeType newNodeType = new EditorNodeType( "new-node-type",
+                                                           false,
+                                                           NodeIconType.Oval,
+                                                           NodeDrawConfig.NODE_BG_ACTIVE );
           nodeTypeListModel.addElement( newNodeType );
           nodeTypeList.setSelectedValue( newNodeType, true );
         }
@@ -426,6 +444,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
           {
             EditorPreferences.getInstance().saveNodeTypes( newNodeTypes );
             JOptionPane.showMessageDialog( NodeTypePreferencesPanel.this, "Changes saved", "Info", JOptionPane.INFORMATION_MESSAGE );
+            GraphEditor.getInstance().nodeTypesChanged();
           }
           catch (final BackingStoreException e)
           {
@@ -433,6 +452,19 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
             JOptionPane.showMessageDialog( NodeTypePreferencesPanel.this,
                                            "Failed to save preferences: " + e.getMessage(),
                                            "Error", JOptionPane.ERROR_MESSAGE );
+          }
+        }
+      });
+
+      this.iconInput.addActionListener( new ActionListener()
+      {
+        @Override
+        public void actionPerformed (ActionEvent e)
+        {
+          EditorNodeType nodeType = (EditorNodeType)nodeTypeList.getSelectedValue();
+          if ( nodeType != null )
+          {
+            nodeType.setNodeIconType( (NodeIconType)iconInput.getSelectedItem() );
           }
         }
       });
@@ -497,6 +529,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
 
       nodeTypeNameInput.setText( nodeType.getName() );
       allowCustomInput.setSelected( nodeType.isAllowNonSpecifiedAttributes() );
+      iconTypesModel.setSelectedItem( nodeType.getNodeIconType() );
       iconColorButton.setBackground( nodeType.getIconColor() );
     }
 

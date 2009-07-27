@@ -20,8 +20,8 @@ import com.googlecode.sarasvati.example.hib.HibTestSetup;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.visual.DefaultGraphLookAndFeel;
 import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
-import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
-import com.googlecode.sarasvati.visual.icon.TaskIcon;
+import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
+import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
 
 public class TestExporter
 {
@@ -36,11 +36,11 @@ public class TestExporter
             Icon icon = null;
             if ( "task".equals( node.getType() ) )
             {
-              icon = new TaskIcon( node, null );
+              icon = new RectangularNodeIcon( node, null );
             }
             else
             {
-              icon = new DefaultNodeIcon( node, null );
+              icon = new OvalNodeIcon( node, null );
             }
 
             JLabel label = new JLabel( icon );

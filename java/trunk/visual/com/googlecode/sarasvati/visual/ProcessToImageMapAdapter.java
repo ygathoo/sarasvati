@@ -22,9 +22,9 @@ import javax.swing.Icon;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
-import com.googlecode.sarasvati.visual.icon.EndNodeIcon;
-import com.googlecode.sarasvati.visual.icon.TaskIcon;
+import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
+import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
+import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
 import com.googlecode.sarasvati.visual.process.VisualProcessArc;
 import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 
@@ -72,8 +72,8 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
   }
 
   /**
-   * Returns a {@link TaskIcon} for nodes with type of 'task' and a
-   * {@link DefaultNodeIcon} for all other nodes.
+   * Returns a {@link RectangularNodeIcon} for nodes with type of 'task' and a
+   * {@link OvalNodeIcon} for all other nodes.
    *
    * @see com.googlecode.sarasvati.visual.GraphToImageMap#iconForNode(com.googlecode.sarasvati.Node)
    */
@@ -82,13 +82,13 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
   {
     if ( getTaskType().equalsIgnoreCase( node.getNode().getType() ) )
     {
-      return new TaskIcon( node.getNode(), node.getToken() );
+      return new RectangularNodeIcon( node.getNode(), node.getToken() );
     }
     else if ( node.getNode().getType().equalsIgnoreCase( "end" ) )
     {
-      return new EndNodeIcon();
+      return new SmallCircleNodeIcon();
     }
-    return new DefaultNodeIcon( node.getNode(), node.getToken() );
+    return new OvalNodeIcon( node.getNode(), node.getToken() );
   }
 
   /**

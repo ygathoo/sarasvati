@@ -33,6 +33,7 @@ import java.util.Set;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
+import javax.swing.Icon;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 
@@ -82,9 +83,8 @@ import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
 import com.googlecode.sarasvati.visual.graph.GraphLayoutNode;
-import com.googlecode.sarasvati.visual.icon.AbstractNodeIcon;
-import com.googlecode.sarasvati.visual.icon.DefaultNodeIcon;
-import com.googlecode.sarasvati.visual.icon.TaskIcon;
+import com.googlecode.sarasvati.visual.icon.NodeIcons;
+import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
 
 public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 {
@@ -314,6 +314,14 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     this.offsetAddedNodes = offsetAddedNodes;
   }
 
+  public void nodeTypesUpdated ()
+  {
+    for ( EditorNode node : graph.getNodes() )
+    {
+      node.stateChanged();
+    }
+  }
+
   public void removeSelected (final String action)
   {
     Set<?> selected = getSelectedObjects();
@@ -384,42 +392,32 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     return widget;
   }
 
-  // TODO: Add drop-down in node type preferences for icon
-  protected AbstractNodeIcon getIconForMember (final EditorGraphMember<?> node)
+  protected Icon getIconForMember (final EditorGraphMember<?> graphMember)
   {
-    boolean join = false;
-    boolean isTask = false;
-
-    if ( node instanceof EditorExternal )
+    if ( graphMember instanceof EditorExternal )
     {
-      return new DefaultNodeIcon( node.getState().getName(),
-                                  NodeDrawConfig.NODE_BG_ACTIVE,
-                                  false,
+      EditorExternal external = (EditorExternal)graphMember;
+      return new OvalNodeIcon( external.getState().getName(),
+                               NodeDrawConfig.NODE_BG_ACTIVE,
+                               false,
+                               external.isSelected() );
+    }
+
+    EditorNode node = (EditorNode)graphMember;
+    NodeState state = node.getState();
+    EditorNodeType type = state.getEditorNodeType();
+
+    return NodeIcons.newInstance( type.getNodeIconType(),
+                                  state.getName(),
+                                  type.getIconColor(),
+                                  state.getJoinType() != JoinType.OR,
                                   node.isSelected() );
-    }
-
-    if ( node instanceof EditorNode )
-    {
-      join = ((EditorNode)node).getState().getJoinType() != JoinType.OR;
-      String typeName = ((EditorNode)node).getState().getType();
-      isTask = "task".equalsIgnoreCase( typeName ) || "activity".equalsIgnoreCase( typeName );
-    }
-
-    return isTask ? new TaskIcon( node.getState().getName(),
-                                  NodeDrawConfig.NODE_BG_COMPLETED,
-                                  join,
-                                  node.isSelected() ) :
-                    new DefaultNodeIcon( node.getState().getName(),
-                                         NodeDrawConfig.NODE_BG_COMPLETED,
-                                         join,
-                                         node.isSelected() );
-
   }
 
   @Override
   protected Widget widgetForNode (final EditorGraphMember<?> graphMember)
   {
-    final AbstractNodeIcon icon = getIconForMember( graphMember );
+    final Icon icon = getIconForMember( graphMember );
 
     final JLabel label = new JLabel( icon );
     final ComponentWidget widget = new ComponentWidget( this, label );

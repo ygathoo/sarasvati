@@ -30,6 +30,7 @@ import java.util.prefs.Preferences;
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
+import com.googlecode.sarasvati.visual.icon.NodeIconType;
 
 public class EditorPreferences
 {
@@ -195,6 +196,7 @@ public class EditorPreferences
   {
     String name = typeNode.get( NODE_TYPE_NAME, "<error loading type name>" );
     boolean allowCustom = typeNode.getBoolean( NODE_TYPE_ALLOW_CUSTOM, false );
+    String nodeIconTypeName = typeNode.get( NODE_TYPE_ICON, NodeIconType.Oval.toString() );
     Color color = new Color( typeNode.getInt( NODE_TYPE_ICON_COLOR, NodeDrawConfig.NODE_BG_ACTIVE.getRGB() ) );
     List<EditorNodeTypeAttribute> attributes = new LinkedList<EditorNodeTypeAttribute>();
 
@@ -208,15 +210,26 @@ public class EditorPreferences
       attributes.add( new EditorNodeTypeAttribute( attrName, defaultValue, useCDATA ) );
     }
 
-    return new EditorNodeType( name, allowCustom, color, attributes );
+    NodeIconType nodeIconType = null;
+
+    try
+    {
+      nodeIconType = NodeIconType.valueOf( nodeIconTypeName );
+    }
+    catch (IllegalArgumentException iae)
+    {
+      nodeIconType = NodeIconType.Oval;
+    }
+
+    return new EditorNodeType( name, allowCustom, nodeIconType, color, attributes );
   }
 
   public List<EditorNodeType> getDefaultNodeTypes ()
   {
     List<EditorNodeType> newNodeTypes = new LinkedList<EditorNodeType>();
     List<EditorNodeTypeAttribute> emptyAttributes = Collections.emptyList();
-    newNodeTypes.add( new EditorNodeType( "node", true, NodeDrawConfig.NODE_BG_ACTIVE, emptyAttributes ) );
-    newNodeTypes.add( new EditorNodeType( "wait", true, NodeDrawConfig.NODE_BG_ACTIVE, emptyAttributes ) );
+    newNodeTypes.add( new EditorNodeType( "node", true, NodeIconType.Oval, NodeDrawConfig.NODE_BG_ACTIVE, emptyAttributes ) );
+    newNodeTypes.add( new EditorNodeType( "wait", true, NodeIconType.Oval, NodeDrawConfig.NODE_BG_ACTIVE, emptyAttributes ) );
 
     List<EditorNodeTypeAttribute> attributes = new LinkedList<EditorNodeTypeAttribute>();
     attributes.add( new EditorNodeTypeAttribute( "execute", "", true ) );
@@ -224,12 +237,12 @@ public class EditorPreferences
     attributes.add( new EditorNodeTypeAttribute( "backtrack", "", true ) );
     attributes.add( new EditorNodeTypeAttribute( "backtrackType", "js", false ) );
 
-    newNodeTypes.add( new EditorNodeType( "script", false, NodeDrawConfig.NODE_BG_ACTIVE, attributes ) );
+    newNodeTypes.add( new EditorNodeType( "script", false, NodeIconType.Oval, NodeDrawConfig.NODE_BG_ACTIVE, attributes ) );
 
     attributes = new LinkedList<EditorNodeTypeAttribute>();
     attributes.add( new EditorNodeTypeAttribute( "graphName", "", false ) );
 
-    newNodeTypes.add( new EditorNodeType( "nested", false, NodeDrawConfig.NODE_BG_ACTIVE, attributes ) );
+    newNodeTypes.add( new EditorNodeType( "nested", false, NodeIconType.Oval, NodeDrawConfig.NODE_BG_ACTIVE, attributes ) );
     return newNodeTypes;
   }
 
@@ -267,6 +280,7 @@ public class EditorPreferences
     Preferences typeNode = typesNode.node( nodeName );
     typeNode.put( NODE_TYPE_NAME, nodeType.getName() );
     typeNode.putBoolean( NODE_TYPE_ALLOW_CUSTOM, nodeType.isAllowNonSpecifiedAttributes() );
+    typeNode.put( NODE_TYPE_ICON, nodeType.getNodeIconType().name() );
     typeNode.putInt( NODE_TYPE_ICON_COLOR, nodeType.getIconColor().getRGB() );
 
     int count = 1;

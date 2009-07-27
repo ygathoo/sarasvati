@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008-2009 Paul Lorenz
+    Copyright 2008 Paul Lorenz
 */
 package com.googlecode.sarasvati.visual.icon;
 
@@ -22,7 +22,6 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Graphics2D;
-import java.awt.RenderingHints;
 
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
@@ -30,26 +29,25 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.util.FontUtil;
 
-public class DefaultNodeIcon extends AbstractNodeIcon
+public class RectangularNodeIcon extends AbstractNodeIcon
 {
   protected boolean isJoin;
   protected String label;
   protected Color color;
   protected boolean isSelected;
 
-  public DefaultNodeIcon (Node node, NodeToken token)
+  public RectangularNodeIcon (final Node node, final NodeToken token)
   {
     this.label = node.getAdaptor( String.class );
-    if ( label == null )
-    {
-      label = node.getName();
-    }
     this.isJoin = node.getJoinType() != JoinType.OR;
     this.color = NodeDrawConfig.getColor( token );
     redrawImage();
   }
 
-  public DefaultNodeIcon (String label, Color color, boolean isJoin, boolean isSelected)
+  public RectangularNodeIcon (final String label,
+                              final Color color,
+                              final boolean isJoin,
+                              final boolean isSelected)
   {
     this.label = label;
     this.color = color;
@@ -61,20 +59,10 @@ public class DefaultNodeIcon extends AbstractNodeIcon
   @Override
   public void redrawImage (Graphics2D g)
   {
-    g.setRenderingHint( RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON );
-
+    g.setFont( g.getFont().deriveFont( Font.BOLD ) );
     g.setColor( color );
     g.fillOval( 0, 0, WIDTH - 1, HEIGHT - 1 );
-
-    //g.setColor( node.isStart() ? NodeDrawConfig.START_NODE_BORDER : NodeDrawConfig.NODE_BORDER);
-    if ( isSelected )
-    {
-      g.setColor( NodeDrawConfig.NODE_BORDER_SELECTED );
-    }
-    else
-    {
-      g.setColor( NodeDrawConfig.NODE_BORDER );
-    }
+    g.fillRoundRect( 0, 0, WIDTH - 1, HEIGHT - 1, 10, 10 );
 
     float[] dashes = isJoin ? new float[] { 10, 5 } : null;
 
@@ -83,25 +71,44 @@ public class DefaultNodeIcon extends AbstractNodeIcon
     BasicStroke stroke = new BasicStroke( 3, BasicStroke.CAP_SQUARE, BasicStroke.JOIN_MITER, 10, dashes, 0) ;
     g.setStroke( stroke );
 
+    g.setColor( isSelected ? NodeDrawConfig.NODE_BORDER_SELECTED : NodeDrawConfig.NODE_BORDER );
+
     int width = WIDTH - ((offset << 1) + 1);
     int height = HEIGHT - ((offset<< 1) + 1);
 
-    g.drawOval( offset, offset, width, height);
-    offset += 3;
+    g.drawRoundRect( offset, offset, width, height, 10, 10 );
 
     g.setColor( Color.white );
+
+    String[] lines = FontUtil.split( label );
 
     int padding = 2 + offset;
     int startX = padding;
 
     int maxWidth = getIconWidth() - (padding << 1);
 
-    g.setFont( g.getFont().deriveFont( Font.BOLD ) );
-    FontUtil.setSizedFont( g, label, 11, maxWidth );
-    int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( label, g ).getWidth() );
-    int strHeight = g.getFontMetrics().getAscent();
-    int left = startX + ((maxWidth - strWidth) >> 1);
-    int top = ((getIconHeight() + strHeight) >> 1);
-    g.drawString( label, left, top );
+    if ( lines.length == 1 )
+    {
+      FontUtil.setSizedFont( g, label, 11, maxWidth );
+      int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[0], g ).getWidth() );
+      int left = startX + ((maxWidth - strWidth) >> 1);
+      g.drawString( label, left, (getIconHeight() >> 1) );
+    }
+    else if ( lines.length == 2 )
+    {
+      FontUtil.setSizedFont( g, lines[0], 11, maxWidth );
+
+      int strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[0], g ).getWidth() );
+      int left = startX + ((maxWidth - strWidth) >> 1);
+      g.drawString( lines[0], left, (getIconHeight() - offset >> 1) );
+
+      FontUtil.setSizedFont( g, lines[1], 11, maxWidth );
+
+      int strHeight = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[1], g ).getHeight() );
+      strWidth = (int)Math.ceil( g.getFontMetrics().getStringBounds( lines[1], g ).getWidth() );
+      left = startX + ((maxWidth - strWidth) >> 1);
+
+      g.drawString( lines[1], left, (getIconHeight() - offset >> 1) + (strHeight + 1) );
+    }
   }
 }
