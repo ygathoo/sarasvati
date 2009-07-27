@@ -19,8 +19,12 @@
 
 package com.googlecode.sarasvati.util;
 
+import java.awt.Point;
+import java.awt.Rectangle;
+
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.graph.Path;
+import org.netbeans.api.visual.widget.Widget;
 
 public class SvGraphicsUtil
 {
@@ -42,5 +46,34 @@ public class SvGraphicsUtil
     bendPoints.addPoint( x, y );
     //Add a new obstacle
     path.setBendPoints( bendPoints  );
+  }
+
+  public static Rectangle getBounds (final Widget widget)
+  {
+    Rectangle bounds = widget.getBounds();
+    bounds.setLocation( widget.getLocation() );
+    return bounds;
+  }
+
+  public static void movePointOutOfBounds (final Point point, final Rectangle bounds)
+  {
+    if ( point.x == bounds.x )
+    {
+      point.x--;
+    }
+    else if ( point.x == ( bounds.x + bounds.width ) )
+    {
+      point.x++;
+    }
+
+    if ( point.y == bounds.y )
+    {
+      point.y--;
+    }
+    else if ( point.y == ( bounds.y + bounds.height ) )
+    {
+      point.y++;
+    }
+
   }
 }

@@ -28,6 +28,7 @@ import org.eclipse.draw2d.graph.Path;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 
+import com.googlecode.sarasvati.util.SvGraphicsUtil;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visual.util.ConvertUtil;
 
@@ -46,6 +47,16 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
   {
     super( scene );
     this.router = router;
+  }
+
+  public Rectangle getSourceBounds ()
+  {
+    return SvGraphicsUtil.getBounds( getSourceAnchor().getRelatedWidget() );
+  }
+
+  public Rectangle getTargetBounds ()
+  {
+    return SvGraphicsUtil.getBounds( getTargetAnchor().getRelatedWidget() );
   }
 
   public boolean ensurePathCurrent ()
@@ -71,6 +82,8 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
       {
         newStart = sourceAnchor.compute( getSourceAnchorEntry() ).getAnchorSceneLocation();
         newEnd = targetAnchor.compute( getTargetAnchorEntry() ).getAnchorSceneLocation();
+        SvGraphicsUtil.movePointOutOfBounds( newStart, getSourceBounds() );
+        SvGraphicsUtil.movePointOutOfBounds( newEnd, getTargetBounds() );
       }
 
       boolean pathChange = path == null || !start.equals( newStart ) || !end.equals( newEnd );
