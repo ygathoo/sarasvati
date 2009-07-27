@@ -40,11 +40,6 @@ public class PreferencesDialog extends JDialog
     panel.setBorder( new BevelBorder( BevelBorder.RAISED ) );
     getContentPane().add( panel );
 
-    if ( isAlwaysOnTopSupported() )
-    {
-      setAlwaysOnTop( true );
-    }
-
     pack();
   }
 

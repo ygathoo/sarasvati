@@ -54,10 +54,6 @@ public class GraphMemberPropertiesDialog extends JDialog
       getContentPane().add( panel );
     }
 
-    if ( isAlwaysOnTopSupported() )
-    {
-      setAlwaysOnTop( true );
-    }
     pack();
   }
 }
