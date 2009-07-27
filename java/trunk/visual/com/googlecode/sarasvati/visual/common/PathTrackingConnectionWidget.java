@@ -75,8 +75,8 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
       {
         Point origin = sourceAnchor.getRelatedWidget().getLocation();
         Rectangle bounds = sourceAnchor.getRelatedWidget().getBounds();
-        newStart = new Point( origin.x + (bounds.width >> 1 ), origin.y + bounds.height );
-        newEnd = new Point( origin.x, origin.y + (bounds.height >> 1 ) );
+        newStart = new Point( origin.x + (bounds.width >> 1 ), origin.y + bounds.height + 1 );
+        newEnd = new Point( origin.x - 1, origin.y + (bounds.height >> 1 ) );
       }
       else
       {
