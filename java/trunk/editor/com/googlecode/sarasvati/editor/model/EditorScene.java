@@ -34,6 +34,7 @@ import java.util.Set;
 import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.Icon;
+import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 
@@ -61,7 +62,6 @@ import com.googlecode.sarasvati.editor.action.ArcPropertiesAction;
 import com.googlecode.sarasvati.editor.action.ArcSelectAction;
 import com.googlecode.sarasvati.editor.action.ConnectAction;
 import com.googlecode.sarasvati.editor.action.GraphMemberMoveAction;
-import com.googlecode.sarasvati.editor.action.GraphMemberPropertiesAction;
 import com.googlecode.sarasvati.editor.action.GraphMemberSelectAction;
 import com.googlecode.sarasvati.editor.action.MoveTrackAction;
 import com.googlecode.sarasvati.editor.action.ObjectSceneListenerAdapter;
@@ -79,6 +79,7 @@ import com.googlecode.sarasvati.editor.command.MoveGraphMemberCommand;
 import com.googlecode.sarasvati.editor.command.MultiCommand;
 import com.googlecode.sarasvati.editor.command.MultiDeleteCommand;
 import com.googlecode.sarasvati.editor.command.PasteCommand;
+import com.googlecode.sarasvati.editor.dialog.DialogFactory;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
@@ -102,7 +103,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   private final WidgetAction connectAction = new ConnectAction( ActionFactory.createConnectAction( intrLayer, new SceneConnectProvider() ) );
   private final WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
 
-  private final WidgetAction graphMemberPropertiesAction = new GraphMemberPropertiesAction();
+  private final WidgetAction graphMemberPopupMenuAction = ActionFactory.createPopupMenuAction( new GraphMemberPopupMenuProvider() );
   private final WidgetAction arcPropertiesAction = new ArcPropertiesAction();
 
   private final WidgetAction arcSelectAction = new ArcSelectAction( createSelectAction() );
@@ -194,7 +195,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     clipboard.clear();
     clipboard.addAll( getSelectedObjects() );
     calculateClipboardPasteable();
-    removeSelected( "Cut" );
+    removeSelected( getSelectedObjects(), "Cut" );
   }
 
   public void editCopy ()
@@ -207,7 +208,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
   public void editDelete ()
   {
-    removeSelected( "Delete" );
+    removeSelected( getSelectedObjects(), "Delete" );
   }
 
   private void calculateClipboardPasteable ()
@@ -322,9 +323,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     }
   }
 
-  public void removeSelected (final String action)
+  public void removeSelected (final Set<?> selected, final String action)
   {
-    Set<?> selected = getSelectedObjects();
     List<Command> commands = new ArrayList<Command>( selected.size() );
 
     Set<EditorArc> arcs = new HashSet<EditorArc>();
@@ -434,7 +434,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     widget.setPreferredLocation( graphMember.getOrigin() );
 
     widget.getActions().addAction( graphMemberSelectAction );
-    widget.getActions().addAction( graphMemberPropertiesAction );
+    widget.getActions().addAction( graphMemberPopupMenuAction );
     widget.getActions().addAction( moveAction );
     widget.getActions().addAction( connectAction );
 
@@ -739,4 +739,107 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return menu;
     }
   }
+
+  protected class GraphMemberPopupMenuProvider implements PopupMenuProvider
+  {
+    @Override
+    public JPopupMenu getPopupMenu (final Widget widget,
+                                    final Point localLocation)
+    {
+      JPopupMenu menu = new JPopupMenu();
+      menu.setLocation( localLocation );
+
+      final EditorGraphMember<?> graphMember = (EditorGraphMember< ? >)findObject( widget );
+
+      String type = null;
+
+      if ( graphMember instanceof EditorNode )
+      {
+        type = "Node";
+      }
+      else if ( graphMember instanceof EditorExternal )
+      {
+        type = "External";
+      }
+
+      Action deleteAction = new AbstractAction( "Delete" )
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          editDelete();
+        }
+      };
+
+      Action cutAction = new AbstractAction( "Cut" )
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          editCut();
+        }
+      };
+
+      Action copyAction = new AbstractAction( "Copy " )
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          editCopy();
+        }
+      };
+
+      Action editPropertiesAction = new AbstractAction( "Edit " + type + " Properties" )
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          JDialog dialog = DialogFactory.newGraphMemberPropertiesDialog( graphMember );
+          dialog.setLocation( widget.convertLocalToScene( localLocation ) );
+          dialog.setVisible( true );
+        }
+      };
+
+      menu.add( deleteAction );
+      menu.add( cutAction );
+      menu.add( copyAction );
+      menu.add( editPropertiesAction );
+
+      if ( graphMember instanceof EditorExternal )
+      {
+        EditorExternal external = (EditorExternal)graphMember;
+        final Library library = Library.getInstance();
+        final LibraryEntry entry = library.getEntry( external.getName() );
+
+        Action openExternal = new AbstractAction( "Open External" )
+        {
+          private static final long serialVersionUID = 1L;
+
+          @Override
+          public void actionPerformed (final ActionEvent e)
+          {
+            GraphEditor.getInstance().openProcessDefinition( entry.getPath() );
+          }
+        };
+
+        if ( entry == null )
+        {
+          openExternal.setEnabled( false );
+        }
+
+        menu.add( openExternal );
+      }
+
+      return menu;
+    }
+  }
+
 }
