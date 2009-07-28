@@ -52,9 +52,8 @@ A graphical editor for process definitions is in progress. It is now usable for 
  * Don't output namespace for `<custom>`: Done
  * Investigate shortestpathrouter weirdness: Done
  * Use right click context menu for nodes/externals for cut/copy/delete/edit properties: Done
+ * Add info text for join types: Done
  * Move layout info to `<editor>` section of PD file: *TODO*
- * Add info text for join types: *TODO*
- * Guard Editor: *Post 1.0*
 
 === Token Sets/Template Nodes: Completed ===
 
@@ -118,10 +117,18 @@ This would be good as a fall back for users who don't use hibernate. Also, it wo
 
 Implementation started.
 
+=== Improve Editor ===
+  * Guard Editor
+  * More node type icons
+  * Allow customization: ie: user defined drop downs for user properties
+  * Graph properties
+    * Define allowed properties, when used as external
+    * Define allowed input/output points, when used as external
+    * Define default input/output points, when used as external
+
 === Other ===
 Possibilities:
 
-  * Improve Editor (expression editor?)
   * Improve visualizations
   * Additional backends
     * Google AppEngine/Bigtable?
