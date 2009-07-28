@@ -31,11 +31,12 @@ import com.googlecode.sarasvati.impl.TokenSetAndJoinStrategy;
 public enum JoinType
 {
   /**
-   * Uses the {@link OrJoinStrategy}. A join of this type
-   * will be satisfied any time an arc token arrives at the
-   * node.
+   * Uses the {@link OrJoinStrategy}.
+   * A join of this type will be satisfied any time
+   * an arc token arrives at the node.
    */
-  OR( new OrJoinStrategy() ),
+  OR( new OrJoinStrategy(),
+      "An OR join will be satisfied any time an arc token arrives at the node." ),
 
   /**
    * Uses the {@link AndJoinStrategy}. A join of this type
@@ -43,7 +44,9 @@ public enum JoinType
    * are arc tokens waiting at all other incoming arcs to
    * the node.
    */
-  AND( new AndJoinStrategy() ),
+  AND( new AndJoinStrategy(),
+       "An AND join will be satisfied when an arc token arrives and there are " +
+       "arc tokens waiting at all other incoming arcs to the node."),
 
   /**
    * Uses the {@link LabelAndJoinStrategy}. A join of this type
@@ -52,7 +55,10 @@ public enum JoinType
    * node which share the same name/label as the arc that the
    * arc token is arriving on.
    */
-  LABEL_AND( new LabelAndJoinStrategy() ),
+  LABEL_AND( new LabelAndJoinStrategy(),
+             "A LABEL_AND join will be satisfied when an arc token arrives and there are " +
+             "arc tokens waiting at all other incoming arcs to the node which " +
+             "share the same name/label as the arc that the arc token is arriving on." ),
 
   /**
    * Uses the {@link TokenSetAndJoinStrategy}. A join of this type
@@ -60,7 +66,10 @@ public enum JoinType
    * active arc tokens in the set are on incoming arcs to the same node
    * and there are no active node tokens.
    */
-  TOKEN_SET_AND( new TokenSetAndJoinStrategy() ),
+  TOKEN_SET_AND( new TokenSetAndJoinStrategy(),
+                 "A TOKEN_SET_AND join will be satisfied when an arc token arrives and all the " +
+                 "other active arc tokens in the set are on incoming arcs to the same node and " +
+                 "there are no active node tokens in the token set." ),
 
   /**
    * Users may use custom join strategies. This can be done by overriding
@@ -77,14 +86,17 @@ public enum JoinType
                                                        "make sure to invoke JoinType.CUSTOM.setJoinStrategy " +
                                                        "before using a custom join type." );
             }
-          })
+          },
+         "A CUSTOM join will be satified based on the join strategy implemented by the user." )
   ;
 
   private JoinStrategy joinStrategy;
+  private String description;
 
-  private JoinType (final JoinStrategy joinStrategy)
+  private JoinType (final JoinStrategy joinStrategy, final String description)
   {
     this.joinStrategy = joinStrategy;
+    this.description = description;
   }
 
   public JoinStrategy getJoinStrategy ()
@@ -99,9 +111,15 @@ public enum JoinType
    */
   public void setJoinStrategy (final JoinStrategy joinStrategy)
   {
-    if ( this == CUSTOM )
+    if ( this != CUSTOM )
     {
-      this.joinStrategy = joinStrategy;
+      throw new IllegalArgumentException( "The join strategy may only be changed on the CUSTOM join type" );
     }
+    this.joinStrategy = joinStrategy;
+  }
+
+  public String getDescription ()
+  {
+    return description;
   }
 }
