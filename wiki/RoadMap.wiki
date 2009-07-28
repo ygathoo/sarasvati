@@ -51,7 +51,7 @@ A graphical editor for process definitions is in progress. It is now usable for 
  * Start with new PD on startup. If a file is opened and new PD is untouched, replace it with edit: Done
  * Don't output namespace for `<custom>`: Done
  * Investigate shortestpathrouter weirdness: Done
- * Use right click context menu for nodes/externals for cut/copy/delete/edit properties: *TODO*
+ * Use right click context menu for nodes/externals for cut/copy/delete/edit properties: Done
  * Move layout info to `<editor>` section of PD file: *TODO*
  * Add info text for join types: *TODO*
  * Guard Editor: *Post 1.0*
