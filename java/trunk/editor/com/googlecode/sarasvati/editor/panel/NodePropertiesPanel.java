@@ -315,9 +315,9 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
             new NodeState( nodeNameInput.getText(),
                            ((EditorNodeType)nodeTypeInput.getSelectedItem()).getName(),
                            (JoinType)joinTypeInput.getSelectedItem(),
-                           joinParamInput.getText(),
+                           SvUtil.nullIfBlank( joinParamInput.getText() ),
                            startNodeInput.isSelected(),
-                           guardInput.getText(),
+                           SvUtil.nullIfBlank( guardInput.getText() ),
                            customProperties );
 
           if ( !newState.equals( node.getState() ) )

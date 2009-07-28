@@ -21,14 +21,19 @@ package com.googlecode.sarasvati.editor.command;
 import java.awt.Point;
 import java.util.LinkedList;
 
+import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.model.ArcState;
 import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorExternal;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorNode;
+import com.googlecode.sarasvati.editor.model.EditorNodeType;
+import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.EditorScene;
+import com.googlecode.sarasvati.editor.model.ExternalState;
 import com.googlecode.sarasvati.editor.model.GraphMemberState;
+import com.googlecode.sarasvati.editor.model.NodeState;
 
 public class CommandStack
 {
@@ -38,6 +43,9 @@ public class CommandStack
   private Command lastSavedCommand = null;
 
   private int currentIndex = -1;
+
+  private int nodeCounter = 0;
+  private int externalCounter = 0;
 
   public void pushCommand (final Command command)
   {
@@ -144,17 +152,30 @@ public class CommandStack
   }
 
   public static void addNode (final EditorScene scene,
-                              final Point location,
-                              final EditorNode node)
+                              final Point location)
   {
-    pushAndPerform( new AddNodeCommand( scene, location, node ) );
+    current.nodeCounter++;
+    EditorNodeType type = EditorPreferences.getInstance().getDefaultNodeType();
+    NodeState state = new NodeState( "Node_" + current.nodeCounter,
+                                     type == null ? "node" : type.getName(),
+                                     JoinType.OR,
+                                     null,
+                                     false,
+                                     null,
+                                     null );
+    EditorNode node = new EditorNode( state );
+
+    pushAndPerform( new AddNodeCommand( scene, scene.convertLocalToScene( location ), node ) );
   }
 
   public static void addExternal (final EditorScene scene,
-                                  final Point location,
-                                  final EditorExternal external)
+                                  final Point location)
   {
-    pushAndPerform( new AddExternalCommand( scene, location, external ) );
+    current.externalCounter++;
+    ExternalState state = new ExternalState( "External_" + current.externalCounter, "", null );
+    EditorExternal external = new EditorExternal( state );
+
+    pushAndPerform( new AddExternalCommand( scene, scene.convertLocalToScene( location ), external ) );
   }
 
   public static void addArc (final EditorScene scene,
