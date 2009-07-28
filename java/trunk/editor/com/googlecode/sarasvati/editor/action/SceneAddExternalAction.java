@@ -18,16 +18,13 @@
 */
 package com.googlecode.sarasvati.editor.action;
 
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 import org.netbeans.api.visual.action.WidgetAction;
 import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.editor.command.CommandStack;
-import com.googlecode.sarasvati.editor.model.EditorExternal;
 import com.googlecode.sarasvati.editor.model.EditorScene;
-import com.googlecode.sarasvati.editor.model.ExternalState;
 
 public class SceneAddExternalAction extends WidgetAction.Adapter
 {
@@ -40,8 +37,6 @@ public class SceneAddExternalAction extends WidgetAction.Adapter
     SceneAddExternalAction.enabled = enabled;
   }
 
-  protected int counter = 0;
-
   @Override
   public State mousePressed (Widget widget, WidgetMouseEvent event)
   {
@@ -52,14 +47,7 @@ public class SceneAddExternalAction extends WidgetAction.Adapter
 
     if ( event.getButton() == MouseEvent.BUTTON1 )
     {
-      counter++;
-      ExternalState state = new ExternalState( "External_" + counter, "", null );
-      EditorExternal external = new EditorExternal( state );
-
-      EditorScene scene = (EditorScene)widget.getScene();
-      Point location = widget.convertLocalToScene( event.getPoint() );
-
-      CommandStack.addExternal( scene, location, external );
+      CommandStack.addExternal( (EditorScene)widget.getScene(), event.getPoint() );
       return State.CONSUMED;
     }
 

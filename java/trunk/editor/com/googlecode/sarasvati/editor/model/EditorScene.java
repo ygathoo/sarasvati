@@ -694,6 +694,32 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       JPopupMenu menu = new JPopupMenu();
       menu.setLocation( localLocation );
 
+      Action addNodeAction = new AbstractAction( "Add Node" )
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          setOffsetAddedNodes( false );
+          CommandStack.addNode( EditorScene.this, localLocation );
+          setOffsetAddedNodes( true );
+        }
+      };
+
+      Action addExternalAction = new AbstractAction( "Add External" )
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          setOffsetAddedNodes( false );
+          CommandStack.addExternal( EditorScene.this, localLocation );
+          setOffsetAddedNodes( true );
+        }
+      };
+
       Action pasteAction = new AbstractAction( "Paste" )
       {
         private static final long serialVersionUID = 1L;
@@ -707,6 +733,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
       pasteAction.setEnabled( isClipboardPasteable() );
 
+      menu.add( addNodeAction );
+      menu.add( addExternalAction );
       menu.add( pasteAction );
       return menu;
     }

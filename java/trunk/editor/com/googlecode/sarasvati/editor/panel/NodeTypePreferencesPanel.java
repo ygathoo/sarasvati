@@ -567,5 +567,6 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       deleteTypeButton.setEnabled( false );
       iconInput.setEnabled( false );
       iconColorButton.setEnabled( false );
+      iconColorButton.setBackground( this.getBackground() );
     }
 }
