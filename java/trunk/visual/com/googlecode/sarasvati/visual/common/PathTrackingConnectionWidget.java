@@ -27,6 +27,7 @@ import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.draw2d.graph.Path;
 import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.ConnectionWidget;
+import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.util.SvGraphicsUtil;
 import com.googlecode.sarasvati.util.SvUtil;
@@ -51,12 +52,14 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
 
   public Rectangle getSourceBounds ()
   {
-    return SvGraphicsUtil.getBounds( getSourceAnchor().getRelatedWidget() );
+    Widget widget = getSourceAnchor().getRelatedWidget();
+    return widget == null ? null : SvGraphicsUtil.getBounds( widget );
   }
 
   public Rectangle getTargetBounds ()
   {
-    return SvGraphicsUtil.getBounds( getTargetAnchor().getRelatedWidget() );
+    Widget widget = getTargetAnchor().getRelatedWidget();
+    return widget == null ? null : SvGraphicsUtil.getBounds( widget );
   }
 
   public boolean ensurePathCurrent ()
