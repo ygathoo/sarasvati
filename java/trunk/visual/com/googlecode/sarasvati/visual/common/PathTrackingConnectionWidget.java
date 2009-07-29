@@ -29,9 +29,9 @@ import org.netbeans.api.visual.anchor.Anchor;
 import org.netbeans.api.visual.widget.ConnectionWidget;
 import org.netbeans.api.visual.widget.Widget;
 
-import com.googlecode.sarasvati.util.SvGraphicsUtil;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visual.util.ConvertUtil;
+import com.googlecode.sarasvati.visual.util.SvGraphicsUtil;
 
 public class PathTrackingConnectionWidget extends ConnectionWidget
 {
