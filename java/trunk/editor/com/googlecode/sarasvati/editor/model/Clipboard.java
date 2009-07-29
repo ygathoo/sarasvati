@@ -18,42 +18,50 @@
 */
 package com.googlecode.sarasvati.editor.model;
 
-import java.util.LinkedList;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
-public abstract class AbstractStateful<T>
+public class Clipboard
 {
-  private final LinkedList<T> stateStack = new LinkedList<T>();
-  private final Notifier<AbstractStateful<?>> notifier = new Notifier<AbstractStateful<?>>();
+  private static Clipboard INSTANCE = new Clipboard();
 
-  public AbstractStateful (T initialState)
+  public static Clipboard getInstance ()
   {
-    pushState( initialState );
+    return INSTANCE;
   }
 
-  public void pushState (T memberState)
+  private Set<Object> clipboard = new HashSet<Object> ();
+  private boolean clipboardPasteable = false;
+
+  public void setContents (final Collection<?> contents)
   {
-    stateStack.push( memberState );
-    stateChanged();
+    clipboard.clear();
+    clipboard.addAll( contents );
+    calculateClipboardPasteable();
   }
 
-  public void popState ()
+  private void calculateClipboardPasteable ()
   {
-    stateStack.pop();
-    stateChanged();
+    for ( Object o : clipboard )
+    {
+      if ( o instanceof EditorGraphMember<?> )
+      {
+        clipboardPasteable = true;
+        return;
+      }
+    }
+
+    clipboardPasteable = false;
   }
 
-  public T getState ()
+  public boolean isClipboardPasteable ()
   {
-    return stateStack.getFirst();
+    return clipboardPasteable;
   }
 
-  public void addListener (ModelListener<? extends AbstractStateful<?>> nodeListener )
+  public Set<?> getContents ()
   {
-    notifier.addListener( nodeListener );
-  }
-
-  protected void stateChanged ()
-  {
-    notifier.notify( this );
+    return clipboard;
   }
 }

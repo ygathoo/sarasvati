@@ -20,6 +20,7 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.util.Map;
+import java.util.Set;
 
 public class GraphMemberState
 {
@@ -44,6 +45,27 @@ public class GraphMemberState
   public Map<String, String> getCustomProperties ()
   {
     return customProperties;
+  }
+
+  public String getNextUniqueName (final Set<String> names)
+  {
+    String uniqueName = getName();
+
+    int count = 1;
+    while ( names.contains( uniqueName ) )
+    {
+      if ( uniqueName.endsWith( "-" + count ) )
+      {
+        count++;
+        uniqueName = uniqueName.substring( 0, name.length() - 1 ) + count;
+      }
+      else
+      {
+        uniqueName += "-" + count;
+      }
+    }
+
+    return uniqueName;
   }
 
   /* (non-Javadoc)

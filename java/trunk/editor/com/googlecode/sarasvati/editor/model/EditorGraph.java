@@ -25,14 +25,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
+import com.googlecode.sarasvati.util.SvUtil;
+
 public class EditorGraph
 {
   protected File                 file;
   protected String               name;
 
-  protected List<EditorNode>     nodes = new ArrayList<EditorNode>();
+  protected List<EditorNode>     nodes     = new ArrayList<EditorNode>();
   protected List<EditorExternal> externals = new ArrayList<EditorExternal>();
-  protected List<EditorArc>      arcs    = new ArrayList<EditorArc>();
+  protected List<EditorArc>      arcs      = new ArrayList<EditorArc>();
 
   public String getName ()
   {
@@ -112,6 +114,16 @@ public class EditorGraph
   public void removeArc (final EditorArc arc)
   {
     arcs.remove( arc );
+  }
+
+  public Set<String> getCurrentNodeNames ()
+  {
+    return SvUtil.getUniqueNames( nodes );
+  }
+
+  public Set<String> getCurrentExternalNames ()
+  {
+    return SvUtil.getUniqueNames( externals );
   }
 
   public List<String> validateGraph ()

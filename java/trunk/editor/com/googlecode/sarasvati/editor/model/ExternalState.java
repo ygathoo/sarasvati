@@ -20,6 +20,7 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.util.Map;
+import java.util.Set;
 
 public class ExternalState extends GraphMemberState
 {
@@ -38,9 +39,9 @@ public class ExternalState extends GraphMemberState
     return graphName;
   }
 
-  public ExternalState copy ()
+  public ExternalState copy (final Set<String> currentNames)
   {
-    return new ExternalState( getName() + "-1", graphName, getCustomProperties() );
+    return new ExternalState( getNextUniqueName( currentNames ), graphName, getCustomProperties() );
   }
 
   @Override
