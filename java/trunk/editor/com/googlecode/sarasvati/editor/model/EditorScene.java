@@ -111,9 +111,6 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
   private boolean offsetAddedNodes = false;
 
-  private Set<Object> clipboard = new HashSet<Object> ();
-  private boolean clipboardPasteable = false;
-
   public EditorScene (EditorGraph graph)
   {
     this.graph = graph;
@@ -192,17 +189,13 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
   public void editCut ()
   {
-    clipboard.clear();
-    clipboard.addAll( getSelectedObjects() );
-    calculateClipboardPasteable();
+    Clipboard.getInstance().setContents( getSelectedObjects() );
     removeSelected( getSelectedObjects(), "Cut" );
   }
 
   public void editCopy ()
   {
-    clipboard.clear();
-    clipboard.addAll( getSelectedObjects() );
-    calculateClipboardPasteable();
+    Clipboard.getInstance().setContents( getSelectedObjects() );
     GraphEditor.getInstance().updateCutCopyPaste( this );
   }
 
@@ -211,32 +204,12 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     removeSelected( getSelectedObjects(), "Delete" );
   }
 
-  private void calculateClipboardPasteable ()
-  {
-    for ( Object o : clipboard )
-    {
-      if ( o instanceof EditorGraphMember<?> )
-      {
-        clipboardPasteable = true;
-        return;
-      }
-    }
-
-    clipboardPasteable = false;
-  }
-
-  /**
-   * @return the clipboardPasteable
-   */
-  public boolean isClipboardPasteable ()
-  {
-    return clipboardPasteable;
-  }
-
   public void editPaste (final Point location)
   {
     int xOffset = Integer.MAX_VALUE;
     int yOffset = Integer.MAX_VALUE;
+
+    Set<?> clipboard = Clipboard.getInstance().getContents();
 
     for ( Object o : clipboard )
     {
@@ -262,23 +235,36 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
     List<Command> commands = new ArrayList<Command>( clipboard.size() );
 
+    Set<String> currentNodeNames = null;
+    Set<String> currentExternalNames = null;
+
     for ( Object o : clipboard )
     {
       if ( o instanceof EditorNode )
       {
+        if ( currentNodeNames == null )
+        {
+          currentNodeNames = graph.getCurrentNodeNames();
+        }
         EditorNode node = (EditorNode)o;
-        EditorNode newNode = new EditorNode( node.getState().copy() );
+        EditorNode newNode = new EditorNode( node.getState().copy( currentNodeNames ) );
         Point origin = new Point( node.getX() + xOffset, node.getY() + yOffset );
         oldNewMap.put( node, newNode );
         commands.add( new AddNodeCommand( this, origin, newNode ) );
+        currentNodeNames.add( newNode.getName() );
       }
       else if ( o instanceof EditorExternal )
       {
+        if ( currentExternalNames == null )
+        {
+          currentExternalNames = graph.getCurrentNodeNames();
+        }
         EditorExternal external = (EditorExternal)o;
-        EditorExternal newExternal = new EditorExternal( external.getState().copy() );
+        EditorExternal newExternal = new EditorExternal( external.getState().copy( currentExternalNames ) );
         Point origin = new Point( external.getX() + xOffset, external.getY() + yOffset );
         oldNewMap.put( external, newExternal );
         commands.add( new AddExternalCommand( this, origin, newExternal ) );
+        currentExternalNames.add( newExternal.getName() );
       }
       else if ( o instanceof EditorArc )
       {
@@ -731,7 +717,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
         }
       };
 
-      pasteAction.setEnabled( isClipboardPasteable() );
+      pasteAction.setEnabled( Clipboard.getInstance().isClipboardPasteable() );
 
       menu.add( addNodeAction );
       menu.add( addExternalAction );

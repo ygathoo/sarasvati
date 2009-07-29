@@ -70,6 +70,7 @@ import com.googlecode.sarasvati.editor.menu.PreferencesAction;
 import com.googlecode.sarasvati.editor.menu.RedoAction;
 import com.googlecode.sarasvati.editor.menu.SaveAction;
 import com.googlecode.sarasvati.editor.menu.UndoAction;
+import com.googlecode.sarasvati.editor.model.Clipboard;
 import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
 import com.googlecode.sarasvati.editor.model.EditorPreferences;
@@ -642,7 +643,7 @@ public class GraphEditor
     deleteAction.setEnabled( hasSelection );
     cutAction.setEnabled( hasSelection );
     copyAction.setEnabled( hasSelection );
-    pasteAction.setEnabled( scene.isClipboardPasteable() );
+    pasteAction.setEnabled( Clipboard.getInstance().isClipboardPasteable() );
   }
 
   private void updateTabTitle (final int index, final String label)

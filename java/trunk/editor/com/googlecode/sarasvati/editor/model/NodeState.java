@@ -20,6 +20,7 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.util.Map;
+import java.util.Set;
 
 import com.googlecode.sarasvati.JoinType;
 
@@ -78,9 +79,9 @@ public class NodeState extends GraphMemberState
     return guard;
   }
 
-  public NodeState copy ()
+  public NodeState copy (final Set<String> currentNames)
   {
-    return new NodeState( getName() + "-1", type, joinType, joinParam, isStart, guard, getCustomProperties() );
+    return new NodeState( getNextUniqueName( currentNames ), type, joinType, joinParam, isStart, guard, getCustomProperties() );
   }
 
   /* (non-Javadoc)
