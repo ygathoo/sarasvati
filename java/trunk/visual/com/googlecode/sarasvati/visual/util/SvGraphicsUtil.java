@@ -17,7 +17,7 @@
     Copyright 2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.util;
+package com.googlecode.sarasvati.visual.util;
 
 import java.awt.Point;
 import java.awt.Rectangle;
