@@ -75,6 +75,7 @@ import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
 import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.EditorScene;
+import com.googlecode.sarasvati.editor.model.Library;
 import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.xml.XmlLoader;
@@ -484,7 +485,15 @@ public class GraphEditor
 
     if ( isSaveAs || scene.getGraph().getFile() == null )
     {
-      JFileChooser fileChooser = new JFileChooser( getLastFile() );
+      File basePath = Library.getInstance().getBasePath();
+
+      if ( basePath == null )
+      {
+        basePath = getLastFile();
+      }
+
+      JFileChooser fileChooser = new JFileChooser();
+      fileChooser.setCurrentDirectory( basePath );
 
       int retVal = fileChooser.showSaveDialog( mainWindow );
 

@@ -48,15 +48,14 @@ public class OpenAction extends AbstractAction
   {
     GraphEditor editor = GraphEditor.getInstance();
 
-    JFileChooser fileChooser = new JFileChooser();
-
-    File path = editor.getLastFile();
+    File path = Library.getInstance().getBasePath();
 
     if ( path == null )
     {
-      path = Library.getInstance().getBasePath();
+      path = editor.getLastFile();
     }
 
+    JFileChooser fileChooser = new JFileChooser( );
     fileChooser.setCurrentDirectory( path );
 
     int retVal = fileChooser.showOpenDialog( editor.getMainWindow() );
