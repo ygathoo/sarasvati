@@ -316,7 +316,7 @@ To demonstrate use of each implementation, we start with a node that just prints
 <process-definition name="hello-world"
                     xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node name="hello" type="helloWord" isStart="true"/>
+  <node name="hello" type="helloWorld" isStart="true"/>
 
 </process-definition>
 }}}
