@@ -32,26 +32,27 @@ public class DefaultNodeFactory implements NodeFactory
 {
   protected static Map<String, Class<? extends CustomNode>> globalCustomTypeMap = new HashMap<String, Class<? extends CustomNode>>();
 
-  public static void addGlobalCustomType (String type, Class<? extends CustomNode> clazz)
+  public static void addGlobalCustomType (final String type,
+                                          final Class<? extends CustomNode> clazz)
   {
     globalCustomTypeMap.put( type, clazz );
   }
 
-  protected Map<String, Class<? extends Node>> typeMap = new HashMap<String, Class<? extends Node>>();
-  protected Class<? extends Node> defaultClass;
+  protected final Map<String, Class<? extends Node>> typeMap = new HashMap<String, Class<? extends Node>>();
+  protected final Class<? extends Node> defaultClass;
 
-  public DefaultNodeFactory (Class<? extends Node> defaultClass)
+  public DefaultNodeFactory (final Class<? extends Node> defaultClass)
   {
     this.defaultClass = defaultClass;
   }
 
-  public void addType (String type, Class<? extends Node> clazz)
+  public void addType (final String type, final Class<? extends Node> clazz)
   {
     typeMap.put( type, clazz );
   }
 
   @Override
-  public Map<String, String> loadCustom (Node node, Object custom)
+  public Map<String, String> loadCustom (final Node node, final Object custom)
   {
     if ( custom == null )
     {
@@ -65,12 +66,12 @@ public class DefaultNodeFactory implements NodeFactory
     else
     {
       throw new SarasvatiLoadException( "Expected DOM Element, but got instance of " + custom.getClass().getName() +
-                               " while loading node of type " + node.getType() );
+                                        " while loading node of type " + node.getType() );
     }
   }
 
   @Override
-  public Node newNode (String type)
+  public Node newNode (final String type)
   {
     Class<? extends Node> clazz = typeMap.get( type );
 

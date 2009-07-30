@@ -515,4 +515,14 @@ public class GraphLoader<G extends Graph>
 
     return loadResults;
   }
+
+  /**
+   * Loads the given XML process definition file.
+   *
+   * @param file The xml file to load
+   */
+  public void load (final File file)
+  {
+    loadDefinition( new XmlLoader(), file );
+  }
 }

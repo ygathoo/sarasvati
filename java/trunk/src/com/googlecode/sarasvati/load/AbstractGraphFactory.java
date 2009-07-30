@@ -45,38 +45,40 @@ public abstract class AbstractGraphFactory<G extends Graph> implements GraphFact
   protected Map<String, NodeFactory>  factoryMap = new HashMap<String, NodeFactory>();
   protected DefaultNodeFactory        defaultNodeFactory;
 
-  public AbstractGraphFactory (Class<? extends Node> defaultClass)
+  public AbstractGraphFactory (final Class<? extends Node> defaultClass)
   {
     this.defaultNodeFactory = new DefaultNodeFactory( defaultClass );
   }
 
   @Override
-  public NodeFactory getNodeFactory (String type)
+  public NodeFactory getNodeFactory (final String type)
   {
     NodeFactory nodeFactory = factoryMap.get( type );
     return nodeFactory == null ? defaultNodeFactory : nodeFactory;
   }
 
   @Override
-  public void addType (String type, Class<? extends Node> clazz)
+  public void addType (final String type, final Class<? extends Node> clazz)
   {
     defaultNodeFactory.addType( type, clazz );
   }
 
   @Override
-  public void addGlobalCustomType (String type, Class<? extends CustomNode> nodeClass)
+  public void addGlobalCustomType (final String type, final Class<? extends CustomNode> nodeClass)
   {
     DefaultNodeFactory.addGlobalCustomType( type, nodeClass );
   }
 
   @Override
-  public void addNodeFactory (String type, NodeFactory nodeFactory)
+  public void addNodeFactory (final String type, final NodeFactory nodeFactory)
   {
     factoryMap.put( type, nodeFactory );
   }
 
   @Override
-  public NodeToken newNodeToken( GraphProcess process, Node node, List<ArcToken> parents )
+  public NodeToken newNodeToken (final GraphProcess process,
+                                 final Node node,
+                                 final List<ArcToken> parents )
   {
     return newNodeToken( process, node, ExecutionType.Forward, parents, null );
   }
