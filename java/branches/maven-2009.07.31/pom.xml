@@ -1,22 +1,24 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.google.sarasvati</groupId>
+  <groupId>com.googlecode.sarasvati</groupId>
   <artifactId>sarasvati-parent</artifactId>
   <packaging>pom</packaging>
   <name>Sarasvati</name>
   <version>1.0.0-RC3-SNAPSHOT</version>
   <description>Sarasvati is a workflow/bpm engine based on graph execution. It has a simple core which allows for different implementations. For example one may change the persistence mechanism (or avoid it altogether), change token representation or build additional functionality on top. </description>
   <url>http://code.google.com/p/sarasvati/</url>
+  <developers>
+  </developers>
   <scm>
   	<developerConnection>Paul Lorenz</developerConnection>
   </scm>
   <build>
   	<resources>
-  		<resource>
-  			<directory>${basedir}/conf</directory>
-  		</resource>
   	</resources>
   	<testResources>
+  		<testResource>
+  			<directory>${basedir}/conf</directory>
+  		</testResource>
   	</testResources>
   	<plugins>
   		<plugin>
@@ -37,6 +39,7 @@
   	<module>sarasvati-visual</module>
   	<module>sarasvati-editor</module>
   	<module>sarasvati-examples</module>
+  	<module>sarasvati-test</module>
   </modules>
   <dependencies>
   	<dependency>
@@ -89,27 +92,34 @@
   </dependencies>
   <dependencyManagement>
   	<dependencies>
-  		<dependency>
-  			<groupId>com.google.sarasvati</groupId>
-  			<artifactId>sarasvati</artifactId>
+  	  	<dependency>
+  			<groupId>com.googlecode.sarasvati</groupId>
+  			<artifactId>sarasvati-core</artifactId>
   			<version>1.0.0-RC3-SNAPSHOT</version>
   			<scope>compile</scope>
   		</dependency>
   		<dependency>
-  			<groupId>com.google.sarasvati</groupId>
-  			<artifactId>sarasvati-editor</artifactId>
-  			<version>1.0.0-RC3-SNAPSHOT</version>
-  			<scope>compile</scope>
-  		</dependency>
-  		<dependency>
-  			<groupId>com.google.sarasvati</groupId>
+  			<groupId>com.googlecode.sarasvati</groupId>
   			<artifactId>sarasvati-visual</artifactId>
   			<version>1.0.0-RC3-SNAPSHOT</version>
   			<scope>compile</scope>
   		</dependency>
   		<dependency>
-  			<groupId>com.google.sarasvati</groupId>
+  			<groupId>com.googlecode.sarasvati</groupId>
+  			<artifactId>sarasvati-editor</artifactId>
+  			<version>1.0.0-RC3-SNAPSHOT</version>
+  			<scope>compile</scope>
+  		</dependency>
+
+  		<dependency>
+  			<groupId>com.googlecode.sarasvati</groupId>
   			<artifactId>sarasvati-examples</artifactId>
+  			<version>1.0.0-RC3-SNAPSHOT</version>
+  			<scope>compile</scope>
+  		</dependency>
+  		<dependency>
+  			<groupId>com.googlecode.sarasvati</groupId>
+  			<artifactId>sarasvati-test</artifactId>
   			<version>1.0.0-RC3-SNAPSHOT</version>
   			<scope>compile</scope>
   		</dependency>
