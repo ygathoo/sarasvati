@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <parent>
     <artifactId>sarasvati-parent</artifactId>
-    <groupId>com.google.sarasvati</groupId>
+    <groupId>com.googlecode.sarasvati</groupId>
     <version>1.0.0-RC3-SNAPSHOT</version>
     <relativePath>../pom.xml</relativePath>
   </parent>
@@ -9,12 +9,6 @@
   <artifactId>sarasvati-visual</artifactId>
   <name>sarasvati-visual</name>
   <dependencies>
-  	<dependency>
-  		<groupId>com.google.sarasvati</groupId>
-  		<artifactId>sarasvati</artifactId>
-  		<version>1.0.0-RC3-SNAPSHOT</version>
-  		<scope>compile</scope>
-  	</dependency>
   	<dependency>
   		<groupId>org.eclipse</groupId>
   		<artifactId>draw2d</artifactId>
@@ -27,6 +21,13 @@
   		<artifactId>visual</artifactId>
   		<version>1.0.0</version>
   		<type>jar</type>
+  		<scope>system</scope>
+  		<systemPath>${basedir}/../lib/org-netbeans-api-visual.jar</systemPath>
+  	</dependency>
+  	<dependency>
+  		<groupId>com.googlecode.sarasvati</groupId>
+  		<artifactId>sarasvati-core</artifactId>
+  		<version>1.0.0-RC3-SNAPSHOT</version>
   		<scope>compile</scope>
   	</dependency>
   </dependencies>

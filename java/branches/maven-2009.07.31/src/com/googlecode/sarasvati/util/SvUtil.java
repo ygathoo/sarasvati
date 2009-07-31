@@ -22,7 +22,6 @@ package com.googlecode.sarasvati.util;
 import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.Map;
@@ -32,7 +31,6 @@ import java.util.Set;
 import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.TokenSetMember;
-import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
 import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
@@ -181,16 +179,6 @@ public class SvUtil
     }
 
     processed.add( def );
-  }
-
-  public static Set<String> getUniqueNames (final Collection<? extends EditorGraphMember<?>> members)
-  {
-    Set<String> names = new HashSet<String> ();
-    for ( EditorGraphMember<?> member : members )
-    {
-      names.add( member.getName() );
-    }
-    return names;
   }
 
   /**

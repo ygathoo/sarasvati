@@ -20,12 +20,11 @@ package com.googlecode.sarasvati.editor.model;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-
-import com.googlecode.sarasvati.util.SvUtil;
 
 public class EditorGraph
 {
@@ -116,14 +115,24 @@ public class EditorGraph
     arcs.remove( arc );
   }
 
+  public Set<String> getUniqueNames (final Collection<? extends EditorGraphMember<?>> members)
+  {
+    Set<String> names = new HashSet<String> ();
+    for ( EditorGraphMember<?> member : members )
+    {
+      names.add( member.getName() );
+    }
+    return names;
+  }
+
   public Set<String> getCurrentNodeNames ()
   {
-    return SvUtil.getUniqueNames( nodes );
+    return getUniqueNames( nodes );
   }
 
   public Set<String> getCurrentExternalNames ()
   {
-    return SvUtil.getUniqueNames( externals );
+    return getUniqueNames( externals );
   }
 
   public List<String> validateGraph ()
