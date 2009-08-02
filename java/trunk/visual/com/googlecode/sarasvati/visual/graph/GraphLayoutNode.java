@@ -88,6 +88,16 @@ public class GraphLayoutNode<N>
     return originY;
   }
 
+  public int getOriginX (final int width)
+  {
+    return originX + (NodeDrawConfig.getMaxNodeRadius() - (width >> 1));
+  }
+
+  public int getOriginY (final int height)
+  {
+    return originY + (NodeDrawConfig.getMaxNodeRadius() - (height >> 1));
+  }
+
   public int getOffset ()
   {
     return NodeDrawConfig.getMaxNodeRadius() >> 1;
