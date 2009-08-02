@@ -23,7 +23,6 @@ package com.googlecode.sarasvati.hib;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import javax.persistence.DiscriminatorValue;
 
@@ -52,8 +51,6 @@ import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
 public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
 {
-  private static final Map<String,Class<?>> checkedTypes = new ConcurrentHashMap<String,Class<?>>();
-
   private Session session;
 
   HibGraphFactory (final Session session)
@@ -301,52 +298,47 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   @Override
   public void addType (final String type, final Class<? extends Node> clazz)
   {
-    Class<?> current = checkedTypes.get( type );
-    if ( current != clazz )
+    HibNodeType hibNodeType = (HibNodeType) session.get( HibNodeType.class, type );
+
+    /*
+     * Node type doesn't exist in database yet, attempt to insert
+     */
+    if ( hibNodeType == null )
     {
-      HibNodeType hibNodeType = (HibNodeType) session.get( HibNodeType.class, type );
+      String behavior = null;
+      String description = "User defined type";
 
-      /*
-       * Node type doesn't exist in database yet, attempt to insert
-       */
-      if ( hibNodeType == null )
+      if ( CustomNode.class.isAssignableFrom( clazz ) )
       {
-        String behavior = null;
-        String description = "User defined type";
-
-        if ( CustomNode.class.isAssignableFrom( clazz ) )
-        {
-          behavior = HibCustomNodeWrapper.class.getAnnotation( DiscriminatorValue.class ).value();
-        }
-        else
-        {
-          DiscriminatorValue discriminator = clazz.getAnnotation( DiscriminatorValue.class );
-
-          if ( discriminator != null )
-          {
-            behavior = discriminator.value();
-          }
-        }
-
-        NodeType nodeType = clazz.getAnnotation( NodeType.class );
-        if ( nodeType != null )
-        {
-          description = nodeType.value();
-        }
-
-        if ( type.equals( behavior ) )
-        {
-          hibNodeType = new HibNodeType( type, description );
-        }
-        else
-        {
-          HibNodeType behaviorType = (HibNodeType) session.load( HibNodeType.class, behavior );
-          hibNodeType = new HibNodeType( type, description, behaviorType );
-        }
-
-        session.save( hibNodeType );
+        behavior = HibCustomNodeWrapper.class.getAnnotation( DiscriminatorValue.class ).value();
       }
-      checkedTypes.put( type, clazz );
+      else
+      {
+        DiscriminatorValue discriminator = clazz.getAnnotation( DiscriminatorValue.class );
+
+        if ( discriminator != null )
+        {
+          behavior = discriminator.value();
+        }
+      }
+
+      NodeType nodeType = clazz.getAnnotation( NodeType.class );
+      if ( nodeType != null )
+      {
+        description = nodeType.value();
+      }
+
+      if ( type.equals( behavior ) )
+      {
+        hibNodeType = new HibNodeType( type, description );
+      }
+      else
+      {
+        HibNodeType behaviorType = (HibNodeType) session.load( HibNodeType.class, behavior );
+        hibNodeType = new HibNodeType( type, description, behaviorType );
+      }
+
+      session.save( hibNodeType );
     }
 
     super.addType( type, clazz );
