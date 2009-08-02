@@ -21,6 +21,7 @@ package com.googlecode.sarasvati.visual.graph;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import org.netbeans.api.visual.layout.LayoutFactory.ConnectionWidgetLayoutAlignment;
 import org.netbeans.api.visual.widget.ConnectionWidget;
@@ -51,7 +52,9 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
         Widget widget = addNode( node );
 
         GraphLayoutNode<Node> treeNode = graphTree.getTreeNode( node );
-        Point origin = new Point( treeNode.getOriginX(), treeNode.getOriginY() );
+        Rectangle bounds = widget.getPreferredBounds();
+        Point origin = new Point( treeNode.getOriginX( bounds.width ), treeNode.getOriginY( bounds.height) );
+
         widget.setPreferredLocation( origin );
         widget.resolveBounds( origin, null );
       }
