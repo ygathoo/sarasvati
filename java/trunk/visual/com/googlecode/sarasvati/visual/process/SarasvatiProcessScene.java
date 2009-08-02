@@ -22,6 +22,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
 import java.awt.Point;
+import java.awt.Rectangle;
 
 import org.netbeans.api.visual.layout.LayoutFactory.ConnectionWidgetLayoutAlignment;
 import org.netbeans.api.visual.widget.ConnectionWidget;
@@ -53,7 +54,9 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
       {
         Widget widget = addNode( node );
 
-        Point origin = new Point( node.getOriginX(), node.getOriginY() );
+        Rectangle bounds = widget.getPreferredBounds();
+        Point origin = new Point( node.getOriginX( bounds.width ), node.getOriginY( bounds.height) );
+
         widget.setPreferredLocation( origin );
         widget.resolveBounds( origin, null );
       }
