@@ -18,29 +18,31 @@
 */
 package com.googlecode.sarasvati.event;
 
-class ExecutionListenerWrapper implements ExecutionListener
+import com.googlecode.sarasvati.Node;
+
+/**
+ * Useful for avoiding hibernate proxy behavior. If a node implements
+ * ExecutionListener, it can return new ExecutionListenerWrapper( this )
+ * from {@link Node#getAdaptor(Class)}, and the proxy will not break.
+ *
+ * @author Paul Lorenz
+ */
+public class ExecutionListenerWrapper implements ExecutionListener
 {
-  protected ExecutionEventType eventType;
   protected ExecutionListener listener;
 
-  public ExecutionListenerWrapper(ExecutionEventType eventType, ExecutionListener listener)
+  public ExecutionListenerWrapper (final ExecutionListener listener)
   {
-    this.eventType = eventType;
     this.listener = listener;
   }
 
-  public ExecutionEventType getEventType()
-  {
-    return eventType;
-  }
-
-  public ExecutionListener getListener()
+  public ExecutionListener getListener ()
   {
     return listener;
   }
 
   @Override
-  public void notify(ExecutionEvent event)
+  public void notify (final ExecutionEvent event)
   {
     listener.notify( event );
   }

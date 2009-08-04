@@ -27,19 +27,19 @@ import com.googlecode.sarasvati.Engine;
 
 public class DefaultExecutionEventQueue implements ExecutionEventQueue
 {
-  private List<ExecutionListenerWrapper> listeners;
+  private List<RegisteredExecutionListener> listeners;
 
   public static ExecutionEventQueue newArrayListInstance ()
   {
-    return new DefaultExecutionEventQueue( new ArrayList<ExecutionListenerWrapper>() );
+    return new DefaultExecutionEventQueue( new ArrayList<RegisteredExecutionListener>() );
   }
 
   public static ExecutionEventQueue newCopyOnWriteListInstance ()
   {
-    return new DefaultExecutionEventQueue( new CopyOnWriteArrayList<ExecutionListenerWrapper>() );
+    return new DefaultExecutionEventQueue( new CopyOnWriteArrayList<RegisteredExecutionListener>() );
   }
 
-  DefaultExecutionEventQueue(List<ExecutionListenerWrapper> listeners)
+  DefaultExecutionEventQueue(List<RegisteredExecutionListener> listeners)
   {
     this.listeners = listeners;
   }
@@ -58,7 +58,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
     {
       if (eventType != null)
       {
-        listeners.add( new ExecutionListenerWrapper( eventType, listener ) );
+        listeners.add( new RegisteredExecutionListener( eventType, listener ) );
       }
     }
   }
@@ -73,9 +73,9 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
 
     List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
 
-    List<ExecutionListenerWrapper> toRemove = new ArrayList<ExecutionListenerWrapper>();
+    List<RegisteredExecutionListener> toRemove = new ArrayList<RegisteredExecutionListener>();
 
-    for ( ExecutionListenerWrapper wrapper : listeners )
+    for ( RegisteredExecutionListener wrapper : listeners )
     {
       if ( listener.getClass() == wrapper.listener.getClass() &&
            ( eventTypes == null || eventTypes.length == 0 || types.contains( wrapper.getEventType() ) ) )
@@ -92,12 +92,41 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
    */
   public void fireEvent (ExecutionEvent event)
   {
-    for (ExecutionListenerWrapper wrapper : listeners )
+    for (RegisteredExecutionListener wrapper : listeners )
     {
       if ( event.getEventType() == wrapper.getEventType() )
       {
         wrapper.notify( event );
       }
+    }
+  }
+
+  static class RegisteredExecutionListener implements ExecutionListener
+  {
+    protected ExecutionEventType eventType;
+    protected ExecutionListener listener;
+
+    public RegisteredExecutionListener (final ExecutionEventType eventType,
+                                     final ExecutionListener listener)
+    {
+      this.eventType = eventType;
+      this.listener = listener;
+    }
+
+    public ExecutionEventType getEventType ()
+    {
+      return eventType;
+    }
+
+    public ExecutionListener getListener ()
+    {
+      return listener;
+    }
+
+    @Override
+    public void notify (final ExecutionEvent event)
+    {
+      listener.notify( event );
     }
   }
 }
