@@ -176,9 +176,23 @@ public class HibEngine extends BaseEngine
     if ( enableCaching )
     {
       config.setCacheConcurrencyStrategy( HibGraph.class.getName(),"read-only" );
+      config.setCollectionCacheConcurrencyStrategy( HibGraph.class.getName() + ".nodes", "read-only" );
+      config.setCollectionCacheConcurrencyStrategy( HibGraph.class.getName() + ".arcs", "read-only" );
+
       config.setCacheConcurrencyStrategy( HibNode.class.getName(),"read-only" );
       config.setCacheConcurrencyStrategy( HibNodeRef.class.getName(),"read-only" );
       config.setCacheConcurrencyStrategy( HibArc.class.getName(),"read-only" );
+      config.setCacheConcurrencyStrategy( HibExternal.class.getName(),"read-only" );
+
+      config.setCacheConcurrencyStrategy( HibGraphProcess.class.getName(),"read-write" );
+      config.setCollectionCacheConcurrencyStrategy( HibGraphProcess.class.getName() + ".listeners", "read-write" );
+      config.setCollectionCacheConcurrencyStrategy( HibGraphProcess.class.getName() + ".activeArcTokens", "read-write" );
+      config.setCollectionCacheConcurrencyStrategy( HibGraphProcess.class.getName() + ".activeNodeTokens", "read-write" );
+      config.setCollectionCacheConcurrencyStrategy( HibGraphProcess.class.getName() + ".executionQueue", "read-write" );
+
+      config.setCacheConcurrencyStrategy( HibProcessListener.class.getName(),"read-write" );
+      config.setCacheConcurrencyStrategy( HibNodeToken.class.getName(),"read-write" );
+      config.setCacheConcurrencyStrategy( HibArcToken.class.getName(),"read-write" );
     }
   }
 }

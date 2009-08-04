@@ -28,17 +28,17 @@ public class CachingExecutionEventQueue extends DefaultExecutionEventQueue
 {
   public static ExecutionEventQueue newArrayListInstance ()
   {
-    return new CachingExecutionEventQueue( new ArrayList<ExecutionListenerWrapper>() );
+    return new CachingExecutionEventQueue( new ArrayList<DefaultExecutionEventQueue.RegisteredExecutionListener>() );
   }
 
   public static ExecutionEventQueue newCopyOnWriteListInstance ()
   {
-    return new CachingExecutionEventQueue( new CopyOnWriteArrayList<ExecutionListenerWrapper>() );
+    return new CachingExecutionEventQueue( new CopyOnWriteArrayList<DefaultExecutionEventQueue.RegisteredExecutionListener>() );
   }
 
   protected static final ListenerCache       listenerCache    = new ListenerCache();
 
-  CachingExecutionEventQueue (List<ExecutionListenerWrapper> listeners)
+  CachingExecutionEventQueue (final List<DefaultExecutionEventQueue.RegisteredExecutionListener> listeners)
   {
     super( listeners );
   }
