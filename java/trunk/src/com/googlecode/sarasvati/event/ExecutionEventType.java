@@ -25,8 +25,8 @@ public enum ExecutionEventType
   PROCESS_CANCELED( 8 ),
 
   NODE_TOKEN_CREATED( 16 ),
-  NODE_TOKEN_PREACCEPTED( 32 ),
-  NODE_TOKEN_POSTACCEPTED( 64 ),
+  NODE_TOKEN_ACCEPTED( 32 ),
+  NODE_TOKEN_EXECUTED( 64 ),
   NODE_TOKEN_DISCARDED( 128 ),
   NODE_TOKEN_SKIPPED( 256 ),
   NODE_TOKEN_COMPLETED( 512 ),
@@ -56,8 +56,8 @@ public enum ExecutionEventType
   public boolean isNodeTokenEvent ()
   {
     return this == NODE_TOKEN_CREATED   ||
-    	   this == NODE_TOKEN_PREACCEPTED  ||
-    	   this == NODE_TOKEN_POSTACCEPTED  ||
+    	   this == NODE_TOKEN_ACCEPTED  ||
+    	   this == NODE_TOKEN_EXECUTED  ||
            this == NODE_TOKEN_COMPLETED ||
            this == NODE_TOKEN_DISCARDED ||
            this == NODE_TOKEN_SKIPPED;

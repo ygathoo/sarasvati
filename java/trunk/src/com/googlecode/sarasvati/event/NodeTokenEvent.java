@@ -32,14 +32,14 @@ public class NodeTokenEvent extends ExecutionEvent
     return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_CREATED, nodeToken, null );
   }
 
-  public static final NodeTokenEvent newPreAcceptedEvent (Engine engine, NodeToken nodeToken)
+  public static final NodeTokenEvent newAcceptedEvent (Engine engine, NodeToken nodeToken)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_PREACCEPTED, nodeToken, null );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, null );
   }
   
-  public static final NodeTokenEvent newPostAcceptedEvent (Engine engine, NodeToken nodeToken)
+  public static final NodeTokenEvent newExecutedEvent (Engine engine, NodeToken nodeToken)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_POSTACCEPTED, nodeToken, null );
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_EXECUTED, nodeToken, null );
   }
 
   public static final NodeTokenEvent newDiscardedEvent (Engine engine, NodeToken nodeToken)
