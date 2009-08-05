@@ -25,13 +25,14 @@ public enum ExecutionEventType
   PROCESS_CANCELED( 8 ),
 
   NODE_TOKEN_CREATED( 16 ),
-  NODE_TOKEN_ACCEPTED( 32 ),
-  NODE_TOKEN_DISCARDED( 64 ),
-  NODE_TOKEN_SKIPPED( 128 ),
-  NODE_TOKEN_COMPLETED( 256 ),
+  NODE_TOKEN_PREACCEPTED( 32 ),
+  NODE_TOKEN_POSTACCEPTED( 64 ),
+  NODE_TOKEN_DISCARDED( 128 ),
+  NODE_TOKEN_SKIPPED( 256 ),
+  NODE_TOKEN_COMPLETED( 512 ),
 
-  ARC_TOKEN_CREATED( 512 ),
-  ARC_TOKEN_COMPLETED( 1024 );
+  ARC_TOKEN_CREATED( 1024 ),
+  ARC_TOKEN_COMPLETED( 2048 );
 
   private int eventType;
 
@@ -55,9 +56,9 @@ public enum ExecutionEventType
   public boolean isNodeTokenEvent ()
   {
     return this == NODE_TOKEN_CREATED   ||
-    	   this == NODE_TOKEN_ACCEPTED  ||
+    	   this == NODE_TOKEN_PREACCEPTED  ||
+    	   this == NODE_TOKEN_POSTACCEPTED  ||
            this == NODE_TOKEN_COMPLETED ||
-           this == NODE_TOKEN_ACCEPTED  ||
            this == NODE_TOKEN_DISCARDED ||
            this == NODE_TOKEN_SKIPPED;
   }
