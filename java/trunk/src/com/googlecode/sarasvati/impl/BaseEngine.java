@@ -218,8 +218,9 @@ public abstract class BaseEngine implements Engine
     {
       case AcceptToken :
         process.addActiveNodeToken( token );
-        fireEvent( NodeTokenEvent.newAcceptedEvent( this, token ) );
+        fireEvent( NodeTokenEvent.newPreAcceptedEvent( this, token ) );
         token.getNode().execute( this, token );
+        fireEvent( NodeTokenEvent.newPostAcceptedEvent( this, token ) );
         break;
 
       case DiscardToken :
