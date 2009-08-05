@@ -22,7 +22,7 @@ table_pat = re.compile( r"^\|\|.*\|\|.*")
 bullet_stack = []
 number_stack = []
 
-image_prefix = "/home/paul/workspace/thesis/proposal/images/"
+image_prefix = "/home/paul/workspace/wf-wiki/images/"
 
 scale_dict = { "legend" : 0.6,
                "concepts5" : 0.6,
@@ -35,13 +35,13 @@ scale_dict = { "legend" : 0.6,
              }
 
 def replaceBold(match):
-    return "\\textbf{" + match.group(1) + "}"
+    return "<emphasis>" + match.group(1) + "</emphasis>"
 
 def replaceItalic(match):
-    return "\\textit{" + match.group(1) + "}"
+    return "<emphasis>" + match.group(1) + "</emphasis>"
 
 def replaceInlineCode(match):
-    return "\\verb!" + match.group(1) + "!"
+    return "<literal>" + match.group(1) + "</literal>"
 
 def processImage( url, name ):
     image_path = image_prefix + name + ".jpg"
@@ -94,7 +94,7 @@ def printItemizeIndent ():
 def popItemizeIndent ():
     bullet_stack.pop( 0 )
     printItemizeIndent()
-    fout.write( "\\end{itemize}\n" )
+    fout.write( "</itemizedlist>\n" )
 
 def printEnumerateIndent ():
     if ( len( number_stack ) == 0 ):
@@ -105,7 +105,7 @@ def printEnumerateIndent ():
 def popEnumerateIndent ():
     number_stack.pop( 0 )
     printEnumerateIndent()
-    fout.write( "\\end{enumerate}\n" )
+    fout.write( "</orderedlist>\n" )
 
 def convert ():
     past_intro  = False
@@ -187,30 +187,22 @@ def convert ():
         if ( bullets ):
             indent = len( bullets.group( 1 ) )
             line   = bullets.group( 2 ) + '\n'
-            if ( len( bullet_stack) == 0 or bullet_stack[0] < indent ):
+            if ( len( bullet_stack ) == 0 or bullet_stack[0] < indent ):
                 printItemizeIndent()
-                fout.write( "\\begin{itemize}\n" )
+                fout.write( "<itemizedlist>\n" )
                 bullet_stack.insert( 0, indent )
             elif ( bullet_stack[0] > indent ):
                 popItemizeIndent()
 
-            for _ in range(0,indent):
-                fout.write( '  ' )
-            fout.write( '\\item ' )
-
         elif ( numbers ):
             indent = len( numbers.group( 1 ) )
             line   = numbers.group( 2 ) + '\n'
-            if ( len( number_stack) == 0 or number_stack[0] < indent ):
+            if ( len( number_stack ) == 0 or number_stack[0] < indent ):
                 printEnumerateIndent()
-                fout.write( "\\begin{enumerate}\n" )
+                fout.write( "<orderedlist>\n" )
                 number_stack.insert( 0, indent )
             elif ( number_stack[0] > indent ):
                 popEnumerateIndent()
-
-            for _ in range(0,indent):
-                fout.write( '  ' )
-            fout.write( '\\item ' )
 
         else:
             while ( len( bullet_stack ) > 0 ):
@@ -218,38 +210,28 @@ def convert ():
             while ( len( number_stack ) > 0 ):
                 popEnumerateIndent()
 
+        if ( bullets or numbers ):
+            fout.write( "<listitem>\n" )
+            fout.write( "  <para>\n" )
+
         processLine( line )
 
+        if ( bullets or numbers ):
+            fout.write( "  </para>\n" )
+            fout.write( "</listitem>\n" )
+
 def printFooter ():
-    fout.write( """
+    fout.write( "</chapter>\n" )
 
-
-\\bibliographystyle{acm}
-\\bibliography{bibdata}
-
-\\end{document}
-""" )
-
-def printHeader ():
-    fout.write( """
-\\documentclass[letterpaper,11pt]{article}
-\\usepackage{graphicx}
-\\setcounter{tocdepth}{2}
-
-\\begin{document}
-
-\\title{Sarasvati: Simple, Extensible and Transparent Workflow}
-\\author{Paul Lorenz}
-\\date{05/27/2008}
-\\maketitle
-
-\\tableofcontents
-""" )
+def printHeader (name):
+    fout.write( "<?xml version='1.0' encoding=\"UTF-8\"?>\n" )
+    fout.write( "<!DOCTYPE chapter PUBLIC \"-//OASIS//DTD DocBook XML V4.5//EN\" \"http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd\">\n" )
+    fout.write( "\n<chapter id=\"" + name + "\">\n" )
 
 
 fin = open( sys.argv[1], "r")
 fout = open( sys.argv[2], "w" )
 
-#printHeader()
+printHeader( sys.argv[3] )
 convert()
-#printFooter()
+printFooter()
