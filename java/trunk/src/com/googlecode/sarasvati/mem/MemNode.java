@@ -70,7 +70,7 @@ public class MemNode implements Node, Cloneable
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     engine.complete( token, Arc.DEFAULT_ARC );
   }
@@ -81,7 +81,7 @@ public class MemNode implements Node, Cloneable
    *
    * @see Node#getAdaptor(Class)
    */
-  @Override public <T> T getAdaptor (Class<T> clazz)
+  @Override public <T> T getAdaptor (final Class<T> clazz)
   {
     return NodeAdapterManager.getAdaptor( this, clazz );
   }
@@ -168,7 +168,7 @@ public class MemNode implements Node, Cloneable
   }
 
   @Override
-  public JoinStrategy getJoinStrategy ()
+  public JoinStrategy getJoinStrategy (final Arc arc)
   {
     return joinType.getJoinStrategy();
   }
@@ -217,7 +217,7 @@ public class MemNode implements Node, Cloneable
     return external;
   }
 
-  public void setExternal (MemExternal external)
+  public void setExternal (final MemExternal external)
   {
     this.external = external;
   }

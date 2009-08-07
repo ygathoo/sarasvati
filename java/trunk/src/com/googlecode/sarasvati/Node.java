@@ -99,10 +99,14 @@ public interface Node extends Adaptable
    * Returns the {@link JoinStrategy} to be used when an
    * {@link ArcToken} arrives at this Node.
    *
+   * @param arc The arc of the incoming arc token. Allows
+   *              different join strategies for different
+   *              arcs.
+   *
    * @return The {@link JoinStrategy} to be used when an
    *         {@link ArcToken} arrives at this Node.
    */
-  JoinStrategy getJoinStrategy ();
+  JoinStrategy getJoinStrategy (Arc arc);
 
   /**
    * Returns true if this node is a start node. Start nodes

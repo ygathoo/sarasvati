@@ -35,6 +35,7 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.JoinStrategy;
@@ -79,7 +80,7 @@ public class HibNodeRef implements Node
 
   protected HibNodeRef () { /* Default constructor for Hibernate */ }
 
-  protected HibNodeRef (HibGraph graph, HibNode node, HibNodeRef originatingExternalNode, HibExternal external )
+  protected HibNodeRef (final HibGraph graph, final HibNode node, final HibNodeRef originatingExternalNode, final HibExternal external )
   {
     this.graph    = graph;
     this.node     = node;
@@ -92,7 +93,7 @@ public class HibNodeRef implements Node
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -102,7 +103,7 @@ public class HibNodeRef implements Node
     return node;
   }
 
-  public void setNode (HibNode node)
+  public void setNode (final HibNode node)
   {
     this.node = node;
   }
@@ -113,7 +114,7 @@ public class HibNodeRef implements Node
     return graph;
   }
 
-  public void setGraph (HibGraph graph)
+  public void setGraph (final HibGraph graph)
   {
     this.graph = graph;
   }
@@ -129,7 +130,7 @@ public class HibNodeRef implements Node
     return originatingExternalNode;
   }
 
-  public void setOriginatingExternalNode (HibNodeRef originatingExternalNode)
+  public void setOriginatingExternalNode (final HibNodeRef originatingExternalNode)
   {
     this.originatingExternalNode = originatingExternalNode;
   }
@@ -140,7 +141,7 @@ public class HibNodeRef implements Node
     return external;
   }
 
-  public void setExternal (HibExternal external)
+  public void setExternal (final HibExternal external)
   {
     this.external = external;
   }
@@ -191,9 +192,9 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public JoinStrategy getJoinStrategy ()
+  public JoinStrategy getJoinStrategy (final Arc arc)
   {
-    return node.getJoinStrategy();
+    return node.getJoinStrategy( arc );
   }
 
   @Override
@@ -203,25 +204,25 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public void backtrack (Engine engine, NodeToken token)
+  public void backtrack (final Engine engine, final NodeToken token)
   {
     node.backtrack( engine, token );
   }
 
   @Override
-  public boolean isBacktrackable(Engine engine, NodeToken token)
+  public boolean isBacktrackable(final Engine engine, final NodeToken token)
   {
     return node.isBacktrackable( engine, token );
   }
 
   @Override
-  public GuardResponse guard (Engine engine, NodeToken token)
+  public GuardResponse guard (final Engine engine, final NodeToken token)
   {
     return node.guard( engine, token );
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     node.execute( engine, token );
   }
@@ -233,7 +234,7 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public <T> T getAdaptor (Class<T> clazz)
+  public <T> T getAdaptor (final Class<T> clazz)
   {
     return node.getAdaptor (clazz);
   }
@@ -255,7 +256,7 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;

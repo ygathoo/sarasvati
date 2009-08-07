@@ -91,7 +91,7 @@ public class HibNode implements Node
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -102,7 +102,7 @@ public class HibNode implements Node
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -113,7 +113,7 @@ public class HibNode implements Node
     return type;
   }
 
-  public void setType (String type)
+  public void setType (final String type)
   {
     this.type = type;
   }
@@ -124,7 +124,7 @@ public class HibNode implements Node
     return graph;
   }
 
-  public void setGraph (HibGraph graph)
+  public void setGraph (final HibGraph graph)
   {
     this.graph = graph;
   }
@@ -134,7 +134,7 @@ public class HibNode implements Node
     return joinType;
   }
 
-  public void setJoinType (JoinType joinType)
+  public void setJoinType (final JoinType joinType)
   {
     this.joinType = joinType;
   }
@@ -145,13 +145,13 @@ public class HibNode implements Node
     return joinParam;
   }
 
-  public void setJoinParam (String joinParam)
+  public void setJoinParam (final String joinParam)
   {
     this.joinParam = joinParam;
   }
 
   @Override
-  public JoinStrategy getJoinStrategy ()
+  public JoinStrategy getJoinStrategy (final Arc arc)
   {
     return getJoinType().getJoinStrategy();
   }
@@ -162,7 +162,7 @@ public class HibNode implements Node
     return start;
   }
 
-  public void setStart( boolean start )
+  public void setStart( final boolean start )
   {
     this.start = start;
   }
@@ -172,7 +172,7 @@ public class HibNode implements Node
     return guard;
   }
 
-  public void setGuard( String guard )
+  public void setGuard( final String guard )
   {
     this.guard = guard;
   }
@@ -211,7 +211,7 @@ public class HibNode implements Node
    * @see Node#backtrack(Engine, NodeToken)
    */
   @Override
-  public void backtrack (Engine engine, NodeToken token)
+  public void backtrack (final Engine engine, final NodeToken token)
   {
     // does nothing by default. Can be overridden by subclasses.
   }
@@ -222,19 +222,19 @@ public class HibNode implements Node
    * @see Node#isBacktrackable(Engine,NodeToken)
    */
   @Override
-  public boolean isBacktrackable (Engine engine, NodeToken token)
+  public boolean isBacktrackable (final Engine engine, final NodeToken token)
   {
     return true;
   }
 
   @Override
-  public GuardResponse guard (Engine engine, NodeToken token)
+  public GuardResponse guard (final Engine engine, final NodeToken token)
   {
     return engine.evaluateGuard( token, guard );
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     engine.complete( token, Arc.DEFAULT_ARC );
   }
@@ -245,7 +245,7 @@ public class HibNode implements Node
    *
    * @see Node#getAdaptor(Class)
    */
-  @Override public <T> T getAdaptor (Class<T> clazz)
+  @Override public <T> T getAdaptor (final Class<T> clazz)
   {
     return NodeAdapterManager.getAdaptor( this, clazz );
   }
@@ -257,7 +257,7 @@ public class HibNode implements Node
    *
    * @param session The hibernate session to use
    */
-  public void create (Session session)
+  public void create (final Session session)
   {
     session.save( this );
   }
@@ -279,7 +279,7 @@ public class HibNode implements Node
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;
