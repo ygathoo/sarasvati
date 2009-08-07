@@ -40,8 +40,8 @@ import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.ProcessState;
-import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.SarasvatiException;
+import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.env.TokenSetMemberEnv;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
@@ -75,7 +75,7 @@ public abstract class BaseEngine implements Engine
   protected BaseEngine parentEngine;
 
   @Override
-  public GraphProcess startProcess (String graphName)
+  public GraphProcess startProcess (final String graphName)
   {
     Graph graph = getRepository().getLatestGraph( graphName );
     if ( graph == null )
@@ -87,7 +87,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public GraphProcess startProcess (Graph graph)
+  public GraphProcess startProcess (final Graph graph)
   {
     GraphProcess process = getFactory().newProcess( graph );
     startProcess( process );
@@ -95,7 +95,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void startProcess (GraphProcess process)
+  public void startProcess (final GraphProcess process)
   {
     process.setState( ProcessState.Executing );
     fireEvent( ProcessEvent.newStartedEvent( this, process ) );
@@ -127,7 +127,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void cancelProcess (GraphProcess process)
+  public void cancelProcess (final GraphProcess process)
   {
     process.setState( ProcessState.PendingCancel );
     fireEvent( ProcessEvent.newCanceledEvent( this, process ) );
@@ -135,7 +135,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void finalizeComplete (GraphProcess process)
+  public void finalizeComplete (final GraphProcess process)
   {
     process.setState( ProcessState.Completed );
 
@@ -148,12 +148,13 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void finalizeCancel (GraphProcess process)
+  public void finalizeCancel (final GraphProcess process)
   {
     process.setState( ProcessState.Canceled );
   }
 
-  private void executeArc (GraphProcess process, ArcToken token)
+  private void executeArc (final GraphProcess process,
+                           final ArcToken token)
   {
     if ( token.isPending() )
     {
@@ -161,7 +162,7 @@ public abstract class BaseEngine implements Engine
       process.addActiveArcToken( token );
 
       Node targetNode = token.getArc().getEndNode();
-      JoinResult result = targetNode.getJoinStrategy().performJoin( this, process, token );
+      JoinResult result = targetNode.getJoinStrategy( token.getArc() ).performJoin( this, process, token );
 
       if ( result.isJoinComplete() )
       {
@@ -170,7 +171,9 @@ public abstract class BaseEngine implements Engine
     }
   }
 
-  private void completeExecuteArc (GraphProcess process, Node targetNode, List<ArcToken> tokens)
+  private void completeExecuteArc (final GraphProcess process,
+                                   final Node targetNode,
+                                   final List<ArcToken> tokens)
   {
     NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, tokens );
     process.addNodeToken( nodeToken );
@@ -209,7 +212,7 @@ public abstract class BaseEngine implements Engine
     executeNode( process, nodeToken );
   }
 
-  protected void executeNode (GraphProcess process, NodeToken token)
+  protected void executeNode (final GraphProcess process, final NodeToken token)
   {
     GuardResponse response = token.getNode().guard( this, token );
     token.recordGuardAction( this, response.getGuardAction() );
@@ -237,7 +240,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void complete (NodeToken token, String arcName)
+  public void complete (final NodeToken token, final String arcName)
   {
     GraphProcess process = token.getProcess();
 
@@ -250,7 +253,7 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public void completeAsynchronous (NodeToken token, String arcName)
+  public void completeAsynchronous (final NodeToken token, final String arcName)
   {
     completeNodeExecution( token, arcName, true );
   }

@@ -31,7 +31,7 @@ public abstract class CustomNode implements Node
 {
   protected CustomNodeWrapper nodeWrapper;
 
-  public void setNodeWrapper (CustomNodeWrapper nodeWrapper)
+  public void setNodeWrapper (final CustomNodeWrapper nodeWrapper)
   {
     this.nodeWrapper = nodeWrapper;
   }
@@ -90,9 +90,9 @@ public abstract class CustomNode implements Node
   }
 
   @Override
-  public JoinStrategy getJoinStrategy ()
+  public JoinStrategy getJoinStrategy (final Arc arc)
   {
-    return nodeWrapper.getJoinStrategy();
+    return nodeWrapper.getJoinStrategy( arc );
   }
 
   @Override
@@ -130,7 +130,7 @@ public abstract class CustomNode implements Node
    *
    * @see Node#backtrack(Engine, NodeToken)
    */
-  @Override public void backtrack (Engine engine, NodeToken token)
+  @Override public void backtrack (final Engine engine, final NodeToken token)
   {
     // does nothing by default
   }
@@ -146,7 +146,7 @@ public abstract class CustomNode implements Node
    *
    * @see Node#isBacktrackable(Engine,NodeToken)
    */
-  @Override public boolean isBacktrackable (Engine engine, NodeToken token)
+  @Override public boolean isBacktrackable (final Engine engine, final NodeToken token)
   {
     return true;
   }
@@ -163,7 +163,7 @@ public abstract class CustomNode implements Node
    *
    * @see Node#getAdaptor(Class)
    */
-  @Override public <T> T getAdaptor (Class<T> clazz)
+  @Override public <T> T getAdaptor (final Class<T> clazz)
   {
     return nodeWrapper.getDefaultAdaptor( clazz );
   }
@@ -180,7 +180,7 @@ public abstract class CustomNode implements Node
    *
    * @see Node#guard(Engine, NodeToken)
    */
-  @Override public GuardResponse guard (Engine engine, NodeToken token)
+  @Override public GuardResponse guard (final Engine engine, final NodeToken token)
   {
     return nodeWrapper.defaultGuard( engine, token );
   }
