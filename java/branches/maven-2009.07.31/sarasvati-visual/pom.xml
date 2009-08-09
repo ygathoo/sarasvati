@@ -3,11 +3,13 @@
     <artifactId>sarasvati-parent</artifactId>
     <groupId>com.googlecode.sarasvati</groupId>
     <version>1.0.0-RC3-SNAPSHOT</version>
-    <relativePath>../pom.xml</relativePath>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   <artifactId>sarasvati-visual</artifactId>
   <name>sarasvati-visual</name>
+  <build>
+  	<sourceDirectory>${basedir}/../visual</sourceDirectory>
+  </build>
   <dependencies>
   	<dependency>
   		<groupId>org.eclipse</groupId>
@@ -25,9 +27,9 @@
   		<systemPath>${basedir}/../lib/org-netbeans-api-visual.jar</systemPath>
   	</dependency>
   	<dependency>
-  		<groupId>com.googlecode.sarasvati</groupId>
+  		<groupId>${project.groupId}</groupId>
   		<artifactId>sarasvati-core</artifactId>
-  		<version>1.0.0-RC3-SNAPSHOT</version>
+  		<version>${project.version}</version>
   		<scope>compile</scope>
   	</dependency>
   </dependencies>
