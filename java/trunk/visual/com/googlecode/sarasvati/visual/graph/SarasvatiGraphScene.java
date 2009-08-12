@@ -40,7 +40,7 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
 
   protected static final Font ARC_LABEL_FONT = Font.decode( "serif bold 11" );
 
-  public SarasvatiGraphScene (Graph graph, GraphLookAndFeel lookAndFeel)
+  public SarasvatiGraphScene (final Graph graph, final GraphLookAndFeel lookAndFeel)
   {
     this.lookAndFeel = lookAndFeel;
 
@@ -76,7 +76,7 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
             arcLabel.setForeground( Color.BLUE );
             arcLabel.setOpaque( true );
             widget.addChild( arcLabel );
-            widget.setConstraint( arcLabel, ConnectionWidgetLayoutAlignment.CENTER, 30 );
+            widget.setConstraint( arcLabel, ConnectionWidgetLayoutAlignment.CENTER_SOURCE, 5 );
           }
         }
       }
@@ -86,7 +86,7 @@ public class SarasvatiGraphScene extends GraphSceneImpl<Node, Arc>
   }
 
   @Override
-  protected Widget widgetForNode (Node node)
+  protected Widget widgetForNode (final Node node)
   {
     return lookAndFeel.newWidget( node, this );
   }

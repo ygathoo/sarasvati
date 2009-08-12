@@ -23,7 +23,10 @@ import java.awt.Graphics;
 
 public class FontUtil
 {
-  public static void setSizedFont (Graphics g, String text, float maxFontSize, int maxWidth)
+  public static void setSizedFont (final Graphics g,
+                                   final String text,
+                                   final float maxFontSize,
+                                   final int maxWidth)
   {
     if ( g.getFont().getSize() != maxFontSize )
     {
@@ -39,7 +42,7 @@ public class FontUtil
     }
   }
 
-  public static String[] split (String text)
+  public static String[] split (final String text)
   {
     String[] lines = text.split( " " );
 
@@ -70,8 +73,8 @@ public class FontUtil
 
     return new String[] { fst, snd };
   }
-  
-  public static String concat (String[] str, int start, String middle)
+
+  public static String concat (final String[] str, final int start, final String middle)
   {
     StringBuilder buf = new StringBuilder();
     for ( int i = start; i < str.length; i++ )

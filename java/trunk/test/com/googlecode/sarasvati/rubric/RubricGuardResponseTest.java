@@ -71,4 +71,37 @@ public class RubricGuardResponseTest
 
     Assert.assertEquals( expected, result );
   }
+
+  @Test public void testSkipWithArcNameQuoted ()
+  {
+    GuardResponse expected = new SkipNodeGuardResponse( "testArc" );
+    String script="Skip \"testArc\"";
+    System.out.println( "SCRIPT: " + script );
+
+    Object result = RubricInterpreter.compile( script ).eval( TestRubricEnv.INSTANCE );
+
+    Assert.assertEquals( expected, result );
+  }
+
+  @Test public void testSkipWithArcNameQuotedAndWithSpaces ()
+  {
+    GuardResponse expected = new SkipNodeGuardResponse( "test Arc" );
+    String script="Skip \"test Arc\"";
+    System.out.println( "SCRIPT: " + script );
+
+    Object result = RubricInterpreter.compile( script ).eval( TestRubricEnv.INSTANCE );
+
+    Assert.assertEquals( expected, result );
+  }
+
+  @Test public void testSkipWithArcNameQuotedWithSpacesAndQuotes ()
+  {
+    GuardResponse expected = new SkipNodeGuardResponse( "test \"Arc\"" );
+    String script="Skip \"test \\\"Arc\\\"\"";
+    System.out.println( "SCRIPT: " + script );
+
+    Object result = RubricInterpreter.compile( script ).eval( TestRubricEnv.INSTANCE );
+
+    Assert.assertEquals( expected, result );
+  }
 }

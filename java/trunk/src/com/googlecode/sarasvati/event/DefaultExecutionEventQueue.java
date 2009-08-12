@@ -39,7 +39,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
     return new DefaultExecutionEventQueue( new CopyOnWriteArrayList<RegisteredExecutionListener>() );
   }
 
-  DefaultExecutionEventQueue(List<RegisteredExecutionListener> listeners)
+  DefaultExecutionEventQueue(final List<RegisteredExecutionListener> listeners)
   {
     this.listeners = listeners;
   }
@@ -47,7 +47,9 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
   /**
    * @see com.googlecode.sarasvati.event.ExecutionEventQueue#addListener(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.event.ExecutionListener, com.googlecode.sarasvati.event.ExecutionEventType[])
    */
-  public synchronized void addListener (Engine engine, ExecutionListener listener, ExecutionEventType...eventTypes)
+  public synchronized void addListener (final Engine engine,
+                                        final ExecutionListener listener,
+                                        final ExecutionEventType...eventTypes)
   {
     if ( eventTypes == null || listener == null)
     {
@@ -64,7 +66,9 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
   }
 
   @Override
-  public synchronized void removeListener (Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public synchronized void removeListener (final Engine engine,
+                                           final ExecutionListener listener,
+                                           final ExecutionEventType... eventTypes)
   {
     if ( listener == null )
     {
@@ -90,7 +94,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
   /**
    * @see com.googlecode.sarasvati.event.ExecutionEventQueue#fireEvent(com.googlecode.sarasvati.event.ExecutionEvent)
    */
-  public void fireEvent (ExecutionEvent event)
+  public void fireEvent (final ExecutionEvent event)
   {
     for (RegisteredExecutionListener wrapper : listeners )
     {
@@ -107,7 +111,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
     protected ExecutionListener listener;
 
     public RegisteredExecutionListener (final ExecutionEventType eventType,
-                                     final ExecutionListener listener)
+                                        final ExecutionListener listener)
     {
       this.eventType = eventType;
       this.listener = listener;
