@@ -111,7 +111,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
   private boolean offsetAddedNodes = false;
 
-  public EditorScene (EditorGraph graph)
+  public EditorScene (final EditorGraph graph)
   {
     this.graph = graph;
     this.commandStack = new CommandStack();
@@ -155,7 +155,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     offsetAddedNodes = true;
   }
 
-  public void setGraphMemberSelection (Set<Object> selection, boolean selected)
+  public void setGraphMemberSelection (final Set<Object> selection, final boolean selected)
   {
     int count = 0;
     for ( Object obj : selection )
@@ -364,7 +364,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     arcLabel.setForeground( Color.BLUE );
     arcLabel.setOpaque( true );
     widget.addChild( arcLabel );
-    widget.setConstraint( arcLabel, ConnectionWidgetLayoutAlignment.CENTER, 30 );
+    widget.setConstraint( arcLabel, ConnectionWidgetLayoutAlignment.CENTER_SOURCE, 20 );
 
     arc.addListener( new ModelListener<EditorArc>()
     {
@@ -427,7 +427,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     graphMember.addListener( new ModelListener<EditorGraphMember<?>> ()
     {
       @Override
-      public void modelChanged (EditorGraphMember<?> modelInstance)
+      public void modelChanged (final EditorGraphMember<?> modelInstance)
       {
         label.setIcon( getIconForMember( graphMember ) );
       }
@@ -441,14 +441,14 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     private EditorGraphMember<?> source = null;
     private EditorGraphMember<?> target = null;
 
-    public boolean isSourceWidget (Widget sourceWidget)
+    public boolean isSourceWidget (final Widget sourceWidget)
     {
       Object object = findObject (sourceWidget);
       source = isNode (object) ? (EditorGraphMember<?>) object : null;
       return source != null;
     }
 
-    public ConnectorState isTargetWidget (Widget sourceWidget, Widget targetWidget)
+    public ConnectorState isTargetWidget (final Widget sourceWidget, final Widget targetWidget)
     {
       Object object = findObject (targetWidget);
       target = isNode (object) ? (EditorGraphMember<?>) object : null;
@@ -459,17 +459,17 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return object != null ? ConnectorState.REJECT_AND_STOP : ConnectorState.REJECT;
     }
 
-    public boolean hasCustomTargetWidgetResolver (Scene scene)
+    public boolean hasCustomTargetWidgetResolver (final Scene scene)
     {
       return false;
     }
 
-    public Widget resolveTargetWidget (Scene scene, Point sceneLocation)
+    public Widget resolveTargetWidget (final Scene scene, final Point sceneLocation)
     {
       return null;
     }
 
-    public void createConnection (Widget sourceWidget, Widget targetWidget)
+    public void createConnection (final Widget sourceWidget, final Widget targetWidget)
     {
       String arcLabel = sourceWidget == targetWidget ? EditorPreferences.getInstance().getDefalutSelfArcsLabel() : null;
       CommandStack.addArc( EditorScene.this, new EditorArc( new ArcState( arcLabel, null, null ), source, target ) );

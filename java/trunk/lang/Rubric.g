@@ -128,10 +128,11 @@ dateSpec returns [RubricStmt value]
          ;
 
 guardResult returns [GuardResponse value]
-         :  ACCEPT   { $value = GuardResponse.ACCEPT_TOKEN_RESPONSE; }
-         |  DISCARD  { $value = GuardResponse.DISCARD_TOKEN_RESPONSE; }
-         |  SKIP^ ID { $value = new SkipNodeGuardResponse( $ID.text ); }
-         |  SKIP     { $value = SkipNodeGuardResponse.DEFAULT_ARC_SKIP_NODE_RESPONSE; }
+         :  ACCEPT       { $value = GuardResponse.ACCEPT_TOKEN_RESPONSE; }
+         |  DISCARD      { $value = GuardResponse.DISCARD_TOKEN_RESPONSE; }
+         |  SKIP^ ID     { $value = new SkipNodeGuardResponse( $ID.text ); }
+         |  SKIP^ STRING { $value = new SkipNodeGuardResponse( SvUtil.normalizeQuotedString( $STRING.text ) ); }
+         |  SKIP         { $value = SkipNodeGuardResponse.DEFAULT_ARC_SKIP_NODE_RESPONSE; }
          ;
 
 // ===========================================================================
