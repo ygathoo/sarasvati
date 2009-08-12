@@ -26,7 +26,7 @@ public class ListenerCache
 {
   protected ConcurrentHashMap<String, ExecutionListener> listenerCache = new ConcurrentHashMap<String, ExecutionListener>();
 
-  public ExecutionListener getListener (String type)
+  public ExecutionListener getListener (final String type)
   {
     ExecutionListener listener = listenerCache.get( type );
 
@@ -47,7 +47,7 @@ public class ListenerCache
     return listener;
   }
 
-  public void ensureContainsListenerType (ExecutionListener listener)
+  public void ensureContainsListenerType (final ExecutionListener listener)
   {
     String type = listener.getClass().getName();
 

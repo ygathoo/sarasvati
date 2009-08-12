@@ -34,7 +34,7 @@ import com.googlecode.sarasvati.GraphProcess;
 public class LabelAndJoinStrategy extends AndJoinStrategy
 {
   @Override
-  protected List<? extends Arc> getJoiningArcs (GraphProcess process, ArcToken token)
+  protected List<? extends Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)
   {
     return process.getGraph().getInputArcs( token.getArc().getEndNode(), token.getArc().getName() );
   }

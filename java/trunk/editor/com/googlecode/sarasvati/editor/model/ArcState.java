@@ -24,7 +24,7 @@ public class ArcState
   private final String externalEnd;
   private final String label;
 
-  public ArcState (String label, String externalStart, String externalEnd)
+  public ArcState (final String label, final String externalStart, final String externalEnd)
   {
     this.externalStart = externalStart;
     this.externalEnd = externalEnd;
@@ -61,7 +61,7 @@ public class ArcState
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;

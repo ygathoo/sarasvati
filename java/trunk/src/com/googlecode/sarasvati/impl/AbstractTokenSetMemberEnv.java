@@ -37,7 +37,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   protected final Map<String, Object>[] transientAttrs;
 
   @SuppressWarnings("unchecked")
-  public AbstractTokenSetMemberEnv (int maxMemberIndex)
+  public AbstractTokenSetMemberEnv (final int maxMemberIndex)
   {
     this.maxMemberIndex = maxMemberIndex;
     this.transientAttrs = new Map[ maxMemberIndex ];

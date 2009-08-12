@@ -61,7 +61,7 @@ public class XmlProcessDefinition implements ProcessDefinition
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -72,7 +72,7 @@ public class XmlProcessDefinition implements ProcessDefinition
     return nodes;
   }
 
-  public void setNodes (List<XmlNode> nodes)
+  public void setNodes (final List<XmlNode> nodes)
   {
     this.nodes = nodes;
   }
@@ -83,7 +83,7 @@ public class XmlProcessDefinition implements ProcessDefinition
     return externals;
   }
 
-  public void setExternals (List<XmlExternal> externals)
+  public void setExternals (final List<XmlExternal> externals)
   {
     this.externals = externals;
   }

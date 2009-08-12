@@ -26,7 +26,7 @@ public class DeleteArcCommand extends AbstractCommand
   private EditorScene scene;
   private EditorArc arc;
 
-  public DeleteArcCommand (EditorScene scene, EditorArc arc)
+  public DeleteArcCommand (final EditorScene scene, final EditorArc arc)
   {
     this.scene = scene;
     this.arc   = arc;

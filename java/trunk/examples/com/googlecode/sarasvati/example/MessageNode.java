@@ -37,13 +37,13 @@ public class MessageNode extends CustomNode
     return message;
   }
 
-  public void setMessage (String message)
+  public void setMessage (final String message)
   {
     this.message = message;
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     System.out.println( "MESSAGE: " + message );
     engine.complete( token, Arc.DEFAULT_ARC );

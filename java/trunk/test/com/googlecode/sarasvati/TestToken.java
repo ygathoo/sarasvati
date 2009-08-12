@@ -29,7 +29,7 @@ public class TestToken<T extends Token>
 
   protected boolean isValidated = false;
 
-  public TestToken (int lineNumber, boolean complete, ExecutionType executionType)
+  public TestToken (final int lineNumber, final boolean complete, final ExecutionType executionType)
   {
     this.lineNumber = lineNumber;
     this.complete   = complete;
@@ -41,7 +41,7 @@ public class TestToken<T extends Token>
     return lineNumber;
   }
 
-  public void setLineNumber (int lineNumber)
+  public void setLineNumber (final int lineNumber)
   {
     this.lineNumber = lineNumber;
   }
@@ -51,7 +51,7 @@ public class TestToken<T extends Token>
     return complete;
   }
 
-  public void setComplete (boolean complete)
+  public void setComplete (final boolean complete)
   {
     this.complete = complete;
   }
@@ -61,7 +61,7 @@ public class TestToken<T extends Token>
     return executionType;
   }
 
-  public void setExecutionType (ExecutionType executionType)
+  public void setExecutionType (final ExecutionType executionType)
   {
     this.executionType = executionType;
   }
@@ -71,7 +71,7 @@ public class TestToken<T extends Token>
     return token;
   }
 
-  public void setToken (T token)
+  public void setToken (final T token)
   {
     this.token = token;
   }
@@ -82,7 +82,7 @@ public class TestToken<T extends Token>
     return isValidated;
   }
 
-  public void setValidated (boolean isValidated)
+  public void setValidated (final boolean isValidated)
   {
     this.isValidated = isValidated;
   }

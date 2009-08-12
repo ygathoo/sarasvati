@@ -14,7 +14,7 @@ import com.googlecode.sarasvati.rubric.env.RubricPredicate;
 public class IsWeekendPredicate implements RubricPredicate
 {
   @Override
-  public boolean eval (Engine engine, NodeToken token)
+  public boolean eval (final Engine engine, final NodeToken token)
   {
     Calendar cal = Calendar.getInstance();
     int day = cal.get( Calendar.DAY_OF_WEEK );
@@ -22,7 +22,7 @@ public class IsWeekendPredicate implements RubricPredicate
            day == Calendar.SUNDAY;
   }
 
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     DefaultRubricFunctionRepository repository = DefaultRubricFunctionRepository.getGlobalInstance();
     repository.registerPredicate( "isWeekend", new IsWeekendPredicate() );

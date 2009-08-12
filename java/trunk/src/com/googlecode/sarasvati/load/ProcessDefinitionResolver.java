@@ -22,7 +22,7 @@ package com.googlecode.sarasvati.load;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 
 /**
- * ProcessDefinitionResolver will map a name to a {@link ProcessDefinition}, 
+ * ProcessDefinitionResolver will map a name to a {@link ProcessDefinition},
  * which can possibly be obtained by a call to {@link ProcessDefinitionTranslator}
  */
 

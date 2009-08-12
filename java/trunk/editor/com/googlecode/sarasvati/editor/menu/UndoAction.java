@@ -41,12 +41,12 @@ public class UndoAction extends AbstractAction
   }
 
   @Override
-  public void actionPerformed (ActionEvent e)
+  public void actionPerformed (final ActionEvent e)
   {
     CommandStack.getCurrent().undo();
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     putValue( Action.NAME, name );
   }

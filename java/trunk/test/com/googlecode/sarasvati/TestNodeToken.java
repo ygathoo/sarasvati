@@ -31,7 +31,7 @@ public class TestNodeToken extends TestToken<NodeToken>
   protected String             id;
   protected Node               node;
 
-  public TestNodeToken (int lineNumber, String id, Node node, boolean complete, ExecutionType executionType)
+  public TestNodeToken (final int lineNumber, final String id, final Node node, final boolean complete, final ExecutionType executionType)
   {
     super( lineNumber, complete, executionType );
     this.lineNumber = lineNumber;
@@ -44,7 +44,7 @@ public class TestNodeToken extends TestToken<NodeToken>
     return id;
   }
 
-  public void setId (String id)
+  public void setId (final String id)
   {
     this.id = id;
   }
@@ -54,7 +54,7 @@ public class TestNodeToken extends TestToken<NodeToken>
     return node;
   }
 
-  public void setNode (Node node)
+  public void setNode (final Node node)
   {
     this.node = node;
   }
@@ -64,7 +64,7 @@ public class TestNodeToken extends TestToken<NodeToken>
     return parents;
   }
 
-  public void setParents (List<TestArcToken> parents)
+  public void setParents (final List<TestArcToken> parents)
   {
     this.parents = parents;
   }
@@ -74,17 +74,17 @@ public class TestNodeToken extends TestToken<NodeToken>
     return children;
   }
 
-  public void setChildren (List<TestArcToken> children)
+  public void setChildren (final List<TestArcToken> children)
   {
     this.children = children;
   }
 
-  public void addChild (TestArcToken childToken)
+  public void addChild (final TestArcToken childToken)
   {
     children.add( childToken );
   }
 
-  public void addParent (TestArcToken parentToken)
+  public void addParent (final TestArcToken parentToken)
   {
     parents.add( parentToken );
   }

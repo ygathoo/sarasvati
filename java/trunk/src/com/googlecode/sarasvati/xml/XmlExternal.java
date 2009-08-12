@@ -64,7 +64,7 @@ public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
     return processDefinition;
   }
 
-  public void setProcessDefinition (String processDefinition)
+  public void setProcessDefinition (final String processDefinition)
   {
     this.processDefinition = processDefinition;
   }
@@ -75,7 +75,7 @@ public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -85,7 +85,7 @@ public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
     return x;
   }
 
-  public void setX (Integer x)
+  public void setX (final Integer x)
   {
     this.x = x;
   }
@@ -95,7 +95,7 @@ public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
     return y;
   }
 
-  public void setY (Integer y)
+  public void setY (final Integer y)
   {
     this.y = y;
   }
@@ -106,7 +106,7 @@ public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
     return externalArcs;
   }
 
-  public void setExternalArcs( List<XmlExternalArc> externalArcs )
+  public void setExternalArcs( final List<XmlExternalArc> externalArcs )
   {
     this.externalArcs = externalArcs;
   }
@@ -117,7 +117,7 @@ public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
     return custom;
   }
 
-  public void setCustom (XmlCustom custom)
+  public void setCustom (final XmlCustom custom)
   {
     this.custom = custom;
   }
@@ -158,7 +158,7 @@ public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
   }
 
   @Override
-  public int compareTo (XmlExternal o)
+  public int compareTo (final XmlExternal o)
   {
     if ( o == null )
     {

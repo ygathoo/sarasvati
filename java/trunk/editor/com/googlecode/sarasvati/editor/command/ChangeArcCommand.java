@@ -33,7 +33,7 @@ public class ChangeArcCommand extends AbstractCommand
 
   public ChangeArcCommand (final EditorScene scene,
                            final EditorArc arc,
-                           boolean isSource,
+                           final boolean isSource,
                            final EditorGraphMember<?> newNode)
   {
     this.scene = scene;

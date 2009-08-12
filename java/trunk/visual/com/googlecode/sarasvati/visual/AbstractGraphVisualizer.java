@@ -44,8 +44,8 @@ import com.googlecode.sarasvati.adapter.NodeAdapterManager;
 import com.googlecode.sarasvati.hib.HibEngine;
 import com.googlecode.sarasvati.visual.graph.SarasvatiGraphScene;
 import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
-import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
 import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
+import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
 
 /**
  * Base class for a standalone graph visualizer. Will show a list of
@@ -95,7 +95,7 @@ public abstract class AbstractGraphVisualizer
     NodeAdapterManager.registerFactory( Component.class,
         new Function<Component, Node>()
         {
-          @Override public Component apply (Node node)
+          @Override public Component apply (final Node node)
           {
             if( "end".equalsIgnoreCase( node.getType() )){
               return new JLabel( new SmallCircleNodeIcon());
@@ -109,7 +109,7 @@ public abstract class AbstractGraphVisualizer
     NodeAdapterManager.registerFactory( String.class,
         new Function<String,Node>()
         {
-          @Override public String apply (Node node)
+          @Override public String apply (final Node node)
           {
             return node.getName();
           }
@@ -136,9 +136,9 @@ public abstract class AbstractGraphVisualizer
       private static final long serialVersionUID = 1L;
 
       @Override
-      public Component getListCellRendererComponent( JList list, Object value,
-                                                     int index, boolean isSelected,
-                                                     boolean cellHasFocus )
+      public Component getListCellRendererComponent( final JList list, final Object value,
+                                                     final int index, final boolean isSelected,
+                                                     final boolean cellHasFocus )
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 
@@ -170,7 +170,7 @@ public abstract class AbstractGraphVisualizer
     graphList.addListSelectionListener( new ListSelectionListener()
     {
       @Override
-      public void valueChanged( ListSelectionEvent e )
+      public void valueChanged( final ListSelectionEvent e )
       {
         if ( e.getValueIsAdjusting() )
         {

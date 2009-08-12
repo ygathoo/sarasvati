@@ -37,7 +37,7 @@ public enum TaskState
     return id;
   }
 
-  public static TaskState getById (int id)
+  public static TaskState getById (final int id)
   {
     for ( TaskState state : TaskState.values() )
     {

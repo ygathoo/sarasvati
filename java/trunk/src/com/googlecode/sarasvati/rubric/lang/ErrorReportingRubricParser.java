@@ -29,12 +29,12 @@ public class ErrorReportingRubricParser extends RubricParser
 {
   protected RubricException e;
 
-  public ErrorReportingRubricParser (TokenStream input, RecognizerSharedState state)
+  public ErrorReportingRubricParser (final TokenStream input, final RecognizerSharedState state)
   {
     super( input, state );
   }
 
-  public ErrorReportingRubricParser (TokenStream input)
+  public ErrorReportingRubricParser (final TokenStream input)
   {
     super( input );
   }
@@ -45,7 +45,7 @@ public class ErrorReportingRubricParser extends RubricParser
   }
 
   @Override
-  public String getErrorMessage (RecognitionException re, String[] arg1)
+  public String getErrorMessage (final RecognitionException re, final String[] arg1)
   {
     String message = super.getErrorMessage( re, arg1 );
 
@@ -71,7 +71,7 @@ public class ErrorReportingRubricParser extends RubricParser
   }
 
   @Override
-  public void emitErrorMessage( String arg0 )
+  public void emitErrorMessage( final String arg0 )
   {
     // do nothing
   }

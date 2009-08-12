@@ -29,7 +29,7 @@ public class BacktrackMirrors
 {
   protected Map<ArcToken, ArcToken> map          = new HashMap<ArcToken, ArcToken> ();
 
-  public void addVisited (ArcToken token)
+  public void addVisited (final ArcToken token)
   {
     if ( !map.containsKey( token ) )
     {
@@ -37,12 +37,12 @@ public class BacktrackMirrors
     }
   }
 
-  public boolean hasMirror (ArcToken token)
+  public boolean hasMirror (final ArcToken token)
   {
     return map.containsKey( token );
   }
 
-  public void findMirror (ArcToken token)
+  public void findMirror (final ArcToken token)
   {
     if ( token.getExecutionType() == ExecutionType.ForwardBacktracked )
     {
@@ -54,7 +54,7 @@ public class BacktrackMirrors
     }
   }
 
-  private void findBacktrackMirror (ArcToken token)
+  private void findBacktrackMirror (final ArcToken token)
   {
     for ( ArcToken parent : token.getParentToken().getParentTokens() )
     {
@@ -84,7 +84,7 @@ public class BacktrackMirrors
     }
   }
 
-  private void findForwardBacktrackedMirror (ArcToken token)
+  private void findForwardBacktrackedMirror (final ArcToken token)
   {
     if ( token.getParentToken().getExecutionType() != ExecutionType.ForwardBacktracked )
     {
@@ -103,7 +103,7 @@ public class BacktrackMirrors
     }
   }
 
-  private boolean isMirror (ArcToken token, ArcToken candidate)
+  private boolean isMirror (final ArcToken token, final ArcToken candidate)
   {
     return ( candidate.getExecutionType() == ExecutionType.ForwardBacktracked ||
              candidate.getExecutionType() == ExecutionType.UTurnBacktracked ) &&
@@ -111,7 +111,7 @@ public class BacktrackMirrors
            map.containsKey( candidate );
   }
 
-  private void tieToEndOfBacktrackChain (ArcToken token)
+  private void tieToEndOfBacktrackChain (final ArcToken token)
   {
     ArcToken lookup = map.get( token );
     ArcToken result = lookup;
@@ -127,7 +127,7 @@ public class BacktrackMirrors
     map.put( token, result );
   }
 
-  public ArcToken getMirror (ArcToken token)
+  public ArcToken getMirror (final ArcToken token)
   {
     ArcToken result = map.get( token );
     return result == null ? token : result;

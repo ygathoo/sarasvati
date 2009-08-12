@@ -44,7 +44,7 @@ public class TestPerfStats
     this.xmlProcDef = xmlProcDef;
   }
 
-  public void addInsertStat (long stat)
+  public void addInsertStat (final long stat)
   {
     currentInsert += stat;
     countInsert++;
@@ -57,7 +57,7 @@ public class TestPerfStats
     }
   }
 
-  public void addLoadStat (long stat)
+  public void addLoadStat (final long stat)
   {
     currentLoad += stat;
     countLoad++;
@@ -80,7 +80,7 @@ public class TestPerfStats
     return xmlProcDef;
   }
 
-  public void setXmlProcDef (XmlProcessDefinition xmlProcDef)
+  public void setXmlProcDef (final XmlProcessDefinition xmlProcDef)
   {
     this.xmlProcDef = xmlProcDef;
   }
@@ -90,7 +90,7 @@ public class TestPerfStats
     return rollover;
   }
 
-  public static void setRollover (int rollover)
+  public static void setRollover (final int rollover)
   {
     TestPerfStats.rollover = rollover;
   }

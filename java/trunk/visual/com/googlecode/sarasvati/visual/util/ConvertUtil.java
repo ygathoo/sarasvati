@@ -25,7 +25,7 @@ import org.eclipse.draw2d.geometry.Rectangle;
 
 public class ConvertUtil
 {
-  public static Rectangle awtToSwt (java.awt.Rectangle r)
+  public static Rectangle awtToSwt (final java.awt.Rectangle r)
   {
     if ( r == null )
     {
@@ -41,7 +41,7 @@ public class ConvertUtil
     return swtRect;
   }
 
-  public static Point awtToSwt (java.awt.Point point)
+  public static Point awtToSwt (final java.awt.Point point)
   {
     Point swtPoint = new org.eclipse.draw2d.geometry.Point();
     swtPoint.x = point.x;
@@ -49,17 +49,17 @@ public class ConvertUtil
     return swtPoint;
   }
 
-  public static java.awt.Rectangle swtToAwt (Rectangle r)
+  public static java.awt.Rectangle swtToAwt (final Rectangle r)
   {
     return new java.awt.Rectangle( r.x, r.y, r.width, r.height );
   }
 
-  public static java.awt.Point swtToAwt (org.eclipse.draw2d.geometry.Point point)
+  public static java.awt.Point swtToAwt (final org.eclipse.draw2d.geometry.Point point)
   {
     return new java.awt.Point( point.x, point.y );
   }
 
-  public static void appendPolygon (Polygon poly, StringBuilder buf)
+  public static void appendPolygon (final Polygon poly, final StringBuilder buf)
   {
     if ( poly.npoints > 0 )
     {

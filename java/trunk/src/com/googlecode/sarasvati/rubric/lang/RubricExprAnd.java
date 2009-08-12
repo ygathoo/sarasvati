@@ -24,19 +24,19 @@ import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
 public class RubricExprAnd extends AbstractBinaryRubricExpr
 {
-  public RubricExprAnd (RubricExpr left, RubricExpr right)
+  public RubricExprAnd (final RubricExpr left, final RubricExpr right)
   {
     super( left, right );
   }
 
   @Override
-  public boolean eval (RubricEnv env)
+  public boolean eval (final RubricEnv env)
   {
     return left.eval( env ) && right.eval( env );
   }
 
   @Override
-  public void traverse (RubricVisitor visitor)
+  public void traverse (final RubricVisitor visitor)
   {
     visitor.visit( this );
     left.traverse( visitor );
@@ -56,7 +56,7 @@ public class RubricExprAnd extends AbstractBinaryRubricExpr
   }
 
   @Override
-  public boolean isEqualTo (RubricExpr expr)
+  public boolean isEqualTo (final RubricExpr expr)
   {
     if ( !expr.isAnd() )
     {

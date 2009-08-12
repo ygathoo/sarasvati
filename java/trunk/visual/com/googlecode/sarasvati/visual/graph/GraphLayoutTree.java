@@ -52,7 +52,7 @@ public class GraphLayoutTree extends AbstractLayoutTree<Node>
   }
 
   @Override
-  protected Collection<Node> getOutputs (Node node)
+  protected Collection<Node> getOutputs (final Node node)
   {
     List<? extends Arc> arcs = graph.getOutputArcs( node );
 
@@ -67,7 +67,7 @@ public class GraphLayoutTree extends AbstractLayoutTree<Node>
   }
 
   @Override
-  protected boolean hasNoInputs (Node node)
+  protected boolean hasNoInputs (final Node node)
   {
     return graph.getInputArcs( node ).isEmpty();
   }

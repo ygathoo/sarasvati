@@ -24,7 +24,7 @@ public class RubricException extends RuntimeException
 {
   private static final long serialVersionUID = 1L;
 
-  public RubricException (String message)
+  public RubricException (final String message)
   {
     super( message );
   }

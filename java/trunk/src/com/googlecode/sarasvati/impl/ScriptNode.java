@@ -39,7 +39,7 @@ public class ScriptNode extends CustomNode
     return execute;
   }
 
-  public void setExecute (String execute)
+  public void setExecute (final String execute)
   {
     this.execute = execute;
   }
@@ -49,7 +49,7 @@ public class ScriptNode extends CustomNode
     return backtrack;
   }
 
-  public void setBacktrack (String backtrack)
+  public void setBacktrack (final String backtrack)
   {
     this.backtrack = backtrack;
   }
@@ -59,7 +59,7 @@ public class ScriptNode extends CustomNode
     return allowBacktrack;
   }
 
-  public void setAllowBacktrack (String allowBacktrack)
+  public void setAllowBacktrack (final String allowBacktrack)
   {
     this.allowBacktrack = allowBacktrack;
   }
@@ -69,7 +69,7 @@ public class ScriptNode extends CustomNode
     return executeType;
   }
 
-  public void setExecuteType (String executeType)
+  public void setExecuteType (final String executeType)
   {
     this.executeType = executeType;
   }
@@ -79,7 +79,7 @@ public class ScriptNode extends CustomNode
     return backtrackType;
   }
 
-  public void setBacktrackType (String backtrackType)
+  public void setBacktrackType (final String backtrackType)
   {
     this.backtrackType = backtrackType;
   }
@@ -89,13 +89,13 @@ public class ScriptNode extends CustomNode
     return allowBacktrackType;
   }
 
-  public void setAllowBacktrackType (String allowBacktrackType)
+  public void setAllowBacktrackType (final String allowBacktrackType)
   {
     this.allowBacktrackType = allowBacktrackType;
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     ScriptRunnerFactory.getScriptRunner().executeScript( engine, token, execute, executeType );
 
@@ -106,7 +106,7 @@ public class ScriptNode extends CustomNode
   }
 
   @Override
-  public void backtrack (Engine engine, NodeToken token)
+  public void backtrack (final Engine engine, final NodeToken token)
   {
     if ( backtrack != null && !backtrack.trim().isEmpty() )
     {
@@ -115,7 +115,7 @@ public class ScriptNode extends CustomNode
   }
 
   @Override
-  public boolean isBacktrackable (Engine engine, NodeToken token)
+  public boolean isBacktrackable (final Engine engine, final NodeToken token)
   {
     if ( allowBacktrack != null && !allowBacktrack.trim().isEmpty() )
     {

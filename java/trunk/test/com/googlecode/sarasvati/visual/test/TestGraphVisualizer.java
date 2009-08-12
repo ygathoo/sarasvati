@@ -46,7 +46,7 @@ public class TestGraphVisualizer extends AbstractGraphVisualizer
     return HibTestSetup.openSession();
   }
 
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     new TestGraphVisualizer().run();
   }

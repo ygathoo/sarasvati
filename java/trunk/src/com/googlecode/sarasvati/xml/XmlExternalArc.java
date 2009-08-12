@@ -49,7 +49,7 @@ public class XmlExternalArc implements ExternalArcDefinition, Comparable<XmlExte
     return from;
   }
 
-  public void setFrom( String from )
+  public void setFrom( final String from )
   {
     this.from = from;
   }
@@ -60,7 +60,7 @@ public class XmlExternalArc implements ExternalArcDefinition, Comparable<XmlExte
     return external;
   }
 
-  public void setExternal( String external )
+  public void setExternal( final String external )
   {
     this.external = external;
   }
@@ -71,7 +71,7 @@ public class XmlExternalArc implements ExternalArcDefinition, Comparable<XmlExte
     return to;
   }
 
-  public void setTo( String to )
+  public void setTo( final String to )
   {
     this.to = to;
   }
@@ -82,7 +82,7 @@ public class XmlExternalArc implements ExternalArcDefinition, Comparable<XmlExte
     return name;
   }
 
-  public void setName( String name )
+  public void setName( final String name )
   {
     this.name = name;
   }
@@ -117,7 +117,7 @@ public class XmlExternalArc implements ExternalArcDefinition, Comparable<XmlExte
   }
 
   @Override
-  public int compareTo (XmlExternalArc o)
+  public int compareTo (final XmlExternalArc o)
   {
     if ( o == null )
     {

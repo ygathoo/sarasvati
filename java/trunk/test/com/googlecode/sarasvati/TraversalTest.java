@@ -32,7 +32,7 @@ public class TraversalTest extends ExecutionTest
     StringBuilder buf = new StringBuilder();
 
     @Override
-    public void visit (NodeToken token)
+    public void visit (final NodeToken token)
     {
       String name = token.getNode().getName();
       buf.append( name.substring( 4 ) );

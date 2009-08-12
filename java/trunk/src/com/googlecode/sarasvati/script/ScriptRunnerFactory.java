@@ -50,7 +50,7 @@ public class ScriptRunnerFactory
     }
   }
 
-  public static void setScriptRunner (ScriptRunner scriptRunner)
+  public static void setScriptRunner (final ScriptRunner scriptRunner)
   {
     ScriptRunnerFactory.scriptRunner = scriptRunner;
   }

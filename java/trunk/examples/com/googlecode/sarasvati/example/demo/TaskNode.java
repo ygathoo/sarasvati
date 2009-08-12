@@ -9,12 +9,12 @@ public class TaskNode extends MemNode {
   protected String job, user;
 
   public String getTaskJob () { return job; }
-  public void setTaskJob (String job) { this.job = job; }
+  public void setTaskJob (final String job) { this.job = job; }
   public String getTaskUser () { return user; }
-  public void setTaskUser (String user) { this.user = user; }
+  public void setTaskUser (final String user) { this.user = user; }
 
   @Override
-  public void execute (Engine engine, NodeToken token) {
+  public void execute (final Engine engine, final NodeToken token) {
     System.out.println( "Job: " + job + " User: " + user );
     engine.complete( token, Arc.DEFAULT_ARC );
   }

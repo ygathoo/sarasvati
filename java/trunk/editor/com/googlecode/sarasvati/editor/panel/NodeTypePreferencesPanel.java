@@ -288,7 +288,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       /**
        * @param nodeType the nodeType to set
        */
-      public void setNodeType (EditorNodeType nodeType)
+      public void setNodeType (final EditorNodeType nodeType)
       {
         this.nodeType = nodeType;
       }
@@ -304,25 +304,25 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       /**
        * @param index the index to set
        */
-      public void setIndex (int index)
+      public void setIndex (final int index)
       {
         this.index = index;
       }
 
       @Override
-      public void changedUpdate (DocumentEvent e)
+      public void changedUpdate (final DocumentEvent e)
       {
         nameUpdated();
       }
 
       @Override
-      public void insertUpdate (DocumentEvent e)
+      public void insertUpdate (final DocumentEvent e)
       {
         nameUpdated();
       }
 
       @Override
-      public void removeUpdate (DocumentEvent e)
+      public void removeUpdate (final DocumentEvent e)
       {
         nameUpdated();
       }
@@ -355,7 +355,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       allowCustomInput.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           EditorNodeType nodeType = (EditorNodeType)nodeTypeList.getSelectedValue();
           if ( nodeType != null )
@@ -377,7 +377,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       newTypeButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           EditorNodeType newNodeType = new EditorNodeType( "new-node-type",
                                                            false,
@@ -391,7 +391,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       deleteTypeButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           nodeTypeListModel.remove( nodeTypeList.getSelectedIndex() );
         }
@@ -400,7 +400,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       newPropertyButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           propertiesTableModel.addAttribute();
         }
@@ -409,7 +409,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       deletePropertyButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           int [] indices = propertiesTable.getSelectedRows();
           Arrays.sort( indices );
@@ -423,7 +423,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       revertButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           if ( JOptionPane.YES_OPTION ==
                JOptionPane.showConfirmDialog( NodeTypePreferencesPanel.this,
@@ -467,7 +467,7 @@ public class NodeTypePreferencesPanel extends BasePrefsPage {
       this.iconInput.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           EditorNodeType nodeType = (EditorNodeType)nodeTypeList.getSelectedValue();
           if ( nodeType != null )

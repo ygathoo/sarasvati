@@ -24,7 +24,7 @@ import com.googlecode.sarasvati.TokenSet;
 
 public class MemArcTokenSetMember extends MemTokenSetMember<MemArcToken> implements ArcTokenSetMember
 {
-  public MemArcTokenSetMember (TokenSet tokenSet, MemArcToken token, int memberIndex)
+  public MemArcTokenSetMember (final TokenSet tokenSet, final MemArcToken token, final int memberIndex)
   {
     super( tokenSet, token, memberIndex );
   }

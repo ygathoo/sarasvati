@@ -40,13 +40,13 @@ public class NestedProcessNode extends CustomNode
     return graphName;
   }
 
-  public void setGraphName(String graphName)
+  public void setGraphName(final String graphName)
   {
     this.graphName = graphName;
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     Graph subGraph = engine.getRepository().getLatestGraph( graphName );
 

@@ -24,12 +24,12 @@ public class GraphMemberMoveAction extends ToggledWidgetActionDecorator
 {
   protected static boolean enabled = false;
 
-  public static void setEnabled (boolean enabled)
+  public static void setEnabled (final boolean enabled)
   {
     GraphMemberMoveAction.enabled = enabled;
   }
 
-  public GraphMemberMoveAction (WidgetAction action)
+  public GraphMemberMoveAction (final WidgetAction action)
   {
     super( action );
   }

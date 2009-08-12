@@ -26,7 +26,7 @@ import com.googlecode.sarasvati.NodeToken;
 public class DumpNode extends CustomNode
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     System.out.println( "Accepted into: " + getName() );
     engine.complete( token, Arc.DEFAULT_ARC );

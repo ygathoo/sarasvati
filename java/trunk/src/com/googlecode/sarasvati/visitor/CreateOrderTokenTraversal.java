@@ -34,7 +34,7 @@ public class CreateOrderTokenTraversal implements TokenTraversal
   protected static final Comparator<Token> tokenSorter = new Comparator<Token>()
   {
     @Override
-    public int compare (Token o1, Token o2)
+    public int compare (final Token o1, final Token o2)
     {
       if ( o1 instanceof NodeToken )
       {
@@ -65,20 +65,20 @@ public class CreateOrderTokenTraversal implements TokenTraversal
   protected Set<Long> nodeTokens = new HashSet<Long>();
 
   @Override
-  public void traverse (NodeToken token, TokenVisitor visitor)
+  public void traverse (final NodeToken token, final TokenVisitor visitor)
   {
     enqueueNodeToken( token );
     traverse( visitor );
   }
 
   @Override
-  public void traverse (ArcToken token, TokenVisitor visitor)
+  public void traverse (final ArcToken token, final TokenVisitor visitor)
   {
     queue.add( token );
     traverse( visitor );
   }
 
-  protected void traverse (TokenVisitor visitor)
+  protected void traverse (final TokenVisitor visitor)
   {
     while ( !queue.isEmpty() )
     {
@@ -103,7 +103,7 @@ public class CreateOrderTokenTraversal implements TokenTraversal
     }
   }
 
-  protected void enqueueNodeToken (NodeToken token)
+  protected void enqueueNodeToken (final NodeToken token)
   {
     if ( token != null && !nodeTokens.contains( token.getId() ) )
     {

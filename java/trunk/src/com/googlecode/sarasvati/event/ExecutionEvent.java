@@ -28,7 +28,7 @@ public abstract class ExecutionEvent
   private Engine             engine;
   private ExecutionEventType eventType;
 
-  public ExecutionEvent (Engine engine, ExecutionEventType eventType)
+  public ExecutionEvent (final Engine engine, final ExecutionEventType eventType)
   {
     this.engine    = engine;
     this.eventType = eventType;

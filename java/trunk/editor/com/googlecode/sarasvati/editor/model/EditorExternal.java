@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.editor.model;
 
 public class EditorExternal extends EditorGraphMember<ExternalState>
 {
-  public EditorExternal (ExternalState initialState)
+  public EditorExternal (final ExternalState initialState)
   {
     super( initialState );
   }

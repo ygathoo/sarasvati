@@ -44,18 +44,18 @@ public class ProcessTreeNode implements VisualProcessNode
   private List<ProcessTreeArc> children = new LinkedList<ProcessTreeArc>();
   private List<ProcessTreeArc> parents  = new LinkedList<ProcessTreeArc>();
 
-  public ProcessTreeNode (ProcessTreeNode parent, Node node)
+  public ProcessTreeNode (final ProcessTreeNode parent, final Node node)
   {
     this.parent = parent;
     this.node = node;
   }
 
-  public void addParent (ProcessTreeArc parentArc)
+  public void addParent (final ProcessTreeArc parentArc)
   {
     parents.add( parentArc );
   }
 
-  public ProcessTreeNode (NodeToken token)
+  public ProcessTreeNode (final NodeToken token)
   {
     this.token = token;
   }
@@ -99,7 +99,7 @@ public class ProcessTreeNode implements VisualProcessNode
     return children;
   }
 
-  public void addChild (ProcessTreeArc child)
+  public void addChild (final ProcessTreeArc child)
   {
     children.add( child );
   }
@@ -109,7 +109,7 @@ public class ProcessTreeNode implements VisualProcessNode
     return depth;
   }
 
-  public void setDepth (int depth)
+  public void setDepth (final int depth)
   {
     this.depth = depth;
   }
@@ -119,12 +119,12 @@ public class ProcessTreeNode implements VisualProcessNode
     return index;
   }
 
-  public void setIndex( int index )
+  public void setIndex( final int index )
   {
     this.index = index;
   }
 
-  public void addToLayer (List<ProcessTreeNode> layer)
+  public void addToLayer (final List<ProcessTreeNode> layer)
   {
     this.index = layer.size();
     layer.add( this );
@@ -136,7 +136,7 @@ public class ProcessTreeNode implements VisualProcessNode
     return token != null && token.getParentTokens().isEmpty() && token.getNode().isStart();
   }
 
-  public boolean isTokenOnArc (Arc arc)
+  public boolean isTokenOnArc (final Arc arc)
   {
     for (ProcessTreeArc ptArc : children )
     {
@@ -167,7 +167,7 @@ public class ProcessTreeNode implements VisualProcessNode
     return false;
   }
 
-  public boolean hasLowerParent (ProcessTreeNode selectedParent, ProcessTree tree)
+  public boolean hasLowerParent (final ProcessTreeNode selectedParent, final ProcessTree tree)
   {
     for ( ProcessTreeArc parentArc : parents )
     {
@@ -187,7 +187,7 @@ public class ProcessTreeNode implements VisualProcessNode
     return false;
   }
 
-  public boolean isAncestor (ProcessTreeNode ptNode, ProcessTree tree)
+  public boolean isAncestor (final ProcessTreeNode ptNode, final ProcessTree tree)
   {
     Set<ProcessTreeNode> visited = new HashSet<ProcessTreeNode>();
 

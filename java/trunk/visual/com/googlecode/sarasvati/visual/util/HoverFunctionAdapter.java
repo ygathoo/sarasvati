@@ -30,13 +30,13 @@ public class HoverFunctionAdapter implements Function<String,Widget>
 {
   protected GraphToImageMap imageMapHelper;
 
-  public HoverFunctionAdapter (GraphToImageMap imageMapHelper)
+  public HoverFunctionAdapter (final GraphToImageMap imageMapHelper)
   {
     this.imageMapHelper = imageMapHelper;
   }
 
   @Override
-  public String apply (Widget widget)
+  public String apply (final Widget widget)
   {
     Object o = ((ObjectScene)widget.getScene()).findObject( widget );
 

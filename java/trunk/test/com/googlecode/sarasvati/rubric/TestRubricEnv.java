@@ -28,25 +28,25 @@ public class TestRubricEnv implements RubricEnv
   public static final TestRubricEnv INSTANCE = new TestRubricEnv();
 
   @Override
-  public Date evalDateFunction (String dateFunction)
+  public Date evalDateFunction (final String dateFunction)
   {
     return null;
   }
 
   @Override
-  public String evalStringFunction (String stringFunction)
+  public String evalStringFunction (final String stringFunction)
   {
     return null;
   }
 
   @Override
-  public boolean evalPredicate (String predicate)
+  public boolean evalPredicate (final String predicate)
   {
     return false;
   }
 
   @Override
-  public Date evalRelativeDate (Date date, boolean business, int offset, int unit)
+  public Date evalRelativeDate (final Date date, final boolean business, final int offset, final int unit)
   {
     return null;
   }

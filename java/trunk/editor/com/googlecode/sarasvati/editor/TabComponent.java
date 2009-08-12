@@ -53,7 +53,7 @@ public class TabComponent extends JPanel
     closeButton.addActionListener( new ActionListener()
     {
       @Override
-      public void actionPerformed (ActionEvent e)
+      public void actionPerformed (final ActionEvent e)
       {
         GraphEditor.getInstance().closeTab( pane.indexOfTabComponent( TabComponent.this ) );
       }

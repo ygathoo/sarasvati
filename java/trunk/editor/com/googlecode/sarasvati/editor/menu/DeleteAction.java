@@ -40,7 +40,7 @@ public class DeleteAction extends AbstractAction
   }
 
   @Override
-  public void actionPerformed (ActionEvent e)
+  public void actionPerformed (final ActionEvent e)
   {
     GraphEditor.getInstance().editDelete();
   }

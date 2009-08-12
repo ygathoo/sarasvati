@@ -25,12 +25,12 @@ public abstract class AbstractStateful<T>
   private final LinkedList<T> stateStack = new LinkedList<T>();
   private final Notifier<AbstractStateful<?>> notifier = new Notifier<AbstractStateful<?>>();
 
-  public AbstractStateful (T initialState)
+  public AbstractStateful (final T initialState)
   {
     pushState( initialState );
   }
 
-  public void pushState (T memberState)
+  public void pushState (final T memberState)
   {
     stateStack.push( memberState );
     stateChanged();
@@ -47,7 +47,7 @@ public abstract class AbstractStateful<T>
     return stateStack.getFirst();
   }
 
-  public void addListener (ModelListener<? extends AbstractStateful<?>> nodeListener )
+  public void addListener (final ModelListener<? extends AbstractStateful<?>> nodeListener )
   {
     notifier.addListener( nodeListener );
   }

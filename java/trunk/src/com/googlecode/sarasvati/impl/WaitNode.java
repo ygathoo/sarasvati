@@ -33,7 +33,7 @@ import com.googlecode.sarasvati.NodeToken;
 public class WaitNode extends CustomNode
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     // Does nothing
   }

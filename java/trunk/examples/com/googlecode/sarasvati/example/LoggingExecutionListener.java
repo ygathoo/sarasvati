@@ -6,7 +6,7 @@ import com.googlecode.sarasvati.event.ExecutionListener;
 public class LoggingExecutionListener implements ExecutionListener
 {
   @Override
-  public void notify(ExecutionEvent event)
+  public void notify(final ExecutionEvent event)
   {
     if ( event.isProcessEvent() )
     {

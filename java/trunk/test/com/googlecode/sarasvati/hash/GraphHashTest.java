@@ -41,7 +41,7 @@ public class GraphHashTest
     FilenameFilter filter = new FilenameFilter()
     {
       @Override
-      public boolean accept (File dir, String name)
+      public boolean accept (final File dir, final String name)
       {
         return name.endsWith( ".wf.xml" ) && !name.equals( "demo-example.wf.xml" );
       }
@@ -66,7 +66,7 @@ public class GraphHashTest
     FilenameFilter filter = new FilenameFilter()
     {
       @Override
-      public boolean accept (File dir, String name)
+      public boolean accept (final File dir, final String name)
       {
         return name.endsWith( ".wf.xml" ) && !name.equals( "demo-example.wf.xml" );
       }
@@ -103,7 +103,7 @@ public class GraphHashTest
     System.out.println( "Scan took " + (System.currentTimeMillis() - start) + "ms to scan " + count + " files" );
   }
 
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     loadWorkflows();
     while ( true )

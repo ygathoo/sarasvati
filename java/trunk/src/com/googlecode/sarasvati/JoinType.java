@@ -79,7 +79,7 @@ public enum JoinType
   CUSTOM( new JoinStrategy()
           {
             @Override
-            public JoinResult performJoin (Engine engine, GraphProcess process, ArcToken token)
+            public JoinResult performJoin (final Engine engine, final GraphProcess process, final ArcToken token)
             {
               throw new UnsupportedOperationException( "No custom join strategy has been set. " +
                                                        "If not overriding Node#getJoinStrategy, " +

@@ -32,13 +32,13 @@ public class SceneAddNodeAction extends WidgetAction.Adapter
 
   protected static boolean enabled = false;
 
-  public static void setEnabled (boolean enabled)
+  public static void setEnabled (final boolean enabled)
   {
     SceneAddNodeAction.enabled = enabled;
   }
 
   @Override
-  public State mousePressed (Widget widget, WidgetMouseEvent event)
+  public State mousePressed (final Widget widget, final WidgetMouseEvent event)
   {
     if( !enabled )
     {

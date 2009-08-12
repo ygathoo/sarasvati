@@ -42,13 +42,13 @@ public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeW
 
   public HibCustomNodeWrapper () { /* Default constructor for Hibernate */ }
 
-  public HibCustomNodeWrapper (CustomNode customNode)
+  public HibCustomNodeWrapper (final CustomNode customNode)
   {
     this.customNode = customNode;
     customNode.setNodeWrapper( this );
   }
 
-  public CustomNode getCustomNode (Engine engine)
+  public CustomNode getCustomNode (final Engine engine)
   {
     if ( customNode == null )
     {
@@ -61,31 +61,31 @@ public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeW
   }
 
   @Override
-  public GuardResponse defaultGuard (Engine engine, NodeToken token)
+  public GuardResponse defaultGuard (final Engine engine, final NodeToken token)
   {
     return super.guard( engine, token );
   }
 
   @Override
-  public <T> T getDefaultAdaptor (Class<T> clazz)
+  public <T> T getDefaultAdaptor (final Class<T> clazz)
   {
     return super.getAdaptor( clazz );
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     getCustomNode( engine ).execute( engine, token );
   }
 
   @Override
-  public void backtrack (Engine engine, NodeToken token)
+  public void backtrack (final Engine engine, final NodeToken token)
   {
     getCustomNode( engine ).backtrack( engine, token );
   }
 
   @Override
-  public boolean isBacktrackable (Engine engine, NodeToken token)
+  public boolean isBacktrackable (final Engine engine, final NodeToken token)
   {
     return getCustomNode( engine ).isBacktrackable( engine, token );
   }

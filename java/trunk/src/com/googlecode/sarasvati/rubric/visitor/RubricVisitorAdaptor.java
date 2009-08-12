@@ -32,55 +32,55 @@ import com.googlecode.sarasvati.rubric.lang.RubricStmtStringSymbol;
 public class RubricVisitorAdaptor implements RubricVisitor
 {
   @Override
-  public void visit (RubricStmtIf ifStmt)
+  public void visit (final RubricStmtIf ifStmt)
   {
     // does nothing by default
   }
 
   @Override
-  public void visit (RubricStmtDateSymbol dateSymbolStmt)
+  public void visit (final RubricStmtDateSymbol dateSymbolStmt)
   {
     // does nothing by default
   }
 
   @Override
-  public void visit (RubricStmtStringSymbol stringSymbolStmt)
+  public void visit (final RubricStmtStringSymbol stringSymbolStmt)
   {
     // does nothing by default
   }
 
   @Override
-  public void visit (RubricStmtRelativeDate relativeDateStmt)
+  public void visit (final RubricStmtRelativeDate relativeDateStmt)
   {
     // does nothing by default
   }
 
   @Override
-  public void visit (RubricStmtResult resultStmt)
+  public void visit (final RubricStmtResult resultStmt)
   {
     // does nothing by default
   }
 
   @Override
-  public void visit (RubricExprAnd andExpr)
+  public void visit (final RubricExprAnd andExpr)
   {
     // does nothing by default
   }
 
   @Override
-  public void visit (RubricExprNot notExpr)
+  public void visit (final RubricExprNot notExpr)
   {
     // does nothing by default
   }
 
   @Override
-  public void visit (RubricExprOr orExpr)
+  public void visit (final RubricExprOr orExpr)
   {
     // does nothing by default
   }
 
   @Override
-  public void visit (RubricExprSymbol symbolExpr)
+  public void visit (final RubricExprSymbol symbolExpr)
   {
     // does nothing by default
   }

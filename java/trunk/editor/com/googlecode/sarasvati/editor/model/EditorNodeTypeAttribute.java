@@ -57,17 +57,17 @@ public class EditorNodeTypeAttribute
     return useCDATA;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
 
-  public void setDefaultValue (String defaultValue)
+  public void setDefaultValue (final String defaultValue)
   {
     this.defaultValue = defaultValue;
   }
 
-  public void setUseCDATA (boolean useCDATA)
+  public void setUseCDATA (final boolean useCDATA)
   {
     this.useCDATA = useCDATA;
   }

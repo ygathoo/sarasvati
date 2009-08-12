@@ -44,7 +44,7 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class EditorGraphFactory
 {
-  public static EditorGraph loadFromXml (ProcessDefinition procDef)
+  public static EditorGraph loadFromXml (final ProcessDefinition procDef)
   {
     EditorGraph graph = new EditorGraph();
     graph.setName( procDef.getName() );
@@ -153,7 +153,7 @@ public class EditorGraphFactory
     return graph;
   }
 
-  public static XmlProcessDefinition exportToXml (EditorGraph graph) throws IOException
+  public static XmlProcessDefinition exportToXml (final EditorGraph graph) throws IOException
   {
     XmlProcessDefinition xmlProcDef = new XmlProcessDefinition();
     xmlProcDef.setName( graph.getName() );

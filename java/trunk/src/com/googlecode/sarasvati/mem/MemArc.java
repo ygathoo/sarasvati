@@ -28,7 +28,7 @@ public class MemArc implements Arc
   protected Node startNode;
   protected Node endNode;
 
-  public MemArc (String name, Node startNode, Node endNode)
+  public MemArc (final String name, final Node startNode, final Node endNode)
   {
     this.name = name;
     this.startNode = startNode;

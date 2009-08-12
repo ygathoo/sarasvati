@@ -33,7 +33,7 @@ public class MemTokenSetMemberEnv extends AbstractTokenSetMemberEnv
   protected final Map<String,String>[] attrs;
 
   @SuppressWarnings("unchecked")
-  public MemTokenSetMemberEnv (MemTokenSet tokenSet)
+  public MemTokenSetMemberEnv (final MemTokenSet tokenSet)
   {
     super( tokenSet.getMaxMemberIndex() );
     this.attrs = new Map[ tokenSet.getMaxMemberIndex() ];

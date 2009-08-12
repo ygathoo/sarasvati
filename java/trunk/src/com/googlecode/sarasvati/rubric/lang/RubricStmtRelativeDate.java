@@ -47,7 +47,7 @@ public class RubricStmtRelativeDate extends AbstractRubricStmt
   protected boolean business;
   protected RubricStmtDateSymbol dateSymbolExpr;
 
-  public RubricStmtRelativeDate (int offset, boolean business, String unitName, String type, String symbol)
+  public RubricStmtRelativeDate (final int offset, final boolean business, final String unitName, final String type, final String symbol)
   {
     this.offset = offset;
 
@@ -82,14 +82,14 @@ public class RubricStmtRelativeDate extends AbstractRubricStmt
   }
 
   @Override
-  public Date eval (RubricEnv env)
+  public Date eval (final RubricEnv env)
   {
     Date baseDate = dateSymbolExpr.eval( env );
     return env.evalRelativeDate( baseDate, business, offset, unit );
   }
 
   @Override
-  public void traverse (RubricVisitor visitor)
+  public void traverse (final RubricVisitor visitor)
   {
     visitor.visit( this );
     dateSymbolExpr.traverse( visitor );
@@ -113,7 +113,7 @@ public class RubricStmtRelativeDate extends AbstractRubricStmt
   }
 
   @Override
-  public boolean isEqualTo (RubricStmt stmt)
+  public boolean isEqualTo (final RubricStmt stmt)
   {
     if ( !stmt.isRelativeDate() )
     {

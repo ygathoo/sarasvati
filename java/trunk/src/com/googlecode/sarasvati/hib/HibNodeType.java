@@ -49,14 +49,14 @@ public class HibNodeType
     /* default constructor for hibernate */
   }
 
-  public HibNodeType (String id, String description)
+  public HibNodeType (final String id, final String description)
   {
     this.id = id;
     this.description = description;
     this.behaviour = this;
   }
 
-  public HibNodeType (String id, String description, HibNodeType type)
+  public HibNodeType (final String id, final String description, final HibNodeType type)
   {
     this.id = id;
     this.description = description;

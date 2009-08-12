@@ -31,7 +31,7 @@ public final class CharacterAttributeConverter extends AbstractStringValueOfAttr
    * @see com.googlecode.sarasvati.env.AttributeConverter#stringToObject(java.lang.String, java.lang.Class)
    */
   @Override
-  public Object stringToObject (String string, Class<?> object)
+  public Object stringToObject (final String string, final Class<?> object)
   {
     return Character.valueOf( string.length() > 0 ? string.charAt( 0 ) : ' ' );
   }

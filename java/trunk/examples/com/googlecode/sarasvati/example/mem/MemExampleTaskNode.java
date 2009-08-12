@@ -34,7 +34,7 @@ public class MemExampleTaskNode extends MemNode
     return taskName;
   }
 
-  public void setTaskName (String taskName)
+  public void setTaskName (final String taskName)
   {
     this.taskName = taskName;
   }
@@ -44,13 +44,13 @@ public class MemExampleTaskNode extends MemNode
     return taskDesc;
   }
 
-  public void setTaskDesc (String taskDesc)
+  public void setTaskDesc (final String taskDesc)
   {
     this.taskDesc = taskDesc;
   }
 
   @Override
-  public void backtrack (Engine engine, NodeToken token)
+  public void backtrack (final Engine engine, final NodeToken token)
   {
     for (MemExampleTask t : MemExampleTaskList.getTasks() )
     {
@@ -63,7 +63,7 @@ public class MemExampleTaskNode extends MemNode
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     MemExampleTask newTask = new MemExampleTask( token, getTaskName(), getTaskDesc(), TaskState.Open );
     MemExampleTaskList.getTasks().add( newTask );

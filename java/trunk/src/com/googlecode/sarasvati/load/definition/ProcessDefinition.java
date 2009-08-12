@@ -26,12 +26,12 @@ import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.ProcessDefinitionTranslator;
 
 /**
- * A ProcessDefinition is the result of the translation of a certain external source containing 
+ * A ProcessDefinition is the result of the translation of a certain external source containing
  * the definition of a process. That external source must contain necessary information to create
- * an {@link Graph}, and that information is translated into an ProcessDefinition through a 
+ * an {@link Graph}, and that information is translated into an ProcessDefinition through a
  * {@link ProcessDefinitionTranslator}. This ProcessDefinition will then in its turn be used
  * by the {@link GraphLoader} to create an {@link Graph} through the {@link GraphFactory}.
- * The default kind of external source is an XML file containing &lt;process-definition&gt; tags.   
+ * The default kind of external source is an XML file containing &lt;process-definition&gt; tags.
  */
 public interface ProcessDefinition
 {

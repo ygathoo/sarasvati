@@ -23,8 +23,8 @@ import javax.swing.Icon;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
-import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
 import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
+import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
 
 /**
  * Provides default implementations for methods in the
@@ -38,32 +38,32 @@ import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
  */
 public class GraphToImageMapAdapter implements GraphToImageMap
 {
-  
+
   private final String taskType;
 
   public GraphToImageMapAdapter ()
   {
     this("task");
   }
-  
-  public GraphToImageMapAdapter (String taskType){
+
+  public GraphToImageMapAdapter (final String taskType){
     this.taskType = taskType;
   }
-  
+
   /**
    * Returns true unless overridden
    * @see com.googlecode.sarasvati.visual.GraphToImageMap#drawArcLabels(Arc)
    */
   @Override
-  public boolean drawArcLabels (Arc arc)
+  public boolean drawArcLabels (final Arc arc)
   {
     return true;
   }
-  
+
   /**
-   * TaskType default is "task". It is used to determine the type of node icon 
+   * TaskType default is "task". It is used to determine the type of node icon
    * returns by {@link #iconForNode(Node)}
-   * 
+   *
    */
   public String getTaskType ()
   {
@@ -77,7 +77,7 @@ public class GraphToImageMapAdapter implements GraphToImageMap
    * @see com.googlecode.sarasvati.visual.GraphToImageMap#iconForNode(com.googlecode.sarasvati.Node)
    */
   @Override
-  public Icon iconForNode (Node node)
+  public Icon iconForNode (final Node node)
   {
     if ( getTaskType().equalsIgnoreCase( node.getType() ) )
     {
@@ -94,7 +94,7 @@ public class GraphToImageMapAdapter implements GraphToImageMap
    * Returns null unless overridden.
    */
   @Override
-  public String hoverForArc (Arc arc)
+  public String hoverForArc (final Arc arc)
   {
     return null;
   }
@@ -103,7 +103,7 @@ public class GraphToImageMapAdapter implements GraphToImageMap
    * Returns null unless overridden.
    */
   @Override
-  public String hoverForNode (Node node)
+  public String hoverForNode (final Node node)
   {
     return null;
   }
@@ -112,7 +112,7 @@ public class GraphToImageMapAdapter implements GraphToImageMap
    * Returns null unless overridden.
    */
   @Override
-  public String hrefForArc (Arc arc)
+  public String hrefForArc (final Arc arc)
   {
     return null;
   }
@@ -121,7 +121,7 @@ public class GraphToImageMapAdapter implements GraphToImageMap
    * Returns null unless overridden.
    */
   @Override
-  public String hrefForNode (Node node)
+  public String hrefForNode (final Node node)
   {
     return null;
   }

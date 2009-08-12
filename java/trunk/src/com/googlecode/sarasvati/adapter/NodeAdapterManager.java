@@ -27,18 +27,18 @@ public class NodeAdapterManager
 {
   protected static Map<Class<?>, Function<?, Node>> map = new HashMap<Class<?>, Function<?, Node>>();
 
-  public static <T> void registerFactory (Class<T> clazz, Function<T, Node> factory)
+  public static <T> void registerFactory (final Class<T> clazz, final Function<T, Node> factory)
   {
     map.put( clazz, factory );
   }
 
-  public static <T> void unregisterFactory (Class<T> clazz)
+  public static <T> void unregisterFactory (final Class<T> clazz)
   {
     map.remove( clazz );
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> T getAdaptor (Node node, Class<T> clazz)
+  public static <T> T getAdaptor (final Node node, final Class<T> clazz)
   {
     Function<T, Node> function = (Function<T, Node>) map.get( clazz );
     return function == null ? null : function.apply( node );

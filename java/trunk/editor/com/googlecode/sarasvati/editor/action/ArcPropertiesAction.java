@@ -32,7 +32,7 @@ import com.googlecode.sarasvati.editor.model.EditorScene;
 public class ArcPropertiesAction extends Adapter
 {
   @Override
-  public State mouseClicked (Widget widget, WidgetMouseEvent event)
+  public State mouseClicked (final Widget widget, final WidgetMouseEvent event)
   {
     if ( event.getClickCount() == 1 && event.getButton() == MouseEvent.BUTTON3 )
     {

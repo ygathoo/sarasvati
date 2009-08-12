@@ -27,7 +27,7 @@ public abstract class AbstractCommand implements Command
   }
 
   @Override
-  public int compareTo (Command o)
+  public int compareTo (final Command o)
   {
     return getUndoOrder() - o.getUndoOrder();
   }

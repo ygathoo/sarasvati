@@ -31,7 +31,7 @@ public class GraphLayoutNode<N>
   protected int     originX;
   protected int     originY;
 
-  public GraphLayoutNode (int depth, N node)
+  public GraphLayoutNode (final int depth, final N node)
   {
     this.node = node;
     this.depth = depth;
@@ -52,12 +52,12 @@ public class GraphLayoutNode<N>
     return index;
   }
 
-  public void setIndex( int index )
+  public void setIndex( final int index )
   {
     this.index = index;
   }
 
-  public void addToLayer (List<GraphLayoutNode<N>> layer)
+  public void addToLayer (final List<GraphLayoutNode<N>> layer)
   {
     this.index = layer.size();
     layer.add( this );

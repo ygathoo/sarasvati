@@ -53,7 +53,7 @@ public class ProcessTree
   {
     protected List<List<NodeToken>> tree = new LinkedList<List<NodeToken>>();
 
-    public ParentTree (NodeToken token)
+    public ParentTree (final NodeToken token)
     {
       Set<NodeToken> processed = new HashSet<NodeToken>();
 
@@ -82,7 +82,7 @@ public class ProcessTree
       tree.remove( 0 );
     }
 
-    public int getDistance (ParentTree other)
+    public int getDistance (final ParentTree other)
     {
       int localDepth = 0;
       for ( List<NodeToken> localLayer : tree )
@@ -102,7 +102,7 @@ public class ProcessTree
     }
   }
 
-  protected ProcessTreeNode getProcessTreeNode (ProcessTreeNode parent, Node node)
+  protected ProcessTreeNode getProcessTreeNode (final ProcessTreeNode parent, final Node node)
   {
     NodeToken parentToken = parent.getParentToken();
 
@@ -142,7 +142,7 @@ public class ProcessTree
     return getNonTokenProcessTreeNode( parent, node );
   }
 
-  public ProcessTreeNode getNonTokenProcessTreeNode (ProcessTreeNode parent, Node node)
+  public ProcessTreeNode getNonTokenProcessTreeNode (final ProcessTreeNode parent, final Node node)
   {
     ProcessTreeNode endNode = nodeMap.get( node );
 
@@ -156,7 +156,7 @@ public class ProcessTree
     return endNode;
   }
 
-  public boolean isBackArc (Arc arc)
+  public boolean isBackArc (final Arc arc)
   {
     return lookAndFeel.isBackArc( arc, graphTree.isBackArc( arc.getStartNode(), arc.getEndNode() ) );
   }
@@ -168,7 +168,7 @@ public class ProcessTree
    *   a. If it's a node token, process all arc token children
    *   b. If it's a node, process all arc children
    */
-  public ProcessTree (GraphProcess process, ProcessLookAndFeel lookAndFeel)
+  public ProcessTree (final GraphProcess process, final ProcessLookAndFeel lookAndFeel)
   {
     Graph graph = process.getGraph();
     this.graphTree = new GraphLayoutTree( graph );
@@ -184,7 +184,7 @@ public class ProcessTree
     Collections.sort( sortedTokenList, new Comparator<NodeToken>()
     {
       @Override
-      public int compare( NodeToken o1, NodeToken o2 )
+      public int compare( final NodeToken o1, final NodeToken o2 )
       {
         return o1.getCreateDate().compareTo( o2.getCreateDate() );
       }

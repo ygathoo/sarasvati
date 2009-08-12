@@ -26,7 +26,7 @@ public class AddArcCommand extends AbstractCommand
   private EditorScene scene;
   private EditorArc arc;
 
-  public AddArcCommand (EditorScene scene, EditorArc arc)
+  public AddArcCommand (final EditorScene scene, final EditorArc arc)
   {
     this.scene = scene;
     this.arc   = arc;

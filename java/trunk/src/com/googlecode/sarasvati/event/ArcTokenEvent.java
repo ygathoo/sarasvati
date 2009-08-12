@@ -24,19 +24,19 @@ import com.googlecode.sarasvati.GraphProcess;
 
 public class ArcTokenEvent extends ExecutionEvent
 {
-  public static final ArcTokenEvent newCreatedEvent (Engine engine, ArcToken arcToken)
+  public static final ArcTokenEvent newCreatedEvent (final Engine engine, final ArcToken arcToken)
   {
     return new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_CREATED, arcToken );
   }
 
-  public static final ArcTokenEvent newCompletedEvent (Engine engine, ArcToken arcToken)
+  public static final ArcTokenEvent newCompletedEvent (final Engine engine, final ArcToken arcToken)
   {
     return new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_COMPLETED, arcToken );
   }
 
   protected ArcToken arcToken;
 
-  private ArcTokenEvent (Engine engine, ExecutionEventType eventType, ArcToken arcToken)
+  private ArcTokenEvent (final Engine engine, final ExecutionEventType eventType, final ArcToken arcToken)
   {
     super( engine, eventType );
     this.arcToken  = arcToken;

@@ -49,14 +49,14 @@ public class HibExampleConsole
 {
   public static boolean log = false;
 
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     DefaultRubricFunctionRepository repository = DefaultRubricFunctionRepository.getGlobalInstance();
 
     repository.registerPredicate( "isRandOdd", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 1;
       }
@@ -65,7 +65,7 @@ public class HibExampleConsole
     repository.registerPredicate( "isRandEven", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 0;
       }
@@ -74,7 +74,7 @@ public class HibExampleConsole
     repository.registerPredicate( "isTenthIteration", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return token.getEnv().getAttribute( "iter", Long.class ) == 10;
       }
@@ -83,7 +83,7 @@ public class HibExampleConsole
     repository.registerPredicate( "Approved", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return true;
       }
@@ -114,7 +114,7 @@ public class HibExampleConsole
   }
 
   @SuppressWarnings("unchecked")
-  public static void runWorkflow (long processId)
+  public static void runWorkflow (final long processId)
   {
     while (true)
     {
@@ -229,7 +229,7 @@ public class HibExampleConsole
     }
   }
 
-  public static void processTask (Task t, HibEngine engine)
+  public static void processTask (final Task t, final HibEngine engine)
   {
     System.out.println( "Task " );
     System.out.println( "\tName        : "  + t.getName() );
@@ -297,7 +297,7 @@ public class HibExampleConsole
   }
 
   @SuppressWarnings("unchecked")
-  public static HibGraph getGraph (HibEngine engine)
+  public static HibGraph getGraph (final HibEngine engine)
   {
     HibGraph graph = null;
 

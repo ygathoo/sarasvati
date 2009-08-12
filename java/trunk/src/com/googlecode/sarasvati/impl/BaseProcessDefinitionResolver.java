@@ -48,7 +48,7 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
    * Sources can be added later by calling {@link addSource}
    * @param translator The translator to use to translate a source of type <T> into a {@link ProcessDefinition}
    */
-  public BaseProcessDefinitionResolver (ProcessDefinitionTranslator<T> translator)
+  public BaseProcessDefinitionResolver (final ProcessDefinitionTranslator<T> translator)
   {
     this.translator = translator;
     this.sourcesRepository = new HashMap<String, T> ();
@@ -64,7 +64,7 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
    * @param translator The translator to use to translate a source of type <T> into a {@link ProcessDefinition}
    * @param sources The sources that will form the repository used to resolve a name into a {@link ProcessDefinition} via the translator
    */
-  public BaseProcessDefinitionResolver (ProcessDefinitionTranslator<T> translator, List<T> sources)
+  public BaseProcessDefinitionResolver (final ProcessDefinitionTranslator<T> translator, final List<T> sources)
   {
     this.translator = translator;
 
@@ -84,7 +84,7 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
    * @param translator The translator to use to translate a source of type <T> into a {@link ProcessDefinition}
    * @param map The sources repository used to resolve a name into a {@link ProcessDefinition} via the translator
    */
-  public BaseProcessDefinitionResolver (ProcessDefinitionTranslator<T> translator, Map<String, T> map)
+  public BaseProcessDefinitionResolver (final ProcessDefinitionTranslator<T> translator, final Map<String, T> map)
   {
     this.translator = translator;
     if (map != null)
@@ -93,12 +93,12 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
       this.sourcesRepository = new HashMap<String, T> ();
   }
 
-  public void addSource (T source)
+  public void addSource (final T source)
   {
     addSource (source.toString(), source);
   }
 
-  public void addSource (String name, T source)
+  public void addSource (final String name, final T source)
   {
     String key = name == null? source.toString() : name;
     sourcesRepository.put ( key, source );
@@ -108,7 +108,7 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
    * @see com.googlecode.sarasvati.load.ProcessDefinitionResolver#resolve(java.lang.String)
    */
   @Override
-  public ProcessDefinition resolve (String name)
+  public ProcessDefinition resolve (final String name)
   {
     return sourcesRepository.get(name) == null? null : translator.translate( sourcesRepository.get( name ) );
   }

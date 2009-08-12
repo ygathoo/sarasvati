@@ -24,12 +24,12 @@ public class ArcSelectAction extends ToggledWidgetActionDecorator
 {
   protected static boolean enabled = false;
 
-  public static void setEnabled (boolean enabled)
+  public static void setEnabled (final boolean enabled)
   {
     ArcSelectAction.enabled = enabled;
   }
 
-  public ArcSelectAction (WidgetAction action)
+  public ArcSelectAction (final WidgetAction action)
   {
     super( action );
   }

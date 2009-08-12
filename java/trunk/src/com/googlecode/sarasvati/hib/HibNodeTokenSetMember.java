@@ -62,7 +62,7 @@ public class HibNodeTokenSetMember implements NodeTokenSetMember
     /* default constructor for hibernate */
   }
 
-  public HibNodeTokenSetMember (HibTokenSet tokenSet, HibNodeToken token, int memberIndex)
+  public HibNodeTokenSetMember (final HibTokenSet tokenSet, final HibNodeToken token, final int memberIndex)
   {
     this.tokenSet = tokenSet;
     this.token = token;
@@ -74,7 +74,7 @@ public class HibNodeTokenSetMember implements NodeTokenSetMember
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -85,7 +85,7 @@ public class HibNodeTokenSetMember implements NodeTokenSetMember
     return tokenSet;
   }
 
-  public void setTokenSet (HibTokenSet tokenSet)
+  public void setTokenSet (final HibTokenSet tokenSet)
   {
     this.tokenSet = tokenSet;
   }
@@ -96,7 +96,7 @@ public class HibNodeTokenSetMember implements NodeTokenSetMember
     return token;
   }
 
-  public void setToken (HibNodeToken token)
+  public void setToken (final HibNodeToken token)
   {
     this.token = token;
   }
@@ -107,7 +107,7 @@ public class HibNodeTokenSetMember implements NodeTokenSetMember
     return memberIndex;
   }
 
-  public void setMemberIndex (int memberIndex)
+  public void setMemberIndex (final int memberIndex)
   {
     this.memberIndex = memberIndex;
   }
@@ -132,7 +132,7 @@ public class HibNodeTokenSetMember implements NodeTokenSetMember
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if (this == obj)
       return true;

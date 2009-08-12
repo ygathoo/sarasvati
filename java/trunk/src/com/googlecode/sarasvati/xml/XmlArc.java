@@ -46,7 +46,7 @@ public class XmlArc implements ArcDefinition, Comparable<XmlArc>
     return external;
   }
 
-  public void setExternal( String external )
+  public void setExternal( final String external )
   {
     this.external = external;
   }
@@ -57,7 +57,7 @@ public class XmlArc implements ArcDefinition, Comparable<XmlArc>
     return to;
   }
 
-  public void setTo (String to)
+  public void setTo (final String to)
   {
     this.to = to;
   }
@@ -68,7 +68,7 @@ public class XmlArc implements ArcDefinition, Comparable<XmlArc>
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -98,7 +98,7 @@ public class XmlArc implements ArcDefinition, Comparable<XmlArc>
   }
 
   @Override
-  public int compareTo (XmlArc o)
+  public int compareTo (final XmlArc o)
   {
     if ( o == null )
     {

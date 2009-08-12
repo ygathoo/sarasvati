@@ -48,7 +48,7 @@ import com.googlecode.sarasvati.util.SvUtil;
  */
 public class TokenSetAndJoinStrategy implements JoinStrategy
 {
-  public TokenSet getTokenSet (ArcToken token)
+  public TokenSet getTokenSet (final ArcToken token)
   {
     String tokenSetName = token.getArc().getEndNode().getJoinParam();
 
@@ -82,13 +82,13 @@ public class TokenSetAndJoinStrategy implements JoinStrategy
    *
    * @return
    */
-  public JoinResult performFallbackJoin (Engine engine, GraphProcess process, ArcToken token)
+  public JoinResult performFallbackJoin (final Engine engine, final GraphProcess process, final ArcToken token)
   {
     throw new IllegalStateException( "Token " + token + " does not belong to the appropriate token set" );
   }
 
   @Override
-  public JoinResult performJoin (Engine engine, GraphProcess process, ArcToken token)
+  public JoinResult performJoin (final Engine engine, final GraphProcess process, final ArcToken token)
   {
     TokenSet tokenSet = getTokenSet( token );
 

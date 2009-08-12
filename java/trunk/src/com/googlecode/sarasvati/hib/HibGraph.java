@@ -58,7 +58,7 @@ public class HibGraph extends AbstractGraph
 
   protected HibGraph () { /* Default constructor for hibernate */ }
 
-  protected HibGraph (String name, int version, String customId)
+  protected HibGraph (final String name, final int version, final String customId)
   {
     this.name = name;
     this.version = version;
@@ -79,7 +79,7 @@ public class HibGraph extends AbstractGraph
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -90,7 +90,7 @@ public class HibGraph extends AbstractGraph
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -100,7 +100,7 @@ public class HibGraph extends AbstractGraph
     return version;
   }
 
-  public void setVersion (int version)
+  public void setVersion (final int version)
   {
     this.version = version;
   }
@@ -111,7 +111,7 @@ public class HibGraph extends AbstractGraph
     return customId;
   }
 
-  public void setCustomId (String customId)
+  public void setCustomId (final String customId)
   {
     this.customId = customId;
   }
@@ -121,7 +121,7 @@ public class HibGraph extends AbstractGraph
     return createDate;
   }
 
-  public void setCreateDate( Date createDate )
+  public void setCreateDate( final Date createDate )
   {
     this.createDate = createDate;
   }
@@ -132,7 +132,7 @@ public class HibGraph extends AbstractGraph
     return nodes;
   }
 
-  public void setNodes (List<HibNodeRef> nodeRefs)
+  public void setNodes (final List<HibNodeRef> nodeRefs)
   {
     this.nodes = nodeRefs;
   }
@@ -142,7 +142,7 @@ public class HibGraph extends AbstractGraph
     return arcs;
   }
 
-  public void setArcs (List<HibArc> arcs)
+  public void setArcs (final List<HibArc> arcs)
   {
     this.arcs = arcs;
   }
@@ -158,7 +158,7 @@ public class HibGraph extends AbstractGraph
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;

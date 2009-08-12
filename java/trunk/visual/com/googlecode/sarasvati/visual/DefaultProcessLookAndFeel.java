@@ -26,8 +26,8 @@ import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
-import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
 import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
+import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
 import com.googlecode.sarasvati.visual.process.SarasvatiProcessScene;
 import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 

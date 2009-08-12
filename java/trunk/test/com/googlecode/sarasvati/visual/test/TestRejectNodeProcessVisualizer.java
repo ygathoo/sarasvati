@@ -55,7 +55,7 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
     return HibTestSetup.openSession();
   }
 
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     load();
     completeProcess();
@@ -73,22 +73,22 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
      */
     HibGraph graph = engine.getRepository().getLatestGraph( "reject-node" );
     GraphProcess process = engine.startProcess( graph );
-    
+
     //Do a complete at the 3rd Node
     {
       Collection<? extends NodeToken> activeNodeTokens = process.getActiveNodeTokens();
       NodeToken activeToken = activeNodeTokens.iterator().next();
       engine.complete( activeToken, Arc.DEFAULT_ARC );
-      
+
     }
-    
+
     //Do a reject at the 5th Node
     {
       Collection<? extends NodeToken> activeNodeTokens = process.getActiveNodeTokens();
       NodeToken activeToken = activeNodeTokens.iterator().next();
       engine.complete( activeToken, "reject" );
     }
-    
+
     session.getTransaction().commit();
   }
 
@@ -106,7 +106,7 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
     engine.addNodeType( "custom", CustomNode.class );
     engine.addNodeType( "wait", WaitNode.class );
     engine.addNodeType( "end", HibNode.class);
-    
+
     GraphLoader<HibGraph> wfLoader = engine.getLoader();
 
     File baseDir = new File( "test/com/googlecode/sarasvati/visual/test/" );
@@ -117,7 +117,7 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
     FilenameFilter filter = new FilenameFilter()
     {
       @Override
-      public boolean accept (File dir, String name)
+      public boolean accept (final File dir, final String name)
       {
         return name.endsWith( ".wf.xml" ) && name.equals( "reject-node.wf.xml" );
       }

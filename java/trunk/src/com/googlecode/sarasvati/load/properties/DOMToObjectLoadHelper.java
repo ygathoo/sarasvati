@@ -47,7 +47,7 @@ import com.googlecode.sarasvati.util.SvUtil;
 
 public class DOMToObjectLoadHelper
 {
-  public static void loadCustomIntoMap (CustomDefinition customDefinition, Map<String, String> map)
+  public static void loadCustomIntoMap (final CustomDefinition customDefinition, final Map<String, String> map)
     throws SarasvatiLoadException
   {
     if ( customDefinition != null && customDefinition.getCustom() != null )
@@ -62,14 +62,14 @@ public class DOMToObjectLoadHelper
     }
   }
 
-  public static Map<String, String> setBeanValues (Object obj, Node node) throws SarasvatiLoadException
+  public static Map<String, String> setBeanValues (final Object obj, final Node node) throws SarasvatiLoadException
   {
     Map<String, String> beanProperties = new HashMap<String, String>();
     setBeanValues( obj, node, null, beanProperties );
     return beanProperties;
   }
 
-  public static void setBeanValues (Object obj, Node node, String name, Map<String, String> beanProperties) throws SarasvatiLoadException
+  public static void setBeanValues (final Object obj, final Node node, final String name, final Map<String, String> beanProperties) throws SarasvatiLoadException
   {
     PropertyMutator editor = null;
     Object currentValue = null;
@@ -151,12 +151,12 @@ public class DOMToObjectLoadHelper
     }
   }
 
-  private static String getChildName (String prefix, String name)
+  private static String getChildName (final String prefix, final String name)
   {
     return prefix == null ? name : prefix + "." + name;
   }
 
-  public static PropertyMutator getMutatorForProperty (Object obj, String name) throws SarasvatiLoadException
+  public static PropertyMutator getMutatorForProperty (final Object obj, final String name) throws SarasvatiLoadException
   {
     if ( obj == EditorLoadPropertyMutator.INSTANCE )
     {
@@ -193,7 +193,7 @@ public class DOMToObjectLoadHelper
     return PropertyMutatorRegistry.getMutator( attr, obj, new BasePropertyMutator() );
   }
 
-  public static void setValues (Object obj, Map<String, String> values) throws SarasvatiLoadException
+  public static void setValues (final Object obj, final Map<String, String> values) throws SarasvatiLoadException
   {
     for (Entry<String, String> entry : values.entrySet() )
     {

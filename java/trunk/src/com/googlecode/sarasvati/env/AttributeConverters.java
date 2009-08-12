@@ -64,19 +64,19 @@ public class AttributeConverters
   private static AttributeConverter defaultConverter = new AttributeConverter()
   {
     @Override
-    public Object stringToObject (String string, Class<?> type)
+    public Object stringToObject (final String string, final Class<?> type)
     {
       throw new IllegalArgumentException( "No converter is set up to handle conversion attributes from string to " + type );
     }
 
     @Override
-    public String objectToString (Object object)
+    public String objectToString (final Object object)
     {
       throw new IllegalArgumentException( "No converter is set up to handle conversion of attributes from " + object.getClass() + " to string" );
     }
   };
 
-  public static String objectToString (Object object)
+  public static String objectToString (final Object object)
   {
     if ( object == null )
     {
@@ -88,7 +88,7 @@ public class AttributeConverters
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> T stringToObject (String string, Class<T> type)
+  public static <T> T stringToObject (final String string, final Class<T> type)
   {
     if ( string == null )
     {
@@ -101,7 +101,7 @@ public class AttributeConverters
   }
 
   @SuppressWarnings("unchecked")
-  public static <T> T stringToObject (String string, Class<T> type, T defaultValue)
+  public static <T> T stringToObject (final String string, final Class<T> type, final T defaultValue)
   {
     if ( string == null )
     {
@@ -113,17 +113,17 @@ public class AttributeConverters
     return (T)result;
   }
 
-  public static void setDefaultConverter (AttributeConverter converter)
+  public static void setDefaultConverter (final AttributeConverter converter)
   {
     defaultConverter = converter;
   }
 
-  public static AttributeConverter getConverterForType (Class<?> type)
+  public static AttributeConverter getConverterForType (final Class<?> type)
   {
     return converters.get( type );
   }
 
-  public static void setConverterForType (Class<?> type, AttributeConverter converter)
+  public static void setConverterForType (final Class<?> type, final AttributeConverter converter)
   {
     converters.put( type, converter );
   }

@@ -43,7 +43,7 @@ public class ShortestPathRouterAdapter implements Router
 
   protected Map<Widget, WidgetBoundsTracker> widgetMap = new HashMap<Widget, WidgetBoundsTracker>();
 
-  public ShortestPathRouterAdapter (final GraphSceneImpl<?,?> scene, int spacing)
+  public ShortestPathRouterAdapter (final GraphSceneImpl<?,?> scene, final int spacing)
   {
     this.scene = scene;
     this.router = new ShortestPathRouter();

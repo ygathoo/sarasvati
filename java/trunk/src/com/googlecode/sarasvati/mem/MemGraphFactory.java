@@ -141,7 +141,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   public External newExternal (final String name,
                                final Graph graph,
                                final Graph externalGraph,
-                               CustomDefinition customDefinition)
+                               final CustomDefinition customDefinition)
   {
     HashMap<String, String> attributes = new HashMap<String, String> ();
     DOMToObjectLoadHelper.loadCustomIntoMap( customDefinition, attributes );

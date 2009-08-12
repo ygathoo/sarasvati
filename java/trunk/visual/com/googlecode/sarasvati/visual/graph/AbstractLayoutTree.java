@@ -95,12 +95,12 @@ public abstract class AbstractLayoutTree<N>
     }
   }
 
-  public GraphLayoutNode<N> getTreeNode (N node)
+  public GraphLayoutNode<N> getTreeNode (final N node)
   {
     return nodeMap.get( node );
   }
 
-  public boolean isBackArc (N start, N end)
+  public boolean isBackArc (final N start, final N end)
   {
     GraphLayoutNode<N> startNode = getTreeNode( start );
     GraphLayoutNode<N> endNode = getTreeNode( end );

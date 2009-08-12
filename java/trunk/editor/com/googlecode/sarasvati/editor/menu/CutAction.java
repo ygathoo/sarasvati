@@ -41,7 +41,7 @@ public class CutAction extends AbstractAction
   }
 
   @Override
-  public void actionPerformed (ActionEvent e)
+  public void actionPerformed (final ActionEvent e)
   {
     GraphEditor.getInstance().editCut();
   }

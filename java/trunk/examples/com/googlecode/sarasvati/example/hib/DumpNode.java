@@ -35,7 +35,7 @@ public class DumpNode extends HibNode
   public static boolean doPrint = true;
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     if( doPrint )
     {

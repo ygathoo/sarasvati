@@ -30,7 +30,7 @@ public class MemExternal implements External
 
   protected ReadEnv env;
 
-  public MemExternal (String name, Graph graph, Graph externalGraph, ReadEnv env)
+  public MemExternal (final String name, final Graph graph, final Graph externalGraph, final ReadEnv env)
   {
     this.name = name;
     this.graph = graph;

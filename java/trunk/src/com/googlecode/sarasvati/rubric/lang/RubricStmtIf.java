@@ -28,7 +28,7 @@ public class RubricStmtIf extends AbstractRubricStmt
   protected RubricStmt ifStmt;
   protected RubricStmt elseStmt;
 
-  public RubricStmtIf (RubricExpr expr, RubricStmt ifStmt, RubricStmt elseStmt)
+  public RubricStmtIf (final RubricExpr expr, final RubricStmt ifStmt, final RubricStmt elseStmt)
   {
     this.expr = expr;
     this.ifStmt = ifStmt;
@@ -40,7 +40,7 @@ public class RubricStmtIf extends AbstractRubricStmt
     return expr;
   }
 
-  public void setExpr (RubricExpr expr)
+  public void setExpr (final RubricExpr expr)
   {
     this.expr = expr;
   }
@@ -50,7 +50,7 @@ public class RubricStmtIf extends AbstractRubricStmt
     return ifStmt;
   }
 
-  public void setIfStmt (RubricStmt ifStmt)
+  public void setIfStmt (final RubricStmt ifStmt)
   {
     this.ifStmt = ifStmt;
   }
@@ -60,19 +60,19 @@ public class RubricStmtIf extends AbstractRubricStmt
     return elseStmt;
   }
 
-  public void setElseStmt (RubricStmt elseStmt)
+  public void setElseStmt (final RubricStmt elseStmt)
   {
     this.elseStmt = elseStmt;
   }
 
   @Override
-  public Object eval (RubricEnv env)
+  public Object eval (final RubricEnv env)
   {
     return expr.eval( env ) ? ifStmt.eval( env ) : elseStmt.eval( env );
   }
 
   @Override
-  public void traverse (RubricVisitor visitor)
+  public void traverse (final RubricVisitor visitor)
   {
     visitor.visit( this );
     expr.traverse( visitor );
@@ -93,7 +93,7 @@ public class RubricStmtIf extends AbstractRubricStmt
   }
 
   @Override
-  public boolean isEqualTo (RubricStmt stmt)
+  public boolean isEqualTo (final RubricStmt stmt)
   {
     if ( !stmt.isIf() )
     {

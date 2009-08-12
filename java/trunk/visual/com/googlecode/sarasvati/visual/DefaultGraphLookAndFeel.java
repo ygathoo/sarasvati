@@ -41,26 +41,26 @@ public class DefaultGraphLookAndFeel implements GraphLookAndFeel
   protected boolean drawSelfArcs;
   protected boolean drawArcLabels;
 
-  public DefaultGraphLookAndFeel (boolean drawSelfArcs, boolean drawArcLabels)
+  public DefaultGraphLookAndFeel (final boolean drawSelfArcs, final boolean drawArcLabels)
   {
     this.drawSelfArcs = drawSelfArcs;
     this.drawArcLabels = drawArcLabels;
   }
 
   @Override
-  public boolean drawArcLabels (Arc arc)
+  public boolean drawArcLabels (final Arc arc)
   {
     return drawArcLabels;
   }
 
   @Override
-  public boolean drawSelfArcs (Arc arc)
+  public boolean drawSelfArcs (final Arc arc)
   {
     return drawSelfArcs;
   }
 
   @Override
-  public Widget newWidget (Node node, SarasvatiGraphScene scene)
+  public Widget newWidget (final Node node, final SarasvatiGraphScene scene)
   {
     Component c = node.getAdaptor( Component.class );
 

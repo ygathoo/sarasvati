@@ -34,20 +34,20 @@ public class DepthFirstTokenTraversal implements TokenTraversal
   protected Set<Long> nodeTokens = new HashSet<Long>();
 
   @Override
-  public void traverse (NodeToken token, TokenVisitor visitor)
+  public void traverse (final NodeToken token, final TokenVisitor visitor)
   {
     enqueueNodeToken( token );
     traverse( visitor );
   }
 
   @Override
-  public void traverse (ArcToken token, TokenVisitor visitor)
+  public void traverse (final ArcToken token, final TokenVisitor visitor)
   {
     arcTokenQueue.add( token );
     traverse( visitor );
   }
 
-  protected void traverse (TokenVisitor visitor)
+  protected void traverse (final TokenVisitor visitor)
   {
     while ( !nodeTokenQueue.isEmpty() || !arcTokenQueue.isEmpty() )
     {
@@ -71,7 +71,7 @@ public class DepthFirstTokenTraversal implements TokenTraversal
     }
   }
 
-  protected void enqueueNodeToken (NodeToken token)
+  protected void enqueueNodeToken (final NodeToken token)
   {
     if ( token != null && !nodeTokens.contains( token.getId() ) )
     {

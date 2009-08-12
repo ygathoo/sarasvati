@@ -29,7 +29,7 @@ public class MemTokenSetMember<T extends Token> implements TokenSetMember
   protected T token;
   protected int memberIndex;
 
-  public MemTokenSetMember (TokenSet tokenSet, T token, int memberIndex)
+  public MemTokenSetMember (final TokenSet tokenSet, final T token, final int memberIndex)
   {
     this.tokenSet = tokenSet;
     this.token = token;

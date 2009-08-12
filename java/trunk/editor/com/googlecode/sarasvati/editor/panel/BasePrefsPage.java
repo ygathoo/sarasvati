@@ -41,7 +41,7 @@ public class BasePrefsPage extends JPanel
     return setupDone;
   }
 
-  public void setSetupDone (boolean setupDone)
+  public void setSetupDone (final boolean setupDone)
   {
     this.setupDone = setupDone;
   }

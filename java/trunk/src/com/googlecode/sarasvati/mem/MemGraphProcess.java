@@ -55,20 +55,20 @@ public class MemGraphProcess implements GraphProcess
 
   protected ExecutionEventQueue eventQueue = DefaultExecutionEventQueue.newArrayListInstance();
 
-  public MemGraphProcess (Graph graph)
+  public MemGraphProcess (final Graph graph)
   {
     this.graph = graph;
     this.state = ProcessState.Created;
   }
 
   @Override
-  public void addActiveArcToken (ArcToken token)
+  public void addActiveArcToken (final ArcToken token)
   {
     activeArcTokens.add( token );
   }
 
   @Override
-  public void addActiveNodeToken (NodeToken token)
+  public void addActiveNodeToken (final NodeToken token)
   {
     activeNodeTokens.add( token );
   }
@@ -92,7 +92,7 @@ public class MemGraphProcess implements GraphProcess
   }
 
   @Override
-  public void addNodeToken(NodeToken token)
+  public void addNodeToken(final NodeToken token)
   {
     nodeTokens.add( token );
   }
@@ -114,19 +114,19 @@ public class MemGraphProcess implements GraphProcess
     return parentToken;
   }
 
-  public void setParentToken (NodeToken parentToken)
+  public void setParentToken (final NodeToken parentToken)
   {
     this.parentToken = parentToken;
   }
 
   @Override
-  public void removeActiveArcToken (ArcToken token)
+  public void removeActiveArcToken (final ArcToken token)
   {
     activeArcTokens.remove( token );
   }
 
   @Override
-  public void removeActiveNodeToken (NodeToken token)
+  public void removeActiveNodeToken (final NodeToken token)
   {
     activeNodeTokens.remove( token );
   }
@@ -138,7 +138,7 @@ public class MemGraphProcess implements GraphProcess
   }
 
   @Override
-  public void enqueueArcTokenForExecution(ArcToken token)
+  public void enqueueArcTokenForExecution(final ArcToken token)
   {
     executionQueue.add( token );
   }
@@ -156,7 +156,7 @@ public class MemGraphProcess implements GraphProcess
   }
 
   @Override
-  public void setState (ProcessState state)
+  public void setState (final ProcessState state)
   {
     this.state = state;
   }

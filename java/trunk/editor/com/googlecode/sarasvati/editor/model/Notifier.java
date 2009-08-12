@@ -26,12 +26,12 @@ public class Notifier<T>
   private List<ModelListener<T>> listeners = new ArrayList<ModelListener<T>>();
 
   @SuppressWarnings("unchecked")
-  public synchronized void addListener (ModelListener<? extends T> listener)
+  public synchronized void addListener (final ModelListener<? extends T> listener)
   {
     listeners.add( (ModelListener<T>) listener );
   }
 
-  public synchronized void notify (T instance)
+  public synchronized void notify (final T instance)
   {
     for ( ModelListener<T> listener : listeners )
     {

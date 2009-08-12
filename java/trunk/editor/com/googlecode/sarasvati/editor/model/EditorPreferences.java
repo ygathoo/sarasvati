@@ -137,7 +137,7 @@ public class EditorPreferences
     return defaultSelfArcsLabel;
   }
 
-  private void setNodeTypes (List<EditorNodeType> nodeTypes)
+  private void setNodeTypes (final List<EditorNodeType> nodeTypes)
   {
     this.nodeTypes = nodeTypes;
 
@@ -154,7 +154,7 @@ public class EditorPreferences
     return nodeTypes;
   }
 
-  public EditorNodeType getTypeByName (String name)
+  public EditorNodeType getTypeByName (final String name)
   {
     return typesByName.get( name );
   }

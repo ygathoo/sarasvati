@@ -92,7 +92,7 @@ public class RubricInterpreter
    * @throws RubricException Thrown if the program is not valid.
    * @return A RubricStmt, which is the root of the compiled AST.
    */
-  public static RubricStmt compile (String rubricStatement) throws RubricException
+  public static RubricStmt compile (final String rubricStatement) throws RubricException
   {
     RubricLexer lexer = new RubricLexer( new ANTLRStringStream( rubricStatement ) );
 

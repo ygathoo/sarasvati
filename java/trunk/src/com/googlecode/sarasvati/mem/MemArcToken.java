@@ -44,7 +44,7 @@ public class MemArcToken implements ArcToken
 
   protected Set<ArcTokenSetMember> tokenSetMemberships = new HashSet<ArcTokenSetMember>();
 
-  public MemArcToken (Arc arc, GraphProcess process, ExecutionType executionType, NodeToken parentToken)
+  public MemArcToken (final Arc arc, final GraphProcess process, final ExecutionType executionType, final NodeToken parentToken)
   {
     this.arc = arc;
     this.process = process;
@@ -84,7 +84,7 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public void markComplete (Engine engine, NodeToken token)
+  public void markComplete (final Engine engine, final NodeToken token)
   {
     this.completeDate = new Date();
     this.childToken = token;
@@ -102,7 +102,7 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public void markProcessed (Engine engine)
+  public void markProcessed (final Engine engine)
   {
     this.pending = false;
   }
@@ -114,13 +114,13 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public void markBacktracked (Engine engine)
+  public void markBacktracked (final Engine engine)
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }
 
   @Override
-  public void accept (TokenVisitor visitor)
+  public void accept (final TokenVisitor visitor)
   {
     visitor.visit( this );
   }

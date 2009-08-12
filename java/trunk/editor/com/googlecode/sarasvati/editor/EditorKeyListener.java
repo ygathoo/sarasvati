@@ -24,7 +24,7 @@ public class EditorKeyListener
 {
   private EditorMode previousMode = null;
 
-  public void keyPressed (KeyEvent event)
+  public void keyPressed (final KeyEvent event)
   {
     EditorMode mode = null;
 
@@ -58,7 +58,7 @@ public class EditorKeyListener
     }
   }
 
-  public void keyReleased (KeyEvent event)
+  public void keyReleased (final KeyEvent event)
   {
     if ( previousMode != null )
     {

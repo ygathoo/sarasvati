@@ -30,7 +30,7 @@ public class DropNotToAboveLeavesVisitor extends RubricVisitorAdaptor
   public static final DropNotToAboveLeavesVisitor INSTANCE = new DropNotToAboveLeavesVisitor ();
 
   @Override
-  public void visit (RubricStmtIf ifStmt)
+  public void visit (final RubricStmtIf ifStmt)
   {
     if ( ifStmt.getExpr().isNot() )
     {
@@ -39,7 +39,7 @@ public class DropNotToAboveLeavesVisitor extends RubricVisitorAdaptor
   }
 
   @Override
-  public void visit (RubricExprAnd andExpr)
+  public void visit (final RubricExprAnd andExpr)
   {
     if ( andExpr.getLeft().isNot() )
     {
@@ -52,7 +52,7 @@ public class DropNotToAboveLeavesVisitor extends RubricVisitorAdaptor
   }
 
   @Override
-  public void visit (RubricExprOr orExpr)
+  public void visit (final RubricExprOr orExpr)
   {
     if ( orExpr.getLeft().isNot() )
     {
@@ -64,7 +64,7 @@ public class DropNotToAboveLeavesVisitor extends RubricVisitorAdaptor
     }
   }
 
-  protected RubricExpr pushDownNot (RubricExprNot notExpr)
+  protected RubricExpr pushDownNot (final RubricExprNot notExpr)
   {
     RubricExpr expr = notExpr.getExpr();
 
@@ -83,12 +83,12 @@ public class DropNotToAboveLeavesVisitor extends RubricVisitorAdaptor
     return notExpr;
   }
 
-  protected RubricExpr negate (RubricExpr expr)
+  protected RubricExpr negate (final RubricExpr expr)
   {
     return expr.isNot() ? expr.asNot().getExpr() : new RubricExprNot( expr );
   }
 
-  public static void process (RubricStmt stmt)
+  public static void process (final RubricStmt stmt)
   {
     stmt.traverse( INSTANCE );
   }

@@ -40,7 +40,7 @@ public class PreferencesAction extends AbstractAction
   }
 
   @Override
-  public void actionPerformed (ActionEvent e)
+  public void actionPerformed (final ActionEvent e)
   {
     JDialog dialog = DialogFactory.newPreferencesDialog();
     dialog.setVisible( true );

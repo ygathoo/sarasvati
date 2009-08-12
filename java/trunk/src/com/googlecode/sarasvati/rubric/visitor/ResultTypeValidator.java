@@ -28,7 +28,7 @@ import com.googlecode.sarasvati.rubric.lang.RubricStmtResult;
 
 public class ResultTypeValidator extends RubricVisitorAdaptor
 {
-  public static boolean isResultOfType (RubricStmt stmt, Class<?> type)
+  public static boolean isResultOfType (final RubricStmt stmt, final Class<?> type)
   {
     ResultTypeValidator validator = new ResultTypeValidator( type );
     stmt.traverse( validator );
@@ -38,7 +38,7 @@ public class ResultTypeValidator extends RubricVisitorAdaptor
   protected Class<?> type;
   protected boolean allMatch = true;
 
-  public ResultTypeValidator (Class<?> type)
+  public ResultTypeValidator (final Class<?> type)
   {
     this.type = type;
   }
@@ -49,7 +49,7 @@ public class ResultTypeValidator extends RubricVisitorAdaptor
   }
 
   @Override
-  public void visit (RubricStmtResult resultStmt)
+  public void visit (final RubricStmtResult resultStmt)
   {
     if ( !type.isAssignableFrom( resultStmt.getResult().getClass() ) )
     {
@@ -58,7 +58,7 @@ public class ResultTypeValidator extends RubricVisitorAdaptor
   }
 
   @Override
-  public void visit (RubricStmtDateSymbol dateSymbolStmt)
+  public void visit (final RubricStmtDateSymbol dateSymbolStmt)
   {
     if ( !type.isAssignableFrom( Date.class ) )
     {
@@ -67,7 +67,7 @@ public class ResultTypeValidator extends RubricVisitorAdaptor
   }
 
   @Override
-  public void visit (RubricStmtRelativeDate relativeDateStmt)
+  public void visit (final RubricStmtRelativeDate relativeDateStmt)
   {
     if ( !type.isAssignableFrom( Date.class ) )
     {

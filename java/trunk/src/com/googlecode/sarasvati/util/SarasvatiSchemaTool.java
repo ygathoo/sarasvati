@@ -34,7 +34,7 @@ public class SarasvatiSchemaTool
 {
   private AnnotationConfiguration config = new AnnotationConfiguration();
 
-  public SarasvatiSchemaTool (String hibernateCfg)
+  public SarasvatiSchemaTool (final String hibernateCfg)
   {
     HibEngine.addToConfiguration( config, true );
     config.configure( new File( hibernateCfg ) );
@@ -52,7 +52,7 @@ public class SarasvatiSchemaTool
     return config.generateDropSchemaScript( settings.getDialect() );
   }
 
-  public void executeDDL (String[] ddl) throws Exception
+  public void executeDDL (final String[] ddl) throws Exception
   {
     SessionFactory factory = config.buildSessionFactory();
 
@@ -75,7 +75,7 @@ public class SarasvatiSchemaTool
   }
 
   @SuppressWarnings("deprecation")
-  public void executeDDL (Session session, String[] ddl)
+  public void executeDDL (final Session session, final String[] ddl)
     throws SQLException
   {
     Statement stmt = session.connection().createStatement();
@@ -104,7 +104,7 @@ public class SarasvatiSchemaTool
     executeDDL( generateDropSchemaDDL() );
   }
 
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     SarasvatiSchemaTool createSchema = new SarasvatiSchemaTool( "/home/paul/workspace/wf-java/conf/hibernate.cfg.xml" );
     // createSchema.dropSchema();

@@ -27,13 +27,13 @@ public class BSFManagerEnv implements ScriptEnv
 {
   protected BSFManager bsfManager;
 
-  public BSFManagerEnv (BSFManager bsfManager)
+  public BSFManagerEnv (final BSFManager bsfManager)
   {
     this.bsfManager = bsfManager;
   }
 
   @Override
-  public void addVariable (String name, Object value)
+  public void addVariable (final String name, final Object value)
   {
     //bsfManager.registerBean( name, value );
     try

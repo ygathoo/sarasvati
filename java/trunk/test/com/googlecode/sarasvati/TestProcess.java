@@ -59,7 +59,7 @@ import junit.framework.Assert;
  */
 public class TestProcess
 {
-  public static void validate (GraphProcess p, String state)
+  public static void validate (final GraphProcess p, final String state)
   {
     TestProcess testProcess = null;
     try
@@ -79,7 +79,7 @@ public class TestProcess
   protected List<TestNodeToken> startTestTokens = new LinkedList<TestNodeToken>();
   protected Graph graph;
 
-  public TestProcess (Graph graph, String spec)
+  public TestProcess (final Graph graph, final String spec)
   {
     this.graph = graph;
 
@@ -151,7 +151,7 @@ public class TestProcess
     }
   }
 
-  private TestNodeToken parseNodeToken (String line, int lineNumber)
+  private TestNodeToken parseNodeToken (final String line, final int lineNumber)
   {
     String[] parts = line.split( " " );
 
@@ -169,7 +169,7 @@ public class TestProcess
     return new TestNodeToken( lineNumber, parts[0], getNode( parts[1] ), complete, stringToExecutionType( line, parts[3] ) );
   }
 
-  private void parseArcToken (String line, TestNodeToken parent, Map<String, List<TestArcToken>> arcTokens, int lineNumber)
+  private void parseArcToken (final String line, final TestNodeToken parent, final Map<String, List<TestArcToken>> arcTokens, final int lineNumber)
   {
     String[] parts = line.split( " " );
 
@@ -221,7 +221,7 @@ public class TestProcess
     }
   }
 
-  private static ExecutionType stringToExecutionType (String line, String type)
+  private static ExecutionType stringToExecutionType (final String line, final String type)
   {
     ExecutionType executionType = executionTypeMap.get( type );
 
@@ -233,7 +233,7 @@ public class TestProcess
     throw new RuntimeException( "Unrecognized execution type '" + type + "' on line: " + line );
   }
 
-  private Node getNode (String name)
+  private Node getNode (final String name)
   {
     List<Node> nodes = new ArrayList<Node>();
     for ( Node node : graph.getNodes() )
@@ -275,7 +275,7 @@ public class TestProcess
     return nodes.get( 0 );
   }
 
-  private LinkedList<NodeToken> getStartTokens (GraphProcess p)
+  private LinkedList<NodeToken> getStartTokens (final GraphProcess p)
   {
     LinkedList<NodeToken> startTokens = new LinkedList<NodeToken>();
 
@@ -290,7 +290,7 @@ public class TestProcess
     return startTokens;
   }
 
-  public void compare (GraphProcess p)
+  public void compare (final GraphProcess p)
   {
     LinkedList<NodeToken> startNodeTokens = getStartTokens( p );
 

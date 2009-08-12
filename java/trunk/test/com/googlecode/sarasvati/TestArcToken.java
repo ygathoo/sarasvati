@@ -28,7 +28,7 @@ public class TestArcToken extends TestToken<ArcToken>
 
   protected boolean       pending;
 
-  public TestArcToken (int lineNumber, TestNodeToken parent, boolean pending, boolean complete, ExecutionType executionType)
+  public TestArcToken (final int lineNumber, final TestNodeToken parent, final boolean pending, final boolean complete, final ExecutionType executionType)
   {
     super( lineNumber, complete, executionType );
     this.parent = parent;
@@ -40,7 +40,7 @@ public class TestArcToken extends TestToken<ArcToken>
     return parent;
   }
 
-  public void setParent (TestNodeToken parent)
+  public void setParent (final TestNodeToken parent)
   {
     this.parent = parent;
   }
@@ -50,7 +50,7 @@ public class TestArcToken extends TestToken<ArcToken>
     return childToken;
   }
 
-  public void setChildToken (TestNodeToken childToken)
+  public void setChildToken (final TestNodeToken childToken)
   {
     this.childToken = childToken;
   }
@@ -60,7 +60,7 @@ public class TestArcToken extends TestToken<ArcToken>
     return childNode;
   }
 
-  public void setChildNode (Node childNode)
+  public void setChildNode (final Node childNode)
   {
     this.childNode = childNode;
   }
@@ -70,7 +70,7 @@ public class TestArcToken extends TestToken<ArcToken>
     return pending;
   }
 
-  public void setPending (boolean pending)
+  public void setPending (final boolean pending)
   {
     this.pending = pending;
   }

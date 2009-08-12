@@ -26,13 +26,13 @@ package com.googlecode.sarasvati.env;
 public final class StringAttributeConverter implements AttributeConverter
 {
   @Override
-  public String objectToString (Object object)
+  public String objectToString (final Object object)
   {
     return (String)object;
   }
 
   @Override
-  public Object stringToObject (String string, Class<?> object)
+  public Object stringToObject (final String string, final Class<?> object)
   {
     return string;
   }

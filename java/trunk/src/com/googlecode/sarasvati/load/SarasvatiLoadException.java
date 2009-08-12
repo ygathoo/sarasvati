@@ -25,12 +25,12 @@ public class SarasvatiLoadException extends SarasvatiException
 {
   private static final long serialVersionUID = 1L;
 
-  public SarasvatiLoadException (String message, Throwable cause)
+  public SarasvatiLoadException (final String message, final Throwable cause)
   {
     super( message, cause );
   }
 
-  public SarasvatiLoadException( String message )
+  public SarasvatiLoadException( final String message )
   {
     super( message );
   }

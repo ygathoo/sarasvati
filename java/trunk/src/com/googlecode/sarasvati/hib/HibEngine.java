@@ -50,7 +50,7 @@ public class HibEngine extends BaseEngine
     // Default constructor
   }
 
-  public HibEngine (Session session)
+  public HibEngine (final Session session)
   {
     this.session = session;
     this.factory = new HibGraphFactory( session );
@@ -62,7 +62,7 @@ public class HibEngine extends BaseEngine
     return session;
   }
 
-  public void setSession (Session session)
+  public void setSession (final Session session)
   {
     this.session = session;
     this.factory = new HibGraphFactory( session );
@@ -88,7 +88,7 @@ public class HibEngine extends BaseEngine
   }
 
   @Override
-  public void addExecutionListener(GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void addExecutionListener(final GraphProcess process, final ExecutionListener listener, final ExecutionEventType... eventTypes)
   {
     if ( eventTypes == null || listener == null )
     {
@@ -108,7 +108,7 @@ public class HibEngine extends BaseEngine
   }
 
   @Override
-  public void removeExecutionListener(GraphProcess process, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public void removeExecutionListener(final GraphProcess process, final ExecutionListener listener, final ExecutionEventType... eventTypes)
   {
     List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
 
@@ -137,7 +137,7 @@ public class HibEngine extends BaseEngine
   }
 
   @SuppressWarnings("unchecked")
-  public List<ArcToken> getActiveArcTokens (HibTokenSet tokenSet)
+  public List<ArcToken> getActiveArcTokens (final HibTokenSet tokenSet)
   {
     String hql = "select token from HibArcToken token inner join token.tokenSetMemberships as setMember " +
                  "where token.completeDate is null and setMember.tokenSet = :tokenSet";
@@ -146,7 +146,7 @@ public class HibEngine extends BaseEngine
   }
 
   @SuppressWarnings("unchecked")
-  public List<NodeToken> getActiveNodeTokens (HibTokenSet tokenSet)
+  public List<NodeToken> getActiveNodeTokens (final HibTokenSet tokenSet)
   {
     String hql = "select token from HibNodeToken token inner join token.tokenSetMemberships as setMember " +
                  "where token.completeDate is null and setMember.tokenSet = :tokenSet";
@@ -154,7 +154,7 @@ public class HibEngine extends BaseEngine
     return query.list();
   }
 
-  public static void addToConfiguration (AnnotationConfiguration config, boolean enableCaching)
+  public static void addToConfiguration (final AnnotationConfiguration config, final boolean enableCaching)
   {
     config.addAnnotatedClass( HibArc.class );
     config.addAnnotatedClass( HibArcToken.class );

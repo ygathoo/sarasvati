@@ -43,13 +43,13 @@ import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
 
 public class TestExporter
 {
-  public static void main(String[] args) throws Exception
+  public static void main(final String[] args) throws Exception
   {
     NodeAdapterManager.registerFactory( Component.class,
         new Function<Component, Node>()
         {
           @Override
-          public Component apply (Node node)
+          public Component apply (final Node node)
           {
             Icon icon = null;
             if ( "task".equals( node.getType() ) )
@@ -81,7 +81,7 @@ public class TestExporter
     Function<String, Widget> mapper = new Function<String, Widget>()
     {
       @Override
-      public String apply(Widget param)
+      public String apply(final Widget param)
       {
         return null;
       }

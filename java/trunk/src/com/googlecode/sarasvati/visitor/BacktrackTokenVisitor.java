@@ -53,14 +53,14 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
   protected Set<TokenSet> tokenSets = new HashSet<TokenSet>();
 
-  public BacktrackTokenVisitor (Engine engine, NodeToken destinationToken)
+  public BacktrackTokenVisitor (final Engine engine, final NodeToken destinationToken)
   {
     this.engine = engine;
     this.destinationToken = destinationToken;
   }
 
   @Override
-  public void visit (NodeToken token)
+  public void visit (final NodeToken token)
   {
     if ( !token.getNode().isBacktrackable( engine, token ) )
     {
@@ -77,7 +77,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
   }
 
   @Override
-  public void visit (ArcToken token)
+  public void visit (final ArcToken token)
   {
     if ( token.getExecutionType() != ExecutionType.Forward  )
     {
@@ -106,7 +106,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
   }
 
   @Override
-  public boolean follow (ArcToken child)
+  public boolean follow (final ArcToken child)
   {
     if ( child.getExecutionType() != ExecutionType.Forward )
     {
@@ -169,7 +169,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     return resultToken;
   }
 
-  private NodeToken backtrackCompletedToken (NodeToken token, ExecutionType executionType)
+  private NodeToken backtrackCompletedToken (final NodeToken token, final ExecutionType executionType)
   {
     token.markBacktracked( engine );
 
@@ -203,7 +203,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     return backtrackToken;
   }
 
-  private NodeToken backtrackToken (NodeToken token)
+  private NodeToken backtrackToken (final NodeToken token)
   {
     NodeToken backtrackToken = token;
 
@@ -257,7 +257,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     return backtrackToken;
   }
 
-  protected void finishArcTokenBacktrack (ArcToken backtrackArcToken, ArcToken parent)
+  protected void finishArcTokenBacktrack (final ArcToken backtrackArcToken, final ArcToken parent)
   {
     arcTokenMap.put( parent, backtrackArcToken );
     NodeToken nodeTokenParent = parent.getParentToken();
@@ -272,13 +272,13 @@ public class BacktrackTokenVisitor implements TokenVisitor
     }
   }
 
-  private List<ArcToken> getParents (NodeToken token)
+  private List<ArcToken> getParents (final NodeToken token)
   {
     NodeToken related = parentMap.get( token );
     return (related == null ? token : related).getParentTokens();
   }
 
-  public NodeToken backtrackDeadEnd (NodeToken token)
+  public NodeToken backtrackDeadEnd (final NodeToken token)
   {
     token.markBacktracked( engine );
     List<ArcToken> parents = new ArrayList<ArcToken>( token.getParentTokens().size() );
@@ -315,7 +315,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     return backtrackToken;
   }
 
-  private void shareTokenSets (NodeToken newToken, NodeToken origToken)
+  private void shareTokenSets (final NodeToken newToken, final NodeToken origToken)
   {
     for ( NodeTokenSetMember setMember : origToken.getTokenSetMemberships() )
     {
@@ -328,7 +328,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     }
   }
 
-  private void shareTokenSets (ArcToken newToken, ArcToken origToken)
+  private void shareTokenSets (final ArcToken newToken, final ArcToken origToken)
   {
     for ( ArcTokenSetMember setMember : origToken.getTokenSetMemberships() )
     {

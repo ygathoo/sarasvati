@@ -61,7 +61,7 @@ public class MemNodeToken implements NodeToken
   protected Env env = new MapEnv();
   protected Env fullEnv = null;
 
-  public MemNodeToken (long id, Node node, GraphProcess process, ExecutionType executionType, List<ArcToken> parentTokens)
+  public MemNodeToken (final long id, final Node node, final GraphProcess process, final ExecutionType executionType, final List<ArcToken> parentTokens)
   {
     this.id = id;
     this.node = node;
@@ -116,7 +116,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void recordGuardAction (Engine engine, GuardAction action)
+  public void recordGuardAction (final Engine engine, final GuardAction action)
   {
     this.guardAction = action;
   }
@@ -128,7 +128,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void markComplete (Engine engine)
+  public void markComplete (final Engine engine)
   {
     completeDate = new Date();
 
@@ -145,7 +145,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void accept (TokenVisitor visitor)
+  public void accept (final TokenVisitor visitor)
   {
     visitor.visit( this );
   }
@@ -173,19 +173,19 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void markBacktracked (Engine engine)
+  public void markBacktracked (final Engine engine)
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }
 
   @Override
-  public TokenSet getTokenSet (String name)
+  public TokenSet getTokenSet (final String name)
   {
     return SvUtil.getTokenSet( this, name );
   }
 
   @Override
-  public NodeTokenSetMember getTokenSetMember (String name)
+  public NodeTokenSetMember getTokenSetMember (final String name)
   {
     return (NodeTokenSetMember)SvUtil.getTokenSetMember( this, name );
   }

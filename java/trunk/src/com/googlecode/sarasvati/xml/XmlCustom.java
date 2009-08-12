@@ -38,7 +38,7 @@ public class XmlCustom implements CustomDefinition
     return custom;
   }
 
-  public void setCustom (List<Object> custom)
+  public void setCustom (final List<Object> custom)
   {
     this.custom = custom;
   }

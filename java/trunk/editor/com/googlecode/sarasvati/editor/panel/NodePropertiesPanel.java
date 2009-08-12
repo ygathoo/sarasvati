@@ -308,7 +308,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
       cancelButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           dialog.setVisible( false );
         }
@@ -347,7 +347,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
       nodeTypeInput.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           nodeTypeChanged( node );
         }
@@ -356,7 +356,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
       joinTypeInput.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           JoinType joinType = (JoinType)joinTypeInput.getSelectedItem();
           joinTypeDescriptionLabel.setText( "<html>" + joinType.getDescription() + "</html>" );
@@ -374,7 +374,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
       addPropertyButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           tableModel.addRow( new String[] { "", "" } );
         }
@@ -383,7 +383,7 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
       deletePropertyButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           int [] indices = customPropertiesInput.getSelectedRows();
           Arrays.sort( indices );

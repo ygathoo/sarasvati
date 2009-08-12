@@ -137,27 +137,27 @@ public class HibGraphProcess implements GraphProcess
   protected ExecutionEventQueue eventQueue = new ExecutionEventQueue()
   {
     @Override
-    public void fireEvent (ExecutionEvent event)
+    public void fireEvent (final ExecutionEvent event)
     {
       initEventQueue( event.getEngine() );
       eventQueue.fireEvent( event );
     }
 
     @Override
-    public void addListener (Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes)
+    public void addListener (final Engine engine, final ExecutionListener listener, final ExecutionEventType... eventTypes)
     {
       initEventQueue( engine );
       eventQueue.addListener( engine, listener, eventTypes );
     }
 
     @Override
-    public void removeListener(Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes)
+    public void removeListener(final Engine engine, final ExecutionListener listener, final ExecutionEventType... eventTypes)
     {
       initEventQueue( engine );
       eventQueue.removeListener( engine, listener, eventTypes );
     }
 
-    private void initEventQueue (Engine engine)
+    private void initEventQueue (final Engine engine)
     {
       ExecutionEventQueue newEventQueue = CachingExecutionEventQueue.newArrayListInstance();
       ListenerCache cache = CachingExecutionEventQueue.getListenerCache();
@@ -175,7 +175,7 @@ public class HibGraphProcess implements GraphProcess
 
   public HibGraphProcess () { /* Default constructor for Hibernate */ }
 
-  public HibGraphProcess (HibGraph graph)
+  public HibGraphProcess (final HibGraph graph)
   {
     this.graph = graph;
     this.nodeTokens = new HashSet<NodeToken>();
@@ -193,7 +193,7 @@ public class HibGraphProcess implements GraphProcess
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -204,7 +204,7 @@ public class HibGraphProcess implements GraphProcess
     return graph;
   }
 
-  public void setGraph (HibGraph graph)
+  public void setGraph (final HibGraph graph)
   {
     this.graph = graph;
   }
@@ -215,7 +215,7 @@ public class HibGraphProcess implements GraphProcess
     return nodeTokens;
   }
 
-  public void setNodeTokens (Set<NodeToken> nodeTokens)
+  public void setNodeTokens (final Set<NodeToken> nodeTokens)
   {
     this.nodeTokens = nodeTokens;
   }
@@ -226,7 +226,7 @@ public class HibGraphProcess implements GraphProcess
     return activeArcTokens;
   }
 
-  public void setActiveArcTokens (Set<ArcToken> activeArcTokens)
+  public void setActiveArcTokens (final Set<ArcToken> activeArcTokens)
   {
     this.activeArcTokens = activeArcTokens;
   }
@@ -236,7 +236,7 @@ public class HibGraphProcess implements GraphProcess
     return activeNodeTokens;
   }
 
-  public void setActiveNodeTokens (Set<NodeToken> activeNodeTokens)
+  public void setActiveNodeTokens (final Set<NodeToken> activeNodeTokens)
   {
     this.activeNodeTokens = activeNodeTokens;
   }
@@ -246,7 +246,7 @@ public class HibGraphProcess implements GraphProcess
     return executionQueue;
   }
 
-  public void setExecutionQueue (List<ArcToken> executionQueue)
+  public void setExecutionQueue (final List<ArcToken> executionQueue)
   {
     this.executionQueue = executionQueue;
   }
@@ -258,7 +258,7 @@ public class HibGraphProcess implements GraphProcess
   }
 
   @Override
-  public void enqueueArcTokenForExecution (ArcToken token)
+  public void enqueueArcTokenForExecution (final ArcToken token)
   {
     executionQueue.add( token );
   }
@@ -274,12 +274,12 @@ public class HibGraphProcess implements GraphProcess
     return listeners;
   }
 
-  public void setListeners (List<HibProcessListener> listeners)
+  public void setListeners (final List<HibProcessListener> listeners)
   {
     this.listeners = listeners;
   }
 
-  public void setEnv (Env env)
+  public void setEnv (final Env env)
   {
     this.env = env;
   }
@@ -290,7 +290,7 @@ public class HibGraphProcess implements GraphProcess
     return parentToken;
   }
 
-  public void setParentToken (NodeToken parentToken)
+  public void setParentToken (final NodeToken parentToken)
   {
     this.parentToken = parentToken;
   }
@@ -300,7 +300,7 @@ public class HibGraphProcess implements GraphProcess
     return createDate;
   }
 
-  public void setCreateDate (Date createDate)
+  public void setCreateDate (final Date createDate)
   {
     this.createDate = createDate;
   }
@@ -310,7 +310,7 @@ public class HibGraphProcess implements GraphProcess
     return version;
   }
 
-  public void setVersion (Integer version)
+  public void setVersion (final Integer version)
   {
     this.version = version;
   }
@@ -320,7 +320,7 @@ public class HibGraphProcess implements GraphProcess
     return attrMap;
   }
 
-  public void setAttrMap (Map<String, String> attrMap)
+  public void setAttrMap (final Map<String, String> attrMap)
   {
     this.attrMap = attrMap;
   }
@@ -335,31 +335,31 @@ public class HibGraphProcess implements GraphProcess
   }
 
   @Override
-  public void addNodeToken (NodeToken token)
+  public void addNodeToken (final NodeToken token)
   {
     nodeTokens.add( token );
   }
 
   @Override
-  public void addActiveArcToken (ArcToken token)
+  public void addActiveArcToken (final ArcToken token)
   {
     activeArcTokens.add( token );
   }
 
   @Override
-  public void removeActiveArcToken (ArcToken token)
+  public void removeActiveArcToken (final ArcToken token)
   {
     activeArcTokens.remove( token );
   }
 
   @Override
-  public void addActiveNodeToken (NodeToken token)
+  public void addActiveNodeToken (final NodeToken token)
   {
     activeNodeTokens.add( token );
   }
 
   @Override
-  public void removeActiveNodeToken (NodeToken token)
+  public void removeActiveNodeToken (final NodeToken token)
   {
     activeNodeTokens.remove( token );
   }
@@ -370,7 +370,7 @@ public class HibGraphProcess implements GraphProcess
     return state;
   }
 
-  public void setState (ProcessState state)
+  public void setState (final ProcessState state)
   {
     this.state = state;
   }
@@ -415,7 +415,7 @@ public class HibGraphProcess implements GraphProcess
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;

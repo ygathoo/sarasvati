@@ -37,7 +37,7 @@ public class CustomTestNode extends CustomNode
       return valueType;
     }
 
-    public void setValueType (String valueType)
+    public void setValueType (final String valueType)
     {
       this.valueType = valueType;
     }
@@ -47,7 +47,7 @@ public class CustomTestNode extends CustomNode
       return value;
     }
 
-    public void setValue (String value)
+    public void setValue (final String value)
     {
       this.value = value;
     }
@@ -57,7 +57,7 @@ public class CustomTestNode extends CustomNode
       return test;
     }
 
-    public void setTest (String test)
+    public void setTest (final String test)
     {
       this.test = test;
     }
@@ -77,7 +77,7 @@ public class CustomTestNode extends CustomNode
     return size;
   }
 
-  public void setSize (int size)
+  public void setSize (final int size)
   {
     this.size = size;
   }
@@ -87,7 +87,7 @@ public class CustomTestNode extends CustomNode
     return label;
   }
 
-  public void setLabel (String label)
+  public void setLabel (final String label)
   {
     this.label = label;
   }
@@ -97,13 +97,13 @@ public class CustomTestNode extends CustomNode
     return inner;
   }
 
-  public void setInner (CustomInner inner)
+  public void setInner (final CustomInner inner)
   {
     this.inner = inner;
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     System.out.println( "Size: " + size );
     System.out.println( "Label: " + label );

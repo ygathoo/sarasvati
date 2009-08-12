@@ -208,7 +208,7 @@ public class ExternalPropertiesPanel extends javax.swing.JPanel {
       cancelButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           dialog.setVisible( false );
         }
@@ -262,7 +262,7 @@ public class ExternalPropertiesPanel extends javax.swing.JPanel {
       addPropertyButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           tableModel.addRow( new String[] { "", "" } );
         }
@@ -271,7 +271,7 @@ public class ExternalPropertiesPanel extends javax.swing.JPanel {
       deletePropertyButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           int [] indices = customPropertiesInput.getSelectedRows();
           Arrays.sort( indices );

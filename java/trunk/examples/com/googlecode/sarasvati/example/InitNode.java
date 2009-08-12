@@ -29,7 +29,7 @@ import com.googlecode.sarasvati.env.Env;
 public class InitNode extends CustomNode
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     long iter = 0;
 

@@ -139,7 +139,7 @@ public class HibTokenSet implements TokenSet
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -171,7 +171,7 @@ public class HibTokenSet implements TokenSet
     return maxMemberIndex;
   }
 
-  public void setMaxMemberIndex (int maxMemberIndex)
+  public void setMaxMemberIndex (final int maxMemberIndex)
   {
     this.maxMemberIndex = maxMemberIndex;
   }
@@ -181,7 +181,7 @@ public class HibTokenSet implements TokenSet
     return attrMap;
   }
 
-  public void setAttrMap (Map<String, String> attrMap)
+  public void setAttrMap (final Map<String, String> attrMap)
   {
     this.attrMap = attrMap;
   }
@@ -192,7 +192,7 @@ public class HibTokenSet implements TokenSet
     return arcTokenSetMembers;
   }
 
-  public void setArcTokenSetMembers (Set<ArcTokenSetMember> arcTokenSetMembers)
+  public void setArcTokenSetMembers (final Set<ArcTokenSetMember> arcTokenSetMembers)
   {
     this.arcTokenSetMembers = arcTokenSetMembers;
   }
@@ -202,7 +202,7 @@ public class HibTokenSet implements TokenSet
     return nodeTokenSetMembers;
   }
 
-  public void setNodeTokenSetMembers (Set<NodeTokenSetMember> nodeTokenSetMembers)
+  public void setNodeTokenSetMembers (final Set<NodeTokenSetMember> nodeTokenSetMembers)
   {
     this.nodeTokenSetMembers = nodeTokenSetMembers;
   }
@@ -232,13 +232,13 @@ public class HibTokenSet implements TokenSet
     return memberAttributes;
   }
 
-  public void setMemberAttributes (Set<HibTokenSetMemberAttribute> memberAttributes)
+  public void setMemberAttributes (final Set<HibTokenSetMemberAttribute> memberAttributes)
   {
     this.memberAttributes = memberAttributes;
   }
 
   @Override
-  public Set<ArcToken> getActiveArcTokens (Engine engine)
+  public Set<ArcToken> getActiveArcTokens (final Engine engine)
   {
     if ( activeArcTokens == null )
     {
@@ -248,7 +248,7 @@ public class HibTokenSet implements TokenSet
   }
 
   @Override
-  public Set<NodeToken> getActiveNodeTokens (Engine engine)
+  public Set<NodeToken> getActiveNodeTokens (final Engine engine)
   {
     if ( activeNodeTokens == null )
     {
@@ -263,19 +263,19 @@ public class HibTokenSet implements TokenSet
     return complete;
   }
 
-  public void setComplete (boolean complete)
+  public void setComplete (final boolean complete)
   {
     this.complete = complete;
   }
 
   @Override
-  public void markComplete (Engine engine)
+  public void markComplete (final Engine engine)
   {
     complete = true;
   }
 
   @Override
-  public void reactivateForBacktrack (Engine engine)
+  public void reactivateForBacktrack (final Engine engine)
   {
     complete = false;
   }
@@ -290,7 +290,7 @@ public class HibTokenSet implements TokenSet
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if (this == obj)
       return true;

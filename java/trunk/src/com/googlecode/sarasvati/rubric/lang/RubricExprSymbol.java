@@ -26,7 +26,7 @@ public class RubricExprSymbol extends AbstractRubricExpr
 {
   protected String symbol;
 
-  public RubricExprSymbol (String symbol)
+  public RubricExprSymbol (final String symbol)
   {
     this.symbol = symbol;
   }
@@ -36,19 +36,19 @@ public class RubricExprSymbol extends AbstractRubricExpr
     return symbol;
   }
 
-  public void setSymbol (String symbol)
+  public void setSymbol (final String symbol)
   {
     this.symbol = symbol;
   }
 
   @Override
-  public boolean eval (RubricEnv env)
+  public boolean eval (final RubricEnv env)
   {
     return env.evalPredicate( symbol );
   }
 
   @Override
-  public void traverse (RubricVisitor visitor)
+  public void traverse (final RubricVisitor visitor)
   {
     visitor.visit( this );
   }
@@ -66,7 +66,7 @@ public class RubricExprSymbol extends AbstractRubricExpr
   }
 
   @Override
-  public boolean isEqualTo (RubricExpr expr)
+  public boolean isEqualTo (final RubricExpr expr)
   {
     return expr.isSymbol() && expr.asSymbol().getSymbol().equals( symbol );
   }

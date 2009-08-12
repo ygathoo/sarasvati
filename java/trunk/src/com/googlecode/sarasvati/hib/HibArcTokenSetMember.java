@@ -56,7 +56,7 @@ public class HibArcTokenSetMember implements ArcTokenSetMember
     /* default constructor for hibernate */
   }
 
-  public HibArcTokenSetMember (HibTokenSet tokenSet, HibArcToken token, int memberIndex)
+  public HibArcTokenSetMember (final HibTokenSet tokenSet, final HibArcToken token, final int memberIndex)
   {
     this.tokenSet = tokenSet;
     this.token = token;
@@ -68,7 +68,7 @@ public class HibArcTokenSetMember implements ArcTokenSetMember
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -79,7 +79,7 @@ public class HibArcTokenSetMember implements ArcTokenSetMember
     return tokenSet;
   }
 
-  public void setTokenSet (HibTokenSet tokenSet)
+  public void setTokenSet (final HibTokenSet tokenSet)
   {
     this.tokenSet = tokenSet;
   }
@@ -90,7 +90,7 @@ public class HibArcTokenSetMember implements ArcTokenSetMember
     return token;
   }
 
-  public void setToken (HibArcToken token)
+  public void setToken (final HibArcToken token)
   {
     this.token = token;
   }
@@ -101,7 +101,7 @@ public class HibArcTokenSetMember implements ArcTokenSetMember
     return memberIndex;
   }
 
-  public void setMemberIndex (int memberIndex)
+  public void setMemberIndex (final int memberIndex)
   {
     this.memberIndex = memberIndex;
   }
@@ -116,7 +116,7 @@ public class HibArcTokenSetMember implements ArcTokenSetMember
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;

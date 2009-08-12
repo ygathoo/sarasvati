@@ -29,43 +29,43 @@ public class MemCustomNodeWrapper extends MemNode implements CustomNodeWrapper
 {
   protected CustomNode customNode;
 
-  public MemCustomNodeWrapper (CustomNode customNode)
+  public MemCustomNodeWrapper (final CustomNode customNode)
   {
     this.customNode = customNode;
     this.customNode.setNodeWrapper( this );
   }
 
-  public CustomNode getCustomNode (Engine engine)
+  public CustomNode getCustomNode (final Engine engine)
   {
     return customNode;
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     getCustomNode( engine ).execute( engine, token );
   }
 
   @Override
-  public void backtrack (Engine engine, NodeToken token)
+  public void backtrack (final Engine engine, final NodeToken token)
   {
     getCustomNode( engine ).backtrack( engine, token );
   }
 
   @Override
-  public boolean isBacktrackable (Engine engine, NodeToken token)
+  public boolean isBacktrackable (final Engine engine, final NodeToken token)
   {
     return getCustomNode( engine ).isBacktrackable( engine, token );
   }
 
   @Override
-  public GuardResponse defaultGuard (Engine engine, NodeToken token)
+  public GuardResponse defaultGuard (final Engine engine, final NodeToken token)
   {
     return super.guard( engine, token );
   }
 
   @Override
-  public <T> T getDefaultAdaptor (Class<T> clazz)
+  public <T> T getDefaultAdaptor (final Class<T> clazz)
   {
     return super.getAdaptor( clazz );
   }
