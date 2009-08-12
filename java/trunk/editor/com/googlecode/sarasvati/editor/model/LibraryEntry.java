@@ -38,6 +38,14 @@ public class LibraryEntry implements Comparable<LibraryEntry>
     this.path = path;
   }
 
+  public LibraryEntry (final ProcessDefinition processDefinition,
+                       final File path )
+  {
+    this.name = processDefinition.getName();
+    this.path = path;
+    this.pdRef = new SoftReference<ProcessDefinition>( processDefinition );
+  }
+
   /**
    * @return the name
    */
@@ -49,7 +57,7 @@ public class LibraryEntry implements Comparable<LibraryEntry>
   /**
    * @param name the name to set
    */
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -65,7 +73,7 @@ public class LibraryEntry implements Comparable<LibraryEntry>
   /**
    * @param path the path to set
    */
-  public void setPath (File path)
+  public void setPath (final File path)
   {
     this.path = path;
   }
@@ -84,7 +92,7 @@ public class LibraryEntry implements Comparable<LibraryEntry>
   }
 
   @Override
-  public int compareTo (LibraryEntry o)
+  public int compareTo (final LibraryEntry o)
   {
     if ( o == null )
     {

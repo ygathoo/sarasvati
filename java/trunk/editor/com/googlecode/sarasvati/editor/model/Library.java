@@ -105,4 +105,9 @@ public class Library
     LibraryEntry entry = getEntry( name );
     return entry == null ? null :entry.getProcessDefinition();
   }
+
+  public void update (final ProcessDefinition processDefinition, final File path)
+  {
+    entries.put( processDefinition.getName(), new LibraryEntry( processDefinition, path ) );
+  }
 }

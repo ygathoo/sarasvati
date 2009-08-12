@@ -384,7 +384,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     {
       EditorExternal external = (EditorExternal)graphMember;
       return new OvalNodeIcon( external.getState().getName(),
-                               NodeDrawConfig.NODE_BG_ACTIVE,
+                               NodeDrawConfig.NODE_BG_DISCARDED,
                                false,
                                external.isSelected() );
     }
@@ -803,7 +803,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       {
         EditorExternal external = (EditorExternal)graphMember;
         final Library library = Library.getInstance();
-        final LibraryEntry entry = library.getEntry( external.getName() );
+        final LibraryEntry entry = library.getEntry( external.getState().getGraphName() );
 
         Action openExternal = new AbstractAction( "Open External" )
         {

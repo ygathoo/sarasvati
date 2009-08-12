@@ -47,7 +47,9 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToggleButton;
 import javax.swing.JToolBar;
+import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
+import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -156,7 +158,7 @@ public class GraphEditor
     return xmlLoader;
   }
 
-  public void setMode (EditorMode mode)
+  public void setMode (final EditorMode mode)
   {
     if ( this.mode == mode )
     {
@@ -208,7 +210,7 @@ public class GraphEditor
     return lastFile;
   }
 
-  public void setLastFile (File lastFile)
+  public void setLastFile (final File lastFile)
   {
     this.lastFile = lastFile;
   }
@@ -216,11 +218,11 @@ public class GraphEditor
   protected void setup ()
   {
     mainWindow = new JFrame( "Sarasvati Graph Editor" );
-    mainWindow.setDefaultCloseOperation( JFrame.DO_NOTHING_ON_CLOSE );
+    mainWindow.setDefaultCloseOperation( WindowConstants.DO_NOTHING_ON_CLOSE );
     mainWindow.addWindowListener( new WindowAdapter()
     {
       @Override
-      public void windowClosing (WindowEvent e)
+      public void windowClosing (final WindowEvent e)
       {
         exitRequested();
       }
@@ -240,7 +242,7 @@ public class GraphEditor
     moveButton.addActionListener( new ActionListener()
     {
       @Override
-      public void actionPerformed (ActionEvent e)
+      public void actionPerformed (final ActionEvent e)
       {
         setMode( EditorMode.Move );
       }
@@ -252,7 +254,7 @@ public class GraphEditor
     editArcsButton.addActionListener( new ActionListener()
     {
       @Override
-      public void actionPerformed (ActionEvent e)
+      public void actionPerformed (final ActionEvent e)
       {
         setMode( EditorMode.EditArcs );
       }
@@ -264,7 +266,7 @@ public class GraphEditor
     addNodesButton.addActionListener( new ActionListener()
     {
       @Override
-      public void actionPerformed (ActionEvent e)
+      public void actionPerformed (final ActionEvent e)
       {
         setMode( EditorMode.AddNode );
       }
@@ -276,7 +278,7 @@ public class GraphEditor
     addExternalsButton.addActionListener( new ActionListener()
     {
       @Override
-      public void actionPerformed (ActionEvent e)
+      public void actionPerformed (final ActionEvent e)
       {
         setMode( EditorMode.AddExternal );
       }
@@ -288,7 +290,7 @@ public class GraphEditor
     autoLayoutButton.addActionListener( new ActionListener()
     {
       @Override
-      public void actionPerformed (ActionEvent e)
+      public void actionPerformed (final ActionEvent e)
       {
         getCurrentScene().autoLayout();
       }
@@ -296,7 +298,7 @@ public class GraphEditor
 
     toolBar.add( autoLayoutButton );
 
-    tabPane = new JTabbedPane( JTabbedPane.TOP );
+    tabPane = new JTabbedPane( SwingConstants.TOP );
     tabPane.setTabLayoutPolicy( JTabbedPane.WRAP_TAB_LAYOUT );
 
     tabPane.addChangeListener( new ChangeListener()
@@ -389,14 +391,14 @@ public class GraphEditor
     addTab( "Untitled", scrollPane );
   }
 
-  private void addTab (String name, JComponent component)
+  private void addTab (final String name, final JComponent component)
   {
     tabPane.addTab( name, component );
     tabPane.setTabComponentAt( tabPane.getTabCount() - 1, new TabComponent( tabPane, name ) );
     tabPane.setSelectedComponent( component );
   }
 
-  public void openProcessDefinition (File processDefinitionFile)
+  public void openProcessDefinition (final File processDefinitionFile)
   {
     if ( getCurrentScene() != null &&
          getCurrentScene().getGraph().getFile() == null &&
@@ -548,6 +550,8 @@ public class GraphEditor
                                      "Process definition successfully saved to: '" + saveFile.getPath() + "'",
                                      "Save", JOptionPane.INFORMATION_MESSAGE );
 
+      Library.getInstance().update( xmlProcDef, outputFile );
+
       return SaveResult.SaveSucceeded;
     }
     catch ( Exception e )
@@ -688,7 +692,7 @@ public class GraphEditor
     System.exit( 0 );
   }
 
-  public void closeTab (int index)
+  public void closeTab (final int index)
   {
     Component previous = tabPane.getSelectedComponent();
     boolean returnToPrev = tabPane.getSelectedIndex() != index;
@@ -737,7 +741,7 @@ public class GraphEditor
     return SaveResult.SaveNotWanted;
   }
 
-  public static void main( String[] args ) throws Exception
+  public static void main( final String[] args ) throws Exception
   {
     final GraphEditor graphEditor = new GraphEditor();
     SwingUtilities.invokeLater( new Runnable()
