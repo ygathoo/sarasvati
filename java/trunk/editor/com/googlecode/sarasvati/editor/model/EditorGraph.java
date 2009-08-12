@@ -21,9 +21,11 @@ package com.googlecode.sarasvati.editor.model;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public class EditorGraph
@@ -34,6 +36,8 @@ public class EditorGraph
   protected List<EditorNode>     nodes     = new ArrayList<EditorNode>();
   protected List<EditorExternal> externals = new ArrayList<EditorExternal>();
   protected List<EditorArc>      arcs      = new ArrayList<EditorArc>();
+
+  protected Map<EditorGraphMember<?>, List<EditorArc>> outArcs = new HashMap<EditorGraphMember<?>, List<EditorArc>> ();
 
   public String getName ()
   {
@@ -105,14 +109,27 @@ public class EditorGraph
     this.arcs = arcs;
   }
 
+  public List<EditorArc> getOutArcs (final EditorGraphMember<?> member)
+  {
+    List<EditorArc> list = outArcs.get( member );
+    if ( list == null )
+    {
+      list = new LinkedList<EditorArc>();
+      outArcs.put( member, list );
+    }
+    return list;
+  }
+
   public void addArc (final EditorArc arc)
   {
     arcs.add( arc );
+    getOutArcs( arc.getStart() ).add( arc );
   }
 
   public void removeArc (final EditorArc arc)
   {
     arcs.remove( arc );
+    getOutArcs( arc.getStart() ).remove( arc );
   }
 
   public Set<String> getUniqueNames (final Collection<? extends EditorGraphMember<?>> members)
