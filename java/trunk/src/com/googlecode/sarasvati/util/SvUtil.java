@@ -36,7 +36,7 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class SvUtil
 {
-  public static boolean equals (Object o1, Object o2)
+  public static boolean equals (final Object o1, final Object o2)
   {
     if ( o1 == null )
     {
@@ -45,27 +45,27 @@ public class SvUtil
     return o1.equals( o2 );
   }
 
-  public static boolean isBlankOrNull (String str)
+  public static boolean isBlankOrNull (final String str)
   {
     return str == null || str.trim().equals( "" );
   }
 
-  public static String nullIfBlank (String str)
+  public static String nullIfBlank (final String str)
   {
     return isBlankOrNull( str ) ? null : str;
   }
 
-  public static String blankIfNull (String str)
+  public static String blankIfNull (final String str)
   {
     return isBlankOrNull( str ) ? "" : str;
   }
 
-  public static boolean falseIfNull (Boolean value)
+  public static boolean falseIfNull (final Boolean value)
   {
     return value != null && value;
   }
 
-  public static String normalizeQuotedString (String string)
+  public static String normalizeQuotedString (final String string)
   {
     if ( string == null )
     {
@@ -88,7 +88,7 @@ public class SvUtil
     return buf.toString();
   }
 
-  public static TokenSet getTokenSet (Token token, String name)
+  public static TokenSet getTokenSet (final Token token, final String name)
   {
     for ( TokenSetMember setMember : token.getTokenSetMemberships() )
     {
@@ -100,7 +100,7 @@ public class SvUtil
     return null;
   }
 
-  public static TokenSetMember getTokenSetMember (Token token, String name)
+  public static TokenSetMember getTokenSetMember (final Token token, final String name)
   {
     for ( TokenSetMember setMember : token.getTokenSetMemberships() )
     {
@@ -194,7 +194,7 @@ public class SvUtil
   /**
    * From http://www.rgagnon.com/javadetails/java-0596.html
    */
-  public static String getHexString (byte[] raw)
+  public static String getHexString (final byte[] raw)
   {
     byte[] hex = new byte[2 * raw.length];
     int index = 0;

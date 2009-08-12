@@ -36,13 +36,13 @@ import com.googlecode.sarasvati.JoinStrategy;
  */
 public class AndJoinStrategy implements JoinStrategy
 {
-  protected List<? extends Arc> getJoiningArcs (GraphProcess process, ArcToken token)
+  protected List<? extends Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)
   {
     return process.getGraph().getInputArcs( token.getArc().getEndNode() );
   }
 
   @Override
-  public JoinResult performJoin (Engine engine, GraphProcess process, ArcToken token)
+  public JoinResult performJoin (final Engine engine, final GraphProcess process, final ArcToken token)
   {
     List<? extends Arc> joinArcs = getJoiningArcs( process, token );
 

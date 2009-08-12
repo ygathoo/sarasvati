@@ -112,9 +112,9 @@ public abstract class AbstractProcessVisualizer
       private static final long serialVersionUID = 1L;
 
       @Override
-      public Component getListCellRendererComponent( JList list, Object value,
-                                                     int index, boolean isSelected,
-                                                     boolean cellHasFocus )
+      public Component getListCellRendererComponent( final JList list, final Object value,
+                                                     final int index, final boolean isSelected,
+                                                     final boolean cellHasFocus )
       {
         super.getListCellRendererComponent( list, value, index, isSelected, cellHasFocus );
 
@@ -145,7 +145,7 @@ public abstract class AbstractProcessVisualizer
     graphList.addListSelectionListener( new ListSelectionListener()
     {
       @Override
-      public void valueChanged( ListSelectionEvent e )
+      public void valueChanged( final ListSelectionEvent e )
       {
         if ( e.getValueIsAdjusting() )
         {

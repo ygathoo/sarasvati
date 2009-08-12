@@ -27,7 +27,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
 
   public abstract boolean isEnabled ();
 
-  public ToggledWidgetActionDecorator (WidgetAction action)
+  public ToggledWidgetActionDecorator (final WidgetAction action)
   {
     this.action = action;
   }
@@ -37,7 +37,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action;
   }
 
-  public void setAction (WidgetAction action)
+  public void setAction (final WidgetAction action)
   {
     this.action = action;
   }

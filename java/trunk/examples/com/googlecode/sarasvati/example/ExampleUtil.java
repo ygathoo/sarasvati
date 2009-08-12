@@ -2,7 +2,7 @@ package com.googlecode.sarasvati.example;
 
 public class ExampleUtil
 {
-  public static void waitFor (long millis)
+  public static void waitFor (final long millis)
   {
     Object o = new Object();
     synchronized ( o )

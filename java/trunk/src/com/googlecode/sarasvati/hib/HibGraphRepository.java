@@ -29,20 +29,20 @@ public class HibGraphRepository implements GraphRepository<HibGraph>
 {
   protected Session session;
 
-  HibGraphRepository (Session session)
+  HibGraphRepository (final Session session)
   {
     this.session = session;
   }
 
   @Override
-  public void addGraph (HibGraph graph)
+  public void addGraph (final HibGraph graph)
   {
     // does nothing, as graph is added to database when it is created
   }
 
   @SuppressWarnings("unchecked")
   @Override
-  public List<HibGraph> getGraphs (String name)
+  public List<HibGraph> getGraphs (final String name)
   {
     Query query = session.createQuery( "from HibGraph where name = :name " );
     query.setString(  "name", name );
@@ -57,7 +57,7 @@ public class HibGraphRepository implements GraphRepository<HibGraph>
   }
 
   @Override
-  public HibGraph getLatestGraph (String name)
+  public HibGraph getLatestGraph (final String name)
   {
     String query = "from HibGraph " +
                    " where name = :name " +
@@ -69,32 +69,32 @@ public class HibGraphRepository implements GraphRepository<HibGraph>
        .uniqueResult();
   }
 
-  public HibGraph loadGraph (long graphId)
+  public HibGraph loadGraph (final long graphId)
   {
     return (HibGraph)session.load( HibGraph.class, graphId );
   }
 
-  public HibGraph findGraph (long graphId)
+  public HibGraph findGraph (final long graphId)
   {
     return (HibGraph)session.get( HibGraph.class, graphId );
   }
 
-  public HibGraphProcess loadProcess (long processId)
+  public HibGraphProcess loadProcess (final long processId)
   {
     return (HibGraphProcess)session.load( HibGraphProcess.class, processId );
   }
 
-  public HibGraphProcess findProcess (long processId)
+  public HibGraphProcess findProcess (final long processId)
   {
     return (HibGraphProcess)session.get( HibGraphProcess.class, processId );
   }
 
-  public HibNodeToken loadNodeToken (long tokenId)
+  public HibNodeToken loadNodeToken (final long tokenId)
   {
     return (HibNodeToken)session.load( HibNodeToken.class, tokenId );
   }
 
-  public HibNodeToken findNodeToken (long tokenId)
+  public HibNodeToken findNodeToken (final long tokenId)
   {
     return (HibNodeToken)session.get( HibNodeToken.class, tokenId );
   }

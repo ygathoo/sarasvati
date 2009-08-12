@@ -57,7 +57,7 @@ public class RectangularNodeIcon extends AbstractNodeIcon
   }
 
   @Override
-  public void redrawImage (Graphics2D g)
+  public void redrawImage (final Graphics2D g)
   {
     g.setFont( g.getFont().deriveFont( Font.BOLD ) );
     g.setColor( color );

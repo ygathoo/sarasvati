@@ -38,7 +38,7 @@ import com.googlecode.sarasvati.impl.MapEnv;
 public class ApprovalSetupNode extends CustomNode
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     Env initialEnv = new MapEnv();
     initialEnv.setAttribute( "access", 1 );

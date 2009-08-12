@@ -50,7 +50,7 @@ public class NodeDrawConfig
   public static final Color NODE_BG_COMPLETED    = new Color( 0, 153, 204 );
   public static final Color NODE_BG_BACKTRACKED  = new Color( 153, 0, 51 );
 
-  public static Color getColor (NodeToken token)
+  public static Color getColor (final NodeToken token)
   {
     if ( token == null )
     {
@@ -80,7 +80,7 @@ public class NodeDrawConfig
     return maxNodeRadius;
   }
 
-  public static void setMaxNodeRadius (int newMaxNodeRadius)
+  public static void setMaxNodeRadius (final int newMaxNodeRadius)
   {
     maxNodeRadius = newMaxNodeRadius;
   }
@@ -90,7 +90,7 @@ public class NodeDrawConfig
     return verticalNodeSpacing;
   }
 
-  public static void setVerticalNodeSpacing (int newVerticalNodeSpacing)
+  public static void setVerticalNodeSpacing (final int newVerticalNodeSpacing)
   {
     verticalNodeSpacing = newVerticalNodeSpacing;
   }
@@ -100,12 +100,12 @@ public class NodeDrawConfig
     return horizontalNodeSpacing;
   }
 
-  public static void sethorizontalNodeSpacing (int newHorizontalNodeSpacing)
+  public static void sethorizontalNodeSpacing (final int newHorizontalNodeSpacing)
   {
     horizontalNodeSpacing = newHorizontalNodeSpacing;
   }
 
-  public static void setVertical (boolean isVertical)
+  public static void setVertical (final boolean isVertical)
   {
     vertical = isVertical;
   }

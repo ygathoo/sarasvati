@@ -24,7 +24,7 @@ import com.googlecode.sarasvati.NodeToken;
 
 public class ProcessPrinter
 {
-  public static void print (GraphProcess p)
+  public static void print (final GraphProcess p)
   {
     System.out.println( "Process: " + p.getGraph().getName() );
     for (NodeToken t : p.getNodeTokens() )

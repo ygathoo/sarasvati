@@ -31,7 +31,7 @@ public final class BooleanAttributeConverter extends AbstractStringValueOfAttrib
    * @see com.googlecode.sarasvati.env.AttributeConverter#stringToObject(java.lang.String, java.lang.Class)
    */
   @Override
-  public Object stringToObject (String string, Class<?> object)
+  public Object stringToObject (final String string, final Class<?> object)
   {
     return Boolean.valueOf( string );
   }

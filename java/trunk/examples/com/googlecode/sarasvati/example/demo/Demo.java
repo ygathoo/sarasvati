@@ -10,7 +10,7 @@ import com.googlecode.sarasvati.xml.XmlLoader;
 public class Demo
 {
   @SuppressWarnings("unused")
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     MemEngine engine = new MemEngine();
     engine.addNodeType( "task", TaskNode.class );

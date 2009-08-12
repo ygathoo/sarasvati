@@ -34,25 +34,25 @@ public class EditorLoadPropertyMutator implements PropertyMutator
   }
 
   @Override
-  public void setFromText (String text) throws SarasvatiLoadException
+  public void setFromText (final String text) throws SarasvatiLoadException
   {
     // does nothing
   }
 
   @Override
-  public void setPropertyDescriptor (PropertyDescriptor pd)
+  public void setPropertyDescriptor (final PropertyDescriptor pd)
   {
     // does nothing
   }
 
   @Override
-  public void setTarget (Object target)
+  public void setTarget (final Object target)
   {
     // does nothing
   }
 
   @Override
-  public void setValue (Object value) throws SarasvatiLoadException
+  public void setValue (final Object value) throws SarasvatiLoadException
   {
     // does nothing
   }

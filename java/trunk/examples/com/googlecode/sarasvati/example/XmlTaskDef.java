@@ -39,7 +39,7 @@ public class XmlTaskDef
     return taskName;
   }
 
-  public void setTaskName (String taskName)
+  public void setTaskName (final String taskName)
   {
     this.taskName = taskName;
   }
@@ -49,7 +49,7 @@ public class XmlTaskDef
     return description;
   }
 
-  public void setDescription (String description)
+  public void setDescription (final String description)
   {
     this.description = description;
   }

@@ -108,25 +108,25 @@ public class ProcessImageMapCreator
     final ProcessLookAndFeel lookAndFeelAdapter = new ProcessLookAndFeel ()
     {
       @Override
-      public boolean drawArcLabels (Arc arc)
+      public boolean drawArcLabels (final Arc arc)
       {
         return processToImageMap.drawArcLabels( arc );
       }
 
       @Override
-      public boolean drawSelfArcs (Arc arc)
+      public boolean drawSelfArcs (final Arc arc)
       {
         return false;
       }
 
       @Override
-      public boolean isBackArc (Arc arc, boolean defaultValue)
+      public boolean isBackArc (final Arc arc, final boolean defaultValue)
       {
         return processToImageMap.isBackArc( arc, defaultValue );
       }
 
       @Override
-      public Widget newWidget (VisualProcessNode node, SarasvatiProcessScene scene)
+      public Widget newWidget (final VisualProcessNode node, final SarasvatiProcessScene scene)
       {
         Icon icon = processToImageMap.iconForNode( node );
         JLabel label = new JLabel( icon );
@@ -173,7 +173,7 @@ public class ProcessImageMapCreator
    * @param imageFileName The name of the file to write the image to
    * @throws IOException If an error occurs writing the image to disc
    */
-  public void writeImageToFile (String imageFormat, String imageFileName)
+  public void writeImageToFile (final String imageFormat, final String imageFileName)
     throws IOException
   {
     ImageIO.write( image, imageFormat, new File( imageFileName ) );

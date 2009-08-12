@@ -26,7 +26,7 @@ public class RubricCompilationException extends RubricException
 
   protected RecognitionException re;
 
-  public RubricCompilationException (RecognitionException re, String message)
+  public RubricCompilationException (final RecognitionException re, final String message)
   {
     super( message );
     this.re = re;

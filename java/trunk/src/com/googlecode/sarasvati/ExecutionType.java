@@ -77,7 +77,7 @@ public enum ExecutionType
    *
    * @return The backtracked version of the execution type.
    */
-  public ExecutionType getCorrespondingBacktracked (boolean isComplete)
+  public ExecutionType getCorrespondingBacktracked (final boolean isComplete)
   {
     if ( this == Forward )
     {

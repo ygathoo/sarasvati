@@ -102,19 +102,19 @@ public class GraphImageMapCreator
     final GraphLookAndFeel lookAndFeelAdapter = new GraphLookAndFeel ()
     {
       @Override
-      public boolean drawArcLabels (Arc arc)
+      public boolean drawArcLabels (final Arc arc)
       {
         return graphToImageMap.drawArcLabels(arc);
       }
 
       @Override
-      public boolean drawSelfArcs (Arc arc)
+      public boolean drawSelfArcs (final Arc arc)
       {
         return false;
       }
 
       @Override
-      public Widget newWidget (Node node, SarasvatiGraphScene scene)
+      public Widget newWidget (final Node node, final SarasvatiGraphScene scene)
       {
         Icon icon = graphToImageMap.iconForNode( node );
         JLabel label = new JLabel( icon );
@@ -161,7 +161,7 @@ public class GraphImageMapCreator
    * @param imageFileName The name of the file to write the image to
    * @throws IOException If an error occurs writing the image to disc
    */
-  public void writeImageToFile (String imageFormat, String imageFileName)
+  public void writeImageToFile (final String imageFormat, final String imageFileName)
     throws IOException
   {
     ImageIO.write( image, imageFormat, new File( imageFileName ) );

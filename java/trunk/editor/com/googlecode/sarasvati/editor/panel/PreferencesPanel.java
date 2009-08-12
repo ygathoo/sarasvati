@@ -95,7 +95,7 @@ public class PreferencesPanel extends javax.swing.JPanel {
       prefsTree.getSelectionModel().addTreeSelectionListener( new TreeSelectionListener()
       {
         @Override
-        public void valueChanged (TreeSelectionEvent e)
+        public void valueChanged (final TreeSelectionEvent e)
         {
           int[] rows = prefsTree.getSelectionModel().getSelectionRows();
           BasePrefsPage prefsPage = null;

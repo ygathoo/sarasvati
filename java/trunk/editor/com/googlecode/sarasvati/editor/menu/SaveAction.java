@@ -34,7 +34,7 @@ public class SaveAction extends AbstractAction
 
   private final boolean isSaveAs;
 
-  public SaveAction (boolean isSaveAs)
+  public SaveAction (final boolean isSaveAs)
   {
     super( isSaveAs ? "Save As.." : "Save" );
     this.isSaveAs = isSaveAs;
@@ -47,7 +47,7 @@ public class SaveAction extends AbstractAction
   }
 
   @Override
-  public void actionPerformed (ActionEvent e)
+  public void actionPerformed (final ActionEvent e)
   {
     GraphEditor.getInstance().saveRequested( isSaveAs );
   }

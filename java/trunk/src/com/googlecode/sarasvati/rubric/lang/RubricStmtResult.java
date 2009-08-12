@@ -26,7 +26,7 @@ public class RubricStmtResult extends AbstractRubricStmt
 {
   protected Object result;
 
-  public RubricStmtResult (Object result)
+  public RubricStmtResult (final Object result)
   {
     this.result = result;
   }
@@ -36,25 +36,25 @@ public class RubricStmtResult extends AbstractRubricStmt
     return result;
   }
 
-  public void setResult (Object result)
+  public void setResult (final Object result)
   {
     this.result = result;
   }
 
   @Override
-  public Object eval (RubricEnv env)
+  public Object eval (final RubricEnv env)
   {
     return result;
   }
 
   @Override
-  public void traverse (RubricVisitor visitor)
+  public void traverse (final RubricVisitor visitor)
   {
     visitor.visit( this );
   }
 
   @Override
-  public boolean isEqualTo (RubricStmt stmt)
+  public boolean isEqualTo (final RubricStmt stmt)
   {
     return stmt.isResult() && stmt.asResult().getResult().equals( result );
   }

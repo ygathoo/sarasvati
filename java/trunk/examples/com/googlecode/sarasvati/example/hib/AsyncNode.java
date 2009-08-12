@@ -33,7 +33,7 @@ import com.googlecode.sarasvati.hib.HibNode;
 public class AsyncNode extends HibNode
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     engine.completeAsynchronous( token, Arc.DEFAULT_ARC );
   }

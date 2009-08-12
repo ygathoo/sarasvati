@@ -181,7 +181,7 @@ public class ArcPropertiesPanel extends javax.swing.JPanel {
       cancelButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           dialog.setVisible( false );
         }

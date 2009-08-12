@@ -74,7 +74,7 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
     });
   }
 
-  public void setAdjacentLineSpacing (int spacing)
+  public void setAdjacentLineSpacing (final int spacing)
   {
     router.setAdjacentLineSpacing( spacing );
   }
@@ -85,21 +85,21 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   }
 
   @Override
-  protected void attachEdgeSourceAnchor(E edge, N oldSourceNode, N sourceNode)
+  protected void attachEdgeSourceAnchor(final E edge, final N oldSourceNode, final N sourceNode)
   {
     ConnectionWidget edgeWidget = (ConnectionWidget) findWidget( edge );
     edgeWidget.setSourceAnchor( anchorMap.get( sourceNode ) );
   }
 
   @Override
-  protected void attachEdgeTargetAnchor(E edge, N oldTargetNode, N targetNode)
+  protected void attachEdgeTargetAnchor(final E edge, final N oldTargetNode, final N targetNode)
   {
     ConnectionWidget edgeWidget = (ConnectionWidget) findWidget( edge );
     edgeWidget.setTargetAnchor( anchorMap.get( targetNode ) );
   }
 
   @Override
-  protected PathTrackingConnectionWidget attachEdgeWidget(E edge)
+  protected PathTrackingConnectionWidget attachEdgeWidget(final E edge)
   {
     PathTrackingConnectionWidget conn = new PathTrackingConnectionWidget( router, this );
     conn.setRouter( router );
@@ -109,7 +109,7 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   }
 
   @Override
-  protected Widget attachNodeWidget (N node)
+  protected Widget attachNodeWidget (final N node)
   {
     Widget widget = widgetForNode( node );
     mainLayer.addChild( widget );
@@ -121,7 +121,7 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
   protected abstract Widget widgetForNode (N node);
 
   @Override
-  protected void detachNodeWidget (N node, Widget widget)
+  protected void detachNodeWidget (final N node, final Widget widget)
   {
     super.detachNodeWidget( node, widget );
     router.removeNodeWidget( widget );
@@ -135,7 +135,7 @@ public abstract class GraphSceneImpl<N,E> extends GraphScene<N, E>
     intrLayer.resolveBounds( new Point( 0, 0 ), null );
   }
 
-  public BufferedImage export (StringBuilder buf, Function<String, Widget> hrefMapper, Function<String, Widget> titleMapper )
+  public BufferedImage export (final StringBuilder buf, final Function<String, Widget> hrefMapper, final Function<String, Widget> titleMapper )
   {
     Rectangle bounds = getPreferredBounds();
     BufferedImage image = new BufferedImage( bounds.width + NodeDrawConfig.getHorizontalNodeSpacing(),

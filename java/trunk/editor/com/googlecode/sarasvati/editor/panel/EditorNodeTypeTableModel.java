@@ -37,7 +37,7 @@ public class EditorNodeTypeTableModel extends AbstractTableModel
     return nodeType;
   }
 
-  public void setNodeType (EditorNodeType nodeType)
+  public void setNodeType (final EditorNodeType nodeType)
   {
     this.nodeType = nodeType;
     fireTableDataChanged();
@@ -56,7 +56,7 @@ public class EditorNodeTypeTableModel extends AbstractTableModel
   }
 
   @Override
-  public Object getValueAt (int rowIndex, int columnIndex)
+  public Object getValueAt (final int rowIndex, final int columnIndex)
   {
     EditorNodeTypeAttribute nodeTypeAttr = nodeType.getAttributes().get( rowIndex );
     switch ( columnIndex )
@@ -73,13 +73,13 @@ public class EditorNodeTypeTableModel extends AbstractTableModel
   }
 
   @Override
-  public Class<?> getColumnClass (int columnIndex)
+  public Class<?> getColumnClass (final int columnIndex)
   {
     return types[ columnIndex ];
   }
 
   @Override
-  public String getColumnName (int column)
+  public String getColumnName (final int column)
   {
     return columns[ column ];
   }
@@ -91,14 +91,14 @@ public class EditorNodeTypeTableModel extends AbstractTableModel
     fireTableRowsInserted( index, index );
   }
 
-  public void removeAttribute (int index)
+  public void removeAttribute (final int index)
   {
     nodeType.getAttributes().remove( index );
     fireTableRowsDeleted( index, index );
   }
 
   @Override
-  public void setValueAt (Object value, int rowIndex, int columnIndex)
+  public void setValueAt (final Object value, final int rowIndex, final int columnIndex)
   {
     EditorNodeTypeAttribute nodeTypeAttr = nodeType.getAttributes().get( rowIndex );
     switch ( columnIndex )
@@ -116,7 +116,7 @@ public class EditorNodeTypeTableModel extends AbstractTableModel
   }
 
   @Override
-  public boolean isCellEditable (int rowIndex, int columnIndex)
+  public boolean isCellEditable (final int rowIndex, final int columnIndex)
   {
     return true;
   }

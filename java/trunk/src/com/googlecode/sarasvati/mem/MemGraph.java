@@ -31,7 +31,7 @@ public class MemGraph extends AbstractGraph
   protected List<MemNode> nodes;
   protected List<MemArc>  arcs;
 
-  public MemGraph (String name, String customId)
+  public MemGraph (final String name, final String customId)
   {
     this.name     = name;
     this.customId = customId;

@@ -24,7 +24,7 @@ import java.util.List;
  * Encapsulates the results of a join attempt. Includes whether
  * or not the join is complete. If the join is complete, also
  * includes the list of arc tokens which completed the join.
- * 
+ *
  * @author Paul Lorenz
  */
 public interface JoinResult
@@ -37,7 +37,7 @@ public interface JoinResult
   {
     /**
      * Always returns false.
-     * 
+     *
      * @see JoinResult#isJoinComplete()
      */
     @Override
@@ -45,7 +45,7 @@ public interface JoinResult
     {
       return false;
     }
-  
+
     /**
      * Always throws an {@link IllegalStateException}
      * @see JoinResult#getArcTokensCompletingJoin()
@@ -56,23 +56,23 @@ public interface JoinResult
       throw new IllegalStateException( "getArcTokensCompletingJoin should never be called if isJoinComplete returns false." );
     }
   };
-  
+
   /**
    * Returns true if the join is complete, false otherwise.
-   * 
+   *
    * @return True if the join is complete, false otherwise.
    */
   boolean isJoinComplete ();
-  
+
   /**
    * Returns the ArcTokens which were required to complete this join, and will be considered
    * the parents of the new {@link NodeToken}. If {@link JoinResult#isJoinComplete()} would
    * return false, this method should throw an {@link IllegalStateException}.
-   * 
+   *
    * @returns The ArcTokens which were required to complete this join, and will be considered
-   *          the parents of the new {@link NodeToken}. 
-   * 
+   *          the parents of the new {@link NodeToken}.
+   *
    * @throws IllegalStateException If this is invoked when isJoinComplete returns false.
    */
-  List<ArcToken> getArcTokensCompletingJoin (); 
+  List<ArcToken> getArcTokensCompletingJoin ();
 }

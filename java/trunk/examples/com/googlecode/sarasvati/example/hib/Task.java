@@ -54,7 +54,7 @@ public class Task
 
   public Task() { /* Default constructor for Hibernate */ }
 
-  public Task( HibNodeToken nodeToken, String name, String description, TaskState state )
+  public Task( final HibNodeToken nodeToken, final String name, final String description, final TaskState state )
   {
     this.nodeToken = nodeToken;
     this.name = name;
@@ -67,7 +67,7 @@ public class Task
     return id;
   }
 
-  public void setId( Long id )
+  public void setId( final Long id )
   {
     this.id = id;
   }
@@ -77,7 +77,7 @@ public class Task
     return nodeToken;
   }
 
-  public void setNodeToken( HibNodeToken nodeToken )
+  public void setNodeToken( final HibNodeToken nodeToken )
   {
     this.nodeToken = nodeToken;
   }
@@ -87,7 +87,7 @@ public class Task
     return name;
   }
 
-  public void setName( String name )
+  public void setName( final String name )
   {
     this.name = name;
   }
@@ -97,7 +97,7 @@ public class Task
     return description;
   }
 
-  public void setDescription( String description )
+  public void setDescription( final String description )
   {
     this.description = description;
   }
@@ -107,7 +107,7 @@ public class Task
     return state;
   }
 
-  public void setState( TaskState state )
+  public void setState( final TaskState state )
   {
     this.state = state;
   }
@@ -128,7 +128,7 @@ public class Task
   }
 
   @Override
-  public boolean equals(Object obj)
+  public boolean equals(final Object obj)
   {
     if (this == obj)
       return true;

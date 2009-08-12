@@ -27,37 +27,37 @@ public class NodeTokenEvent extends ExecutionEvent
   protected NodeToken nodeToken;
   protected String    exitArcsName;
 
-  public static final NodeTokenEvent newCreatedEvent (Engine engine, NodeToken nodeToken)
+  public static final NodeTokenEvent newCreatedEvent (final Engine engine, final NodeToken nodeToken)
   {
     return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_CREATED, nodeToken, null );
   }
 
-  public static final NodeTokenEvent newAcceptedEvent (Engine engine, NodeToken nodeToken)
+  public static final NodeTokenEvent newAcceptedEvent (final Engine engine, final NodeToken nodeToken)
   {
     return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, null );
   }
-  
-  public static final NodeTokenEvent newExecutedEvent (Engine engine, NodeToken nodeToken)
+
+  public static final NodeTokenEvent newExecutedEvent (final Engine engine, final NodeToken nodeToken)
   {
     return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_EXECUTED, nodeToken, null );
   }
 
-  public static final NodeTokenEvent newDiscardedEvent (Engine engine, NodeToken nodeToken)
+  public static final NodeTokenEvent newDiscardedEvent (final Engine engine, final NodeToken nodeToken)
   {
     return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken, null );
   }
 
-  public static final NodeTokenEvent newSkippedEvent (Engine engine, NodeToken nodeToken, String exitArcsName)
+  public static final NodeTokenEvent newSkippedEvent (final Engine engine, final NodeToken nodeToken, final String exitArcsName)
   {
     return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, exitArcsName );
   }
 
-  public static final NodeTokenEvent newCompletedEvent (Engine engine, NodeToken nodeToken, String exitArcsName)
+  public static final NodeTokenEvent newCompletedEvent (final Engine engine, final NodeToken nodeToken, final String exitArcsName)
   {
     return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, exitArcsName );
   }
 
-  private NodeTokenEvent (Engine engine, ExecutionEventType eventType, NodeToken nodeToken, String exitArcsName)
+  private NodeTokenEvent (final Engine engine, final ExecutionEventType eventType, final NodeToken nodeToken, final String exitArcsName)
   {
     super( engine, eventType );
     this.nodeToken = nodeToken;

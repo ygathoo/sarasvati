@@ -39,12 +39,12 @@ public class HibPropertyNode extends HibNode
   @Column( name="value")
   protected Map<String, String> attrMap;
 
-  public String getProperty (String key)
+  public String getProperty (final String key)
   {
     return attrMap == null ? null : attrMap.get( key );
   }
 
-  public void setProperty (String key, String value)
+  public void setProperty (final String key, final String value)
   {
     if ( attrMap == null )
     {
@@ -53,7 +53,7 @@ public class HibPropertyNode extends HibNode
     attrMap.put( key, value );
   }
 
-  public void importProperties (Map<String, String> properties)
+  public void importProperties (final Map<String, String> properties)
   {
     if ( properties != null )
     {

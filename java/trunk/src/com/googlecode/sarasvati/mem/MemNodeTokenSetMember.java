@@ -28,7 +28,7 @@ public class MemNodeTokenSetMember extends MemTokenSetMember<MemNodeToken> imple
 {
   protected Env env;
 
-  public MemNodeTokenSetMember (TokenSet tokenSet, MemNodeToken token, int memberIndex)
+  public MemNodeTokenSetMember (final TokenSet tokenSet, final MemNodeToken token, final int memberIndex)
   {
     super( tokenSet, token, memberIndex );
   }

@@ -33,13 +33,13 @@ public class MoveTrackAction extends WidgetActionDecorator
   protected Widget currentWidget = null;
   protected Point startLocation = null;
 
-  public MoveTrackAction (WidgetAction action)
+  public MoveTrackAction (final WidgetAction action)
   {
     super( action );
   }
 
   @Override
-  public State mousePressed (Widget widget, WidgetMouseEvent event)
+  public State mousePressed (final Widget widget, final WidgetMouseEvent event)
   {
     if ( event.getButton() == MouseEvent.BUTTON1 && event.getClickCount() == 1 )
     {
@@ -53,7 +53,7 @@ public class MoveTrackAction extends WidgetActionDecorator
   }
 
   @Override
-  public State mouseDragged (Widget widget, WidgetMouseEvent event)
+  public State mouseDragged (final Widget widget, final WidgetMouseEvent event)
   {
     if ( currentWidget == widget )
     {
@@ -65,7 +65,7 @@ public class MoveTrackAction extends WidgetActionDecorator
   }
 
   @Override
-  public State mouseReleased (Widget widget, WidgetMouseEvent event)
+  public State mouseReleased (final Widget widget, final WidgetMouseEvent event)
   {
     State state = getAction().mouseReleased( widget, event );
     if ( currentWidget == widget )

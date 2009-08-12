@@ -28,7 +28,7 @@ public class RubricStmtDateSymbol extends AbstractRubricStmt
 {
   protected String symbol;
 
-  public RubricStmtDateSymbol (String symbol)
+  public RubricStmtDateSymbol (final String symbol)
   {
     this.symbol = symbol;
   }
@@ -38,25 +38,25 @@ public class RubricStmtDateSymbol extends AbstractRubricStmt
     return symbol;
   }
 
-  public void setSymbol (String symbol)
+  public void setSymbol (final String symbol)
   {
     this.symbol = symbol;
   }
 
   @Override
-  public Date eval (RubricEnv env)
+  public Date eval (final RubricEnv env)
   {
     return env.evalDateFunction( symbol );
   }
 
   @Override
-  public void traverse (RubricVisitor visitor)
+  public void traverse (final RubricVisitor visitor)
   {
     visitor.visit( this );
   }
 
   @Override
-  public boolean isEqualTo (RubricStmt stmt)
+  public boolean isEqualTo (final RubricStmt stmt)
   {
     return stmt.isDateSymbol() && stmt.asDateSymbol().getSymbol().equals( symbol );
   }

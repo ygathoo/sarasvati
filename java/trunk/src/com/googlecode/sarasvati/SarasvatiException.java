@@ -22,12 +22,12 @@ public class SarasvatiException extends RuntimeException
 {
   private static final long serialVersionUID = 1L;
 
-  public SarasvatiException( String message )
+  public SarasvatiException( final String message )
   {
     super( message );
   }
 
-  public SarasvatiException( String message, Throwable cause )
+  public SarasvatiException( final String message, final Throwable cause )
   {
     super( message, cause );
   }

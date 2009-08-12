@@ -24,7 +24,7 @@ public abstract class AbstractBinaryRubricExpr extends AbstractRubricExpr
   protected RubricExpr left;
   protected RubricExpr right;
 
-  public AbstractBinaryRubricExpr (RubricExpr left, RubricExpr right)
+  public AbstractBinaryRubricExpr (final RubricExpr left, final RubricExpr right)
   {
     this.left = left;
     this.right = right;
@@ -35,7 +35,7 @@ public abstract class AbstractBinaryRubricExpr extends AbstractRubricExpr
     return left;
   }
 
-  public void setLeft (RubricExpr left)
+  public void setLeft (final RubricExpr left)
   {
     this.left = left;
   }
@@ -45,7 +45,7 @@ public abstract class AbstractBinaryRubricExpr extends AbstractRubricExpr
     return right;
   }
 
-  public void setRight (RubricExpr right)
+  public void setRight (final RubricExpr right)
   {
     this.right = right;
   }

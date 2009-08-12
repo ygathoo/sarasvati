@@ -53,7 +53,7 @@ public abstract class AbstractGraph implements Graph
    * @see Graph#getInputArcs(Node)
    */
   @Override
-  public List<Arc> getInputArcs (Node node)
+  public List<Arc> getInputArcs (final Node node)
   {
     if ( inputMap == null )
     {
@@ -73,7 +73,7 @@ public abstract class AbstractGraph implements Graph
    * @see Graph#getInputArcs(Node, String)
    */
   @Override
-  public List<Arc> getInputArcs (Node node, String arcName)
+  public List<Arc> getInputArcs (final Node node, final String arcName)
   {
     List<Arc> arcList = getInputArcs( node );
 
@@ -98,7 +98,7 @@ public abstract class AbstractGraph implements Graph
    * @see Graph#getOutputArcs(Node)
    */
   @Override
-  public List<Arc> getOutputArcs (Node node)
+  public List<Arc> getOutputArcs (final Node node)
   {
     if (outputMap == null)
     {
@@ -118,7 +118,7 @@ public abstract class AbstractGraph implements Graph
    * @see Graph#getOutputArcs(Node, String)
    */
   @Override
-  public List<Arc> getOutputArcs (Node node, String arcName)
+  public List<Arc> getOutputArcs (final Node node, final String arcName)
   {
     List<Arc> arcList = getOutputArcs( node );
 

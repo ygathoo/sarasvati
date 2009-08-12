@@ -21,14 +21,14 @@
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 
 /**
- * A translator will take a process definition created by an external actor and in any format 
+ * A translator will take a process definition created by an external actor and in any format
  * (e.g. an hand-written XML file, any class that's the output of a graphical editor, etc.)
  * and translate (or convert or adapt) it into a {@link ProcessDefinition} that the {@link GraphLoader}
  * will understand and use in order to build a certain flavour of {@link Graph}.
- * 
+ *
  * <br/>
- * 
- * It only has one {@code translate} method that takes an instance of the external representation 
+ *
+ * It only has one {@code translate} method that takes an instance of the external representation
  * (or a way to find or build it) and returns a {@link ProcessDefinition} built from the input.
  * @see {@link GraphLoader}
  * @author vkirsch

@@ -29,20 +29,20 @@ public class DefaultFileXmlProcessDefinitionResolver extends BaseProcessDefiniti
 {
   private static final String DEFAULT_SUFFIX = ".wf.xml";
 
-  public DefaultFileXmlProcessDefinitionResolver (XmlLoader loader, File basePath)
+  public DefaultFileXmlProcessDefinitionResolver (final XmlLoader loader, final File basePath)
   {
     this (loader, basePath, null);
   }
 
-  public DefaultFileXmlProcessDefinitionResolver (XmlLoader loader, File basePath, String suffix)
+  public DefaultFileXmlProcessDefinitionResolver (final XmlLoader loader, final File basePath, final String suffix)
   {
     super( loader, getFilesRepository( basePath, suffix ));
   }
 
-  private static Map<String, File> getFilesRepository (File basePath, String suffix)
+  private static Map<String, File> getFilesRepository (final File basePath, final String suffix)
   {
     String suf = suffix == null? DEFAULT_SUFFIX : suffix;
-    
+
     Map<String, File> map = new HashMap<String, File>();
 
     if ( basePath.isDirectory() )
@@ -59,7 +59,7 @@ public class DefaultFileXmlProcessDefinitionResolver extends BaseProcessDefiniti
     {
       if ( basePath.getName().endsWith( suf ) )
         map.put( basePath.getName().substring( 0, basePath.getName().length() - suf.length() ), basePath );
-      else 
+      else
         map.put( basePath.getName(), basePath );
     }
 

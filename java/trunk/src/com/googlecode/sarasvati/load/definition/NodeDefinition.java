@@ -27,12 +27,12 @@ import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.ProcessDefinitionTranslator;
 
 /**
- * A NodeDefinition is the result of the translation of a certain external source containing 
+ * A NodeDefinition is the result of the translation of a certain external source containing
  * the definition of a process. That external source may contain necessary information to create
- * an {@link Node}, and that information is translated into an NodeDefinition through a 
+ * an {@link Node}, and that information is translated into an NodeDefinition through a
  * {@link ProcessDefinitionTranslator}. This NodeDefinition will then in its turn be used
  * by the {@link GraphLoader} to create an {@link Node} through the {@link GraphFactory}.
- * The default kind of external source is an XML file containing &lt;node&gt; tags.   
+ * The default kind of external source is an XML file containing &lt;node&gt; tags.
  */
 public interface NodeDefinition
 {
@@ -41,7 +41,7 @@ public interface NodeDefinition
   public JoinType getJoinType ();
 
   public String getType ();
-  
+
   public String getJoinParam();
 
   public String getGuard ();

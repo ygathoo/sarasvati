@@ -29,19 +29,19 @@ import com.googlecode.sarasvati.NodeToken;
 public class TokenVisitorAdaptor implements TokenVisitor
 {
   @Override
-  public boolean follow (ArcToken child)
+  public boolean follow (final ArcToken child)
   {
     return true;
   }
 
   @Override
-  public void visit( NodeToken token )
+  public void visit( final NodeToken token )
   {
     // does nothing by default
   }
 
   @Override
-  public void visit( ArcToken token )
+  public void visit( final ArcToken token )
   {
     // does nothing by default
   }

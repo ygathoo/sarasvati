@@ -33,28 +33,28 @@ public class DialogFactory
 
   private static PreferencesDialog preferencesDialog = null;
 
-  public static void setFrame (JFrame frame)
+  public static void setFrame (final JFrame frame)
   {
     DialogFactory.frame = frame;
     preferencesDialog = new PreferencesDialog( frame );
   }
 
-  public static JDialog newGraphMemberPropertiesDialog (EditorGraphMember<?> graphMember)
+  public static JDialog newGraphMemberPropertiesDialog (final EditorGraphMember<?> graphMember)
   {
     return new GraphMemberPropertiesDialog( frame, graphMember );
   }
 
-  public static JDialog newArcPropertiesDialog (EditorArc arc)
+  public static JDialog newArcPropertiesDialog (final EditorArc arc)
   {
     return new ArcPropertiesDialog( frame, arc );
   }
 
-  public static void showError (String error)
+  public static void showError (final String error)
   {
     JOptionPane.showMessageDialog( frame, error, "Error", JOptionPane.ERROR_MESSAGE );
   }
 
-  public static void showInfo (String msg)
+  public static void showInfo (final String msg)
   {
     JOptionPane.showMessageDialog( frame, msg, "Info", JOptionPane.INFORMATION_MESSAGE );
   }

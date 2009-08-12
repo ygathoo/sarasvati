@@ -47,7 +47,7 @@ public class SkipNodeGuardResponse implements GuardResponse
    *
    * @param arcName The name of the arc(s) to exit on when leaving the node
    */
-  public SkipNodeGuardResponse (String arcName)
+  public SkipNodeGuardResponse (final String arcName)
   {
     this.exitArcForSkip = arcName;
   }
@@ -85,7 +85,7 @@ public class SkipNodeGuardResponse implements GuardResponse
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if (this == obj)
       return true;

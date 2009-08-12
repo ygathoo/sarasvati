@@ -75,7 +75,7 @@ public class HibExternal implements External
     /* Default constructor for Hibernate */
   }
 
-  public HibExternal (String name, HibGraph graph, HibGraph externalGraph, Map<String, String> attrMap)
+  public HibExternal (final String name, final HibGraph graph, final HibGraph externalGraph, final Map<String, String> attrMap)
   {
     this.name = name;
     this.graph = graph;
@@ -88,7 +88,7 @@ public class HibExternal implements External
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -99,7 +99,7 @@ public class HibExternal implements External
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -110,7 +110,7 @@ public class HibExternal implements External
     return graph;
   }
 
-  public void setGraph (HibGraph graph)
+  public void setGraph (final HibGraph graph)
   {
     this.graph = graph;
   }
@@ -121,7 +121,7 @@ public class HibExternal implements External
     return externalGraph;
   }
 
-  public void setExternalGraph (HibGraph externalGraph)
+  public void setExternalGraph (final HibGraph externalGraph)
   {
     this.externalGraph = externalGraph;
   }

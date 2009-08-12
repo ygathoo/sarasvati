@@ -27,7 +27,7 @@ public class RubricStmtStringSymbol extends AbstractRubricStmt
 {
   protected String symbol;
 
-  public RubricStmtStringSymbol (String symbol)
+  public RubricStmtStringSymbol (final String symbol)
   {
     this.symbol = symbol;
   }
@@ -37,25 +37,25 @@ public class RubricStmtStringSymbol extends AbstractRubricStmt
     return symbol;
   }
 
-  public void setSymbol (String symbol)
+  public void setSymbol (final String symbol)
   {
     this.symbol = symbol;
   }
 
   @Override
-  public String eval (RubricEnv env)
+  public String eval (final RubricEnv env)
   {
     return env.evalStringFunction( symbol );
   }
 
   @Override
-  public void traverse (RubricVisitor visitor)
+  public void traverse (final RubricVisitor visitor)
   {
     visitor.visit( this );
   }
 
   @Override
-  public boolean isEqualTo (RubricStmt stmt)
+  public boolean isEqualTo (final RubricStmt stmt)
   {
     return stmt.isStringSymbol() && SvUtil.equals( symbol, stmt.asStringSymbol().getSymbol() );
   }

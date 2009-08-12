@@ -29,14 +29,14 @@ import com.googlecode.sarasvati.rubric.visitor.RubricVisitorAdaptor;
 
 public class RubricTest
 {
-  public static void eval (String testStmt) throws Exception
+  public static void eval (final String testStmt) throws Exception
   {
     RubricStmt stmt = RubricInterpreter.compile( testStmt );
 
     RubricEnv env = new RubricEnv()
     {
       @Override
-      public Date evalRelativeDate (Date date, boolean business, int offset, int unit)
+      public Date evalRelativeDate (final Date date, final boolean business, final int offset, final int unit)
       {
         Calendar cal = Calendar.getInstance();
         cal.setTime( date );
@@ -45,7 +45,7 @@ public class RubricTest
       }
 
       @Override
-      public boolean evalPredicate (String predicate)
+      public boolean evalPredicate (final String predicate)
       {
         if ( "a".equals( predicate ) )
         {
@@ -62,7 +62,7 @@ public class RubricTest
       }
 
       @Override
-      public Date evalDateFunction (String dateFunction)
+      public Date evalDateFunction (final String dateFunction)
       {
         if ( "now".equals( dateFunction ) )
         {
@@ -73,7 +73,7 @@ public class RubricTest
       }
 
       @Override
-      public String evalStringFunction (String stringFunction)
+      public String evalStringFunction (final String stringFunction)
       {
         if ( "hello".equals( stringFunction ) )
         {
@@ -93,13 +93,13 @@ public class RubricTest
     System.out.println( stmt.eval( env ) );
   }
 
-  public static void main(String[] args) throws Exception
+  public static void main(final String[] args) throws Exception
   {
     RubricStmt stmt = RubricInterpreter.compile( "(1 business day after now)" );
     stmt.traverse( new RubricVisitorAdaptor()
     {
       @Override
-      public void visit (RubricStmtRelativeDate relativeDateStmt)
+      public void visit (final RubricStmtRelativeDate relativeDateStmt)
       {
         System.out.println( relativeDateStmt );
       }

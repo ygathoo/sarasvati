@@ -23,8 +23,8 @@ import javax.swing.Icon;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
-import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
 import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
+import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;
 import com.googlecode.sarasvati.visual.process.VisualProcessArc;
 import com.googlecode.sarasvati.visual.process.VisualProcessNode;
 
@@ -45,7 +45,7 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
     this("task");
   }
 
-  public ProcessToImageMapAdapter (String taskType)
+  public ProcessToImageMapAdapter (final String taskType)
   {
     this.taskType = taskType;
   }
@@ -55,7 +55,7 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
    * @see com.googlecode.sarasvati.visual.ProcessToImageMap#drawArcLabels(Arc)
    */
   @Override
-  public boolean drawArcLabels (Arc arc)
+  public boolean drawArcLabels (final Arc arc)
   {
     return true;
   }
@@ -66,7 +66,7 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
    * @see com.googlecode.sarasvati.visual.ProcessToImageMap#isBackArc(com.googlecode.sarasvati.Arc)
    */
   @Override
-  public boolean isBackArc (Arc arc, boolean defaultValue)
+  public boolean isBackArc (final Arc arc, final boolean defaultValue)
   {
     return defaultValue;
   }
@@ -78,7 +78,7 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
    * @see com.googlecode.sarasvati.visual.GraphToImageMap#iconForNode(com.googlecode.sarasvati.Node)
    */
   @Override
-  public Icon iconForNode (VisualProcessNode node)
+  public Icon iconForNode (final VisualProcessNode node)
   {
     if ( getTaskType().equalsIgnoreCase( node.getNode().getType() ) )
     {
@@ -102,25 +102,25 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
   }
 
   @Override
-  public String hoverForArc (VisualProcessArc arc)
+  public String hoverForArc (final VisualProcessArc arc)
   {
     return null;
   }
 
   @Override
-  public String hoverForNode (VisualProcessNode node)
+  public String hoverForNode (final VisualProcessNode node)
   {
     return null;
   }
 
   @Override
-  public String hrefForArc (VisualProcessArc arc)
+  public String hrefForArc (final VisualProcessArc arc)
   {
     return null;
   }
 
   @Override
-  public String hrefForNode (VisualProcessNode node)
+  public String hrefForNode (final VisualProcessNode node)
   {
     return null;
   }

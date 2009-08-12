@@ -35,7 +35,7 @@ import com.googlecode.sarasvati.JoinStrategy;
 public class OrJoinStrategy implements JoinStrategy
 {
   @Override
-  public JoinResult performJoin (Engine engine, GraphProcess process, ArcToken token)
+  public JoinResult performJoin (final Engine engine, final GraphProcess process, final ArcToken token)
   {
     return new CompleteJoinResult( Collections.singletonList( token ) );
   }

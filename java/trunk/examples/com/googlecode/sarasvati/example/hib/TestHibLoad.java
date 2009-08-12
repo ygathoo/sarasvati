@@ -41,7 +41,7 @@ import com.googlecode.sarasvati.load.LoadResult;
 
 public class TestHibLoad
 {
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     HibTestSetup.init( false );
 
@@ -73,7 +73,7 @@ public class TestHibLoad
     FilenameFilter filter = new FilenameFilter()
     {
       @Override
-      public boolean accept( File dir, String name )
+      public boolean accept( final File dir, final String name )
       {
         return name.endsWith( ".wf.xml" ) && !name.equals( "demo-example.wf.xml" );
       }

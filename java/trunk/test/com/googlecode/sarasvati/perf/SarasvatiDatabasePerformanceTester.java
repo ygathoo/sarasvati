@@ -73,7 +73,7 @@ public class SarasvatiDatabasePerformanceTester
   private static final FilenameFilter filter = new FilenameFilter()
   {
     @Override
-    public boolean accept( File dir, String name )
+    public boolean accept( final File dir, final String name )
     {
       return allowed.contains( name );
     }
@@ -226,7 +226,7 @@ public class SarasvatiDatabasePerformanceTester
     repository.registerPredicate( "isRandOdd", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 1;
       }
@@ -235,7 +235,7 @@ public class SarasvatiDatabasePerformanceTester
     repository.registerPredicate( "isRandEven", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 0;
       }
@@ -244,7 +244,7 @@ public class SarasvatiDatabasePerformanceTester
     repository.registerPredicate( "isTenthIteration", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return token.getEnv().getAttribute( "iter", Long.class ) == 100;
       }
@@ -253,7 +253,7 @@ public class SarasvatiDatabasePerformanceTester
     repository.registerPredicate( "Approved", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return true;
       }

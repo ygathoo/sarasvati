@@ -36,7 +36,7 @@ public enum ExecutionEventType
 
   private int eventType;
 
-  private ExecutionEventType (int eventType)
+  private ExecutionEventType (final int eventType)
   {
     this.eventType = eventType;
   }

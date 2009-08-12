@@ -52,7 +52,7 @@ public class TestRejectNodeGraphVisualizer extends AbstractGraphVisualizer {
     return HibTestSetup.openSession();
   }
 
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     load();
     new TestRejectNodeGraphVisualizer().run();
@@ -82,7 +82,7 @@ public class TestRejectNodeGraphVisualizer extends AbstractGraphVisualizer {
     FilenameFilter filter = new FilenameFilter()
     {
       @Override
-      public boolean accept( File dir, String name )
+      public boolean accept( final File dir, final String name )
       {
         return name.endsWith( ".wf.xml" ) && name.equals( "reject-node.wf.xml" );
       }

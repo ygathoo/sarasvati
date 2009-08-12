@@ -25,7 +25,7 @@ public abstract class EditorGraphMember<T extends GraphMemberState> extends Abst
   protected Point  origin = new Point();
   protected boolean selected = false;
 
-  public EditorGraphMember (T initialState)
+  public EditorGraphMember (final T initialState)
   {
     super( initialState );
   }
@@ -40,7 +40,7 @@ public abstract class EditorGraphMember<T extends GraphMemberState> extends Abst
     return origin.x;
   }
 
-  public void setX (int x)
+  public void setX (final int x)
   {
     this.origin.x = x;
   }
@@ -50,7 +50,7 @@ public abstract class EditorGraphMember<T extends GraphMemberState> extends Abst
     return origin.y;
   }
 
-  public void setY (int y)
+  public void setY (final int y)
   {
     this.origin.y = y;
   }
@@ -60,7 +60,7 @@ public abstract class EditorGraphMember<T extends GraphMemberState> extends Abst
     return origin;
   }
 
-  public void setOrigin (Point origin)
+  public void setOrigin (final Point origin)
   {
     this.origin = origin;
   }
@@ -75,7 +75,7 @@ public abstract class EditorGraphMember<T extends GraphMemberState> extends Abst
     return selected;
   }
 
-  public void setSelected (boolean selected)
+  public void setSelected (final boolean selected)
   {
     this.selected = selected;
     stateChanged();

@@ -24,13 +24,13 @@ public class ScriptEngineEnv implements ScriptEnv
 {
   protected ScriptEngine engine;
 
-  public ScriptEngineEnv (ScriptEngine engine)
+  public ScriptEngineEnv (final ScriptEngine engine)
   {
     this.engine = engine;
   }
 
   @Override
-  public void addVariable(String name, Object value)
+  public void addVariable(final String name, final Object value)
   {
     engine.put( name, value );
   }

@@ -24,12 +24,12 @@ import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.ProcessDefinitionTranslator;
 
 /**
- * An ArcDefinition is the result of the translation of a certain external source containing 
+ * An ArcDefinition is the result of the translation of a certain external source containing
  * the definition of a process. That external source may contain necessary information to create
- * an {@link Arc}, and that information is translated into an ArcDefinition through a 
+ * an {@link Arc}, and that information is translated into an ArcDefinition through a
  * {@link ProcessDefinitionTranslator}. This ArcDefinition will then in its turn be used
  * by the {@link GraphLoader} to create an {@link Arc} through the {@link GraphFactory}.
- * The default kind of external source is an XML file containing &lt;arc&gt; tags.   
+ * The default kind of external source is an XML file containing &lt;arc&gt; tags.
  */
 public interface ArcDefinition
 {

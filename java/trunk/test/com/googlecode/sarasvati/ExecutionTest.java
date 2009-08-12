@@ -39,7 +39,7 @@ public class ExecutionTest
     engine = new MemEngine();
   }
 
-  protected Graph ensureLoaded (String name) throws Exception
+  protected Graph ensureLoaded (final String name) throws Exception
   {
     File basePath = new File( "common/unit-test/" );
     assert basePath.exists();
@@ -54,7 +54,7 @@ public class ExecutionTest
     return engine.getRepository().getLatestGraph( name );
   }
 
-  public NodeToken getActiveToken (GraphProcess p, String nodeName)
+  public NodeToken getActiveToken (final GraphProcess p, final String nodeName)
   {
     for ( NodeToken token : p.getActiveNodeTokens() )
     {

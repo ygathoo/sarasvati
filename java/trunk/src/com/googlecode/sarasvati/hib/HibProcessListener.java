@@ -53,7 +53,7 @@ public class HibProcessListener
 
   protected HibProcessListener () { /* Default constructor for Hibernate */ }
 
-  public HibProcessListener (String type, ExecutionEventType eventType, GraphProcess process)
+  public HibProcessListener (final String type, final ExecutionEventType eventType, final GraphProcess process)
   {
     this.eventType = eventType;
     this.type = type;
@@ -65,7 +65,7 @@ public class HibProcessListener
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -75,7 +75,7 @@ public class HibProcessListener
     return type;
   }
 
-  public void setType (String type)
+  public void setType (final String type)
   {
     this.type = type;
   }
@@ -85,7 +85,7 @@ public class HibProcessListener
     return eventType;
   }
 
-  public void setEventType (ExecutionEventType eventType)
+  public void setEventType (final ExecutionEventType eventType)
   {
     this.eventType = eventType;
   }
@@ -95,7 +95,7 @@ public class HibProcessListener
     return process;
   }
 
-  public void setProcess (GraphProcess process)
+  public void setProcess (final GraphProcess process)
   {
     this.process = process;
   }
@@ -110,7 +110,7 @@ public class HibProcessListener
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if (this == obj)
       return true;

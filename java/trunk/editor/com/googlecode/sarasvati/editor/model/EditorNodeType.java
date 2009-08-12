@@ -93,7 +93,7 @@ public class EditorNodeType
   /**
    * @param name the name to set
    */
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -109,7 +109,7 @@ public class EditorNodeType
   /**
    * @param nodeIconType the nodeIconType to set
    */
-  public void setNodeIconType (NodeIconType nodeIconType)
+  public void setNodeIconType (final NodeIconType nodeIconType)
   {
     this.nodeIconType = nodeIconType;
   }
@@ -125,7 +125,7 @@ public class EditorNodeType
   /**
    * @param iconColor the color to set
    */
-  public void setIconColor (Color iconColor)
+  public void setIconColor (final Color iconColor)
   {
     this.iconColor = iconColor;
   }
@@ -133,7 +133,7 @@ public class EditorNodeType
   /**
    * @param allowNonSpecifiedAttributes the allowNonSpecifiedAttributes to set
    */
-  public void setAllowNonSpecifiedAttributes (boolean allowNonSpecifiedAttributes)
+  public void setAllowNonSpecifiedAttributes (final boolean allowNonSpecifiedAttributes)
   {
     this.allowNonSpecifiedAttributes = allowNonSpecifiedAttributes;
   }

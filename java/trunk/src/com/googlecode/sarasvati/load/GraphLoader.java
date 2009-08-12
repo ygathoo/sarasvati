@@ -64,7 +64,7 @@ public class GraphLoader<G extends Graph>
   protected GraphRepository<G> repository;
   protected G graph;
 
-  public GraphLoader (GraphFactory<G> factory, GraphRepository<G> repository)
+  public GraphLoader (final GraphFactory<G> factory, final GraphRepository<G> repository)
   {
     this.factory = factory;
     this.repository = repository;
@@ -423,7 +423,7 @@ public class GraphLoader<G extends Graph>
     FilenameFilter filenameFilter = new FilenameFilter()
     {
       @Override
-      public boolean accept (File dir, String name)
+      public boolean accept (final File dir, final String name)
       {
         return name.endsWith( ".wf.xml" );
       }
@@ -443,12 +443,12 @@ public class GraphLoader<G extends Graph>
     FileVisitor visitor = new FileVisitor()
     {
       @Override
-      public boolean accept (File dir, String name)
+      public boolean accept (final File dir, final String name)
       {
         return filenameFilter.accept( dir, name );
       }
 
-      public void accept (File file)
+      public void accept (final File file)
       {
         XmlProcessDefinition pd = xmlLoader.translate( file );
         processDefs.put( pd.getName(), pd );

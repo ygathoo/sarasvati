@@ -30,12 +30,12 @@ public class PropertyMutatorRegistry
   protected static Map<Class<?>, Class<?>> mutatorCache = new HashMap<Class<?>, Class<?>>();
 
 
-  public static void registerPropertyMutator (Class<?> targetClass, Class<?> mutatorClass)
+  public static void registerPropertyMutator (final Class<?> targetClass, final Class<?> mutatorClass)
   {
     mutatorCache.put( targetClass, mutatorClass );
   }
 
-  public static PropertyMutator getMutator (PropertyDescriptor pd, Object obj, PropertyMutator defaultMutator)
+  public static PropertyMutator getMutator (final PropertyDescriptor pd, final Object obj, final PropertyMutator defaultMutator)
   {
     Class<?> mutatorClass = mutatorCache.get( pd.getPropertyType() );
 

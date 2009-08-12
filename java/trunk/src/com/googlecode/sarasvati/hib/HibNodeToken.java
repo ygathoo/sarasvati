@@ -127,13 +127,13 @@ public class HibNodeToken implements NodeToken
 
   public HibNodeToken () { /* Default constructor for Hibernate */ }
 
-  public HibNodeToken (HibGraphProcess process,
-                       HibNodeRef nodeRef,
-                       HibNodeToken attrSetToken,
-                       ExecutionType executionType,
-                       Map<String,String> attrMap,
-                       List<ArcToken> parentTokens,
-                       Map<String,Object> transientAttributes)
+  public HibNodeToken (final HibGraphProcess process,
+                       final HibNodeRef nodeRef,
+                       final HibNodeToken attrSetToken,
+                       final ExecutionType executionType,
+                       final Map<String,String> attrMap,
+                       final List<ArcToken> parentTokens,
+                       final Map<String,Object> transientAttributes)
   {
     this.process       = process;
     this.nodeRef       = nodeRef;
@@ -153,7 +153,7 @@ public class HibNodeToken implements NodeToken
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -163,7 +163,7 @@ public class HibNodeToken implements NodeToken
     return process;
   }
 
-  public void setProcess (HibGraphProcess process)
+  public void setProcess (final HibGraphProcess process)
   {
     this.process = process;
   }
@@ -174,7 +174,7 @@ public class HibNodeToken implements NodeToken
     return nodeRef;
   }
 
-  public void setNodeRef (HibNodeRef nodeRef)
+  public void setNodeRef (final HibNodeRef nodeRef)
   {
     this.nodeRef = nodeRef;
   }
@@ -186,7 +186,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void recordGuardAction (Engine engine, GuardAction action)
+  public void recordGuardAction (final Engine engine, final GuardAction action)
   {
     this.guardAction = action;
   }
@@ -196,7 +196,7 @@ public class HibNodeToken implements NodeToken
     return attrSetToken;
   }
 
-  public void setAttrSetToken( HibNodeToken attrSetToken )
+  public void setAttrSetToken( final HibNodeToken attrSetToken )
   {
     this.attrSetToken = attrSetToken;
   }
@@ -206,7 +206,7 @@ public class HibNodeToken implements NodeToken
     return attrMap;
   }
 
-  public void setAttrMap( Map<String, String> attrMap )
+  public void setAttrMap( final Map<String, String> attrMap )
   {
     this.attrMap = attrMap;
   }
@@ -217,7 +217,7 @@ public class HibNodeToken implements NodeToken
     return parentTokens;
   }
 
-  public void setParentTokens (List<ArcToken> parentTokens)
+  public void setParentTokens (final List<ArcToken> parentTokens)
   {
     this.parentTokens = parentTokens;
   }
@@ -228,7 +228,7 @@ public class HibNodeToken implements NodeToken
     return childTokens;
   }
 
-  public void setChildTokens (List<ArcToken> childTokens)
+  public void setChildTokens (final List<ArcToken> childTokens)
   {
     this.childTokens = childTokens;
   }
@@ -239,7 +239,7 @@ public class HibNodeToken implements NodeToken
     return createDate;
   }
 
-  public void setCreateDate (Date createDate)
+  public void setCreateDate (final Date createDate)
   {
     this.createDate = createDate;
   }
@@ -250,7 +250,7 @@ public class HibNodeToken implements NodeToken
     return completeDate;
   }
 
-  public void setCompleteDate (Date completeDate)
+  public void setCompleteDate (final Date completeDate)
   {
     this.completeDate = completeDate;
   }
@@ -262,7 +262,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void markComplete (Engine engine)
+  public void markComplete (final Engine engine)
   {
     this.completeDate = new Date();
 
@@ -279,25 +279,25 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void markBacktracked (Engine engine)
+  public void markBacktracked (final Engine engine)
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }
 
   @Override
-  public void accept (TokenVisitor visitor)
+  public void accept (final TokenVisitor visitor)
   {
     visitor.visit( this );
   }
 
   @Override
-  public TokenSet getTokenSet (String name)
+  public TokenSet getTokenSet (final String name)
   {
     return SvUtil.getTokenSet( this, name );
   }
 
   @Override
-  public NodeTokenSetMember getTokenSetMember (String name)
+  public NodeTokenSetMember getTokenSetMember (final String name)
   {
     return (NodeTokenSetMember)SvUtil.getTokenSetMember( this, name );
   }
@@ -308,7 +308,7 @@ public class HibNodeToken implements NodeToken
     return tokenSetMemberships;
   }
 
-  public void setTokenSetMemberships (Set<NodeTokenSetMember> tokenSetMemberships)
+  public void setTokenSetMemberships (final Set<NodeTokenSetMember> tokenSetMemberships)
   {
     this.tokenSetMemberships = tokenSetMemberships;
   }
@@ -373,7 +373,7 @@ public class HibNodeToken implements NodeToken
     @Override
     public <T> T getAttribute (final String name,
                                final Class<T> type,
-                               T defaultValue)
+                               final T defaultValue)
     {
       String value = getAttribute( name );
       return AttributeConverters.stringToObject( value, type, defaultValue );
@@ -448,25 +448,25 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public void setTransientAttribute (String name, Object value)
+    public void setTransientAttribute (final String name, final Object value)
     {
       transientAttributes.put( name, value );
     }
 
     @Override
-    public Object getTransientAttribute (String name)
+    public Object getTransientAttribute (final String name)
     {
       return transientAttributes.get( name );
     }
 
     @Override
-    public boolean hasTransientAttribute (String name)
+    public boolean hasTransientAttribute (final String name)
     {
       return transientAttributes.containsKey( name );
     }
 
     @Override
-    public void removeTransientAttribute (String name)
+    public void removeTransientAttribute (final String name)
     {
       transientAttributes.remove( name );
     }
@@ -478,7 +478,7 @@ public class HibNodeToken implements NodeToken
     }
 
     @Override
-    public void importEnv (Env copyEnv)
+    public void importEnv (final Env copyEnv)
     {
       for ( String name : copyEnv.getAttributeNames() )
       {
@@ -502,7 +502,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;

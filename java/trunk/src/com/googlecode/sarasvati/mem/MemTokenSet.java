@@ -44,7 +44,7 @@ public class MemTokenSet implements TokenSet
   protected Env env = new MapEnv();
   protected TokenSetMemberEnv memberEnv;
 
-  public MemTokenSet (final GraphProcess process, final String name, int maxMemberIndex)
+  public MemTokenSet (final GraphProcess process, final String name, final int maxMemberIndex)
   {
     this.process = process;
     this.name = name;
@@ -64,13 +64,13 @@ public class MemTokenSet implements TokenSet
   }
 
   @Override
-  public Set<ArcToken> getActiveArcTokens (Engine engine)
+  public Set<ArcToken> getActiveArcTokens (final Engine engine)
   {
     return activeArcTokens;
   }
 
   @Override
-  public Set<NodeToken> getActiveNodeTokens (Engine engine)
+  public Set<NodeToken> getActiveNodeTokens (final Engine engine)
   {
     return activeNodeTokens;
   }
@@ -88,13 +88,13 @@ public class MemTokenSet implements TokenSet
   }
 
   @Override
-  public void markComplete (Engine engine)
+  public void markComplete (final Engine engine)
   {
     complete = true;
   }
 
   @Override
-  public void reactivateForBacktrack (Engine engine)
+  public void reactivateForBacktrack (final Engine engine)
   {
     complete = false;
   }

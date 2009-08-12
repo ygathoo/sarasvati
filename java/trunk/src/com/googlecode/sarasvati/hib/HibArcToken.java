@@ -106,7 +106,7 @@ public class HibArcToken implements ArcToken
 
   public HibArcToken () { /* Default constructor for hibernate */ }
 
-  public HibArcToken (HibGraphProcess process, HibArc arc, ExecutionType executionType, HibNodeToken parentToken)
+  public HibArcToken (final HibGraphProcess process, final HibArc arc, final ExecutionType executionType, final HibNodeToken parentToken)
   {
     this.process       = process;
     this.arc           = arc;
@@ -122,7 +122,7 @@ public class HibArcToken implements ArcToken
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -132,7 +132,7 @@ public class HibArcToken implements ArcToken
     return process;
   }
 
-  public void setProcess (HibGraphProcess process)
+  public void setProcess (final HibGraphProcess process)
   {
     this.process = process;
   }
@@ -143,7 +143,7 @@ public class HibArcToken implements ArcToken
     return arc;
   }
 
-  public void setArc (HibArc arc)
+  public void setArc (final HibArc arc)
   {
     this.arc = arc;
   }
@@ -153,7 +153,7 @@ public class HibArcToken implements ArcToken
     return parentToken;
   }
 
-  public void setParentToken (NodeToken parentToken)
+  public void setParentToken (final NodeToken parentToken)
   {
     this.parentToken = parentToken;
   }
@@ -163,7 +163,7 @@ public class HibArcToken implements ArcToken
     return childToken;
   }
 
-  public void setChildToken(NodeToken childToken)
+  public void setChildToken(final NodeToken childToken)
   {
     this.childToken = childToken;
   }
@@ -173,7 +173,7 @@ public class HibArcToken implements ArcToken
     return createDate;
   }
 
-  public void setCreateDate (Date createDate)
+  public void setCreateDate (final Date createDate)
   {
     this.createDate = createDate;
   }
@@ -183,7 +183,7 @@ public class HibArcToken implements ArcToken
     return completeDate;
   }
 
-  public void setCompleteDate (Date completeDate)
+  public void setCompleteDate (final Date completeDate)
   {
     this.completeDate = completeDate;
   }
@@ -195,7 +195,7 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public void markComplete (Engine engine, NodeToken token)
+  public void markComplete (final Engine engine, final NodeToken token)
   {
     this.completeDate = new Date();
     this.childToken = token;
@@ -213,7 +213,7 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public void markProcessed (Engine engine)
+  public void markProcessed (final Engine engine)
   {
     pending = false;
   }
@@ -225,13 +225,13 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public void markBacktracked (Engine engine)
+  public void markBacktracked (final Engine engine)
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }
 
   @Override
-  public void accept (TokenVisitor visitor)
+  public void accept (final TokenVisitor visitor)
   {
     visitor.visit( this );
   }
@@ -242,7 +242,7 @@ public class HibArcToken implements ArcToken
     return tokenSetMemberships;
   }
 
-  public void setTokenSetMembers (Set<ArcTokenSetMember> tokenSetMemberships)
+  public void setTokenSetMembers (final Set<ArcTokenSetMember> tokenSetMemberships)
   {
     this.tokenSetMemberships = tokenSetMemberships;
   }
@@ -257,7 +257,7 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;

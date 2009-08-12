@@ -30,13 +30,13 @@ public class HrefFunctionAdapter implements Function<String,Widget>
 {
   protected GraphToImageMap imageMapHelper;
 
-  public HrefFunctionAdapter (GraphToImageMap imageMapHelper)
+  public HrefFunctionAdapter (final GraphToImageMap imageMapHelper)
   {
     this.imageMapHelper = imageMapHelper;
   }
 
   @Override
-  public String apply (Widget widget)
+  public String apply (final Widget widget)
   {
     Object o = ((ObjectScene)widget.getScene()).findObject( widget );
 

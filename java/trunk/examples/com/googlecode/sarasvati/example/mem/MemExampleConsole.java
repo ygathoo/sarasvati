@@ -51,7 +51,7 @@ public class MemExampleConsole
 {
   public static boolean log = false;
 
-  public static void main (String[] args) throws Throwable
+  public static void main (final String[] args) throws Throwable
   {
     loadWorkflows();
 
@@ -60,7 +60,7 @@ public class MemExampleConsole
     repository.registerPredicate( "isRandOdd", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 1;
       }
@@ -69,7 +69,7 @@ public class MemExampleConsole
     repository.registerPredicate( "isRandEven", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return token.getEnv().getAttribute( "rand", Long.class ) % 2 == 0;
       }
@@ -78,7 +78,7 @@ public class MemExampleConsole
     repository.registerPredicate( "isTenthIteration", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         System.out.println( "iter: " + token.getEnv().getAttribute( "iter", Long.class ) );
         return token.getEnv().getAttribute( "iter", Long.class ) == 1000;
@@ -88,7 +88,7 @@ public class MemExampleConsole
     repository.registerPredicate( "Approved", new RubricPredicate()
     {
       @Override
-      public boolean eval( Engine engine, NodeToken token )
+      public boolean eval( final Engine engine, final NodeToken token )
       {
         return true;
       }
@@ -122,7 +122,7 @@ public class MemExampleConsole
     }
   }
 
-  public static void runWorkflow (GraphProcess process)
+  public static void runWorkflow (final GraphProcess process)
   {
     while (true)
     {
@@ -177,7 +177,7 @@ public class MemExampleConsole
     }
   }
 
-  public static void processTask (MemExampleTask t, MemEngine engine)
+  public static void processTask (final MemExampleTask t, final MemEngine engine)
   {
     System.out.println( "Task " );
     System.out.println( "\tName        : "  + t.getName() );
@@ -321,7 +321,7 @@ public class MemExampleConsole
     FilenameFilter filter = new FilenameFilter()
     {
       @Override
-      public boolean accept (File dir, String name)
+      public boolean accept (final File dir, final String name)
       {
         return name.endsWith( ".wf.xml" ) && !name.equals( "demo-example.wf.xml" );
       }

@@ -32,7 +32,7 @@ public class HibTestSetup
 {
   protected static SessionFactory sessionFactory = null;
 
-  public static void init (boolean createSchema) throws Exception
+  public static void init (final boolean createSchema) throws Exception
   {
     AnnotationConfiguration config = new AnnotationConfiguration();
 
@@ -68,7 +68,7 @@ public class HibTestSetup
     return sessionFactory.openSession();
   }
 
-  public static void main (String[] args) throws Exception
+  public static void main (final String[] args) throws Exception
   {
     init( true );
   }

@@ -24,32 +24,32 @@ import com.googlecode.sarasvati.NodeToken;
 
 public class TokenTraversals
 {
-  public static void breadthFirstTraversal (NodeToken token, TokenVisitor visitor)
+  public static void breadthFirstTraversal (final NodeToken token, final TokenVisitor visitor)
   {
     new BreadthFirstTokenTraversal().traverse( token, visitor );
   }
 
-  public static void breadthFirstTraversal (ArcToken token, TokenVisitor visitor)
+  public static void breadthFirstTraversal (final ArcToken token, final TokenVisitor visitor)
   {
     new BreadthFirstTokenTraversal().traverse( token, visitor );
   }
 
-  public static void depthFirstTraversal (NodeToken token, TokenVisitor visitor)
+  public static void depthFirstTraversal (final NodeToken token, final TokenVisitor visitor)
   {
     new DepthFirstTokenTraversal().traverse( token, visitor );
   }
 
-  public static void depthFirstTraversal (ArcToken token, TokenVisitor visitor)
+  public static void depthFirstTraversal (final ArcToken token, final TokenVisitor visitor)
   {
     new DepthFirstTokenTraversal().traverse( token, visitor );
   }
 
-  public static void createOrderTraversal (NodeToken token, TokenVisitor visitor)
+  public static void createOrderTraversal (final NodeToken token, final TokenVisitor visitor)
   {
     new CreateOrderTokenTraversal().traverse( token, visitor );
   }
 
-  public static void createOrderTraversal (ArcToken token, TokenVisitor visitor)
+  public static void createOrderTraversal (final ArcToken token, final TokenVisitor visitor)
   {
     new CreateOrderTokenTraversal().traverse( token, visitor );
   }

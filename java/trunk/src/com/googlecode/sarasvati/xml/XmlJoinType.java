@@ -45,7 +45,7 @@ public enum XmlJoinType
     return joinType;
   }
 
-  public static XmlJoinType getXmlJoinType (JoinType joinType)
+  public static XmlJoinType getXmlJoinType (final JoinType joinType)
   {
     for ( XmlJoinType xmlJoinType : values() )
     {

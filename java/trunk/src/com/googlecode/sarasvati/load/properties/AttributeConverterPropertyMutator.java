@@ -33,7 +33,7 @@ public class AttributeConverterPropertyMutator extends BasePropertyMutator
   }
 
   @Override
-  public void setFromText (String text)
+  public void setFromText (final String text)
   {
     setValue( converter.stringToObject( text, type ) );
   }

@@ -30,13 +30,13 @@ public class ProcessHoverFunctionAdapter implements Function<String,Widget>
 {
   protected ProcessToImageMap imageMapHelper;
 
-  public ProcessHoverFunctionAdapter (ProcessToImageMap imageMapHelper)
+  public ProcessHoverFunctionAdapter (final ProcessToImageMap imageMapHelper)
   {
     this.imageMapHelper = imageMapHelper;
   }
 
   @Override
-  public String apply (Widget widget)
+  public String apply (final Widget widget)
   {
     Object o = ((ObjectScene)widget.getScene()).findObject( widget );
 

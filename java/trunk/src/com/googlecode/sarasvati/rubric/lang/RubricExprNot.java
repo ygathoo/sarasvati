@@ -26,7 +26,7 @@ public class RubricExprNot extends AbstractRubricExpr
 {
   protected RubricExpr expr;
 
-  public RubricExprNot (RubricExpr expr)
+  public RubricExprNot (final RubricExpr expr)
   {
     this.expr = expr;
   }
@@ -36,19 +36,19 @@ public class RubricExprNot extends AbstractRubricExpr
     return expr;
   }
 
-  public void setExpr (RubricExpr expr)
+  public void setExpr (final RubricExpr expr)
   {
     this.expr = expr;
   }
 
   @Override
-  public boolean eval (RubricEnv env)
+  public boolean eval (final RubricEnv env)
   {
     return !expr.eval( env );
   }
 
   @Override
-  public void traverse (RubricVisitor visitor)
+  public void traverse (final RubricVisitor visitor)
   {
     visitor.visit( this );
     expr.traverse( visitor );
@@ -67,7 +67,7 @@ public class RubricExprNot extends AbstractRubricExpr
   }
 
   @Override
-  public boolean isEqualTo (RubricExpr e)
+  public boolean isEqualTo (final RubricExpr e)
   {
     return e.isNot() && e.asNot().getExpr().isEqualTo( expr );
   }

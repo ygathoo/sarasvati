@@ -28,14 +28,14 @@ public class ProcessTreeArc implements VisualProcessArc
   protected ProcessTreeNode parent;
   protected ProcessTreeNode child;
 
-  public ProcessTreeArc(ArcToken token, ProcessTreeNode parent, ProcessTreeNode child)
+  public ProcessTreeArc(final ArcToken token, final ProcessTreeNode parent, final ProcessTreeNode child)
   {
     this.token  = token;
     this.parent = parent;
     this.child  = child;
   }
 
-  public ProcessTreeArc(Arc arc, ProcessTreeNode parent, ProcessTreeNode child)
+  public ProcessTreeArc(final Arc arc, final ProcessTreeNode parent, final ProcessTreeNode child)
   {
     this.arc    = arc;
     this.parent = parent;

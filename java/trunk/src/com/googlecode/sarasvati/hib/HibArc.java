@@ -60,7 +60,7 @@ public class HibArc implements Arc
 
   protected HibArc () { /* Default constructor for hibernate */ }
 
-  protected HibArc (HibGraph graph, Node startNode, Node endNode, String name)
+  protected HibArc (final HibGraph graph, final Node startNode, final Node endNode, final String name)
   {
     this.graph = graph;
     this.startNode = startNode;
@@ -73,7 +73,7 @@ public class HibArc implements Arc
     return id;
   }
 
-  public void setId (Long id)
+  public void setId (final Long id)
   {
     this.id = id;
   }
@@ -84,7 +84,7 @@ public class HibArc implements Arc
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -94,7 +94,7 @@ public class HibArc implements Arc
     return graph;
   }
 
-  public void setGraph (HibGraph graph)
+  public void setGraph (final HibGraph graph)
   {
     this.graph = graph;
   }
@@ -105,7 +105,7 @@ public class HibArc implements Arc
     return startNode;
   }
 
-  public void setStartNode (Node startNode)
+  public void setStartNode (final Node startNode)
   {
     this.startNode = startNode;
   }
@@ -116,7 +116,7 @@ public class HibArc implements Arc
     return endNode;
   }
 
-  public void setEndNode (Node endNode)
+  public void setEndNode (final Node endNode)
   {
     this.endNode = endNode;
   }
@@ -144,7 +144,7 @@ public class HibArc implements Arc
   }
 
   @Override
-  public boolean equals (Object obj)
+  public boolean equals (final Object obj)
   {
     if ( this == obj ) return true;
     if ( obj == null ) return false;

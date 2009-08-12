@@ -31,7 +31,7 @@ public class MemExampleTask
 
   protected TaskState state;
 
-  public MemExampleTask (NodeToken nodeToken, String name, String description, TaskState state)
+  public MemExampleTask (final NodeToken nodeToken, final String name, final String description, final TaskState state)
   {
     this.nodeToken = nodeToken;
     this.name = name;
@@ -44,7 +44,7 @@ public class MemExampleTask
     return nodeToken;
   }
 
-  public void setNodeToken (NodeToken nodeToken)
+  public void setNodeToken (final NodeToken nodeToken)
   {
     this.nodeToken = nodeToken;
   }
@@ -64,7 +64,7 @@ public class MemExampleTask
     return state;
   }
 
-  public void setState (TaskState state )
+  public void setState (final TaskState state )
   {
     this.state = state;
   }

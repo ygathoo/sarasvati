@@ -44,13 +44,13 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
   protected JAXBContext context;
   protected Schema      schema;
 
-  public XmlLoader (JAXBContext context) throws SarasvatiLoadException
+  public XmlLoader (final JAXBContext context) throws SarasvatiLoadException
   {
     this.context = context;
     loadSchema();
   }
 
-  public XmlLoader (String... extraPackages) throws SarasvatiLoadException
+  public XmlLoader (final String... extraPackages) throws SarasvatiLoadException
   {
     String packages = "com.googlecode.sarasvati.xml";
 
@@ -126,7 +126,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
     return m;
   }
 
-  private XmlProcessDefinition loadProcessDefinition (File file)
+  private XmlProcessDefinition loadProcessDefinition (final File file)
     throws SarasvatiLoadException
   {
     XmlProcessDefinition def = null;
@@ -142,7 +142,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
     return def;
   }
 
-  public void saveProcessDefinition (XmlProcessDefinition xmlProcDef, File file)
+  public void saveProcessDefinition (final XmlProcessDefinition xmlProcDef, final File file)
       throws JAXBException, IOException
   {
     FileOutputStream fOut = new FileOutputStream( file );
@@ -158,7 +158,7 @@ public class XmlLoader implements ProcessDefinitionTranslator<File>
   }
 
   @Override
-  public XmlProcessDefinition translate (File source) throws SarasvatiLoadException
+  public XmlProcessDefinition translate (final File source) throws SarasvatiLoadException
   {
     return loadProcessDefinition( source );
   }

@@ -44,7 +44,7 @@ public class CachingExecutionEventQueue extends DefaultExecutionEventQueue
   }
 
   @Override
-  public synchronized void addListener (Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes)
+  public synchronized void addListener (final Engine engine, final ExecutionListener listener, final ExecutionEventType... eventTypes)
   {
     listenerCache.ensureContainsListenerType( listener );
     super.addListener( engine, listener, eventTypes );

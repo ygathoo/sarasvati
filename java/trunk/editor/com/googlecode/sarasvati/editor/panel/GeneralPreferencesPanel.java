@@ -207,7 +207,7 @@ public class GeneralPreferencesPanel extends BasePrefsPage {
       revertButton.addActionListener( new ActionListener()
       {
         @Override
-        public void actionPerformed (ActionEvent e)
+        public void actionPerformed (final ActionEvent e)
         {
           if ( JOptionPane.YES_OPTION ==
                JOptionPane.showConfirmDialog( GeneralPreferencesPanel.this,

@@ -77,7 +77,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return name;
   }
 
-  public void setName (String name)
+  public void setName (final String name)
   {
     this.name = name;
   }
@@ -88,7 +88,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return joinType == null ? JoinType.OR : joinType.getJoinType();
   }
 
-  public void setJoinType (XmlJoinType joinType)
+  public void setJoinType (final XmlJoinType joinType)
   {
     this.joinType = joinType;
   }
@@ -99,7 +99,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return joinParam;
   }
 
-  public void setJoinParam (String joinParam)
+  public void setJoinParam (final String joinParam)
   {
     this.joinParam = joinParam;
   }
@@ -109,7 +109,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return type;
   }
 
-  public void setType (String type)
+  public void setType (final String type)
   {
     this.type = type;
   }
@@ -119,7 +119,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return start == null ? false : start;
   }
 
-  public void setStart (Boolean start)
+  public void setStart (final Boolean start)
   {
     this.start = start;
   }
@@ -129,7 +129,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return x;
   }
 
-  public void setX (Integer x)
+  public void setX (final Integer x)
   {
     this.x = x;
   }
@@ -139,7 +139,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return y;
   }
 
-  public void setY (Integer y)
+  public void setY (final Integer y)
   {
     this.y = y;
   }
@@ -150,7 +150,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return guard;
   }
 
-  public void setGuard (String guard)
+  public void setGuard (final String guard)
   {
     this.guard = guard;
   }
@@ -161,7 +161,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return arcs;
   }
 
-  public void setArcs (List<XmlArc> arcs)
+  public void setArcs (final List<XmlArc> arcs)
   {
     this.arcs = arcs;
   }
@@ -172,7 +172,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     return custom;
   }
 
-  public void setCustom (XmlCustom custom)
+  public void setCustom (final XmlCustom custom)
   {
     this.custom = custom;
   }
@@ -230,7 +230,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
   }
 
   @Override
-  public int compareTo (XmlNode o)
+  public int compareTo (final XmlNode o)
   {
     if ( o == null )
     {

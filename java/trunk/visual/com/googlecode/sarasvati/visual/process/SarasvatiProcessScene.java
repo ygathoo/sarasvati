@@ -41,7 +41,7 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
   protected static final Font ARC_LABEL_FONT = Font.decode( "serif bold 11" );
   protected ProcessLookAndFeel lookAndFeel;
 
-  public SarasvatiProcessScene (GraphProcess process, ProcessLookAndFeel lookAndFeel)
+  public SarasvatiProcessScene (final GraphProcess process, final ProcessLookAndFeel lookAndFeel)
   {
     this.lookAndFeel = lookAndFeel;
 
@@ -111,7 +111,7 @@ public class SarasvatiProcessScene extends GraphSceneImpl<ProcessTreeNode, Proce
   }
 
   @Override
-  protected Widget widgetForNode (ProcessTreeNode node)
+  protected Widget widgetForNode (final ProcessTreeNode node)
   {
     return lookAndFeel.newWidget( node, this );
   }

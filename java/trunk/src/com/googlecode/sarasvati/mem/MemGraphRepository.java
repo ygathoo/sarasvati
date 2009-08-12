@@ -34,13 +34,13 @@ public class MemGraphRepository implements GraphRepository<MemGraph>
   private static Map<String,MemGraph> cache = new ConcurrentHashMap<String, MemGraph>();
 
   @Override
-  public void addGraph (MemGraph graph)
+  public void addGraph (final MemGraph graph)
   {
     cache.put( graph.getName(), graph );
   }
 
   @Override
-  public List<MemGraph> getGraphs(String name)
+  public List<MemGraph> getGraphs(final String name)
   {
     MemGraph graph = cache.get( name );
     if (  graph == null )
@@ -59,7 +59,7 @@ public class MemGraphRepository implements GraphRepository<MemGraph>
   }
 
   @Override
-  public MemGraph getLatestGraph(String name)
+  public MemGraph getLatestGraph(final String name)
   {
     return cache.get( name );
   }

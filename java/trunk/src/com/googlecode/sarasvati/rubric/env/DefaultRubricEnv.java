@@ -72,7 +72,7 @@ public class DefaultRubricEnv implements RubricEnv
   }
 
   @Override
-  public boolean evalPredicate (String predicate)
+  public boolean evalPredicate (final String predicate)
   {
     RubricPredicate rubricPredicate = functionRepository.getPredicate( predicate );
     if ( rubricPredicate == null )
@@ -83,7 +83,7 @@ public class DefaultRubricEnv implements RubricEnv
   }
 
   @Override
-  public Date evalRelativeDate (Date date, boolean business, int offset, int unit)
+  public Date evalRelativeDate (final Date date, final boolean business, final int offset, final int unit)
   {
     Calendar cal = Calendar.getInstance();
     cal.setTime( date );

@@ -52,7 +52,7 @@ public class HibExampleTaskNode extends HibNode
     return taskName;
   }
 
-  public void setTaskName (String taskName)
+  public void setTaskName (final String taskName)
   {
     this.taskName = taskName;
   }
@@ -62,13 +62,13 @@ public class HibExampleTaskNode extends HibNode
     return taskDesc;
   }
 
-  public void setTaskDesc (String taskDesc)
+  public void setTaskDesc (final String taskDesc)
   {
     this.taskDesc = taskDesc;
   }
 
   @Override
-  public void backtrack (Engine engine, NodeToken token)
+  public void backtrack (final Engine engine, final NodeToken token)
   {
     HibEngine hibEngine = (HibEngine)engine;
     Task task = TaskDAO.getTaskForToken( hibEngine.getSession(), token );
@@ -77,7 +77,7 @@ public class HibExampleTaskNode extends HibNode
 
   @SuppressWarnings("unchecked")
   @Override
-  public <T> T getAdaptor (Class<T> clazz)
+  public <T> T getAdaptor (final Class<T> clazz)
   {
     if ( String.class == clazz )
     {
@@ -87,7 +87,7 @@ public class HibExampleTaskNode extends HibNode
   }
 
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     HibEngine hibEngine = (HibEngine)engine;
 

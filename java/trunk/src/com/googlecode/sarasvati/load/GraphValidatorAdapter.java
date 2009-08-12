@@ -41,7 +41,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateArc (Arc arc) throws SarasvatiLoadException
+  public void validateArc (final Arc arc) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -50,7 +50,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateGraph (Graph graph) throws SarasvatiLoadException
+  public void validateGraph (final Graph graph) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -59,7 +59,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateNode (Node node) throws SarasvatiLoadException
+  public void validateNode (final Node node) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -68,7 +68,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateArcDefinition (ArcDefinition arcDefinition) throws SarasvatiLoadException
+  public void validateArcDefinition (final ArcDefinition arcDefinition) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -77,7 +77,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateExternalDefinition (ExternalDefinition externalDefinition)
+  public void validateExternalDefinition (final ExternalDefinition externalDefinition)
       throws SarasvatiLoadException
   {
     // Does nothing
@@ -87,7 +87,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateExternalArcDefinition (ExternalArcDefinition xmlExternalArc)
+  public void validateExternalArcDefinition (final ExternalArcDefinition xmlExternalArc)
       throws SarasvatiLoadException
   {
     // Does nothing
@@ -97,7 +97,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateNodeDefinition (NodeDefinition nodeDefinition) throws SarasvatiLoadException
+  public void validateNodeDefinition (final NodeDefinition nodeDefinition) throws SarasvatiLoadException
   {
     // Does nothing
   }
@@ -106,7 +106,7 @@ public class GraphValidatorAdapter implements GraphValidator
    * Does nothing. Override in a subclass to do user constraint checking
    */
   @Override
-  public void validateProcessDefinition (ProcessDefinition processDefinition)
+  public void validateProcessDefinition (final ProcessDefinition processDefinition)
     throws SarasvatiLoadException
   {
     // Does nothing

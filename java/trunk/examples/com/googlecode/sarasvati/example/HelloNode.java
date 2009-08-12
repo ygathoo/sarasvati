@@ -10,13 +10,13 @@ import com.googlecode.sarasvati.mem.MemEngine;
 public class HelloNode extends CustomNode
 {
   @Override
-  public void execute (Engine engine, NodeToken token)
+  public void execute (final Engine engine, final NodeToken token)
   {
     System.out.println( "Hello, World!" );
     engine.complete( token, Arc.DEFAULT_ARC );
   }
-  
-  public static void main (String[] args)
+
+  public static void main (final String[] args)
   {
     MemEngine engine = new MemEngine ();
     engine.addGlobalCustomNodeType( "helloWorld", HelloNode.class );

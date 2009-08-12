@@ -28,13 +28,13 @@ public class BasePropertyMutator implements PropertyMutator
   protected Object target;
 
   @Override
-  public void setPropertyDescriptor (PropertyDescriptor propertyDescriptor)
+  public void setPropertyDescriptor (final PropertyDescriptor propertyDescriptor)
   {
     this.propertyDescriptor = propertyDescriptor;
   }
 
   @Override
-  public void setTarget (Object target)
+  public void setTarget (final Object target)
   {
     this.target = target;
   }
@@ -53,12 +53,12 @@ public class BasePropertyMutator implements PropertyMutator
   }
 
   @Override
-  public void setFromText (String text)
+  public void setFromText (final String text)
   {
     throw new UnsupportedOperationException( "Writes are not supported to the property " + propertyDescriptor.getName() + " on class " + target.getClass().getName() );
   }
 
-  public void setValue (Object value)
+  public void setValue (final Object value)
   {
     try
     {

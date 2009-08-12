@@ -24,12 +24,12 @@ public class ConnectAction extends ToggledWidgetActionDecorator
 {
   protected static boolean enabled = false;
 
-  public static void setEnabled (boolean enabled)
+  public static void setEnabled (final boolean enabled)
   {
     ConnectAction.enabled = enabled;
   }
 
-  public ConnectAction (WidgetAction action)
+  public ConnectAction (final WidgetAction action)
   {
     super( action );
   }
