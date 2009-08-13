@@ -22,17 +22,13 @@ table_pat = re.compile( r"^\|\|.*\|\|.*")
 bullet_stack = []
 number_stack = []
 
-image_prefix = "/home/paul/workspace/wf-wiki/images/"
+image_prefix = "images/"
 
-scale_dict = { "legend" : 0.6,
-               "concepts5" : 0.6,
-               "concepts5-3" : 0.6,
-               "concepts5-4" : 0.6,
-               "concepts-externals2" : 0.5,
-               "concepts-externals3" : 0.5,
-               "concepts-externals4" : 0.5,
-               "concepts-externals5" : 0.5
-             }
+section_index = 1
+current_section = 1;
+current_subsection = 1;
+in_section = False
+in_subsection = False
 
 def replaceBold(match):
     return "<emphasis>" + match.group(1) + "</emphasis>"
@@ -45,28 +41,9 @@ def replaceInlineCode(match):
 
 def processImage( url, name ):
     image_path = image_prefix + name + ".jpg"
-    if ( not os.path.exists( image_path ) ):
-        image_in = urllib2.urlopen( url )
-        image_data = image_in.read()
-        image_in.close()
-        image_out = open( image_path, "w" )
-        image_out.write( image_data )
-        image_out.close()
-        #os.spawnlp( os.P_NOWAIT, "/usr/bin/sam2p", "sam2p", jpg_name, "/tmp/" + name + ".eps" )
-
-    scale = 0.8
-    if ( scale_dict.has_key( name ) ):
-        scale = scale_dict[ name ]
-
-    fout.write( "\\begin{center}\n" +
-                "\n\\includegraphics[scale=" + str(scale) + "]{" + image_path + "}\n" +
-                "\\end{center}\n" )
-
-    #fout.write( #"\n\\begin{figure}\n" +
-                #"\\begin{center}\n" +
-                #"\\includegraphics[scale=0.5]{/tmp/" + name + ".eps}\n"
-                #"\\end{center}\n" +
-                #"\\end{figure}\n\n" )
+    fout.write( "<informalfigure>\n" +
+                "  <graphic fileref=\"" + image_path + "\"/>\n" +
+                "</informalfigure>\n" )
 
 def convertStyle(orig_line):
     line = re.sub( r"`([^`]+)`", replaceInlineCode, orig_line)
@@ -107,10 +84,27 @@ def popEnumerateIndent ():
     printEnumerateIndent()
     fout.write( "</orderedlist>\n" )
 
+def closeOpenSubSection ():
+    if ( in_subsection ):
+        fout.write( "</section>\n" )
+
+def closeOpenSection ():
+    closeOpenSubSection()
+    if ( in_section ):
+        fout.write( "</section>\n" )
+
+
 def convert ():
-    past_intro  = False
-    in_verbatim = False
-    in_table    = False
+    global section_index
+    global current_section
+    global current_subsection
+    global in_section
+    global in_subsection
+
+    past_intro    = False
+    in_verbatim   = False
+    in_table      = False
+
     for line in fin:
 
         if ( not past_intro ):
@@ -123,7 +117,7 @@ def convert ():
             verbatim = verbatim_end_pat.search( line )
             if (verbatim):
                 in_verbatim = False
-                fout.write( "\end{verbatim}\n" )
+                fout.write( "]]></programlisting>\n" )
             else:
                 fout.write( line )
             continue
@@ -135,20 +129,31 @@ def convert ():
 
         section = section_pat.search( line )
         if ( section ):
+            closeOpenSection()
             name = section.group( 1 )
-            fout.write( "\\section{" + name + "}\n" )
+            fout.write( "<section id=\"sect" + str(section_index) + "\">\n" )
+            fout.write( "<title>" + section.group( 1 ) + "</title>\n" )
+            current_section = section_index
+            section_index = section_index + 1
+            in_section    = True;
+            in_subsection = False
             continue
 
         subsection = subsection_pat.search( line )
         if ( subsection ):
+            closeOpenSubSection()
             name = subsection.group( 1 )
-            fout.write( "\\subsection{" + name + "}\n" )
+            fout.write( "<section id=\"sect" + str(section_index) + "\">\n" )
+            fout.write( "<title>" + subsection.group( 1 ) + "</title>\n" )
+            current_subsection = section_index
+            section_index = section_index + 1
+            in_subsection = True
             continue
 
         verbatim = verbatim_start_pat.search( line )
 
         if ( verbatim  ):
-            fout.write( "\\begin{verbatim}\n" )
+            fout.write( "<programlisting><![CDATA[" )
             in_verbatim = True
             continue
 
@@ -221,6 +226,7 @@ def convert ():
             fout.write( "</listitem>\n" )
 
 def printFooter ():
+    closeOpenSection()
     fout.write( "</chapter>\n" )
 
 def printHeader (name):
