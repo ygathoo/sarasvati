@@ -116,8 +116,8 @@ public class GraphLoader<G extends Graph>
           if ( endNode == null )
           {
             throw new SarasvatiLoadException( "Arc in node '" + nodeDef.getName() +
-                                     "' points to non-existent node '" + arcDef.getTo() +
-                                     "' in external '" + arcDef.getExternal() + "'" );
+                                              "' points to non-existent node '" + arcDef.getTo() +
+                                              "' in external '" + arcDef.getExternal() + "'" );
           }
         }
         else
@@ -125,7 +125,8 @@ public class GraphLoader<G extends Graph>
           endNode = nodeCache.get( arcDef.getTo() );
           if ( endNode == null )
           {
-            throw new SarasvatiLoadException( "Arc in node '" + nodeDef.getName() + "' points to non-existent node '" + arcDef.getTo() + "'" );
+            throw new SarasvatiLoadException( "Arc in node '" + nodeDef.getName() +
+                                              "' points to non-existent node '" + arcDef.getTo() + "'" );
           }
         }
 
