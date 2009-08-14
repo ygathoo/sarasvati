@@ -73,13 +73,14 @@
           .
         </para>
       </listitem>
+      <listitem>
+        <para>
+          <emphasis>Workflow</emphasis>
+          - A label for systems which enable the building of
+      process definitions and the execution of processes.
+        </para>
+      </listitem>
     </itemizedlist>
-
-    <para>
-      Workflow is a label for systems which enable the building of
-      process
-      definitions and the execution of processes.
-    </para>
 
   </section>
   <section id="sect2">
