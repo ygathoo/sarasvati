@@ -54,6 +54,11 @@ def convertStyle(orig_line):
 
     return line
 
+def printIndent( bullets, numbers ):
+    if ( bullets ):
+        printItemizeIndent()
+    if ( numbers ):
+        printEnumerateIndent()
 
 def processLine(line):
     image = image_pat.search( line )
@@ -72,6 +77,10 @@ def popItemizeIndent ():
     bullet_stack.pop( 0 )
     printItemizeIndent()
     fout.write( "</itemizedlist>\n" )
+    if ( len( bullet_stack ) > 0 ):
+        printItemizeIndent()
+        fout.write( "</listitem>\n" )
+
 
 def printEnumerateIndent ():
     if ( len( number_stack ) == 0 ):
@@ -83,6 +92,9 @@ def popEnumerateIndent ():
     number_stack.pop( 0 )
     printEnumerateIndent()
     fout.write( "</orderedlist>\n" )
+    if ( len( number_stack ) != 0 ):
+        printEnumerateIndent()
+        fout.write( "</listitem>\n" )
 
 def closeOpenSubSection ():
     if ( in_subsection ):
@@ -104,14 +116,15 @@ def convert ():
     past_intro    = False
     in_verbatim   = False
     in_table      = False
+    in_para       = False
 
-    for line in fin:
-
-        if ( not past_intro ):
-            if ( intro_pat.search( line ) ):
-                past_intro = True
-            else:
-                continue
+    prevline = None
+    line = None
+    nextline = fin.readline()
+    while ( line != "" ):
+        prevline = line
+        line = nextline
+        nextline = fin.readline()
 
         if (in_verbatim):
             verbatim = verbatim_end_pat.search( line )
@@ -216,14 +229,31 @@ def convert ():
                 popEnumerateIndent()
 
         if ( bullets or numbers ):
+            printIndent( bullets, numbers )
             fout.write( "<listitem>\n" )
+            printIndent( bullets, numbers )
             fout.write( "  <para>\n" )
+
+        if ( not bullets and not numbers and not in_para and line != "\n" ):
+            in_para = True
+            fout.write( "<para>\n" )
 
         processLine( line )
 
+        if ( in_para and not bullets and not numbers and line != "\n" and nextline == "\n" ):
+            in_para = False
+            fout.write( "</para>\n" )
+
         if ( bullets or numbers ):
+            printIndent( bullets, numbers )
             fout.write( "  </para>\n" )
-            fout.write( "</listitem>\n" )
+            next_bullets = bullet_pat.search( nextline )
+            next_numbers = number_pat.search( line )
+
+            if ( not ( next_bullets and len( next_bullets.group( 1 ) ) > bullet_stack[0] ) and
+                 not ( next_numbers and len( next_numbers.group( 1 ) ) > number_stack[0] ) ):
+                printIndent( bullets, numbers )
+                fout.write( "</listitem>\n" )
 
 def printFooter ():
     closeOpenSection()
