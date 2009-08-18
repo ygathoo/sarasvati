@@ -38,5 +38,5 @@ public interface ExecutionEventQueue
    *
    * @param event The execution event
    */
-  void fireEvent (ExecutionEvent event);
+  EventActions fireEvent (ExecutionEvent event);
 }

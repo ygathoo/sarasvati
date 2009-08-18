@@ -59,6 +59,7 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.event.CachingExecutionEventQueue;
+import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
@@ -137,10 +138,10 @@ public class HibGraphProcess implements GraphProcess
   protected ExecutionEventQueue eventQueue = new ExecutionEventQueue()
   {
     @Override
-    public void fireEvent (final ExecutionEvent event)
+    public EventActions fireEvent (final ExecutionEvent event)
     {
       initEventQueue( event.getEngine() );
-      eventQueue.fireEvent( event );
+      return eventQueue.fireEvent( event );
     }
 
     @Override

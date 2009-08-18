@@ -1,12 +1,13 @@
 package com.googlecode.sarasvati.example;
 
+import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionListener;
 
 public class LoggingExecutionListener implements ExecutionListener
 {
   @Override
-  public void notify(final ExecutionEvent event)
+  public EventActions notify(final ExecutionEvent event)
   {
     if ( event.isProcessEvent() )
     {
@@ -22,5 +23,7 @@ public class LoggingExecutionListener implements ExecutionListener
     {
       System.out.println( event.getEventType() + ": " + event.getArcToken() );
     }
+
+    return null;
   }
 }

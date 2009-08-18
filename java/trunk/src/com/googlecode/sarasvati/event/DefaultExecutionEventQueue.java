@@ -94,15 +94,17 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
   /**
    * @see com.googlecode.sarasvati.event.ExecutionEventQueue#fireEvent(com.googlecode.sarasvati.event.ExecutionEvent)
    */
-  public void fireEvent (final ExecutionEvent event)
+  public EventActions fireEvent (final ExecutionEvent event)
   {
+    EventActions eventActions = new EventActions();
     for (RegisteredExecutionListener wrapper : listeners )
     {
       if ( event.getEventType() == wrapper.getEventType() )
       {
-        wrapper.notify( event );
+        eventActions.compose( wrapper.notify( event ) );
       }
     }
+    return eventActions;
   }
 
   static class RegisteredExecutionListener implements ExecutionListener
@@ -128,9 +130,9 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
     }
 
     @Override
-    public void notify (final ExecutionEvent event)
+    public EventActions notify (final ExecutionEvent event)
     {
-      listener.notify( event );
+      return listener.notify( event );
     }
   }
 }
