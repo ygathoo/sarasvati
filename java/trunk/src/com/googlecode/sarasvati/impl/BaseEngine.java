@@ -134,7 +134,7 @@ public abstract class BaseEngine implements Engine
     process.setState( ProcessState.PendingCancel );
     EventActions actions = fireEvent( ProcessEvent.newCanceledEvent( this, process ) );
 
-    if ( actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_CANCEL ) )
+    if ( !actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_CANCEL ) )
     {
       finalizeCancel( process );
     }
@@ -228,7 +228,7 @@ public abstract class BaseEngine implements Engine
       case AcceptToken :
         process.addActiveNodeToken( token );
         EventActions actions = fireEvent( NodeTokenEvent.newAcceptedEvent( this, token ) );
-        if ( actions.isEventTypeIncluded( EventActionType.DELAY_NODE_EXECUTION ) )
+        if ( !actions.isEventTypeIncluded( EventActionType.DELAY_NODE_EXECUTION ) )
         {
           token.getNode().execute( this, token );
           fireEvent( NodeTokenEvent.newExecutedEvent( this, token ) );
@@ -426,7 +426,7 @@ public abstract class BaseEngine implements Engine
     {
       process.setState( ProcessState.PendingCompletion );
       EventActions actions = fireEvent( ProcessEvent.newCompletedEvent( this, process ) );
-      if ( actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_COMPLETE ) )
+      if ( !actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_COMPLETE ) )
       {
         finalizeComplete( process );
       }
