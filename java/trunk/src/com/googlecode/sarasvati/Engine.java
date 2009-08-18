@@ -22,7 +22,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.googlecode.sarasvati.env.Env;
-import com.googlecode.sarasvati.event.ExecutionEvent;
+import com.googlecode.sarasvati.event.EventActionType;
+import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.GraphFactory;
@@ -97,7 +98,11 @@ public interface Engine
    * Called by the engine when the process is detected to be completed.
    * It will set the state to {@link ProcessState#Completed} and perform
    * whatever cleanup is required.
-   *
+   * <p>
+   * If an {@link ExecutionListener} returns an {@link EventActions} object
+   * specifying {@link EventActionType#DELAY_PROCESS_FINALIZE_COMPLETE}, then
+   * this method will *not* be called, and be manually invoked from user logic
+   * <p>
    * If this process is a nested process, at this point the containing
    * token will be completed.
    *
@@ -109,7 +114,11 @@ public interface Engine
    * Called by the engine when a process is cancelled, via {@link Engine#cancelProcess(GraphProcess)}.
    * It will set the state to {@link ProcessState#Canceled} and perform whatever
    * cleanup is required.
-   *
+   * <p>
+   * If an {@link ExecutionListener} returns an {@link EventActions} object
+   * specifying {@link EventActionType#DELAY_PROCESS_FINALIZE_CANCEL}, then
+   * this method will *not* be called, and be manually invoked from user logic
+   * <p>
    * @param process The process being canceled.
    */
   void finalizeCancel (GraphProcess process);
@@ -226,15 +235,6 @@ public interface Engine
    * @param nodeClass The custom node class which will be instantiated for this type
    */
   void addGlobalCustomNodeType (String type, Class<? extends CustomNode> nodeClass );
-
-  /**
-   * This will send the given event to listeners who have registered for
-   * events on all processes and to listeners who have registered for events
-   * on the process that originated this event.
-   *
-   * @param event The event to send to all interested listeners.
-   */
-  void fireEvent (ExecutionEvent event);
 
   /**
    * Adds a listener for the given event types for all processes. It is not added to

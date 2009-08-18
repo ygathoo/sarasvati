@@ -46,6 +46,8 @@ import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.env.TokenSetMemberEnv;
 import com.googlecode.sarasvati.event.ArcTokenEvent;
 import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.EventActionType;
+import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
@@ -130,8 +132,12 @@ public abstract class BaseEngine implements Engine
   public void cancelProcess (final GraphProcess process)
   {
     process.setState( ProcessState.PendingCancel );
-    fireEvent( ProcessEvent.newCanceledEvent( this, process ) );
-    finalizeCancel( process );
+    EventActions actions = fireEvent( ProcessEvent.newCanceledEvent( this, process ) );
+
+    if ( actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_CANCEL ) )
+    {
+      finalizeCancel( process );
+    }
   }
 
   @Override
@@ -221,9 +227,12 @@ public abstract class BaseEngine implements Engine
     {
       case AcceptToken :
         process.addActiveNodeToken( token );
-        fireEvent( NodeTokenEvent.newAcceptedEvent( this, token ) );
-        token.getNode().execute( this, token );
-        fireEvent( NodeTokenEvent.newExecutedEvent( this, token ) );
+        EventActions actions = fireEvent( NodeTokenEvent.newAcceptedEvent( this, token ) );
+        if ( actions.isEventTypeIncluded( EventActionType.DELAY_NODE_EXECUTION ) )
+        {
+          token.getNode().execute( this, token );
+          fireEvent( NodeTokenEvent.newExecutedEvent( this, token ) );
+        }
         break;
 
       case DiscardToken :
@@ -416,14 +425,16 @@ public abstract class BaseEngine implements Engine
     if ( !process.hasActiveTokens() && process.isArcTokenQueueEmpty() && asyncQueue.isEmpty() )
     {
       process.setState( ProcessState.PendingCompletion );
-      fireEvent( ProcessEvent.newCompletedEvent( this, process ) );
-      finalizeComplete( process );
+      EventActions actions = fireEvent( ProcessEvent.newCompletedEvent( this, process ) );
+      if ( actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_COMPLETE ) )
+      {
+        finalizeComplete( process );
+      }
     }
   }
 
   @Override
-  public void setupScriptEnv (final ScriptEnv env,
-                              final NodeToken token)
+  public void setupScriptEnv (final ScriptEnv env, final NodeToken token)
   {
     env.addVariable( "engine", this );
     env.addVariable( "token", token );
@@ -552,10 +563,10 @@ public abstract class BaseEngine implements Engine
     process.getEventQueue().removeListener( this, listener, eventTypes );
   }
 
-  @Override
-  public void fireEvent (final ExecutionEvent event)
+  public EventActions fireEvent (final ExecutionEvent event)
   {
-    globalEventQueue.fireEvent( event );
-    event.getProcess().getEventQueue().fireEvent( event );
+    EventActions actions = globalEventQueue.fireEvent( event );
+    actions.compose( event.getProcess().getEventQueue().fireEvent( event ) );
+    return actions;
   }
 }

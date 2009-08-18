@@ -23,10 +23,12 @@ import com.googlecode.sarasvati.GraphProcess;
 
 /**
  * Listeners may be registered for events happening on a single {@link GraphProcess} or
- * all processes.
+ * all processes. Listeners may in some cases influence how execution proceeds by returning
+ * an {@link EventActions} object.
  *
  * @see Engine#addExecutionListener(ExecutionListener, ExecutionEventType...)
  * @see Engine#addExecutionListener(GraphProcess, ExecutionListener, ExecutionEventType...)
+ * @see EventActionType
  *
  * @author Paul Lorenz
  */
@@ -34,9 +36,12 @@ public interface ExecutionListener
 {
   /**
    * Invoked by the {@link Engine} when an event of a type that this
-   * listener has register for occurs.
+   * listener has register for occurs. May return an {@link EventActions}
+   * defining the actions to be performed or null.
    *
    * @param event The event which has just occurred.
+   *
+   * @return EventActions The set of requested {@link EventActionType}s or null.
    */
-  void notify (ExecutionEvent event);
+  EventActions notify (ExecutionEvent event);
 }
