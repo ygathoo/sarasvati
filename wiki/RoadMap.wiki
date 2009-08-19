@@ -53,7 +53,7 @@ A graphical editor for process definitions is in progress. It is now usable for 
  * Investigate shortestpathrouter weirdness: Done
  * Use right click context menu for nodes/externals for cut/copy/delete/edit properties: Done
  * Add info text for join types: Done
- * Move layout info to `<editor>` section of PD file: *TODO*
+ * Move layout info to `<editor>` section of PD file: Done
 
 === Token Sets/Template Nodes: Completed ===
 
