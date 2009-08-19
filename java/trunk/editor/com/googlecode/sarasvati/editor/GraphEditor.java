@@ -31,7 +31,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.io.File;
-import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -78,6 +77,7 @@ import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
 import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 import com.googlecode.sarasvati.editor.model.Library;
+import com.googlecode.sarasvati.editor.model.ValidationResults;
 import com.googlecode.sarasvati.editor.xml.EditorXmlLoader;
 import com.googlecode.sarasvati.editor.xml.XmlEditorProperties;
 import com.googlecode.sarasvati.load.SarasvatiLoadException;
@@ -477,22 +477,45 @@ public class GraphEditor
 
     EditorGraph graph = scene.getGraph();
 
-    List<String> errors = graph.validateGraph();
+    ValidationResults results = graph.validateGraph();
 
-    if ( !errors.isEmpty() )
+    StringBuilder buf = new StringBuilder ();
+    for ( String msg : results.getErrors() )
     {
-      StringBuilder buf = new StringBuilder ();
-      for ( String error : errors )
-      {
-        buf.append( error );
-        buf.append( "\n" );
-      }
+      buf.append( "ERROR: " + msg );
+      buf.append( "\n" );
+    }
+    for ( String msg : results.getWarnings() )
+    {
+      buf.append( "WARNING: " + msg );
+      buf.append( "\n" );
+    }
+    for ( String msg : results.getInfos() )
+    {
+      buf.append( "WARNING: " + msg );
+      buf.append( "\n" );
+    }
 
+    if ( results.hasErrors() )
+    {
       JOptionPane.showMessageDialog( GraphEditor.getInstance().getMainWindow(),
                                      buf.toString(),
                                      "Invalid Process Definition",
                                      JOptionPane.ERROR_MESSAGE );
       return SaveResult.SaveFailed;
+    }
+
+    if ( results.hasWarnings() )
+    {
+      buf.append( "\nYour process definition triggered validation warnings. Do you still wish to save?" );
+      if ( JOptionPane.OK_OPTION !=
+             JOptionPane.showConfirmDialog( GraphEditor.getInstance().getMainWindow(),
+                                            buf.toString(),
+                                            "Warning",
+                                            JOptionPane.WARNING_MESSAGE ) )
+      {
+        return SaveResult.SaveFailed;
+      }
     }
 
     if ( isSaveAs || scene.getGraph().getFile() == null )
@@ -512,7 +535,7 @@ public class GraphEditor
       if ( retVal == JFileChooser.APPROVE_OPTION )
       {
         setLastFile( fileChooser.getSelectedFile() );
-        return saveProcessDefinition( graph, fileChooser.getSelectedFile() );
+        return saveProcessDefinition( graph, fileChooser.getSelectedFile(), buf.toString() );
       }
       else
       {
@@ -521,12 +544,13 @@ public class GraphEditor
     }
     else
     {
-      return saveProcessDefinition( graph, graph.getFile() );
+      return saveProcessDefinition( graph, graph.getFile(), buf.toString() );
     }
   }
 
   public SaveResult saveProcessDefinition (final EditorGraph graph,
-                                           final File outputFile)
+                                           final File outputFile,
+                                           final String infoMessages)
   {
     File saveFile = null;
 
@@ -558,7 +582,7 @@ public class GraphEditor
       CommandStack.markSaved();
 
       JOptionPane.showMessageDialog( mainWindow,
-                                     "Process definition successfully saved to: '" + saveFile.getPath() + "'",
+                                     infoMessages + "\nProcess definition successfully saved to: '" + saveFile.getPath() + "'",
                                      "Save", JOptionPane.INFORMATION_MESSAGE );
 
       Library.getInstance().update( saveData.getXmlProcDef(), outputFile );
