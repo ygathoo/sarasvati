@@ -9,7 +9,7 @@ Sarasvati is fairly stable at this point, and we are workings towards a 1.0 rele
 
 == 1.0 TODO ==
 
-=== Editor: In Progress ===
+=== Editor: Completed ===
 
 A graphical editor for process definitions is in progress. It is now usable for process definitions that don't use externals.
 
@@ -33,7 +33,7 @@ A graphical editor for process definitions is in progress. It is now usable for 
  * Arc labels: Done
  * Cleanup move/add/reconnect interactions: Done
  * Check for unsaved: Done
- * Graph validation on save: *Started*
+ * Graph validation on save: Done
  * Preferences
    * Node Types
      * Basic node type management: Done
@@ -78,7 +78,7 @@ See [TokenSetsDesign design].
    * Allow specification of a the name of a token set to join on in a TokenSet
    * Status: Done
 
-===Documentation: Not yet started===
+===Documentation: In Progress===
  # Documentation needs to be updated for changes. 
    * Split out external
    * isJoin => joinType
