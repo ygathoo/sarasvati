@@ -27,6 +27,7 @@ import javax.swing.AbstractAction;
 import javax.swing.Action;
 import javax.swing.JFileChooser;
 import javax.swing.KeyStroke;
+import javax.swing.filechooser.FileFilter;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.model.Library;
@@ -57,6 +58,20 @@ public class OpenAction extends AbstractAction
 
     JFileChooser fileChooser = new JFileChooser( );
     fileChooser.setCurrentDirectory( path );
+    fileChooser.setFileFilter( new FileFilter()
+    {
+      @Override
+      public String getDescription ()
+      {
+        return "Process Definitions";
+      }
+
+      @Override
+      public boolean accept (File f)
+      {
+        return f.isDirectory() || f.getName().endsWith( ".wf.xml" );
+      }
+    });
 
     int retVal = fileChooser.showOpenDialog( editor.getMainWindow() );
 

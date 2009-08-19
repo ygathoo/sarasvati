@@ -26,6 +26,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.googlecode.sarasvati.editor.xml.XmlEditorExternal;
+import com.googlecode.sarasvati.editor.xml.XmlEditorNode;
+import com.googlecode.sarasvati.editor.xml.XmlEditorProperties;
 import com.googlecode.sarasvati.load.definition.ArcDefinition;
 import com.googlecode.sarasvati.load.definition.CustomDefinition;
 import com.googlecode.sarasvati.load.definition.ExternalArcDefinition;
@@ -44,7 +47,29 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class EditorGraphFactory
 {
-  public static EditorGraph loadFromXml (final ProcessDefinition procDef)
+  public static class XmlSaveData
+  {
+    private final XmlProcessDefinition xmlProcDef;
+    private final XmlEditorProperties xmlEditorProps;
+    public XmlSaveData (final XmlProcessDefinition xmlProcDef, final XmlEditorProperties xmlEditorProps)
+    {
+      this.xmlProcDef = xmlProcDef;
+      this.xmlEditorProps = xmlEditorProps;
+    }
+
+    public XmlProcessDefinition getXmlProcDef ()
+    {
+      return xmlProcDef;
+    }
+
+    public XmlEditorProperties getXmlEditorProps ()
+    {
+      return xmlEditorProps;
+    }
+  }
+
+  public static EditorGraph loadFromXml (final ProcessDefinition procDef,
+                                         final XmlEditorProperties editorProps)
   {
     EditorGraph graph = new EditorGraph();
     graph.setName( procDef.getName() );
@@ -150,12 +175,36 @@ public class EditorGraphFactory
       }
     }
 
+    if ( editorProps != null )
+    {
+      for ( XmlEditorNode xmlEditorNode : editorProps.getNodes() )
+      {
+        EditorNode node = nodeMap.get( xmlEditorNode.getName() );
+        if ( node != null )
+        {
+          node.setX( xmlEditorNode.getX() );
+          node.setY( xmlEditorNode.getY() );
+        }
+      }
+
+      for ( XmlEditorExternal xmlEditorExternal : editorProps.getExternals() )
+      {
+        EditorExternal external = externalMap.get( xmlEditorExternal.getName() );
+        if ( external != null )
+        {
+          external.setX( xmlEditorExternal.getX() );
+          external.setY( xmlEditorExternal.getY() );
+        }
+      }
+    }
+
     return graph;
   }
 
-  public static XmlProcessDefinition exportToXml (final EditorGraph graph) throws IOException
+  public static XmlSaveData exportToXml (final EditorGraph graph) throws IOException
   {
     XmlProcessDefinition xmlProcDef = new XmlProcessDefinition();
+    XmlEditorProperties xmlEditorProps = new XmlEditorProperties();
     xmlProcDef.setName( graph.getName() );
 
     Map<EditorNode,XmlNode> nodeMap = new HashMap<EditorNode, XmlNode>();
@@ -175,9 +224,6 @@ public class EditorGraphFactory
         xmlNode.setStart( true );
       }
 
-      xmlNode.setX( node.getX() );
-      xmlNode.setY( node.getY() );
-
       EditorNodeType nodeType = state.getEditorNodeType();
       Set<String> cdataTypes = Collections.emptySet();
       if ( nodeType != null )
@@ -195,6 +241,13 @@ public class EditorGraphFactory
 
       xmlProcDef.getNodes().add( xmlNode );
       nodeMap.put( node, xmlNode );
+
+      XmlEditorNode xmlEditorNode = new XmlEditorNode();
+      xmlEditorNode.setName( state.getName() );
+      xmlEditorNode.setX( node.getX() );
+      xmlEditorNode.setY( node.getY() );
+
+      xmlEditorProps.getNodes().add( xmlEditorNode );
     }
 
     for ( EditorExternal external : graph.getExternals() )
@@ -218,6 +271,13 @@ public class EditorGraphFactory
 
       xmlProcDef.getExternals().add( xmlExternal );
       externalMap.put( external, xmlExternal );
+
+      XmlEditorExternal xmlEditorExternal = new XmlEditorExternal();
+      xmlEditorExternal.setName( state.getName() );
+      xmlEditorExternal.setX( external.getX() );
+      xmlEditorExternal.setY( external.getY() );
+
+      xmlEditorProps.getExternals().add( xmlEditorExternal );
     }
 
     for ( EditorArc arc : graph.getArcs() )
@@ -260,6 +320,6 @@ public class EditorGraphFactory
       }
     }
 
-    return xmlProcDef;
+    return new XmlSaveData( xmlProcDef, xmlEditorProps );
   }
 }
