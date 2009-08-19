@@ -28,6 +28,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.googlecode.sarasvati.load.definition.NodeDefinition;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
+import com.googlecode.sarasvati.util.SvUtil;
+
 public class EditorGraph
 {
   protected File                 file;
@@ -152,22 +156,150 @@ public class EditorGraph
     return getUniqueNames( externals );
   }
 
-  public List<String> validateGraph ()
+  public ValidationResults validateGraph ()
   {
-    List<String> errors = new LinkedList<String> ();
+    ValidationResults results = new ValidationResults();
 
-    Set<String> nodeIds = new HashSet<String> ();
+    Set<String> ids = new HashSet<String> ();
 
     for ( EditorNode node : nodes )
     {
       String nodeName = node.getState().getName();
-      if (nodeIds.contains( nodeName ) )
+      if ( ids.contains( nodeName ) )
       {
-        errors.add( "Node name '" + nodeName + "' is used more than once. Each node must have a unique name." );
+        results.error( "Node name '" + nodeName + "' is used more than once. " +
+                       "Each node must have a unique name." );
       }
-      nodeIds.add( nodeName );
+      ids.add( nodeName );
     }
 
-    return errors;
+    ids = new HashSet<String> ();
+
+    for ( EditorExternal external : externals )
+    {
+      String externalName = external.getState().getName();
+      if ( ids.contains( externalName ) )
+      {
+        results.error( "External name '" + externalName + "' is used more than once. " +
+                       "Each external must have a unique name." );
+      }
+      ids.add( externalName );
+    }
+
+    if ( externals.isEmpty() )
+    {
+      return results;
+    }
+
+    for ( EditorArc arc : arcs )
+    {
+      if ( arc.isExternalInArc() )
+      {
+        if ( SvUtil.isBlankOrNull( arc.getState().getExternalStart() ) )
+        {
+          results.error( "The arc from external " +
+                         "'" + arc.getStart().getName() + "' to '" + arc.getEnd().getName() +
+                         "' does not have a start node selected." );
+        }
+      }
+
+      if ( arc.isExternalOutArc() )
+      {
+        if ( SvUtil.isBlankOrNull( arc.getState().getExternalEnd() ) )
+        {
+          results.error( "The arc from " +
+                         "'" + arc.getStart().getName() + "' to external '" + arc.getEnd().getName() +
+                         "' does not have an end node selected." );
+        }
+      }
+    }
+
+
+    Library lib = Library.getInstance();
+    if ( lib.getEntries().isEmpty() )
+    {
+      results.info( "Process Definition Library is empty. Externals can not be validated." );
+      return results;
+    }
+
+    for ( EditorExternal external : externals )
+    {
+      String externalName = external.getState().getName();
+      String pdName = external.getState().getGraphName();
+      if ( lib.getEntry( pdName ) == null )
+      {
+        results.warning( "External with name '" + externalName + "' " +
+                         "references process definition '" + pdName + "' " +
+                         "which does not exist in the library." );
+      }
+    }
+
+
+    for ( EditorArc arc : arcs )
+    {
+      if ( arc.isExternalInArc() )
+      {
+        String nodeName = arc.getState().getExternalStart();
+        if ( !SvUtil.isBlankOrNull( nodeName ) )
+        {
+          String pdName = arc.getStart().asExternal().getState().getGraphName();
+          LibraryEntry entry = lib.getEntry( pdName );
+          if ( entry != null )
+          {
+            ProcessDefinition pd = entry.getProcessDefinition();
+            boolean found = false;
+            for ( NodeDefinition nodeDef : pd.getNodes() )
+            {
+              if ( nodeName.equals( nodeDef.getName() ) )
+              {
+                found = true;
+                break;
+              }
+            }
+
+            if ( !found  )
+            {
+              results.warning( "Arc from external " + "'" + arc.getStart().getName() +
+                               "' to '" + arc.getEnd().getName() +
+                               "' has node '" + nodeName + "' selected at start, which does not appear" +
+                               " in the library version of graph '" + pdName + "'" );
+            }
+          }
+        }
+      }
+      if ( arc.isExternalOutArc() )
+      {
+        String nodeName = arc.getState().getExternalEnd();
+        if ( !SvUtil.isBlankOrNull( nodeName ) )
+        {
+          String pdName = arc.getEnd().asExternal().getState().getGraphName();
+          LibraryEntry entry = lib.getEntry( pdName );
+          if ( entry != null )
+          {
+            ProcessDefinition pd = entry.getProcessDefinition();
+            boolean found = false;
+            for ( NodeDefinition nodeDef : pd.getNodes() )
+            {
+              if ( nodeName.equals( nodeDef.getName() ) )
+              {
+                found = true;
+                break;
+              }
+            }
+
+            if ( !found  )
+            {
+              results.warning( "Arc from " + "'" + arc.getStart().getName() +
+                               "' to external '" + arc.getEnd().getName() +
+                               "' has node '" + nodeName + "' selected at end, which does not appear" +
+                               " in the library version of graph '" + pdName + "'" );
+            }
+          }
+        }
+      }
+
+    }
+
+    return results;
   }
 }
