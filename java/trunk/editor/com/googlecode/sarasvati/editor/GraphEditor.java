@@ -78,10 +78,11 @@ import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
 import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 import com.googlecode.sarasvati.editor.model.Library;
+import com.googlecode.sarasvati.editor.xml.EditorXmlLoader;
+import com.googlecode.sarasvati.editor.xml.XmlEditorProperties;
 import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.xml.XmlLoader;
-import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 public class GraphEditor
 {
@@ -114,6 +115,7 @@ public class GraphEditor
   }
 
   protected XmlLoader   xmlLoader;
+  protected EditorXmlLoader editorXmlLoader;
   protected JFrame      mainWindow;
   protected JPanel      mainPanel;
   protected JToolBar    toolBar;
@@ -141,6 +143,7 @@ public class GraphEditor
   {
     INSTANCE = this;
     xmlLoader = new XmlLoader();
+    editorXmlLoader = new EditorXmlLoader();
   }
 
   public JFrame getMainWindow ()
@@ -410,7 +413,14 @@ public class GraphEditor
     try
     {
       ProcessDefinition xmlProcDef = xmlLoader.translate( processDefinitionFile );
-      EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef );
+
+      File editorPropsFile = new File( processDefinitionFile.getParentFile(), xmlProcDef.getName() + ".editor.xml" );
+      XmlEditorProperties xmlEditorProps = null;
+      if ( editorPropsFile.exists() && editorPropsFile.canRead() )
+      {
+        xmlEditorProps = editorXmlLoader.loadEditorProperties( editorPropsFile );
+      }
+      EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef, xmlEditorProps );
       graph.setFile( processDefinitionFile );
       EditorScene scene = new EditorScene( graph );
 
@@ -541,8 +551,9 @@ public class GraphEditor
 
     try
     {
-      XmlProcessDefinition xmlProcDef = EditorGraphFactory.exportToXml( graph );
-      xmlLoader.saveProcessDefinition( xmlProcDef, saveFile );
+      EditorGraphFactory.XmlSaveData saveData = EditorGraphFactory.exportToXml( graph );
+      xmlLoader.saveProcessDefinition( saveData.getXmlProcDef(), saveFile );
+      editorXmlLoader.saveEditorProperties( saveData.getXmlEditorProps(), new File( saveFile.getParentFile(), name + ".editor.xml" ) );
       graph.setFile( outputFile );
       CommandStack.markSaved();
 
@@ -550,7 +561,7 @@ public class GraphEditor
                                      "Process definition successfully saved to: '" + saveFile.getPath() + "'",
                                      "Save", JOptionPane.INFORMATION_MESSAGE );
 
-      Library.getInstance().update( xmlProcDef, outputFile );
+      Library.getInstance().update( saveData.getXmlProcDef(), outputFile );
 
       return SaveResult.SaveSucceeded;
     }
