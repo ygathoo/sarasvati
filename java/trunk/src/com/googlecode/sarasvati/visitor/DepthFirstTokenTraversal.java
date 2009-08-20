@@ -28,10 +28,22 @@ import com.googlecode.sarasvati.NodeToken;
 
 public class DepthFirstTokenTraversal implements TokenTraversal
 {
-  protected LinkedList<NodeToken> nodeTokenQueue = new LinkedList<NodeToken>();
-  protected LinkedList<ArcToken> arcTokenQueue = new LinkedList<ArcToken>();
+  private final LinkedList<NodeToken> nodeTokenQueue = new LinkedList<NodeToken>();
+  private final LinkedList<ArcToken> arcTokenQueue = new LinkedList<ArcToken>();
 
-  protected Set<Long> nodeTokens = new HashSet<Long>();
+  private final Set<Long> nodeTokens = new HashSet<Long>();
+
+  private final boolean forward;
+
+  public DepthFirstTokenTraversal ()
+  {
+    this.forward = true;
+  }
+
+  public DepthFirstTokenTraversal (final boolean forward)
+  {
+    this.forward = forward;
+  }
 
   @Override
   public void traverse (final NodeToken token, final TokenVisitor visitor)
@@ -55,7 +67,7 @@ public class DepthFirstTokenTraversal implements TokenTraversal
       {
         NodeToken token = nodeTokenQueue.removeFirst();
         token.accept( visitor );
-        arcTokenQueue.addAll( 0, token.getChildTokens() );
+        arcTokenQueue.addAll( 0, forward ? token.getChildTokens() : token.getParentTokens() );
       }
 
       if ( !arcTokenQueue.isEmpty() )
@@ -65,7 +77,7 @@ public class DepthFirstTokenTraversal implements TokenTraversal
         if ( visitor.follow( token ) )
         {
           token.accept( visitor );
-          enqueueNodeToken( token.getChildToken() );
+          enqueueNodeToken( forward ? token.getChildToken() : token.getParentToken() );
         }
       }
     }

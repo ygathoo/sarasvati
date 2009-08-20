@@ -61,8 +61,20 @@ public class CreateOrderTokenTraversal implements TokenTraversal
     }
   };
 
-  protected Queue<Token> queue = new PriorityQueue<Token>( 10, tokenSorter );
-  protected Set<Long> nodeTokens = new HashSet<Long>();
+  private final Queue<Token> queue = new PriorityQueue<Token>( 10, tokenSorter );
+  private final Set<Long> nodeTokens = new HashSet<Long>();
+
+  private final boolean forward;
+
+  public CreateOrderTokenTraversal ()
+  {
+    this.forward = true;
+  }
+
+  public CreateOrderTokenTraversal (final boolean forward)
+  {
+    this.forward = forward;
+  }
 
   @Override
   public void traverse (final NodeToken token, final TokenVisitor visitor)
@@ -88,7 +100,7 @@ public class CreateOrderTokenTraversal implements TokenTraversal
       {
         NodeToken token = (NodeToken)next;
         token.accept( visitor );
-        queue.addAll( token.getChildTokens() );
+        queue.addAll( forward ? token.getChildTokens() : token.getParentTokens() );
       }
       else
       {
@@ -97,7 +109,7 @@ public class CreateOrderTokenTraversal implements TokenTraversal
         if ( visitor.follow( token ) )
         {
           token.accept( visitor );
-          enqueueNodeToken( token.getChildToken() );
+          enqueueNodeToken( forward ? token.getChildToken() : token.getParentToken() );
         }
       }
     }
