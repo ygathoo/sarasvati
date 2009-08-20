@@ -476,7 +476,7 @@ public abstract class BaseEngine implements Engine
     }
     else
     {
-      TokenTraversals.createOrderTraversal( token, visitor );
+      TokenTraversals.traverseChildrenInCreateOrder( token, visitor );
       resultToken = visitor.backtrack();
     }
 

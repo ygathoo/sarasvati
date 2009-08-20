@@ -65,7 +65,7 @@ public class TraversalTest extends ExecutionTest
     NodeToken tokenA = executeTraversal();
 
     TestVisitor visitor = new TestVisitor();
-    TokenTraversals.breadthFirstTraversal( tokenA, visitor );
+    TokenTraversals.traverseChildrenBreadthFirst( tokenA, visitor );
 
     String compare = "ABCDEFGHIJ";
     Assert.assertEquals( compare, visitor.buf.toString() );
@@ -76,7 +76,7 @@ public class TraversalTest extends ExecutionTest
     NodeToken tokenA = executeTraversal();
 
     TestVisitor visitor = new TestVisitor();
-    TokenTraversals.depthFirstTraversal( tokenA, visitor );
+    TokenTraversals.traverseChildrenDepthFirst( tokenA, visitor );
 
     String compare = "ABDJEFCGHI";
     Assert.assertEquals( compare, visitor.buf.toString() );

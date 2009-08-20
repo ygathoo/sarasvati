@@ -24,33 +24,65 @@ import com.googlecode.sarasvati.NodeToken;
 
 public class TokenTraversals
 {
-  public static void breadthFirstTraversal (final NodeToken token, final TokenVisitor visitor)
+  //==========================================================================================
+  //               Breadth First Traversals
+  //==========================================================================================
+
+  public static void traverseParentsBreadthFirst (final NodeToken token, final TokenVisitor visitor)
   {
-    new BreadthFirstTokenTraversal().traverse( token, visitor );
+    new BreadthFirstTokenTraversal( false ).traverse( token, visitor );
   }
 
-  public static void breadthFirstTraversal (final ArcToken token, final TokenVisitor visitor)
+  public static void traverseChildrenBreadthFirst (final NodeToken token, final TokenVisitor visitor)
   {
-    new BreadthFirstTokenTraversal().traverse( token, visitor );
+    new BreadthFirstTokenTraversal( true ).traverse( token, visitor );
   }
 
-  public static void depthFirstTraversal (final NodeToken token, final TokenVisitor visitor)
+  public static void traverseParentsBreadthFirst (final ArcToken token, final TokenVisitor visitor)
   {
-    new DepthFirstTokenTraversal().traverse( token, visitor );
+    new BreadthFirstTokenTraversal( false ).traverse( token, visitor );
   }
 
-  public static void depthFirstTraversal (final ArcToken token, final TokenVisitor visitor)
+  public static void traverseChildrenBreadthFirst (final ArcToken token, final TokenVisitor visitor)
   {
-    new DepthFirstTokenTraversal().traverse( token, visitor );
+    new BreadthFirstTokenTraversal( true ).traverse( token, visitor );
   }
 
-  public static void createOrderTraversal (final NodeToken token, final TokenVisitor visitor)
+  //==========================================================================================
+  //               Depth First Traversals
+  //==========================================================================================
+
+  public static void traverseParentsDepthFirst (final NodeToken token, final TokenVisitor visitor)
   {
-    new CreateOrderTokenTraversal().traverse( token, visitor );
+    new DepthFirstTokenTraversal( false ).traverse( token, visitor );
   }
 
-  public static void createOrderTraversal (final ArcToken token, final TokenVisitor visitor)
+  public static void traverseChildrenDepthFirst (final NodeToken token, final TokenVisitor visitor)
   {
-    new CreateOrderTokenTraversal().traverse( token, visitor );
+    new DepthFirstTokenTraversal( true ).traverse( token, visitor );
+  }
+
+  public static void traverseParentsDepthFirstTraversal (final ArcToken token, final TokenVisitor visitor)
+  {
+    new DepthFirstTokenTraversal( false ).traverse( token, visitor );
+  }
+
+  public static void traverseChildrenDepthFirstTraversal (final ArcToken token, final TokenVisitor visitor)
+  {
+    new DepthFirstTokenTraversal( true ).traverse( token, visitor );
+  }
+
+  //==========================================================================================
+  //               Create Order Traversals
+  //==========================================================================================
+
+  public static void traverseChildrenInCreateOrder (final NodeToken token, final TokenVisitor visitor)
+  {
+    new CreateOrderTokenTraversal( true ).traverse( token, visitor );
+  }
+
+  public static void traverseChildrenInCreateOrder (final ArcToken token, final TokenVisitor visitor)
+  {
+    new CreateOrderTokenTraversal( true ).traverse( token, visitor );
   }
 }
