@@ -82,6 +82,7 @@ import com.googlecode.sarasvati.editor.xml.EditorXmlLoader;
 import com.googlecode.sarasvati.editor.xml.XmlEditorProperties;
 import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
+import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.xml.XmlLoader;
 
 public class GraphEditor
@@ -401,6 +402,22 @@ public class GraphEditor
     tabPane.setSelectedComponent( component );
   }
 
+  public void openExternal (final String externalName, final File externalPath)
+  {
+    for ( Component child : tabPane.getComponents() )
+    {
+      JComponent pane = (JComponent)child;
+      String title = (String)pane.getClientProperty( GRAPH_NAME_KEY );
+      if ( SvUtil.equals( title, externalName ) )
+      {
+        tabPane.setSelectedComponent( pane );
+        return;
+      }
+    }
+
+    openProcessDefinition( externalPath );
+  }
+
   public void openProcessDefinition (final File processDefinitionFile)
   {
     if ( getCurrentScene() != null &&
@@ -516,6 +533,8 @@ public class GraphEditor
       {
         return SaveResult.SaveFailed;
       }
+
+      buf = new StringBuilder();
     }
 
     if ( isSaveAs || scene.getGraph().getFile() == null )
@@ -578,14 +597,14 @@ public class GraphEditor
       EditorGraphFactory.XmlSaveData saveData = EditorGraphFactory.exportToXml( graph );
       xmlLoader.saveProcessDefinition( saveData.getXmlProcDef(), saveFile );
       editorXmlLoader.saveEditorProperties( saveData.getXmlEditorProps(), new File( saveFile.getParentFile(), name + ".editor.xml" ) );
-      graph.setFile( outputFile );
+      graph.setFile( saveFile );
       CommandStack.markSaved();
 
       JOptionPane.showMessageDialog( mainWindow,
                                      infoMessages + "\nProcess definition successfully saved to: '" + saveFile.getPath() + "'",
                                      "Save", JOptionPane.INFORMATION_MESSAGE );
 
-      Library.getInstance().update( saveData.getXmlProcDef(), outputFile );
+      Library.getInstance().update( saveData.getXmlProcDef(), saveFile );
 
       return SaveResult.SaveSucceeded;
     }
