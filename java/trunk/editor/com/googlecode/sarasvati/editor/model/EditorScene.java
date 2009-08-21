@@ -62,6 +62,7 @@ import com.googlecode.sarasvati.editor.action.ArcPropertiesAction;
 import com.googlecode.sarasvati.editor.action.ArcSelectAction;
 import com.googlecode.sarasvati.editor.action.ConnectAction;
 import com.googlecode.sarasvati.editor.action.GraphMemberMoveAction;
+import com.googlecode.sarasvati.editor.action.GraphMemberPropertiesAction;
 import com.googlecode.sarasvati.editor.action.GraphMemberSelectAction;
 import com.googlecode.sarasvati.editor.action.MoveTrackAction;
 import com.googlecode.sarasvati.editor.action.ObjectSceneListenerAdapter;
@@ -94,7 +95,6 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   protected final CommandStack commandStack;
   protected final EditorGraph graph;
 
-
   private final WidgetAction singleMoveAction = new MoveTrackAction( ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null ) );
   private final WidgetAction multiMoveAction = ActionFactory.createMoveAction( null, new MultiMoveProvider() );
 
@@ -104,6 +104,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   private final WidgetAction reconnectAction = ActionFactory.createReconnectAction( new SceneReconnectProvider() );
 
   private final WidgetAction graphMemberPopupMenuAction = ActionFactory.createPopupMenuAction( new GraphMemberPopupMenuProvider() );
+  private final WidgetAction graphMemberPropertiesAction = new GraphMemberPropertiesAction();
   private final WidgetAction arcPropertiesAction = new ArcPropertiesAction();
 
   private final WidgetAction arcSelectAction = new ArcSelectAction( createSelectAction() );
@@ -421,6 +422,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
 
     widget.getActions().addAction( graphMemberSelectAction );
     widget.getActions().addAction( graphMemberPopupMenuAction );
+    widget.getActions().addAction( graphMemberPropertiesAction );
     widget.getActions().addAction( moveAction );
     widget.getActions().addAction( connectAction );
 

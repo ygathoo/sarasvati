@@ -26,21 +26,19 @@ import org.netbeans.api.visual.action.WidgetAction.Adapter;
 import org.netbeans.api.visual.widget.Widget;
 
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
-import com.googlecode.sarasvati.editor.model.EditorArc;
+import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 
-public class ArcPropertiesAction extends Adapter
+public class GraphMemberPropertiesAction extends Adapter
 {
   @Override
   public State mouseClicked (final Widget widget, final WidgetMouseEvent event)
   {
-    if ( ( event.getClickCount() == 1 && event.getButton() == MouseEvent.BUTTON3 ) ||
-         ( event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1 ) )
+    if ( event.getClickCount() == 2 && event.getButton() == MouseEvent.BUTTON1 )
     {
       EditorScene scene = (EditorScene)widget.getScene();
-      EditorArc arc = (EditorArc) scene.findObject( widget );
-
-      JDialog dialog = DialogFactory.newArcPropertiesDialog( arc );
+      EditorGraphMember<?> member = (EditorGraphMember< ? >)scene.findObject( widget );
+      JDialog dialog = DialogFactory.newGraphMemberPropertiesDialog( member );
       dialog.setLocation( widget.convertLocalToScene( event.getPoint() ) );
       dialog.setVisible( true );
 
@@ -49,5 +47,4 @@ public class ArcPropertiesAction extends Adapter
 
     return State.REJECTED;
   }
-
 }
