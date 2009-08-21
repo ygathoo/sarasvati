@@ -51,6 +51,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.WindowConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileFilter;
 
 import com.googlecode.sarasvati.editor.action.ArcSelectAction;
 import com.googlecode.sarasvati.editor.action.ConnectAction;
@@ -548,6 +549,20 @@ public class GraphEditor
 
       JFileChooser fileChooser = new JFileChooser();
       fileChooser.setCurrentDirectory( basePath );
+      fileChooser.setFileFilter( new FileFilter()
+      {
+        @Override
+        public String getDescription ()
+        {
+          return "Process Definitions";
+        }
+
+        @Override
+        public boolean accept (final File f)
+        {
+          return f.isDirectory() || f.getName().endsWith( ".wf.xml" );
+        }
+      });
 
       int retVal = fileChooser.showSaveDialog( mainWindow );
 
