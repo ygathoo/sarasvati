@@ -22,10 +22,11 @@ package com.googlecode.sarasvati.visitor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ArcTokenSetMember;
@@ -36,13 +37,14 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.util.NodeTokenIdComparator;
 
 public class BacktrackTokenVisitor implements TokenVisitor
 {
   protected Engine engine;
   protected NodeToken destinationToken;
 
-  protected LinkedList<NodeToken> queue = new LinkedList<NodeToken>();
+  protected SortedSet<NodeToken> queue = new TreeSet<NodeToken>( new NodeTokenIdComparator( false ) );
   protected Set<ArcToken> arcTokenLeaves = new HashSet<ArcToken>();
 
   protected Set<NodeToken> visited = new HashSet<NodeToken>();
@@ -142,7 +144,8 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
     while ( !queue.isEmpty() )
     {
-      NodeToken token = queue.removeFirst();
+      NodeToken token = queue.first();
+      queue.remove( token );
       if (token.getExecutionType().isBacktracked() )
       {
         continue;
@@ -150,7 +153,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
       token.getNode().backtrack( engine, token );
 
-      boolean isDestination = token == destinationToken;
+      boolean isDestination = token.equals( destinationToken );
 
       if ( isDestination )
       {
