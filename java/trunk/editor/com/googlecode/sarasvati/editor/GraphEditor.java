@@ -23,6 +23,7 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.KeyEventDispatcher;
 import java.awt.KeyboardFocusManager;
+import java.awt.MouseInfo;
 import java.awt.Point;
 import java.awt.Window;
 import java.awt.event.ActionEvent;
@@ -827,7 +828,9 @@ public class GraphEditor
     EditorScene scene = getCurrentScene();
     if ( scene != null )
     {
-      scene.editPaste( new Point( 0, 0 ) );
+      Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+      SwingUtilities.convertPointFromScreen( mouseLocation, scene.getView() );
+      scene.editPaste( mouseLocation );
     }
   }
 

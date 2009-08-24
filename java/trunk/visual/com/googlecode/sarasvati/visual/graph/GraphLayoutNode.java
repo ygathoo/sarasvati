@@ -18,8 +18,6 @@
 */
 package com.googlecode.sarasvati.visual.graph;
 
-import java.util.List;
-
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 
 public class GraphLayoutNode<N>
@@ -55,12 +53,6 @@ public class GraphLayoutNode<N>
   public void setIndex( final int index )
   {
     this.index = index;
-  }
-
-  public void addToLayer (final List<GraphLayoutNode<N>> layer)
-  {
-    this.index = layer.size();
-    layer.add( this );
     recalculateOrigin();
   }
 
