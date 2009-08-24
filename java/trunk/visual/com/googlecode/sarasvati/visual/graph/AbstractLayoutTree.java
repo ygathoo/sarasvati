@@ -21,9 +21,12 @@ package com.googlecode.sarasvati.visual.graph;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
 
 public abstract class AbstractLayoutTree<N>
 {
@@ -33,6 +36,16 @@ public abstract class AbstractLayoutTree<N>
   protected abstract Collection<N> getStartNodes ();
   protected abstract boolean hasNoInputs(N node);
   protected abstract Collection<N> getOutputs (N node);
+  protected abstract Collection<N> getInputs (N node);
+
+//  private final Comparator<GraphLayoutNode<N>> nodeComparator = new Comparator<GraphLayoutNode<N>>()
+//  {
+//    @Override
+//    public int compare (final GraphLayoutNode<N> o1, final GraphLayoutNode<N> o2)
+//    {
+//      return getOutputs( o2.getNode() ).size() - getOutputs( o1.getNode() ).size();
+//    }
+//  };
 
   @SuppressWarnings("unchecked")
   public void init ()
@@ -65,8 +78,10 @@ public abstract class AbstractLayoutTree<N>
       GraphLayoutNode<N> treeNode = new GraphLayoutNode<N>( 0, node );
 
       nodeMap.put( node, treeNode );
-      treeNode.addToLayer( nextLayer );
+      nextLayer.add( treeNode );
     }
+
+    sortLayer( nextLayer );
 
     List<GraphLayoutNode<N>> layer = null;
 
@@ -85,14 +100,69 @@ public abstract class AbstractLayoutTree<N>
 
           if (targetTreeNode == null)
           {
-            targetTreeNode = new GraphLayoutNode( depth, target );
-            nodeMap.put( target, targetTreeNode );
-            targetTreeNode.addToLayer( nextLayer );
+            boolean allAncestorsTraversed = true;
+            for ( N input : getInputs( target ) )
+            {
+              if ( !nodeMap.containsKey( input ) && !target.equals( input ) && !isParentAlsoChild( input, target ) )
+              {
+                allAncestorsTraversed = false;
+                break;
+              }
+            }
+
+            if ( allAncestorsTraversed )
+            {
+              targetTreeNode = new GraphLayoutNode( depth, target );
+              nodeMap.put( target, targetTreeNode );
+              nextLayer.add( targetTreeNode );
+            }
           }
         }
       }
+
+      sortLayer( nextLayer );
+
       depth++;
     }
+  }
+
+  private void sortLayer (final List<GraphLayoutNode<N>> layer)
+  {
+    // Collections.sort( layer, nodeComparator );
+    int index = 0;
+    for ( GraphLayoutNode<N> layoutNode : layer )
+    {
+      layoutNode.setIndex( index++ );
+    }
+  }
+
+  private boolean isParentAlsoChild (final N parent, final N child)
+  {
+    final Set<N> processed = new HashSet<N>();
+    final Queue<N> queue = new LinkedList<N>();
+
+    processed.add( parent );
+
+    queue.addAll( getInputs( parent ) );
+
+    while ( !queue.isEmpty() )
+    {
+      N node = queue.remove();
+      if ( node.equals( child ) )
+      {
+        return true;
+      }
+      processed.add( node );
+      for ( N input : getInputs( node ) )
+      {
+        if ( !processed.contains( input ) )
+        {
+          queue.add( input );
+        }
+      }
+    }
+
+    return false;
   }
 
   public GraphLayoutNode<N> getTreeNode (final N node)

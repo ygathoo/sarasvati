@@ -67,6 +67,21 @@ public class GraphLayoutTree extends AbstractLayoutTree<Node>
   }
 
   @Override
+  protected Collection<Node> getInputs (final Node node)
+  {
+    List<? extends Arc> arcs = graph.getInputArcs( node );
+
+    List<Node> inputs = new ArrayList<Node>( arcs.size() );
+
+    for ( Arc arc : arcs )
+    {
+      inputs.add( arc.getEndNode() );
+    }
+
+    return inputs;
+  }
+
+  @Override
   protected boolean hasNoInputs (final Node node)
   {
     return graph.getInputArcs( node ).isEmpty();

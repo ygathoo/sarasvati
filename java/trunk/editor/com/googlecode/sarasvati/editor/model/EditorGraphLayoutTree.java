@@ -25,14 +25,13 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.visual.graph.AbstractLayoutTree;
 
 public class EditorGraphLayoutTree extends AbstractLayoutTree<EditorGraphMember<?>>
 {
   private final List<EditorGraphMember<?>> nodes = new LinkedList<EditorGraphMember<?>>();
   private final List<EditorGraphMember<?>> startNodes = new LinkedList<EditorGraphMember<?>> ();
-  private final Map<EditorGraphMember<?>,Boolean> hasInputMap = new HashMap<EditorGraphMember<?>, Boolean>();
+  private final Map<EditorGraphMember<?>,List<EditorGraphMember<?>>> inputMap = new HashMap<EditorGraphMember<?>, List<EditorGraphMember<?>>>();
   private final Map<EditorGraphMember<?>,List<EditorGraphMember<?>>> outputMap = new HashMap<EditorGraphMember<?>, List<EditorGraphMember<?>>>();
 
   public EditorGraphLayoutTree (final EditorGraph graph)
@@ -45,16 +44,18 @@ public class EditorGraphLayoutTree extends AbstractLayoutTree<EditorGraphMember<
       }
 
       outputMap.put( node, new LinkedList<EditorGraphMember<?>>() );
+      inputMap.put( node, new LinkedList<EditorGraphMember<?>>() );
     }
 
     for ( EditorExternal external : graph.getExternals() )
     {
       outputMap.put( external, new LinkedList<EditorGraphMember<?>>() );
+      inputMap.put( external, new LinkedList<EditorGraphMember<?>>() );
     }
 
     for ( EditorArc arc : graph.getArcs() )
     {
-      hasInputMap.put( arc.getEnd(), true );
+      inputMap.get( arc.getEnd() ).add( arc.getStart() );
       outputMap.get( arc.getStart() ).add( arc.getEnd() );
     }
 
@@ -82,6 +83,12 @@ public class EditorGraphLayoutTree extends AbstractLayoutTree<EditorGraphMember<
   }
 
   @Override
+  protected Collection<EditorGraphMember<?>> getInputs (final EditorGraphMember<?> node)
+  {
+    return inputMap.get( node );
+  }
+
+  @Override
   protected Collection<EditorGraphMember<?>> getStartNodes ()
   {
     return startNodes;
@@ -90,6 +97,6 @@ public class EditorGraphLayoutTree extends AbstractLayoutTree<EditorGraphMember<
   @Override
   protected boolean hasNoInputs (final EditorGraphMember<?> node)
   {
-    return !SvUtil.falseIfNull( hasInputMap.get( node ) );
+    return inputMap.get( node ).isEmpty();
   }
 }
