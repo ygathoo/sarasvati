@@ -224,7 +224,7 @@ public class OpenLibraryPanel extends javax.swing.JPanel {
         }
       });
 
-      Action enterAction = new AbstractAction()
+      final Action enterAction = new AbstractAction()
       {
         private static final long serialVersionUID = 1L;
 
@@ -235,10 +235,26 @@ public class OpenLibraryPanel extends javax.swing.JPanel {
         }
       };
 
+      final Action escapeAction = new AbstractAction()
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          dialog.setVisible( false );
+          dialog.dispose();
+        }
+      };
+
       KeyStroke enterStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ENTER,0);
+      KeyStroke escapeStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE,0);
       nameInput.getInputMap().put( enterStroke, enterAction );
-      pdList.getInputMap().put( enterStroke, "jlist:ENTER" );
-      pdList.getActionMap().put( "jlist:ENTER", enterAction );
+      nameInput.getInputMap().put( escapeStroke, escapeAction );
+      pdList.getInputMap().put( enterStroke, "pdlist:ENTER" );
+      pdList.getActionMap().put( "pdlist:ENTER", enterAction );
+      pdList.getInputMap().put( escapeStroke, "pdlist:ESCAPE" );
+      pdList.getActionMap().put( "pdlist:ESCAPE", escapeAction );
 
       pdList.getSelectionModel().addListSelectionListener( new ListSelectionListener()
       {
