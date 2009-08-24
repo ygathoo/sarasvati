@@ -814,7 +814,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
           @Override
           public void actionPerformed (final ActionEvent e)
           {
-            GraphEditor.getInstance().openExternal( entry.getName(), entry.getPath() );
+            GraphEditor.getInstance().giveFocusOrOpen( entry.getName(), entry.getPath() );
           }
         };
 

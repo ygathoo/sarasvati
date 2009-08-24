@@ -49,6 +49,11 @@ public class DialogFactory
     return new ArcPropertiesDialog( frame, arc );
   }
 
+  public static JDialog newOpenLibraryDialog ()
+  {
+    return new OpenLibraryDialog( frame );
+  }
+
   public static void showError (final String error)
   {
     JOptionPane.showMessageDialog( frame, error, "Error", JOptionPane.ERROR_MESSAGE );

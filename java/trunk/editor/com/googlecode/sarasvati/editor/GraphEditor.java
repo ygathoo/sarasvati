@@ -62,12 +62,14 @@ import com.googlecode.sarasvati.editor.action.SceneAddExternalAction;
 import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
+import com.googlecode.sarasvati.editor.menu.CloseAction;
 import com.googlecode.sarasvati.editor.menu.CopyAction;
 import com.googlecode.sarasvati.editor.menu.CutAction;
 import com.googlecode.sarasvati.editor.menu.DeleteAction;
 import com.googlecode.sarasvati.editor.menu.ExitAction;
 import com.googlecode.sarasvati.editor.menu.NewGraphAction;
 import com.googlecode.sarasvati.editor.menu.OpenAction;
+import com.googlecode.sarasvati.editor.menu.OpenFromLibraryAction;
 import com.googlecode.sarasvati.editor.menu.PasteAction;
 import com.googlecode.sarasvati.editor.menu.PreferencesAction;
 import com.googlecode.sarasvati.editor.menu.RedoAction;
@@ -131,6 +133,7 @@ public class GraphEditor
 
   protected SaveAction    saveAction;
   protected SaveAction    saveAsAction;
+  protected CloseAction   closeAction;
 
   protected DeleteAction  deleteAction;
   protected CutAction     cutAction;
@@ -352,11 +355,15 @@ public class GraphEditor
 
     saveAction = new SaveAction( false );
     saveAsAction = new SaveAction( true );
+    closeAction = new CloseAction();
 
     fileMenu.add( new JMenuItem( new NewGraphAction() ) );
     fileMenu.add( new JMenuItem( new OpenAction() ) );
+    fileMenu.add( new JMenuItem( new OpenFromLibraryAction() ) );
     fileMenu.add( new JMenuItem( saveAsAction ) );
     fileMenu.add( new JMenuItem( saveAction ) );
+    fileMenu.addSeparator();
+    fileMenu.add( closeAction );
     fileMenu.addSeparator();
     fileMenu.add( new JMenuItem( new ExitAction() ) );
 
@@ -404,20 +411,20 @@ public class GraphEditor
     tabPane.setSelectedComponent( component );
   }
 
-  public void openExternal (final String externalName, final File externalPath)
+  public void giveFocusOrOpen (final String name, final File path)
   {
     for ( Component child : tabPane.getComponents() )
     {
       JComponent pane = (JComponent)child;
       String title = (String)pane.getClientProperty( GRAPH_NAME_KEY );
-      if ( SvUtil.equals( title, externalName ) )
+      if ( SvUtil.equals( title, name ) )
       {
         tabPane.setSelectedComponent( pane );
         return;
       }
     }
 
-    openProcessDefinition( externalPath );
+    openProcessDefinition( path );
   }
 
   public void openProcessDefinition (final File processDefinitionFile)
@@ -653,11 +660,15 @@ public class GraphEditor
     {
       undoAction.setEnabled( currentCommandStack.canUndo() );
       redoAction.setEnabled( currentCommandStack.canRedo() );
+      closeAction.setEnabled( true );
     }
     else
     {
       undoAction.setEnabled( false );
       redoAction.setEnabled( false );
+      saveAction.setEnabled( false );
+      saveAsAction.setEnabled( false );
+      closeAction.setEnabled( false );
     }
 
     if ( undoAction.isEnabled() )
@@ -694,11 +705,6 @@ public class GraphEditor
       {
         updateTabTitle( tabPane.getSelectedIndex(), title );
       }
-    }
-    else
-    {
-      saveAction.setEnabled( false );
-      saveAsAction.setEnabled( false );
     }
 
     updateCutCopyPaste();
