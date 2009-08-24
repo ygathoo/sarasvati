@@ -184,6 +184,7 @@ public class ArcPropertiesPanel extends javax.swing.JPanel {
         public void actionPerformed (final ActionEvent e)
         {
           dialog.setVisible( false );
+          dialog.dispose();
         }
       });
 
@@ -216,6 +217,7 @@ public class ArcPropertiesPanel extends javax.swing.JPanel {
           }
 
           dialog.setVisible( false );
+          dialog.dispose();
         }
       });
 
