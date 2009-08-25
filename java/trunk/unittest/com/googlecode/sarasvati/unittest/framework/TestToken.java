@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.test.framework;
+package com.googlecode.sarasvati.unittest.framework;
 
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Token;

@@ -16,7 +16,7 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.unittest;
 
 import junit.framework.Assert;
 
