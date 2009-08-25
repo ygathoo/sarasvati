@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.visual.test;
+package com.googlecode.sarasvati.test.visual;
 
 import org.hibernate.Session;
 

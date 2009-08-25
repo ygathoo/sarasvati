@@ -17,7 +17,7 @@
     Copyright 2008-2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.test;
 
 import java.util.Calendar;
 import java.util.Date;
