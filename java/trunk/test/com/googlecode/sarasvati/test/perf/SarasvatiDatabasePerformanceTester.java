@@ -17,7 +17,7 @@
     Copyright 2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.perf;
+package com.googlecode.sarasvati.test.perf;
 
 import java.io.File;
 import java.io.FilenameFilter;

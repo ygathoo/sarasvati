@@ -16,7 +16,7 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.hash;
+package com.googlecode.sarasvati.test.hash;
 
 import java.io.BufferedInputStream;
 import java.io.File;
