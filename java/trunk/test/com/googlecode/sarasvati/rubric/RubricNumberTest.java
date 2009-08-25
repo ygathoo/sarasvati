@@ -23,6 +23,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.googlecode.sarasvati.test.framework.TestRubricEnv;
+
 public class RubricNumberTest
 {
   @Test public void testSimple ()

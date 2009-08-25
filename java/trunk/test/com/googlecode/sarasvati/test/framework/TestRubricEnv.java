@@ -14,27 +14,40 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008-2009 Paul Lorenz
+    Copyright 2008, 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.util;
 
-import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.NodeToken;
+package com.googlecode.sarasvati.test.framework;
 
-public class ProcessPrinter
+import java.util.Date;
+
+import com.googlecode.sarasvati.rubric.env.RubricEnv;
+
+public class TestRubricEnv implements RubricEnv
 {
-  public static void print (final GraphProcess p)
+  public static final TestRubricEnv INSTANCE = new TestRubricEnv();
+
+  @Override
+  public Date evalDateFunction (final String dateFunction)
   {
-    System.out.println( "Process: " + p.getGraph().getName() );
-    for (NodeToken t : p.getNodeTokens() )
-    {
-      System.out.println( t );
-      for ( ArcToken a : t.getChildTokens() )
-      {
-        System.out.println( "\t" + a );
-      }
-    }
-    System.out.println();
+    return null;
+  }
+
+  @Override
+  public String evalStringFunction (final String stringFunction)
+  {
+    return null;
+  }
+
+  @Override
+  public boolean evalPredicate (final String predicate)
+  {
+    return false;
+  }
+
+  @Override
+  public Date evalRelativeDate (final Date date, final boolean business, final int offset, final int unit)
+  {
+    return null;
   }
 }

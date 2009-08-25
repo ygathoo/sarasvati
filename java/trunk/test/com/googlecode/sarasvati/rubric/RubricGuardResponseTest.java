@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.impl.SkipNodeGuardResponse;
+import com.googlecode.sarasvati.test.framework.TestRubricEnv;
 
 public class RubricGuardResponseTest
 {

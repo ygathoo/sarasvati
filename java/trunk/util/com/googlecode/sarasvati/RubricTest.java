@@ -17,11 +17,12 @@
     Copyright 2008-2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.rubric;
+package com.googlecode.sarasvati;
 
 import java.util.Calendar;
 import java.util.Date;
 
+import com.googlecode.sarasvati.rubric.RubricInterpreter;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtRelativeDate;
