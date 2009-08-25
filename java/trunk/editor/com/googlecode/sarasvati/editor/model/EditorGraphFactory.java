@@ -256,8 +256,6 @@ public class EditorGraphFactory
       ExternalState state = external.getState();
       xmlExternal.setName( state.getName() );
       xmlExternal.setProcessDefinition( state.getGraphName() );
-      xmlExternal.setX( external.getX() );
-      xmlExternal.setY( external.getY() );
 
       Set<String> emptySet = Collections.emptySet();
       List<Object> customList = DOMToObjectLoadHelper.mapToDOM( state.getCustomProperties(), emptySet );
