@@ -20,6 +20,9 @@ package com.googlecode.sarasvati;
 
 import org.junit.Test;
 
+import com.googlecode.sarasvati.test.framework.ExecutionTest;
+import com.googlecode.sarasvati.test.framework.TestProcess;
+
 public class BacktrackSplitTest extends ExecutionTest
 {
   @Test public void testSplit() throws Exception

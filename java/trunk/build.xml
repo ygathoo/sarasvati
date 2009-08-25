@@ -4,8 +4,11 @@
 
   <property name="dist.dir" value="dist"/>
   <property name="build.dir" value="${dist.dir}/build"/>
-  <property name="build.jarbase.dir" value="${dist.dir}/build/jarbase"/>
+  <property name="core.build.dir" value="${dist.dir}/core"/>
+  <property name="lang.build.dir" value="${dist.dir}/lang"/>
   <property name="examples.build.dir" value="${dist.dir}/examples"/>
+  <property name="tests.build.dir" value="${dist.dir}/tests"/>
+  <property name="build.jarbase.dir" value="${build.dir}/jarbase"/>
 
   <property name="dist.name" value="sarasvati-java-${version}"/>
   <property name="release.name" value="sarasvati-${version}"/>
@@ -65,12 +68,12 @@
   </target>
 
   <target name="buildLang">
-    <mkdir dir="${build.dir}/lang/com/googlecode/sarasvati/rubric/lang"/>
-    <mkdir dir="${build.dir}/lang"/>
+    <mkdir dir="${lang.build.dir}/com/googlecode/sarasvati/rubric/lang"/>
+    <mkdir dir="${lang.build.dir}"/>
 
-    <antlr3 target="lang/Rubric.g" dir="lang" outputdirectory="${build.dir}/lang/com/googlecode/sarasvati/rubric/lang"/>
+    <antlr3 target="lang/Rubric.g" dir="lang" outputdirectory="${lang.build.dir}/com/googlecode/sarasvati/rubric/lang"/>
 
-    <javac srcdir="${build.dir}/lang" destdir="${build.dir}/lang" source="1.5" target="1.5" debug="true">
+    <javac srcdir="${lang.build.dir}" destdir="${lang.build.dir}" source="1.5" target="1.5" debug="true">
       <include name="**/*.java" />
       <classpath refid="classpath"/>
       <sourcepath path="src"/>
@@ -78,7 +81,7 @@
   </target>
 
   <target name="buildLangJar" depends="buildLang">
-    <jar basedir="${build.dir}/lang" destfile="lib/rubric.jar">
+    <jar basedir="${lang.build.dir}" destfile="lib/rubric.jar">
       <include name="**/lang/RubricParser*.class"/>
       <include name="**/lang/RubricLexer*.class"/>
       <include name="**/lang/Rubric.tokens"/>
@@ -90,8 +93,8 @@
   </target>
 
   <target name="compile" depends="fetchlibs, buildMissingLangJar">
-    <mkdir dir="${build.dir}" />
-    <javac destdir="${build.dir}" source="1.5" target="1.5" debug="true">
+    <mkdir dir="${core.build.dir}" />
+    <javac destdir="${core.build.dir}" source="1.5" target="1.5" debug="true">
       <src>
         <pathelement path="src"/>
         <pathelement path="visual"/>
@@ -100,6 +103,12 @@
       <include name="**/*.java" />
       <classpath refid="classpath"/>
     </javac>
+
+    <copy todir="${core.build.dir}/com/googlecode/sarasvati">
+      <fileset dir="common">
+        <include name="ProcessDefinition.xsd"/>
+      </fileset>
+    </copy>
   </target>
 
   <target name="compile-examples" depends="compile, buildLang">
@@ -107,7 +116,16 @@
     <javac srcdir="examples" destdir="${examples.build.dir}" source="1.5" target="1.5" debug="true">
       <include name="**/*.java" />
       <classpath refid="classpath"/>
-      <classpath path="${build.dir}"/>
+      <classpath path="${core.build.dir}"/>
+    </javac>
+  </target>
+
+  <target name="compile-tests" depends="compile, buildLang">
+    <mkdir dir="${tests.build.dir}" />
+    <javac srcdir="test" destdir="${tests.build.dir}" source="1.5" target="1.5" debug="true">
+      <include name="**/*.java" />
+      <classpath refid="classpath"/>
+      <classpath path="${core.build.dir}"/>
     </javac>
   </target>
 
@@ -115,18 +133,12 @@
     <mkdir dir="${archive.base}"/>
 
     <copy todir="${build.jarbase.dir}">
-      <fileset dir="${build.dir}/lang">
+      <fileset dir="${lang.build.dir}">
         <include name="**/lang/RubricParser*.class"/>
         <include name="**/lang/RubricLexer*.class"/>
         <include name="**/lang/Rubric.tokens"/>
       </fileset>
-      <fileset dir="${build.dir}/com"/>
-    </copy>
-
-    <copy todir="${build.jarbase.dir}/com/googlecode/sarasvati">
-      <fileset dir="common">
-        <include name="ProcessDefinition.xsd"/>
-      </fileset>
+      <fileset dir="${core.build.dir}"/>
     </copy>
 
     <jar basedir="${build.jarbase.dir}" destfile="${archive.base}/${release.name}.jar">
@@ -194,11 +206,44 @@
       <sourcePath path="${basedir}/src" />
       <sourcePath path="${basedir}/visual" />
       <sourcePath path="${basedir}/editor" />
-      <class location="${build.dir}/com"/>
+      <class location="${core.build.dir}"/>
       <auxClasspath refid="classpath"/>
     </findbugs>
   </target>
 
-  <target name="hudson" depends="findbugs"/>
+  <target name="junit" depends="compile-tests">
+    <mkdir dir="hudson/testresults"/>
+    <junit haltonfailure="false">
+       <jvmarg value="-Xms128m"/>
+       <jvmarg value="-Xmx128m"/>
+       <classpath>
+         <path refid="classpath"/>
+         <path location="${core.build.dir}"/>
+         <path location="${tests.build.dir}"/>
+       </classpath>
+       <formatter type="xml"/>
+       <batchtest fork="yes" todir="hudson/testresults">
+          <fileset dir="${tests.build.dir}">
+              <include name="**/*.class"/>
+              <exclude name="**/framework/*"/>
+          </fileset>
+       </batchtest>
+    </junit>
+  </target>
+
+  <!--
+  <target name="generate-reports" depends="junit" description="create JUnit test HTML reports">
+    <mkdir dir="hudson/testresults"/>
+    <junitreport todir="hudson/testresults">
+        <fileset dir="hudson/testresults">
+            <include name="TEST-*.xml"/>
+        </fileset>
+        <report format="frames" todir="${reports}"/>
+    </junitreport>
+
+  </target>
+  -->
+
+  <target name="hudson" depends="findbugs, junit"/>
 
 </project>

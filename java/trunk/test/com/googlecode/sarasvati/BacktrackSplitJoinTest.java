@@ -22,6 +22,9 @@ import java.util.Iterator;
 
 import org.junit.Test;
 
+import com.googlecode.sarasvati.test.framework.ExecutionTest;
+import com.googlecode.sarasvati.test.framework.TestProcess;
+
 public class BacktrackSplitJoinTest extends ExecutionTest
 {
   @Test public void testSplitJoin() throws Exception
