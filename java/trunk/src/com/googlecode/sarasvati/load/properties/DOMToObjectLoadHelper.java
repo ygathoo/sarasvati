@@ -262,7 +262,7 @@ public class DOMToObjectLoadHelper
             }
             fullName.append( pathElement );
 
-            Element element = elemMap.get( fullName );
+            Element element = elemMap.get( fullName.toString() );
             if ( element == null )
             {
               element = doc.createElementNS( "http://sarasvati.googlecode.com/ProcessDefinition", pathElement );

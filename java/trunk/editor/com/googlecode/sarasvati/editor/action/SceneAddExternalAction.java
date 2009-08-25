@@ -28,9 +28,9 @@ import com.googlecode.sarasvati.editor.model.EditorScene;
 
 public class SceneAddExternalAction extends WidgetAction.Adapter
 {
-  public static SceneAddExternalAction INSTANCE = new SceneAddExternalAction();
+  public static final SceneAddExternalAction INSTANCE = new SceneAddExternalAction();
 
-  protected static boolean enabled = false;
+  private static boolean enabled = false;
 
   public static void setEnabled (final boolean enabled)
   {

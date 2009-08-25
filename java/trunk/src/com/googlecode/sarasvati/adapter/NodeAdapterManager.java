@@ -25,7 +25,7 @@ import com.googlecode.sarasvati.Node;
 
 public class NodeAdapterManager
 {
-  protected static Map<Class<?>, Function<?, Node>> map = new HashMap<Class<?>, Function<?, Node>>();
+  private static final Map<Class<?>, Function<?, Node>> map = new HashMap<Class<?>, Function<?, Node>>();
 
   public static <T> void registerFactory (final Class<T> clazz, final Function<T, Node> factory)
   {

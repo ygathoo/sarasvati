@@ -27,7 +27,7 @@ import com.googlecode.sarasvati.env.AttributeConverters;
 
 public class PropertyMutatorRegistry
 {
-  protected static Map<Class<?>, Class<?>> mutatorCache = new HashMap<Class<?>, Class<?>>();
+  private static final Map<Class<?>, Class<?>> mutatorCache = new HashMap<Class<?>, Class<?>>();
 
 
   public static void registerPropertyMutator (final Class<?> targetClass, final Class<?> mutatorClass)

@@ -28,9 +28,9 @@ import com.googlecode.sarasvati.editor.model.EditorScene;
 
 public class SceneAddNodeAction extends WidgetAction.Adapter
 {
-  public static SceneAddNodeAction INSTANCE = new SceneAddNodeAction();
+  public static final SceneAddNodeAction INSTANCE = new SceneAddNodeAction();
 
-  protected static boolean enabled = false;
+  private static boolean enabled = false;
 
   public static void setEnabled (final boolean enabled)
   {
