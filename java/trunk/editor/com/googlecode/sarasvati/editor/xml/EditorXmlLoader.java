@@ -51,17 +51,21 @@ public class EditorXmlLoader
 
   public EditorXmlLoader (final String... extraPackages) throws SarasvatiLoadException
   {
-    String packages = "com.googlecode.sarasvati.editor.xml";
+    StringBuilder packages = new StringBuilder();
+    packages.append( "com.googlecode.sarasvati.editor.xml" );
 
     if (extraPackages != null)
     {
       for (String p : extraPackages)
-        packages += ":" + p;
+      {
+        packages.append( ":" );
+        packages.append( p );
+      }
     }
 
     try
     {
-      this.context = JAXBContext.newInstance( packages );
+      this.context = JAXBContext.newInstance( packages.toString() );
     }
     catch (JAXBException e)
     {

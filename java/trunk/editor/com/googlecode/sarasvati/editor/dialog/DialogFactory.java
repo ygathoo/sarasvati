@@ -29,7 +29,7 @@ import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 
 public class DialogFactory
 {
-  protected static JFrame frame = null;
+  private static JFrame frame = null;
 
   private static PreferencesDialog preferencesDialog = null;
 
