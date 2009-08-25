@@ -92,18 +92,22 @@ public abstract class AbstractLayoutTree<N>
       layer = nextLayer;
       nextLayer = new LinkedList<GraphLayoutNode<N>>();
 
+      Set<N> layerNodes = new HashSet<N>();
       for ( GraphLayoutNode<N> treeNode : layer )
       {
         for ( N target : getOutputs( treeNode.getNode() ) )
         {
           GraphLayoutNode<N> targetTreeNode = nodeMap.get( target );
 
-          if (targetTreeNode == null)
+          if ( targetTreeNode == null )
           {
             boolean allAncestorsTraversed = true;
             for ( N input : getInputs( target ) )
             {
-              if ( !nodeMap.containsKey( input ) && !target.equals( input ) && !isParentAlsoChild( input, target ) )
+              // If we haven't encountered an ancestor yet (or the ancestor is in the same
+              // layer), we should delay processing.
+              if ( ( !nodeMap.containsKey( input ) || layerNodes.contains( input ) ) &&
+                   !target.equals( input ) && !isParentAlsoChild( input, target ) )
               {
                 allAncestorsTraversed = false;
                 break;
@@ -115,6 +119,7 @@ public abstract class AbstractLayoutTree<N>
               targetTreeNode = new GraphLayoutNode( depth, target );
               nodeMap.put( target, targetTreeNode );
               nextLayer.add( targetTreeNode );
+              layerNodes.add( target );
             }
           }
         }
