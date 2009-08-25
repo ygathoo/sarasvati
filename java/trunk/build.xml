@@ -4,6 +4,7 @@
 
   <property name="dist.dir" value="dist"/>
   <property name="build.dir" value="${dist.dir}/build"/>
+  <property name="build.jarbase.dir" value="${dist.dir}/build/jarbase"/>
   <property name="examples.build.dir" value="${dist.dir}/examples"/>
 
   <property name="dist.name" value="sarasvati-java-${version}"/>
@@ -113,28 +114,29 @@
   <target name="dist" depends="compile, buildLang">
     <mkdir dir="${archive.base}"/>
 
-    <copy todir="${build.dir}">
+    <copy todir="${build.jarbase.dir}">
       <fileset dir="${build.dir}/lang">
         <include name="**/lang/RubricParser*.class"/>
         <include name="**/lang/RubricLexer*.class"/>
         <include name="**/lang/Rubric.tokens"/>
       </fileset>
+      <fileset dir="${build.dir}/com"/>
     </copy>
 
-    <copy todir="${build.dir}/com/googlecode/sarasvati">
+    <copy todir="${build.jarbase.dir}/com/googlecode/sarasvati">
       <fileset dir="common">
         <include name="ProcessDefinition.xsd"/>
       </fileset>
     </copy>
 
-    <jar basedir="${build.dir}" destfile="${archive.base}/${release.name}.jar">
+    <jar basedir="${build.jarbase.dir}" destfile="${archive.base}/${release.name}.jar">
       <exclude name="lang/com/**"/>
       <exclude name="**/visual/**"/>
       <exclude name="**/editor/**"/>
     </jar>
 
-    <jar basedir="${build.dir}" includes="**/visual/**" destfile="${archive.base}/${visual.release.name}.jar"/>
-    <jar basedir="${build.dir}" includes="**/editor/**" destfile="${archive.base}/${editor.release.name}.jar"/>
+    <jar basedir="${build.jarbase.dir}" includes="**/visual/**" destfile="${archive.base}/${visual.release.name}.jar"/>
+    <jar basedir="${build.jarbase.dir}" includes="**/editor/**" destfile="${archive.base}/${editor.release.name}.jar"/>
 
     <copy todir="${archive.base}">
       <fileset dir=".">
@@ -192,9 +194,7 @@
       <sourcePath path="${basedir}/src" />
       <sourcePath path="${basedir}/visual" />
       <sourcePath path="${basedir}/editor" />
-      <class location="${archive.base}/${release.name}.jar"/>
-      <class location="${archive.base}/${visual.release.name}.jar"/>
-      <class location="${archive.base}/${editor.release.name}.jar"/>
+      <class location="${build.dir}/com"/>
       <auxClasspath refid="classpath"/>
     </findbugs>
   </target>
