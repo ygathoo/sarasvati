@@ -128,7 +128,7 @@
 
   <target name="compile-tests" depends="compile, buildLang">
     <mkdir dir="${tests.build.dir}" />
-    <javac srcdir="test" destdir="${tests.build.dir}" source="1.5" target="1.5" debug="true">
+    <javac srcdir="unittest" destdir="${tests.build.dir}" source="1.5" target="1.5" debug="true">
       <include name="**/*.java" />
       <classpath refid="classpath"/>
       <classpath path="${core.build.dir}"/>

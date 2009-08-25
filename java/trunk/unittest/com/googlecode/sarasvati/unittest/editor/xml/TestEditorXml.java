@@ -1,10 +1,15 @@
-package com.googlecode.sarasvati.editor.xml;
+package com.googlecode.sarasvati.unittest.editor.xml;
 
 import java.io.File;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
+
+import com.googlecode.sarasvati.editor.xml.EditorXmlLoader;
+import com.googlecode.sarasvati.editor.xml.XmlEditorExternal;
+import com.googlecode.sarasvati.editor.xml.XmlEditorNode;
+import com.googlecode.sarasvati.editor.xml.XmlEditorProperties;
 
 public class TestEditorXml
 {

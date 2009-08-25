@@ -17,12 +17,13 @@
     Copyright 2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.rubric;
+package com.googlecode.sarasvati.unittest.rubric;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.googlecode.sarasvati.rubric.RubricInterpreter;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.visitor.DropNotToAboveLeavesVisitor;
 

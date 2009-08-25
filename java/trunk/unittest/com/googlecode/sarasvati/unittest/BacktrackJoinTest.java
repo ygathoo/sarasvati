@@ -16,14 +16,18 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.unittest;
 
 import java.util.Iterator;
 
 import org.junit.Test;
 
-import com.googlecode.sarasvati.test.framework.ExecutionTest;
-import com.googlecode.sarasvati.test.framework.TestProcess;
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.unittest.framework.ExecutionTest;
+import com.googlecode.sarasvati.unittest.framework.TestProcess;
 
 public class BacktrackJoinTest extends ExecutionTest
 {

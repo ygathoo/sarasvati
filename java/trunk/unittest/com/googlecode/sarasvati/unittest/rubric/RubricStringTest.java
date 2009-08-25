@@ -17,20 +17,22 @@
     Copyright 2008 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.rubric;
+package com.googlecode.sarasvati.unittest.rubric;
 
 import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.googlecode.sarasvati.test.framework.TestRubricEnv;
+import com.googlecode.sarasvati.rubric.RubricException;
+import com.googlecode.sarasvati.rubric.RubricInterpreter;
+import com.googlecode.sarasvati.unittest.framework.TestRubricEnv;
 
-public class RubricNumberTest
+public class RubricStringTest
 {
   @Test public void testSimple ()
   {
-    Integer expected = 1;
-    String script="1";
+    String expected = "foo";
+    String script="\"foo\"";
     System.out.println( "SCRIPT: " + script );
 
     Object result = RubricInterpreter.compile( script ).eval( TestRubricEnv.INSTANCE );
@@ -38,10 +40,29 @@ public class RubricNumberTest
     Assert.assertEquals( expected, result );
   }
 
-  @Test public void testNegative ()
+  @Test public void testWithQuotes ()
   {
-    Integer expected = -10000;
-    String script="-10000";
+    String expected = "foo\"bar\"";
+    String script="\"foo\\\"bar\\\"\"";
+    System.out.println( "SCRIPT: " + script );
+
+    Object result = RubricInterpreter.compile( script ).eval( TestRubricEnv.INSTANCE );
+
+    Assert.assertEquals( expected, result );
+  }
+
+  @Test (expected=RubricException.class)
+  public void testUnbalancedQuoteFailure ()
+  {
+    String script="\"foo";
+    System.out.println( "SCRIPT: " + script );
+    RubricInterpreter.compile( script ).eval( TestRubricEnv.INSTANCE );
+  }
+
+  @Test public void testWithSpaces ()
+  {
+    String expected = "This is a long statement, include a \"quote with stuff\"";
+    String script="\"This is a long statement, include a \\\"quote with stuff\\\"\"";
     System.out.println( "SCRIPT: " + script );
 
     Object result = RubricInterpreter.compile( script ).eval( TestRubricEnv.INSTANCE );
