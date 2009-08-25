@@ -21,8 +21,8 @@ package com.googlecode.sarasvati;
 import org.junit.Test;
 
 import com.googlecode.sarasvati.test.framework.ExecutionTest;
+import com.googlecode.sarasvati.test.framework.ProcessPrinter;
 import com.googlecode.sarasvati.test.framework.TestProcess;
-import com.googlecode.sarasvati.util.ProcessPrinter;
 
 public class BacktrackUnevenTreesTest extends ExecutionTest
 {

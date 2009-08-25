@@ -109,6 +109,12 @@
         <include name="ProcessDefinition.xsd"/>
       </fileset>
     </copy>
+
+    <copy todir="${core.build.dir}/com/googlecode/sarasvati/editor">
+      <fileset dir="editor/com/googlecode/sarasvati/editor">
+        <include name="Editor.xsd"/>
+      </fileset>
+    </copy>
   </target>
 
   <target name="compile-examples" depends="compile, buildLang">
@@ -196,6 +202,7 @@
 
   <target name="clean">
     <delete dir="${dist.dir}"/>
+    <delete dir="hudson/testresults"/>
   </target>
 
   <target name="findbugs" depends="dist">
@@ -226,6 +233,7 @@
           <fileset dir="${tests.build.dir}">
               <include name="**/*.class"/>
               <exclude name="**/framework/*"/>
+            <exclude name="**/*$*.*"/>
           </fileset>
        </batchtest>
     </junit>
