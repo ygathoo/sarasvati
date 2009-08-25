@@ -20,7 +20,7 @@ package com.googlecode.sarasvati.script;
 
 public class ScriptRunnerFactory
 {
-  protected static ScriptRunner scriptRunner = null;
+  private static ScriptRunner scriptRunner = null;
 
   static
   {

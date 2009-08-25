@@ -36,7 +36,7 @@ import com.googlecode.sarasvati.impl.NestedReadEnv;
 
 public class MemNode implements Node, Cloneable
 {
-  protected static AtomicLong idGenerator = new AtomicLong();
+  protected static final AtomicLong idGenerator = new AtomicLong();
 
   protected Graph    graph;
   protected Graph    definingGraph;
