@@ -85,7 +85,7 @@ public abstract class AbstractProcessVisualizer
   }
 
   @SuppressWarnings("unchecked")
-  public void run () throws Exception
+  public synchronized void run () throws Exception
   {
     init ();
 
