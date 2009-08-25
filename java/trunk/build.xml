@@ -199,4 +199,6 @@
     </findbugs>
   </target>
 
+  <target name="hudson" depends="findbugs"/>
+
 </project>
