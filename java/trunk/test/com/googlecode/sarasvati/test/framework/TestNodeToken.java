@@ -16,10 +16,14 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.test.framework;
 
 import java.util.LinkedList;
 import java.util.List;
+
+import com.googlecode.sarasvati.ExecutionType;
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.NodeToken;
 
 import junit.framework.Assert;
 

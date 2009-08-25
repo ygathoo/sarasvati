@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.test.framework;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,6 +26,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
+
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ExecutionType;
+import com.googlecode.sarasvati.Graph;
+import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.NodeToken;
 
 import junit.framework.Assert;
 

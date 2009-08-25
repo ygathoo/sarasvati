@@ -16,7 +16,11 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati;
+package com.googlecode.sarasvati.test.framework;
+
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.ExecutionType;
+import com.googlecode.sarasvati.Node;
 
 import junit.framework.Assert;
 
