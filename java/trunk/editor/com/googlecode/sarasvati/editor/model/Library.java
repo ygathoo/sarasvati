@@ -19,13 +19,20 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.TreeMap;
 
+import javax.xml.bind.JAXBException;
+
+import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.xml.EditorXmlLoader;
+import com.googlecode.sarasvati.editor.xml.XmlEditorProperties;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.util.FileVisitor;
 import com.googlecode.sarasvati.util.SvUtil;
+import com.googlecode.sarasvati.xml.XmlLoader;
 
 public class Library
 {
@@ -109,5 +116,29 @@ public class Library
   public void update (final ProcessDefinition processDefinition, final File path)
   {
     entries.put( processDefinition.getName(), new LibraryEntry( processDefinition, path ) );
+  }
+
+  public void saveAllEntriesInLibraryInNewestFormat () throws IOException, JAXBException
+  {
+    GraphEditor editor = GraphEditor.getInstance();
+    XmlLoader xmlLoader = editor.getXmlLoader();
+    EditorXmlLoader editorXmlLoader = editor.getEditorXmlLoader();
+
+    for ( LibraryEntry entry : getEntries() )
+    {
+      File saveFile = entry.getPath();
+      File editorPropsFile = new File( saveFile.getParentFile(), entry.getName() + ".editor.xml" );
+      XmlEditorProperties xmlEditorProps = null;
+      if ( editorPropsFile.exists() && editorPropsFile.canRead() )
+      {
+        xmlEditorProps = editorXmlLoader.loadEditorProperties( editorPropsFile );
+      }
+      EditorGraph graph = EditorGraphFactory.loadFromXml( entry.getProcessDefinition(), xmlEditorProps );
+
+      EditorGraphFactory.XmlSaveData saveData = EditorGraphFactory.exportToXml( graph );
+      xmlLoader.saveProcessDefinition( saveData.getXmlProcDef(), saveFile );
+      editorXmlLoader.saveEditorProperties( saveData.getXmlEditorProps(), new File( saveFile.getParentFile(), entry.getName() + ".editor.xml" ) );
+      update( saveData.getXmlProcDef(), saveFile );
+    }
   }
 }

@@ -63,6 +63,7 @@ import com.googlecode.sarasvati.editor.action.SceneAddNodeAction;
 import com.googlecode.sarasvati.editor.command.CommandStack;
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
 import com.googlecode.sarasvati.editor.menu.CloseAction;
+import com.googlecode.sarasvati.editor.menu.ConvertLibraryAction;
 import com.googlecode.sarasvati.editor.menu.CopyAction;
 import com.googlecode.sarasvati.editor.menu.CutAction;
 import com.googlecode.sarasvati.editor.menu.DeleteAction;
@@ -165,6 +166,11 @@ public class GraphEditor
   public XmlLoader getXmlLoader ()
   {
     return xmlLoader;
+  }
+
+  public EditorXmlLoader getEditorXmlLoader ()
+  {
+    return editorXmlLoader;
   }
 
   public void setMode (final EditorMode mode)
@@ -387,8 +393,14 @@ public class GraphEditor
     editMenu.addSeparator();
     editMenu.add( new JMenuItem( new PreferencesAction() ) );
 
+    JMenu toolsMenu = new JMenu( "Tools" );
+    toolsMenu.setMnemonic( KeyEvent.VK_T );
+
+    toolsMenu.add( new JMenuItem( new ConvertLibraryAction() ) );
+
     menuBar.add( fileMenu );
     menuBar.add( editMenu );
+    menuBar.add( toolsMenu );
 
     return menuBar;
   }
@@ -535,7 +547,7 @@ public class GraphEditor
     {
       buf.append( "\nYour process definition triggered validation warnings. Do you still wish to save?" );
       if ( JOptionPane.OK_OPTION !=
-             JOptionPane.showConfirmDialog( GraphEditor.getInstance().getMainWindow(),
+             JOptionPane.showConfirmDialog( mainWindow,
                                             buf.toString(),
                                             "Warning",
                                             JOptionPane.WARNING_MESSAGE ) )
