@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.util;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import com.googlecode.sarasvati.NodeToken;
@@ -28,8 +29,9 @@ import com.googlecode.sarasvati.NodeToken;
  *
  * @author Paul Lorenz
  */
-public class NodeTokenIdComparator implements Comparator<NodeToken>
+public class NodeTokenIdComparator implements Comparator<NodeToken>, Serializable
 {
+  private static final long serialVersionUID = 1L;
   private final boolean oldestFirst;
 
   public NodeTokenIdComparator (final boolean oldestFirst)

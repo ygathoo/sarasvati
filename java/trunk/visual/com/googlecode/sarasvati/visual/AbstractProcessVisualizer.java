@@ -219,7 +219,7 @@ public abstract class AbstractProcessVisualizer
           }
         }
       }
-    }.run();
+    }.start();
   }
 
   public synchronized void setProcess (final HibGraphProcess graphProcess)
