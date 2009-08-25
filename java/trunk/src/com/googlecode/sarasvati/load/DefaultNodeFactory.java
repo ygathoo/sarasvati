@@ -30,7 +30,7 @@ import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
 public class DefaultNodeFactory implements NodeFactory
 {
-  protected static Map<String, Class<? extends CustomNode>> globalCustomTypeMap = new HashMap<String, Class<? extends CustomNode>>();
+  private static final Map<String, Class<? extends CustomNode>> globalCustomTypeMap = new HashMap<String, Class<? extends CustomNode>>();
 
   public static void addGlobalCustomType (final String type,
                                           final Class<? extends CustomNode> clazz)

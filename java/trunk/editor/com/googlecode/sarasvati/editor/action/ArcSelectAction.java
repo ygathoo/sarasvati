@@ -22,7 +22,7 @@ import org.netbeans.api.visual.action.WidgetAction;
 
 public class ArcSelectAction extends ToggledWidgetActionDecorator
 {
-  protected static boolean enabled = false;
+  private static boolean enabled = false;
 
   public static void setEnabled (final boolean enabled)
   {

@@ -93,7 +93,7 @@ import com.googlecode.sarasvati.xml.XmlLoader;
 public class GraphEditor
 {
   private static final String GRAPH_NAME_KEY = "graphName";
-  private static GraphEditor INSTANCE;
+  private static final GraphEditor INSTANCE = new GraphEditor ();
 
   private enum SaveResult
   {
@@ -146,9 +146,8 @@ public class GraphEditor
   protected EditorMode  mode;
   protected File        lastFile;
 
-  public GraphEditor () throws SarasvatiLoadException
+  private GraphEditor () throws SarasvatiLoadException
   {
-    INSTANCE = this;
     xmlLoader = new XmlLoader();
     editorXmlLoader = new EditorXmlLoader();
   }
@@ -831,12 +830,11 @@ public class GraphEditor
 
   public static void main( final String[] args ) throws Exception
   {
-    final GraphEditor graphEditor = new GraphEditor();
     SwingUtilities.invokeLater( new Runnable()
     {
       @Override public void run()
       {
-        graphEditor.setup();
+        GraphEditor.getInstance().setup();
       }
     });
   }
