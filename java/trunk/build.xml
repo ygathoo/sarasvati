@@ -9,6 +9,7 @@
   <property name="dist.name" value="sarasvati-java-${version}"/>
   <property name="release.name" value="sarasvati-${version}"/>
   <property name="visual.release.name" value="sarasvati-visual-${version}"/>
+  <property name="editor.release.name" value="sarasvati-editor-${version}"/>
 
   <property name="archive.base" value="${dist.dir}/${dist.name}"/>
   <property name="fetch.indicator" value="lib/.fetchlibs"/>
@@ -19,7 +20,17 @@
     </fileset>
   </path>
 
+  <path id="hudson">
+    <fileset dir="lib/">
+      <include name="*.jar"/>
+    </fileset>
+    <fileset dir="hudson/lib/">
+      <include name="*.jar"/>
+    </fileset>
+  </path>
+
   <taskdef name="antlr3" classname="org.apache.tools.ant.antlr.ANTLR3" classpathref="classpath"/>
+  <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="hudson"/>
 
   <available file="${fetch.indicator}" property="libs.notfetched"/>
   <available file="lib/rubric.jar" property="rubric.jar.exists"/>
@@ -83,6 +94,7 @@
       <src>
         <pathelement path="src"/>
         <pathelement path="visual"/>
+        <pathelement path="editor"/>
       </src>
       <include name="**/*.java" />
       <classpath refid="classpath"/>
@@ -118,9 +130,11 @@
     <jar basedir="${build.dir}" destfile="${archive.base}/${release.name}.jar">
       <exclude name="lang/com/**"/>
       <exclude name="**/visual/**"/>
+      <exclude name="**/editor/**"/>
     </jar>
 
     <jar basedir="${build.dir}" includes="**/visual/**" destfile="${archive.base}/${visual.release.name}.jar"/>
+    <jar basedir="${build.dir}" includes="**/editor/**" destfile="${archive.base}/${editor.release.name}.jar"/>
 
     <copy todir="${archive.base}">
       <fileset dir=".">
@@ -168,6 +182,21 @@
 
   <target name="clean">
     <delete dir="${dist.dir}"/>
+  </target>
+
+  <target name="findbugs" depends="dist">
+    <findbugs home="hudson"
+              output="xml"
+              outputFile="hudson/findbugs.xml"
+              jvmargs="-Xmx200M">
+      <sourcePath path="${basedir}/src" />
+      <sourcePath path="${basedir}/visual" />
+      <sourcePath path="${basedir}/editor" />
+      <class location="${archive.base}/${release.name}.jar"/>
+      <class location="${archive.base}/${visual.release.name}.jar"/>
+      <class location="${archive.base}/${editor.release.name}.jar"/>
+      <auxClasspath refid="classpath"/>
+    </findbugs>
   </target>
 
 </project>
