@@ -14,6 +14,8 @@ package com.googlecode.sarasvati.editor.panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.regex.Pattern;
 
 import javax.swing.AbstractAction;
@@ -262,6 +264,18 @@ public class OpenLibraryPanel extends javax.swing.JPanel {
         public void valueChanged (final ListSelectionEvent e)
         {
           okButton.setEnabled( pdList.getSelectedIndex() != -1 );
+        }
+      });
+
+      pdList.addMouseListener( new MouseAdapter()
+      {
+        @Override
+        public void mouseClicked (final MouseEvent e)
+        {
+          if ( e.getClickCount() == 2 && e.getButton() == MouseEvent.BUTTON1 )
+          {
+            openSelected();
+          }
         }
       });
 
