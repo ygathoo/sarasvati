@@ -75,7 +75,7 @@ public class GraphLayoutTree extends AbstractLayoutTree<Node>
 
     for ( Arc arc : arcs )
     {
-      inputs.add( arc.getEndNode() );
+      inputs.add( arc.getStartNode() );
     }
 
     return inputs;
