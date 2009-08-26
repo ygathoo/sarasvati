@@ -26,6 +26,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
 
 import com.googlecode.sarasvati.Arc;
@@ -236,9 +237,26 @@ public class ProcessTree
           if ( !processed.contains( ptArc.getChild() ) )
           {
             ProcessTreeNode childNode = ptArc.getChild();
-            childNode.setDepth( depth );
-            childNode.addToLayer( nextLayer );
-            processed.add( childNode );
+
+            // We only want to draw a node token once all it's parents have
+            // been drawn on previous rows.
+            boolean allInputsProcessed = true;
+            for ( ProcessTreeArc parentArc : childNode.getParents() )
+            {
+              if ( !processed.contains( parentArc.getParent() ) ||
+                   nextLayer.contains( parentArc.getParent() ) )
+              {
+                allInputsProcessed = false;
+                break;
+              }
+            }
+
+            if ( allInputsProcessed )
+            {
+              childNode.setDepth( depth );
+              childNode.addToLayer( nextLayer );
+              processed.add( childNode );
+            }
           }
         }
       }
@@ -318,23 +336,70 @@ public class ProcessTree
         for ( ProcessTreeArc ptArc : treeNode.getChildren() )
         {
           ProcessTreeNode child = ptArc.getChild();
-          if ( !processed.contains( child ) &&
-               !( treeNode.isCompletedNodeToken() && child.hasNonCompleteNodeTokenParent() ) &&
-               !( ptArc.getToken() == null &&
-                  treeNode.getToken() != null &&
-                  child.hasLowerParent( treeNode, this ) ) )
+          if ( processed.contains( child ) )
           {
-            if ( child.getDepth() == -1 )
+            continue;
+          }
+
+          if ( child.getDepth() >= 0 )
+          {
+            processed.add( child );
+            continue;
+          }
+
+          // We only want to draw a node token once all it's parents have
+          // been drawn on previous rows.
+          boolean allInputsProcessed = true;
+          for ( ProcessTreeArc parentArc : child.getParents() )
+          {
+            if ( ( !processed.contains( parentArc.getParent() ) ||
+                   nextLayer.contains( parentArc.getParent() ) ) &&
+                 !isParentAlsoChild( parentArc.getParent(), child ) )
             {
-              child.setDepth( depth );
-              child.addToLayer( nextLayer );
+              allInputsProcessed = false;
+              break;
             }
+          }
+
+          if ( allInputsProcessed )
+          {
+            child.setDepth( depth );
+            child.addToLayer( nextLayer );
             processed.add( child );
           }
         }
       }
       depth++;
     }
+  }
+
+  private boolean isParentAlsoChild (final ProcessTreeNode parent, final ProcessTreeNode child)
+  {
+    final Set<ProcessTreeNode> processed = new HashSet<ProcessTreeNode>();
+    final Queue<ProcessTreeNode> checkQueue = new LinkedList<ProcessTreeNode>();
+
+    processed.add( parent );
+
+    checkQueue.addAll( parent.getNodeParents() );
+
+    while ( !checkQueue.isEmpty() )
+    {
+      ProcessTreeNode node = checkQueue.remove();
+      if ( node.equals( child ) )
+      {
+        return true;
+      }
+      processed.add( node );
+      for ( ProcessTreeNode input : node.getNodeParents() )
+      {
+        if ( !processed.contains( input ) )
+        {
+          checkQueue.add( input );
+        }
+      }
+    }
+
+    return false;
   }
 
   public Iterable<ProcessTreeNode> getProcessTreeNodes ()

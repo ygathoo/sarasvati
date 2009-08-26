@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.visual.process;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,6 +98,23 @@ public class ProcessTreeNode implements VisualProcessNode
   public List<ProcessTreeArc> getChildren ()
   {
     return children;
+  }
+
+  public List<ProcessTreeArc> getParents ()
+  {
+    return parents;
+  }
+
+  public List<ProcessTreeNode> getNodeParents ()
+  {
+    List<ProcessTreeNode> parentNodes = new ArrayList<ProcessTreeNode>( parents.size() );
+
+    for ( ProcessTreeArc parentArc : parents )
+    {
+      parentNodes.add( parentArc.getParent() );
+    }
+
+    return parentNodes;
   }
 
   public void addChild (final ProcessTreeArc child)
