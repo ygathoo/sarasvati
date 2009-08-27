@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.SarasvatiException;
 
 public class DefaultExecutionEventQueue implements ExecutionEventQueue
 {
@@ -48,7 +49,38 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
    * @see com.googlecode.sarasvati.event.ExecutionEventQueue#addListener(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.event.ExecutionListener, com.googlecode.sarasvati.event.ExecutionEventType[])
    */
   public synchronized void addListener (final Engine engine,
-                                        final ExecutionListener listener,
+                                        final Class<? extends ExecutionListener> listenerClass,
+                                        final ExecutionEventType...eventTypes)
+  {
+    if ( eventTypes == null || listenerClass == null)
+    {
+      return;
+    }
+
+    ExecutionListener listener = null;
+
+    try
+    {
+      listener = listenerClass.newInstance();
+    }
+    catch ( InstantiationException e )
+    {
+      throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
+                                    "They may not be non-static inner classes. " +
+                                    "In other words, you must be able create new ones using listenerClass.newInstance()",
+                                    e );
+    }
+    catch ( IllegalAccessException e )
+    {
+      throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
+                                    "They may not be non-static inner classes. " +
+                                    "In other words, you must be able create new ones using listenerClass.newInstance()",
+                                    e );
+    }
+    addListener( listener, eventTypes );
+  }
+
+  public synchronized void addListener (final ExecutionListener listener,
                                         final ExecutionEventType...eventTypes)
   {
     if ( eventTypes == null || listener == null)
@@ -65,9 +97,10 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
     }
   }
 
+
   @Override
   public synchronized void removeListener (final Engine engine,
-                                           final ExecutionListener listener,
+                                           final Class<? extends ExecutionListener> listener,
                                            final ExecutionEventType... eventTypes)
   {
     if ( listener == null )
@@ -75,13 +108,13 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
       return;
     }
 
-    List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
+    List<ExecutionEventType> types = eventTypes == null ? null : Arrays.asList( eventTypes );
 
     List<RegisteredExecutionListener> toRemove = new ArrayList<RegisteredExecutionListener>();
 
     for ( RegisteredExecutionListener wrapper : listeners )
     {
-      if ( listener.getClass() == wrapper.listener.getClass() &&
+      if ( listener == wrapper.listener.getClass() &&
            ( eventTypes == null || eventTypes.length == 0 || types.contains( wrapper.getEventType() ) ) )
       {
         toRemove.add( wrapper );

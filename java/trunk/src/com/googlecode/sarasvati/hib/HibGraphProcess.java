@@ -145,28 +145,31 @@ public class HibGraphProcess implements GraphProcess
     }
 
     @Override
-    public void addListener (final Engine engine, final ExecutionListener listener, final ExecutionEventType... eventTypes)
+    public void addListener (final Engine engine,
+                             final Class<? extends ExecutionListener> listenerClass,
+                             final ExecutionEventType... eventTypes)
     {
       initEventQueue( engine );
-      eventQueue.addListener( engine, listener, eventTypes );
+      eventQueue.addListener( engine, listenerClass, eventTypes );
     }
 
     @Override
-    public void removeListener(final Engine engine, final ExecutionListener listener, final ExecutionEventType... eventTypes)
+    public void removeListener(final Engine engine,
+                               final Class<? extends ExecutionListener> listenerClass,
+                               final ExecutionEventType... eventTypes)
     {
       initEventQueue( engine );
-      eventQueue.removeListener( engine, listener, eventTypes );
+      eventQueue.removeListener( engine, listenerClass, eventTypes );
     }
 
     private void initEventQueue (final Engine engine)
     {
-      ExecutionEventQueue newEventQueue = CachingExecutionEventQueue.newArrayListInstance();
+      CachingExecutionEventQueue newEventQueue = CachingExecutionEventQueue.newArrayListInstance();
       ListenerCache cache = CachingExecutionEventQueue.getListenerCache();
 
       for ( HibProcessListener listener : getListeners() )
       {
-        newEventQueue.addListener( engine,
-                                   cache.getListener( listener.getType() ),
+        newEventQueue.addListener( cache.getListener( listener.getType() ),
                                    listener.getEventType() );
       }
 

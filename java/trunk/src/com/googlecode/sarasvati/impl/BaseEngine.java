@@ -534,33 +534,33 @@ public abstract class BaseEngine implements Engine
   // ==========================================================================================
 
   @Override
-  public void addExecutionListener(final ExecutionListener listener,
+  public void addExecutionListener(final Class<? extends ExecutionListener> listenerClass,
                                    final ExecutionEventType... eventTypes)
   {
-    globalEventQueue.addListener( this, listener, eventTypes );
+    globalEventQueue.addListener( this, listenerClass, eventTypes );
   }
 
   @Override
-  public void removeExecutionListener(final ExecutionListener listener,
+  public void removeExecutionListener(final Class<? extends ExecutionListener> listenerClass,
                                       final ExecutionEventType... eventTypes)
   {
-    globalEventQueue.removeListener( this, listener, eventTypes );
+    globalEventQueue.removeListener( this, listenerClass, eventTypes );
   }
 
   @Override
   public void addExecutionListener (final GraphProcess process,
-                                    final ExecutionListener listener,
+                                    final Class<? extends ExecutionListener> listenerClass,
                                     final ExecutionEventType... eventTypes)
   {
-    process.getEventQueue().addListener( this, listener, eventTypes );
+    process.getEventQueue().addListener( this, listenerClass, eventTypes );
   }
 
   @Override
   public void removeExecutionListener (final GraphProcess process,
-                                       final ExecutionListener listener,
+                                       final Class<? extends ExecutionListener> listenerClass,
                                        final ExecutionEventType... eventTypes)
   {
-    process.getEventQueue().removeListener( this, listener, eventTypes );
+    process.getEventQueue().removeListener( this, listenerClass, eventTypes );
   }
 
   public EventActions fireEvent (final ExecutionEvent event)

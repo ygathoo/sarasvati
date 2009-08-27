@@ -267,11 +267,11 @@ public class MemExampleConsole
       {
         if ( log )
         {
-          engine.removeExecutionListener( new LoggingExecutionListener() );
+          engine.removeExecutionListener( LoggingExecutionListener.class );
         }
         else
         {
-          engine.addExecutionListener( new LoggingExecutionListener(), ExecutionEventType.values() );
+          engine.addExecutionListener( LoggingExecutionListener.class, ExecutionEventType.values() );
         }
 
         log = !log;

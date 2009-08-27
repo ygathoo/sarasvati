@@ -26,34 +26,73 @@ public class ListenerCache
 {
   protected ConcurrentHashMap<String, ExecutionListener> listenerCache = new ConcurrentHashMap<String, ExecutionListener>();
 
+  @SuppressWarnings("unchecked")
   public ExecutionListener getListener (final String type)
   {
     ExecutionListener listener = listenerCache.get( type );
 
     if ( listener == null )
     {
+      Class<? extends ExecutionListener> listenerClass = null;
+
       try
       {
-        Class<?> listenerClass = Class.forName( type );
-        listener = (ExecutionListener) listenerClass.newInstance();
-        listenerCache.put( type, listener );
+        listenerClass = (Class< ? extends ExecutionListener>)Class.forName( type );
       }
       catch (Exception e)
       {
-        throw new SarasvatiException( "Failed to instantiate ExecutionListener of type " + type, e );
+        throw new SarasvatiException( "Failed to load ExecutionListener class: " + type, e );
+      }
+
+      try
+      {
+        listener = listenerClass.newInstance();
+      }
+      catch ( InstantiationException e )
+      {
+        throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
+                                      "They may not be non-static inner classes. " +
+                                      "In other words, you must be able create new ones using listenerClass.newInstance()",
+                                      e );
+      }
+      catch ( IllegalAccessException e )
+      {
+        throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
+                                      "They may not be non-static inner classes. " +
+                                      "In other words, you must be able create new ones using listenerClass.newInstance()",
+                                      e );
       }
     }
 
     return listener;
   }
 
-  public void ensureContainsListenerType (final ExecutionListener listener)
+  public ExecutionListener getListener (final Class<? extends ExecutionListener> listenerClass)
   {
-    String type = listener.getClass().getName();
+    ExecutionListener listener = listenerCache.get( listenerClass.getName() );
 
-    if ( !listenerCache.contains( type ) )
+    if ( listener == null )
     {
-      listenerCache.put( type, listener );
+      try
+      {
+        listener = listenerClass.newInstance();
+      }
+      catch ( InstantiationException e )
+      {
+        throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
+                                      "They may not be non-static inner classes. " +
+                                      "In other words, you must be able create new ones using listenerClass.newInstance()",
+                                      e );
+      }
+      catch ( IllegalAccessException e )
+      {
+        throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
+                                      "They may not be non-static inner classes. " +
+                                      "In other words, you must be able create new ones using listenerClass.newInstance()",
+                                      e );
+      }
     }
+
+    return listener;
   }
 }

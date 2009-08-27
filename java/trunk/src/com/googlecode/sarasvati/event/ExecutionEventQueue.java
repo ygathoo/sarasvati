@@ -29,9 +29,27 @@ import com.googlecode.sarasvati.Engine;
  */
 public interface ExecutionEventQueue
 {
-  void addListener (Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes);
+  /**
+   * Adds the given listener type to the event queue for the given event types using the given engine.
+   *
+   * @param engine The engine being used
+   * @param listenerClass The type of listener to add
+   * @param eventTypes The event types the listener should receive event notifications for
+   */
+  void addListener (Engine engine,
+                    Class<? extends ExecutionListener> listenerClass,
+                    ExecutionEventType... eventTypes);
 
-  void removeListener (Engine engine, ExecutionListener listener, ExecutionEventType... eventTypes);
+  /**
+   * Removes the given listener type from the event queue for the given event types using the given engine.
+   *
+   * @param engine The engine being used
+   * @param listenerClass The type of listener to add
+   * @param eventTypes The event types the listener should receive event notifications for
+   */
+  void removeListener (Engine engine,
+                       Class<? extends ExecutionListener> listenerClass,
+                       ExecutionEventType... eventTypes);
 
   /**
    * Sends the event to the appropriate listeners.

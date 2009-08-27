@@ -237,51 +237,56 @@ public interface Engine
   void addGlobalCustomNodeType (String type, Class<? extends CustomNode> nodeClass );
 
   /**
-   * Adds a listener for the given event types for all processes. It is not added to
-   * each process individually, but rather added to a global set of listeners. Global
-   * generally means global for instances of a particular engine types.
+   * Adds a listener of the given type for the given event types for all processes.
+   * It is not added to each process individually, but rather added to a global set
+   * of listeners. Global generally means global for a running JVM instance.
    *
    * <br/>
    *
-   * {@link ExecutionListener} instances may be be reused and they may be serialized
-   * in some fashion. Therefore, they must be thread safe and they must have a
-   * default constructor.
+   * {@link ExecutionListener} Global execution listeners must be thread safe. Because
+   * listeners are specified by type, they must have a default constructor and be
+   * instantiatable by a call to listenerClass.newInstance().
    *
-   * @param listener The listener
+   * <br/>
+   * Global execution listeners are specified by class for consistency with process
+   * level execution listeners, which can be persisted in a database by class name.
+   *
+   * @param listenerClass The listener type to be added
    * @param eventTypes The event types to be notified for.
    */
-  void addExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+  void addExecutionListener (Class<? extends ExecutionListener> listenerClass, ExecutionEventType...eventTypes);
 
   /**
    * Adds a listener for the given event types for the given process.
    *
    * <br/>
    *
-   * {@link ExecutionListener} instances may be be reused and they may be serialized
-   * in some fashion. Therefore, they must be thread safe and they must have a
-   * default constructor.
+   * {@link ExecutionListener} Execution listeners must be thread safe. Because
+   * listeners are specified by type, they must have a default constructor and be
+   * instantiatable by a call to listenerClass.newInstance().
+   *
+   * <br/>
+   * Process level execution listeners are specified by class because they may be
+   * stored in the database as class names. This is so they can be reinstantiated
+   * after a JVM restart.
    *
    *
    * @param process The process to add the listener for, or null for all processes
-   * @param listener The listener
+   * @param listenerClass The listener type to be added
    * @param eventTypes The event types to be notified for.
    */
-  void addExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  void addExecutionListener (GraphProcess process, Class<? extends ExecutionListener> listenerClass, ExecutionEventType...eventTypes);
 
   /**
-   * Will remove the given listener from the set of global listeners. If no event types are specified,
+   * Will remove the given listener type from the set of global listeners. If no event types are specified,
    * the listener will be removed for all event types. Otherwise it will be removed for only the
    * specified event types.
-   *
-   * <br/>
-   * The listener doesn't need to match exactly. All listeners of this type will be matched. What matches
-   * types is determined by the implementation, but usually it means same class.
    *
    *
    * @param listener The type of listener to remove
    * @param eventTypes The set of event types to remove the listener for, or none to remove for all
    */
-  void removeExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+  void removeExecutionListener (Class<? extends ExecutionListener> listenerClass, ExecutionEventType...eventTypes);
 
   /**
    * Will remove the listener from the given proces. If no event types are specified, the listener
@@ -293,10 +298,10 @@ public interface Engine
    *
    *
    * @param process The process to remove the listener from, or null to remove from the global listener set
-   * @param listener The type of listener to remove
+   * @param listenerClass The type of listener to remove
    * @param eventTypes The set of event types to remove the listener for, or none to remove for all
    */
-  void removeExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  void removeExecutionListener (GraphProcess process, Class<? extends ExecutionListener> listenerClass, ExecutionEventType...eventTypes);
 
   /**
    * Adds whatever variables of interest to the script environment. May be overridden
