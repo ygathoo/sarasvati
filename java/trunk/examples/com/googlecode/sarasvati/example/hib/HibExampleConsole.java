@@ -189,11 +189,11 @@ public class HibExampleConsole
           {
             if ( p.getListeners().isEmpty() )
             {
-              engine.addExecutionListener( p, new LoggingExecutionListener(), ExecutionEventType.values() );
+              engine.addExecutionListener( p, LoggingExecutionListener.class, ExecutionEventType.values() );
             }
             else
             {
-              engine.removeExecutionListener( p, new LoggingExecutionListener(), ExecutionEventType.values() );
+              engine.removeExecutionListener( p, LoggingExecutionListener.class, ExecutionEventType.values() );
             }
             break;
           }
@@ -330,11 +330,11 @@ public class HibExampleConsole
         log = !log;
         if ( log )
         {
-          engine.addExecutionListener( new LoggingExecutionListener(), ExecutionEventType.values() );
+          engine.addExecutionListener( LoggingExecutionListener.class, ExecutionEventType.values() );
         }
         else
         {
-          engine.removeExecutionListener( new LoggingExecutionListener() );
+          engine.removeExecutionListener( LoggingExecutionListener.class );
         }
         System.out.println( "Logging set to: " + log );
         continue;

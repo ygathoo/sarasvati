@@ -88,9 +88,11 @@ public class HibEngine extends BaseEngine
   }
 
   @Override
-  public void addExecutionListener(final GraphProcess process, final ExecutionListener listener, final ExecutionEventType... eventTypes)
+  public void addExecutionListener(final GraphProcess process,
+                                   final Class<? extends ExecutionListener> listenerClass,
+                                   final ExecutionEventType... eventTypes)
   {
-    if ( eventTypes == null || listener == null )
+    if ( eventTypes == null || listenerClass == null )
     {
       return;
     }
@@ -99,16 +101,18 @@ public class HibEngine extends BaseEngine
     {
       if ( eventType != null )
       {
-        HibProcessListener hibListener = new HibProcessListener( listener.getClass().getName(), eventType, process );
+        HibProcessListener hibListener = new HibProcessListener( listenerClass.getName(), eventType, process );
         session.save( hibListener );
       }
     }
 
-    super.addExecutionListener( process, listener, eventTypes );
+    super.addExecutionListener( process, listenerClass, eventTypes );
   }
 
   @Override
-  public void removeExecutionListener(final GraphProcess process, final ExecutionListener listener, final ExecutionEventType... eventTypes)
+  public void removeExecutionListener(final GraphProcess process,
+                                      final Class<? extends ExecutionListener> listenerClass,
+                                      final ExecutionEventType... eventTypes)
   {
     List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
 
@@ -121,7 +125,7 @@ public class HibEngine extends BaseEngine
       }
     }
 
-    super.removeExecutionListener( process, listener, eventTypes );
+    super.removeExecutionListener( process, listenerClass, eventTypes );
   }
 
   @Override

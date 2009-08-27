@@ -26,17 +26,17 @@ import com.googlecode.sarasvati.Engine;
 
 public class CachingExecutionEventQueue extends DefaultExecutionEventQueue
 {
-  public static ExecutionEventQueue newArrayListInstance ()
+  public static CachingExecutionEventQueue newArrayListInstance ()
   {
     return new CachingExecutionEventQueue( new ArrayList<DefaultExecutionEventQueue.RegisteredExecutionListener>() );
   }
 
-  public static ExecutionEventQueue newCopyOnWriteListInstance ()
+  public static CachingExecutionEventQueue newCopyOnWriteListInstance ()
   {
     return new CachingExecutionEventQueue( new CopyOnWriteArrayList<DefaultExecutionEventQueue.RegisteredExecutionListener>() );
   }
 
-  protected static final ListenerCache       listenerCache    = new ListenerCache();
+  protected static final ListenerCache  listenerCache = new ListenerCache();
 
   CachingExecutionEventQueue (final List<DefaultExecutionEventQueue.RegisteredExecutionListener> listeners)
   {
@@ -44,10 +44,12 @@ public class CachingExecutionEventQueue extends DefaultExecutionEventQueue
   }
 
   @Override
-  public synchronized void addListener (final Engine engine, final ExecutionListener listener, final ExecutionEventType... eventTypes)
+  public synchronized void addListener (final Engine engine,
+                                        final Class<? extends ExecutionListener> listenerClass,
+                                        final ExecutionEventType... eventTypes)
   {
-    listenerCache.ensureContainsListenerType( listener );
-    super.addListener( engine, listener, eventTypes );
+    ExecutionListener listener = listenerCache.getListener( listenerClass );
+    addListener( listener, eventTypes );
   }
 
   public static ListenerCache getListenerCache ()
