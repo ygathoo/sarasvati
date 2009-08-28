@@ -31,7 +31,7 @@ import com.googlecode.sarasvati.GraphProcess;
  *
  * @author Paul Lorenz
  */
-public class LabelAndJoinStrategy extends AndJoinStrategy
+public class LabelJoinStrategy extends AndJoinStrategy
 {
   @Override
   protected List<? extends Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)

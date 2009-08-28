@@ -19,9 +19,10 @@
 package com.googlecode.sarasvati;
 
 import com.googlecode.sarasvati.impl.AndJoinStrategy;
-import com.googlecode.sarasvati.impl.LabelAndJoinStrategy;
+import com.googlecode.sarasvati.impl.LabelJoinStrategy;
 import com.googlecode.sarasvati.impl.OrJoinStrategy;
-import com.googlecode.sarasvati.impl.TokenSetAndJoinStrategy;
+import com.googlecode.sarasvati.impl.TokenSetJoinStrategy;
+import com.googlecode.sarasvati.impl.TokenSetOrJoinStrategy;
 
 /**
  * Enumerates the types of joins.
@@ -49,27 +50,27 @@ public enum JoinType
        "arc tokens waiting at all other incoming arcs to the node."),
 
   /**
-   * Uses the {@link LabelAndJoinStrategy}. A join of this type
+   * Uses the {@link LabelJoinStrategy}. A join of this type
    * will be satisfied when an arc token arrives, and there
    * are arc tokens waiting at all other incoming arcs to the
    * node which share the same name/label as the arc that the
    * arc token is arriving on.
    */
-  LABEL_AND( new LabelAndJoinStrategy(),
-             "A LABEL_AND join will be satisfied when an arc token arrives and there are " +
-             "arc tokens waiting at all other incoming arcs to the node which " +
-             "share the same name/label as the arc that the arc token is arriving on." ),
+  LABEL( new LabelJoinStrategy(),
+         "A LABEL join will be satisfied when an arc token arrives and there are " +
+         "arc tokens waiting at all other incoming arcs to the node which " +
+         "share the same name/label as the arc that the arc token is arriving on." ),
 
   /**
-   * Uses the {@link TokenSetAndJoinStrategy}. A join of this type
-   * will be satisfied when an arc token arrives, and all the other
-   * active arc tokens in the set are on incoming arcs to the same node
-   * and there are no active node tokens.
+   * Uses the {@link TokenSetJoinStrategy}. A token set join will be satisfied when all
+   * active arc tokens in the set are on incoming arcs to the same node and there are no
+   * active node tokens in the token set. An exception will be raised if a non-token set
+   * token arrives.
    */
-  TOKEN_SET_AND( new TokenSetAndJoinStrategy(),
-                 "A TOKEN_SET_AND join will be satisfied when an arc token arrives and all the " +
-                 "other active arc tokens in the set are on incoming arcs to the same node and " +
-                 "there are no active node tokens in the token set." ),
+  TOKEN_SET( new TokenSetJoinStrategy(),
+             "A TOKEN_SET join will be satisfied when all active arc tokens in the set " +
+             "are on incoming arcs to the same node and there are no active node tokens " +
+             "in the token set. An exception will be raised if a non-token set token arrives." ),
 
   /**
    * Users may use custom join strategies. This can be done by overriding
@@ -87,8 +88,19 @@ public enum JoinType
                                                        "before using a custom join type." );
             }
           },
-         "A CUSTOM join will be satified based on the join strategy implemented by the user." )
-  ;
+         "A CUSTOM join will be satified based on the join strategy implemented by the user." ),
+
+  /**
+   * Uses the {@link TokenSetOrJoinStrategy}. A token set or join will be satisfied when all
+   * active arc tokens in the set are on incoming arcs to the same node and there are no
+   * active node tokens in the token set. The {@link OrJoinStrategy} will be used as a fallback
+   * if a non-token set token arrives.
+   */
+  TOKEN_SET_OR( new TokenSetJoinStrategy(),
+                "A TOKEN_SET join will be satisfied when all active arc tokens in the set " +
+                "are on incoming arcs to the same node and there are no active node tokens " +
+                "in the token set. The OR strategy will be used as a fallback if a non-token " +
+                "set token arrives." );
 
   private JoinStrategy joinStrategy;
   private String description;

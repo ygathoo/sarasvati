@@ -225,6 +225,7 @@
         <xs:enumeration value="and"/>
         <xs:enumeration value="labelAnd"/>
         <xs:enumeration value="tokenSetAnd"/>
+        <xs:enumeration value="tokenSetOr"/>
         <xs:enumeration value="custom"/>
       </xs:restriction>
     </xs:simpleType>
