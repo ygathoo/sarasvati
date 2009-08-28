@@ -105,7 +105,7 @@
     </javac>
 
     <copy todir="${core.build.dir}/com/googlecode/sarasvati">
-      <fileset dir="common">
+      <fileset dir="src/com/googlecode/sarasvati">
         <include name="ProcessDefinition.xsd"/>
       </fileset>
     </copy>
