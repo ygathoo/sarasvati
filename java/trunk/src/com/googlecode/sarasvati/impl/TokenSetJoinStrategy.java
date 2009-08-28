@@ -42,11 +42,11 @@ import com.googlecode.sarasvati.util.SvUtil;
  *
  * If the incoming arc token does not belong to a token set, an {@link IllegalStateException}
  * will be thrown. This behavior could be changed in a subclass by overriding
- * {@link TokenSetAndJoinStrategy#performFallbackJoin(Engine, GraphProcess, ArcToken)}.
+ * {@link TokenSetJoinStrategy#performFallbackJoin(Engine, GraphProcess, ArcToken)}.
  *
  * @author Paul Lorenz
  */
-public class TokenSetAndJoinStrategy implements JoinStrategy
+public class TokenSetJoinStrategy implements JoinStrategy
 {
   public TokenSet getTokenSet (final ArcToken token)
   {
