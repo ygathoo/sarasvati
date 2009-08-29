@@ -250,8 +250,8 @@ def convert ():
             next_bullets = bullet_pat.search( nextline )
             next_numbers = number_pat.search( line )
 
-            if ( not ( next_bullets and len( next_bullets.group( 1 ) ) > bullet_stack[0] ) and
-                 not ( next_numbers and len( next_numbers.group( 1 ) ) > number_stack[0] ) ):
+            if ( not ( next_bullets and len(bullet_stack) > 0 and len( next_bullets.group( 1 ) ) > bullet_stack[0] ) and
+                 not ( next_numbers and len(number_stack) > 0 and len( next_numbers.group( 1 ) ) > number_stack[0] ) ):
                 printIndent( bullets, numbers )
                 fout.write( "</listitem>\n" )
 

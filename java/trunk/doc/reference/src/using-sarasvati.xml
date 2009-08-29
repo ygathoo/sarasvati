@@ -1,0 +1,1546 @@
+<?xml version='1.0' encoding="UTF-8"?>
+<!DOCTYPE chapter PUBLIC "-//OASIS//DTD DocBook XML V4.5//EN" "http://www.oasis-open.org/docbook/xml/4.5/docbookx.dtd">
+
+<chapter id="using-sarasvati">
+  <title>Using Sarasvati</title>
+
+
+  <section id="intro">
+    <title>Introduction</title>
+    <para>
+      Using Sarasvati usually involves writing process definition files, along
+      with custom node types. Sarasvati uses an XML file format for
+      process definitions. These files can be loaded into in-memory
+      graph structures and executed, or they can be loaded first into a
+      database, and from there loaded and executed.
+   </para>
+
+    <para>
+      We first introduce the file format, then explain how to implement
+      custom behavior. Finally, we discuss how to interact with the
+      Sarasvati engine.
+    </para>
+  </section>
+
+  <section id="file-format">
+    <title> Sarasvati File Format</title>
+
+    <section id="sect1">
+      <title>Introduction </title>
+      <para>
+        The process definition file format is defined by an XSD, which is
+        <ulink url="http://code.google.com/p/sarasvati/source/browse/common/ProcessDefinition.xsd">
+          available to view in the project SVN
+        </ulink>.
+      </para>
+
+      <para>
+        We'll explore the Sarasvati file format, starting with the root element
+        and working from there, with examples interspersed.
+      </para>
+    </section>
+
+    <section id="process-definition-element">
+      <title>Element <literal>process-definition</literal></title>
+      <para>
+        This is the root element. It should indicate the XML namespace, that being:
+        <literal>http://sarasvati.googlecode.com/ProcessDefinition</literal>
+      </para>
+
+      <table frame="all">
+        <title><literal>process-definition</literal> attributes</title>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>Attribute Name</entry>
+              <entry>Usage</entry>
+              <entry>Is Required?</entry>
+              <entry>Default Value</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>name</literal></entry>
+              <entry>
+                The unique name for this process definition.
+              </entry>
+              <entry>Yes</entry>
+              <entry>N/A</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table frame="all">
+        <title><literal>process-definition</literal> nested elements</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Element</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>node</literal></entry>
+              <entry>
+                Every <literal>process-definition</literal> must have a least one <literal>node</literal> defined.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>external</literal></entry>
+              <entry>
+                An external declares a process definition to be included. More than one external process definition
+                may be included and the same process definition may be included more than once with a different name
+                for each include.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+    </section>
+
+    <section id="node-element">
+      <title>Element <literal>node</literal></title>
+      <para>
+        Nodes in a process definition are defined by the <literal>node</literal>
+        element. Every node must have a name <emphasis>unique to that file</emphasis>.
+      </para>
+
+      <table frame="all">
+        <title><literal>node</literal> attributes</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Attribute Name</entry>
+              <entry>Usage</entry>
+              <entry>Is Required?</entry>
+              <entry>Default Value</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>name</literal></entry>
+              <entry>The name of this node. The name must be unique within this process definition.</entry>
+              <entry>Yes</entry>
+              <entry>N/A</entry>
+            </row>
+            <row>
+              <entry><literal>type</literal></entry>
+              <entry>The node type. Determines the node behavior.</entry>
+              <entry>No</entry>
+              <entry><literal>node</literal></entry>
+            </row>
+            <row>
+              <entry><literal>isStart</literal></entry>
+              <entry>Specifies whether a node will be presented with a token when the process is started.</entry>
+              <entry>No</entry>
+              <entry><literal>false</literal></entry>
+            </row>
+            <row>
+              <entry><literal>joinType</literal></entry>
+              <entry>
+                Determines the join strategy the node should use when a token arrives.
+                Some nodes may accept incoming tokens as soon as they arrives,
+                others may act as gates, waiting until a certain number of
+                nodes arrive or token exist on specific incoming arcs before
+                executing. See below for the allowed join types.
+              </entry>
+              <entry>No</entry>
+              <entry><literal>or</literal></entry>
+            </row>
+            <row>
+              <entry><literal>joinParam</literal></entry>
+              <entry>
+                Some join strategies, such as the token set join, may join based on this paramter.
+                Alternately, this can be used by the custom join type as the developer desires.
+              </entry>
+              <entry>No</entry>
+              <entry>N/A</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <table frame="all">
+        <title><literal>node</literal> nested elements</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Element</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>guard</literal></entry>
+              <entry>
+                Each node may have a single, optional guard element. The guard is generally defined in the
+                Rubric rules language and will be evaluated when the node's join strategy determines that
+                the node is to be executed. The guard will determine if the node should be executed, skipped
+                or if the newly created node token should be discarded.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>arc</literal></entry>
+              <entry>
+                Nodes may have zero to many arcs, pointing to other nodes in the same process definition. Arcs
+                link together nodes and provide the paths along with the flow of execution proceeds.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>custom</literal></entry>
+              <entry>
+                Each node has a custom section which may contain any user defined elements.
+                How data from these custom elements is loaded is explained in
+                the section on custom node attributes below.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>
+        Every node defines a join strategy, which is invoked when tokens arrive at the node and
+        determines when the node is ready to be executed.
+      </para>
+
+      <table frame="all">
+        <title>Join Types</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Type</entry>
+              <entry>Behavior</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>or</literal> </entry>
+              <entry>
+                An <literal>or</literal> join will be satisfied any time an arc token arrives at the node.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>and</literal> </entry>
+              <entry>
+                An <literal>and</literal> join will be satisfied when an arc token arrives and there are
+                arc tokens waiting at all other incoming arcs to the node. In most cases the
+                <literal>labelAnd</literal> is safer and more flexible.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>labelAnd</literal> </entry>
+              <entry>
+                A <literal>labelAnd</literal> join will be satisfied when an arc token arrives
+                and there are arc tokens waiting at all other incoming arcs to the node which
+                share the same name/label as the arc that the arc token is arriving on.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>tokenSetAnd</literal> </entry>
+              <entry>
+                A <literal>tokenSetAnd</literal> join will be satisfied when all active arc tokens
+                in the set are on incoming arcs to the same node and there are no active node tokens
+                in the token set. An exception will be raised if a non-token set token arrives.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>tokenSetOr</literal> </entry>
+              <entry>
+                A <literal>tokenSetOr</literal> join will be satisfied when all active arc tokens
+                in the set are on incoming arcs to the same node and there are no active node tokens
+                in the token set. The <literal>or</literal> strategy will be used as a fallback if
+                a non-token set token arrives.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>custom</literal> </entry>
+              <entry>
+                Users may use custom join strategies. See the API reference for more detail.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <section id="sect7">
+        <title>Built in Node Types</title>
+        <itemizedlist>
+          <listitem>
+            <para>
+              <literal>node</literal>
+              - Nodes of this type will complete out on the default arc
+              when they are executed. The node type can be useful if a
+              synchronization point is needed. It can also be used as a
+              choice mechanism, by specifying a guard which skips to
+              selected arcs.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>wait</literal>
+              - Nodes of this type will enter a wait state when
+              executed. They will continue when completed by external
+              logic. This can be useful when you need to wait on an
+              external event, and no other logic is required.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              <literal>script</literal>
+              - Requires a <literal>script</literal> element which will contain a script
+              to execute when the node is executed.
+            </para>
+          </listitem>
+        </itemizedlist>
+
+      </section>
+
+      <section id="sect9">
+        <title>Element guard</title>
+        <para>
+          A node may contain a GuardLang statement, which will be executed as
+          the node's guard. The guard element has no attributes and may
+          contain no nested elements.
+        </para>
+
+      </section>
+    </section>
+
+    <section id="sect10">
+      <title>One Node Example</title>
+      <para>
+        With just
+        <literal>process-definition</literal>
+        and
+        <literal>node</literal>
+        a simple process definition can be built.
+      </para>
+
+      <para>
+        The simplest process definition would be a single node. Graphically,
+        it would look like:
+      </para>
+
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/pdfiles/example1.jpg" />
+        </informalfigure>
+      </para>
+
+      <para>
+        The corresponding XML process definition would look like:
+      </para>
+
+      <programlisting><![CDATA[
+<?xml version="1.0"?>
+<process-definition name="simplest"
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="node-one" isStart="true"/>
+
+</process-definition>
+]]></programlisting>
+
+      <para>
+        While there can be many nodes declared in a process definition, we have
+        as yet, not defined a way of linking them together.
+      </para>
+
+      </section>
+      <section id="sect11">
+        <title>Element arc</title>
+        <para>
+          An <literal>arc</literal>
+          element declares an arc from the enclosing node to the node
+          with the name specified in the <literal>to</literal>
+          attribute. An arc is allowed no nested elements.
+        </para>
+
+      </section>
+
+      <table frame="all">
+        <title>node attributes</title>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>Attribute Name</entry>
+              <entry>Usage</entry>
+              <entry>Is Required?</entry>
+              <entry>Default Value</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>to</literal> </entry>
+              <entry>Specifies the name of the node this arc goes to.</entry>
+              <entry>Yes</entry>
+              <entry>N/A</entry>
+            </row>
+            <row>
+              <entry><literal>name</literal> </entry>
+              <entry>Specifies the arc name. This name need not be unique.</entry>
+              <entry>No</entry>
+              <entry><literal>null</literal></entry>
+            </row>
+            <row>
+              <entry><literal>external</literal> </entry>
+              <entry>
+                If this arc is linking to an external (see below for more information on externals),
+                the name of the external being linked to. If an <literal>external</literal> attribute
+                is specified then the <literal>to</literal> attribute will refer to a node in the
+                external, not a locally defined node.
+              </entry>
+              <entry>No</entry>
+              <entry><literal>null</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <section id="sect13">
+        <title>Arc Example One</title>
+
+        <para>
+          The following example contains three nodes.
+        </para>
+
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/pdfiles/example2.jpg" />
+          </informalfigure>
+        </para>
+
+        <programlisting><![CDATA[<?xml version="1.0"?>
+<process-definition name="example2"
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="node-one" isStart="true">
+    <arc to="node-two"/>
+    <arc to="node-three"/>
+  </node>
+
+  <node name="node-two"/>
+  <node name="node-three"/>
+
+</process-definition>
+]]></programlisting>
+
+        <para>
+          To indicate an arc, an
+          <literal>arc</literal>
+          element is added to the start node. The
+          <literal>to</literal>
+          attribute indicates the name of the target node. A node with
+          that name must exist in the same process definition file.
+        </para>
+
+
+      </section>
+      <section id="sect14">
+        <title>Arc Example Two </title>
+
+        <para>
+          Here is an example with two start nodes. They both have arcs
+          to
+          <literal>node-three</literal>
+          , which uses the <literal>labelAnd</literal> join strategy. It will only execute once both
+          <literal>node-one</literal>
+          and
+          <literal>node-two</literal>
+          have completed.
+        </para>
+
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/pdfiles/example3.jpg" />
+          </informalfigure>
+        </para>
+
+        <programlisting><![CDATA[<?xml version="1.0"?>
+<process-definition name="example3"
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="node-one" isStart="true">
+    <arc to="node-three"/>
+  </node>
+
+  <node name="node-two" isStart="true">
+    <arc to="node-three"/>
+  </node>
+
+  <node name="node-three" joinType="labelAnd"/>
+
+</process-definition>
+]]></programlisting>
+
+        <para>
+          Now that we've seen how to create links between nodes in the same
+          process definition, let us examine how to create links to
+          nodes in external process definitions.
+        </para>
+
+      </section>
+
+      <section id="sect15">
+        <title>Element externalArc</title>
+        <para>
+          An
+          <literal>externalArc</literal>
+          element declares an arc from the enclosing node to the
+          external node with the name specified in the
+          <literal>nodeName</literal>
+          attribute. External arc elements may not contain nested
+          elements.
+        </para>
+
+      </section>
+      <section id="sect16">
+        <title>Attributes</title>
+        \begin{tabular}{| c | c | c | c | }
+        \hline
+        <emphasis>Attribute Name</emphasis>
+        &amp;
+        <emphasis>Usage</emphasis>
+        &amp;
+        <emphasis>Required?</emphasis>
+        &amp;
+        <emphasis>Default</emphasis>
+        \\ \hline
+        <literal>external</literal>
+        &amp; Specifies the name of the external process definition this
+        arc goes to. &amp; Yes &amp; N/A \\ \hline
+        <literal>instance</literal>
+        &amp; Specifies the specific instance of the external process
+        definition this arc goes to. All external arcs with the same
+        values for
+        <literal>external</literal>
+        and
+        <literal>instance</literal>
+        will go to the same set of nodes. &amp; Yes &amp; N/A \\ \hline
+        <literal>nodeName</literal>
+        &amp; Specifies the name of the node this arc goes to. &amp; Yes
+        &amp; N/A \\ \hline
+        <literal>name</literal>
+        &amp; Specifies the external arc name. This name need not be
+        unique. &amp; No &amp; null \\ \hline
+        <literal>type</literal>
+        &amp; Indicates if the containing node is at the beginning or
+        end of the arc. Valid values are
+        <literal>out</literal>
+        and
+        <literal>in</literal>
+        . If
+        <literal>out</literal>
+        is specified, the containing node is the start node of the arc,
+        otherwise it is the end. &amp; Yes &amp; N/A \\ \hline
+        \end{tabular}
+
+      </section>
+      <section id="sect17">
+        <title>External Arc Example One </title>
+        <para>
+          To examine external arcs, we'll need at least two process
+          definitions.
+</para>
+
+        <para>
+          This example is from the EngineConcepts section.
+</para>
+
+        <programlisting><![CDATA[<?xml version="1.0"?>
+<process-definition name="ext"
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="A" isJoin="true">
+    <arc to="B"/>
+  </node>
+
+  <node name="B" isJoin="true"/>
+
+</process-definition>
+]]></programlisting>
+
+        <para>
+          It looks like:
+</para>
+
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/concepts-externals1.jpg" />
+          </informalfigure>
+        </para>
+
+        <para>
+          The graph which contains external arcs going to 'ext', is below.
+        </para>
+
+        <programlisting><![CDATA[<?xml version="1.0"?>
+<process-definition name="example4"
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="P" isStart="true">
+    <externalArc external="ext" instance="1" nodeName="A" type="out"/>
+  </node>
+
+  <node name="Q" isStart="true">
+    <externalArc external="ext" instance="2" nodeName="A" type="out"/>
+  </node>
+
+  <node name="R" isStart="true">
+    <externalArc external="ext" instance="2" nodeName="B" type="out"/>
+  </node>
+
+  <node name="X">
+    <arc to="Z"/>
+
+    <externalArc external="ext" instance="1" nodeName="A" type="in"/>
+  </node>
+
+  <node name="Y">
+    <arc to="Z"/>
+    <externalArc external="ext" instance="2" nodeName="B" type="in"/>
+  </node>
+
+  <node name="Z" isJoin="true"/>
+
+</process-definition>
+]]></programlisting>
+
+        <para>
+          It looks like:
+       </para>
+
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/concepts-externals4.jpg" />
+          </informalfigure>
+        </para>
+
+        <para>
+          When the process definition is loaded into memory, it will look like:
+        </para>
+
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/concepts-externals5.jpg" />
+          </informalfigure>
+        </para>
+
+      </section>
+    </section>
+
+  <section id="sect18">
+    <title>Java API</title>
+    <para>
+      The process definition file format also supports custom elements and
+      attributes, but before we discuss that, the API needs to be
+      introduced.
+    </para>
+
+    <section id="sect19">
+      <title>Interfaces</title>
+      <para>
+        The main interface for interacting with process definitions and
+        processes is
+        <literal>Engine</literal>
+        :
+      </para>
+
+      <programlisting><![CDATA[package com.googlecode.sarasvati;
+
+public interface Engine
+{
+  GraphProcess startProcess (Graph graph);
+  void startProcess (GraphProcess process);
+  void cancelProcess (GraphProcess process);
+  void finalizeComplete (GraphProcess process);
+  void finalizeCancel (GraphProcess process);
+  void completeExecution (NodeToken token, String arcName);
+  void completeAsynchronous (NodeToken token, String arcName );
+  void executeQueuedArcTokens (GraphProcess process);
+  GraphRepository<? extends Graph> getRepository ();
+  GraphFactory<? extends Graph> getFactory ();
+  GraphLoader<? extends Graph> getLoader ();
+  void addNodeType (String type, Class<? extends Node> nodeClass );
+  void fireEvent (ExecutionEvent event);
+  void addExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+  void addExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  void removeExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+  void removeExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException;
+  void setupScriptEnv (ScriptEnv env, NodeToken token);
+}
+]]></programlisting>
+
+      <para>
+        Process definitions are stored in classes implementing the
+        <literal>Graph</literal>
+        interface.
+      </para>
+
+      <programlisting><![CDATA[package com.googlecode.sarasvati;
+
+public interface Graph
+{
+  String getName ();
+  int getVersion ();
+  List<? extends Arc> getArcs ();
+  List<? extends Arc> getInputArcs (Node node);
+  List<? extends Arc> getInputArcs (Node node, String arcName);
+  List<? extends Arc> getOutputArcs (Node node);
+  List<? extends Arc> getOutputArcs (Node node, String arcName);
+  List<? extends Node> getStartNodes ();
+  List<? extends Node> getNodes ();
+}
+]]></programlisting>
+
+      <para>
+        A
+        <literal>Graph</literal>
+        contains instances of
+        <literal>Node</literal>
+        and
+        <literal>Arc</literal>
+        .
+      </para>
+
+      <para>
+        <literal>Node</literal>
+        is where the developer can provide custom functionality, and has
+        the following API:
+      </para>
+
+      <programlisting><![CDATA[package com.googlecode.sarasvati;
+public interface Node extends Adaptable
+{
+  String getName ();
+  String getType ();
+  boolean isJoin ();
+  boolean isStart ();
+  String getGuard ();
+  Graph getGraph ();
+  boolean isExternal ();
+  GuardResponse guard (Engine engine, NodeToken token);
+  void execute (Engine engine, NodeToken token);
+}
+]]></programlisting>
+
+    </section>
+    <section id="sect20">
+      <title>Flow of Execution</title>
+      <para>
+        When the engine determines that a node is ready to execute, it will
+        follow this flow:
+</para>
+
+      <orderedlist>
+        <listitem>
+          <para>
+            Generate a
+            <literal>NodeToken</literal>
+            pointing to that node.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Execute the
+            <literal>guard</literal>
+            function on the node. This will return a
+            <literal>GuardResponse</literal>
+            .
+          </para>
+        </listitem>
+        <itemizedlist>
+          <listitem>
+            <para>
+              The
+              <literal>GuardResponse</literal>
+              contains a
+              <literal>GuardAction</literal>
+              , which is an enum having values
+              <literal>AcceptToken</literal>
+              ,
+              <literal>DiscardToken</literal>
+              and
+              <literal>SkipNode</literal>
+              .
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              If the action is
+              <literal>AcceptToken</literal>
+              , the
+              <literal>execute</literal>
+              method will be called. The process will not continue until
+              the
+              <literal>Engine#completeExecution</literal>
+              method is invoked. It must be invoked with the name of the
+              arcs on which to generate
+              <literal>ArcToken</literal>
+              s.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              If the action is
+              <literal>DiscardToken</literal>
+              , the token is marked complete and no further execution
+              will take place from this set of tokens.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              If the action is
+              <literal>SkipNode</literal>
+              ,
+              <literal>Engine.completeExecution</literal>
+              will be called with the arc name contained in the
+              <literal>GuardResponse</literal>
+              .
+            </para>
+          </listitem>
+        </itemizedlist>
+      </orderedlist>
+
+    </section>
+    <section id="sect21">
+      <title>Custom logic for Node Execution</title>
+      <para>
+        To provide custom behavior to your nodes, you will override the
+        <literal>execute</literal>
+        method on
+        <literal>Node</literal>
+        . Sarasvati currently provides two implementations of the base
+        API, one memory backed and one database backed, implemented
+        using Hibernate. Other implementations could be made using, for
+        example, pure JDBC or some other persistence mechanism. There
+        are three base classes for nodes.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <literal>com.googlecode.sarasvati.mem.MemNode</literal>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>com.googlecode.sarasvati.hib.HibNode</literal>
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            <literal>com.googlecode.sarasvati.CustomNode</literal>
+          </para>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        If using only the memory backed implementation,
+        <literal>MemNode</literal>
+        should be extended. If using only the hibernate backend, nodes
+        should subclass
+        <literal>HibNode</literal>
+        .
+        <literal>CustomNode</literal>
+        can be used with either or both backends. In to store custom
+        attributes in the database, it uses a key/value pair table.
+        <literal>CustomNode</literal>
+        can only be used if the database mapping doesn't need to be
+        explicitly defined.
+      </para>
+
+    </section>
+    <section id="sect22">
+      <title>Example One </title>
+      <para>
+        To demonstrate use of each implementation, we start with a node that
+        just prints out "Hello, World". We start with the process
+        definition.
+</para>
+
+    </section>
+    <section id="sect23">
+      <title>Example One: Process Definition </title>
+      <programlisting><![CDATA[<?xml version="1.0"?>
+<process-definition name="hello-world"
+                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="hello" type="helloWorld" isStart="true"/>
+
+</process-definition>
+]]></programlisting>
+
+    </section>
+    <section id="sect24">
+      <title>Example One: Node implementation </title>
+      <para>
+        If using the memory implementation, the subclass would look like:
+      </para>
+
+      <programlisting><![CDATA[package com.googlecode.sarasvati.example.mem;
+
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.mem.MemNode;
+
+public class HelloNode extends MemNode {
+  @Override public void execute (Engine engine, NodeToken token)
+  {
+    System.out.println( "Hello, world!" );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+]]></programlisting>
+
+      <para>
+        The hibernate version would look like:
+</para>
+
+      <programlisting><![CDATA[import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.hib.HibNode;
+
+@Entity
+@DiscriminatorValue( "helloWorld" )
+public class HelloNode extends HibNode
+{
+  @Override public void execute (Engine engine, NodeToken token) {
+    System.out.println( "Hello, World!" );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+]]></programlisting>
+
+      <para>
+        The hibernate version would also require an insert into the
+        <literal>wf_node_type</literal>
+        table, with type, description and behaviour.
+      </para>
+
+      <programlisting><![CDATA[ insert into wf_node_type (id, description, behaviour) values ( 'helloWorld', 'Says hello to the world', 'helloWorld' )
+]]></programlisting>
+
+      <para>
+        The behaviour column ties the type to a discriminator specified on the
+        subclass. This allows having multiple types with the same
+        implementation class, if that was desired.
+</para>
+
+      <para>
+        The backend independent version would look like:
+</para>
+
+      <programlisting><![CDATA[import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+
+public class HelloNode extends CustomNode
+{
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    System.out.println( "Hello, World!" );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+]]></programlisting>
+
+      <para>
+        For use with the hibernate backend, a row would still need to be
+        added to the
+        <literal>wf_node_type</literal>
+        table.
+      </para>
+
+      <programlisting><![CDATA[ insert into wf_node_type (id, description, behaviour) values ( 'helloWorld', 'Says hello to the world', 'custom' )
+]]></programlisting>
+
+    </section>
+    <section id="sect25">
+      <title>Example One: Loading and Running</title>
+      <para>
+        Now we can load the process into memory, or into the database.
+        This is done using a
+        <literal>GraphLoader</literal>
+        , which can be retrieved from the appropriate engine. Before
+        loading the process definition, you will need to tell the engine
+        about your custom node types.
+      </para>
+
+      <para>
+        The steps are
+        <orderedlist>
+          <listitem>
+            <para>
+              Create an engine of the appropriate type
+      </para>
+          </listitem>
+          <listitem>
+            <para>
+              Register custom node types
+      </para>
+          </listitem>
+          <listitem>
+            <para>
+              Load the process definition from XML file
+      </para>
+          </listitem>
+          <listitem>
+            <para>
+              Get the loaded graph from the graph repository associated with the
+              engine
+      </para>
+          </listitem>
+          <listitem>
+            <para>
+              Start a new GraphProcess using the graph
+      </para>
+          </listitem>
+        </orderedlist>
+
+        Here are the steps in code for the memory backed implementation.
+      </para>
+
+      <programlisting><![CDATA[    MemEngine engine = new MemEngine();
+
+    // Tell engine about our custom node type
+    engine.addNodeType( "helloWorld", HelloNode.class );
+
+    // Load the process definition (this can throw LoadException or JAXBException
+    // The graph will be stored in the GraphRepository for this engine
+    engine.getLoader().load( "/path/to/hello-world.wf.xml" );
+
+    // Get the graph from the GraphRepository
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
+
+    // start a graph process
+    GraphProcess process = engine.startProcess( graph );
+]]></programlisting>
+
+      <para>
+        Here are the steps in code for the hibernate backed
+        implementation. It assumes that you have a means of creating a
+        hibernate
+        <literal>Session</literal>
+        object.
+      </para>
+
+      <programlisting><![CDATA[    Session session = ...; // get hibernate session
+    HibEngine engine = new HibEngine( session );
+
+    // Tell engine about our custom node type
+    engine.addNodeType( "helloWorld", HelloNode.class );
+
+    // Load the process definition (this can throw LoadException or JAXBException
+    // The graph will be stored in the GraphRepository for this engine
+    engine.getLoader().load( "/path/to/hello-world.wf.xml" );
+
+    // Get the graph from the GraphRepository
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
+
+    // start a graph process
+    GraphProcess process = engine.startProcess( graph );
+]]></programlisting>
+
+      <para>
+        Here are the steps in code using the backend independent custom
+        type with
+        <literal>MemEngine</literal>
+        .
+      </para>
+
+      <programlisting><![CDATA[    MemEngine engine = new MemEngine();
+
+    // We can either register the type with the Engine or with the DefaultNodeFactory
+    // directly.
+    // Either tell the engine about our custom node type
+    engine.addGlobalCustomNodeType( "helloWorld", HelloNode.class );
+
+    // or tell the DefaultNodeFactory about the node type directly
+    DefaultNodeFactory.addGlobalCustomType( "helloWorld", HelloNode.class );
+
+    // Load the process definition (this can throw LoadException or JAXBException
+    // The graph will be stored in the GraphRepository for this engine
+    engine.getLoader().load( "/path/to/hello-world.wf.xml" );
+
+    // Get the graph from the GraphRepository
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
+
+    // start a graph process
+    GraphProcess process = engine.startProcess( graph );
+]]></programlisting>
+
+
+      <para>
+        The call to
+        <literal>startProcess</literal>
+        will create tokens on the start nodes and will continue
+        executing the process until it completes or enters a wait state.
+      </para>
+
+    </section>
+    <section id="sect26">
+      <title>Custom Attributes</title>
+      <para>
+        Often, custom nodes will need some information with which to do their
+        work. Sarasvati supports this in two ways.
+</para>
+
+      <para>
+        The schema for process definition files has a
+        <literal>&gt;custom&lt;</literal>
+        element which contains an
+        <literal>&gt;xs:any&lt;</literal>
+        element at the end of the node definition. Custom elements may
+        be added here. These can be automatically mapped to properties
+        on custom nodes.
+      </para>
+
+      <para>
+        For example, given the following custom node:
+</para>
+
+      <programlisting><![CDATA[public class CustomNode extends MemNode {
+  String foo;
+
+  public String getFoo () {
+    return foo;
+  }
+
+  public void setFoo (String foo) {
+    this.foo = foo;
+  }
+
+  @Override public void execute (Engine engine, NodeToken token) {
+    // do something ...
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+]]></programlisting>
+
+      <para>
+        The following process definition would load the value
+        <literal>test</literal>
+        into the
+        <literal>custom</literal>
+        property.
+      </para>
+
+      <programlisting><![CDATA[<?xml version="1.0"?>
+<process-definition name="example1"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="test" type="custom" isStart="true">
+    <arc to="1"/>
+
+    <custom>
+      <foo>test</foo>
+    </custom>
+  </node>
+</process-definition>
+]]></programlisting>
+
+      <para>
+        There several things to note with custom elements.
+</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            All custom elements must be contained within the
+            <literal>&gt;custom&lt;</literal>
+            tag.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            Non-string properties on custom node types are supported.
+      </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                Support for primitive types such as boolean, byte, char, short, int,
+                long, float, double as well as their corresponding
+                object types is built in.
+          </para>
+            </listitem>
+            <listitem>
+              <para>
+                Support for non-primitive types can be added
+          </para>
+              <itemizedlist>
+                <listitem>
+                  <para>
+                    Subclass com.googlecode.sarasvati.load.properties.BasePropertyMutator
+                  </para>
+                </listitem>
+                <listitem>
+                  <para>
+                    Register new mutator with
+                    com.googlecode.sarasvati.load.properties.PropertyMutatorRegistry#registerPropertyMutator
+                  </para>
+                </listitem>
+              </itemizedlist>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+        Nested objects are supported. For example:
+</para>
+
+      <programlisting><![CDATA[  <custom>
+    <task>
+      <name>test</name>
+    </task>
+  </custom>
+]]></programlisting>
+
+      <para>
+        The loader would invoke
+        <literal>getTask().setName( ... )</literal>
+        on the custom node.
+      </para>
+
+      <para>
+        Attributes are also supported. How they are mapped is based on the contents of
+        the element the attribute is on. If the element has child
+        elements, the attribute will get mapped as a child property. If
+        the element is itself a property, the attribute name will be
+        combined with the element name to get the property name.
+</para>
+
+      <programlisting><![CDATA[  <custom>
+    <task user="pat">
+      <name>test</name>
+    </task>
+  </custom>
+]]></programlisting>
+
+      <para>
+        This would map the
+        <literal>name</literal>
+        element value to
+        <literal>getTask().setName( ... )</literal>
+        and the
+        <literal>user</literal>
+        attribute to
+        <literal>getTask().setUser( ... )</literal>
+        .
+      </para>
+
+      <para>
+        However, the following would be mapped differently:
+</para>
+
+      <programlisting><![CDATA[  <custom>
+    <task user="pat">
+      test
+    </task>
+  </custom>
+]]></programlisting>
+
+      <para>
+        This would map the text in the
+        <literal>task</literal>
+        element to
+        <literal>setTask( ... )</literal>
+        and the
+        <literal>user</literal>
+        attribute to
+        <literal>setTaskUser( ... )</literal>
+        .
+      </para>
+
+    </section>
+    <section id="sect27">
+      <title>Custom Loader</title>
+      <para>
+        You may also provide custom loading via a subclass of
+        <literal>NodeFactory</literal>
+        . It has the following interface:
+      </para>
+
+      <programlisting><![CDATA[public interface NodeFactory
+{
+  Node newNode (String type) throws LoadException;
+  void loadCustom (Node node, Object custom) throws LoadException;
+}
+]]></programlisting>
+
+      <para>
+        The custom data may be null, a single object, or a list of
+        objects. The object or objects will either be elements of
+        <literal>org.w3c.dom.Element</literal>
+        or JAXB objects, if you have a JAXB mapping for your custom XML.
+      </para>
+
+      <para>
+        Instances of
+        <literal>NodeFactory</literal>
+        may be registered on
+        <literal>GraphLoader</literal>
+        .
+      </para>
+
+    </section>
+    <section id="sect28">
+      <title>Example Two: Process Definition </title>
+
+      <para>
+        Here we examine a more complicated example, which uses custom
+        attributes.
+</para>
+
+      <programlisting><![CDATA[<?xml version="1.0"?>
+
+<process-definition name="example1"
+                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="start" isStart="true">
+    <arc to="1"/>
+  </node>
+
+  <node name="1" type="task">
+    <arc to="2"/>
+    <arc to="3"/>
+
+    <custom>
+      <taskName>Enter order</taskName>
+      <taskDesc>
+        Enter order and billing info
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="2">
+    <arc to="4"/>
+
+    <custom>
+      <taskName>Bill Customer</taskName>
+      <taskDesc>
+        Bill the Customer
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="3">
+    <arc to="4"/>
+
+    <custom>
+      <taskName>Ship product</taskName>
+      <taskDesc>
+        Package and ship product
+      </taskDesc>
+    </custom>
+  </node>
+
+  <node type="task" name="4" isJoin="true">
+
+    <custom>
+      <taskName>Market to Customer</taskName>
+      <taskDesc>
+        Send marketing material to customer
+      </taskDesc>
+    </custom>
+
+  </node>
+
+</process-definition>
+]]></programlisting>
+
+    </section>
+    <section id="sect29">
+      <title>Example Two: Node implementation </title>
+
+      <para>
+        We will need a couple of classes to represent tasks and their state.
+        First we look at the memory based implementation.
+</para>
+
+      <para>
+        First we have an enum for task states.
+        <programlisting><![CDATA[public enum TaskState { Open, Completed, Rejected }
+]]></programlisting>
+
+        Next is the
+        <literal>Task</literal>
+        class.
+      </para>
+
+      <programlisting><![CDATA[public class Task {
+  protected NodeToken nodeToken;
+  protected String name;
+  protected String description;
+  protected TaskState state;
+
+  public Task (NodeToken nodeToken, String name, String description, TaskState state) {
+    this.nodeToken = nodeToken;
+    this.name = name;
+    this.description = description;
+    this.state = state;
+  }
+
+  public NodeToken getNodeToken () {
+    return nodeToken;
+  }
+
+  public void setNodeToken (NodeToken nodeToken) {
+    this.nodeToken = nodeToken;
+  }
+
+  public String getName () {
+    return name;
+  }
+
+  public String getDescription () {
+    return description;
+  }
+
+  public TaskState getState () {
+    return state;
+  }
+
+  public void setState (TaskState state ) {
+    this.state = state;
+  }
+
+  public boolean isRejectable () {
+    Node node = getNodeToken().getNode();
+    return !node.getGraph().getOutputArcs( node, "reject" ).isEmpty();
+  }
+}
+]]></programlisting>
+
+      <para>
+        In our simple example, we need some way of tracking which tasks have
+        been created.
+</para>
+
+      <programlisting><![CDATA[public class TaskList {
+  protected static List<Task> tasks = new LinkedList<Task>();
+
+  public static List<Task> getTasks () {
+    return tasks;
+  }
+}
+]]></programlisting>
+
+      <para>
+        Finally, the custom node for generating tasks
+</para>
+
+      <programlisting><![CDATA[public class TaskNode extends MemNode {
+  protected String taskName;
+  protected String taskDesc;
+
+  public String getTaskName () {
+    return taskName;
+  }
+
+  public void setTaskName (String taskName) {
+    this.taskName = taskName;
+  }
+
+  public String getTaskDesc () {
+    return taskDesc;
+  }
+
+  public void setTaskDesc (String taskDesc) {
+    this.taskDesc = taskDesc;
+  }
+
+  @Override public void execute (Engine engine, NodeToken token) {
+    Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );
+    TaskList.getTasks().add( newTask );
+  }
+}
+]]></programlisting>
+
+      <para>
+        When a task node is executed, it will create new
+        <literal>Task</literal>
+        instance and add it to a task list. A task can be completed or
+        rejected as seen in the following code snippet:
+      </para>
+
+      <programlisting><![CDATA[      Task t = ...;
+
+      if ( isCompletion )
+      {
+        t.setState( TaskState.Completed );
+        engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
+      }
+      else if ( isReject && t.isRejectable() )
+      {
+        t.setState( TaskState.Rejected );
+        engine.completeExecution( t.getNodeToken(), "reject" );
+      }
+]]></programlisting>
+
+      <para>
+        The primary difference with the database/Hibernate version, is
+        that the node and tasks will require database backing. Let us
+        look at the
+        <literal>TaskNode</literal>
+        class.
+      </para>
+
+      <programlisting><![CDATA[@Entity
+@DiscriminatorValue( "task" )
+@SecondaryTable( name="wf_node_task", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
+public class TaskNode extends HibNode
+{
+  @Column (name="name", table="wf_node_task")
+  protected String taskName;
+
+  @Column (name="description", table="wf_node_task")
+  protected String taskDesc;
+
+  public TaskNode() { /* Default constructor for Hibernate */ }
+
+  public String getTaskName () {
+    return taskName;
+  }
+
+  public void setTaskName (String taskName) {
+    this.taskName = taskName;
+  }
+
+  public String getTaskDesc () {
+    return taskDesc;
+  }
+
+  public void setTaskDesc (String taskDesc) {
+    this.taskDesc = taskDesc;
+  }
+
+  @Override public void execute (Engine engine, NodeToken token) {
+    HibEngine hibEngine = (HibEngine)engine;
+
+    Session session = hibEngine.getSession();
+
+    TaskState open = (TaskState)session.load( TaskState.class, 0 );
+    Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), open );
+    session.save( newTask );
+  }
+}
+]]></programlisting>
+
+
+    </section>
+  </section>
+</chapter>
+

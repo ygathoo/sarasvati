@@ -42,5 +42,6 @@
   <xi:include href="what-is-workflow.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
   <xi:include href="why-graph-based-workflow.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
   <xi:include href="core-concepts.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
+  <xi:include href="using-sarasvati.xml" xmlns:xi="http://www.w3.org/2001/XInclude" />
 
 </book>
