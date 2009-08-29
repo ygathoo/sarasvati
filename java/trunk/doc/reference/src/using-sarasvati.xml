@@ -207,7 +207,7 @@
       </para>
 
       <table frame="all">
-        <title>Join Types</title>
+        <title><literal>node</literal> join types</title>
         <tgroup cols="2">
           <thead>
             <row>
@@ -362,7 +362,7 @@
       </section>
 
       <table frame="all">
-        <title>node attributes</title>
+        <title><literal>arc</literal> attributes</title>
         <tgroup cols="4">
           <thead>
             <row>
