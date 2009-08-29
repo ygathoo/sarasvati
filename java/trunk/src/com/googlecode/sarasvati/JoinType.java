@@ -88,7 +88,7 @@ public enum JoinType
                                                        "before using a custom join type." );
             }
           },
-         "A CUSTOM join will be satified based on the join strategy implemented by the user." ),
+         "A CUSTOM join will be satisfied based on the join strategy implemented by the user." ),
 
   /**
    * Uses the {@link TokenSetOrJoinStrategy}. A token set or join will be satisfied when all
@@ -97,7 +97,7 @@ public enum JoinType
    * if a non-token set token arrives.
    */
   TOKEN_SET_OR( new TokenSetJoinStrategy(),
-                "A TOKEN_SET join will be satisfied when all active arc tokens in the set " +
+                "A TOKEN_SET_OR join will be satisfied when all active arc tokens in the set " +
                 "are on incoming arcs to the same node and there are no active node tokens " +
                 "in the token set. The OR strategy will be used as a fallback if a non-token " +
                 "set token arrives." );
