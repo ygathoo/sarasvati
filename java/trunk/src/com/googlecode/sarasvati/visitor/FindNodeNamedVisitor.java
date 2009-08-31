@@ -58,4 +58,11 @@ public class FindNodeNamedVisitor extends TokenVisitorAdaptor
   {
     return match;
   }
+
+  public static NodeToken findFirstNamedParent (final NodeToken token, final String nodeName)
+  {
+    final FindNodeNamedVisitor visitor = new FindNodeNamedVisitor( nodeName );
+    TokenTraversals.traverseParentsBreadthFirst( token, visitor );
+    return visitor.getMatch();
+  }
 }
