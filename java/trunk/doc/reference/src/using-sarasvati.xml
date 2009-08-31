@@ -41,7 +41,7 @@
     </section>
 
     <section id="process-definition-element">
-      <title>Element <literal>process-definition</literal></title>
+      <title>Process Definition</title>
       <para>
         This is the root element. It should indicate the XML namespace, that being:
         <literal>http://sarasvati.googlecode.com/ProcessDefinition</literal>
@@ -102,7 +102,7 @@
     </section>
 
     <section id="node-element">
-      <title>Element <literal>node</literal></title>
+      <title>Nodes</title>
       <para>
         Nodes in a process definition are defined by the <literal>node</literal>
         element. Every node must have a name <emphasis>unique to that file</emphasis>.
@@ -265,7 +265,7 @@
         </tgroup>
       </table>
 
-      <section id="sect7">
+      <section id="node-types">
         <title>Built in Node Types</title>
         <itemizedlist>
           <listitem>
@@ -309,14 +309,12 @@
       </section>
     </section>
 
-    <section id="sect10">
+    <section id="one-node-example">
       <title>One Node Example</title>
       <para>
-        With just
-        <literal>process-definition</literal>
-        and
-        <literal>node</literal>
-        a simple process definition can be built.
+        With just <literal>process-definition</literal>
+        and <literal>node</literal> a simple process definition
+        can be built.
       </para>
 
       <para>
@@ -349,17 +347,16 @@
         as yet, not defined a way of linking them together.
       </para>
 
-      </section>
-      <section id="sect11">
-        <title>Element arc</title>
-        <para>
-          An <literal>arc</literal>
-          element declares an arc from the enclosing node to the node
-          with the name specified in the <literal>to</literal>
-          attribute. An arc is allowed no nested elements.
-        </para>
+    </section>
 
-      </section>
+    <section id="node-arc-element">
+      <title>Node Arcs</title>
+      <para>
+        An <literal>arc</literal>
+        element declares an arc from the enclosing node to the node
+        with the name specified in the <literal>to</literal>
+        attribute. An arc is allowed no nested elements.
+      </para>
 
       <table frame="all">
         <title><literal>arc</literal> attributes</title>
@@ -399,21 +396,22 @@
           </tbody>
         </tgroup>
       </table>
+    </section>
 
-      <section id="sect13">
-        <title>Arc Example One</title>
+    <section id="arc-example-one">
+      <title>Arc Example One</title>
 
-        <para>
-          The following example contains three nodes.
-        </para>
+      <para>
+        The following example contains three nodes.
+      </para>
 
-        <para>
-          <informalfigure>
-            <graphic fileref="../images/pdfiles/example2.jpg" />
-          </informalfigure>
-        </para>
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/pdfiles/example2.jpg" />
+        </informalfigure>
+      </para>
 
-        <programlisting><![CDATA[<?xml version="1.0"?>
+      <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition name="example2"
                     xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
@@ -428,38 +426,38 @@
 </process-definition>
 ]]></programlisting>
 
-        <para>
-          To indicate an arc, an
-          <literal>arc</literal>
-          element is added to the start node. The
-          <literal>to</literal>
-          attribute indicates the name of the target node. A node with
-          that name must exist in the same process definition file.
-        </para>
+      <para>
+        To indicate an arc, an
+        <literal>arc</literal>
+        element is added to the start node. The
+        <literal>to</literal>
+        attribute indicates the name of the target node. A node with
+        that name must exist in the same process definition file.
+      </para>
 
+    </section>
 
-      </section>
-      <section id="sect14">
-        <title>Arc Example Two </title>
+    <section id="arc-example-two">
+      <title>Arc Example Two </title>
 
-        <para>
-          Here is an example with two start nodes. They both have arcs
-          to
-          <literal>node-three</literal>
-          , which uses the <literal>labelAnd</literal> join strategy. It will only execute once both
-          <literal>node-one</literal>
-          and
-          <literal>node-two</literal>
-          have completed.
-        </para>
+      <para>
+        Here is an example with two start nodes. They both have arcs
+        to
+        <literal>node-three</literal>
+        , which uses the <literal>labelAnd</literal> join strategy. It will only execute once both
+        <literal>node-one</literal>
+        and
+        <literal>node-two</literal>
+        have completed.
+      </para>
 
-        <para>
-          <informalfigure>
-            <graphic fileref="../images/pdfiles/example3.jpg" />
-          </informalfigure>
-        </para>
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/pdfiles/example3.jpg" />
+        </informalfigure>
+      </para>
 
-        <programlisting><![CDATA[<?xml version="1.0"?>
+      <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition name="example3"
                     xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
@@ -476,161 +474,238 @@
 </process-definition>
 ]]></programlisting>
 
-        <para>
-          Now that we've seen how to create links between nodes in the same
-          process definition, let us examine how to create links to
-          nodes in external process definitions.
-        </para>
+      <para>
+        Now that we've seen how to create links between nodes in the same
+        process definition, let us examine how to include external process
+        definitions and create links to them.
+      </para>
 
-      </section>
+    </section>
 
-      <section id="sect15">
-        <title>Element externalArc</title>
-        <para>
-          An
-          <literal>externalArc</literal>
-          element declares an arc from the enclosing node to the
-          external node with the name specified in the
-          <literal>nodeName</literal>
-          attribute. External arc elements may not contain nested
-          elements.
-        </para>
+    <section id="external-element">
+      <title>Externals</title>
+      <para>
+        An exernal process definition must have a declaration for each time
+        it is to be included.
+      </para>
 
-      </section>
-      <section id="sect16">
-        <title>Attributes</title>
-        \begin{tabular}{| c | c | c | c | }
-        \hline
-        <emphasis>Attribute Name</emphasis>
-        &amp;
-        <emphasis>Usage</emphasis>
-        &amp;
-        <emphasis>Required?</emphasis>
-        &amp;
-        <emphasis>Default</emphasis>
-        \\ \hline
-        <literal>external</literal>
-        &amp; Specifies the name of the external process definition this
-        arc goes to. &amp; Yes &amp; N/A \\ \hline
-        <literal>instance</literal>
-        &amp; Specifies the specific instance of the external process
-        definition this arc goes to. All external arcs with the same
-        values for
-        <literal>external</literal>
-        and
-        <literal>instance</literal>
-        will go to the same set of nodes. &amp; Yes &amp; N/A \\ \hline
-        <literal>nodeName</literal>
-        &amp; Specifies the name of the node this arc goes to. &amp; Yes
-        &amp; N/A \\ \hline
-        <literal>name</literal>
-        &amp; Specifies the external arc name. This name need not be
-        unique. &amp; No &amp; null \\ \hline
-        <literal>type</literal>
-        &amp; Indicates if the containing node is at the beginning or
-        end of the arc. Valid values are
-        <literal>out</literal>
-        and
-        <literal>in</literal>
-        . If
-        <literal>out</literal>
-        is specified, the containing node is the start node of the arc,
-        otherwise it is the end. &amp; Yes &amp; N/A \\ \hline
-        \end{tabular}
+      <table frame="all">
+        <title><literal>external</literal> attributes</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Attribute Name</entry>
+              <entry>Usage</entry>
+              <entry>Is Required?</entry>
+              <entry>Default Value</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>name</literal></entry>
+              <entry>
+                The name by which this external process definition will be referred to.
+                The name must be unique within this process definition.
+              </entry>
+              <entry>Yes</entry>
+              <entry>N/A</entry>
+            </row>
+            <row>
+              <entry><literal>processDefinition</literal></entry>
+              <entry>
+                The name of the process definition being included. The same process definition
+                may be included more than once.
+              </entry>
+              <entry>Yes</entry>
+              <entry>N/A</entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
 
-      </section>
-      <section id="sect17">
-        <title>External Arc Example One </title>
-        <para>
-          To examine external arcs, we'll need at least two process
-          definitions.
-</para>
+      <table frame="all">
+        <title><literal>external</literal> nested elements</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Element</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>arc</literal></entry>
+              <entry>
+                Externals may have zero to many arcs. The arcs originate in the extenal process definition.
+                They may end in nodes in the same process definition, in other externals or even in
+                the same external.
+              </entry>
+            </row>
+            <row>
+              <entry><literal>custom</literal></entry>
+              <entry>
+                Each external has a custom section which may contain any user defined elements.
+                How data from these custom elements is made loaded is explained in
+                the section on custom external attributes below.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
 
-        <para>
-          This example is from the EngineConcepts section.
-</para>
+    </section>
 
-        <programlisting><![CDATA[<?xml version="1.0"?>
+    <section id="external-arc-element">
+      <title>External arcs</title>
+      <para>
+        An <literal>arc</literal> element in an <literal>external</literal> declares an arc
+        from a node in the enclosing external to the node with the name specified in
+        the <literal>to</literal> attribute. An arc is allowed no nested elements.
+      </para>
+
+      <table frame="all">
+        <title><literal>arc</literal> attributes</title>
+        <tgroup cols="4">
+          <thead>
+            <row>
+              <entry>Attribute Name</entry>
+              <entry>Usage</entry>
+              <entry>Is Required?</entry>
+              <entry>Default Value</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry><literal>from</literal> </entry>
+              <entry>Specifies the name of the node in the external that this arc starts from.</entry>
+              <entry>Yes</entry>
+              <entry>N/A</entry>
+            </row>
+            <row>
+              <entry><literal>to</literal> </entry>
+              <entry>Specifies the name of the node this arc goes to.</entry>
+              <entry>Yes</entry>
+              <entry>N/A</entry>
+            </row>
+            <row>
+              <entry><literal>name</literal> </entry>
+              <entry>Specifies the arc name. This name need not be unique.</entry>
+              <entry>No</entry>
+              <entry><literal>null</literal></entry>
+            </row>
+            <row>
+              <entry><literal>external</literal> </entry>
+              <entry>
+                If this arc is linking to another external, this specifies the name of the external
+                being linked to. If an <literal>external</literal> attribute is specified then the
+                <literal>to</literal> attribute will refer to a node in the external, not a locally
+                defined node.
+              </entry>
+              <entry>No</entry>
+              <entry><literal>null</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </section>
+
+    <section id="sect17">
+      <title>External Arc Example One </title>
+      <para>
+        To examine external arcs, we'll need at least two process
+        definitions.
+      </para>
+
+      <para>
+        This example is from the EngineConcepts section.
+      </para>
+
+      <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition name="ext"
                     xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
-  <node name="A" isJoin="true">
+  <node name="A" joinType="labelAnd">
     <arc to="B"/>
   </node>
 
-  <node name="B" isJoin="true"/>
+  <node name="B" joinType="labelAnd"/>
 
 </process-definition>
 ]]></programlisting>
 
-        <para>
-          It looks like:
-</para>
+      <para>
+        It looks like:
+      </para>
 
-        <para>
-          <informalfigure>
-            <graphic fileref="../images/concepts-externals1.jpg" />
-          </informalfigure>
-        </para>
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts-externals1.jpg" />
+        </informalfigure>
+      </para>
 
-        <para>
-          The graph which contains external arcs going to 'ext', is below.
-        </para>
+      <para>
+        The graph which contains external arcs going to 'ext', is below.
+      </para>
 
-        <programlisting><![CDATA[<?xml version="1.0"?>
+      <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition name="example4"
                     xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="P" isStart="true">
-    <externalArc external="ext" instance="1" nodeName="A" type="out"/>
+    <arc external="1" to="A"/>
   </node>
 
   <node name="Q" isStart="true">
-    <externalArc external="ext" instance="2" nodeName="A" type="out"/>
+    <arc external="2" to="A"/>
   </node>
 
   <node name="R" isStart="true">
-    <externalArc external="ext" instance="2" nodeName="B" type="out"/>
+    <arc external="2" to="B"/>
   </node>
 
   <node name="X">
     <arc to="Z"/>
-
-    <externalArc external="ext" instance="1" nodeName="A" type="in"/>
   </node>
 
   <node name="Y">
     <arc to="Z"/>
-    <externalArc external="ext" instance="2" nodeName="B" type="in"/>
   </node>
 
-  <node name="Z" isJoin="true"/>
+  <node name="Z" joinType="labelAnd"/>
+
+  <external name="1" processDefinition="ext">
+    <arc from="A" to="X"/>
+  </external>
+
+  <external name="2" processDefinition="ext">
+    <arc from="B" to="Y"/>
+  </external>
 
 </process-definition>
 ]]></programlisting>
 
-        <para>
-          It looks like:
-       </para>
+      <para>
+        It looks like:
+     </para>
 
-        <para>
-          <informalfigure>
-            <graphic fileref="../images/concepts-externals4.jpg" />
-          </informalfigure>
-        </para>
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts-externals4.jpg" />
+        </informalfigure>
+      </para>
 
-        <para>
-          When the process definition is loaded into memory, it will look like:
-        </para>
+      <para>
+        When the process definition is loaded into memory, it will look like:
+      </para>
 
-        <para>
-          <informalfigure>
-            <graphic fileref="../images/concepts-externals5.jpg" />
-          </informalfigure>
-        </para>
+      <para>
+        <informalfigure>
+          <graphic fileref="../images/concepts-externals5.jpg" />
+        </informalfigure>
+      </para>
 
-      </section>
     </section>
+  </section>
 
   <section id="sect18">
     <title>Java API</title>
@@ -734,7 +809,7 @@ public interface Node extends Adaptable
       <para>
         When the engine determines that a node is ready to execute, it will
         follow this flow:
-</para>
+      </para>
 
       <orderedlist>
         <listitem>
@@ -746,67 +821,65 @@ public interface Node extends Adaptable
         </listitem>
         <listitem>
           <para>
-            Execute the
-            <literal>guard</literal>
+            Execute the <literal>guard</literal>
             function on the node. This will return a
+            <literal>GuardResponse</literal>.
+          </para>
+          <itemizedlist>
+            <listitem>
+              <para>
+                The
+                <literal>GuardResponse</literal>
+                contains a
+                <literal>GuardAction</literal>
+                , which is an enum having values
+                <literal>AcceptToken</literal>
+                ,
+                <literal>DiscardToken</literal>
+                and
+                <literal>SkipNode</literal>
+                .
+              </para>
+            </listitem>
+          </itemizedlist>
+        </listitem>
+        <listitem>
+          <para>
+            If the action is
+            <literal>AcceptToken</literal>
+            , the
+            <literal>execute</literal>
+            method will be called. The process will not continue until
+            the
+            <literal>Engine#completeExecution</literal>
+            method is invoked. It must be invoked with the name of the
+            arcs on which to generate
+            <literal>ArcToken</literal>
+            s.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If the action is
+            <literal>DiscardToken</literal>
+            , the token is marked complete and no further execution
+            will take place from this set of tokens.
+          </para>
+        </listitem>
+        <listitem>
+          <para>
+            If the action is
+            <literal>SkipNode</literal>
+            ,
+            <literal>Engine.completeExecution</literal>
+            will be called with the arc name contained in the
             <literal>GuardResponse</literal>
             .
           </para>
         </listitem>
-        <itemizedlist>
-          <listitem>
-            <para>
-              The
-              <literal>GuardResponse</literal>
-              contains a
-              <literal>GuardAction</literal>
-              , which is an enum having values
-              <literal>AcceptToken</literal>
-              ,
-              <literal>DiscardToken</literal>
-              and
-              <literal>SkipNode</literal>
-              .
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              If the action is
-              <literal>AcceptToken</literal>
-              , the
-              <literal>execute</literal>
-              method will be called. The process will not continue until
-              the
-              <literal>Engine#completeExecution</literal>
-              method is invoked. It must be invoked with the name of the
-              arcs on which to generate
-              <literal>ArcToken</literal>
-              s.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              If the action is
-              <literal>DiscardToken</literal>
-              , the token is marked complete and no further execution
-              will take place from this set of tokens.
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              If the action is
-              <literal>SkipNode</literal>
-              ,
-              <literal>Engine.completeExecution</literal>
-              will be called with the arc name contained in the
-              <literal>GuardResponse</literal>
-              .
-            </para>
-          </listitem>
-        </itemizedlist>
       </orderedlist>
-
     </section>
+
     <section id="sect21">
       <title>Custom logic for Node Execution</title>
       <para>
@@ -861,7 +934,7 @@ public interface Node extends Adaptable
         To demonstrate use of each implementation, we start with a node that
         just prints out "Hello, World". We start with the process
         definition.
-</para>
+      </para>
 
     </section>
     <section id="sect23">
@@ -882,15 +955,18 @@ public interface Node extends Adaptable
         If using the memory implementation, the subclass would look like:
       </para>
 
-      <programlisting><![CDATA[package com.googlecode.sarasvati.example.mem;
+      <programlisting><![CDATA[
+package com.googlecode.sarasvati.example.mem;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.mem.MemNode;
 
-public class HelloNode extends MemNode {
-  @Override public void execute (Engine engine, NodeToken token)
+public class HelloNode extends MemNode
+{
+  @Override
+  public void execute (Engine engine, NodeToken token)
   {
     System.out.println( "Hello, world!" );
     engine.completeExecution( token, Arc.DEFAULT_ARC );
@@ -902,7 +978,8 @@ public class HelloNode extends MemNode {
         The hibernate version would look like:
 </para>
 
-      <programlisting><![CDATA[import javax.persistence.DiscriminatorValue;
+      <programlisting><![CDATA[
+import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 import com.googlecode.sarasvati.Arc;
@@ -914,7 +991,9 @@ import com.googlecode.sarasvati.hib.HibNode;
 @DiscriminatorValue( "helloWorld" )
 public class HelloNode extends HibNode
 {
-  @Override public void execute (Engine engine, NodeToken token) {
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
     System.out.println( "Hello, World!" );
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
@@ -934,13 +1013,14 @@ public class HelloNode extends HibNode
         The behaviour column ties the type to a discriminator specified on the
         subclass. This allows having multiple types with the same
         implementation class, if that was desired.
-</para>
+      </para>
 
       <para>
         The backend independent version would look like:
-</para>
+      </para>
 
-      <programlisting><![CDATA[import com.googlecode.sarasvati.Arc;
+      <programlisting><![CDATA[
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
@@ -958,9 +1038,7 @@ public class HelloNode extends CustomNode
 
       <para>
         For use with the hibernate backend, a row would still need to be
-        added to the
-        <literal>wf_node_type</literal>
-        table.
+        added to the <literal>wf_node_type</literal> table.
       </para>
 
       <programlisting><![CDATA[ insert into wf_node_type (id, description, behaviour) values ( 'helloWorld', 'Says hello to the world', 'custom' )
@@ -984,35 +1062,36 @@ public class HelloNode extends CustomNode
           <listitem>
             <para>
               Create an engine of the appropriate type
-      </para>
+            </para>
           </listitem>
           <listitem>
             <para>
               Register custom node types
-      </para>
+            </para>
           </listitem>
           <listitem>
             <para>
               Load the process definition from XML file
-      </para>
+            </para>
           </listitem>
           <listitem>
             <para>
               Get the loaded graph from the graph repository associated with the
               engine
-      </para>
+            </para>
           </listitem>
           <listitem>
             <para>
               Start a new GraphProcess using the graph
-      </para>
+            </para>
           </listitem>
         </orderedlist>
 
         Here are the steps in code for the memory backed implementation.
       </para>
 
-      <programlisting><![CDATA[    MemEngine engine = new MemEngine();
+      <programlisting><![CDATA[
+    MemEngine engine = new MemEngine();
 
     // Tell engine about our custom node type
     engine.addNodeType( "helloWorld", HelloNode.class );
@@ -1031,12 +1110,11 @@ public class HelloNode extends CustomNode
       <para>
         Here are the steps in code for the hibernate backed
         implementation. It assumes that you have a means of creating a
-        hibernate
-        <literal>Session</literal>
-        object.
+        hibernate <literal>Session</literal> object.
       </para>
 
-      <programlisting><![CDATA[    Session session = ...; // get hibernate session
+      <programlisting><![CDATA[
+    Session session = ...; // get hibernate session
     HibEngine engine = new HibEngine( session );
 
     // Tell engine about our custom node type
@@ -1055,12 +1133,11 @@ public class HelloNode extends CustomNode
 
       <para>
         Here are the steps in code using the backend independent custom
-        type with
-        <literal>MemEngine</literal>
-        .
+        type with <literal>MemEngine</literal>.
       </para>
 
-      <programlisting><![CDATA[    MemEngine engine = new MemEngine();
+      <programlisting><![CDATA[
+    MemEngine engine = new MemEngine();
 
     // We can either register the type with the Engine or with the DefaultNodeFactory
     // directly.
@@ -1095,13 +1172,13 @@ public class HelloNode extends CustomNode
       <para>
         Often, custom nodes will need some information with which to do their
         work. Sarasvati supports this in two ways.
-</para>
+      </para>
 
       <para>
         The schema for process definition files has a
-        <literal>&gt;custom&lt;</literal>
+        <literal>&lt;custom&gt;</literal>
         element which contains an
-        <literal>&gt;xs:any&lt;</literal>
+        <literal>&lt;xs:any&gt;</literal>
         element at the end of the node definition. Custom elements may
         be added here. These can be automatically mapped to properties
         on custom nodes.
@@ -1109,20 +1186,26 @@ public class HelloNode extends CustomNode
 
       <para>
         For example, given the following custom node:
-</para>
+      </para>
 
-      <programlisting><![CDATA[public class CustomNode extends MemNode {
+      <programlisting><![CDATA[
+public class CustomNode extends MemNode
+{
   String foo;
 
-  public String getFoo () {
+  public String getFoo ()
+  {
     return foo;
   }
 
-  public void setFoo (String foo) {
+  public void setFoo (String foo)
+  {
     this.foo = foo;
   }
 
-  @Override public void execute (Engine engine, NodeToken token) {
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
     // do something ...
     engine.completeExecution( token, Arc.DEFAULT_ARC );
   }
@@ -1131,13 +1214,12 @@ public class HelloNode extends CustomNode
 
       <para>
         The following process definition would load the value
-        <literal>test</literal>
-        into the
-        <literal>custom</literal>
+        <literal>test</literal> into the <literal>custom</literal>
         property.
       </para>
 
-      <programlisting><![CDATA[<?xml version="1.0"?>
+      <programlisting><![CDATA[
+<?xml version="1.0"?>
 <process-definition name="example1"
                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
@@ -1153,20 +1235,19 @@ public class HelloNode extends CustomNode
 
       <para>
         There several things to note with custom elements.
-</para>
+      </para>
 
       <itemizedlist>
         <listitem>
           <para>
             All custom elements must be contained within the
-            <literal>&gt;custom&lt;</literal>
-            tag.
+            <literal>&lt;custom&gt;</literal> tag.
           </para>
         </listitem>
         <listitem>
           <para>
             Non-string properties on custom node types are supported.
-      </para>
+          </para>
           <itemizedlist>
             <listitem>
               <para>
@@ -1199,9 +1280,10 @@ public class HelloNode extends CustomNode
 
       <para>
         Nested objects are supported. For example:
-</para>
+      </para>
 
-      <programlisting><![CDATA[  <custom>
+      <programlisting><![CDATA[
+  <custom>
     <task>
       <name>test</name>
     </task>
@@ -1220,9 +1302,10 @@ public class HelloNode extends CustomNode
         elements, the attribute will get mapped as a child property. If
         the element is itself a property, the attribute name will be
         combined with the element name to get the property name.
-</para>
+      </para>
 
-      <programlisting><![CDATA[  <custom>
+      <programlisting><![CDATA[
+  <custom>
     <task user="pat">
       <name>test</name>
     </task>
@@ -1243,9 +1326,10 @@ public class HelloNode extends CustomNode
 
       <para>
         However, the following would be mapped differently:
-</para>
+      </para>
 
-      <programlisting><![CDATA[  <custom>
+      <programlisting><![CDATA[
+  <custom>
     <task user="pat">
       test
     </task>
@@ -1269,11 +1353,11 @@ public class HelloNode extends CustomNode
       <title>Custom Loader</title>
       <para>
         You may also provide custom loading via a subclass of
-        <literal>NodeFactory</literal>
-        . It has the following interface:
+        <literal>NodeFactory</literal>. It has the following interface:
       </para>
 
-      <programlisting><![CDATA[public interface NodeFactory
+      <programlisting><![CDATA[
+public interface NodeFactory
 {
   Node newNode (String type) throws LoadException;
   void loadCustom (Node node, Object custom) throws LoadException;
@@ -1302,7 +1386,7 @@ public class HelloNode extends CustomNode
       <para>
         Here we examine a more complicated example, which uses custom
         attributes.
-</para>
+     </para>
 
       <programlisting><![CDATA[<?xml version="1.0"?>
 
@@ -1347,7 +1431,7 @@ public class HelloNode extends CustomNode
     </custom>
   </node>
 
-  <node type="task" name="4" isJoin="true">
+  <node type="task" name="4" joinType="labelAnd">
 
     <custom>
       <taskName>Market to Customer</taskName>
@@ -1368,56 +1452,65 @@ public class HelloNode extends CustomNode
       <para>
         We will need a couple of classes to represent tasks and their state.
         First we look at the memory based implementation.
-</para>
+      </para>
 
       <para>
         First we have an enum for task states.
-        <programlisting><![CDATA[public enum TaskState { Open, Completed, Rejected }
+        <programlisting><![CDATA[
+public enum TaskState { Open, Completed, Rejected }
 ]]></programlisting>
 
-        Next is the
-        <literal>Task</literal>
-        class.
+        Next is the <literal>Task</literal> class.
       </para>
 
-      <programlisting><![CDATA[public class Task {
+      <programlisting><![CDATA[
+public class Task
+{
   protected NodeToken nodeToken;
   protected String name;
   protected String description;
   protected TaskState state;
 
-  public Task (NodeToken nodeToken, String name, String description, TaskState state) {
+  public Task (NodeToken nodeToken, String name, String description, TaskState state)
+  {
     this.nodeToken = nodeToken;
     this.name = name;
     this.description = description;
     this.state = state;
   }
 
-  public NodeToken getNodeToken () {
+  public NodeToken getNodeToken ()
+  {
     return nodeToken;
   }
 
-  public void setNodeToken (NodeToken nodeToken) {
+  public void setNodeToken (NodeToken nodeToken)
+  {
     this.nodeToken = nodeToken;
   }
 
-  public String getName () {
+  public String getName ()
+  {
     return name;
   }
 
-  public String getDescription () {
+  public String getDescription ()
+  {
     return description;
   }
 
-  public TaskState getState () {
+  public TaskState getState ()
+  {
     return state;
   }
 
-  public void setState (TaskState state ) {
+  public void setState (TaskState state )
+  {
     this.state = state;
   }
 
-  public boolean isRejectable () {
+  public boolean isRejectable ()
+  {
     Node node = getNodeToken().getNode();
     return !node.getGraph().getOutputArcs( node, "reject" ).isEmpty();
   }
@@ -1427,12 +1520,15 @@ public class HelloNode extends CustomNode
       <para>
         In our simple example, we need some way of tracking which tasks have
         been created.
-</para>
+      </para>
 
-      <programlisting><![CDATA[public class TaskList {
+      <programlisting><![CDATA[
+public class TaskList
+{
   protected static List<Task> tasks = new LinkedList<Task>();
 
-  public static List<Task> getTasks () {
+  public static List<Task> getTasks ()
+  {
     return tasks;
   }
 }
@@ -1440,29 +1536,37 @@ public class HelloNode extends CustomNode
 
       <para>
         Finally, the custom node for generating tasks
-</para>
+      </para>
 
-      <programlisting><![CDATA[public class TaskNode extends MemNode {
+      <programlisting><![CDATA[
+public class TaskNode extends MemNode
+{
   protected String taskName;
   protected String taskDesc;
 
-  public String getTaskName () {
+  public String getTaskName ()
+  {
     return taskName;
   }
 
-  public void setTaskName (String taskName) {
+  public void setTaskName (String taskName)
+  {
     this.taskName = taskName;
   }
 
-  public String getTaskDesc () {
+  public String getTaskDesc ()
+  {
     return taskDesc;
   }
 
-  public void setTaskDesc (String taskDesc) {
+  public void setTaskDesc (String taskDesc)
+  {
     this.taskDesc = taskDesc;
   }
 
-  @Override public void execute (Engine engine, NodeToken token) {
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
     Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );
     TaskList.getTasks().add( newTask );
   }
@@ -1476,7 +1580,8 @@ public class HelloNode extends CustomNode
         rejected as seen in the following code snippet:
       </para>
 
-      <programlisting><![CDATA[      Task t = ...;
+      <programlisting><![CDATA[
+      Task t = ...;
 
       if ( isCompletion )
       {
@@ -1493,12 +1598,11 @@ public class HelloNode extends CustomNode
       <para>
         The primary difference with the database/Hibernate version, is
         that the node and tasks will require database backing. Let us
-        look at the
-        <literal>TaskNode</literal>
-        class.
+        look at the <literal>TaskNode</literal> class.
       </para>
 
-      <programlisting><![CDATA[@Entity
+      <programlisting><![CDATA[
+@Entity
 @DiscriminatorValue( "task" )
 @SecondaryTable( name="wf_node_task", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
 public class TaskNode extends HibNode
@@ -1511,23 +1615,29 @@ public class TaskNode extends HibNode
 
   public TaskNode() { /* Default constructor for Hibernate */ }
 
-  public String getTaskName () {
+  public String getTaskName ()
+  {
     return taskName;
   }
 
-  public void setTaskName (String taskName) {
+  public void setTaskName (String taskName)
+  {
     this.taskName = taskName;
   }
 
-  public String getTaskDesc () {
+  public String getTaskDesc ()
+  {
     return taskDesc;
   }
 
-  public void setTaskDesc (String taskDesc) {
+  public void setTaskDesc (String taskDesc)
+  {
     this.taskDesc = taskDesc;
   }
 
-  @Override public void execute (Engine engine, NodeToken token) {
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
     HibEngine hibEngine = (HibEngine)engine;
 
     Session session = hibEngine.getSession();
