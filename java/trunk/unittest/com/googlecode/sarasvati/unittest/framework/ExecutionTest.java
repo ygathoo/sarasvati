@@ -19,14 +19,21 @@
 package com.googlecode.sarasvati.unittest.framework;
 
 import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 import junit.framework.Assert;
 
 import org.junit.Before;
 
+import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.event.EventActions;
+import com.googlecode.sarasvati.event.ExecutionEvent;
+import com.googlecode.sarasvati.event.ExecutionEventType;
+import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.mem.MemEngine;
 import com.googlecode.sarasvati.mem.MemGraph;
@@ -34,12 +41,45 @@ import com.googlecode.sarasvati.xml.XmlLoader;
 
 public class ExecutionTest
 {
+  public static class DuplicateEventDetector implements ExecutionListener
+  {
+    private Set<NodeToken> backtrackedNodeTokens = new HashSet<NodeToken>();
+    private Set<ArcToken> backtrackedArcTokens = new HashSet<ArcToken>();
+
+    @Override
+    public EventActions notify (final ExecutionEvent event)
+    {
+      if ( event.getEventType() == ExecutionEventType.NODE_TOKEN_BACKTRACKED )
+      {
+        if ( backtrackedNodeTokens.contains( event.getNodeToken() ) )
+        {
+          throw new RuntimeException( "Node Token " + event.getNodeToken() + " notified of backtracking twice" );
+        }
+        backtrackedNodeTokens.add( event.getNodeToken() );
+      }
+
+      if ( event.getEventType() == ExecutionEventType.ARC_TOKEN_BACKTRACKED )
+      {
+        if ( backtrackedArcTokens.contains( event.getArcToken() ) )
+        {
+          throw new RuntimeException( "Arc Token " + event.getNodeToken() + " notified of backtracking twice" );
+        }
+        backtrackedArcTokens.add( event.getArcToken() );
+      }
+
+      return null;
+    }
+  }
+
   protected MemEngine engine;
 
   @Before
   public void setup ()
   {
     engine = new MemEngine();
+    engine.addExecutionListener( DuplicateEventDetector.class,
+                                 ExecutionEventType.ARC_TOKEN_BACKTRACKED,
+                                 ExecutionEventType.NODE_TOKEN_BACKTRACKED );
   }
 
   protected Graph ensureLoaded (final String name) throws Exception
