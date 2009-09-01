@@ -172,6 +172,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
         NodeTokenEvent.newBacktrackedEvent( engine, token );
 
         backtrackToken.markComplete( engine );
+        NodeTokenEvent.newCompletedEvent( engine, backtrackToken, null );
       }
     }
 
@@ -209,9 +210,12 @@ public class BacktrackTokenVisitor implements TokenVisitor
     for ( ArcToken parent : parents )
     {
       token.getProcess().removeActiveArcToken( parent );
+
       parent.markBacktracked( engine );
       ArcTokenEvent.newBacktrackedEvent( engine, parent );
+
       parent.markComplete( engine, backtrackToken );
+      ArcTokenEvent.newCompletedEvent( engine, parent );
     }
 
     return backtrackToken;
@@ -224,8 +228,11 @@ public class BacktrackTokenVisitor implements TokenVisitor
     if ( !token.isComplete() )
     {
       token.markComplete( engine );
+      NodeTokenEvent.newCompletedEvent( engine, backtrackToken, null );
+
       token.markBacktracked( engine );
       NodeTokenEvent.newBacktrackedEvent( engine, token );
+
       token.getProcess().removeActiveNodeToken( token );
     }
     else if ( !token.getExecutionType().isBacktracked() )
@@ -330,6 +337,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     {
       parent.markProcessed( engine );
       parent.markComplete( engine, backtrackToken );
+      ArcTokenEvent.newCompletedEvent( engine, parent );
     }
 
     reactivateTokenSets();
