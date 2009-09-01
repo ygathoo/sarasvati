@@ -46,6 +46,10 @@ public class ExecutionTest
     private Set<NodeToken> backtrackedNodeTokens = new HashSet<NodeToken>();
     private Set<ArcToken> backtrackedArcTokens = new HashSet<ArcToken>();
 
+    private Set<NodeToken> completedNodeTokens = new HashSet<NodeToken>();
+    private Set<ArcToken> completedArcTokens = new HashSet<ArcToken>();
+
+
     @Override
     public EventActions notify (final ExecutionEvent event)
     {
@@ -67,6 +71,24 @@ public class ExecutionTest
         backtrackedArcTokens.add( event.getArcToken() );
       }
 
+      if ( event.getEventType() == ExecutionEventType.NODE_TOKEN_COMPLETED )
+      {
+        if ( completedNodeTokens.contains( event.getNodeToken() ) )
+        {
+          throw new RuntimeException( "Node Token " + event.getNodeToken() + " notified of completion twice" );
+        }
+        completedNodeTokens.add( event.getNodeToken() );
+      }
+
+      if ( event.getEventType() == ExecutionEventType.ARC_TOKEN_COMPLETED )
+      {
+        if ( completedArcTokens.contains( event.getArcToken() ) )
+        {
+          throw new RuntimeException( "Arc Token " + event.getNodeToken() + " notified of completion twice" );
+        }
+        completedArcTokens.add( event.getArcToken() );
+      }
+
       return null;
     }
   }
@@ -77,9 +99,7 @@ public class ExecutionTest
   public void setup ()
   {
     engine = new MemEngine();
-    engine.addExecutionListener( DuplicateEventDetector.class,
-                                 ExecutionEventType.ARC_TOKEN_BACKTRACKED,
-                                 ExecutionEventType.NODE_TOKEN_BACKTRACKED );
+    engine.addExecutionListener( DuplicateEventDetector.class, ExecutionEventType.values());
   }
 
   protected Graph ensureLoaded (final String name) throws Exception
