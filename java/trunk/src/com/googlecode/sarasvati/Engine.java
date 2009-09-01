@@ -24,6 +24,7 @@ import java.util.Map;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.event.EventActionType;
 import com.googlecode.sarasvati.event.EventActions;
+import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.GraphFactory;
@@ -235,6 +236,17 @@ public interface Engine
    * @param nodeClass The custom node class which will be instantiated for this type
    */
   void addGlobalCustomNodeType (String type, Class<? extends CustomNode> nodeClass );
+
+  /**
+   * This will send the given event to listeners who have registered for
+   * events on all processes and to listeners who have registered for events
+   * on the process that originated this event.
+   *
+   * @param event The event to send to all interested listeners.
+   * @return EventActions Listeners may return EventActions which may influence
+   *         execution by, for example, delaying further execution.
+   */
+  EventActions fireEvent (ExecutionEvent event);
 
   /**
    * Adds a listener of the given type for the given event types for all processes.

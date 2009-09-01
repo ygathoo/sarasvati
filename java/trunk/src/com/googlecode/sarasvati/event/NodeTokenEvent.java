@@ -57,6 +57,11 @@ public class NodeTokenEvent extends ExecutionEvent
     return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, exitArcsName );
   }
 
+  public static final NodeTokenEvent newBacktrackedEvent (final Engine engine, final NodeToken nodeToken)
+  {
+    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_BACKTRACKED, nodeToken, null );
+  }
+
   private NodeTokenEvent (final Engine engine, final ExecutionEventType eventType, final NodeToken nodeToken, final String exitArcsName)
   {
     super( engine, eventType );

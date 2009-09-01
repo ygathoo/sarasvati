@@ -30,9 +30,11 @@ public enum ExecutionEventType
   NODE_TOKEN_DISCARDED( 128 ),
   NODE_TOKEN_SKIPPED( 256 ),
   NODE_TOKEN_COMPLETED( 512 ),
+  NODE_TOKEN_BACKTRACKED( 1024 ),
 
-  ARC_TOKEN_CREATED( 1024 ),
-  ARC_TOKEN_COMPLETED( 2048 );
+  ARC_TOKEN_CREATED( 2048 ),
+  ARC_TOKEN_COMPLETED( 4096 ),
+  ARC_TOKEN_BACKTRACKED( 8192 );
 
   private int eventType;
 
@@ -55,17 +57,19 @@ public enum ExecutionEventType
 
   public boolean isNodeTokenEvent ()
   {
-    return this == NODE_TOKEN_CREATED   ||
-    	   this == NODE_TOKEN_ACCEPTED  ||
-    	   this == NODE_TOKEN_EXECUTED  ||
-           this == NODE_TOKEN_COMPLETED ||
-           this == NODE_TOKEN_DISCARDED ||
-           this == NODE_TOKEN_SKIPPED;
+    return this == NODE_TOKEN_CREATED     ||
+           this == NODE_TOKEN_ACCEPTED    ||
+           this == NODE_TOKEN_EXECUTED    ||
+           this == NODE_TOKEN_COMPLETED   ||
+           this == NODE_TOKEN_DISCARDED   ||
+           this == NODE_TOKEN_SKIPPED     ||
+           this == NODE_TOKEN_BACKTRACKED;
   }
 
   public boolean isArcTokenEvent ()
   {
-    return this == ARC_TOKEN_CREATED ||
-           this == ARC_TOKEN_COMPLETED;
+    return this == ARC_TOKEN_CREATED     ||
+           this == ARC_TOKEN_COMPLETED   ||
+           this == ARC_TOKEN_BACKTRACKED;
   }
 }

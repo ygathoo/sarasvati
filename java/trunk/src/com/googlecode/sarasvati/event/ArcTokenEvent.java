@@ -34,6 +34,11 @@ public class ArcTokenEvent extends ExecutionEvent
     return new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_COMPLETED, arcToken );
   }
 
+  public static final ArcTokenEvent newBacktrackedEvent (final Engine engine, final ArcToken arcToken)
+  {
+    return new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_BACKTRACKED, arcToken );
+  }
+
   protected ArcToken arcToken;
 
   private ArcTokenEvent (final Engine engine, final ExecutionEventType eventType, final ArcToken arcToken)

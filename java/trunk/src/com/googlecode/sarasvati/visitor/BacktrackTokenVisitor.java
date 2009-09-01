@@ -37,6 +37,8 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.TokenSet;
+import com.googlecode.sarasvati.event.ArcTokenEvent;
+import com.googlecode.sarasvati.event.NodeTokenEvent;
 import com.googlecode.sarasvati.util.NodeTokenIdComparator;
 
 public class BacktrackTokenVisitor implements TokenVisitor
@@ -130,7 +132,10 @@ public class BacktrackTokenVisitor implements TokenVisitor
     for ( ArcToken token : arcTokenLeaves )
     {
       arcTokenMap.put( token, token );
+
       token.markBacktracked( engine );
+      ArcTokenEvent.newBacktrackedEvent( engine, token );
+
       queue.add( token.getParentToken() );
       token.getProcess().removeActiveArcToken( token );
     }
@@ -162,7 +167,10 @@ public class BacktrackTokenVisitor implements TokenVisitor
       else
       {
         NodeToken backtrackToken = backtrackToken( token );
+
         backtrackToken.markBacktracked( engine );
+        NodeTokenEvent.newBacktrackedEvent( engine, token );
+
         backtrackToken.markComplete( engine );
       }
     }
@@ -175,6 +183,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
   private NodeToken backtrackCompletedToken (final NodeToken token, final ExecutionType executionType)
   {
     token.markBacktracked( engine );
+    NodeTokenEvent.newBacktrackedEvent( engine, token );
 
     List<ArcToken> parents = new ArrayList<ArcToken>( token.getChildTokens().size() );
     for ( ArcToken childToken : token.getChildTokens() )
@@ -193,6 +202,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
                                         executionType,
                                         parents,
                                         token );
+    engine.fireEvent( NodeTokenEvent.newCreatedEvent( engine, backtrackToken ) );
     token.getProcess().addNodeToken( backtrackToken );
     shareTokenSets( backtrackToken, token );
 
@@ -200,6 +210,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     {
       token.getProcess().removeActiveArcToken( parent );
       parent.markBacktracked( engine );
+      ArcTokenEvent.newBacktrackedEvent( engine, parent );
       parent.markComplete( engine, backtrackToken );
     }
 
@@ -214,6 +225,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
     {
       token.markComplete( engine );
       token.markBacktracked( engine );
+      NodeTokenEvent.newBacktrackedEvent( engine, token );
       token.getProcess().removeActiveNodeToken( token );
     }
     else if ( !token.getExecutionType().isBacktracked() )
@@ -221,6 +233,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
       if ( token.getChildTokens().isEmpty() )
       {
         token.markBacktracked( engine );
+        NodeTokenEvent.newBacktrackedEvent( engine, token );
       }
       else
       {
@@ -235,13 +248,14 @@ public class BacktrackTokenVisitor implements TokenVisitor
 
       token.getProcess().removeActiveArcToken( parent );
       parent.markBacktracked( engine );
+      ArcTokenEvent.newBacktrackedEvent( engine, parent );
 
       ArcToken backtrackArcToken =
         engine.getFactory().newArcToken( token.getProcess(),
                                          parent.getArc(),
                                          backtrackParent ? ExecutionType.Backtracked : ExecutionType.UTurn,
                                          backtrackToken );
-
+      engine.fireEvent( ArcTokenEvent.newCreatedEvent( engine, backtrackArcToken ) );
       backtrackToken.getChildTokens().add( backtrackArcToken );
       shareTokenSets( backtrackArcToken, parent );
 
@@ -284,15 +298,19 @@ public class BacktrackTokenVisitor implements TokenVisitor
   public NodeToken backtrackDeadEnd (final NodeToken token)
   {
     token.markBacktracked( engine );
+    NodeTokenEvent.newBacktrackedEvent( engine, token );
     List<ArcToken> parents = new ArrayList<ArcToken>( token.getParentTokens().size() );
     for (ArcToken parent : token.getParentTokens() )
     {
       parent.markBacktracked( engine );
+      ArcTokenEvent.newBacktrackedEvent( engine, parent );
+
       ArcToken backtrackArcToken =
         engine.getFactory().newArcToken( token.getProcess(),
                                          parent.getArc(),
                                          ExecutionType.UTurn,
                                          token );
+      engine.fireEvent( ArcTokenEvent.newCreatedEvent( engine, backtrackArcToken ) );
       token.getChildTokens().add( backtrackArcToken );
       parents.add( backtrackArcToken );
       shareTokenSets( backtrackArcToken, parent );
@@ -304,6 +322,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
                                         ExecutionType.Forward,
                                         parents,
                                         token );
+    engine.fireEvent( NodeTokenEvent.newCreatedEvent( engine, backtrackToken ) );
     token.getProcess().addNodeToken( backtrackToken );
     shareTokenSets( backtrackToken, token );
 
