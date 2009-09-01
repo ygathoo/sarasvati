@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.env;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,6 +36,7 @@ public class AttributeConverters
   static
   {
     converters.put( String.class, new StringAttributeConverter() );
+    converters.put( Date.class, new DateAttributeConverter() );
 
     converters.put( Byte.class, new ByteAttributeConverter() );
     converters.put( Byte.TYPE, new ByteAttributeConverter() );
