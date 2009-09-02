@@ -71,36 +71,51 @@ public abstract class BaseEngine implements Engine
   protected static final String DEFAULT_APPLICATION_CONTEXT = "";
   protected static final Map<String, DefaultExecutionEventQueue> globalQueueMap = new ConcurrentHashMap<String, DefaultExecutionEventQueue>();
 
-  static
-  {
-    getGlobalQueueForContext( DEFAULT_APPLICATION_CONTEXT );
-  }
-
-  private static DefaultExecutionEventQueue getGlobalQueueForContext (final String applicationContext)
-  {
-    DefaultExecutionEventQueue queue = globalQueueMap.get( applicationContext );
-    if ( queue == null )
-    {
-      queue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
-      queue.addListener( new TokenSetCompletionListener(),
-                         ExecutionEventType.ARC_TOKEN_COMPLETED,
-                         ExecutionEventType.NODE_TOKEN_COMPLETED );
-      globalQueueMap.put( applicationContext, queue );
-    }
-
-    return queue;
-  }
-
   protected boolean arcExecutionStarted = false;
   protected List<ArcToken> asyncQueue = new LinkedList<ArcToken>();
 
   protected final DefaultExecutionEventQueue globalEventQueue;
   protected BaseEngine parentEngine;
 
+  /**
+   * Creates a new Engine with the given application context.
+   * Each application context has it's own set of global listeners.
+   *
+   * This allows different applications running the same JVM to
+   * have different sets of listeners without having to add
+   * them at the process level.
 
+   * @param applicationContext The application context
+   */
   public BaseEngine (final String applicationContext)
   {
     globalEventQueue = getGlobalQueueForContext( applicationContext );
+  }
+
+  private DefaultExecutionEventQueue getGlobalQueueForContext (final String applicationContext)
+  {
+    DefaultExecutionEventQueue queue = globalQueueMap.get( applicationContext );
+    if ( queue == null )
+    {
+      queue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
+      contributeGlobalListeners( queue );
+      globalQueueMap.put( applicationContext, queue );
+    }
+
+    return queue;
+  }
+
+  /**
+   * Provides a subclass to override which execution event listeners are added to
+   * new global queues. By default this just adds the {@link TokenSetCompletionListener}.
+   *
+   * @param queue The new global queue
+   */
+  protected void contributeGlobalListeners (final DefaultExecutionEventQueue queue)
+  {
+    queue.addListener( new TokenSetCompletionListener(),
+                       ExecutionEventType.ARC_TOKEN_COMPLETED,
+                       ExecutionEventType.NODE_TOKEN_COMPLETED );
   }
 
   @Override
