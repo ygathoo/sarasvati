@@ -26,7 +26,6 @@ import java.util.Set;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ArcTokenSetMember;
-import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
@@ -84,15 +83,10 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public void markComplete (final Engine engine, final NodeToken token)
+  public void markComplete (final NodeToken token)
   {
     this.completeDate = new Date();
     this.childToken = token;
-
-    for ( ArcTokenSetMember setMember : getTokenSetMemberships() )
-    {
-      setMember.getTokenSet().getActiveArcTokens( engine ).remove( this );
-    }
   }
 
   @Override
@@ -102,7 +96,7 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public void markProcessed (final Engine engine)
+  public void markProcessed ()
   {
     this.pending = false;
   }
@@ -114,7 +108,7 @@ public class MemArcToken implements ArcToken
   }
 
   @Override
-  public void markBacktracked (final Engine engine)
+  public void markBacktracked ()
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }

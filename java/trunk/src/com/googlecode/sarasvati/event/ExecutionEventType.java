@@ -33,8 +33,9 @@ public enum ExecutionEventType
   NODE_TOKEN_BACKTRACKED( 1024 ),
 
   ARC_TOKEN_CREATED( 2048 ),
-  ARC_TOKEN_COMPLETED( 4096 ),
-  ARC_TOKEN_BACKTRACKED( 8192 );
+  ARC_TOKEN_PROCESSED( 4096 ),
+  ARC_TOKEN_COMPLETED( 8192 ),
+  ARC_TOKEN_BACKTRACKED( 16384 );
 
   private int eventType;
 
@@ -69,6 +70,7 @@ public enum ExecutionEventType
   public boolean isArcTokenEvent ()
   {
     return this == ARC_TOKEN_CREATED     ||
+           this == ARC_TOKEN_PROCESSED   ||
            this == ARC_TOKEN_COMPLETED   ||
            this == ARC_TOKEN_BACKTRACKED;
   }

@@ -49,7 +49,6 @@ import org.hibernate.annotations.Type;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ArcTokenSetMember;
-import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.visitor.TokenVisitor;
@@ -195,15 +194,10 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public void markComplete (final Engine engine, final NodeToken token)
+  public void markComplete (final NodeToken token)
   {
     this.completeDate = new Date();
     this.childToken = token;
-
-    for ( ArcTokenSetMember setMember : getTokenSetMemberships() )
-    {
-      setMember.getTokenSet().getActiveArcTokens( engine ).remove( this );
-    }
   }
 
   @Override
@@ -213,7 +207,7 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public void markProcessed (final Engine engine)
+  public void markProcessed ()
   {
     pending = false;
   }
@@ -225,7 +219,7 @@ public class HibArcToken implements ArcToken
   }
 
   @Override
-  public void markBacktracked (final Engine engine)
+  public void markBacktracked ()
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }

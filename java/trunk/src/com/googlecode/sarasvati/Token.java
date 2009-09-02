@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 
 package com.googlecode.sarasvati;
@@ -62,7 +62,7 @@ public interface Token
    *
    * Any other type of change should not occur.
    */
-  void markBacktracked (Engine engine);
+  void markBacktracked ();
 
   /**
    * Should call the appropriate visit method on the given

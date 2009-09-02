@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 20082-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.event;
 
@@ -24,19 +24,24 @@ import com.googlecode.sarasvati.GraphProcess;
 
 public class ArcTokenEvent extends ExecutionEvent
 {
-  public static final ArcTokenEvent newCreatedEvent (final Engine engine, final ArcToken arcToken)
+  public static final EventActions fireCreatedEvent (final Engine engine, final ArcToken arcToken)
   {
-    return new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_CREATED, arcToken );
+    return engine.fireEvent( new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_CREATED, arcToken ) );
   }
 
-  public static final ArcTokenEvent newCompletedEvent (final Engine engine, final ArcToken arcToken)
+  public static final EventActions fireProcessedEvent (final Engine engine, final ArcToken arcToken)
   {
-    return new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_COMPLETED, arcToken );
+    return engine.fireEvent( new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_PROCESSED, arcToken ) );
   }
 
-  public static final ArcTokenEvent newBacktrackedEvent (final Engine engine, final ArcToken arcToken)
+  public static final EventActions fireCompletedEvent (final Engine engine, final ArcToken arcToken)
   {
-    return new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_BACKTRACKED, arcToken );
+    return engine.fireEvent( new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_COMPLETED, arcToken ) );
+  }
+
+  public static final EventActions fireBacktrackedEvent (final Engine engine, final ArcToken arcToken)
+  {
+    return engine.fireEvent( new ArcTokenEvent( engine, ExecutionEventType.ARC_TOKEN_BACKTRACKED, arcToken ) );
   }
 
   protected ArcToken arcToken;

@@ -43,11 +43,12 @@ public class EventActions
     return (mask & type.getMask()) != 0;
   }
 
-  public void compose (final EventActions eventActions)
+  public EventActions compose (final EventActions eventActions)
   {
     if ( eventActions != null )
     {
       this.mask |= eventActions.mask;
     }
+    return this;
   }
 }

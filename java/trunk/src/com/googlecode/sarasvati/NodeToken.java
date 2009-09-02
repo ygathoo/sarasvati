@@ -97,14 +97,13 @@ public interface NodeToken extends Token
 
   /**
    * A NodeToken is evaluated by the {@link Node#guard(Engine, NodeToken)}
-   * method. recordGuardAction will be called by the engine to
-   * record the result of the guard.
+   * method. setGuardAction will be called by the engine to record the result
+   * of the guard.
    *
-   * @param engine The {@link Engine} being used to execute the associated {@link GraphProcess}.
    * @param action The {@link GuardAction} taken with this NodeToken.
    * @see Node#guard(Engine, NodeToken)
    */
-  void recordGuardAction (Engine engine, GuardAction action);
+  void setGuardAction (GuardAction action);
 
   /**
    * Returns the GuardAction that was returned from the Node guard
@@ -137,7 +136,7 @@ public interface NodeToken extends Token
    *
    * @param engine The engine executing the current process.
    */
-  void markComplete (Engine engine);
+  void markComplete ();
 
   /**
    * Returns the first {@link TokenSet} of the given name that
