@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.event;
 
@@ -30,12 +30,12 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
 {
   private List<RegisteredExecutionListener> listeners;
 
-  public static ExecutionEventQueue newArrayListInstance ()
+  public static DefaultExecutionEventQueue newArrayListInstance ()
   {
     return new DefaultExecutionEventQueue( new ArrayList<RegisteredExecutionListener>() );
   }
 
-  public static ExecutionEventQueue newCopyOnWriteListInstance ()
+  public static DefaultExecutionEventQueue newCopyOnWriteListInstance ()
   {
     return new DefaultExecutionEventQueue( new CopyOnWriteArrayList<RegisteredExecutionListener>() );
   }

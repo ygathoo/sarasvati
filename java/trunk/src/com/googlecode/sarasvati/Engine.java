@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
 package com.googlecode.sarasvati;
 
@@ -251,7 +251,10 @@ public interface Engine
   /**
    * Adds a listener of the given type for the given event types for all processes.
    * It is not added to each process individually, but rather added to a global set
-   * of listeners. Global generally means global for a running JVM instance.
+   * of listeners. Global generally means global for the application scope of this
+   * engine. The application scope is just a string name, specified in the engine
+   * constructor. If the default constructor is used, the default application
+   * scope is used, which is the empty string.
    *
    * <br/>
    *

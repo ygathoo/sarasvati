@@ -24,6 +24,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
@@ -33,7 +34,6 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.Node;
@@ -49,7 +49,6 @@ import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
 import com.googlecode.sarasvati.event.EventActionType;
 import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
-import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
@@ -69,12 +68,40 @@ import com.googlecode.sarasvati.visitor.TokenTraversals;
  */
 public abstract class BaseEngine implements Engine
 {
-  protected static final ExecutionEventQueue globalEventQueue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
+  protected static final String DEFAULT_APPLICATION_CONTEXT = "";
+  protected static final Map<String, DefaultExecutionEventQueue> globalQueueMap = new ConcurrentHashMap<String, DefaultExecutionEventQueue>();
+
+  static
+  {
+    getGlobalQueueForContext( DEFAULT_APPLICATION_CONTEXT );
+  }
+
+  private static DefaultExecutionEventQueue getGlobalQueueForContext (final String applicationContext)
+  {
+    DefaultExecutionEventQueue queue = globalQueueMap.get( applicationContext );
+    if ( queue == null )
+    {
+      queue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
+      queue.addListener( new TokenSetCompletionListener(),
+                         ExecutionEventType.ARC_TOKEN_COMPLETED,
+                         ExecutionEventType.NODE_TOKEN_COMPLETED );
+      globalQueueMap.put( applicationContext, queue );
+    }
+
+    return queue;
+  }
 
   protected boolean arcExecutionStarted = false;
   protected List<ArcToken> asyncQueue = new LinkedList<ArcToken>();
 
+  protected final DefaultExecutionEventQueue globalEventQueue;
   protected BaseEngine parentEngine;
+
+
+  public BaseEngine (final String applicationContext)
+  {
+    globalEventQueue = getGlobalQueueForContext( applicationContext );
+  }
 
   @Override
   public GraphProcess startProcess (final String graphName)
@@ -100,7 +127,7 @@ public abstract class BaseEngine implements Engine
   public void startProcess (final GraphProcess process)
   {
     process.setState( ProcessState.Executing );
-    fireEvent( ProcessEvent.newStartedEvent( this, process ) );
+    ProcessEvent.fireStartedEvent( this, process );
 
     arcExecutionStarted = true;
 
@@ -110,7 +137,7 @@ public abstract class BaseEngine implements Engine
       {
         NodeToken startToken = getFactory().newNodeToken( process, startNode,
                                                           new ArrayList<ArcToken>(0) );
-        fireEvent( NodeTokenEvent.newCreatedEvent(this, startToken));
+        NodeTokenEvent.fireCreatedEvent(this, startToken);
         process.addNodeToken( startToken );
         executeNode( process, startToken );
       }
@@ -132,7 +159,7 @@ public abstract class BaseEngine implements Engine
   public void cancelProcess (final GraphProcess process)
   {
     process.setState( ProcessState.PendingCancel );
-    EventActions actions = fireEvent( ProcessEvent.newCanceledEvent( this, process ) );
+    EventActions actions = ProcessEvent.fireCanceledEvent( this, process );
 
     if ( !actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_CANCEL ) )
     {
@@ -164,7 +191,9 @@ public abstract class BaseEngine implements Engine
   {
     if ( token.isPending() )
     {
-      token.markProcessed( this );
+      token.markProcessed();
+      ArcTokenEvent.fireProcessedEvent( this, token );
+
       process.addActiveArcToken( token );
 
       Node targetNode = token.getArc().getEndNode();
@@ -202,17 +231,18 @@ public abstract class BaseEngine implements Engine
       }
     }
 
-    fireEvent( NodeTokenEvent.newCreatedEvent( this, nodeToken ) );
+    NodeTokenEvent.fireCreatedEvent( this, nodeToken );
 
     for ( ArcToken token : tokens )
     {
       process.removeActiveArcToken( token );
       if ( token.isPending() )
       {
-        token.markProcessed( this );
+        token.markProcessed();
+        ArcTokenEvent.fireProcessedEvent( this, token );
       }
-      token.markComplete( this, nodeToken );
-      fireEvent( ArcTokenEvent.newCompletedEvent( this, token ) );
+      token.markComplete( nodeToken );
+      ArcTokenEvent.fireCompletedEvent( this, token );
     }
 
     executeNode( process, nodeToken );
@@ -221,28 +251,29 @@ public abstract class BaseEngine implements Engine
   protected void executeNode (final GraphProcess process, final NodeToken token)
   {
     GuardResponse response = token.getNode().guard( this, token );
-    token.recordGuardAction( this, response.getGuardAction() );
+    token.setGuardAction( response.getGuardAction() );
 
     switch ( response.getGuardAction() )
     {
       case AcceptToken :
         process.addActiveNodeToken( token );
-        EventActions actions = fireEvent( NodeTokenEvent.newAcceptedEvent( this, token ) );
+        EventActions actions = NodeTokenEvent.fireAcceptedEvent( this, token );
         if ( !actions.isEventTypeIncluded( EventActionType.DELAY_NODE_EXECUTION ) )
         {
           token.getNode().execute( this, token );
-          fireEvent( NodeTokenEvent.newExecutedEvent( this, token ) );
+          NodeTokenEvent.fireExecutedEvent( this, token );
         }
         break;
 
       case DiscardToken :
-        token.markComplete( this );
-        fireEvent( NodeTokenEvent.newDiscardedEvent( this, token ) );
+        token.markComplete();
+        NodeTokenEvent.fireDiscardedEvent( this, token );
+        NodeTokenEvent.fireCompletedEvent( this, token, null );
         break;
 
       case SkipNode :
         process.addActiveNodeToken( token );
-        fireEvent( NodeTokenEvent.newSkippedEvent( this, token, response.getExitArcForSkip() ) );
+        NodeTokenEvent.fireSkippedEvent( this, token, response.getExitArcForSkip() );
         complete( token, response.getExitArcForSkip() );
         break;
     }
@@ -345,14 +376,8 @@ public abstract class BaseEngine implements Engine
                                   final String arcName)
   {
     process.removeActiveNodeToken( token );
-    token.markComplete( this );
-
-    // If the node was skipped, we already sent a 'skipped' event and don't want to
-    // send another 'completed' event.
-    if ( token.getGuardAction() != GuardAction.SkipNode )
-    {
-      fireEvent( NodeTokenEvent.newCompletedEvent( this, token, arcName ) );
-    }
+    token.markComplete();
+    NodeTokenEvent.fireCompletedEvent( this, token, arcName );
   }
 
   private ArcToken generateArcToken (final GraphProcess process,
@@ -380,7 +405,7 @@ public abstract class BaseEngine implements Engine
                                             final ArcToken arcToken,
                                             final boolean asynchronous)
   {
-    fireEvent( ArcTokenEvent.newCreatedEvent( this, arcToken ) );
+    ArcTokenEvent.fireCreatedEvent( this, arcToken );
 
     if ( asynchronous && arcExecutionStarted )
     {
@@ -422,10 +447,13 @@ public abstract class BaseEngine implements Engine
 
   private void checkForCompletion (final GraphProcess process)
   {
-    if ( !process.hasActiveTokens() && process.isArcTokenQueueEmpty() && asyncQueue.isEmpty() )
+    if ( process.isExecuting() &&
+         !process.hasActiveTokens() &&
+         process.isArcTokenQueueEmpty() &&
+         asyncQueue.isEmpty() )
     {
       process.setState( ProcessState.PendingCompletion );
-      EventActions actions = fireEvent( ProcessEvent.newCompletedEvent( this, process ) );
+      EventActions actions = ProcessEvent.fireCompletedEvent( this, process );
       if ( !actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_COMPLETE ) )
       {
         finalizeComplete( process );
@@ -481,7 +509,11 @@ public abstract class BaseEngine implements Engine
     }
 
     executeNode( resultToken.getProcess(), resultToken );
-    executeQueuedArcTokens( token.getProcess() );
+
+    if ( !arcExecutionStarted )
+    {
+      executeQueuedArcTokens( token.getProcess() );
+    }
   }
 
   @Override
@@ -566,7 +598,6 @@ public abstract class BaseEngine implements Engine
   public EventActions fireEvent (final ExecutionEvent event)
   {
     EventActions actions = globalEventQueue.fireEvent( event );
-    actions.compose( event.getProcess().getEventQueue().fireEvent( event ) );
-    return actions;
+    return actions.compose( event.getProcess().getEventQueue().fireEvent( event ) );
   }
 }

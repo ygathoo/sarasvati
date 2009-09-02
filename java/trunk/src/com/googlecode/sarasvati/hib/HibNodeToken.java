@@ -48,7 +48,6 @@ import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
 
 import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GuardAction;
 import com.googlecode.sarasvati.NodeToken;
@@ -186,7 +185,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void recordGuardAction (final Engine engine, final GuardAction action)
+  public void setGuardAction (final GuardAction action)
   {
     this.guardAction = action;
   }
@@ -262,14 +261,9 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void markComplete (final Engine engine)
+  public void markComplete ()
   {
     this.completeDate = new Date();
-
-    for ( NodeTokenSetMember setMember : getTokenSetMemberships() )
-    {
-      setMember.getTokenSet().getActiveNodeTokens( engine ).remove( this );
-    }
   }
 
   @Override
@@ -279,7 +273,7 @@ public class HibNodeToken implements NodeToken
   }
 
   @Override
-  public void markBacktracked (final Engine engine)
+  public void markBacktracked ()
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }

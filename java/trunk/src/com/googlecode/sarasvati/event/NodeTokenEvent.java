@@ -27,39 +27,39 @@ public class NodeTokenEvent extends ExecutionEvent
   protected NodeToken nodeToken;
   protected String    exitArcsName;
 
-  public static final NodeTokenEvent newCreatedEvent (final Engine engine, final NodeToken nodeToken)
+  public static final EventActions fireCreatedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_CREATED, nodeToken, null );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_CREATED, nodeToken, null ) );
   }
 
-  public static final NodeTokenEvent newAcceptedEvent (final Engine engine, final NodeToken nodeToken)
+  public static final EventActions fireAcceptedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, null );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_ACCEPTED, nodeToken, null ) );
   }
 
-  public static final NodeTokenEvent newExecutedEvent (final Engine engine, final NodeToken nodeToken)
+  public static final EventActions fireExecutedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_EXECUTED, nodeToken, null );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_EXECUTED, nodeToken, null ) );
   }
 
-  public static final NodeTokenEvent newDiscardedEvent (final Engine engine, final NodeToken nodeToken)
+  public static final EventActions fireDiscardedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken, null );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_DISCARDED, nodeToken, null ) );
   }
 
-  public static final NodeTokenEvent newSkippedEvent (final Engine engine, final NodeToken nodeToken, final String exitArcsName)
+  public static final EventActions fireSkippedEvent (final Engine engine, final NodeToken nodeToken, final String exitArcsName)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, exitArcsName );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_SKIPPED, nodeToken, exitArcsName ) );
   }
 
-  public static final NodeTokenEvent newCompletedEvent (final Engine engine, final NodeToken nodeToken, final String exitArcsName)
+  public static final EventActions fireCompletedEvent (final Engine engine, final NodeToken nodeToken, final String exitArcsName)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, exitArcsName );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_COMPLETED, nodeToken, exitArcsName ) );
   }
 
-  public static final NodeTokenEvent newBacktrackedEvent (final Engine engine, final NodeToken nodeToken)
+  public static final EventActions fireBacktrackedEvent (final Engine engine, final NodeToken nodeToken)
   {
-    return new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_BACKTRACKED, nodeToken, null );
+    return engine.fireEvent( new NodeTokenEvent( engine, ExecutionEventType.NODE_TOKEN_BACKTRACKED, nodeToken, null ) );
   }
 
   private NodeTokenEvent (final Engine engine, final ExecutionEventType eventType, final NodeToken nodeToken, final String exitArcsName)

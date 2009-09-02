@@ -43,15 +43,67 @@ public class HibEngine extends BaseEngine
   /**
    * This constructor can be used in cases when the session will be set in later
    * or when performing operations that don't require a session, such as adding
-   * global execution listeners.
+   * global execution listeners. The HibEngine is created with the default
+   * application context.
+   * <p>
+   * Each application context has it's own set of global listeners.
+   *
+   * This allows different applications running the same JVM to
+   * have different sets of listeners without having to add
+   * them at the process level.
    */
   public HibEngine ()
   {
-    // Default constructor
+    super( DEFAULT_APPLICATION_CONTEXT );
   }
 
+  /**
+   * This constructor can be used in cases when the session will be set in later
+   * or when performing operations that don't require a session, such as adding
+   * global execution listeners. The HibEngine is created with the given
+   * application context.
+   * <p>
+   * Each application context has it's own set of global listeners.
+   *
+   * This allows different applications running the same JVM to
+   * have different sets of listeners without having to add
+   * them at the process level.
+   */
+  public HibEngine (final String applicationContext)
+  {
+    super( applicationContext );
+  }
+
+  /**
+   * Creates a new HibEngine with the default application context.
+   * <p>
+   * Each application context has it's own set of global listeners.
+   *
+   * This allows different applications running the same JVM to
+   * have different sets of listeners without having to add
+   * them at the process level.
+   *
+   * @param session The hibernate session.
+   */
   public HibEngine (final Session session)
   {
+    this( DEFAULT_APPLICATION_CONTEXT );
+  }
+
+  /**
+   * Creates a new HibEngine with the given application context.
+   * <p>
+   * Each application context has it's own set of global listeners.
+   *
+   * This allows different applications running the same JVM to
+   * have different sets of listeners without having to add
+   * them at the process level.
+   *
+   * @param session The hibernate session.
+   */
+  public HibEngine (final String applicationContext, final Session session)
+  {
+    super( applicationContext );
     this.session = session;
     this.factory = new HibGraphFactory( session );
     this.repository = new HibGraphRepository( session );

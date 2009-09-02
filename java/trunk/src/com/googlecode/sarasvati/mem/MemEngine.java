@@ -24,6 +24,31 @@ import com.googlecode.sarasvati.load.GraphLoader;
 
 public class MemEngine extends BaseEngine
 {
+  /**
+   * Creates a new MemEngine with the default application context.
+   * Each application context can have it's own set of global
+   * listeners.
+   */
+  public MemEngine ()
+  {
+    super( DEFAULT_APPLICATION_CONTEXT );
+  }
+
+  /**
+   * Creates a new MemEngine with the given application context.
+   * Each application context has it's own set of global listeners.
+   *
+   * This allows different applications running the same JVM to
+   * have different sets of listeners without having to add
+   * them at the process level.
+   *
+   * @param applicationContext The application context
+   */
+  public MemEngine (final String applicationContext)
+  {
+    super( applicationContext );
+  }
+
   @Override
   public MemGraphFactory getFactory ()
   {

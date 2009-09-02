@@ -23,19 +23,19 @@ import com.googlecode.sarasvati.GraphProcess;
 
 public class ProcessEvent extends ExecutionEvent
 {
-  public static final ProcessEvent newStartedEvent (final Engine engine, final GraphProcess process)
+  public static final EventActions fireStartedEvent (final Engine engine, final GraphProcess process)
   {
-    return new ProcessEvent( engine, ExecutionEventType.PROCESS_STARTED, process );
+    return engine.fireEvent( new ProcessEvent( engine, ExecutionEventType.PROCESS_STARTED, process ) );
   }
 
-  public static final ProcessEvent newCompletedEvent (final Engine engine, final GraphProcess process)
+  public static final EventActions fireCompletedEvent (final Engine engine, final GraphProcess process)
   {
-    return new ProcessEvent( engine, ExecutionEventType.PROCESS_COMPLETED, process );
+    return engine.fireEvent( new ProcessEvent( engine, ExecutionEventType.PROCESS_COMPLETED, process ) );
   }
 
-  public static final ProcessEvent newCanceledEvent (final Engine engine, final GraphProcess process)
+  public static final EventActions fireCanceledEvent (final Engine engine, final GraphProcess process)
   {
-    return new ProcessEvent( engine, ExecutionEventType.PROCESS_CANCELED, process );
+    return engine.fireEvent( new ProcessEvent( engine, ExecutionEventType.PROCESS_CANCELED, process ) );
   }
 
   private GraphProcess process;

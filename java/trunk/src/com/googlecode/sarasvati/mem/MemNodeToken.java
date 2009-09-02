@@ -28,7 +28,6 @@ import java.util.Map;
 import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.GuardAction;
@@ -116,7 +115,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void recordGuardAction (final Engine engine, final GuardAction action)
+  public void setGuardAction (final GuardAction action)
   {
     this.guardAction = action;
   }
@@ -128,14 +127,9 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void markComplete (final Engine engine)
+  public void markComplete ()
   {
     completeDate = new Date();
-
-    for ( NodeTokenSetMember setMember : getTokenSetMemberships() )
-    {
-      setMember.getTokenSet().getActiveNodeTokens( engine ).remove( this );
-    }
   }
 
   @Override
@@ -173,7 +167,7 @@ public class MemNodeToken implements NodeToken
   }
 
   @Override
-  public void markBacktracked (final Engine engine)
+  public void markBacktracked ()
   {
     executionType = executionType.getCorrespondingBacktracked( isComplete() );
   }
