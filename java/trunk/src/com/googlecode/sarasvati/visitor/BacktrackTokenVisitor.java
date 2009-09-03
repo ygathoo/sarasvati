@@ -249,6 +249,7 @@ public class BacktrackTokenVisitor implements TokenVisitor
       {
         backtrackToken = backtrackCompletedToken( token, ExecutionType.Backtracked );
         backtrackToken.setGuardAction( GuardAction.SkipNode );
+        NodeTokenEvent.fireSkippedEvent( engine, backtrackToken, null );
       }
     }
 
