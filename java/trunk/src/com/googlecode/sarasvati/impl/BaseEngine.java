@@ -79,7 +79,7 @@ public abstract class BaseEngine implements Engine
 
   /**
    * Creates a new Engine with the given application context.
-   * Each application context has it's own set of global listeners.
+   * Each application context has its own set of global listeners.
    *
    * This allows different applications running the same JVM to
    * have different sets of listeners without having to add
@@ -439,7 +439,8 @@ public abstract class BaseEngine implements Engine
 
     try
     {
-      while ( !process.isArcTokenQueueEmpty() )
+    	
+      while ( process.isExecuting() && !process.isArcTokenQueueEmpty() )
       {
         executeArc( process, process.dequeueArcTokenForExecution() );
       }
