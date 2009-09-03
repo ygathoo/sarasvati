@@ -19,7 +19,6 @@
 package com.googlecode.sarasvati.event;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -83,20 +82,34 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
   public synchronized void addListener (final ExecutionListener listener,
                                         final ExecutionEventType...eventTypes)
   {
-    if ( eventTypes == null || listener == null)
+    if ( eventTypes == null || listener == null || eventTypes.length == 0 )
     {
       return;
     }
 
-    for ( ExecutionEventType eventType : eventTypes )
-    {
-      if (eventType != null)
-      {
-        listeners.add( new RegisteredExecutionListener( eventType, listener ) );
-      }
-    }
+    addListener( listener, ExecutionEventType.toMask( eventTypes ) );
   }
 
+  public synchronized void addListener (final ExecutionListener listener,
+                                        final int eventTypeMask)
+  {
+    if ( eventTypeMask == 0 || listener == null )
+    {
+      return;
+    }
+
+    // If we already have a visitor of the given type, reuse it rather than creating a new one
+    for ( RegisteredExecutionListener registeredListener : listeners )
+    {
+      if ( registeredListener.getListener().getClass() == listener.getClass() )
+      {
+        registeredListener.addEventTypesMask( eventTypeMask );
+        return; // INNER RETURN
+      }
+    }
+
+    listeners.add( new RegisteredExecutionListener( listener, eventTypeMask ) );
+  }
 
   @Override
   public synchronized void removeListener (final Engine engine,
@@ -108,16 +121,28 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
       return;
     }
 
-    List<ExecutionEventType> types = eventTypes == null ? null : Arrays.asList( eventTypes );
-
     List<RegisteredExecutionListener> toRemove = new ArrayList<RegisteredExecutionListener>();
 
     for ( RegisteredExecutionListener wrapper : listeners )
     {
-      if ( listener == wrapper.listener.getClass() &&
-           ( eventTypes == null || eventTypes.length == 0 || types.contains( wrapper.getEventType() ) ) )
+      if ( listener == wrapper.listener.getClass() )
       {
-        toRemove.add( wrapper );
+        if ( eventTypes == null || eventTypes.length == 0 )
+        {
+          toRemove.add( wrapper );
+        }
+        else
+        {
+          for ( ExecutionEventType eventType : eventTypes )
+          {
+            wrapper.removeEventType( eventType );
+          }
+
+          if ( wrapper.isUnregisteredForAllEventTypes() )
+          {
+            toRemove.add( wrapper );
+          }
+        }
       }
     }
 
@@ -132,7 +157,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
     EventActions eventActions = new EventActions();
     for (RegisteredExecutionListener wrapper : listeners )
     {
-      if ( event.getEventType() == wrapper.getEventType() )
+      if ( wrapper.isRegisteredForEventType( event.getEventType() ) )
       {
         eventActions.compose( wrapper.notify( event ) );
       }
@@ -140,21 +165,38 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
     return eventActions;
   }
 
-  static class RegisteredExecutionListener implements ExecutionListener
+  public static class RegisteredExecutionListener implements ExecutionListener
   {
-    protected ExecutionEventType eventType;
+    protected int eventTypeMask;
     protected ExecutionListener listener;
 
-    public RegisteredExecutionListener (final ExecutionEventType eventType,
-                                        final ExecutionListener listener)
+    public RegisteredExecutionListener (final ExecutionListener listener, final int eventTypeMask)
     {
-      this.eventType = eventType;
       this.listener = listener;
+      this.eventTypeMask = eventTypeMask;
     }
 
-    public ExecutionEventType getEventType ()
+    public void addEventTypesMask (final int mask)
     {
-      return eventType;
+      eventTypeMask |= mask;
+    }
+
+    public void removeEventType (final ExecutionEventType eventType)
+    {
+      if ( eventType != null )
+      {
+        eventTypeMask &= ExecutionEventType.invertMask( eventType.getEventType() );
+      }
+    }
+
+    public boolean isRegisteredForEventType (final ExecutionEventType eventType)
+    {
+      return (eventType.getEventType() & eventTypeMask) != 0;
+    }
+
+    public boolean isUnregisteredForAllEventTypes ()
+    {
+      return eventTypeMask == 0;
     }
 
     public ExecutionListener getListener ()

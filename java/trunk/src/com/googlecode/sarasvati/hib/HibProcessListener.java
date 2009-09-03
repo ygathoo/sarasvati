@@ -31,7 +31,6 @@ import javax.persistence.Table;
 import org.hibernate.annotations.ForeignKey;
 
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.event.ExecutionEventType;
 
 @Entity
 @Table (name="wf_process_listener")
@@ -44,7 +43,7 @@ public class HibProcessListener
   protected String type;
 
   @Column (name="event_type")
-  protected ExecutionEventType eventType;
+  protected int eventTypeMask;
 
   @ForeignKey(name="FK_listener_process")
   @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibGraphProcess.class)
@@ -53,9 +52,9 @@ public class HibProcessListener
 
   protected HibProcessListener () { /* Default constructor for Hibernate */ }
 
-  public HibProcessListener (final String type, final ExecutionEventType eventType, final GraphProcess process)
+  public HibProcessListener (final String type, final int eventTypeMask, final GraphProcess process)
   {
-    this.eventType = eventType;
+    this.eventTypeMask = eventTypeMask;
     this.type = type;
     this.process = process;
   }
@@ -80,14 +79,14 @@ public class HibProcessListener
     this.type = type;
   }
 
-  public ExecutionEventType getEventType ()
+  public int getEventTypeMask ()
   {
-    return eventType;
+    return eventTypeMask;
   }
 
-  public void setEventType (final ExecutionEventType eventType)
+  public void setEventTypeMask (final int eventTypeMask)
   {
-    this.eventType = eventType;
+    this.eventTypeMask = eventTypeMask;
   }
 
   public GraphProcess getProcess ()

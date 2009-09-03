@@ -169,8 +169,7 @@ public class HibGraphProcess implements GraphProcess
 
       for ( HibProcessListener listener : getListeners() )
       {
-        newEventQueue.addListener( cache.getListener( listener.getType() ),
-                                   listener.getEventType() );
+        newEventQueue.addListener( cache.getListener( listener.getType() ), listener.getEventTypeMask() );
       }
 
       eventQueue = newEventQueue;

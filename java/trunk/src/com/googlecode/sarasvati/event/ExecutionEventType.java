@@ -20,6 +20,12 @@ package com.googlecode.sarasvati.event;
 
 public enum ExecutionEventType
 {
+  /**
+   * NOTE: The eventType ids below are used in constructing bitmasks. Since
+   *       the bitmasks are stored in the database, these ids must be
+   *       stable. If adding a new event type, it must be assigned the next
+   *       highest power of 2.
+   */
   PROCESS_STARTED ( 2 ),
   PROCESS_COMPLETED( 4 ),
   PROCESS_CANCELED( 8 ),
@@ -36,6 +42,8 @@ public enum ExecutionEventType
   ARC_TOKEN_PROCESSED( 4096 ),
   ARC_TOKEN_COMPLETED( 8192 ),
   ARC_TOKEN_BACKTRACKED( 16384 );
+
+  private static final int INVERSE_MASK = 0xFFFFFFFF;
 
   private int eventType;
 
@@ -73,5 +81,25 @@ public enum ExecutionEventType
            this == ARC_TOKEN_PROCESSED   ||
            this == ARC_TOKEN_COMPLETED   ||
            this == ARC_TOKEN_BACKTRACKED;
+  }
+
+  public static int toMask (final ExecutionEventType...eventTypes)
+  {
+    int eventTypeMask = 0;
+
+    for ( ExecutionEventType eventType : eventTypes )
+    {
+      if ( eventType != null )
+      {
+        eventTypeMask |= eventType.getEventType();
+      }
+    }
+
+    return eventTypeMask;
+  }
+
+  public static int invertMask (final int mask)
+  {
+    return mask ^ INVERSE_MASK;
   }
 }
