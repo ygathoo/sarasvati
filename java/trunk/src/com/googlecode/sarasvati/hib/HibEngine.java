@@ -19,7 +19,6 @@
 
 package com.googlecode.sarasvati.hib;
 
-import java.util.Arrays;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -87,7 +86,7 @@ public class HibEngine extends BaseEngine
    */
   public HibEngine (final Session session)
   {
-    this( DEFAULT_APPLICATION_CONTEXT );
+    this( DEFAULT_APPLICATION_CONTEXT, session );
   }
 
   /**
@@ -144,18 +143,25 @@ public class HibEngine extends BaseEngine
                                    final Class<? extends ExecutionListener> listenerClass,
                                    final ExecutionEventType... eventTypes)
   {
-    if ( eventTypes == null || listenerClass == null )
+    if ( eventTypes == null || eventTypes.length == 0 || listenerClass == null )
     {
       return;
     }
+
+    int eventTypeMask = 0;
 
     for ( ExecutionEventType eventType : eventTypes )
     {
       if ( eventType != null )
       {
-        HibProcessListener hibListener = new HibProcessListener( listenerClass.getName(), eventType, process );
-        session.save( hibListener );
+        eventTypeMask |= eventType.getEventType();
       }
+    }
+
+    if ( eventTypeMask != 0 )
+    {
+      HibProcessListener hibListener = new HibProcessListener( listenerClass.getName(), eventTypeMask, process );
+      session.save( hibListener );
     }
 
     super.addExecutionListener( process, listenerClass, eventTypes );
@@ -166,14 +172,33 @@ public class HibEngine extends BaseEngine
                                       final Class<? extends ExecutionListener> listenerClass,
                                       final ExecutionEventType... eventTypes)
   {
-    List<ExecutionEventType> types = eventTypes == null ? null :  Arrays.asList( eventTypes );
+    if ( listenerClass == null )
+    {
+      return;
+    }
+
+    int removeMask = ExecutionEventType.invertMask( ExecutionEventType.toMask( eventTypes ) );
 
     for ( HibProcessListener hibListener : ((HibGraphProcess)process).getListeners() )
     {
-      if ( process.equals( hibListener.getProcess() ) &&
-           (eventTypes == null || eventTypes.length == 0 || types.contains( hibListener.getEventType() ) ) )
+      if ( listenerClass.getName().equals( hibListener.getType() ) )
       {
-        session.delete( hibListener );
+        if ( eventTypes == null || eventTypes.length == 0 )
+        {
+          session.delete( hibListener );
+        }
+        else
+        {
+          int newMask = hibListener.getEventTypeMask() & removeMask;
+          if ( newMask == 0 )
+          {
+            session.delete( hibListener );
+          }
+          else
+          {
+            hibListener.setEventTypeMask( newMask );
+          }
+        }
       }
     }
 
