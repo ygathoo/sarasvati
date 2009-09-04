@@ -134,6 +134,7 @@ public abstract class BaseEngine implements Engine
   public GraphProcess startProcess (final Graph graph)
   {
     GraphProcess process = getFactory().newProcess( graph );
+    ProcessEvent.fireCreatedEvent( this, process );
     startProcess( process );
     return process;
   }
@@ -174,7 +175,7 @@ public abstract class BaseEngine implements Engine
   public void cancelProcess (final GraphProcess process)
   {
     process.setState( ProcessState.PendingCancel );
-    EventActions actions = ProcessEvent.fireCanceledEvent( this, process );
+    EventActions actions = ProcessEvent.firePendingCancelEvent( this, process );
 
     if ( !actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_CANCEL ) )
     {
@@ -186,6 +187,7 @@ public abstract class BaseEngine implements Engine
   public void finalizeComplete (final GraphProcess process)
   {
     process.setState( ProcessState.Completed );
+    ProcessEvent.fireCompletedEvent( this, process );
 
     NodeToken parentToken = process.getParentToken();
     if ( parentToken != null )
@@ -199,6 +201,7 @@ public abstract class BaseEngine implements Engine
   public void finalizeCancel (final GraphProcess process)
   {
     process.setState( ProcessState.Canceled );
+    ProcessEvent.fireCanceledEvent( this, process );
   }
 
   private void executeArc (final GraphProcess process,
@@ -439,7 +442,7 @@ public abstract class BaseEngine implements Engine
 
     try
     {
-    	
+
       while ( process.isExecuting() && !process.isArcTokenQueueEmpty() )
       {
         executeArc( process, process.dequeueArcTokenForExecution() );
@@ -469,7 +472,7 @@ public abstract class BaseEngine implements Engine
          asyncQueue.isEmpty() )
     {
       process.setState( ProcessState.PendingCompletion );
-      EventActions actions = ProcessEvent.fireCompletedEvent( this, process );
+      EventActions actions = ProcessEvent.firePendingCompleteEvent( this, process );
       if ( !actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_COMPLETE ) )
       {
         finalizeComplete( process );

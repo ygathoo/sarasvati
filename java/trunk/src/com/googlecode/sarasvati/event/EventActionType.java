@@ -36,14 +36,14 @@ public enum EventActionType
 
   /**
    * Request that {@link Engine#finalizeComplete(com.googlecode.sarasvati.GraphProcess)} be done by some external
-   * logic at a later point. Only has any effect if returned from the {@link ExecutionEventType#PROCESS_COMPLETED}
+   * logic at a later point. Only has any effect if returned from the {@link ExecutionEventType#PROCESS_PENDING_COMPLETE}
    * event type.
    */
   DELAY_PROCESS_FINALIZE_COMPLETE( 2 ),
 
   /**
    * Request that {@link Engine#finalizeCancel(com.googlecode.sarasvati.GraphProcess)} be done by some external
-   * logic at a later point. Only has any effect if returned from the {@link ExecutionEventType#PROCESS_CANCELED}
+   * logic at a later point. Only has any effect if returned from the {@link ExecutionEventType#PROCESS_PENDING_CANCEL}
    * event type.
    */
   DELAY_PROCESS_FINALIZE_CANCEL( 4 );
