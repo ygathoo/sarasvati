@@ -828,7 +828,7 @@ public class GraphEditor
     return SaveResult.SaveNotWanted;
   }
 
-  public static void main( final String[] args ) throws Exception
+  public static void main( final String[] args )
   {
     SwingUtilities.invokeLater( new Runnable()
     {

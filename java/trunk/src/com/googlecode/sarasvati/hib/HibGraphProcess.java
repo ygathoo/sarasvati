@@ -140,7 +140,7 @@ public class HibGraphProcess implements GraphProcess
     @Override
     public EventActions fireEvent (final ExecutionEvent event)
     {
-      initEventQueue( event.getEngine() );
+      initEventQueue();
       return eventQueue.fireEvent( event );
     }
 
@@ -149,7 +149,7 @@ public class HibGraphProcess implements GraphProcess
                              final Class<? extends ExecutionListener> listenerClass,
                              final ExecutionEventType... eventTypes)
     {
-      initEventQueue( engine );
+      initEventQueue();
       eventQueue.addListener( engine, listenerClass, eventTypes );
     }
 
@@ -158,11 +158,11 @@ public class HibGraphProcess implements GraphProcess
                                final Class<? extends ExecutionListener> listenerClass,
                                final ExecutionEventType... eventTypes)
     {
-      initEventQueue( engine );
+      initEventQueue();
       eventQueue.removeListener( engine, listenerClass, eventTypes );
     }
 
-    private void initEventQueue (final Engine engine)
+    private void initEventQueue ()
     {
       CachingExecutionEventQueue newEventQueue = CachingExecutionEventQueue.newArrayListInstance();
       ListenerCache cache = CachingExecutionEventQueue.getListenerCache();
