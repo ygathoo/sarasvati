@@ -215,7 +215,7 @@ public abstract class BaseEngine implements Engine
       process.addActiveArcToken( token );
 
       Node targetNode = token.getArc().getEndNode();
-      JoinResult result = targetNode.getJoinStrategy( token.getArc() ).performJoin( this, process, token );
+      JoinResult result = targetNode.getJoinStrategy( token.getArc() ).performJoin( this, token );
 
       if ( result.isJoinComplete() )
       {

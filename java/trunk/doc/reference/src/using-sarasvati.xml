@@ -5,7 +5,7 @@
   <title>Using Sarasvati</title>
 
 
-  <section id="intro">
+  <section id="using-intro">
     <title>Introduction</title>
     <para>
       Using Sarasvati usually involves writing process definition files, along
@@ -22,10 +22,10 @@
     </para>
   </section>
 
-  <section id="file-format">
+  <section id="using-file-format">
     <title> Sarasvati File Format</title>
 
-    <section id="sect1">
+    <section id="using-file-format-intro">
       <title>Introduction </title>
       <para>
         The process definition file format is defined by an XSD, which is
@@ -40,7 +40,7 @@
       </para>
     </section>
 
-    <section id="process-definition-element">
+    <section id="using-process-definition-element">
       <title>Process Definition</title>
       <para>
         This is the root element. It should indicate the XML namespace, that being:
@@ -101,7 +101,7 @@
 
     </section>
 
-    <section id="node-element">
+    <section id="using-node-element">
       <title>Nodes</title>
       <para>
         Nodes in a process definition are defined by the <literal>node</literal>
@@ -110,7 +110,7 @@
 
       <table frame="all">
         <title><literal>node</literal> attributes</title>
-        <tgroup cols="2">
+        <tgroup cols="4">
           <thead>
             <row>
               <entry>Attribute Name</entry>
@@ -265,7 +265,7 @@
         </tgroup>
       </table>
 
-      <section id="node-types">
+      <section id="using-node-types">
         <title>Built in Node Types</title>
         <itemizedlist>
           <listitem>
@@ -298,7 +298,7 @@
 
       </section>
 
-      <section id="sect9">
+      <section id="using-guard">
         <title>Element guard</title>
         <para>
           A node may contain a GuardLang statement, which will be executed as
@@ -309,7 +309,7 @@
       </section>
     </section>
 
-    <section id="one-node-example">
+    <section id="using-one-node-example">
       <title>One Node Example</title>
       <para>
         With just <literal>process-definition</literal>
@@ -349,7 +349,7 @@
 
     </section>
 
-    <section id="node-arc-element">
+    <section id="using-node-arc-element">
       <title>Node Arcs</title>
       <para>
         An <literal>arc</literal>
@@ -398,7 +398,7 @@
       </table>
     </section>
 
-    <section id="arc-example-one">
+    <section id="using-arc-example-one">
       <title>Arc Example One</title>
 
       <para>
@@ -437,7 +437,7 @@
 
     </section>
 
-    <section id="arc-example-two">
+    <section id="using-arc-example-two">
       <title>Arc Example Two </title>
 
       <para>
@@ -482,7 +482,7 @@
 
     </section>
 
-    <section id="external-element">
+    <section id="using-external-element">
       <title>Externals</title>
       <para>
         An exernal process definition must have a declaration for each time
@@ -491,7 +491,7 @@
 
       <table frame="all">
         <title><literal>external</literal> attributes</title>
-        <tgroup cols="2">
+        <tgroup cols="4">
           <thead>
             <row>
               <entry>Attribute Name</entry>
@@ -555,7 +555,7 @@
 
     </section>
 
-    <section id="external-arc-element">
+    <section id="using-external-arc-element">
       <title>External arcs</title>
       <para>
         An <literal>arc</literal> element in an <literal>external</literal> declares an arc
@@ -609,7 +609,7 @@
       </table>
     </section>
 
-    <section id="sect17">
+    <section id="using-external-arc-example-one">
       <title>External Arc Example One </title>
       <para>
         To examine external arcs, we'll need at least two process
@@ -707,7 +707,7 @@
     </section>
   </section>
 
-  <section id="sect18">
+  <section id="using-java-api">
     <title>Java API</title>
     <para>
       The process definition file format also supports custom elements and
@@ -715,7 +715,7 @@
       introduced.
     </para>
 
-    <section id="sect19">
+    <section id="using-java-api-interfaces">
       <title>Interfaces</title>
       <para>
         The main interface for interacting with process definitions and
@@ -804,7 +804,7 @@ public interface Node extends Adaptable
 ]]></programlisting>
 
     </section>
-    <section id="sect20">
+    <section id="using-flow-of-execution">
       <title>Flow of Execution</title>
       <para>
         When the engine determines that a node is ready to execute, it will
@@ -880,7 +880,7 @@ public interface Node extends Adaptable
       </orderedlist>
     </section>
 
-    <section id="sect21">
+    <section id="using-custom-logic-node-execution">
       <title>Custom logic for Node Execution</title>
       <para>
         To provide custom behavior to your nodes, you will override the
@@ -928,7 +928,7 @@ public interface Node extends Adaptable
       </para>
 
     </section>
-    <section id="sect22">
+    <section id="using-custom-example-one">
       <title>Example One </title>
       <para>
         To demonstrate use of each implementation, we start with a node that
@@ -937,7 +937,7 @@ public interface Node extends Adaptable
       </para>
 
     </section>
-    <section id="sect23">
+    <section id="using-custom-example-one-proc-def">
       <title>Example One: Process Definition </title>
       <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition name="hello-world"
@@ -949,7 +949,7 @@ public interface Node extends Adaptable
 ]]></programlisting>
 
     </section>
-    <section id="sect24">
+    <section id="using-custom-example-one-node-impl">
       <title>Example One: Node implementation </title>
       <para>
         If using the memory implementation, the subclass would look like:
@@ -1045,7 +1045,7 @@ public class HelloNode extends CustomNode
 ]]></programlisting>
 
     </section>
-    <section id="sect25">
+    <section id="using-example-one-load-run">
       <title>Example One: Loading and Running</title>
       <para>
         Now we can load the process into memory, or into the database.
@@ -1167,7 +1167,7 @@ public class HelloNode extends CustomNode
       </para>
 
     </section>
-    <section id="sect26">
+    <section id="using-custom-attributes">
       <title>Custom Attributes</title>
       <para>
         Often, custom nodes will need some information with which to do their
@@ -1349,7 +1349,7 @@ public class CustomNode extends MemNode
       </para>
 
     </section>
-    <section id="sect27">
+    <section id="using-java-api-custom-loader">
       <title>Custom Loader</title>
       <para>
         You may also provide custom loading via a subclass of
@@ -1380,7 +1380,7 @@ public interface NodeFactory
       </para>
 
     </section>
-    <section id="sect28">
+    <section id="using-example-two-proc-def">
       <title>Example Two: Process Definition </title>
 
       <para>
@@ -1446,7 +1446,7 @@ public interface NodeFactory
 ]]></programlisting>
 
     </section>
-    <section id="sect29">
+    <section id="using-example-two-node-impl">
       <title>Example Two: Node implementation </title>
 
       <para>

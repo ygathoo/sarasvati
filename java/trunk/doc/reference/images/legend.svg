@@ -98,7 +98,7 @@
      showgrid="false"
      showguides="true"
      inkscape:guide-bbox="true"
-     inkscape:window-width="1600"
+     inkscape:window-width="1592"
      inkscape:window-height="1134"
      inkscape:window-x="0"
      inkscape:window-y="0">
@@ -224,7 +224,7 @@
          sodipodi:role="line"
          id="tspan3985"
          x="161.77185"
-         y="70.695412">- Non-join node</tspan></text>
+         y="70.695412">- Or Join Node</tspan></text>
     <g
        id="g3261"
        transform="translate(0,-2.0322809)">
@@ -268,7 +268,7 @@
            y="120.79379"
            x="161.77185"
            id="tspan3989"
-           sodipodi:role="line">- Join Node</tspan></text>
+           sodipodi:role="line">- Label Join Node</tspan></text>
     </g>
     <g
        id="g7869"

@@ -49,7 +49,7 @@
       executing any computation.
     </para>
 
-    <section id="sect1">
+    <section id="why-graph-based-alternatives">
       <title>Alternatives </title>
       <para>
         There are other ways of representing workflows. For example, one could

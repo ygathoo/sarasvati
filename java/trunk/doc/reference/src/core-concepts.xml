@@ -4,7 +4,7 @@
 <chapter id="core-concepts">
   <title>Core Concepts</title>
 
-  <section id="sect2">
+  <section id="concepts-intro">
     <title>Introduction</title>
     <para>
       Graph based workflow/business process management engines are common. They
@@ -20,7 +20,7 @@
     </para>
 
   </section>
-  <section id="sect3">
+  <section id="concepts-definitions">
     <title>Definitions</title>
 
     <para>
@@ -57,7 +57,7 @@
         <para>
           <emphasis>Node</emphasis>
           - An element of a graph. A node corresponds roughly to an
-          action as defined [Workflow previously]. Nodes can be thought
+          action as defined <link linkend="what-is-workflow-definitions">previously</link>. Nodes can be thought
           of as pieces of code, waiting to be executed when their turn
           comes.
         </para>
@@ -157,7 +157,7 @@
 
 
   </section>
-  <section id="sect4">
+  <section id="concepts-execution">
     <title>Sarasvati Graph Execution </title>
 
     <para>
@@ -166,7 +166,7 @@
       and then complete.
 </para>
 
-    <section id="sect5">
+    <section id="concepts-legend">
       <title>Legend </title>
       <para>
         First, we introduce a graphical notation for process definitions and
@@ -182,7 +182,7 @@
 
 
     </section>
-    <section id="sect6">
+    <section id="concepts-single-node">
       <title>Single Node </title>
       <para>
         The simplest useful process definition would consist of a simple node.
@@ -339,7 +339,7 @@
 
 
     </section>
-    <section id="sect7">
+    <section id="concepts-two-nodes">
       <title>Two Nodes</title>
       <para>
         Let's now example a slightly more complicated example. Instead of a
@@ -394,16 +394,50 @@
         <listitem>
           <para>
             <emphasis>Arc Token</emphasis>
-            - A token situated on an arc. Arc tokens exist so that join
-            nodes (see below) know when to execute. Arc tokens may not
+            - A token situated on an arc. Arc tokens exist so that
+            nodes know when to execute. Arc tokens may not
             have attributes.
           </para>
         </listitem>
       </itemizedlist>
 
       <para>
-        Since the arc on which the arc token is situated goes into a
-        <emphasis>non-join node</emphasis>
+        Whenever an arc token is created on an arc, the <emphasis>join strategy</emphasis> of the
+        node at the end of the arc is evaluated, to determine if the node is ready to have a node token
+        created at that node. The only time join strategies are not used is when a process is started.
+        At that time all start node will have node tokens created on them.
+      </para>
+
+      <itemizedlist>
+        <listitem>
+          <para>
+            <emphasis>join strategy</emphasis>
+            - A join strategy determines if a node token should be created on a node. Evaluation
+            of the join strategy is generally initiated by the processing of an arc token
+            on an incoming arc to the node. The join strategy will determine two things:
+          </para>
+            <itemizedlist>
+              <listitem>
+                <para>
+                  <emphasis>Is the join complete?</emphasis> Some join strategies require multiple arc tokens to
+                  be present before a node token is created on the node. Others may be satisfied every
+                  time an arc token arrives.
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  <emphasis>Which arc tokens completed the join?</emphasis> Every arc token that
+                  participates in completed the join will be marked complete and will be noted
+                  as a parent of the new node token, preserving a history of the flow of execution.
+                </para>
+              </listitem>
+            </itemizedlist>
+        </listitem>
+      </itemizedlist>
+
+      <para>
+         Since the arc on which the arc token is situated goes into a
+        node using the<emphasis>or join strategy</emphasis>
         , a node token will be created on
         <emphasis>World</emphasis>
         immediately.
@@ -412,12 +446,10 @@
       <itemizedlist>
         <listitem>
           <para>
-            <emphasis>Non-join node</emphasis>
-            - A node which is activated whenever an arc token arrives on
-            an incoming node. Activated means the incoming arc token is
-            completed and an active node token is created. This stands
-            in contrast to a
-            <emphasis>join node</emphasis>
+            <emphasis>or join strategy</emphasis>
+            - The or join strategy will allow a new node token
+            every time an arc token arrives at the node. This
+            stands in contrast to a <emphasis>label-and join strategy</emphasis>
             , where active arc tokens must exist on all incoming arcs
             with the same name.
           </para>
@@ -441,18 +473,14 @@
         token will be completed.
       </para>
 
-
       <para>
         <informalfigure>
           <graphic fileref="../images/concepts2-4.jpg" />
         </informalfigure>
       </para>
-
-
-
-
     </section>
-    <section id="sect8">
+
+    <section id="concepts-split-join-with-wait-states">
       <title>Split and Join with Wait States</title>
 
       <para>
@@ -680,19 +708,17 @@
         Now the engine will see if the
         <emphasis>Grant</emphasis>
         node can be executed. However, as the dashed border indicates,
-        the
-        <emphasis>Grant</emphasis>
-        node is a
-        <emphasis>join node</emphasis>
+        the <emphasis>Grant</emphasis> node is using the
+        <emphasis>label-and join strategy</emphasis>.
         .
       </para>
 
       <itemizedlist>
         <listitem>
           <para>
-            <emphasis>Join node</emphasis>
-            - When an arc token arrives a join node, arc tokens must
-            exist on all other arcs
+            <emphasis>label-and join strategy</emphasis>
+            - When an arc token arrives a node using the label-and join
+            strategy, arc tokens must exist on all other arcs
             <emphasis>with the same name</emphasis>
             before the node will accept a node token.
           </para>
@@ -750,7 +776,7 @@
 
 
     </section>
-    <section id="sect9">
+    <section id="concepts-multithreading">
       <title>Multithreading</title>
       <para>
         As seen the previous example, a process may have multiple tokens
@@ -776,7 +802,7 @@
 
 
     </section>
-    <section id="sect10">
+    <section id="concepts-split-join-without-wait-states">
       <title>Split and Join without Wait States</title>
       <para>
         Lets now take a look at the same process, except now the approvals will
@@ -808,9 +834,8 @@
       </para>
 
       <para>
-        Again, the
-        <emphasis>Grant</emphasis>
-        node is a join node, so it will wait for an arc token on the
+        Again, the <emphasis>Grant</emphasis>
+        node is using the label-and join strategy, so it will wait for an arc token on the
         other incoming arc before executing. Execution will continue on
         the lower outgoing arc of
         <emphasis>Request</emphasis>
@@ -854,10 +879,10 @@
 
 
     </section>
-    <section id="sect11">
+    <section id="concepts-flow-control-skip">
       <title>Flow Control with Guards using Skip</title>
       <para>
-        Now that we've seen how execution can split across arcs and join nodes
+        Now that we've seen how execution can split across arcs and join strategies
         can bring current executions back together, let us examine how
         to select which outgoing arcs receive tokens and which nodes get
         executed.
@@ -935,7 +960,7 @@
 
 
     </section>
-    <section id="sect12">
+    <section id="concepts-flow-control-discard">
       <title>Flow Control with Guards using Discard</title>
       <para>
         Having seen Skip, let us examine how to use the Discard response from
@@ -955,19 +980,13 @@
 
       <para>
         Because we are using discard, only one token will reach
-        <emphasis>Grant</emphasis>
-        . This is why the
-        <emphasis>Grant</emphasis>
-        node is no longer a
-        <emphasis>join node</emphasis>
-        .
+        <emphasis>Grant</emphasis>. This is why the <emphasis>Grant</emphasis>
+        node is no longer a <emphasis>label-and join stragy</emphasis>.
       </para>
 
       <para>
         Execution begins as normal. We pick up execution where a node
-        token has been generated in
-        <emphasis>Approval 1</emphasis>
-        .
+        token has been generated in <emphasis>Approval 1</emphasis>.
       </para>
 
       <para>
@@ -1041,7 +1060,7 @@
       <para>
         Remember, because
         <emphasis>Grant</emphasis>
-        is no longer a join node, it will have a node token generated on
+        is using the <emphasis>or join strategy</emphasis>, it will have a node token generated on
         it as soon as any arc tokens arrived.
       </para>
 
@@ -1050,11 +1069,9 @@
           <graphic fileref="../images/concepts4-8.jpg" />
         </informalfigure>
       </para>
-
-
-
     </section>
-    <section id="sect13">
+
+    <section id="concepts-flow-control-guards-named-arcs">
       <title>Flow Control with Guards using Named Arcs</title>
       <para>
         This same basic process could be implemented using a guard which returns
@@ -1118,7 +1135,7 @@
 
 
     </section>
-    <section id="sect14">
+    <section id="concepts-flow-control-completion-named-arcs">
       <title>Flow Control from Node Completion using Named Arcs</title>
       <para>
         As mentioned previously, when a node token is completed, an arc name
@@ -1167,7 +1184,7 @@
 
     </section>
   </section>
-  <section id="sect15">
+  <section id="concepts-graph-composition-nested-processes">
     <title>Graph Composition and Nested Processes</title>
     <para>
       Much like any software, a set of process definitions can grow larger,
@@ -1404,7 +1421,7 @@
 
 
 
-    <section id="sect16">
+    <section id="concepts-graph-composition-example-one">
       <title>Graph Composition Example One</title>
 
       <para>
@@ -1422,15 +1439,15 @@
       </para>
 
       <para>
-        It only has two nodes. Notice that both nodes are join nodes, even
+        It only has two nodes. Notice that both nodes are using the
+        <emphasis>label-and</emphasis> join strategy, even
         though one node has no inputs and the other only has one.
         However, in the composed graph these nodes may have more inputs.
       </para>
 
       <para>
         Next is the process definition which will be using
-        <emphasis>ext</emphasis>
-        .
+        <emphasis>ext</emphasis>.
       </para>
 
       <para>
@@ -1482,7 +1499,7 @@
 
 
     </section>
-    <section id="sect17">
+    <section id="concepts-graph-composition-example-two">
       <title>Graph Composition Example Two</title>
       <para>
         The previous example referenced only a single instance. Here is the
@@ -1517,7 +1534,7 @@
 
 
     </section>
-    <section id="sect18">
+    <section id="concepts-nested-processes-example-one">
       <title>Nested Processes Example</title>
       <para>
         The above example could not be implemented with nested processes
@@ -1575,7 +1592,7 @@
 
     </section>
   </section>
-  <section id="sect19">
+  <section id="concepts-execution-environment">
     <title>Execution Environment</title>
     <para>
       While executing your process definitions, it may be desirable to
@@ -1633,7 +1650,7 @@
       </listitem>
     </itemizedlist>
 
-    <section id="sect20">
+    <section id="concepts-process-attributes">
       <title>Process Attributes</title>
       <para>
         If you want state that is accessible from anywhere during process
@@ -1643,7 +1660,7 @@
 </para>
 
     </section>
-    <section id="sect21">
+    <section id="concepts-token-attributes">
       <title>Token Attributes</title>
       <para>
         Each
@@ -1678,12 +1695,11 @@
             </listitem>
             <listitem>
               <para>
-                A node token on a join node may have multiple parents, one for
-                each arc of the same name. In this case the environments
-                of all the parents must be combined in some way. By
-                default, each environment will be imported into that of
-                the new node. So if more than one parent has an
-                attribute with the same one, the last one imported will
+                A node token on a node using the labe-and join strategy may have multiple
+                parents, one for each arc of the same name. In this case the environments
+                of all the parents must be combined in some way. By default, each
+                environment will be imported into that of the new node. So if more than one
+                 parent has an attribute with the same one, the last one imported will
                 overwrite the previous values. This behavior may be
                 overridden, but if this is a concern, then using process
                 level attributes may be advisable.

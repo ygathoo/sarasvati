@@ -9,7 +9,7 @@
     the main components of a workflow system.
   </para>
 
-  <section id="sect1">
+  <section id="what-is-workflow-definitions">
     <title>Definitions </title>
 
     <itemizedlist>
@@ -83,7 +83,7 @@
     </itemizedlist>
 
   </section>
-  <section id="sect2">
+  <section id="what-is-workflow-why-workflow">
     <title>Why workflow?</title>
 
     <para>
@@ -152,10 +152,10 @@
     </itemizedlist>
 
   </section>
-  <section id="sect3">
+  <section id="what-is-workflow-examples">
     <title>Examples </title>
 
-    <section id="sect3.1">
+    <section id="what-is-workflow-example-one">
       <title>Example 1: Order Fulfillment</title>
 
       <para>
@@ -163,7 +163,7 @@
         balls. They have a process for servicing an order.
     </para>
 
-      <section id="sect4">
+      <section id="what-is-workflow-example-one-actors">
         <title>Actors </title>
         <itemizedlist>
           <listitem>
@@ -189,7 +189,7 @@
         </itemizedlist>
 
       </section>
-      <section id="sect5">
+      <section id="what-is-workflow-example-one-process">
         <title>The process </title>
         <orderedlist>
           <listitem>
@@ -237,7 +237,7 @@
 
       </section>
     </section>
-    <section id="sect3.2">
+    <section id="what-is-workflow-example-two">
       <title>Example 2: Document conversion</title>
 
       <para>
@@ -247,7 +247,7 @@
         two input formats.
         </para>
 
-      <section id="sect6">
+      <section id="what-is-workflow-example-two-actors">
         <title>Actors </title>
         <itemizedlist>
           <listitem>
@@ -283,7 +283,7 @@
         </itemizedlist>
 
       </section>
-      <section id="sect7">
+      <section id="what-is-workflow-example-two-process">
         <title>The process </title>
         <orderedlist>
           <listitem>
