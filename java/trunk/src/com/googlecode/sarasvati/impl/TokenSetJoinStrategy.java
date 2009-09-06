@@ -88,13 +88,13 @@ public class TokenSetJoinStrategy implements JoinStrategy
   }
 
   @Override
-  public JoinResult performJoin (final Engine engine, final GraphProcess process, final ArcToken token)
+  public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
     TokenSet tokenSet = getTokenSet( token );
 
     if ( tokenSet == null )
     {
-      return performFallbackJoin( engine, process, token );
+      return performFallbackJoin( engine, token.getProcess(), token );
     }
 
     if ( !tokenSet.getActiveNodeTokens( engine ).isEmpty() )

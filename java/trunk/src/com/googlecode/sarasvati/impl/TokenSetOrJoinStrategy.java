@@ -53,6 +53,6 @@ public class TokenSetOrJoinStrategy extends TokenSetJoinStrategy
   @Override
   public JoinResult performFallbackJoin (final Engine engine, final GraphProcess process, final ArcToken token)
   {
-    return JoinType.OR.getJoinStrategy().performJoin( engine, process, token );
+    return JoinType.OR.getJoinStrategy().performJoin( engine, token );
   }
 }

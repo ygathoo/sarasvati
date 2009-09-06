@@ -42,8 +42,9 @@ public class AndJoinStrategy implements JoinStrategy
   }
 
   @Override
-  public JoinResult performJoin (final Engine engine, final GraphProcess process, final ArcToken token)
+  public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
+    GraphProcess process = token.getProcess();
     List<? extends Arc> joinArcs = getJoiningArcs( process, token );
 
     ArrayList<ArcToken> tokens = new ArrayList<ArcToken>( joinArcs.size() );
