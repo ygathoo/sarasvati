@@ -96,7 +96,7 @@ public enum JoinType
    * active node tokens in the token set. The {@link OrJoinStrategy} will be used as a fallback
    * if a non-token set token arrives.
    */
-  TOKEN_SET_OR( new TokenSetJoinStrategy(),
+  TOKEN_SET_OR( new TokenSetOrJoinStrategy(),
                 "A TOKEN_SET_OR join will be satisfied when all active arc tokens in the set " +
                 "are on incoming arcs to the same node and there are no active node tokens " +
                 "in the token set. The OR strategy will be used as a fallback if a non-token " +
