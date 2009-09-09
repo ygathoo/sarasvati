@@ -110,9 +110,11 @@
       </fileset>
     </copy>
 
-    <copy todir="${core.build.dir}/com/googlecode/sarasvati/editor">
-      <fileset dir="editor/com/googlecode/sarasvati/editor">
-        <include name="Editor.xsd"/>
+    <copy todir="${core.build.dir}">
+      <fileset dir="editor/">
+        <include name="**/*.form"/>
+        <include name="**/*.properties"/>
+        <include name="**/*Editor.xsd"/>
       </fileset>
     </copy>
   </target>
