@@ -62,10 +62,10 @@ public enum ExecutionEventType
 
   public boolean isProcessEvent ()
   {
-    return 
-    	   this == PROCESS_CREATED ||
+    return
+         this == PROCESS_CREATED ||
            this == PROCESS_STARTED ||
-           this == PROCESS_PENDING_COMPLETE || 
+           this == PROCESS_PENDING_COMPLETE ||
            this == PROCESS_COMPLETED ||
            this == PROCESS_PENDING_CANCEL ||
            this == PROCESS_CANCELED;
@@ -92,6 +92,11 @@ public enum ExecutionEventType
 
   public static int toMask (final ExecutionEventType...eventTypes)
   {
+    if ( eventTypes == null || eventTypes.length == 0 )
+    {
+      return INVERSE_MASK;
+    }
+
     int eventTypeMask = 0;
 
     for ( ExecutionEventType eventType : eventTypes )

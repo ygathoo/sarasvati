@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 package com.googlecode.sarasvati.hib;
 
@@ -30,12 +30,12 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
 
-import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.event.PersistedExecutionListener;
 
 @Entity
-@Table (name="wf_process_listener")
-public class HibProcessListener implements PersistedExecutionListener
+@Table (name="wf_graph_listener")
+public class HibGraphListener implements PersistedExecutionListener
 {
   @Id
   @GeneratedValue(strategy=GenerationType.IDENTITY)
@@ -46,18 +46,18 @@ public class HibProcessListener implements PersistedExecutionListener
   @Column (name="event_type_mask")
   protected int eventTypeMask;
 
-  @ForeignKey(name="FK_listener_process")
-  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibGraphProcess.class)
-  @JoinColumn(name = "process_id")
-  protected GraphProcess process;
+  @ForeignKey(name="FK_listener_graph")
+  @ManyToOne(fetch = FetchType.LAZY, targetEntity=HibGraph.class)
+  @JoinColumn(name = "graph_id")
+  protected Graph graph;
 
-  protected HibProcessListener () { /* Default constructor for Hibernate */ }
+  protected HibGraphListener () { /* Default constructor for Hibernate */ }
 
-  public HibProcessListener (final String type, final int eventTypeMask, final GraphProcess process)
+  public HibGraphListener (final String type, final int eventTypeMask, final Graph graph)
   {
     this.eventTypeMask = eventTypeMask;
     this.type = type;
-    this.process = process;
+    this.graph = graph;
   }
 
   public Long getId ()
@@ -90,14 +90,20 @@ public class HibProcessListener implements PersistedExecutionListener
     this.eventTypeMask = eventTypeMask;
   }
 
-  public GraphProcess getProcess ()
+  /**
+   * @return the graph
+   */
+  public Graph getGraph ()
   {
-    return process;
+    return graph;
   }
 
-  public void setProcess (final GraphProcess process)
+  /**
+   * @param graph the graph to set
+   */
+  public void setGraph (final Graph graph)
   {
-    this.process = process;
+    this.graph = graph;
   }
 
   @Override
@@ -116,9 +122,9 @@ public class HibProcessListener implements PersistedExecutionListener
       return true;
     if (obj == null)
       return false;
-    if (!(obj instanceof HibProcessListener))
+    if (!(obj instanceof HibGraphListener))
       return false;
-    HibProcessListener other = (HibProcessListener) obj;
+    HibGraphListener other = (HibGraphListener) obj;
     if (id == null)
     {
       if (other.getId() != null)

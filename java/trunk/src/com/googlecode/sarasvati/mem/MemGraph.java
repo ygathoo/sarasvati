@@ -22,6 +22,8 @@ package com.googlecode.sarasvati.mem;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.googlecode.sarasvati.event.DefaultExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.impl.AbstractGraph;
 
 public class MemGraph extends AbstractGraph
@@ -30,6 +32,8 @@ public class MemGraph extends AbstractGraph
   protected String        customId;
   protected List<MemNode> nodes;
   protected List<MemArc>  arcs;
+
+  protected final ExecutionEventQueue eventQueue = DefaultExecutionEventQueue.newArrayListInstance();
 
   public MemGraph (final String name, final String customId)
   {
@@ -65,5 +69,14 @@ public class MemGraph extends AbstractGraph
   public String getCustomId ()
   {
     return customId;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.event.HasEventQueue#getEventQueue()
+   */
+  @Override
+  public ExecutionEventQueue getEventQueue ()
+  {
+    return eventQueue;
   }
 }

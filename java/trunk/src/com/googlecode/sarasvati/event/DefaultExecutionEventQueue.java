@@ -51,7 +51,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
                                         final Class<? extends ExecutionListener> listenerClass,
                                         final ExecutionEventType...eventTypes)
   {
-    if ( eventTypes == null || listenerClass == null)
+    if ( listenerClass == null)
     {
       return;
     }
@@ -82,7 +82,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
   public synchronized void addListener (final ExecutionListener listener,
                                         final ExecutionEventType...eventTypes)
   {
-    if ( eventTypes == null || listener == null || eventTypes.length == 0 )
+    if ( listener == null )
     {
       return;
     }

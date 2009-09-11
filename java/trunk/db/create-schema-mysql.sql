@@ -20,6 +20,7 @@ drop table if exists wf_guard_action cascade;
 drop table if exists wf_process_listener cascade;
 drop table if exists wf_process cascade;
 drop table if exists wf_process_state cascade;
+drop table if exists wf_graph_listener cascade;
 drop table if exists wf_graph cascade;
 
 -- -----------------------------------------------------------------------------
@@ -38,6 +39,18 @@ create table wf_graph
 ALTER TABLE wf_graph
   ADD CONSTRAINT wf_graph_unique
     UNIQUE (name,version);
+
+create table wf_graph_listener
+(
+  id              serial         NOT NULL PRIMARY KEY,
+  type            varchar(255)   NOT NULL,
+  event_type_mask int            NOT NULL,
+  graph_id        int            NOT NULL REFERENCES wf_graph
+);
+
+ALTER TABLE wf_graph_listener
+  ADD CONSTRAINT wf_graph_listener_unique
+    UNIQUE(graph_id, type);
 
 create table wf_process_state
 (
@@ -78,13 +91,13 @@ create table wf_process_listener
 (
   id              serial       NOT NULL PRIMARY KEY,
   type            varchar(255) NOT NULL,
-  event_type      int          NOT NULL,
+  event_type_mask int          NOT NULL,
   process_id      int          NOT NULL REFERENCES wf_process
 );
 
 ALTER TABLE wf_process_listener
   ADD CONSTRAINT wf_listener_unique
-    UNIQUE(type, event_type, process_id);
+    UNIQUE(process_id, type);
 
 create table wf_node_type
 (

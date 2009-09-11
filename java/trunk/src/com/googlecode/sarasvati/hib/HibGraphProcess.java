@@ -14,11 +14,9 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2008-2009 Paul Lorenz
 */
-/**
- * Created on Apr 25, 2008
- */
+
 package com.googlecode.sarasvati.hib;
 
 import java.util.Date;
@@ -53,18 +51,13 @@ import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Where;
 
 import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.env.Env;
 import com.googlecode.sarasvati.event.CachingExecutionEventQueue;
-import com.googlecode.sarasvati.event.EventActions;
-import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
-import com.googlecode.sarasvati.event.ExecutionEventType;
-import com.googlecode.sarasvati.event.ExecutionListener;
-import com.googlecode.sarasvati.event.ListenerCache;
+import com.googlecode.sarasvati.event.InitialExecutionEventQueue;
 import com.googlecode.sarasvati.impl.MapEnv;
 
 @Entity
@@ -135,44 +128,15 @@ public class HibGraphProcess implements GraphProcess
   protected Env env = null;
 
   @Transient
-  protected ExecutionEventQueue eventQueue = new ExecutionEventQueue()
+  protected ExecutionEventQueue eventQueue = new InitialExecutionEventQueue()
   {
     @Override
-    public EventActions fireEvent (final ExecutionEvent event)
-    {
-      initEventQueue();
-      return eventQueue.fireEvent( event );
-    }
-
-    @Override
-    public void addListener (final Engine engine,
-                             final Class<? extends ExecutionListener> listenerClass,
-                             final ExecutionEventType... eventTypes)
-    {
-      initEventQueue();
-      eventQueue.addListener( engine, listenerClass, eventTypes );
-    }
-
-    @Override
-    public void removeListener(final Engine engine,
-                               final Class<? extends ExecutionListener> listenerClass,
-                               final ExecutionEventType... eventTypes)
-    {
-      initEventQueue();
-      eventQueue.removeListener( engine, listenerClass, eventTypes );
-    }
-
-    private void initEventQueue ()
+    protected ExecutionEventQueue init ()
     {
       CachingExecutionEventQueue newEventQueue = CachingExecutionEventQueue.newArrayListInstance();
-      ListenerCache cache = CachingExecutionEventQueue.getListenerCache();
-
-      for ( HibProcessListener listener : getListeners() )
-      {
-        newEventQueue.addListener( cache.getListener( listener.getType() ), listener.getEventTypeMask() );
-      }
-
+      newEventQueue.initFromPersisted( getListeners() );
       eventQueue = newEventQueue;
+      return eventQueue;
     }
   };
 

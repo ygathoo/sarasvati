@@ -20,6 +20,8 @@ package com.googlecode.sarasvati;
 
 import java.util.List;
 
+import com.googlecode.sarasvati.event.HasEventQueue;
+
 /**
  * A Graph corresponds to a process definition. It has a set of
  * Nodes, which correspond to actions that need to be taken for the process
@@ -28,7 +30,7 @@ import java.util.List;
  *
  * @author Paul Lorenz
  */
-public interface Graph
+public interface Graph extends HasEventQueue
 {
   /**
    * Returns the graph name, which should be unique. Different versions with the same

@@ -267,7 +267,7 @@ public interface Engine
    * level execution listeners, which can be persisted in a database by class name.
    *
    * @param listenerClass The listener type to be added
-   * @param eventTypes The event types to be notified for.
+   * @param eventTypes The event types to be notified for. If no types are specified, the listener is added for all event types.
    */
   void addExecutionListener (Class<? extends ExecutionListener> listenerClass, ExecutionEventType...eventTypes);
 
@@ -287,8 +287,8 @@ public interface Engine
    *
    *
    * @param process The process to add the listener for, or null for all processes
-   * @param listenerClass The listener type to be added
-   * @param eventTypes The event types to be notified for.
+   * @param listenerClass The listener type to be added.
+   * @param eventTypes The event types to be notified for. If no listener types are specified, the listener is added for all event types.
    */
   void addExecutionListener (GraphProcess process, Class<? extends ExecutionListener> listenerClass, ExecutionEventType...eventTypes);
 

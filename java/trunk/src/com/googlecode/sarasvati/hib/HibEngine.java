@@ -160,8 +160,23 @@ public class HibEngine extends BaseEngine
 
     if ( eventTypeMask != 0 )
     {
-      HibProcessListener hibListener = new HibProcessListener( listenerClass.getName(), eventTypeMask, process );
-      session.save( hibListener );
+      String type = listenerClass.getName();
+      boolean updated = false;
+      for ( HibProcessListener hibListener : ((HibGraphProcess)process).getListeners() )
+      {
+        if ( type.equals( hibListener.getType() ) )
+        {
+          hibListener.setEventTypeMask( eventTypeMask );
+          updated = true;
+          break;
+        }
+      }
+
+      if ( !updated )
+      {
+        HibProcessListener hibListener = new HibProcessListener( type, eventTypeMask, process );
+        session.save( hibListener );
+      }
     }
 
     super.addExecutionListener( process, listenerClass, eventTypes );
@@ -240,6 +255,7 @@ public class HibEngine extends BaseEngine
     config.addAnnotatedClass( HibArc.class );
     config.addAnnotatedClass( HibArcToken.class );
     config.addAnnotatedClass( HibGraph.class );
+    config.addAnnotatedClass( HibGraphListener.class );
     config.addAnnotatedClass( HibProcessListener.class );
     config.addAnnotatedClass( HibNode.class );
     config.addAnnotatedClass( HibNodeRef.class );
@@ -259,6 +275,9 @@ public class HibEngine extends BaseEngine
       config.setCacheConcurrencyStrategy( HibGraph.class.getName(),"read-write" );
       config.setCollectionCacheConcurrencyStrategy( HibGraph.class.getName() + ".nodes", "read-write" );
       config.setCollectionCacheConcurrencyStrategy( HibGraph.class.getName() + ".arcs", "read-write" );
+      config.setCollectionCacheConcurrencyStrategy( HibGraph.class.getName() + ".listeners", "read-write" );
+
+      config.setCacheConcurrencyStrategy( HibGraphListener.class.getName(),"read-write" );
 
       config.setCacheConcurrencyStrategy( HibNode.class.getName(),"read-write" );
       config.setCacheConcurrencyStrategy( HibNodeRef.class.getName(),"read-write" );

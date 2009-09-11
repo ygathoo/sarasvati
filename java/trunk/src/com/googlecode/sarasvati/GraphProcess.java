@@ -21,7 +21,7 @@ package com.googlecode.sarasvati;
 import java.util.Collection;
 
 import com.googlecode.sarasvati.env.Env;
-import com.googlecode.sarasvati.event.ExecutionEventQueue;
+import com.googlecode.sarasvati.event.HasEventQueue;
 import com.googlecode.sarasvati.load.GraphFactory;
 
 /**
@@ -29,7 +29,7 @@ import com.googlecode.sarasvati.load.GraphFactory;
  *
  * @author Paul Lorenz
  */
-public interface GraphProcess
+public interface GraphProcess extends HasEventQueue
 {
   /**
    * Returns the graph being executed.
@@ -183,12 +183,4 @@ public interface GraphProcess
    * @return If this is a nested process, this will return the parent {@link NodeToken}, and null otherwise.
    */
   NodeToken getParentToken ();
-
-  /**
-   * Each process should have an event queue which manages the set of listeners for the process
-   * and handles firing events to those listeners.
-   *
-   * @return The event queue for this process.
-   */
-  ExecutionEventQueue getEventQueue ();
 }
