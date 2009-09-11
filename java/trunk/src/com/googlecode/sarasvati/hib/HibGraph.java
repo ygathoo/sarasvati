@@ -36,7 +36,13 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Transient;
 
+import org.hibernate.annotations.Cascade;
+
+import com.googlecode.sarasvati.event.CachingExecutionEventQueue;
+import com.googlecode.sarasvati.event.ExecutionEventQueue;
+import com.googlecode.sarasvati.event.InitialExecutionEventQueue;
 import com.googlecode.sarasvati.impl.AbstractGraph;
 
 @Entity
@@ -55,6 +61,23 @@ public class HibGraph extends AbstractGraph
   @Column (name="create_date", updatable=false)
   @Temporal (TemporalType.TIMESTAMP)
   protected Date   createDate;
+
+  @OneToMany (mappedBy="graph", fetch=FetchType.LAZY)
+  @Cascade( { org.hibernate.annotations.CascadeType.LOCK, org.hibernate.annotations.CascadeType.DELETE } )
+  protected List<HibGraphListener>  listeners;
+
+  @Transient
+  protected ExecutionEventQueue eventQueue = new InitialExecutionEventQueue()
+  {
+    @Override
+    protected ExecutionEventQueue init ()
+    {
+      CachingExecutionEventQueue newEventQueue = CachingExecutionEventQueue.newArrayListInstance();
+      newEventQueue.initFromPersisted( getListeners() );
+      eventQueue = newEventQueue;
+      return eventQueue;
+    }
+  };
 
   protected HibGraph () { /* Default constructor for hibernate */ }
 
@@ -145,6 +168,31 @@ public class HibGraph extends AbstractGraph
   public void setArcs (final List<HibArc> arcs)
   {
     this.arcs = arcs;
+  }
+
+  /**
+   * @return the listeners
+   */
+  public List<HibGraphListener> getListeners ()
+  {
+    return listeners;
+  }
+
+  /**
+   * @param listeners the listeners to set
+   */
+  public void setListeners (List<HibGraphListener> listeners)
+  {
+    this.listeners = listeners;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.event.HasEventQueue#getEventQueue()
+   */
+  @Override
+  public ExecutionEventQueue getEventQueue ()
+  {
+    return eventQueue;
   }
 
   @Override

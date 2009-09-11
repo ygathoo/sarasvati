@@ -35,6 +35,7 @@ IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_guard_action') drop table wf_
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_external_attr') drop table wf_external_attr
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_external') drop table wf_external
 
+IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_graph_listener') drop table wf_graph
 IF EXISTS (SELECT * FROM sysobjects WHERE name='wf_graph') drop table wf_graph
 go
 
@@ -57,6 +58,20 @@ go
 ALTER TABLE wf_graph
   ADD CONSTRAINT wf_graph_unique
     UNIQUE(name,version)
+go
+
+create table wf_graph_listener
+(
+  id              bigint IDENTITY NOT NULL PRIMARY KEY,
+  type            varchar(255)    NOT NULL,
+  event_type_mask int             NOT NULL,
+  graph_id        bigint          NOT NULL REFERENCES wf_graph
+) with identity_gap = 10
+go
+
+ALTER TABLE wf_graph_listener
+  ADD CONSTRAINT wf_graph_listener_unique
+    UNIQUE(graph_id, type);
 go
 
 create table wf_process_state
@@ -104,14 +119,14 @@ create table wf_process_listener
 (
   id              bigint       IDENTITY NOT NULL PRIMARY KEY,
   type            varchar(255)          NOT NULL,
-  event_type      int                   NOT NULL,
+  event_type_mask int                   NOT NULL,
   process_id      bigint                NOT NULL REFERENCES wf_process
 ) with identity_gap = 10
 go
 
 ALTER TABLE wf_process_listener
   ADD CONSTRAINT wf_listener_unique
-    UNIQUE(type, event_type, process_id)
+    UNIQUE(process_id, type)
 go
 
 create table wf_node_type
