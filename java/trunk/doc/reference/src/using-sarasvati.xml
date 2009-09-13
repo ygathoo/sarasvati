@@ -324,7 +324,7 @@
 
       <para>
         <informalfigure>
-          <graphic fileref="../images/pdfiles/example1.jpg" />
+          <graphic fileref="../images/pdfiles/example1.jpg"/>
         </informalfigure>
       </para>
 
@@ -407,7 +407,7 @@
 
       <para>
         <informalfigure>
-          <graphic fileref="../images/pdfiles/example2.jpg" />
+          <graphic fileref="../images/pdfiles/example2.jpg"/>
         </informalfigure>
       </para>
 
@@ -453,7 +453,7 @@
 
       <para>
         <informalfigure>
-          <graphic fileref="../images/pdfiles/example3.jpg" />
+          <graphic fileref="../images/pdfiles/example3.jpg"/>
         </informalfigure>
       </para>
 
@@ -639,7 +639,7 @@
 
       <para>
         <informalfigure>
-          <graphic fileref="../images/concepts-externals1.jpg" />
+          <graphic fileref="../images/concepts-externals1.jpg"/>
         </informalfigure>
       </para>
 
@@ -690,7 +690,7 @@
 
       <para>
         <informalfigure>
-          <graphic fileref="../images/concepts-externals4.jpg" />
+          <graphic fileref="../images/concepts-externals4.jpg" scalefit="1" width="100%"/>
         </informalfigure>
       </para>
 
@@ -700,7 +700,7 @@
 
       <para>
         <informalfigure>
-          <graphic fileref="../images/concepts-externals5.jpg" />
+          <graphic fileref="../images/concepts-externals5.jpg" scalefit="1" width="100%"/>
         </informalfigure>
       </para>
 
@@ -1006,7 +1006,9 @@ public class HelloNode extends HibNode
         table, with type, description and behaviour.
       </para>
 
-      <programlisting><![CDATA[ insert into wf_node_type (id, description, behaviour) values ( 'helloWorld', 'Says hello to the world', 'helloWorld' )
+      <programlisting><![CDATA[
+insert into wf_node_type (id, description, behaviour)
+ values ( 'helloWorld', 'Says hello to the world', 'helloWorld' )
 ]]></programlisting>
 
       <para>
@@ -1041,7 +1043,9 @@ public class HelloNode extends CustomNode
         added to the <literal>wf_node_type</literal> table.
       </para>
 
-      <programlisting><![CDATA[ insert into wf_node_type (id, description, behaviour) values ( 'helloWorld', 'Says hello to the world', 'custom' )
+      <programlisting><![CDATA[
+insert into wf_node_type (id, description, behaviour)
+ values ( 'helloWorld', 'Says hello to the world', 'custom' )
 ]]></programlisting>
 
     </section>

@@ -51,7 +51,9 @@ import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
+import com.googlecode.sarasvati.event.GraphDefinedEventListenerInvoker;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
+import com.googlecode.sarasvati.event.ProcessDefinedEventListenerInvoker;
 import com.googlecode.sarasvati.event.ProcessEvent;
 import com.googlecode.sarasvati.rubric.RubricInterpreter;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricEnv;
@@ -107,7 +109,12 @@ public abstract class BaseEngine implements Engine
 
   /**
    * Provides a subclass to override which execution event listeners are added to
-   * new global queues. By default this just adds the {@link TokenSetCompletionListener}.
+   * new global queues. By default this adds the following listeners:
+   * <ul>
+   *  <li>{@link TokenSetCompletionListener}</li>
+   *  <li>{@link GraphDefinedEventListenerInvoker}</li>
+   *  <li>{@link ProcessDefinedEventListenerInvoker}</li>
+   * </ul>
    *
    * @param queue The new global queue
    */
@@ -116,6 +123,8 @@ public abstract class BaseEngine implements Engine
     queue.addListener( new TokenSetCompletionListener(),
                        ExecutionEventType.ARC_TOKEN_COMPLETED,
                        ExecutionEventType.NODE_TOKEN_COMPLETED );
+    queue.addListener( new GraphDefinedEventListenerInvoker() );
+    queue.addListener( new ProcessDefinedEventListenerInvoker() );
   }
 
   @Override
@@ -616,7 +625,6 @@ public abstract class BaseEngine implements Engine
 
   public EventActions fireEvent (final ExecutionEvent event)
   {
-    EventActions actions = globalEventQueue.fireEvent( event );
-    return actions.compose( event.getProcess().getEventQueue().fireEvent( event ) );
+    return globalEventQueue.fireEvent( event );
   }
 }
