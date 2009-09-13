@@ -232,7 +232,7 @@
         </para>
 
         <informalfigure>
-          <graphic fileref="../images/example1.jpg" />
+          <graphic fileref="../images/example1.jpg" scalefit="1" width="100%"/>
         </informalfigure>
 
       </section>
@@ -353,7 +353,7 @@
           Graphically, the process could be represented as follows:
         </para>
         <informalfigure>
-          <graphic fileref="../images/example2.jpg" />
+          <graphic fileref="../images/example2.jpg" scalefit="1" width="100%"/>
         </informalfigure>
 
       </section>
