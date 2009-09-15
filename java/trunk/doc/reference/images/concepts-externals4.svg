@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
+
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -12,7 +13,7 @@
    height="744.09448"
    id="svg9073"
    sodipodi:version="0.32"
-   inkscape:version="0.46"
+   inkscape:version="0.47pre1 r21720"
    sodipodi:docname="concepts-externals4.svg"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
    version="1.0">
@@ -82,9 +83,10 @@
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:window-width="1600"
-     inkscape:window-height="1134"
+     inkscape:window-height="990"
      inkscape:window-x="0"
-     inkscape:window-y="0" />
+     inkscape:window-y="0"
+     inkscape:window-maximized="0" />
   <metadata
      id="metadata9078">
     <rdf:RDF>
@@ -141,7 +143,7 @@
            inkscape:flatsided="true"
            inkscape:rounded="0"
            inkscape:randomized="0"
-           d="M 54.712832,283.50293 L 45.210078,288.98935 L 45.210078,278.01651 L 54.712832,283.50293 z"
+           d="m 54.712832,283.50293 -9.502754,5.48642 0,-10.97284 9.502754,5.48642 z"
            transform="matrix(0.700671,0,0,0.6882871,-17.943393,-140.37364)" />
       </g>
       <g
@@ -182,7 +184,7 @@
            inkscape:flatsided="true"
            inkscape:rounded="0"
            inkscape:randomized="0"
-           d="M 54.712832,283.50293 L 45.210078,288.98935 L 45.210078,278.01651 L 54.712832,283.50293 z"
+           d="m 54.712832,283.50293 -9.502754,5.48642 0,-10.97284 9.502754,5.48642 z"
            transform="matrix(0.700671,0,0,0.6882871,-15.923088,-65.622296)" />
       </g>
       <g
@@ -223,7 +225,7 @@
            inkscape:flatsided="true"
            inkscape:rounded="0"
            inkscape:randomized="0"
-           d="M 54.712832,283.50293 L 45.210078,288.98935 L 45.210078,278.01651 L 54.712832,283.50293 z"
+           d="m 54.712832,283.50293 -9.502754,5.48642 0,-10.97284 9.502754,5.48642 z"
            transform="matrix(0.700671,0,0,0.6882871,-14.912935,9.12904)" />
       </g>
       <g
@@ -365,12 +367,12 @@
          id="text5295"
          y="70.523056"
          x="430.09888"
-         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         style="font-size:12px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
          xml:space="preserve"><tspan
            y="70.523056"
            x="430.09888"
            id="tspan5297"
-           sodipodi:role="line">from ext, instance 1, node A</tspan></text>
+           sodipodi:role="line">from ext, instance 1, node B</tspan></text>
       <text
          id="text5299"
          y="167.95581"
