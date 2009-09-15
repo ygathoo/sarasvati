@@ -334,8 +334,9 @@
 
       <programlisting><![CDATA[
 <?xml version="1.0"?>
-<process-definition name="simplest"
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition
+  name="simplest"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="node-one" isStart="true"/>
 
@@ -412,8 +413,9 @@
       </para>
 
       <programlisting><![CDATA[<?xml version="1.0"?>
-<process-definition name="example2"
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition
+  name="example2"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="node-one" isStart="true">
     <arc to="node-two"/>
@@ -458,8 +460,9 @@
       </para>
 
       <programlisting><![CDATA[<?xml version="1.0"?>
-<process-definition name="example3"
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition
+  name="example3"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="node-one" isStart="true">
     <arc to="node-three"/>
@@ -621,8 +624,9 @@
       </para>
 
       <programlisting><![CDATA[<?xml version="1.0"?>
-<process-definition name="ext"
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition
+  name="ext"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="A" joinType="labelAnd">
     <arc to="B"/>
@@ -648,8 +652,9 @@
       </para>
 
       <programlisting><![CDATA[<?xml version="1.0"?>
-<process-definition name="example4"
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition
+  name="example4"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="P" isStart="true">
     <arc external="1" to="A"/>
@@ -940,8 +945,9 @@ public interface Node extends Adaptable
     <section id="using-custom-example-one-proc-def">
       <title>Example One: Process Definition </title>
       <programlisting><![CDATA[<?xml version="1.0"?>
-<process-definition name="hello-world"
-                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition
+  name="hello-world"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="hello" type="helloWorld" isStart="true"/>
 
@@ -1224,8 +1230,9 @@ public class CustomNode extends MemNode
 
       <programlisting><![CDATA[
 <?xml version="1.0"?>
-<process-definition name="example1"
-                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition
+  name="example1"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="test" type="custom" isStart="true">
     <arc to="1"/>
@@ -1267,13 +1274,14 @@ public class CustomNode extends MemNode
               <itemizedlist>
                 <listitem>
                   <para>
-                    Subclass com.googlecode.sarasvati.load.properties.BasePropertyMutator
+                    Implement <literal>com.googlecode.sarasvati.env.AttributeConverter</literal>
                   </para>
                 </listitem>
                 <listitem>
                   <para>
-                    Register new mutator with
-                    com.googlecode.sarasvati.load.properties.PropertyMutatorRegistry#registerPropertyMutator
+                    Register the new mutator using the <literal>setConverterForType</literal> method (which takes
+                    a class and an <literal>AttributeConverter</literal>) on
+                    <literal>com.googlecode.sarasvati.env.AttributeConverters</literal>.
                   </para>
                 </listitem>
               </itemizedlist>
@@ -1394,8 +1402,9 @@ public interface NodeFactory
 
       <programlisting><![CDATA[<?xml version="1.0"?>
 
-<process-definition name="example1"
-                   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+<process-definition
+  name="example1"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="start" isStart="true">
     <arc to="1"/>
