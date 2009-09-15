@@ -11,16 +11,21 @@ Sarasvati is fairly stable at this point, and we are workings towards a 1.0 rele
 
 ===Documentation: In Progress===
  # Documentation needs to be updated for changes. 
-   * Split out external
-   * isJoin => joinType
+   * Split out external - DONE
+   * isJoin => joinType - DONE
    * Env refactoring
    * hibernate node type handling
    * Graph validation framework
- # Convert documentation to Docbook
+   * Convert visualization docs to DocBook
+   * Convert backtracking doc to DocBook
+   * Token Sets documentation
+   * Execution Listener docs
+   * Editor docs
+ # Convert documentation to Docbook - IN PROGRESS
 
 Note:
-  * Should update external example image 1 (to show external as entity)
-  * Need to fix external example image 2 (has incorrect link)
+  * Need to fix external example image 2 (has incorrect link) - DONE
+
 
 === Broader Database support: In progress ===
 
