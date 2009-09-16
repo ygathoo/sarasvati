@@ -18,6 +18,7 @@
 */
 package com.googlecode.sarasvati.editor.action;
 
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 
 import javax.swing.JDialog;
@@ -39,7 +40,7 @@ public class GraphMemberPropertiesAction extends Adapter
       EditorScene scene = (EditorScene)widget.getScene();
       EditorGraphMember<?> member = (EditorGraphMember< ? >)scene.findObject( widget );
       JDialog dialog = DialogFactory.newGraphMemberPropertiesDialog( member );
-      dialog.setLocation( widget.convertLocalToScene( event.getPoint() ) );
+      dialog.setLocation( new Point( 200, 200 ) );
       dialog.setVisible( true );
 
       return State.CONSUMED;
