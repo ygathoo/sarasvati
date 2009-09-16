@@ -28,8 +28,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
+import com.googlecode.sarasvati.GuardResponse;
 import com.googlecode.sarasvati.load.definition.NodeDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
+import com.googlecode.sarasvati.rubric.RubricInterpreter;
+import com.googlecode.sarasvati.rubric.lang.RubricStmt;
+import com.googlecode.sarasvati.rubric.visitor.ExitArcNameCollector;
+import com.googlecode.sarasvati.rubric.visitor.ResultTypeValidator;
 import com.googlecode.sarasvati.util.SvUtil;
 
 public class EditorGraph
@@ -76,11 +81,13 @@ public class EditorGraph
   public void addNode (final EditorNode node)
   {
     nodes.add( node );
+    outArcs.put( node, new LinkedList<EditorArc>() );
   }
 
   public void removeNode (final EditorNode node)
   {
     nodes.remove( node );
+    outArcs.remove( node );
   }
 
   public List<EditorExternal> getExternals()
@@ -96,11 +103,13 @@ public class EditorGraph
   public void addExternal (final EditorExternal external)
   {
     externals.add( external );
+    outArcs.put( external, new LinkedList<EditorArc>() );
   }
 
   public void removeExternal (final EditorExternal external)
   {
     externals.remove( external );
+    outArcs.remove( external );
   }
 
   public List<EditorArc> getArcs()
@@ -115,13 +124,7 @@ public class EditorGraph
 
   public List<EditorArc> getOutArcs (final EditorGraphMember<?> member)
   {
-    List<EditorArc> list = outArcs.get( member );
-    if ( list == null )
-    {
-      list = new LinkedList<EditorArc>();
-      outArcs.put( member, list );
-    }
-    return list;
+    return outArcs.get( member );
   }
 
   public void addArc (final EditorArc arc)
@@ -171,6 +174,43 @@ public class EditorGraph
                        "Each node must have a unique name." );
       }
       ids.add( nodeName );
+
+      String guard = node.getState().getGuard();
+      if ( !SvUtil.isBlankOrNull( guard ) )
+      {
+        try
+        {
+          RubricStmt guardStmt = RubricInterpreter.compile( guard );
+
+          if ( !ResultTypeValidator.isResultOfType( guardStmt, GuardResponse.class ) )
+          {
+            results.error( "The guard in node " + nodeName + " may return something other than guard response." );
+          }
+
+          ExitArcNameCollector exitArcCollector = new ExitArcNameCollector();
+          guardStmt.traverse( exitArcCollector );
+
+          Set<String> actualOutArcNames = new HashSet<String>();
+
+          for ( EditorArc arc : getOutArcs( node ) )
+          {
+            actualOutArcNames.add( arc.getState().getLabel() );
+          }
+
+          for ( String guardExitArc : exitArcCollector.getExitArcNames() )
+          {
+            if ( !actualOutArcNames.contains( guardExitArc ) && guardExitArc != null )
+            {
+              results.warning( "The guard in node " + nodeName + " uses the arc name '" +
+                               guardExitArc + "' but no arc with that name exits node" );
+            }
+          }
+        }
+        catch ( RuntimeException re )
+        {
+          results.warning( "The guard in node " + nodeName + " failed to compile with following error: " + re.getMessage() );
+        }
+      }
     }
 
     ids = new HashSet<String> ();
