@@ -307,32 +307,31 @@
         </para>
 
       </section>
-    </section>
 
-    <section id="using-one-node-example">
-      <title>One Node Example</title>
-      <para>
-        With just <literal>process-definition</literal>
-        and <literal>node</literal> a simple process definition
-        can be built.
-      </para>
+      <section id="using-one-node-example">
+        <title>One Node Example</title>
+        <para>
+          With just <literal>process-definition</literal>
+          and <literal>node</literal> a simple process definition
+          can be built.
+        </para>
 
-      <para>
-        The simplest process definition would be a single node. Graphically,
-        it would look like:
-      </para>
+        <para>
+          The simplest process definition would be a single node. Graphically,
+          it would look like:
+        </para>
 
-      <para>
-        <informalfigure>
-          <graphic fileref="../images/pdfiles/example1.jpg"/>
-        </informalfigure>
-      </para>
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/pdfiles/example1.jpg"/>
+          </informalfigure>
+        </para>
 
-      <para>
-        The corresponding XML process definition would look like:
-      </para>
+        <para>
+          The corresponding XML process definition would look like:
+        </para>
 
-      <programlisting><![CDATA[
+        <programlisting><![CDATA[
 <?xml version="1.0"?>
 <process-definition
   name="simplest"
@@ -343,11 +342,12 @@
 </process-definition>
 ]]></programlisting>
 
-      <para>
-        While there can be many nodes declared in a process definition, we have
-        as yet, not defined a way of linking them together.
-      </para>
+        <para>
+          While there can be many nodes declared in a process definition, we have
+          as yet, not defined a way of linking them together.
+        </para>
 
+      </section>
     </section>
 
     <section id="using-node-arc-element">
@@ -397,22 +397,21 @@
           </tbody>
         </tgroup>
       </table>
-    </section>
 
-    <section id="using-arc-example-one">
-      <title>Arc Example One</title>
+      <section id="using-arc-example-one">
+        <title>Arc Example One</title>
 
-      <para>
-        The following example contains three nodes.
-      </para>
+        <para>
+          The following example contains three nodes.
+        </para>
 
-      <para>
-        <informalfigure>
-          <graphic fileref="../images/pdfiles/example2.jpg"/>
-        </informalfigure>
-      </para>
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/pdfiles/example2.jpg"/>
+          </informalfigure>
+        </para>
 
-      <programlisting><![CDATA[<?xml version="1.0"?>
+        <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition
   name="example2"
   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
@@ -428,38 +427,38 @@
 </process-definition>
 ]]></programlisting>
 
-      <para>
-        To indicate an arc, an
-        <literal>arc</literal>
-        element is added to the start node. The
-        <literal>to</literal>
-        attribute indicates the name of the target node. A node with
-        that name must exist in the same process definition file.
-      </para>
+        <para>
+          To indicate an arc, an
+          <literal>arc</literal>
+          element is added to the start node. The
+          <literal>to</literal>
+          attribute indicates the name of the target node. A node with
+          that name must exist in the same process definition file.
+        </para>
 
-    </section>
+      </section>
 
-    <section id="using-arc-example-two">
-      <title>Arc Example Two </title>
+      <section id="using-arc-example-two">
+        <title>Arc Example Two </title>
 
-      <para>
-        Here is an example with two start nodes. They both have arcs
-        to
-        <literal>node-three</literal>
-        , which uses the <literal>labelAnd</literal> join strategy. It will only execute once both
-        <literal>node-one</literal>
-        and
-        <literal>node-two</literal>
-        have completed.
-      </para>
+        <para>
+          Here is an example with two start nodes. They both have arcs
+          to
+          <literal>node-three</literal>
+          , which uses the <literal>labelAnd</literal> join strategy. It will only execute once both
+          <literal>node-one</literal>
+          and
+          <literal>node-two</literal>
+          have completed.
+        </para>
 
-      <para>
-        <informalfigure>
-          <graphic fileref="../images/pdfiles/example3.jpg"/>
-        </informalfigure>
-      </para>
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/pdfiles/example3.jpg"/>
+          </informalfigure>
+        </para>
 
-      <programlisting><![CDATA[<?xml version="1.0"?>
+        <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition
   name="example3"
   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
@@ -477,12 +476,13 @@
 </process-definition>
 ]]></programlisting>
 
-      <para>
-        Now that we've seen how to create links between nodes in the same
-        process definition, let us examine how to include external process
-        definitions and create links to them.
-      </para>
+        <para>
+          Now that we've seen how to create links between nodes in the same
+          process definition, let us examine how to include external process
+          definitions and create links to them.
+        </para>
 
+      </section>
     </section>
 
     <section id="using-external-element">
@@ -610,20 +610,19 @@
           </tbody>
         </tgroup>
       </table>
-    </section>
 
-    <section id="using-external-arc-example-one">
-      <title>External Arc Example One </title>
-      <para>
-        To examine external arcs, we'll need at least two process
-        definitions.
-      </para>
+      <section id="using-external-arc-example-one">
+        <title>External Arc Example One </title>
+        <para>
+          To examine external arcs, we'll need at least two process
+          definitions.
+        </para>
 
-      <para>
-        This example is from the EngineConcepts section.
-      </para>
+        <para>
+          This example is from the EngineConcepts section.
+        </para>
 
-      <programlisting><![CDATA[<?xml version="1.0"?>
+        <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition
   name="ext"
   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
@@ -637,21 +636,21 @@
 </process-definition>
 ]]></programlisting>
 
-      <para>
-        It looks like:
-      </para>
+        <para>
+          It looks like:
+        </para>
 
-      <para>
-        <informalfigure>
-          <graphic fileref="../images/concepts-externals1.jpg"/>
-        </informalfigure>
-      </para>
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/concepts-externals1.jpg"/>
+          </informalfigure>
+        </para>
 
-      <para>
-        The graph which contains external arcs going to 'ext', is below.
-      </para>
+        <para>
+          The graph which contains external arcs going to 'ext', is below.
+        </para>
 
-      <programlisting><![CDATA[<?xml version="1.0"?>
+        <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition
   name="example4"
   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
@@ -689,26 +688,27 @@
 </process-definition>
 ]]></programlisting>
 
-      <para>
-        It looks like:
-     </para>
+        <para>
+          It looks like:
+        </para>
 
-      <para>
-        <informalfigure>
-          <graphic fileref="../images/concepts-externals4.jpg" scalefit="1" width="100%"/>
-        </informalfigure>
-      </para>
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/concepts-externals4.jpg" scalefit="1" width="100%"/>
+          </informalfigure>
+        </para>
 
-      <para>
-        When the process definition is loaded into memory, it will look like:
-      </para>
+        <para>
+          When the process definition is loaded into memory, it will look like:
+        </para>
 
-      <para>
-        <informalfigure>
-          <graphic fileref="../images/concepts-externals5.jpg" scalefit="1" width="100%"/>
-        </informalfigure>
-      </para>
+        <para>
+          <informalfigure>
+            <graphic fileref="../images/concepts-externals5.jpg" scalefit="1" width="100%"/>
+          </informalfigure>
+        </para>
 
+      </section>
     </section>
   </section>
 
@@ -921,9 +921,7 @@ public interface Node extends Adaptable
         If using only the memory backed implementation,
         <literal>MemNode</literal>
         should be extended. If using only the hibernate backend, nodes
-        should subclass
-        <literal>HibNode</literal>
-        .
+        should subclass <literal>HibNode</literal>.
         <literal>CustomNode</literal>
         can be used with either or both backends. In to store custom
         attributes in the database, it uses a key/value pair table.
@@ -932,19 +930,17 @@ public interface Node extends Adaptable
         explicitly defined.
       </para>
 
-    </section>
-    <section id="using-custom-example-one">
-      <title>Example One </title>
-      <para>
-        To demonstrate use of each implementation, we start with a node that
-        just prints out "Hello, World". We start with the process
-        definition.
-      </para>
+      <section id="using-custom-example-one">
+        <title>Example One </title>
+        <para>
+          To demonstrate use of each implementation, we start with a node that
+          just prints out "Hello, World". We start with the process
+          definition.
+        </para>
 
-    </section>
-    <section id="using-custom-example-one-proc-def">
-      <title>Example One: Process Definition </title>
-      <programlisting><![CDATA[<?xml version="1.0"?>
+        <section id="using-custom-example-one-proc-def">
+          <title>Example One: Process Definition </title>
+          <programlisting><![CDATA[<?xml version="1.0"?>
 <process-definition
   name="hello-world"
   xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
@@ -954,14 +950,14 @@ public interface Node extends Adaptable
 </process-definition>
 ]]></programlisting>
 
-    </section>
-    <section id="using-custom-example-one-node-impl">
-      <title>Example One: Node implementation </title>
-      <para>
-        If using the memory implementation, the subclass would look like:
-      </para>
+        </section>
+        <section id="using-custom-example-one-node-impl">
+          <title>Example One: Node implementation </title>
+          <para>
+            If using the memory implementation, the subclass would look like:
+          </para>
 
-      <programlisting><![CDATA[
+          <programlisting><![CDATA[
 package com.googlecode.sarasvati.example.mem;
 
 import com.googlecode.sarasvati.Arc;
@@ -980,11 +976,11 @@ public class HelloNode extends MemNode
 }
 ]]></programlisting>
 
-      <para>
-        The hibernate version would look like:
-</para>
+          <para>
+            The hibernate version would look like:
+          </para>
 
-      <programlisting><![CDATA[
+          <programlisting><![CDATA[
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
@@ -1006,28 +1002,28 @@ public class HelloNode extends HibNode
 }
 ]]></programlisting>
 
-      <para>
-        The hibernate version would also require an insert into the
-        <literal>wf_node_type</literal>
-        table, with type, description and behaviour.
-      </para>
+          <para>
+            The hibernate version would also require an insert into the
+            <literal>wf_node_type</literal>
+            table, with type, description and behaviour.
+          </para>
 
-      <programlisting><![CDATA[
+          <programlisting><![CDATA[
 insert into wf_node_type (id, description, behaviour)
  values ( 'helloWorld', 'Says hello to the world', 'helloWorld' )
 ]]></programlisting>
 
-      <para>
-        The behaviour column ties the type to a discriminator specified on the
-        subclass. This allows having multiple types with the same
-        implementation class, if that was desired.
-      </para>
+          <para>
+            The behaviour column ties the type to a discriminator specified on the
+            subclass. This allows having multiple types with the same
+            implementation class, if that was desired.
+          </para>
 
-      <para>
-        The backend independent version would look like:
-      </para>
+          <para>
+            The backend independent version would look like:
+          </para>
 
-      <programlisting><![CDATA[
+          <programlisting><![CDATA[
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
@@ -1044,63 +1040,63 @@ public class HelloNode extends CustomNode
 }
 ]]></programlisting>
 
-      <para>
-        For use with the hibernate backend, a row would still need to be
-        added to the <literal>wf_node_type</literal> table.
-      </para>
+          <para>
+            For use with the hibernate backend, a row would still need to be
+            added to the <literal>wf_node_type</literal> table.
+          </para>
 
-      <programlisting><![CDATA[
+          <programlisting><![CDATA[
 insert into wf_node_type (id, description, behaviour)
  values ( 'helloWorld', 'Says hello to the world', 'custom' )
 ]]></programlisting>
 
-    </section>
-    <section id="using-example-one-load-run">
-      <title>Example One: Loading and Running</title>
-      <para>
-        Now we can load the process into memory, or into the database.
-        This is done using a
-        <literal>GraphLoader</literal>
-        , which can be retrieved from the appropriate engine. Before
-        loading the process definition, you will need to tell the engine
-        about your custom node types.
-      </para>
+        </section>
+        <section id="using-example-one-load-run">
+          <title>Example One: Loading and Running</title>
+          <para>
+            Now we can load the process into memory, or into the database.
+            This is done using a
+            <literal>GraphLoader</literal>
+            , which can be retrieved from the appropriate engine. Before
+            loading the process definition, you will need to tell the engine
+            about your custom node types.
+          </para>
 
-      <para>
-        The steps are
-        <orderedlist>
-          <listitem>
-            <para>
-              Create an engine of the appropriate type
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Register custom node types
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Load the process definition from XML file
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Get the loaded graph from the graph repository associated with the
-              engine
-            </para>
-          </listitem>
-          <listitem>
-            <para>
-              Start a new GraphProcess using the graph
-            </para>
-          </listitem>
-        </orderedlist>
+          <para>
+            The steps are
+            <orderedlist>
+              <listitem>
+                <para>
+                  Create an engine of the appropriate type
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Register custom node types
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Load the process definition from XML file
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Get the loaded graph from the graph repository associated with the
+                  engine
+                </para>
+              </listitem>
+              <listitem>
+                <para>
+                  Start a new GraphProcess using the graph
+                </para>
+              </listitem>
+            </orderedlist>
 
-        Here are the steps in code for the memory backed implementation.
-      </para>
+            Here are the steps in code for the memory backed implementation.
+          </para>
 
-      <programlisting><![CDATA[
+          <programlisting><![CDATA[
     MemEngine engine = new MemEngine();
 
     // Tell engine about our custom node type
@@ -1117,13 +1113,13 @@ insert into wf_node_type (id, description, behaviour)
     GraphProcess process = engine.startProcess( graph );
 ]]></programlisting>
 
-      <para>
-        Here are the steps in code for the hibernate backed
-        implementation. It assumes that you have a means of creating a
-        hibernate <literal>Session</literal> object.
-      </para>
+          <para>
+            Here are the steps in code for the hibernate backed
+            implementation. It assumes that you have a means of creating a
+            hibernate <literal>Session</literal> object.
+          </para>
 
-      <programlisting><![CDATA[
+          <programlisting><![CDATA[
     Session session = ...; // get hibernate session
     HibEngine engine = new HibEngine( session );
 
@@ -1141,12 +1137,12 @@ insert into wf_node_type (id, description, behaviour)
     GraphProcess process = engine.startProcess( graph );
 ]]></programlisting>
 
-      <para>
-        Here are the steps in code using the backend independent custom
-        type with <literal>MemEngine</literal>.
-      </para>
+          <para>
+            Here are the steps in code using the backend independent custom
+            type with <literal>MemEngine</literal>.
+          </para>
 
-      <programlisting><![CDATA[
+          <programlisting><![CDATA[
     MemEngine engine = new MemEngine();
 
     // We can either register the type with the Engine or with the DefaultNodeFactory
@@ -1169,13 +1165,14 @@ insert into wf_node_type (id, description, behaviour)
 ]]></programlisting>
 
 
-      <para>
-        The call to
-        <literal>startProcess</literal>
-        will create tokens on the start nodes and will continue
-        executing the process until it completes or enters a wait state.
-      </para>
+          <para>
+            The call to <literal>startProcess</literal>
+            will create tokens on the start nodes and will continue
+            executing the process until it completes or enters a wait state.
+          </para>
 
+        </section>
+      </section>
     </section>
     <section id="using-custom-attributes">
       <title>Custom Attributes</title>
@@ -1391,16 +1388,15 @@ public interface NodeFactory
         .
       </para>
 
-    </section>
-    <section id="using-example-two-proc-def">
-      <title>Example Two: Process Definition </title>
+      <section id="using-example-two-proc-def">
+        <title>Example Two: Process Definition </title>
 
-      <para>
-        Here we examine a more complicated example, which uses custom
-        attributes.
-     </para>
+        <para>
+          Here we examine a more complicated example, which uses custom
+          attributes.
+       </para>
 
-      <programlisting><![CDATA[<?xml version="1.0"?>
+        <programlisting><![CDATA[<?xml version="1.0"?>
 
 <process-definition
   name="example1"
@@ -1458,25 +1454,25 @@ public interface NodeFactory
 </process-definition>
 ]]></programlisting>
 
-    </section>
-    <section id="using-example-two-node-impl">
-      <title>Example Two: Node implementation </title>
+      </section>
+      <section id="using-example-two-node-impl">
+        <title>Example Two: Node implementation </title>
 
-      <para>
-        We will need a couple of classes to represent tasks and their state.
-        First we look at the memory based implementation.
-      </para>
+        <para>
+          We will need a couple of classes to represent tasks and their state.
+          First we look at the memory based implementation.
+        </para>
 
-      <para>
-        First we have an enum for task states.
-        <programlisting><![CDATA[
+        <para>
+          First we have an enum for task states.
+          <programlisting><![CDATA[
 public enum TaskState { Open, Completed, Rejected }
 ]]></programlisting>
 
-        Next is the <literal>Task</literal> class.
-      </para>
+          Next is the <literal>Task</literal> class.
+        </para>
 
-      <programlisting><![CDATA[
+        <programlisting><![CDATA[
 public class Task
 {
   protected NodeToken nodeToken;
@@ -1530,12 +1526,12 @@ public class Task
 }
 ]]></programlisting>
 
-      <para>
-        In our simple example, we need some way of tracking which tasks have
-        been created.
-      </para>
+        <para>
+          In our simple example, we need some way of tracking which tasks have
+          been created.
+        </para>
 
-      <programlisting><![CDATA[
+        <programlisting><![CDATA[
 public class TaskList
 {
   protected static List<Task> tasks = new LinkedList<Task>();
@@ -1547,11 +1543,11 @@ public class TaskList
 }
 ]]></programlisting>
 
-      <para>
-        Finally, the custom node for generating tasks
-      </para>
+        <para>
+          Finally, the custom node for generating tasks
+        </para>
 
-      <programlisting><![CDATA[
+        <programlisting><![CDATA[
 public class TaskNode extends MemNode
 {
   protected String taskName;
@@ -1586,14 +1582,14 @@ public class TaskNode extends MemNode
 }
 ]]></programlisting>
 
-      <para>
-        When a task node is executed, it will create new
-        <literal>Task</literal>
-        instance and add it to a task list. A task can be completed or
-        rejected as seen in the following code snippet:
-      </para>
+        <para>
+          When a task node is executed, it will create new
+          <literal>Task</literal>
+          instance and add it to a task list. A task can be completed or
+          rejected as seen in the following code snippet:
+        </para>
 
-      <programlisting><![CDATA[
+        <programlisting><![CDATA[
       Task t = ...;
 
       if ( isCompletion )
@@ -1608,13 +1604,13 @@ public class TaskNode extends MemNode
       }
 ]]></programlisting>
 
-      <para>
-        The primary difference with the database/Hibernate version, is
-        that the node and tasks will require database backing. Let us
-        look at the <literal>TaskNode</literal> class.
-      </para>
+        <para>
+          The primary difference with the database/Hibernate version, is
+          that the node and tasks will require database backing. Let us
+          look at the <literal>TaskNode</literal> class.
+        </para>
 
-      <programlisting><![CDATA[
+        <programlisting><![CDATA[
 @Entity
 @DiscriminatorValue( "task" )
 @SecondaryTable( name="wf_node_task", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
@@ -1663,6 +1659,7 @@ public class TaskNode extends HibNode
 ]]></programlisting>
 
 
+      </section>
     </section>
   </section>
 </chapter>
