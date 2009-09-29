@@ -143,3 +143,15 @@ Possibilities:
     * Google AppEngine/Bigtable?
   * Porting to .NET/Python/Ruby?
     * Porting to C# is a priority, based on request.
+  
+Potential runtime upgrade algorithm: Rerun workflow history over new graph.
+  # Need a way to determine which complete action was performed on a node token.
+    # Could be tracked, or maybe inferred
+  # If a node was removed, can do lookahead on history to see if an equivalent node exists.
+  # If a node was added, can have user agent decide if node should be skipped or stopped at.
+  # At fork points, will be able to determine if additional paths were added and can have a user agent determine if new nodes are to be skipped or halted at.
+
+JoinLang: Could write DSL to specify forks 
+   require arc "foo" and arc "bar"
+   require at least 5 tokens
+   
