@@ -298,7 +298,7 @@ public interface Engine
    * specified event types.
    *
    *
-   * @param listener The type of listener to remove
+   * @param listenerClass The type of listener to remove
    * @param eventTypes The set of event types to remove the listener for, or none to remove for all
    */
   void removeExecutionListener (Class<? extends ExecutionListener> listenerClass, ExecutionEventType...eventTypes);

@@ -80,7 +80,8 @@ public class TokenSetJoinStrategy implements JoinStrategy
    * @param process The currently executing process.
    * @param token The token being join on.
    *
-   * @return
+   * @return The result of the fallback join strategy. The default implementation
+   *         does return anything, rather it throws an {@link IllegalStateException}.
    */
   public JoinResult performFallbackJoin (final Engine engine, final GraphProcess process, final ArcToken token)
   {

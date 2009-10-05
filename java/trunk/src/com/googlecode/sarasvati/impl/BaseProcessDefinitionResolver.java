@@ -36,7 +36,7 @@ import com.googlecode.sarasvati.load.definition.ProcessDefinition;
  * @author vkirsch
  *
  * @param <T> the type of the source to translate into a {@link ProcessDefinition}
- * @see {@link ProcessDefinitionTranslator<T>}
+ * @see ProcessDefinitionTranslator
  */
 public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinitionResolver
 {
@@ -45,7 +45,8 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
 
   /**
    * Build a new process definition resolver without a repository of sources to lookup.
-   * Sources can be added later by calling {@link addSource}
+   * Sources can be added later by calling {@link BaseProcessDefinitionResolver#addSource(Object)}
+   *
    * @param translator The translator to use to translate a source of type <T> into a {@link ProcessDefinition}
    */
   public BaseProcessDefinitionResolver (final ProcessDefinitionTranslator<T> translator)
@@ -57,10 +58,10 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
   /**
    * Build a process definition resolver that will resolve a name to a <T> that will then be translated to
    * a {@link ProcessDefinition} via the provided {@link ProcessDefinitionTranslator}.
-   * The {@link resolve} method will match the name it is provided with a <T> via the result of a
+   * The {@link ProcessDefinitionResolver#resolve(String)} method will match the name it is provided with a <T> via the result of a
    * call to the toString() method of each element of the provided list.
    *
-   * @see {@link resolve}
+   * @see ProcessDefinitionResolver#resolve(String)
    * @param translator The translator to use to translate a source of type <T> into a {@link ProcessDefinition}
    * @param sources The sources that will form the repository used to resolve a name into a {@link ProcessDefinition} via the translator
    */
@@ -72,25 +73,32 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
     if ( sources != null )
     {
       for (T t : sources)
+      {
         sourcesRepository.put( t.toString(), t );
+      }
     }
   }
 
   /**
    * Build a process definition resolver that will resolve a name to a <T> that will then be translated to
    * a {@link ProcessDefinition} via the provided {@link ProcessDefinitionTranslator}.
-   * The {@link resolve} method will match the name it is provided with a <T> via the provided map.
-   * @see {@link resolve}
+   * The {@link ProcessDefinitionResolver#resolve(String)} method will match the name it is provided with a <T> via the provided map.
+   *
+   * @see ProcessDefinitionResolver#resolve(String)
    * @param translator The translator to use to translate a source of type <T> into a {@link ProcessDefinition}
    * @param map The sources repository used to resolve a name into a {@link ProcessDefinition} via the translator
    */
   public BaseProcessDefinitionResolver (final ProcessDefinitionTranslator<T> translator, final Map<String, T> map)
   {
     this.translator = translator;
-    if (map != null)
+    if ( map != null )
+    {
       this.sourcesRepository = map;
+    }
     else
-      this.sourcesRepository = new HashMap<String, T> ();
+    {
+      this.sourcesRepository = new HashMap<String, T>();
+    }
   }
 
   public void addSource (final T source)
@@ -110,6 +118,6 @@ public abstract class BaseProcessDefinitionResolver<T> implements ProcessDefinit
   @Override
   public ProcessDefinition resolve (final String name)
   {
-    return sourcesRepository.get(name) == null? null : translator.translate( sourcesRepository.get( name ) );
+    return sourcesRepository.get(name) == null ? null : translator.translate( sourcesRepository.get( name ) );
   }
 }

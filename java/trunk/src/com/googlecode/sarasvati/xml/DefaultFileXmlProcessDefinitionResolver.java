@@ -31,7 +31,7 @@ public class DefaultFileXmlProcessDefinitionResolver extends BaseProcessDefiniti
 
   public DefaultFileXmlProcessDefinitionResolver (final XmlLoader loader, final File basePath)
   {
-    this (loader, basePath, null);
+    this( loader, basePath, null );
   }
 
   public DefaultFileXmlProcessDefinitionResolver (final XmlLoader loader, final File basePath, final String suffix)
@@ -50,17 +50,25 @@ public class DefaultFileXmlProcessDefinitionResolver extends BaseProcessDefiniti
       for ( String fileName : basePath.list() )
       {
         if ( fileName.endsWith( suf ) )
-          map.put( fileName.substring( 0, fileName.length() - suf.length() ), new File(
-              basePath, fileName ) );
-        else map.put( fileName, new File( fileName ) );
+        {
+          map.put( fileName.substring( 0, fileName.length() - suf.length() ), new File( basePath, fileName ) );
+        }
+        else
+        {
+          map.put( fileName, new File( fileName ) );
+        }
       }
     }
     else
     {
       if ( basePath.getName().endsWith( suf ) )
+      {
         map.put( basePath.getName().substring( 0, basePath.getName().length() - suf.length() ), basePath );
+      }
       else
+      {
         map.put( basePath.getName(), basePath );
+      }
     }
 
     return map;

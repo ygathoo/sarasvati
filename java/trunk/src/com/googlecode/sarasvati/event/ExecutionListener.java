@@ -26,8 +26,8 @@ import com.googlecode.sarasvati.GraphProcess;
  * all processes. Listeners may in some cases influence how execution proceeds by returning
  * an {@link EventActions} object.
  *
- * @see Engine#addExecutionListener(ExecutionListener, ExecutionEventType...)
- * @see Engine#addExecutionListener(GraphProcess, ExecutionListener, ExecutionEventType...)
+ * @see Engine#addExecutionListener(Class, ExecutionEventType...)
+ * @see Engine#addExecutionListener(GraphProcess, Class, ExecutionEventType...)
  * @see EventActionType
  *
  * @author Paul Lorenz

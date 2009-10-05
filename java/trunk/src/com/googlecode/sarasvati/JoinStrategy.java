@@ -32,11 +32,11 @@ public interface JoinStrategy
   /**
    * Called on every {@link ArcToken} when processed.
    *
-   * @param The engine executing the given process.
-   * @param token The arc token being processed.
+   * @param engine The engine executing the given process.
+   * @param token  The arc token being processed.
    *
-   * @return The {@link JoinResult} encapsulating if the join is complete and the set of
-   *         arc tokens participating in the join.
+   * @return A {@link JoinResult} which contains a boolean indicating whether or not
+   *         the join is complete and the set of arc tokens participating in the join.
    */
   JoinResult performJoin (Engine engine, ArcToken token);
 }

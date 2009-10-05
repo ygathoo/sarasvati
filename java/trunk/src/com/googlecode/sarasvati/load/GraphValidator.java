@@ -127,7 +127,7 @@ public interface GraphValidator
    * <p>
    * If a user constraint is violated, a {@link SarasvatiLoadException} should be thrown.
    *
-   * @param graph The {@link Arc} to be validated.
+   * @param arc The {@link Arc} to be validated.
    */
   void validateArc (Arc arc) throws SarasvatiLoadException;
 }

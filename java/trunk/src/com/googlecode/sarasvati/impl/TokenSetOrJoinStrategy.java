@@ -48,7 +48,7 @@ public class TokenSetOrJoinStrategy extends TokenSetJoinStrategy
    * @param process The currently executing process.
    * @param token The token being join on.
    *
-   * @return
+   * @return The result of the {@link OrJoinStrategy} used as a fall back.
    */
   @Override
   public JoinResult performFallbackJoin (final Engine engine, final GraphProcess process, final ArcToken token)

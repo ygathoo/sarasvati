@@ -133,8 +133,6 @@ public interface NodeToken extends Token
    * Marks this token as being complete, in the sense that it no longer
    * represents an active part of the process. Once a token is marked
    * complete, it is generally only of historical interest.
-   *
-   * @param engine The engine executing the current process.
    */
   void markComplete ();
 

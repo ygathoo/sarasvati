@@ -69,8 +69,8 @@ public interface JoinResult
    * the parents of the new {@link NodeToken}. If {@link JoinResult#isJoinComplete()} would
    * return false, this method should throw an {@link IllegalStateException}.
    *
-   * @returns The ArcTokens which were required to complete this join, and will be considered
-   *          the parents of the new {@link NodeToken}.
+   * @return The ArcTokens which were required to complete this join, and will be considered
+   *         the parents of the new {@link NodeToken}.
    *
    * @throws IllegalStateException If this is invoked when isJoinComplete returns false.
    */
