@@ -18,6 +18,7 @@
  */
  package com.googlecode.sarasvati.load;
 
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 
 /**
@@ -30,10 +31,10 @@ import com.googlecode.sarasvati.load.definition.ProcessDefinition;
  *
  * It only has one {@code translate} method that takes an instance of the external representation
  * (or a way to find or build it) and returns a {@link ProcessDefinition} built from the input.
- * @see {@link GraphLoader}
+ * @see GraphLoader
  * @author vkirsch
  *
- * @param <T> The class representing the external representation (or a way to find or build it, like a file name)
+ * @param T The class representing the external representation (or a way to find or build it, like a file name)
  */
 public interface ProcessDefinitionTranslator<T>
 {

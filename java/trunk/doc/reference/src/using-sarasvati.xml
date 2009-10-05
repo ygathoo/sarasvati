@@ -1661,13 +1661,23 @@ public class TaskNode extends HibNode
 
       </section>
     </section>
-    
+
     <section id="using-java-api-env">
       <title>Environment</title>
       <para>
-        Sarasvati provides several 
+        It is often useful to track state associated with a process or tokens. Sarasvati
+        provides several environments in which state can be placed. Some environments
+        are defined solely by the contents of a process definition, and are therefore
+        readonly. Readonly environments are represented by the
+        <literal>com.googlecode.sarasvati.env.ReadEnv</literal> interface.
+
+        <ulink url="http://code.google.com/p/sarasvati/source/browse/common/ProcessDefinition.xsd">
+          available to view in the project SVN
+        </ulink>.
+
       </para>
-    </section>    
+
+    </section>
   </section>
 </chapter>
 

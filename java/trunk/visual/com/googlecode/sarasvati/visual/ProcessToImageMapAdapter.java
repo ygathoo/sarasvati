@@ -63,7 +63,7 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
   /**
    * Returns the defaultValue for all arcs
    *
-   * @see com.googlecode.sarasvati.visual.ProcessToImageMap#isBackArc(com.googlecode.sarasvati.Arc)
+   * @see ProcessToImageMap#isBackArc(Arc, boolean)
    */
   @Override
   public boolean isBackArc (final Arc arc, final boolean defaultValue)
@@ -75,7 +75,7 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
    * Returns a {@link RectangularNodeIcon} for nodes with type of 'task' and a
    * {@link OvalNodeIcon} for all other nodes.
    *
-   * @see com.googlecode.sarasvati.visual.GraphToImageMap#iconForNode(com.googlecode.sarasvati.Node)
+   * @see ProcessToImageMap#iconForNode(VisualProcessNode)
    */
   @Override
   public Icon iconForNode (final VisualProcessNode node)
@@ -93,7 +93,7 @@ public class ProcessToImageMapAdapter implements ProcessToImageMap
 
   /**
    * TaskType default is "task". It is used to determine the type of node icon
-   * returns by {@link #iconForNode(Node)}
+   * returns by {@link #iconForNode(VisualProcessNode)}
    *
    */
   public String getTaskType ()

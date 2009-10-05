@@ -74,7 +74,7 @@ public enum JoinType
 
   /**
    * Users may use custom join strategies. This can be done by overriding
-   * {@link Node#getJoinStrategy()}. Alternately, the node type of custom
+   * {@link Node#getJoinStrategy(Arc)}. Alternately, the node type of custom
    * may be used, and a join strategy can be set into the CUSTOM join type.
    */
   CUSTOM( new JoinStrategy()

@@ -45,7 +45,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
   }
 
   /**
-   * @see com.googlecode.sarasvati.event.ExecutionEventQueue#addListener(com.googlecode.sarasvati.Engine, com.googlecode.sarasvati.event.ExecutionListener, com.googlecode.sarasvati.event.ExecutionEventType[])
+   * @see ExecutionEventQueue#addListener(Engine, Class, ExecutionEventType...)
    */
   public synchronized void addListener (final Engine engine,
                                         final Class<? extends ExecutionListener> listenerClass,
@@ -111,6 +111,9 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
     listeners.add( new RegisteredExecutionListener( listener, eventTypeMask ) );
   }
 
+  /**
+   * @see ExecutionEventQueue#removeListener(Engine, Class, ExecutionEventType...)
+   */
   @Override
   public synchronized void removeListener (final Engine engine,
                                            final Class<? extends ExecutionListener> listener,
