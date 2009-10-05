@@ -48,10 +48,10 @@ public interface Engine
   /**
    * Starts an instance of the latest graph with the given name.
    * Is the equivalent of doing
-   * <code>
+   * <pre>
    *  Graph graph = engine.getRepository().getLatestGraph( graphName );
    *  GraphProcess process = engine.startProcess( graph );
-   * </code>
+   * </pre>
    *
    * If no process definition exists for the given name, a {@link SarasvatiException}
    * will be thrown.
