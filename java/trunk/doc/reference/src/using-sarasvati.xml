@@ -1669,11 +1669,8 @@ public class TaskNode extends HibNode
         provides several environments in which state can be placed. Some environments
         are defined solely by the contents of a process definition, and are therefore
         readonly. Readonly environments are represented by the
-        <literal>com.googlecode.sarasvati.env.ReadEnv</literal> interface.
-
-        <ulink url="http://code.google.com/p/sarasvati/source/browse/common/ProcessDefinition.xsd">
-          available to view in the project SVN
-        </ulink>.
+        <ulink url="../../javadoc/com/googlecode/sarasvati/env/ReadEnv.html">ReadEnv</ulink>
+        interface.
 
       </para>
 
