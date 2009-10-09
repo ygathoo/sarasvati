@@ -1670,9 +1670,125 @@ public class TaskNode extends HibNode
         are defined solely by the contents of a process definition, and are therefore
         readonly. Readonly environments are represented by the
         <ulink url="../../javadoc/com/googlecode/sarasvati/env/ReadEnv.html">ReadEnv</ulink>
-        interface.
-
+        interface. Most environments are read-write and are represented by the
+        <ulink url="../../javadoc/com/googlecode/sarasvati/env/Env.html">Env</ulink> interface,
+        which extends from <literal>ReadEnv</literal>.
       </para>
+
+      <para>
+        The Env interface supports both persistent and transient attributes.
+
+        <table frame="all">
+          <tgroup cols="2">
+            <colspec colnum="1" colwidth="60"/>
+            <thead>
+              <row>
+                <entry>Type</entry>
+                <entry>Behavior</entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>Persistent</entry>
+                <entry>
+                  Must be serializable to the database. All primitives and object version of the primitives, as
+                  well as String and Date are supported by default. Support for other types may be added
+                  by defining an <ulink url="../../javadoc/com/googlecode/sarasvati/env/AttributeConverter.html">AttributeConverter</ulink>,
+                  which is then registered with the
+                  <ulink url="../../javadoc/com/googlecode/sarasvati/env/AttributeConverters.html">AttributeConverters</ulink> class,
+                  using the <literal>setConverterForType</literal> method.
+                </entry>
+              </row>
+              <row>
+                <entry>Transient</entry>
+                <entry>
+                  Transient attributes are only stored as long as the process is in memory. They are a convenient places to cache values
+                  during process execution. Because they aren't persisted to a database, there is no restriction on what types can
+                  be stored.
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </table>
+      </para>
+
+      <section id="using-java-api-env-process">
+        <title>Process Environment</title>
+        <para>
+          A process environment is read-write and shared across an entire process. It can be useful
+          for global counters,
+        </para>
+
+         <programlisting><![CDATA[
+  GraphProcess p = ...;
+  Env env = p.getEnv();
+  env.setAttribute( "foo", "test" );
+  env.setAttribute( "bar", 5 );
+  String foo = env.getAttribute( "foo" );
+  int bar = env.getAttribute( "foo", Integer.class );
+           ]]>
+         </programlisting>
+      </section>
+
+      <section id="using-java-api-env-token">
+        <title>Node Token Environment</title>
+        <para>
+          The node token environment is read-write. Node token state is only visible to the
+          given token, however tokens inherit the environment of their parents. If a
+          node has multiple parents, the environments will be merged into a single
+          environment. If the parents have attributes with the same name, whichever
+          value is merged last will be the one set.
+
+          <itemizedlist>
+            <listitem>
+             <para>
+               If a token has no parents, it will start with an empty environment.
+             </para>
+            </listitem>
+            <listitem>
+             <para>
+               If a token has one parent, it will inherit the environment of its parent.
+             </para>
+            </listitem>
+            <listitem>
+             <para>
+               When a child token inherits the environment of it's parent, it may point directly
+               to the parent's environment, until the child writes to the environment, at which
+               point the environment will be copied. This means that if the parents writes to the
+               environment after children have been created, these change may be visible to the
+               children.
+             </para>
+            </listitem>
+            <listitem>
+             <para>
+               If a token has multiple parents parent, it will inherit the environment of its parent.
+             </para>
+            </listitem>
+            <listitem>
+             <para>
+               If a token has multiple parents parent with overlapping attribute names, the child
+               environment wil get one the value from one of the parents, generally whichever is
+               merged into the child environment last.
+             </para>
+            </listitem>
+
+          </itemizedlist>
+
+
+
+
+        </para>
+
+         <programlisting><![CDATA[
+  NodeToken t = ...;
+  Env env = t.getEnv();
+  env.setAttribute( "foo", "test" );
+  env.setAttribute( "bar", 5 );
+  String foo = env.getAttribute( "foo" );
+  int bar = env.getAttribute( "foo", Integer.class );
+]]>
+         </programlisting>
+      </section>
 
     </section>
   </section>
