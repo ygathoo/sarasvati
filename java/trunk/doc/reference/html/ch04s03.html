@@ -1,0 +1,776 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Java API</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="up" href="ch04.html" title="Chapter 4. Using Sarasvati"><link rel="prev" href="ch04s02.html" title="Sarasvati File Format"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Java API</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Using Sarasvati</th><td width="20%" align="right"> </td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-java-api"></a>Java API</h2></div></div></div><p>
+      The process definition file format also supports custom elements and
+      attributes, but before we discuss that, the API needs to be
+      introduced.
+    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-interfaces"></a>Interfaces</h3></div></div></div><p>
+        The main interface for interacting with process definitions and
+        processes is
+        <code class="literal">Engine</code>
+        :
+      </p><pre class="programlisting">package com.googlecode.sarasvati;
+
+public interface Engine
+{
+  GraphProcess startProcess (Graph graph);
+  void startProcess (GraphProcess process);
+  void cancelProcess (GraphProcess process);
+  void finalizeComplete (GraphProcess process);
+  void finalizeCancel (GraphProcess process);
+  void completeExecution (NodeToken token, String arcName);
+  void completeAsynchronous (NodeToken token, String arcName );
+  void executeQueuedArcTokens (GraphProcess process);
+  GraphRepository&lt;? extends Graph&gt; getRepository ();
+  GraphFactory&lt;? extends Graph&gt; getFactory ();
+  GraphLoader&lt;? extends Graph&gt; getLoader ();
+  void addNodeType (String type, Class&lt;? extends Node&gt; nodeClass );
+  void fireEvent (ExecutionEvent event);
+  void addExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+  void addExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  void removeExecutionListener (ExecutionListener listener, ExecutionEventType...eventTypes);
+  void removeExecutionListener (GraphProcess process, ExecutionListener listener, ExecutionEventType...eventTypes);
+  ExecutionListener getExecutionListenerInstance (String type) throws WorkflowException;
+  void setupScriptEnv (ScriptEnv env, NodeToken token);
+}
+</pre><p>
+        Process definitions are stored in classes implementing the
+        <code class="literal">Graph</code>
+        interface.
+      </p><pre class="programlisting">package com.googlecode.sarasvati;
+
+public interface Graph
+{
+  String getName ();
+  int getVersion ();
+  List&lt;? extends Arc&gt; getArcs ();
+  List&lt;? extends Arc&gt; getInputArcs (Node node);
+  List&lt;? extends Arc&gt; getInputArcs (Node node, String arcName);
+  List&lt;? extends Arc&gt; getOutputArcs (Node node);
+  List&lt;? extends Arc&gt; getOutputArcs (Node node, String arcName);
+  List&lt;? extends Node&gt; getStartNodes ();
+  List&lt;? extends Node&gt; getNodes ();
+}
+</pre><p>
+        A
+        <code class="literal">Graph</code>
+        contains instances of
+        <code class="literal">Node</code>
+        and
+        <code class="literal">Arc</code>
+        .
+      </p><p>
+        <code class="literal">Node</code>
+        is where the developer can provide custom functionality, and has
+        the following API:
+      </p><pre class="programlisting">package com.googlecode.sarasvati;
+public interface Node extends Adaptable
+{
+  String getName ();
+  String getType ();
+  boolean isJoin ();
+  boolean isStart ();
+  String getGuard ();
+  Graph getGraph ();
+  boolean isExternal ();
+  GuardResponse guard (Engine engine, NodeToken token);
+  void execute (Engine engine, NodeToken token);
+}
+</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-flow-of-execution"></a>Flow of Execution</h3></div></div></div><p>
+        When the engine determines that a node is ready to execute, it will
+        follow this flow:
+      </p><div class="orderedlist"><ol type="1"><li><p>
+            Generate a
+            <code class="literal">NodeToken</code>
+            pointing to that node.
+          </p></li><li><p>
+            Execute the <code class="literal">guard</code>
+            function on the node. This will return a
+            <code class="literal">GuardResponse</code>.
+          </p><div class="itemizedlist"><ul type="disc"><li><p>
+                The
+                <code class="literal">GuardResponse</code>
+                contains a
+                <code class="literal">GuardAction</code>
+                , which is an enum having values
+                <code class="literal">AcceptToken</code>
+                ,
+                <code class="literal">DiscardToken</code>
+                and
+                <code class="literal">SkipNode</code>
+                .
+              </p></li></ul></div></li><li><p>
+            If the action is
+            <code class="literal">AcceptToken</code>
+            , the
+            <code class="literal">execute</code>
+            method will be called. The process will not continue until
+            the
+            <code class="literal">Engine#completeExecution</code>
+            method is invoked. It must be invoked with the name of the
+            arcs on which to generate
+            <code class="literal">ArcToken</code>
+            s.
+          </p></li><li><p>
+            If the action is
+            <code class="literal">DiscardToken</code>
+            , the token is marked complete and no further execution
+            will take place from this set of tokens.
+          </p></li><li><p>
+            If the action is
+            <code class="literal">SkipNode</code>
+            ,
+            <code class="literal">Engine.completeExecution</code>
+            will be called with the arc name contained in the
+            <code class="literal">GuardResponse</code>
+            .
+          </p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-custom-logic-node-execution"></a>Custom logic for Node Execution</h3></div></div></div><p>
+        To provide custom behavior to your nodes, you will override the
+        <code class="literal">execute</code>
+        method on
+        <code class="literal">Node</code>
+        . Sarasvati currently provides two implementations of the base
+        API, one memory backed and one database backed, implemented
+        using Hibernate. Other implementations could be made using, for
+        example, pure JDBC or some other persistence mechanism. There
+        are three base classes for nodes.
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            <code class="literal">com.googlecode.sarasvati.mem.MemNode</code>
+          </p></li><li><p>
+            <code class="literal">com.googlecode.sarasvati.hib.HibNode</code>
+          </p></li><li><p>
+            <code class="literal">com.googlecode.sarasvati.CustomNode</code>
+          </p></li></ul></div><p>
+        If using only the memory backed implementation,
+        <code class="literal">MemNode</code>
+        should be extended. If using only the hibernate backend, nodes
+        should subclass <code class="literal">HibNode</code>.
+        <code class="literal">CustomNode</code>
+        can be used with either or both backends. In to store custom
+        attributes in the database, it uses a key/value pair table.
+        <code class="literal">CustomNode</code>
+        can only be used if the database mapping doesn't need to be
+        explicitly defined.
+      </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-custom-example-one"></a>Example One </h4></div></div></div><p>
+          To demonstrate use of each implementation, we start with a node that
+          just prints out "Hello, World". We start with the process
+          definition.
+        </p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="using-custom-example-one-proc-def"></a>Example One: Process Definition </h5></div></div></div><pre class="programlisting">&lt;?xml version="1.0"?&gt;
+&lt;process-definition
+  name="hello-world"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
+
+  &lt;node name="hello" type="helloWorld" isStart="true"/&gt;
+
+&lt;/process-definition&gt;
+</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="using-custom-example-one-node-impl"></a>Example One: Node implementation </h5></div></div></div><p>
+            If using the memory implementation, the subclass would look like:
+          </p><pre class="programlisting">
+package com.googlecode.sarasvati.example.mem;
+
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.mem.MemNode;
+
+public class HelloNode extends MemNode
+{
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    System.out.println( "Hello, world!" );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+</pre><p>
+            The hibernate version would look like:
+          </p><pre class="programlisting">
+import javax.persistence.DiscriminatorValue;
+import javax.persistence.Entity;
+
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.hib.HibNode;
+
+@Entity
+@DiscriminatorValue( "helloWorld" )
+public class HelloNode extends HibNode
+{
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    System.out.println( "Hello, World!" );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+</pre><p>
+            The hibernate version would also require an insert into the
+            <code class="literal">wf_node_type</code>
+            table, with type, description and behaviour.
+          </p><pre class="programlisting">
+insert into wf_node_type (id, description, behaviour)
+ values ( 'helloWorld', 'Says hello to the world', 'helloWorld' )
+</pre><p>
+            The behaviour column ties the type to a discriminator specified on the
+            subclass. This allows having multiple types with the same
+            implementation class, if that was desired.
+          </p><p>
+            The backend independent version would look like:
+          </p><pre class="programlisting">
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.NodeToken;
+
+public class HelloNode extends CustomNode
+{
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    System.out.println( "Hello, World!" );
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+</pre><p>
+            For use with the hibernate backend, a row would still need to be
+            added to the <code class="literal">wf_node_type</code> table.
+          </p><pre class="programlisting">
+insert into wf_node_type (id, description, behaviour)
+ values ( 'helloWorld', 'Says hello to the world', 'custom' )
+</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="using-example-one-load-run"></a>Example One: Loading and Running</h5></div></div></div><p>
+            Now we can load the process into memory, or into the database.
+            This is done using a
+            <code class="literal">GraphLoader</code>
+            , which can be retrieved from the appropriate engine. Before
+            loading the process definition, you will need to tell the engine
+            about your custom node types.
+          </p><p>
+            The steps are
+            </p><div class="orderedlist"><ol type="1"><li><p>
+                  Create an engine of the appropriate type
+                </p></li><li><p>
+                  Register custom node types
+                </p></li><li><p>
+                  Load the process definition from XML file
+                </p></li><li><p>
+                  Get the loaded graph from the graph repository associated with the
+                  engine
+                </p></li><li><p>
+                  Start a new GraphProcess using the graph
+                </p></li></ol></div><p>
+
+            Here are the steps in code for the memory backed implementation.
+          </p><pre class="programlisting">
+    MemEngine engine = new MemEngine();
+
+    // Tell engine about our custom node type
+    engine.addNodeType( "helloWorld", HelloNode.class );
+
+    // Load the process definition (this can throw LoadException or JAXBException
+    // The graph will be stored in the GraphRepository for this engine
+    engine.getLoader().load( "/path/to/hello-world.wf.xml" );
+
+    // Get the graph from the GraphRepository
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
+
+    // start a graph process
+    GraphProcess process = engine.startProcess( graph );
+</pre><p>
+            Here are the steps in code for the hibernate backed
+            implementation. It assumes that you have a means of creating a
+            hibernate <code class="literal">Session</code> object.
+          </p><pre class="programlisting">
+    Session session = ...; // get hibernate session
+    HibEngine engine = new HibEngine( session );
+
+    // Tell engine about our custom node type
+    engine.addNodeType( "helloWorld", HelloNode.class );
+
+    // Load the process definition (this can throw LoadException or JAXBException
+    // The graph will be stored in the GraphRepository for this engine
+    engine.getLoader().load( "/path/to/hello-world.wf.xml" );
+
+    // Get the graph from the GraphRepository
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
+
+    // start a graph process
+    GraphProcess process = engine.startProcess( graph );
+</pre><p>
+            Here are the steps in code using the backend independent custom
+            type with <code class="literal">MemEngine</code>.
+          </p><pre class="programlisting">
+    MemEngine engine = new MemEngine();
+
+    // We can either register the type with the Engine or with the DefaultNodeFactory
+    // directly.
+    // Either tell the engine about our custom node type
+    engine.addGlobalCustomNodeType( "helloWorld", HelloNode.class );
+
+    // or tell the DefaultNodeFactory about the node type directly
+    DefaultNodeFactory.addGlobalCustomType( "helloWorld", HelloNode.class );
+
+    // Load the process definition (this can throw LoadException or JAXBException
+    // The graph will be stored in the GraphRepository for this engine
+    engine.getLoader().load( "/path/to/hello-world.wf.xml" );
+
+    // Get the graph from the GraphRepository
+    Graph graph = engine.getRepository().getLatestGraph( "hello-world" );
+
+    // start a graph process
+    GraphProcess process = engine.startProcess( graph );
+</pre><p>
+            The call to <code class="literal">startProcess</code>
+            will create tokens on the start nodes and will continue
+            executing the process until it completes or enters a wait state.
+          </p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-custom-attributes"></a>Custom Attributes</h3></div></div></div><p>
+        Often, custom nodes will need some information with which to do their
+        work. Sarasvati supports this in two ways.
+      </p><p>
+        The schema for process definition files has a
+        <code class="literal">&lt;custom&gt;</code>
+        element which contains an
+        <code class="literal">&lt;xs:any&gt;</code>
+        element at the end of the node definition. Custom elements may
+        be added here. These can be automatically mapped to properties
+        on custom nodes.
+      </p><p>
+        For example, given the following custom node:
+      </p><pre class="programlisting">
+public class CustomNode extends MemNode
+{
+  String foo;
+
+  public String getFoo ()
+  {
+    return foo;
+  }
+
+  public void setFoo (String foo)
+  {
+    this.foo = foo;
+  }
+
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    // do something ...
+    engine.completeExecution( token, Arc.DEFAULT_ARC );
+  }
+}
+</pre><p>
+        The following process definition would load the value
+        <code class="literal">test</code> into the <code class="literal">custom</code>
+        property.
+      </p><pre class="programlisting">
+&lt;?xml version="1.0"?&gt;
+&lt;process-definition
+  name="example1"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
+
+  &lt;node name="test" type="custom" isStart="true"&gt;
+    &lt;arc to="1"/&gt;
+
+    &lt;custom&gt;
+      &lt;foo&gt;test&lt;/foo&gt;
+    &lt;/custom&gt;
+  &lt;/node&gt;
+&lt;/process-definition&gt;
+</pre><p>
+        There several things to note with custom elements.
+      </p><div class="itemizedlist"><ul type="disc"><li><p>
+            All custom elements must be contained within the
+            <code class="literal">&lt;custom&gt;</code> tag.
+          </p></li><li><p>
+            Non-string properties on custom node types are supported.
+          </p><div class="itemizedlist"><ul type="circle"><li><p>
+                Support for primitive types such as boolean, byte, char, short, int,
+                long, float, double as well as their corresponding
+                object types is built in.
+          </p></li><li><p>
+                Support for non-primitive types can be added
+          </p><div class="itemizedlist"><ul type="square"><li><p>
+                    Implement <code class="literal">com.googlecode.sarasvati.env.AttributeConverter</code>
+                  </p></li><li><p>
+                    Register the new mutator using the <code class="literal">setConverterForType</code> method (which takes
+                    a class and an <code class="literal">AttributeConverter</code>) on
+                    <code class="literal">com.googlecode.sarasvati.env.AttributeConverters</code>.
+                  </p></li></ul></div></li></ul></div></li></ul></div><p>
+        Nested objects are supported. For example:
+      </p><pre class="programlisting">
+  &lt;custom&gt;
+    &lt;task&gt;
+      &lt;name&gt;test&lt;/name&gt;
+    &lt;/task&gt;
+  &lt;/custom&gt;
+</pre><p>
+        The loader would invoke
+        <code class="literal">getTask().setName( ... )</code>
+        on the custom node.
+      </p><p>
+        Attributes are also supported. How they are mapped is based on the contents of
+        the element the attribute is on. If the element has child
+        elements, the attribute will get mapped as a child property. If
+        the element is itself a property, the attribute name will be
+        combined with the element name to get the property name.
+      </p><pre class="programlisting">
+  &lt;custom&gt;
+    &lt;task user="pat"&gt;
+      &lt;name&gt;test&lt;/name&gt;
+    &lt;/task&gt;
+  &lt;/custom&gt;
+</pre><p>
+        This would map the
+        <code class="literal">name</code>
+        element value to
+        <code class="literal">getTask().setName( ... )</code>
+        and the
+        <code class="literal">user</code>
+        attribute to
+        <code class="literal">getTask().setUser( ... )</code>
+        .
+      </p><p>
+        However, the following would be mapped differently:
+      </p><pre class="programlisting">
+  &lt;custom&gt;
+    &lt;task user="pat"&gt;
+      test
+    &lt;/task&gt;
+  &lt;/custom&gt;
+</pre><p>
+        This would map the text in the
+        <code class="literal">task</code>
+        element to
+        <code class="literal">setTask( ... )</code>
+        and the
+        <code class="literal">user</code>
+        attribute to
+        <code class="literal">setTaskUser( ... )</code>
+        .
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-custom-loader"></a>Custom Loader</h3></div></div></div><p>
+        You may also provide custom loading via a subclass of
+        <code class="literal">NodeFactory</code>. It has the following interface:
+      </p><pre class="programlisting">
+public interface NodeFactory
+{
+  Node newNode (String type) throws LoadException;
+  void loadCustom (Node node, Object custom) throws LoadException;
+}
+</pre><p>
+        The custom data may be null, a single object, or a list of
+        objects. The object or objects will either be elements of
+        <code class="literal">org.w3c.dom.Element</code>
+        or JAXB objects, if you have a JAXB mapping for your custom XML.
+      </p><p>
+        Instances of
+        <code class="literal">NodeFactory</code>
+        may be registered on
+        <code class="literal">GraphLoader</code>
+        .
+      </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-example-two-proc-def"></a>Example Two: Process Definition </h4></div></div></div><p>
+          Here we examine a more complicated example, which uses custom
+          attributes.
+       </p><pre class="programlisting">&lt;?xml version="1.0"?&gt;
+
+&lt;process-definition
+  name="example1"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
+
+  &lt;node name="start" isStart="true"&gt;
+    &lt;arc to="1"/&gt;
+  &lt;/node&gt;
+
+  &lt;node name="1" type="task"&gt;
+    &lt;arc to="2"/&gt;
+    &lt;arc to="3"/&gt;
+
+    &lt;custom&gt;
+      &lt;taskName&gt;Enter order&lt;/taskName&gt;
+      &lt;taskDesc&gt;
+        Enter order and billing info
+      &lt;/taskDesc&gt;
+    &lt;/custom&gt;
+  &lt;/node&gt;
+
+  &lt;node type="task" name="2"&gt;
+    &lt;arc to="4"/&gt;
+
+    &lt;custom&gt;
+      &lt;taskName&gt;Bill Customer&lt;/taskName&gt;
+      &lt;taskDesc&gt;
+        Bill the Customer
+      &lt;/taskDesc&gt;
+    &lt;/custom&gt;
+  &lt;/node&gt;
+
+  &lt;node type="task" name="3"&gt;
+    &lt;arc to="4"/&gt;
+
+    &lt;custom&gt;
+      &lt;taskName&gt;Ship product&lt;/taskName&gt;
+      &lt;taskDesc&gt;
+        Package and ship product
+      &lt;/taskDesc&gt;
+    &lt;/custom&gt;
+  &lt;/node&gt;
+
+  &lt;node type="task" name="4" joinType="labelAnd"&gt;
+
+    &lt;custom&gt;
+      &lt;taskName&gt;Market to Customer&lt;/taskName&gt;
+      &lt;taskDesc&gt;
+        Send marketing material to customer
+      &lt;/taskDesc&gt;
+    &lt;/custom&gt;
+
+  &lt;/node&gt;
+
+&lt;/process-definition&gt;
+</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-example-two-node-impl"></a>Example Two: Node implementation </h4></div></div></div><p>
+          We will need a couple of classes to represent tasks and their state.
+          First we look at the memory based implementation.
+        </p><p>
+          First we have an enum for task states.
+          </p><pre class="programlisting">
+public enum TaskState { Open, Completed, Rejected }
+</pre><p>
+
+          Next is the <code class="literal">Task</code> class.
+        </p><pre class="programlisting">
+public class Task
+{
+  protected NodeToken nodeToken;
+  protected String name;
+  protected String description;
+  protected TaskState state;
+
+  public Task (NodeToken nodeToken, String name, String description, TaskState state)
+  {
+    this.nodeToken = nodeToken;
+    this.name = name;
+    this.description = description;
+    this.state = state;
+  }
+
+  public NodeToken getNodeToken ()
+  {
+    return nodeToken;
+  }
+
+  public void setNodeToken (NodeToken nodeToken)
+  {
+    this.nodeToken = nodeToken;
+  }
+
+  public String getName ()
+  {
+    return name;
+  }
+
+  public String getDescription ()
+  {
+    return description;
+  }
+
+  public TaskState getState ()
+  {
+    return state;
+  }
+
+  public void setState (TaskState state )
+  {
+    this.state = state;
+  }
+
+  public boolean isRejectable ()
+  {
+    Node node = getNodeToken().getNode();
+    return !node.getGraph().getOutputArcs( node, "reject" ).isEmpty();
+  }
+}
+</pre><p>
+          In our simple example, we need some way of tracking which tasks have
+          been created.
+        </p><pre class="programlisting">
+public class TaskList
+{
+  protected static List&lt;Task&gt; tasks = new LinkedList&lt;Task&gt;();
+
+  public static List&lt;Task&gt; getTasks ()
+  {
+    return tasks;
+  }
+}
+</pre><p>
+          Finally, the custom node for generating tasks
+        </p><pre class="programlisting">
+public class TaskNode extends MemNode
+{
+  protected String taskName;
+  protected String taskDesc;
+
+  public String getTaskName ()
+  {
+    return taskName;
+  }
+
+  public void setTaskName (String taskName)
+  {
+    this.taskName = taskName;
+  }
+
+  public String getTaskDesc ()
+  {
+    return taskDesc;
+  }
+
+  public void setTaskDesc (String taskDesc)
+  {
+    this.taskDesc = taskDesc;
+  }
+
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    Task newTask = new Task( token, getTaskName(), getTaskDesc(), TaskState.Open );
+    TaskList.getTasks().add( newTask );
+  }
+}
+</pre><p>
+          When a task node is executed, it will create new
+          <code class="literal">Task</code>
+          instance and add it to a task list. A task can be completed or
+          rejected as seen in the following code snippet:
+        </p><pre class="programlisting">
+      Task t = ...;
+
+      if ( isCompletion )
+      {
+        t.setState( TaskState.Completed );
+        engine.completeExecution( t.getNodeToken(), Arc.DEFAULT_ARC );
+      }
+      else if ( isReject &amp;&amp; t.isRejectable() )
+      {
+        t.setState( TaskState.Rejected );
+        engine.completeExecution( t.getNodeToken(), "reject" );
+      }
+</pre><p>
+          The primary difference with the database/Hibernate version, is
+          that the node and tasks will require database backing. Let us
+          look at the <code class="literal">TaskNode</code> class.
+        </p><pre class="programlisting">
+@Entity
+@DiscriminatorValue( "task" )
+@SecondaryTable( name="wf_node_task", pkJoinColumns=@PrimaryKeyJoinColumn(name="id"))
+public class TaskNode extends HibNode
+{
+  @Column (name="name", table="wf_node_task")
+  protected String taskName;
+
+  @Column (name="description", table="wf_node_task")
+  protected String taskDesc;
+
+  public TaskNode() { /* Default constructor for Hibernate */ }
+
+  public String getTaskName ()
+  {
+    return taskName;
+  }
+
+  public void setTaskName (String taskName)
+  {
+    this.taskName = taskName;
+  }
+
+  public String getTaskDesc ()
+  {
+    return taskDesc;
+  }
+
+  public void setTaskDesc (String taskDesc)
+  {
+    this.taskDesc = taskDesc;
+  }
+
+  @Override
+  public void execute (Engine engine, NodeToken token)
+  {
+    HibEngine hibEngine = (HibEngine)engine;
+
+    Session session = hibEngine.getSession();
+
+    TaskState open = (TaskState)session.load( TaskState.class, 0 );
+    Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), open );
+    session.save( newTask );
+  }
+}
+</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-env"></a>Environment</h3></div></div></div><p>
+        It is often useful to track state associated with a process or tokens. Sarasvati
+        provides several environments in which state can be placed. Some environments
+        are defined solely by the contents of a process definition, and are therefore
+        readonly. Readonly environments are represented by the
+        <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/env/ReadEnv.html" target="_top">ReadEnv</a>
+        interface. Most environments are read-write and are represented by the
+        <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/env/Env.html" target="_top">Env</a> interface,
+        which extends from <code class="literal">ReadEnv</code>.
+      </p><p>
+        The Env interface supports both persistent and transient attributes.
+
+        </p><div class="table"><a name="id374906"></a><p class="title"><b>Table 4.10. </b></p><div class="table-contents"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
+                  Must be serializable to the database. All primitives and object version of the primitives, as
+                  well as String and Date are supported by default. Support for other types may be added
+                  by defining an <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/env/AttributeConverter.html" target="_top">AttributeConverter</a>,
+                  which is then registered with the
+                  <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/env/AttributeConverters.html" target="_top">AttributeConverters</a> class,
+                  using the <code class="literal">setConverterForType</code> method.
+                </td></tr><tr><td>Transient</td><td>
+                  Transient attributes are only stored as long as the process is in memory. They are a convenient places to cache values
+                  during process execution. Because they aren't persisted to a database, there is no restriction on what types can
+                  be stored.
+                </td></tr></tbody></table></div></div><p><br class="table-break">
+      </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-process"></a>Process Environment</h4></div></div></div><p>
+          A process environment is read-write and shared across an entire process. It can be useful
+          for global counters,
+        </p><pre class="programlisting">
+  GraphProcess p = ...;
+  Env env = p.getEnv();
+  env.setAttribute( "foo", "test" );
+  env.setAttribute( "bar", 5 );
+  String foo = env.getAttribute( "foo" );
+  int bar = env.getAttribute( "foo", Integer.class );
+           
+         </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-token"></a>Node Token Environment</h4></div></div></div><p>
+          The node token environment is read-write. Node token state is only visible to the
+          given token, however tokens inherit the environment of their parents. If a
+          node has multiple parents, the environments will be merged into a single
+          environment. If the parents have attributes with the same name, whichever
+          value is merged last will be the one set.
+
+          </p><div class="itemizedlist"><ul type="disc"><li><p>
+               If a token has no parents, it will start with an empty environment.
+             </p></li><li><p>
+               If a token has one parent, it will inherit the environment of its parent.
+             </p></li><li><p>
+               When a child token inherits the environment of it's parent, it may point directly
+               to the parent's environment, until the child writes to the environment, at which
+               point the environment will be copied. This means that if the parents writes to the
+               environment after children have been created, these change may be visible to the
+               children.
+             </p></li><li><p>
+               If a token has multiple parents parent, it will inherit the environment of its parent.
+             </p></li><li><p>
+               If a token has multiple parents parent with overlapping attribute names, the child
+               environment wil get one the value from one of the parents, generally whichever is
+               merged into the child environment last.
+             </p></li></ul></div><p>
+
+
+
+
+        </p><pre class="programlisting">
+  NodeToken t = ...;
+  Env env = t.getEnv();
+  env.setAttribute( "foo", "test" );
+  env.setAttribute( "bar", 5 );
+  String foo = env.getAttribute( "foo" );
+  int bar = env.getAttribute( "foo", Integer.class );
+
+         </pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top"> Sarasvati File Format </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>
