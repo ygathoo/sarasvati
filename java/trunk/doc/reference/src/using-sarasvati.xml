@@ -1715,8 +1715,7 @@ public class TaskNode extends HibNode
       <section id="using-java-api-env-process">
         <title>Process Environment</title>
         <para>
-          A process environment is read-write and shared across an entire process. It can be useful
-          for global counters,
+          A process environment is read-write and is shared across an entire process.
         </para>
 
          <programlisting><![CDATA[
@@ -1734,10 +1733,8 @@ public class TaskNode extends HibNode
         <title>Node Token Environment</title>
         <para>
           The node token environment is read-write. Node token state is only visible to the
-          given token, however tokens inherit the environment of their parents. If a
-          node has multiple parents, the environments will be merged into a single
-          environment. If the parents have attributes with the same name, whichever
-          value is merged last will be the one set.
+          given token, however tokens inherit the environment of their parents. Token state
+          is initialized using the following rules:
 
           <itemizedlist>
             <listitem>
@@ -1755,8 +1752,8 @@ public class TaskNode extends HibNode
                When a child token inherits the environment of it's parent, it may point directly
                to the parent's environment, until the child writes to the environment, at which
                point the environment will be copied. This means that if the parents writes to the
-               environment after children have been created, these change may be visible to the
-               children.
+               environment after children have been created, and the children have not written
+               to their environments, these changes will be visible to the children.
              </para>
             </listitem>
             <listitem>
@@ -1773,10 +1770,6 @@ public class TaskNode extends HibNode
             </listitem>
 
           </itemizedlist>
-
-
-
-
         </para>
 
          <programlisting><![CDATA[
@@ -1789,7 +1782,165 @@ public class TaskNode extends HibNode
 ]]>
          </programlisting>
       </section>
+      <section id="using-java-api-env-combining">
+        <title>Combining Environment</title>
+        <para>
+          To read from both the process and node token environments, use the
+          <literal>NodeToken#getFullEnv()</literal> method. It will return
+          an <literal>Env</literal> which will read first from node token environment
+          and, if no attribute is defined there, read from the process environment.
+          All writes will affect the node token environment.
+        </para>
+        <para>
+          This is implemented using
+          <ulink url="../../javadoc/com/googlecode/sarasvati/impl/NestedEnv.html">NestedEnv</ulink>,
+          which can be used to stack any combination of environments.
+        </para>
+      </section>
 
+      <section id="using-java-api-env-token-set">
+        <title>Token Set Environment</title>
+        <para>
+          When working with token sets, there are two environments available.
+
+          <orderedlist>
+            <listitem>
+              <para>An environment shared by all tokens in the token set</para>
+            </listitem>
+            <listitem>
+              <para>
+                An environment specific to each member index. For example, if a token set
+                is generated with three members, then the first token will have index
+                <literal>0</literal>, the second with have index <literal>1</literal>
+                and the third will have index <literal>2</literal>. Any tokens generated
+                from the first token will also have index <literal>0</literal>, until
+                such point as the token set is joined and is marked complete.
+              </para>
+            </listitem>
+          </orderedlist>
+
+          To see how token set environments are used, take as an example an approval process.
+          The token set is generated as follows:
+
+        </para>
+         <programlisting><![CDATA[
+Map<String,List<?>> initialMemberEnv = new HashMap<String, List<?>>();
+String[] groups = new String[] { "Accounting",
+                                 "Security",
+                                 "Operations" };
+initialMemberEnv.put( "group", Arrays.asList( groups ) );
+
+Env tokenSetEnv = new MapEnv();
+tokenSetEnv.setAttribute( "deadline", 3 );
+
+engine.completeWithNewTokenSet(
+    token,           // the token being completed
+    Arc.DEFAULT_ARC, // the name of the arc(s) to exit on
+    "approvals",     // name to give the new token set
+    3,               // number of tokens to generate on each arc
+                     // with the given name
+    true,            // completing asynchronously
+    tokenSetEnv,     // initial token set env
+    initialMemberEnv // token set member env
+  );
+]]>
+         </programlisting>
+         <para>
+           This generates a token set with three tokens in it. They all share a common <literal>deadline</literal>
+           attribute, but each will see a different value for the <literal>group</literal> attribute. These
+           attributes can be access from the tokens in the token set as follows:
+         </para>
+         <programlisting>
+<![CDATA[
+// Access the token set environment
+Env setEnv = token.getTokenSet( "approvals" ).getEnv();
+int deadline = setEnv.getAttribute( "deadline", Integer.class );
+
+// Access the environment specific to this token within the token set
+Env env = token.getTokenSetMember( "approvals" ).getEnv();
+String group = env.getAttribute( "group" );
+]]>
+         </programlisting>
+      </section>
+      <section id="using-java-api-env-externals">
+        <title>Externals Environment</title>
+        <para>
+          When defining an external in a process definition, attributes may be defined
+          for that external. Those attributes will be visible to nodes in the referenced
+          external.
+
+          In the following process definition, when node <literal>A</literal> is executed,
+          it will print out the values defined for attributes named <literal>foo</literal>
+          and <literal>bar</literal>. If the process definition were executed directly,
+          both values would be undefined.
+
+          <programlisting>
+<![CDATA[
+<process-definition
+  name="external-env-one"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="A" type="script">
+    <custom>
+      <execute type="js">
+        var env = token.getNode().getExternalEnv();
+        System.out.println( "foo: " + env.getAttribute( "foo" ) );
+        System.out.println( "bar: " + env.getAttribute( "bar" ) );
+      </execute>
+    </custom>
+  </node>
+</process-definition>
+]]>
+           </programlisting>
+
+           Process definition <literal>external-env-one</literal> can be included in <literal>external-env-two</literal>,
+           as demonstrated below. If executed, <literal>foo</literal> would now have the value
+           <literal>hello</literal> and <literal>bar</literal> would have the value <literal>world</literal>.
+          <programlisting>
+<![CDATA[
+<process-definition
+  name="external-env-two"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="B">
+    <arc external="one" to="A"/>
+  </node>
+
+  <external name="one" processDefinition="external-env-one">
+    <custom>
+      <foo>hello</foo>
+      <bar>world</bar>
+    </custom>
+  </external>
+
+</process-definition>
+]]>
+          </programlisting>
+          The values defined for externals can be overriden. This can happen when the proces definition which
+          defines the external is itself references as an external, as below. Now, <literal>foo</literal>
+          will have the value <literal>goodbye</literal>, while <literal>bar</literal> will retain the
+          value <literal>world</literal>.
+          <programlisting>
+<![CDATA[
+<process-definition
+  name="external-env-three"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
+
+  <node name="C" isStart="true">
+    <arc external="two" to="B"/>
+  </node>
+
+  <external name="two" processDefinition="external-env-two">
+    <custom>
+      <foo>goodbye</foo>
+    </custom>
+  </external>
+
+</process-definition>
+]]>
+          </programlisting>
+        </para>
+      </section>
     </section>
   </section>
 </chapter>

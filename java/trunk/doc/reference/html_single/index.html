@@ -1,5 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Sarasvati - Simple, Capable and Transparent Workflow</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="#id464336" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="next" href="#what-is-workflow" title="Chapter 1. What is workflow"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id464336"></a>Sarasvati - Simple, Capable and Transparent Workflow</h1></div><div><h2 class="subtitle">Reference Manual</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Paul</span> <span class="surname">Lorenz</span></h3></div></div></div><div><p class="releaseinfo">1.0.0-rc3
-    </p></div><div><p class="copyright">Copyright © 2008-2009 Paul Lorenz</p></div><div><p class="pubdate">2009-06-28</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#what-is-workflow">1. What is workflow</a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-definitions">Definitions </a></span></dt><dt><span class="section"><a href="#what-is-workflow-why-workflow">Why workflow?</a></span></dt><dt><span class="section"><a href="#what-is-workflow-examples">Examples </a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-example-one">Example 1: Order Fulfillment</a></span></dt><dt><span class="section"><a href="#what-is-workflow-example-two">Example 2: Document conversion</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#why-graph-based-workflow">2. Why graph based workflow?</a></span></dt><dd><dl><dt><span class="section"><a href="#id606437">Graphs and Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#why-graph-based-alternatives">Alternatives </a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#core-concepts">3. Core Concepts</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-intro">Introduction</a></span></dt><dt><span class="section"><a href="#concepts-definitions">Definitions</a></span></dt><dt><span class="section"><a href="#concepts-execution">Sarasvati Graph Execution </a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-legend">Legend </a></span></dt><dt><span class="section"><a href="#concepts-single-node">Single Node </a></span></dt><dt><span class="section"><a href="#concepts-two-nodes">Two Nodes</a></span></dt><dt><span class="section"><a href="#concepts-split-join-with-wait-states">Split and Join with Wait States</a></span></dt><dt><span class="section"><a href="#concepts-multithreading">Multithreading</a></span></dt><dt><span class="section"><a href="#concepts-split-join-without-wait-states">Split and Join without Wait States</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-skip">Flow Control with Guards using Skip</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-discard">Flow Control with Guards using Discard</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-guards-named-arcs">Flow Control with Guards using Named Arcs</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-completion-named-arcs">Flow Control from Node Completion using Named Arcs</a></span></dt></dl></dd><dt><span class="section"><a href="#concepts-graph-composition-nested-processes">Graph Composition and Nested Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-graph-composition-example-one">Graph Composition Example One</a></span></dt><dt><span class="section"><a href="#concepts-graph-composition-example-two">Graph Composition Example Two</a></span></dt><dt><span class="section"><a href="#concepts-nested-processes-example-one">Nested Processes Example</a></span></dt></dl></dd><dt><span class="section"><a href="#concepts-execution-environment">Execution Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-process-attributes">Process Attributes</a></span></dt><dt><span class="section"><a href="#concepts-token-attributes">Token Attributes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#using-sarasvati">4. Using Sarasvati</a></span></dt><dd><dl><dt><span class="section"><a href="#using-intro">Introduction</a></span></dt><dt><span class="section"><a href="#using-file-format"> Sarasvati File Format</a></span></dt><dd><dl><dt><span class="section"><a href="#using-file-format-intro">Introduction </a></span></dt><dt><span class="section"><a href="#using-process-definition-element">Process Definition</a></span></dt><dt><span class="section"><a href="#using-node-element">Nodes</a></span></dt><dt><span class="section"><a href="#using-node-arc-element">Node Arcs</a></span></dt><dt><span class="section"><a href="#using-external-element">Externals</a></span></dt><dt><span class="section"><a href="#using-external-arc-element">External arcs</a></span></dt></dl></dd><dt><span class="section"><a href="#using-java-api">Java API</a></span></dt><dd><dl><dt><span class="section"><a href="#using-java-api-interfaces">Interfaces</a></span></dt><dt><span class="section"><a href="#using-flow-of-execution">Flow of Execution</a></span></dt><dt><span class="section"><a href="#using-custom-logic-node-execution">Custom logic for Node Execution</a></span></dt><dt><span class="section"><a href="#using-custom-attributes">Custom Attributes</a></span></dt><dt><span class="section"><a href="#using-java-api-custom-loader">Custom Loader</a></span></dt><dt><span class="section"><a href="#using-java-api-env">Environment</a></span></dt></dl></dd></dl></dd></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id604864"><code class="literal">process-definition</code> attributes</a></dt><dt>4.2. <a href="#id591969"><code class="literal">process-definition</code> nested elements</a></dt><dt>4.3. <a href="#id587470"><code class="literal">node</code> attributes</a></dt><dt>4.4. <a href="#id610392"><code class="literal">node</code> nested elements</a></dt><dt>4.5. <a href="#id613923"><code class="literal">node</code> join types</a></dt><dt>4.6. <a href="#id614276"><code class="literal">arc</code> attributes</a></dt><dt>4.7. <a href="#id614546"><code class="literal">external</code> attributes</a></dt><dt>4.8. <a href="#id614639"><code class="literal">external</code> nested elements</a></dt><dt>4.9. <a href="#id614744"><code class="literal">arc</code> attributes</a></dt><dt>4.10. <a href="#id617169"></a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="what-is-workflow"></a>Chapter 1. What is workflow</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#what-is-workflow-definitions">Definitions </a></span></dt><dt><span class="section"><a href="#what-is-workflow-why-workflow">Why workflow?</a></span></dt><dt><span class="section"><a href="#what-is-workflow-examples">Examples </a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-example-one">Example 1: Order Fulfillment</a></span></dt><dt><span class="section"><a href="#what-is-workflow-example-two">Example 2: Document conversion</a></span></dt></dl></dd></dl></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Sarasvati - Simple, Capable and Transparent Workflow</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="#id230386" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="next" href="#what-is-workflow" title="Chapter 1. What is workflow"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" lang="en"><div class="titlepage"><div><div><h1 class="title"><a name="id230386"></a>Sarasvati - Simple, Capable and Transparent Workflow</h1></div><div><h2 class="subtitle">Reference Manual</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Paul</span> <span class="surname">Lorenz</span></h3></div></div></div><div><p class="releaseinfo">1.0.0-rc3
+    </p></div><div><p class="copyright">Copyright © 2008-2009 Paul Lorenz</p></div><div><p class="pubdate">2009-06-28</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#what-is-workflow">1. What is workflow</a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-definitions">Definitions </a></span></dt><dt><span class="section"><a href="#what-is-workflow-why-workflow">Why workflow?</a></span></dt><dt><span class="section"><a href="#what-is-workflow-examples">Examples </a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-example-one">Example 1: Order Fulfillment</a></span></dt><dt><span class="section"><a href="#what-is-workflow-example-two">Example 2: Document conversion</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#why-graph-based-workflow">2. Why graph based workflow?</a></span></dt><dd><dl><dt><span class="section"><a href="#id372487">Graphs and Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#why-graph-based-alternatives">Alternatives </a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#core-concepts">3. Core Concepts</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-intro">Introduction</a></span></dt><dt><span class="section"><a href="#concepts-definitions">Definitions</a></span></dt><dt><span class="section"><a href="#concepts-execution">Sarasvati Graph Execution </a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-legend">Legend </a></span></dt><dt><span class="section"><a href="#concepts-single-node">Single Node </a></span></dt><dt><span class="section"><a href="#concepts-two-nodes">Two Nodes</a></span></dt><dt><span class="section"><a href="#concepts-split-join-with-wait-states">Split and Join with Wait States</a></span></dt><dt><span class="section"><a href="#concepts-multithreading">Multithreading</a></span></dt><dt><span class="section"><a href="#concepts-split-join-without-wait-states">Split and Join without Wait States</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-skip">Flow Control with Guards using Skip</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-discard">Flow Control with Guards using Discard</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-guards-named-arcs">Flow Control with Guards using Named Arcs</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-completion-named-arcs">Flow Control from Node Completion using Named Arcs</a></span></dt></dl></dd><dt><span class="section"><a href="#concepts-graph-composition-nested-processes">Graph Composition and Nested Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-graph-composition-example-one">Graph Composition Example One</a></span></dt><dt><span class="section"><a href="#concepts-graph-composition-example-two">Graph Composition Example Two</a></span></dt><dt><span class="section"><a href="#concepts-nested-processes-example-one">Nested Processes Example</a></span></dt></dl></dd><dt><span class="section"><a href="#concepts-execution-environment">Execution Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-process-attributes">Process Attributes</a></span></dt><dt><span class="section"><a href="#concepts-token-attributes">Token Attributes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#using-sarasvati">4. Using Sarasvati</a></span></dt><dd><dl><dt><span class="section"><a href="#using-intro">Introduction</a></span></dt><dt><span class="section"><a href="#using-file-format"> Sarasvati File Format</a></span></dt><dd><dl><dt><span class="section"><a href="#using-file-format-intro">Introduction </a></span></dt><dt><span class="section"><a href="#using-process-definition-element">Process Definition</a></span></dt><dt><span class="section"><a href="#using-node-element">Nodes</a></span></dt><dt><span class="section"><a href="#using-node-arc-element">Node Arcs</a></span></dt><dt><span class="section"><a href="#using-external-element">Externals</a></span></dt><dt><span class="section"><a href="#using-external-arc-element">External arcs</a></span></dt></dl></dd><dt><span class="section"><a href="#using-java-api">Java API</a></span></dt><dd><dl><dt><span class="section"><a href="#using-java-api-interfaces">Interfaces</a></span></dt><dt><span class="section"><a href="#using-flow-of-execution">Flow of Execution</a></span></dt><dt><span class="section"><a href="#using-custom-logic-node-execution">Custom logic for Node Execution</a></span></dt><dt><span class="section"><a href="#using-custom-attributes">Custom Attributes</a></span></dt><dt><span class="section"><a href="#using-java-api-custom-loader">Custom Loader</a></span></dt><dt><span class="section"><a href="#using-java-api-env">Environment</a></span></dt></dl></dd></dl></dd></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id370914"><code class="literal">process-definition</code> attributes</a></dt><dt>4.2. <a href="#id358019"><code class="literal">process-definition</code> nested elements</a></dt><dt>4.3. <a href="#id353520"><code class="literal">node</code> attributes</a></dt><dt>4.4. <a href="#id376442"><code class="literal">node</code> nested elements</a></dt><dt>4.5. <a href="#id379973"><code class="literal">node</code> join types</a></dt><dt>4.6. <a href="#id380326"><code class="literal">arc</code> attributes</a></dt><dt>4.7. <a href="#id380596"><code class="literal">external</code> attributes</a></dt><dt>4.8. <a href="#id380690"><code class="literal">external</code> nested elements</a></dt><dt>4.9. <a href="#id380795"><code class="literal">arc</code> attributes</a></dt><dt>4.10. <a href="#id383495"></a></dt></dl></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="what-is-workflow"></a>Chapter 1. What is workflow</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#what-is-workflow-definitions">Definitions </a></span></dt><dt><span class="section"><a href="#what-is-workflow-why-workflow">Why workflow?</a></span></dt><dt><span class="section"><a href="#what-is-workflow-examples">Examples </a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-example-one">Example 1: Order Fulfillment</a></span></dt><dt><span class="section"><a href="#what-is-workflow-example-two">Example 2: Document conversion</a></span></dt></dl></dd></dl></div><p>
     To help understand what workflow is, we start with definitions of
     the main components of a workflow system.
   </p><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="what-is-workflow-definitions"></a>Definitions </h2></div></div></div><div class="itemizedlist"><ul type="disc"><li><p>
@@ -160,7 +160,7 @@
                   published web article.
                 </p></li></ol></div></li></ol></div><p>
           Graphically, the process could be represented as follows:
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/example2.jpg" width="100%"></td></tr></table></div></div></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="why-graph-based-workflow"></a>Chapter 2. Why graph based workflow?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#id606437">Graphs and Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#why-graph-based-alternatives">Alternatives </a></span></dt></dl></dd></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id606437"></a>Graphs and Processes</h2></div></div></div><p>
+        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/example2.jpg" width="100%"></td></tr></table></div></div></div></div></div></div><div class="chapter" lang="en"><div class="titlepage"><div><div><h2 class="title"><a name="why-graph-based-workflow"></a>Chapter 2. Why graph based workflow?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#id372487">Graphs and Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#why-graph-based-alternatives">Alternatives </a></span></dt></dl></dd></dl></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id372487"></a>Graphs and Processes</h2></div></div></div><p>
       Graphs have been used for a long time to visually represent processes. Some
       examples are:
     </p><div class="itemizedlist"><ul type="disc"><li><p>
@@ -1141,9 +1141,9 @@
       </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-process-definition-element"></a>Process Definition</h3></div></div></div><p>
         This is the root element. It should indicate the XML namespace, that being:
         <code class="literal">http://sarasvati.googlecode.com/ProcessDefinition</code>
-      </p><div class="table"><a name="id604864"></a><p class="title"><b>Table 4.1. <code class="literal">process-definition</code> attributes</b></p><div class="table-contents"><table summary="process-definition attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
+      </p><div class="table"><a name="id370914"></a><p class="title"><b>Table 4.1. <code class="literal">process-definition</code> attributes</b></p><div class="table-contents"><table summary="process-definition attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
                 The unique name for this process definition.
-              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id591969"></a><p class="title"><b>Table 4.2. <code class="literal">process-definition</code> nested elements</b></p><div class="table-contents"><table summary="process-definition nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">node</code></td><td>
+              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id358019"></a><p class="title"><b>Table 4.2. <code class="literal">process-definition</code> nested elements</b></p><div class="table-contents"><table summary="process-definition nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">node</code></td><td>
                 Every <code class="literal">process-definition</code> must have a least one <code class="literal">node</code> defined.
               </td></tr><tr><td><code class="literal">external</code></td><td>
                 An external declares a process definition to be included. More than one external process definition
@@ -1152,7 +1152,7 @@
               </td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-node-element"></a>Nodes</h3></div></div></div><p>
         Nodes in a process definition are defined by the <code class="literal">node</code>
         element. Every node must have a name <span class="emphasis"><em>unique to that file</em></span>.
-      </p><div class="table"><a name="id587470"></a><p class="title"><b>Table 4.3. <code class="literal">node</code> attributes</b></p><div class="table-contents"><table summary="node attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>The name of this node. The name must be unique within this process definition.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">type</code></td><td>The node type. Determines the node behavior.</td><td>No</td><td><code class="literal">node</code></td></tr><tr><td><code class="literal">isStart</code></td><td>Specifies whether a node will be presented with a token when the process is started.</td><td>No</td><td><code class="literal">false</code></td></tr><tr><td><code class="literal">joinType</code></td><td>
+      </p><div class="table"><a name="id353520"></a><p class="title"><b>Table 4.3. <code class="literal">node</code> attributes</b></p><div class="table-contents"><table summary="node attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>The name of this node. The name must be unique within this process definition.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">type</code></td><td>The node type. Determines the node behavior.</td><td>No</td><td><code class="literal">node</code></td></tr><tr><td><code class="literal">isStart</code></td><td>Specifies whether a node will be presented with a token when the process is started.</td><td>No</td><td><code class="literal">false</code></td></tr><tr><td><code class="literal">joinType</code></td><td>
                 Determines the join strategy the node should use when a token arrives.
                 Some nodes may accept incoming tokens as soon as they arrives,
                 others may act as gates, waiting until a certain number of
@@ -1161,7 +1161,7 @@
               </td><td>No</td><td><code class="literal">or</code></td></tr><tr><td><code class="literal">joinParam</code></td><td>
                 Some join strategies, such as the token set join, may join based on this paramter.
                 Alternately, this can be used by the custom join type as the developer desires.
-              </td><td>No</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id610392"></a><p class="title"><b>Table 4.4. <code class="literal">node</code> nested elements</b></p><div class="table-contents"><table summary="node nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">guard</code></td><td>
+              </td><td>No</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id376442"></a><p class="title"><b>Table 4.4. <code class="literal">node</code> nested elements</b></p><div class="table-contents"><table summary="node nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">guard</code></td><td>
                 Each node may have a single, optional guard element. The guard is generally defined in the
                 Rubric rules language and will be evaluated when the node's join strategy determines that
                 the node is to be executed. The guard will determine if the node should be executed, skipped
@@ -1176,7 +1176,7 @@
               </td></tr></tbody></table></div></div><br class="table-break"><p>
         Every node defines a join strategy, which is invoked when tokens arrive at the node and
         determines when the node is ready to be executed.
-      </p><div class="table"><a name="id613923"></a><p class="title"><b>Table 4.5. <code class="literal">node</code> join types</b></p><div class="table-contents"><table summary="node join types" border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td><code class="literal">or</code> </td><td>
+      </p><div class="table"><a name="id379973"></a><p class="title"><b>Table 4.5. <code class="literal">node</code> join types</b></p><div class="table-contents"><table summary="node join types" border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td><code class="literal">or</code> </td><td>
                 An <code class="literal">or</code> join will be satisfied any time an arc token arrives at the node.
               </td></tr><tr><td><code class="literal">and</code> </td><td>
                 An <code class="literal">and</code> join will be satisfied when an arc token arrives and there are
@@ -1246,7 +1246,7 @@
         element declares an arc from the enclosing node to the node
         with the name specified in the <code class="literal">to</code>
         attribute. An arc is allowed no nested elements.
-      </p><div class="table"><a name="id614276"></a><p class="title"><b>Table 4.6. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
+      </p><div class="table"><a name="id380326"></a><p class="title"><b>Table 4.6. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
                 If this arc is linking to an external (see below for more information on externals),
                 the name of the external being linked to. If an <code class="literal">external</code> attribute
                 is specified then the <code class="literal">to</code> attribute will refer to a node in the
@@ -1310,13 +1310,13 @@
         </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-external-element"></a>Externals</h3></div></div></div><p>
         An exernal process definition must have a declaration for each time
         it is to be included.
-      </p><div class="table"><a name="id614546"></a><p class="title"><b>Table 4.7. <code class="literal">external</code> attributes</b></p><div class="table-contents"><table summary="external attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
+      </p><div class="table"><a name="id380596"></a><p class="title"><b>Table 4.7. <code class="literal">external</code> attributes</b></p><div class="table-contents"><table summary="external attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
                 The name by which this external process definition will be referred to.
                 The name must be unique within this process definition.
               </td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">processDefinition</code></td><td>
                 The name of the process definition being included. The same process definition
                 may be included more than once.
-              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id614639"></a><p class="title"><b>Table 4.8. <code class="literal">external</code> nested elements</b></p><div class="table-contents"><table summary="external nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">arc</code></td><td>
+              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id380690"></a><p class="title"><b>Table 4.8. <code class="literal">external</code> nested elements</b></p><div class="table-contents"><table summary="external nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">arc</code></td><td>
                 Externals may have zero to many arcs. The arcs originate in the extenal process definition.
                 They may end in nodes in the same process definition, in other externals or even in
                 the same external.
@@ -1328,7 +1328,7 @@
         An <code class="literal">arc</code> element in an <code class="literal">external</code> declares an arc
         from a node in the enclosing external to the node with the name specified in
         the <code class="literal">to</code> attribute. An arc is allowed no nested elements.
-      </p><div class="table"><a name="id614744"></a><p class="title"><b>Table 4.9. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">from</code> </td><td>Specifies the name of the node in the external that this arc starts from.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
+      </p><div class="table"><a name="id380795"></a><p class="title"><b>Table 4.9. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">from</code> </td><td>Specifies the name of the node in the external that this arc starts from.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
                 If this arc is linking to another external, this specifies the name of the external
                 being linked to. If an <code class="literal">external</code> attribute is specified then the
                 <code class="literal">to</code> attribute will refer to a node in the external, not a locally
@@ -2116,7 +2116,7 @@ public class TaskNode extends HibNode
       </p><p>
         The Env interface supports both persistent and transient attributes.
 
-        </p><div class="table"><a name="id617169"></a><p class="title"><b>Table 4.10. </b></p><div class="table-contents"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
+        </p><div class="table"><a name="id383495"></a><p class="title"><b>Table 4.10. </b></p><div class="table-contents"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
                   Must be serializable to the database. All primitives and object version of the primitives, as
                   well as String and Date are supported by default. Support for other types may be added
                   by defining an <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/env/AttributeConverter.html" target="_top">AttributeConverter</a>,
@@ -2129,8 +2129,7 @@ public class TaskNode extends HibNode
                   be stored.
                 </td></tr></tbody></table></div></div><p><br class="table-break">
       </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-process"></a>Process Environment</h4></div></div></div><p>
-          A process environment is read-write and shared across an entire process. It can be useful
-          for global counters,
+          A process environment is read-write and is shared across an entire process.
         </p><pre class="programlisting">
   GraphProcess p = ...;
   Env env = p.getEnv();
@@ -2141,10 +2140,8 @@ public class TaskNode extends HibNode
            
          </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-token"></a>Node Token Environment</h4></div></div></div><p>
           The node token environment is read-write. Node token state is only visible to the
-          given token, however tokens inherit the environment of their parents. If a
-          node has multiple parents, the environments will be merged into a single
-          environment. If the parents have attributes with the same name, whichever
-          value is merged last will be the one set.
+          given token, however tokens inherit the environment of their parents. Token state
+          is initialized using the following rules:
 
           </p><div class="itemizedlist"><ul type="disc"><li><p>
                If a token has no parents, it will start with an empty environment.
@@ -2154,8 +2151,8 @@ public class TaskNode extends HibNode
                When a child token inherits the environment of it's parent, it may point directly
                to the parent's environment, until the child writes to the environment, at which
                point the environment will be copied. This means that if the parents writes to the
-               environment after children have been created, these change may be visible to the
-               children.
+               environment after children have been created, and the children have not written
+               to their environments, these changes will be visible to the children.
              </p></li><li><p>
                If a token has multiple parents parent, it will inherit the environment of its parent.
              </p></li><li><p>
@@ -2163,10 +2160,6 @@ public class TaskNode extends HibNode
                environment wil get one the value from one of the parents, generally whichever is
                merged into the child environment last.
              </p></li></ul></div><p>
-
-
-
-
         </p><pre class="programlisting">
   NodeToken t = ...;
   Env env = t.getEnv();
@@ -2175,4 +2168,139 @@ public class TaskNode extends HibNode
   String foo = env.getAttribute( "foo" );
   int bar = env.getAttribute( "foo", Integer.class );
 
-         </pre></div></div></div></div></div></body></html>
+         </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-combining"></a>Combining Environment</h4></div></div></div><p>
+          To read from both the process and node token environments, use the
+          <code class="literal">NodeToken#getFullEnv()</code> method. It will return
+          an <code class="literal">Env</code> which will read first from node token environment
+          and, if no attribute is defined there, read from the process environment.
+          All writes will affect the node token environment.
+        </p><p>
+          This is implemented using
+          <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/impl/NestedEnv.html" target="_top">NestedEnv</a>,
+          which can be used to stack any combination of environments.
+        </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-token-set"></a>Token Set Environment</h4></div></div></div><p>
+          When working with token sets, there are two environments available.
+
+          </p><div class="orderedlist"><ol type="1"><li><p>An environment shared by all tokens in the token set</p></li><li><p>
+                An environment specific to each member index. For example, if a token set
+                is generated with three members, then the first token will have index
+                <code class="literal">0</code>, the second with have index <code class="literal">1</code>
+                and the third will have index <code class="literal">2</code>. Any tokens generated
+                from the first token will also have index <code class="literal">0</code>, until
+                such point as the token set is joined and is marked complete.
+              </p></li></ol></div><p>
+
+          To see how token set environments are used, take as an example an approval process.
+          The token set is generated as follows:
+
+        </p><pre class="programlisting">
+Map&lt;String,List&lt;?&gt;&gt; initialMemberEnv = new HashMap&lt;String, List&lt;?&gt;&gt;();
+String[] groups = new String[] { "Accounting",
+                                 "Security",
+                                 "Operations" };
+initialMemberEnv.put( "group", Arrays.asList( groups ) );
+
+Env tokenSetEnv = new MapEnv();
+tokenSetEnv.setAttribute( "deadline", 3 );
+
+engine.completeWithNewTokenSet(
+    token,           // the token being completed
+    Arc.DEFAULT_ARC, // the name of the arc(s) to exit on
+    "approvals",     // name to give the new token set
+    3,               // number of tokens to generate on each arc
+                     // with the given name
+    true,            // completing asynchronously
+    tokenSetEnv,     // initial token set env
+    initialMemberEnv // token set member env
+  );
+
+         </pre><p>
+           This generates a token set with three tokens in it. They all share a common <code class="literal">deadline</code>
+           attribute, but each will see a different value for the <code class="literal">group</code> attribute. These
+           attributes can be access from the tokens in the token set as follows:
+         </p><pre class="programlisting">
+
+// Access the token set environment
+Env setEnv = token.getTokenSet( "approvals" ).getEnv();
+int deadline = setEnv.getAttribute( "deadline", Integer.class );
+
+// Access the environment specific to this token within the token set
+Env env = token.getTokenSetMember( "approvals" ).getEnv();
+String group = env.getAttribute( "group" );
+
+         </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-externals"></a>Externals Environment</h4></div></div></div><p>
+          When defining an external in a process definition, attributes may be defined
+          for that external. Those attributes will be visible to nodes in the referenced
+          external.
+
+          In the following process definition, when node <code class="literal">A</code> is executed,
+          it will print out the values defined for attributes named <code class="literal">foo</code>
+          and <code class="literal">bar</code>. If the process definition were executed directly,
+          both values would be undefined.
+
+          </p><pre class="programlisting">
+
+&lt;process-definition
+  name="external-env-one"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
+
+  &lt;node name="A" type="script"&gt;
+    &lt;custom&gt;
+      &lt;execute type="js"&gt;
+        var env = token.getNode().getExternalEnv();
+        System.out.println( "foo: " + env.getAttribute( "foo" ) );
+        System.out.println( "bar: " + env.getAttribute( "bar" ) );
+      &lt;/execute&gt;
+    &lt;/custom&gt;
+  &lt;/node&gt;
+&lt;/process-definition&gt;
+
+           </pre><p>
+
+           Process definition <code class="literal">external-env-one</code> can be included in <code class="literal">external-env-two</code>,
+           as demonstrated below. If executed, <code class="literal">foo</code> would now have the value
+           <code class="literal">hello</code> and <code class="literal">bar</code> would have the value <code class="literal">world</code>.
+          </p><pre class="programlisting">
+
+&lt;process-definition
+  name="external-env-two"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
+
+  &lt;node name="B"&gt;
+    &lt;arc external="one" to="A"/&gt;
+  &lt;/node&gt;
+
+  &lt;external name="one" processDefinition="external-env-one"&gt;
+    &lt;custom&gt;
+      &lt;foo&gt;hello&lt;/foo&gt;
+      &lt;bar&gt;world&lt;/bar&gt;
+    &lt;/custom&gt;
+  &lt;/external&gt;
+
+&lt;/process-definition&gt;
+
+          </pre><p>
+          The values defined for externals can be overriden. This can happen when the proces definition which
+          defines the external is itself references as an external, as below. Now, <code class="literal">foo</code>
+          will have the value <code class="literal">goodbye</code>, while <code class="literal">bar</code> will retain the
+          value <code class="literal">world</code>.
+          </p><pre class="programlisting">
+
+&lt;process-definition
+  name="external-env-three"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
+
+  &lt;node name="C" isStart="true"&gt;
+    &lt;arc external="two" to="B"/&gt;
+  &lt;/node&gt;
+
+  &lt;external name="two" processDefinition="external-env-two"&gt;
+    &lt;custom&gt;
+      &lt;foo&gt;goodbye&lt;/foo&gt;
+    &lt;/custom&gt;
+  &lt;/external&gt;
+
+&lt;/process-definition&gt;
+
+          </pre><p>
+        </p></div></div></div></div></div></body></html>
