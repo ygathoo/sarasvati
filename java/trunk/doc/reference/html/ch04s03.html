@@ -714,7 +714,7 @@ public class TaskNode extends HibNode
       </p><p>
         The Env interface supports both persistent and transient attributes.
 
-        </p><div class="table"><a name="id374906"></a><p class="title"><b>Table 4.10. </b></p><div class="table-contents"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
+        </p><div class="table"><a name="id615344"></a><p class="title"><b>Table 4.10. </b></p><div class="table-contents"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
                   Must be serializable to the database. All primitives and object version of the primitives, as
                   well as String and Date are supported by default. Support for other types may be added
                   by defining an <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/env/AttributeConverter.html" target="_top">AttributeConverter</a>,
@@ -727,8 +727,7 @@ public class TaskNode extends HibNode
                   be stored.
                 </td></tr></tbody></table></div></div><p><br class="table-break">
       </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-process"></a>Process Environment</h4></div></div></div><p>
-          A process environment is read-write and shared across an entire process. It can be useful
-          for global counters,
+          A process environment is read-write and is shared across an entire process.
         </p><pre class="programlisting">
   GraphProcess p = ...;
   Env env = p.getEnv();
@@ -739,10 +738,8 @@ public class TaskNode extends HibNode
            
          </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-token"></a>Node Token Environment</h4></div></div></div><p>
           The node token environment is read-write. Node token state is only visible to the
-          given token, however tokens inherit the environment of their parents. If a
-          node has multiple parents, the environments will be merged into a single
-          environment. If the parents have attributes with the same name, whichever
-          value is merged last will be the one set.
+          given token, however tokens inherit the environment of their parents. Token state
+          is initialized using the following rules:
 
           </p><div class="itemizedlist"><ul type="disc"><li><p>
                If a token has no parents, it will start with an empty environment.
@@ -752,8 +749,8 @@ public class TaskNode extends HibNode
                When a child token inherits the environment of it's parent, it may point directly
                to the parent's environment, until the child writes to the environment, at which
                point the environment will be copied. This means that if the parents writes to the
-               environment after children have been created, these change may be visible to the
-               children.
+               environment after children have been created, and the children have not written
+               to their environments, these changes will be visible to the children.
              </p></li><li><p>
                If a token has multiple parents parent, it will inherit the environment of its parent.
              </p></li><li><p>
@@ -761,10 +758,6 @@ public class TaskNode extends HibNode
                environment wil get one the value from one of the parents, generally whichever is
                merged into the child environment last.
              </p></li></ul></div><p>
-
-
-
-
         </p><pre class="programlisting">
   NodeToken t = ...;
   Env env = t.getEnv();
@@ -773,4 +766,139 @@ public class TaskNode extends HibNode
   String foo = env.getAttribute( "foo" );
   int bar = env.getAttribute( "foo", Integer.class );
 
-         </pre></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top"> Sarasvati File Format </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>
+         </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-combining"></a>Combining Environment</h4></div></div></div><p>
+          To read from both the process and node token environments, use the
+          <code class="literal">NodeToken#getFullEnv()</code> method. It will return
+          an <code class="literal">Env</code> which will read first from node token environment
+          and, if no attribute is defined there, read from the process environment.
+          All writes will affect the node token environment.
+        </p><p>
+          This is implemented using
+          <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/impl/NestedEnv.html" target="_top">NestedEnv</a>,
+          which can be used to stack any combination of environments.
+        </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-token-set"></a>Token Set Environment</h4></div></div></div><p>
+          When working with token sets, there are two environments available.
+
+          </p><div class="orderedlist"><ol type="1"><li><p>An environment shared by all tokens in the token set</p></li><li><p>
+                An environment specific to each member index. For example, if a token set
+                is generated with three members, then the first token will have index
+                <code class="literal">0</code>, the second with have index <code class="literal">1</code>
+                and the third will have index <code class="literal">2</code>. Any tokens generated
+                from the first token will also have index <code class="literal">0</code>, until
+                such point as the token set is joined and is marked complete.
+              </p></li></ol></div><p>
+
+          To see how token set environments are used, take as an example an approval process.
+          The token set is generated as follows:
+
+        </p><pre class="programlisting">
+Map&lt;String,List&lt;?&gt;&gt; initialMemberEnv = new HashMap&lt;String, List&lt;?&gt;&gt;();
+String[] groups = new String[] { "Accounting",
+                                 "Security",
+                                 "Operations" };
+initialMemberEnv.put( "group", Arrays.asList( groups ) );
+
+Env tokenSetEnv = new MapEnv();
+tokenSetEnv.setAttribute( "deadline", 3 );
+
+engine.completeWithNewTokenSet(
+    token,           // the token being completed
+    Arc.DEFAULT_ARC, // the name of the arc(s) to exit on
+    "approvals",     // name to give the new token set
+    3,               // number of tokens to generate on each arc
+                     // with the given name
+    true,            // completing asynchronously
+    tokenSetEnv,     // initial token set env
+    initialMemberEnv // token set member env
+  );
+
+         </pre><p>
+           This generates a token set with three tokens in it. They all share a common <code class="literal">deadline</code>
+           attribute, but each will see a different value for the <code class="literal">group</code> attribute. These
+           attributes can be access from the tokens in the token set as follows:
+         </p><pre class="programlisting">
+
+// Access the token set environment
+Env setEnv = token.getTokenSet( "approvals" ).getEnv();
+int deadline = setEnv.getAttribute( "deadline", Integer.class );
+
+// Access the environment specific to this token within the token set
+Env env = token.getTokenSetMember( "approvals" ).getEnv();
+String group = env.getAttribute( "group" );
+
+         </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-externals"></a>Externals Environment</h4></div></div></div><p>
+          When defining an external in a process definition, attributes may be defined
+          for that external. Those attributes will be visible to nodes in the referenced
+          external.
+
+          In the following process definition, when node <code class="literal">A</code> is executed,
+          it will print out the values defined for attributes named <code class="literal">foo</code>
+          and <code class="literal">bar</code>. If the process definition were executed directly,
+          both values would be undefined.
+
+          </p><pre class="programlisting">
+
+&lt;process-definition
+  name="external-env-one"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
+
+  &lt;node name="A" type="script"&gt;
+    &lt;custom&gt;
+      &lt;execute type="js"&gt;
+        var env = token.getNode().getExternalEnv();
+        System.out.println( "foo: " + env.getAttribute( "foo" ) );
+        System.out.println( "bar: " + env.getAttribute( "bar" ) );
+      &lt;/execute&gt;
+    &lt;/custom&gt;
+  &lt;/node&gt;
+&lt;/process-definition&gt;
+
+           </pre><p>
+
+           Process definition <code class="literal">external-env-one</code> can be included in <code class="literal">external-env-two</code>,
+           as demonstrated below. If executed, <code class="literal">foo</code> would now have the value
+           <code class="literal">hello</code> and <code class="literal">bar</code> would have the value <code class="literal">world</code>.
+          </p><pre class="programlisting">
+
+&lt;process-definition
+  name="external-env-two"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
+
+  &lt;node name="B"&gt;
+    &lt;arc external="one" to="A"/&gt;
+  &lt;/node&gt;
+
+  &lt;external name="one" processDefinition="external-env-one"&gt;
+    &lt;custom&gt;
+      &lt;foo&gt;hello&lt;/foo&gt;
+      &lt;bar&gt;world&lt;/bar&gt;
+    &lt;/custom&gt;
+  &lt;/external&gt;
+
+&lt;/process-definition&gt;
+
+          </pre><p>
+          The values defined for externals can be overriden. This can happen when the proces definition which
+          defines the external is itself references as an external, as below. Now, <code class="literal">foo</code>
+          will have the value <code class="literal">goodbye</code>, while <code class="literal">bar</code> will retain the
+          value <code class="literal">world</code>.
+          </p><pre class="programlisting">
+
+&lt;process-definition
+  name="external-env-three"
+  xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
+
+  &lt;node name="C" isStart="true"&gt;
+    &lt;arc external="two" to="B"/&gt;
+  &lt;/node&gt;
+
+  &lt;external name="two" processDefinition="external-env-two"&gt;
+    &lt;custom&gt;
+      &lt;foo&gt;goodbye&lt;/foo&gt;
+    &lt;/custom&gt;
+  &lt;/external&gt;
+
+&lt;/process-definition&gt;
+
+          </pre><p>
+        </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top"> Sarasvati File Format </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>
