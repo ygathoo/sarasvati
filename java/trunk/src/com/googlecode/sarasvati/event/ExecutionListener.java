@@ -25,6 +25,9 @@ import com.googlecode.sarasvati.GraphProcess;
  * Listeners may be registered for events happening on a single {@link GraphProcess} or
  * all processes. Listeners may in some cases influence how execution proceeds by returning
  * an {@link EventActions} object.
+ * <b>
+ * Listeners may be stored a database by classname. They should therefore have a public
+ * default (no-args) constructor.
  *
  * @see Engine#addExecutionListener(Class, ExecutionEventType...)
  * @see Engine#addExecutionListener(GraphProcess, Class, ExecutionEventType...)

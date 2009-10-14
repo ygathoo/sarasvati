@@ -189,11 +189,11 @@ public class HibExampleConsole
           {
             if ( p.getListeners().isEmpty() )
             {
-              engine.addExecutionListener( p, LoggingExecutionListener.class, ExecutionEventType.values() );
+              engine.addExecutionListener( p, LoggingExecutionListener.class );
             }
             else
             {
-              engine.removeExecutionListener( p, LoggingExecutionListener.class, ExecutionEventType.values() );
+              engine.removeExecutionListener( p, LoggingExecutionListener.class );
             }
             break;
           }
