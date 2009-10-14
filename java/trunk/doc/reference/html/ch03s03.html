@@ -1,14 +1,14 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Sarasvati Graph Execution</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="up" href="ch03.html" title="Chapter 3. Core Concepts"><link rel="prev" href="ch03s02.html" title="Definitions"><link rel="next" href="ch03s04.html" title="Graph Composition and Nested Processes"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Sarasvati Graph Execution </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Core Concepts</th><td width="20%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="concepts-execution"></a>Sarasvati Graph Execution </h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Sarasvati Graph Execution</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.1"><link rel="home" href="index.html" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="up" href="ch03.html" title="Chapter 3. Core Concepts"><link rel="prev" href="ch03s02.html" title="Definitions"><link rel="next" href="ch03s04.html" title="Graph Composition and Nested Processes"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Sarasvati Graph Execution </th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch03s02.html">Prev</a> </td><th width="60%" align="center">Chapter 3. Core Concepts</th><td width="20%" align="right"> <a accesskey="n" href="ch03s04.html">Next</a></td></tr></table><hr></div><div class="section" title="Sarasvati Graph Execution"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="concepts-execution"></a>Sarasvati Graph Execution </h2></div></div></div><p>
       Let us start with a simple process definition, the classic 'Hello
       World'. When executed, this process will print out 'Hello, World!'
       and then complete.
-</p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-legend"></a>Legend </h3></div></div></div><p>
+</p><div class="section" title="Legend"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-legend"></a>Legend </h3></div></div></div><p>
         First, we introduce a graphical notation for process definitions and
         execution. Not all the symbols will make sense immediately, but
         they will all be explained.
 </p><p>
         </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/legend.jpg" width="100%"></td></tr></table></div></div><p>
-      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-single-node"></a>Single Node </h3></div></div></div><p>
+      </p></div><div class="section" title="Single Node"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-single-node"></a>Single Node </h3></div></div></div><p>
         The simplest useful process definition would consist of a simple node.
         Here is the graphical representation:
 </p><p>
@@ -16,7 +16,7 @@
       </p><p>
         How will this process be executed? First the engine needs to determine
         where to start execution.
-</p><div class="itemizedlist"><ul type="disc"><li><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>Start Node</em></span>
             - A node at which a token will be placed when process
             execution begins.
@@ -32,7 +32,7 @@
         would begin by creating a new
         <span class="emphasis"><em>node token</em></span>
         at the 'Hello World' node.
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>Node Token</em></span>
             - A token situated at a node. Node tokens track the response
             of the node guard (see below). They may also have
@@ -48,20 +48,20 @@
         be, its
         <span class="emphasis"><em>guard</em></span>
         would need to be invoked.
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>Node Guard</em></span>
             - Nodes have functionality associated with them, which will
             be executed when a node token is accepted into the node.
             However, before a node is executed, its guard will be
             executed. The guard is allowed one of three responses:
-          </p><div class="itemizedlist"><ul type="circle"><li><p>
+          </p><div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><p>
                 <span class="emphasis"><em>Accept</em></span>
                 - The node will be executed.
-              </p></li><li><p>
+              </p></li><li class="listitem"><p>
                 <span class="emphasis"><em>Discard</em></span>
                 - The node token will be marked as discarded and the
                 node will not be executed.
-              </p></li><li><p>
+              </p></li><li class="listitem"><p>
                 <span class="emphasis"><em>Skip</em></span>
                 - The node will
                 <span class="emphasis"><em>not</em></span>
@@ -72,7 +72,7 @@
         then be
         <span class="emphasis"><em>executed</em></span>
         . This should cause 'Hello, World!' to be printed out.
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>Node Execution</em></span>
             - When a node is executed, whatever custom logic has been
             assigned by the developer will run. To complete node
@@ -86,10 +86,10 @@
         and looks like:
       </p><p>
         </p><div class="informalfigure"><div><img src="../images/concepts1-2.jpg"></div></div><p>
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>Process Completion</em></span>
             - A process with no active tokens is considered complete.
-          </p></li></ul></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-two-nodes"></a>Two Nodes</h3></div></div></div><p>
+          </p></li></ul></div></div><div class="section" title="Two Nodes"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-two-nodes"></a>Two Nodes</h3></div></div></div><p>
         Let's now example a slightly more complicated example. Instead of a
         single node, we'll have two, the first of which prints out
         'Hello', the second prints out 'World'. It looks as follows:
@@ -118,7 +118,7 @@
         will be generated on the outgoing arc.
       </p><p>
         </p><div class="informalfigure"><div><img src="../images/concepts2-2.jpg"></div></div><p>
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>Arc Token</em></span>
             - A token situated on an arc. Arc tokens exist so that
             nodes know when to execute. Arc tokens may not
@@ -128,16 +128,16 @@
         node at the end of the arc is evaluated, to determine if the node is ready to have a node token
         created at that node. The only time join strategies are not used is when a process is started.
         At that time all start node will have node tokens created on them.
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>join strategy</em></span>
             - A join strategy determines if a node token should be created on a node. Evaluation
             of the join strategy is generally initiated by the processing of an arc token
             on an incoming arc to the node. The join strategy will determine two things:
-          </p><div class="itemizedlist"><ul type="circle"><li><p>
+          </p><div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><p>
                   <span class="emphasis"><em>Is the join complete?</em></span> Some join strategies require multiple arc tokens to
                   be present before a node token is created on the node. Others may be satisfied every
                   time an arc token arrives.
-                </p></li><li><p>
+                </p></li><li class="listitem"><p>
                   <span class="emphasis"><em>Which arc tokens completed the join?</em></span> Every arc token that
                   participates in completed the join will be marked complete and will be noted
                   as a parent of the new node token, preserving a history of the flow of execution.
@@ -147,7 +147,7 @@
         , a node token will be created on
         <span class="emphasis"><em>World</em></span>
         immediately.
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>or join strategy</em></span>
             - The or join strategy will allow a new node token
             every time an arc token arrives at the node. This
@@ -165,15 +165,15 @@
         token will be completed.
       </p><p>
         </p><div class="informalfigure"><div><img src="../images/concepts2-4.jpg"></div></div><p>
-      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-split-join-with-wait-states"></a>Split and Join with Wait States</h3></div></div></div><p>
+      </p></div><div class="section" title="Split and Join with Wait States"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-split-join-with-wait-states"></a>Split and Join with Wait States</h3></div></div></div><p>
         Let us now examine an example which contains concurrent execution.
       </p><p>
         The process describes an approval process.
-        </p><div class="orderedlist"><ol type="1"><li><p>
+        </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
               A request is made
-      </p></li><li><p>
+      </p></li><li class="listitem"><p>
               Two approvals must be obtained
-      </p></li><li><p>
+      </p></li><li class="listitem"><p>
               The request is granted
       </p></li></ol></div><p>
 
@@ -185,7 +185,7 @@
         denied.
 </p><p>
         There is more than one way that this process could be executed.
-</p><div class="itemizedlist"><ul type="disc"><li><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             If the approvals are granted by people, the nodes will
             almost certainly be executed asynchronously. This means that
             when a token arrives at
@@ -196,12 +196,12 @@
             . Execution may continue elsewhere in the process, but this
             token will wait until the user enters the system and grants
             approval.
-          </p></li><li><p>
+          </p></li><li class="listitem"><p>
             If approvals are done by software which does a check and
             then returns immediately the tokens will not have enter a
             <span class="emphasis"><em>wait state</em></span>
             , but may continue immediately.
-          </p></li></ul></div><div class="itemizedlist"><ul type="disc"><li><p>
+          </p></li></ul></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>Wait State</em></span>
             - When a token enters a node and the node is executed, it
             may choose not to immediately continue process execution at
@@ -238,15 +238,15 @@
         generated on them.
       </p><p>
         Some things to note:
-</p><div class="itemizedlist"><ul type="disc"><li><p>
+</p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             Most arcs have no name specified. They are considered to have the
             'default' name.
-      </p></li><li><p>
+      </p></li><li class="listitem"><p>
             Usually when completing a node token, the default arc name will be given.
-          </p></li><li><p>
+          </p></li><li class="listitem"><p>
             Each arc will have an arc token placed on it in turn. No specific
             order is guaranteed
-      </p></li><li><p>
+      </p></li><li class="listitem"><p>
             When an arc token is placed on an arc, it will continue on to its end
             node immediately and see if the node can be executed.
       </p></li></ul></div><p>
@@ -293,7 +293,7 @@
         the <span class="emphasis"><em>Grant</em></span> node is using the
         <span class="emphasis"><em>label-and join strategy</em></span>.
         .
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>label-and join strategy</em></span>
             - When an arc token arrives a node using the label-and join
             strategy, arc tokens must exist on all other arcs
@@ -326,7 +326,7 @@
         process will be complete.
       </p><p>
         </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-9.jpg" width="100%"></td></tr></table></div></div><p>
-      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-multithreading"></a>Multithreading</h3></div></div></div><p>
+      </p></div><div class="section" title="Multithreading"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-multithreading"></a>Multithreading</h3></div></div></div><p>
         As seen the previous example, a process may have multiple tokens
         active concurrently. Does this imply that each token executes in
         a separate thread? No. Concurrency here is like that of multiple
@@ -342,7 +342,7 @@
         Note that only one thread may safely execute the process at any given
         time, and care must be taken to serialize access to the process
         itself.
-</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-split-join-without-wait-states"></a>Split and Join without Wait States</h3></div></div></div><p>
+</p></div><div class="section" title="Split and Join without Wait States"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-split-join-without-wait-states"></a>Split and Join without Wait States</h3></div></div></div><p>
         Lets now take a look at the same process, except now the approvals will
         be done by software and will not require a wait state.
 </p><p>
@@ -380,7 +380,7 @@
       </p><p>
         Execution will finish as before now that all required incoming arcs have
         tokens on them.
-</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-skip"></a>Flow Control with Guards using Skip</h3></div></div></div><p>
+</p></div><div class="section" title="Flow Control with Guards using Skip"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-skip"></a>Flow Control with Guards using Skip</h3></div></div></div><p>
         Now that we've seen how execution can split across arcs and join strategies
         can bring current executions back together, let us examine how
         to select which outgoing arcs receive tokens and which nodes get
@@ -412,7 +412,7 @@
         see if this approval is required. If not, it will return a
         <span class="emphasis"><em>Skip</em></span>
         response.
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>Skip</em></span>
             - A guard response which indicates that the node should not
             be executed, but that execution should continue on the
@@ -426,7 +426,7 @@
         the node, and execution will continue on the outgoing arc.
       </p><p>
         </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-16.jpg" width="100%"></td></tr></table></div></div><p>
-      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-discard"></a>Flow Control with Guards using Discard</h3></div></div></div><p>
+      </p></div><div class="section" title="Flow Control with Guards using Discard"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-discard"></a>Flow Control with Guards using Discard</h3></div></div></div><p>
         Having seen Skip, let us examine how to use the Discard response from
         guards. The same basic process definition is used, only this
         time, the assumption is that only one of the guards is required.
@@ -449,7 +449,7 @@
         is not required, and returns a
         <span class="emphasis"><em>Discard</em></span>
         response.
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <span class="emphasis"><em>Discard</em></span>
             - A guard response indicating that the node token should be
             marked as discard, the node should
@@ -482,7 +482,7 @@
         it as soon as any arc tokens arrived.
       </p><p>
         </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts4-8.jpg" width="100%"></td></tr></table></div></div><p>
-      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-guards-named-arcs"></a>Flow Control with Guards using Named Arcs</h3></div></div></div><p>
+      </p></div><div class="section" title="Flow Control with Guards using Named Arcs"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-guards-named-arcs"></a>Flow Control with Guards using Named Arcs</h3></div></div></div><p>
         This same basic process could be implemented using a guard which returns
         Skip along with an arc name.
 </p><p>
@@ -519,7 +519,7 @@
         </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts5-4.jpg" width="100%"></td></tr></table></div></div><p>
       </p><p>
         From here execution continues as normal.
-</p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-completion-named-arcs"></a>Flow Control from Node Completion using Named Arcs</h3></div></div></div><p>
+</p></div><div class="section" title="Flow Control from Node Completion using Named Arcs"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-completion-named-arcs"></a>Flow Control from Node Completion using Named Arcs</h3></div></div></div><p>
         As mentioned previously, when a node token is completed, an arc name
         must be specified. Arc tokens will be generated on all outgoing
         arcs with that name. So the previous example could also be

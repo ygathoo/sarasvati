@@ -1,8 +1,8 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Java API</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.73.2"><link rel="start" href="index.html" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="up" href="ch04.html" title="Chapter 4. Using Sarasvati"><link rel="prev" href="ch04s02.html" title="Sarasvati File Format"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Java API</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Using Sarasvati</th><td width="20%" align="right"> </td></tr></table><hr></div><div class="section" lang="en"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-java-api"></a>Java API</h2></div></div></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Java API</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.1"><link rel="home" href="index.html" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="up" href="ch04.html" title="Chapter 4. Using Sarasvati"><link rel="prev" href="ch04s02.html" title="Sarasvati File Format"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="navheader"><table width="100%" summary="Navigation header"><tr><th colspan="3" align="center">Java API</th></tr><tr><td width="20%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><th width="60%" align="center">Chapter 4. Using Sarasvati</th><td width="20%" align="right"> </td></tr></table><hr></div><div class="section" title="Java API"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="using-java-api"></a>Java API</h2></div></div></div><p>
       The process definition file format also supports custom elements and
       attributes, but before we discuss that, the API needs to be
       introduced.
-    </p><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-interfaces"></a>Interfaces</h3></div></div></div><p>
+    </p><div class="section" title="Interfaces"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-interfaces"></a>Interfaces</h3></div></div></div><p>
         The main interface for interacting with process definitions and
         processes is
         <code class="literal">Engine</code>
@@ -74,18 +74,18 @@ public interface Node extends Adaptable
   GuardResponse guard (Engine engine, NodeToken token);
   void execute (Engine engine, NodeToken token);
 }
-</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-flow-of-execution"></a>Flow of Execution</h3></div></div></div><p>
+</pre></div><div class="section" title="Flow of Execution"><div class="titlepage"><div><div><h3 class="title"><a name="using-flow-of-execution"></a>Flow of Execution</h3></div></div></div><p>
         When the engine determines that a node is ready to execute, it will
         follow this flow:
-      </p><div class="orderedlist"><ol type="1"><li><p>
+      </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
             Generate a
             <code class="literal">NodeToken</code>
             pointing to that node.
-          </p></li><li><p>
+          </p></li><li class="listitem"><p>
             Execute the <code class="literal">guard</code>
             function on the node. This will return a
             <code class="literal">GuardResponse</code>.
-          </p><div class="itemizedlist"><ul type="disc"><li><p>
+          </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
                 The
                 <code class="literal">GuardResponse</code>
                 contains a
@@ -97,7 +97,7 @@ public interface Node extends Adaptable
                 and
                 <code class="literal">SkipNode</code>
                 .
-              </p></li></ul></div></li><li><p>
+              </p></li></ul></div></li><li class="listitem"><p>
             If the action is
             <code class="literal">AcceptToken</code>
             , the
@@ -109,12 +109,12 @@ public interface Node extends Adaptable
             arcs on which to generate
             <code class="literal">ArcToken</code>
             s.
-          </p></li><li><p>
+          </p></li><li class="listitem"><p>
             If the action is
             <code class="literal">DiscardToken</code>
             , the token is marked complete and no further execution
             will take place from this set of tokens.
-          </p></li><li><p>
+          </p></li><li class="listitem"><p>
             If the action is
             <code class="literal">SkipNode</code>
             ,
@@ -122,7 +122,7 @@ public interface Node extends Adaptable
             will be called with the arc name contained in the
             <code class="literal">GuardResponse</code>
             .
-          </p></li></ol></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-custom-logic-node-execution"></a>Custom logic for Node Execution</h3></div></div></div><p>
+          </p></li></ol></div></div><div class="section" title="Custom logic for Node Execution"><div class="titlepage"><div><div><h3 class="title"><a name="using-custom-logic-node-execution"></a>Custom logic for Node Execution</h3></div></div></div><p>
         To provide custom behavior to your nodes, you will override the
         <code class="literal">execute</code>
         method on
@@ -132,11 +132,11 @@ public interface Node extends Adaptable
         using Hibernate. Other implementations could be made using, for
         example, pure JDBC or some other persistence mechanism. There
         are three base classes for nodes.
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             <code class="literal">com.googlecode.sarasvati.mem.MemNode</code>
-          </p></li><li><p>
+          </p></li><li class="listitem"><p>
             <code class="literal">com.googlecode.sarasvati.hib.HibNode</code>
-          </p></li><li><p>
+          </p></li><li class="listitem"><p>
             <code class="literal">com.googlecode.sarasvati.CustomNode</code>
           </p></li></ul></div><p>
         If using only the memory backed implementation,
@@ -149,11 +149,11 @@ public interface Node extends Adaptable
         <code class="literal">CustomNode</code>
         can only be used if the database mapping doesn't need to be
         explicitly defined.
-      </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-custom-example-one"></a>Example One </h4></div></div></div><p>
+      </p><div class="section" title="Example One"><div class="titlepage"><div><div><h4 class="title"><a name="using-custom-example-one"></a>Example One </h4></div></div></div><p>
           To demonstrate use of each implementation, we start with a node that
           just prints out "Hello, World". We start with the process
           definition.
-        </p><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="using-custom-example-one-proc-def"></a>Example One: Process Definition </h5></div></div></div><pre class="programlisting">&lt;?xml version="1.0"?&gt;
+        </p><div class="section" title="Example One: Process Definition"><div class="titlepage"><div><div><h5 class="title"><a name="using-custom-example-one-proc-def"></a>Example One: Process Definition </h5></div></div></div><pre class="programlisting">&lt;?xml version="1.0"?&gt;
 &lt;process-definition
   name="hello-world"
   xmlns="http://sarasvati.googlecode.com/ProcessDefinition"&gt;
@@ -161,7 +161,7 @@ public interface Node extends Adaptable
   &lt;node name="hello" type="helloWorld" isStart="true"/&gt;
 
 &lt;/process-definition&gt;
-</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="using-custom-example-one-node-impl"></a>Example One: Node implementation </h5></div></div></div><p>
+</pre></div><div class="section" title="Example One: Node implementation"><div class="titlepage"><div><div><h5 class="title"><a name="using-custom-example-one-node-impl"></a>Example One: Node implementation </h5></div></div></div><p>
             If using the memory implementation, the subclass would look like:
           </p><pre class="programlisting">
 package com.googlecode.sarasvati.example.mem;
@@ -236,7 +236,7 @@ public class HelloNode extends CustomNode
           </p><pre class="programlisting">
 insert into wf_node_type (id, description, behaviour)
  values ( 'helloWorld', 'Says hello to the world', 'custom' )
-</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h5 class="title"><a name="using-example-one-load-run"></a>Example One: Loading and Running</h5></div></div></div><p>
+</pre></div><div class="section" title="Example One: Loading and Running"><div class="titlepage"><div><div><h5 class="title"><a name="using-example-one-load-run"></a>Example One: Loading and Running</h5></div></div></div><p>
             Now we can load the process into memory, or into the database.
             This is done using a
             <code class="literal">GraphLoader</code>
@@ -245,16 +245,16 @@ insert into wf_node_type (id, description, behaviour)
             about your custom node types.
           </p><p>
             The steps are
-            </p><div class="orderedlist"><ol type="1"><li><p>
+            </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
                   Create an engine of the appropriate type
-                </p></li><li><p>
+                </p></li><li class="listitem"><p>
                   Register custom node types
-                </p></li><li><p>
+                </p></li><li class="listitem"><p>
                   Load the process definition from XML file
-                </p></li><li><p>
+                </p></li><li class="listitem"><p>
                   Get the loaded graph from the graph repository associated with the
                   engine
-                </p></li><li><p>
+                </p></li><li class="listitem"><p>
                   Start a new GraphProcess using the graph
                 </p></li></ol></div><p>
 
@@ -321,7 +321,7 @@ insert into wf_node_type (id, description, behaviour)
             The call to <code class="literal">startProcess</code>
             will create tokens on the start nodes and will continue
             executing the process until it completes or enters a wait state.
-          </p></div></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-custom-attributes"></a>Custom Attributes</h3></div></div></div><p>
+          </p></div></div></div><div class="section" title="Custom Attributes"><div class="titlepage"><div><div><h3 class="title"><a name="using-custom-attributes"></a>Custom Attributes</h3></div></div></div><p>
         Often, custom nodes will need some information with which to do their
         work. Sarasvati supports this in two ways.
       </p><p>
@@ -376,20 +376,20 @@ public class CustomNode extends MemNode
 &lt;/process-definition&gt;
 </pre><p>
         There several things to note with custom elements.
-      </p><div class="itemizedlist"><ul type="disc"><li><p>
+      </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
             All custom elements must be contained within the
             <code class="literal">&lt;custom&gt;</code> tag.
-          </p></li><li><p>
+          </p></li><li class="listitem"><p>
             Non-string properties on custom node types are supported.
-          </p><div class="itemizedlist"><ul type="circle"><li><p>
+          </p><div class="itemizedlist"><ul class="itemizedlist" type="circle"><li class="listitem"><p>
                 Support for primitive types such as boolean, byte, char, short, int,
                 long, float, double as well as their corresponding
                 object types is built in.
-          </p></li><li><p>
+          </p></li><li class="listitem"><p>
                 Support for non-primitive types can be added
-          </p><div class="itemizedlist"><ul type="square"><li><p>
+          </p><div class="itemizedlist"><ul class="itemizedlist" type="square"><li class="listitem"><p>
                     Implement <code class="literal">com.googlecode.sarasvati.env.AttributeConverter</code>
-                  </p></li><li><p>
+                  </p></li><li class="listitem"><p>
                     Register the new mutator using the <code class="literal">setConverterForType</code> method (which takes
                     a class and an <code class="literal">AttributeConverter</code>) on
                     <code class="literal">com.googlecode.sarasvati.env.AttributeConverters</code>.
@@ -445,7 +445,7 @@ public class CustomNode extends MemNode
         attribute to
         <code class="literal">setTaskUser( ... )</code>
         .
-      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-custom-loader"></a>Custom Loader</h3></div></div></div><p>
+      </p></div><div class="section" title="Custom Loader"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-custom-loader"></a>Custom Loader</h3></div></div></div><p>
         You may also provide custom loading via a subclass of
         <code class="literal">NodeFactory</code>. It has the following interface:
       </p><pre class="programlisting">
@@ -465,7 +465,7 @@ public interface NodeFactory
         may be registered on
         <code class="literal">GraphLoader</code>
         .
-      </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-example-two-proc-def"></a>Example Two: Process Definition </h4></div></div></div><p>
+      </p><div class="section" title="Example Two: Process Definition"><div class="titlepage"><div><div><h4 class="title"><a name="using-example-two-proc-def"></a>Example Two: Process Definition </h4></div></div></div><p>
           Here we examine a more complicated example, which uses custom
           attributes.
        </p><pre class="programlisting">&lt;?xml version="1.0"?&gt;
@@ -524,7 +524,7 @@ public interface NodeFactory
   &lt;/node&gt;
 
 &lt;/process-definition&gt;
-</pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-example-two-node-impl"></a>Example Two: Node implementation </h4></div></div></div><p>
+</pre></div><div class="section" title="Example Two: Node implementation"><div class="titlepage"><div><div><h4 class="title"><a name="using-example-two-node-impl"></a>Example Two: Node implementation </h4></div></div></div><p>
           We will need a couple of classes to represent tasks and their state.
           First we look at the memory based implementation.
         </p><p>
@@ -702,7 +702,7 @@ public class TaskNode extends HibNode
     session.save( newTask );
   }
 }
-</pre></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-env"></a>Environment</h3></div></div></div><p>
+</pre></div></div><div class="section" title="Environment"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-env"></a>Environment</h3></div></div></div><p>
         It is often useful to track state associated with a process or tokens. Sarasvati
         provides several environments in which state can be placed. Some environments
         are defined solely by the contents of a process definition, and are therefore
@@ -714,7 +714,7 @@ public class TaskNode extends HibNode
       </p><p>
         The Env interface supports both persistent and transient attributes.
 
-        </p><div class="table"><a name="id615344"></a><p class="title"><b>Table 4.10. </b></p><div class="table-contents"><table border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
+        </p><div class="table"><a name="id567244"></a><p class="title"><b>Table 4.10. Environment Attribute Types</b></p><div class="table-contents"><table summary="Environment Attribute Types" border="1"><colgroup><col width="60"><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
                   Must be serializable to the database. All primitives and object version of the primitives, as
                   well as String and Date are supported by default. Support for other types may be added
                   by defining an <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/env/AttributeConverter.html" target="_top">AttributeConverter</a>,
@@ -726,7 +726,7 @@ public class TaskNode extends HibNode
                   during process execution. Because they aren't persisted to a database, there is no restriction on what types can
                   be stored.
                 </td></tr></tbody></table></div></div><p><br class="table-break">
-      </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-process"></a>Process Environment</h4></div></div></div><p>
+      </p><div class="section" title="Process Environment"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-process"></a>Process Environment</h4></div></div></div><p>
           A process environment is read-write and is shared across an entire process.
         </p><pre class="programlisting">
   GraphProcess p = ...;
@@ -736,24 +736,24 @@ public class TaskNode extends HibNode
   String foo = env.getAttribute( "foo" );
   int bar = env.getAttribute( "foo", Integer.class );
            
-         </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-token"></a>Node Token Environment</h4></div></div></div><p>
+         </pre></div><div class="section" title="Node Token Environment"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-token"></a>Node Token Environment</h4></div></div></div><p>
           The node token environment is read-write. Node token state is only visible to the
           given token, however tokens inherit the environment of their parents. Token state
           is initialized using the following rules:
 
-          </p><div class="itemizedlist"><ul type="disc"><li><p>
+          </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
                If a token has no parents, it will start with an empty environment.
-             </p></li><li><p>
+             </p></li><li class="listitem"><p>
                If a token has one parent, it will inherit the environment of its parent.
-             </p></li><li><p>
+             </p></li><li class="listitem"><p>
                When a child token inherits the environment of it's parent, it may point directly
                to the parent's environment, until the child writes to the environment, at which
                point the environment will be copied. This means that if the parents writes to the
                environment after children have been created, and the children have not written
                to their environments, these changes will be visible to the children.
-             </p></li><li><p>
+             </p></li><li class="listitem"><p>
                If a token has multiple parents parent, it will inherit the environment of its parent.
-             </p></li><li><p>
+             </p></li><li class="listitem"><p>
                If a token has multiple parents parent with overlapping attribute names, the child
                environment wil get one the value from one of the parents, generally whichever is
                merged into the child environment last.
@@ -766,7 +766,7 @@ public class TaskNode extends HibNode
   String foo = env.getAttribute( "foo" );
   int bar = env.getAttribute( "foo", Integer.class );
 
-         </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-combining"></a>Combining Environment</h4></div></div></div><p>
+         </pre></div><div class="section" title="Combining Environment"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-combining"></a>Combining Environment</h4></div></div></div><p>
           To read from both the process and node token environments, use the
           <code class="literal">NodeToken#getFullEnv()</code> method. It will return
           an <code class="literal">Env</code> which will read first from node token environment
@@ -776,10 +776,10 @@ public class TaskNode extends HibNode
           This is implemented using
           <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/impl/NestedEnv.html" target="_top">NestedEnv</a>,
           which can be used to stack any combination of environments.
-        </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-token-set"></a>Token Set Environment</h4></div></div></div><p>
+        </p></div><div class="section" title="Token Set Environment"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-token-set"></a>Token Set Environment</h4></div></div></div><p>
           When working with token sets, there are two environments available.
 
-          </p><div class="orderedlist"><ol type="1"><li><p>An environment shared by all tokens in the token set</p></li><li><p>
+          </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>An environment shared by all tokens in the token set</p></li><li class="listitem"><p>
                 An environment specific to each member index. For example, if a token set
                 is generated with three members, then the first token will have index
                 <code class="literal">0</code>, the second with have index <code class="literal">1</code>
@@ -826,7 +826,7 @@ int deadline = setEnv.getAttribute( "deadline", Integer.class );
 Env env = token.getTokenSetMember( "approvals" ).getEnv();
 String group = env.getAttribute( "group" );
 
-         </pre></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-externals"></a>Externals Environment</h4></div></div></div><p>
+         </pre></div><div class="section" title="Externals Environment"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-env-externals"></a>Externals Environment</h4></div></div></div><p>
           When defining an external in a process definition, attributes may be defined
           for that external. Those attributes will be visible to nodes in the referenced
           external.
@@ -901,4 +901,116 @@ String group = env.getAttribute( "group" );
 &lt;/process-definition&gt;
 
           </pre><p>
-        </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top"> Sarasvati File Format </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>
+        </p></div></div><div class="section" title="Execution Listeners"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-listeners"></a>Execution Listeners</h3></div></div></div><p>
+        It is often useful to have a callback mechanism for various events in the execution of the
+        workflow. Sarasvati allows registering listeners either globally or per-process. Support
+        for specifying listeners per-graph will be forthcoming.
+      </p><p>
+        Execution listeners must implement the
+        <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/event/ExecutionListener.html" target="_top">ExecutionListener</a>
+        interface. Because execution listeners may be added to processes that are serialized to a database,
+        there are some rules around how they should be built.
+        </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem"><p>
+              Execution listeners are stored in the database simply by classname.
+              They must therefore have a public default constructor.
+            </p></li><li class="listitem"><p>
+              Instances of an execution listeners may be shared across threads and should therefore
+              be thread-safe. For performance reasons, they should ideally be stateless, allowing
+              them to be unsychronized.
+            </p></li></ol></div><p>
+
+        Here is an example listener which prints out events as they occur.
+
+        </p><pre class="programlisting">
+
+package com.googlecode.sarasvati.example;
+
+import com.googlecode.sarasvati.event.EventActions;
+import com.googlecode.sarasvati.event.ExecutionEvent;
+import com.googlecode.sarasvati.event.ExecutionListener;
+
+public class LoggingExecutionListener implements ExecutionListener
+{
+  @Override
+  public EventActions notify (final ExecutionEvent event)
+  {
+    System.out.println( event.getEventType() + ": " +
+                        " Process: " + event.getProcess() +
+                        " NodeToken: " + event.getNodeToken() +
+                        " ArcToken: " + event.getArcToken() );
+    return null;
+  }
+}
+
+        </pre><p>
+
+         This listener could be register for all processes as follows:
+
+        </p><pre class="programlisting">
+
+// Add listener for all event types
+engine.addExecutionListener( LoggingExecutionListener.class );
+
+// Add listener for only the arc token and node token completed events
+engine.addExecutionListener( LoggingExecutionListener.class,
+                             ExecutionEventType.ARC_TOKEN_COMPLETED,
+                             ExecutionEventType.NODE_TOKEN_COMPLETED );
+
+        </pre><p>
+
+         One can also specify a particular process to listener to.
+
+        </p><pre class="programlisting">
+
+// Add listener for all event types
+engine.addExecutionListener( process, LoggingExecutionListener.class );
+
+// Add listener for only the arc token and node token completed events
+engine.addExecutionListener( process, LoggingExecutionListener.class,
+                             ExecutionEventType.ARC_TOKEN_COMPLETED,
+                             ExecutionEventType.NODE_TOKEN_COMPLETED );
+
+        </pre><p>
+
+        Listeners aren't limited to a passive. In some cases they may
+        affect workflow processing by returning a
+        <code class="literal">EventActions</code> with an appropriate
+        <code class="literal">EventActionType</code>. The actions that may be
+        taken are:
+
+        </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
+              An execution listener may prevent a process that is
+              in pending complete state from moving to complete
+              state. This is to allow end of workflow processing
+              to happen asynchronously.
+            </p></li><li class="listitem"><p>
+              Similarly, an execution listener may prevent a process
+              that is in pending cancel state from moving to cancelled
+              state.
+            </p></li><li class="listitem"><p>
+              An execution listener may prevent a node token that has just
+              been accepted into a node from executing. This may be used
+              to implement delayed node execution based on timer.
+            </p></li></ul></div><p>
+
+        Here is a listener that creates and returns <code class="literal">EventActions</code>.
+
+        </p><pre class="programlisting">
+
+public class DelayExecutionListener implements ExecutionListener
+{
+  @Override
+  public EventActions notify (final ExecutionEvent event)
+  {
+    if ( event.getEventType() ==
+         ExecutionEventType.PROCESS_PENDING_COMPLETE )
+    {
+      return new EventActions(
+        EventActionType.DELAY_PROCESS_FINALIZE_COMPLETE );
+    }
+    return null;
+  }
+}
+
+        </pre><p>
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top"> Sarasvati File Format </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>

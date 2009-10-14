@@ -1679,6 +1679,7 @@ public class TaskNode extends HibNode
         The Env interface supports both persistent and transient attributes.
 
         <table frame="all">
+          <title>Environment Attribute Types</title>
           <tgroup cols="2">
             <colspec colnum="1" colwidth="60"/>
             <thead>
@@ -1942,6 +1943,139 @@ String group = env.getAttribute( "group" );
         </para>
       </section>
     </section>
+    <section id="using-java-api-listeners">
+      <title>Execution Listeners</title>
+      <para>
+        It is often useful to have a callback mechanism for various events in the execution of the
+        workflow. Sarasvati allows registering listeners either globally or per-process. Support
+        for specifying listeners per-graph will be forthcoming.
+      </para>
+      <para>
+        Execution listeners must implement the
+        <ulink url="../../javadoc/com/googlecode/sarasvati/event/ExecutionListener.html">ExecutionListener</ulink>
+        interface. Because execution listeners may be added to processes that are serialized to a database,
+        there are some rules around how they should be built.
+        <orderedlist>
+          <listitem>
+            <para>
+              Execution listeners are stored in the database simply by classname.
+              They must therefore have a public default constructor.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Instances of an execution listeners may be shared across threads and should therefore
+              be thread-safe. For performance reasons, they should ideally be stateless, allowing
+              them to be unsychronized.
+            </para>
+          </listitem>
+        </orderedlist>
+
+        Here is an example listener which prints out events as they occur.
+
+        <programlisting>
+<![CDATA[
+package com.googlecode.sarasvati.example;
+
+import com.googlecode.sarasvati.event.EventActions;
+import com.googlecode.sarasvati.event.ExecutionEvent;
+import com.googlecode.sarasvati.event.ExecutionListener;
+
+public class LoggingExecutionListener implements ExecutionListener
+{
+  @Override
+  public EventActions notify (final ExecutionEvent event)
+  {
+    System.out.println( event.getEventType() + ": " +
+                        " Process: " + event.getProcess() +
+                        " NodeToken: " + event.getNodeToken() +
+                        " ArcToken: " + event.getArcToken() );
+    return null;
+  }
+}
+]]>
+        </programlisting>
+
+         This listener could be register for all processes as follows:
+
+        <programlisting>
+<![CDATA[
+// Add listener for all event types
+engine.addExecutionListener( LoggingExecutionListener.class );
+
+// Add listener for only the arc token and node token completed events
+engine.addExecutionListener( LoggingExecutionListener.class,
+                             ExecutionEventType.ARC_TOKEN_COMPLETED,
+                             ExecutionEventType.NODE_TOKEN_COMPLETED );
+]]>
+        </programlisting>
+
+         One can also specify a particular process to listener to.
+
+        <programlisting>
+<![CDATA[
+// Add listener for all event types
+engine.addExecutionListener( process, LoggingExecutionListener.class );
+
+// Add listener for only the arc token and node token completed events
+engine.addExecutionListener( process, LoggingExecutionListener.class,
+                             ExecutionEventType.ARC_TOKEN_COMPLETED,
+                             ExecutionEventType.NODE_TOKEN_COMPLETED );
+]]>
+        </programlisting>
+
+        Listeners aren't limited to a passive. In some cases they may
+        affect workflow processing by returning a
+        <literal>EventActions</literal> with an appropriate
+        <literal>EventActionType</literal>. The actions that may be
+        taken are:
+
+        <itemizedlist>
+          <listitem>
+            <para>
+              An execution listener may prevent a process that is
+              in pending complete state from moving to complete
+              state. This is to allow end of workflow processing
+              to happen asynchronously.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              Similarly, an execution listener may prevent a process
+              that is in pending cancel state from moving to cancelled
+              state.
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              An execution listener may prevent a node token that has just
+              been accepted into a node from executing. This may be used
+              to implement delayed node execution based on timer.
+            </para>
+          </listitem>
+        </itemizedlist>
+
+        Here is a listener that creates and returns <literal>EventActions</literal>.
+
+        <programlisting>
+<![CDATA[
+public class DelayExecutionListener implements ExecutionListener
+{
+  @Override
+  public EventActions notify (final ExecutionEvent event)
+  {
+    if ( event.getEventType() ==
+         ExecutionEventType.PROCESS_PENDING_COMPLETE )
+    {
+      return new EventActions(
+        EventActionType.DELAY_PROCESS_FINALIZE_COMPLETE );
+    }
+    return null;
+  }
+}
+]]>
+        </programlisting>
+      </para>
+    </section>
   </section>
 </chapter>
-
