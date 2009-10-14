@@ -451,7 +451,6 @@ public abstract class BaseEngine implements Engine
 
     try
     {
-
       while ( process.isExecuting() && !process.isArcTokenQueueEmpty() )
       {
         executeArc( process, process.dequeueArcTokenForExecution() );
@@ -513,6 +512,11 @@ public abstract class BaseEngine implements Engine
   @Override
   public void backtrack (final NodeToken token)
   {
+    if ( !token.getProcess().isExecuting() )
+    {
+      throw new SarasvatiException( "Can only backtrack processes with a state of 'Executing'" );
+    }
+
     if ( !token.isComplete() )
     {
       throw new SarasvatiException( "Cannot backtrack to a node token which isn't completed." );
