@@ -15,33 +15,15 @@ Sarasvati is fairly stable at this point, and we are workings towards a 1.0 rele
    * isJoin => joinType - DONE
    * Env                - DONE
    * Execution Listener - DONE
-   * hibernate node type handling
+   * Convert visualization docs - DONE
+   * Convert backtracking doc   - DONE
+   * hibernate node type handling - DONE
    * Graph validation framework
-   * Convert visualization docs to DocBook
-   * Convert backtracking doc to DocBook
    * Token Sets documentation
    * Editor docs
 
 Note:
   * Need to fix external example image 2 (has incorrect link) - DONE
-
-
-=== Broader Database support: In progress ===
-
-  * Investigate if schema can be generate from Hibernate mappings
-    * Issue with generating FKs to enum tables
-    * Issue text columns on postgesql vs varchars in other dbs
-  * Investigate table name mappings, so users can pick their own table names
-    * Use hibernate NamingStrategy
-    * Make sure we don't hardcode tables/column name, if possible.
-  * Need test suite for DB
-    * Test against following databases
-      * Postgresql
-      * Sybase
-      * MySQL
-      * Oracle
-      * DB2
-      * Some simple file based engine? BerkleyDB?
 
 == 1.0 Complete ==
 
@@ -124,6 +106,23 @@ Analyzed SQL generated from hibernate. Ran explain plan on each statement and ma
 This would be good as a fall back for users who don't use hibernate. Also, it would make sure that the interfaces are sufficiently flexible.
 
 Implementation started.
+
+=== Broader Database support: Some work done ===
+
+  * Investigate if schema can be generate from Hibernate mappings
+    * Issue with generating FKs to enum tables
+    * Issue text columns on postgesql vs varchars in other dbs
+  * Investigate table name mappings, so users can pick their own table names
+    * Use hibernate NamingStrategy
+    * Make sure we don't hardcode tables/column name, if possible.
+  * Need test suite for DB
+    * Test against following databases
+      * Postgresql
+      * Sybase
+      * MySQL
+      * Oracle
+      * DB2
+      * Some simple file based engine? BerkleyDB?
 
 === Improve Editor ===
   * Guard Editor
