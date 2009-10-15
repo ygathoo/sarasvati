@@ -2104,9 +2104,9 @@ public class DelayExecutionListener implements ExecutionListener
             squares for node tokens and triangles for arc tokens, the resulting
             execution looks like:
 
-            <informalfigure>
+            <figure>
               <graphic fileref="images/backtrack-process1.jpg" />
-            </informalfigure>
+            </figure>
 
             What if we wish to let a user choose to send the workflow backwards,
             instead of forwards, say to fix a mistake made earlier. If we
@@ -2145,30 +2145,25 @@ public class DelayExecutionListener implements ExecutionListener
             So, lets says we've gotten up to <emphasis>C</emphasis>. At this
             point, the process execution history looks like:
 
-            <informalfigure>
+            <figure>
               <graphic fileref="images/backtrack-process3-1.jpg" />
-            </informalfigure>
+            </figure>
 
             Now we wish to backtrack to <emphasis>B</emphasis>. If we
             retrace our steps, the process history will now look like:
 
-            <informalfigure>
+            <figure>
               <graphic fileref="images/backtrack-process3-2.jpg" />
-            </informalfigure>
+            </figure>
 
-            Note that when we traverse arc
-            <emphasis>2</emphasis>
+            Note that when we traverse arc <emphasis>2</emphasis>
             backward, it's marked in red. This is to mark that we've gone
-            backwards along that arc. The node tokens on
-            <emphasis>B</emphasis>
-            and
-            <emphasis>C</emphasis>
-            , as well as the forward moving arc token on
-            <emphasis>2</emphasis>
-            are also marked, but in blue. This is to note that these actions
-            have been backtracked. When node tokens are backtracked, they are
-            given the opportunity to undo whatever work they did, send out
-            notifications, or do whatever else is required.
+            backwards along that arc. The node tokens on <emphasis>B</emphasis>
+            and <emphasis>C</emphasis>, as well as the forward moving arc token on
+            <emphasis>2</emphasis> are also marked, but in blue. This is to
+            note that these actions have been backtracked. When node tokens are
+            backtracked, they are given the opportunity to undo whatever work
+            they did, send out notifications, or do whatever else is required.
           </para>
 
           <para>
@@ -2176,16 +2171,16 @@ public class DelayExecutionListener implements ExecutionListener
             <emphasis>D</emphasis>, where the process execution
             history looks like:
 
-            <informalfigure>
+            <figure>
               <graphic fileref="images/backtrack-process3-3.jpg" scalefit="1" width="100%"/>
-            </informalfigure>
+            </figure>
 
             If from here, we once again wish to return to <emphasis>B</emphasis>, the
             execution history will look like:
 
-            <informalfigure>
+            <figure>
               <graphic fileref="images/backtrack-process3-4.jpg" scalefit="1" width="100%"/>
-            </informalfigure>
+            </figure>
 
             Note that since we are somewhat literally retracing our steps, to
             get from <emphasis>D</emphasis> to <emphasis>B</emphasis>
@@ -2197,9 +2192,9 @@ public class DelayExecutionListener implements ExecutionListener
 
           <para>
             From here we now finish, and go to the end.
-            <informalfigure>
+            <figure>
               <graphic fileref="images/backtrack-process3-5.jpg" scalefit="1" width="100%"/>
-            </informalfigure>
+            </figure>
           </para>
         </section>
 
@@ -2210,331 +2205,215 @@ public class DelayExecutionListener implements ExecutionListener
             Let us now examine a process definition which has splits and joins.
 
             <figure>
-              <title>Process Definition</title>
               <graphic fileref="images/backtrack-graph3.jpg" />
             </figure>
 
             These complicate manual backtracking a great deal.
          </para>
 
-  </section>
-  <section id="sect5">
-    <title>Considerations</title>
-    <para>
-      If one has multiple, concurrent node tokens active after a split,
-      backtracking one of them means that all must be backtracked. The
-      one which has been backtracked must out and find all incomplete
-      concurrent tokens and complete them. It must also set a marker
-      indicating that backtracking should occur. All the tokens must
-      then first be collected by an intermediary node, which will test
-      to see if a backtrack is required. It will then send execution
-      forward or back based on this test.
-</para>
+         <para>
+          If one has multiple, concurrent node tokens active after a split,
+          backtracking one of them means that all must be backtracked. The
+          one which has been backtracked must out and find all incomplete
+          concurrent tokens and complete them. It must also set a marker
+          indicating that backtracking should occur. All the tokens must
+          then first be collected by an intermediary node, which will test
+          to see if a backtrack is required. It will then send execution
+          forward or back based on this test.
+        </para>
 
-    <para>
-      If all tokens which were generated from the split aren't collected and
-      sent back as a single token then each token sent back to the split
-      will generate a new set of tokens from the split. This could cause
-      many duplicates to be generated.
-</para>
+        <para>
+          If all tokens which were generated from the split aren't collected and
+          sent back as a single token then each token sent back to the split
+          will generate a new set of tokens from the split. This could cause
+          many duplicates to be generated.
+        </para>
 
-    <para>
-      Here is an example of a graph which would be roughly equivalent to the
-      previous graph, but allows manual backtracking.
-</para>
+        <para>
+          Here is an example of a graph which would be roughly equivalent to the
+          previous graph, but allows manual backtracking.
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-graph4.jpg" />
-      </informalfigure>
-    </para>
+          <figure>
+            <title>Manual Backtracking Split/Join</title>
+            <graphic fileref="images/backtrack-graph4.jpg" />
+          </figure>
 
-    <para>
-      It has a great deal many more arcs, as well as a more complicated
-      structure, to accommodate backtracking to the split.
-</para>
+          It has a great deal many more arcs, as well as a more complicated
+          structure, to accommodate backtracking to the split.
+        </para>
 
-  </section>
-  <section id="sect6">
-    <title>Automated</title>
-    <para>
-      To see how automated backtracking would work, let us first
-      progress from
-      <emphasis>A</emphasis>
-      to
-      <emphasis>B</emphasis>
-      to where both
-      <emphasis>C</emphasis>
-      and
-      <emphasis>D</emphasis>
-      are open.
-    </para>
+        <para>
+          To see how automated backtracking would work, let us first
+          progress from <emphasis>A</emphasis> to <emphasis>B</emphasis>
+          to where both <emphasis>C</emphasis> and
+          <emphasis>D</emphasis> are open.
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-process4-s1.jpg" />
-      </informalfigure>
-    </para>
+          <figure>
+            <graphic fileref="images/backtrack-process4-s1.jpg" />
+          </figure>
 
-    <para>
-      We can now attempt to backtrack to
-      <emphasis>B</emphasis>
-      .
-    </para>
+          We can now attempt to backtrack to <emphasis>B</emphasis>.
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-process4-s2.jpg" />
-      </informalfigure>
-    </para>
+          <figure>
+            <graphic fileref="images/backtrack-process4-s2.jpg" />
+          </figure>
 
-    <para>
-      The engine will follow all execution history which emanated from
-      <emphasis>B</emphasis>
-      and attempt to reverse it. So we can see that it flows backwards
-      from
-      <emphasis>C</emphasis>
-      and
-      <emphasis>D</emphasis>
-      backwards to
-      <emphasis>B</emphasis>
-      .
-    </para>
+          The engine will follow all execution history which emanated from
+          <emphasis>B</emphasis> and attempt to reverse it. So we can see
+          that it flows backwards from <emphasis>C</emphasis> and
+          <emphasis>D</emphasis> backwards to <emphasis>B</emphasis>.
+        </para>
 
-    <para>
-      If we now attempt to backtrack one more step to
-      <emphasis>A</emphasis>
-      , the execution history will look like:
-    </para>
+        <para>
+          If we now attempt to backtrack one more step to <emphasis>A</emphasis>,
+          the execution history will look like:
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-process4-s3.jpg" />
-      </informalfigure>
-    </para>
+          <figure>
+            <graphic fileref="images/backtrack-process4-s3.jpg" scalefit="1" width="100%"/>
+          </figure>
 
-    <para>
-      Though this appears to be a simple linear backtrack, it's actually
-      slightly complicated. The history starting from
-      <emphasis>A</emphasis>
-      includes the backtracking we just did. So the engine must traverse
-      this to get to the current active tokens and backtrack them.
-    </para>
+          Though this appears to be a simple linear backtrack, it's actually
+          slightly complicated. The history starting from <emphasis>A</emphasis>
+          includes the backtracking we just did. So the engine must traverse
+          this to get to the current active tokens and backtrack them.
+        </para>
 
-  </section>
-  <section id="sect7">
-    <title>Variation</title>
-    <para>
-      If we were to backtrack directly from when
-      <emphasis>C</emphasis>
-      and
-      <emphasis>D</emphasis>
-      were open back to
-      <emphasis>A</emphasis>
-      , the execution history would look as follows:
-    </para>
+        <para>
+          If instead, we were to backtrack directly from when <emphasis>C</emphasis>
+          and <emphasis>D</emphasis> were open, back to <emphasis>A</emphasis>,
+          the execution history would look as follows:
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-process4-s4.jpg" />
-      </informalfigure>
-    </para>
+          <figure>
+            <graphic fileref="images/backtrack-process4-s4.jpg" scalefit="1" width="100%"/>
+          </figure>
 
-    <para>
-      It looks almost the same, except that the second
-      <emphasis>B</emphasis>
-      is marked as a backwards execution, since this time, we went
-      straight across it, instead of stopping there, and then continuing
-      backwards.
-    </para>
+          It looks almost the same, except that the second <emphasis>B</emphasis>
+          is marked as a backwards execution, since this time, we went
+          straight across it, instead of stopping there, and then continuing
+          backwards.
+        </para>
+      </section>
+      <section id="using-java-api-backtracking-join">
+        <title>Backtracking Across a Join</title>
+        <para>
+          We'll use the same process definition as we used for demonstrating
+          splits.
 
-    <para>
-      =Backtracking Across a Join=
-    </para>
-  </section>
-  <section id="sect8">
-    <title>Process Definition</title>
-    <para>
-    We'll use the same process definition as we used for demonstrating
-    splits.
-  </para>
+          <figure>
+            <graphic fileref="images/backtrack-graph3.jpg" />
+          </figure>
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-graph3.jpg" />
-      </informalfigure>
-    </para>
+          Going back from a join is both more and less problematic than a split. A
+          join can act as a split and send tokens back all of its inputs.
+          However, it is very difficult to go back to just one of the
+          inputs. If only one of the join inputs is reactivated, then the
+          join will never fire, since it won't have all the required inputs
+          available.
+        </para>
 
-  </section>
-  <section id="sect9">
-    <title>Considerations</title>
-    <para>
-      Going back from a join is both more and less problematic than a split. A
-      join can act as a split and send tokens back all of its inputs.
-      However, it is very difficult to go back to just one of the
-      inputs. If only one of the join inputs is reactivated, then the
-      join will never fire, since it won't have all the required inputs
-      available.
-</para>
+        <para>
+          To start off with, assume execution has proceeded to
+          <emphasis>E</emphasis> and the execution history looks like:
 
-  </section>
-  <section id="sect10">
-    <title>Automated</title>
-    <para>
-      To start off with, assume execution has proceeded to
-      <emphasis>E</emphasis>
-      and the execution history looks like:
-    </para>
+          <figure>
+            <graphic fileref="images/backtrack-process4-j1.jpg" />
+          </figure>
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-process4-j1.jpg" />
-      </informalfigure>
-    </para>
+          If we then want to go back to when <emphasis>C</emphasis>
+          was open, the process will now look like:
 
-    <para>
-      If we then want to go back to when
-      <emphasis>C</emphasis>
-      was open, the process will now look like:
-    </para>
+          <figure>
+           <graphic fileref="images/backtrack-process4-j2.jpg" scalefit="1" width="100%"/>
+          </figure>
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-process4-j2.jpg" />
-      </informalfigure>
-    </para>
+          As expected, <emphasis>C</emphasis> is now open. To do so,
+          we backtracked across arc <emphasis>4</emphasis>. However,
+          <emphasis>D</emphasis> is not open but there is an open arc
+          token on <emphasis>5</emphasis>. We only wanted <emphasis>C</emphasis>
+          open, not <emphasis>D</emphasis>. However, when <emphasis>C</emphasis>
+          completes, we want <emphasis>E</emphasis> to execute again. However,
+          <emphasis>E</emphasis> will only execute if there are arc tokens
+          waiting on arcs <emphasis>4</emphasis> and <emphasis>5</emphasis>.
+          So, we backtrack arc <emphasis>5</emphasis>, but the arc token we
+          create on <emphasis>5</emphasis> is left active. Now when
+          <emphasis>C</emphasis> completes, <emphasis>E</emphasis>
+          will execute as it will have arc tokens on all inputs.
+        </para>
 
-    <para>
-      As expected,
-      <emphasis>C</emphasis>
-      is now open. To do so, we backtracked across arc
-      <emphasis>4</emphasis>
-      . However,
-      <emphasis>D</emphasis>
-      is not open but there is an open arc token on
-      <emphasis>5</emphasis>
-      . We only wanted
-      <emphasis>C</emphasis>
-      open, not
-      <emphasis>D</emphasis>
-      . However, when
-      <emphasis>C</emphasis>
-      completes, we want
-      <emphasis>E</emphasis>
-      to execute again. However,
-      <emphasis>E</emphasis>
-      will only execute if there are arc tokens waiting on arcs
-      <emphasis>4</emphasis>
-      and
-      <emphasis>5</emphasis>
-      . So, we backtrack arc
-      <emphasis>5</emphasis>
-      , but the arc token we create on
-      <emphasis>5</emphasis>
-      is left active. Now when
-      <emphasis>C</emphasis>
-      completes,
-      <emphasis>E</emphasis>
-      will execute as it will have arc tokens on all inputs.
-    </para>
+        <para>
+          The arc token on <emphasis>5</emphasis>, marked in yellow,
+          is called a <emphasis>u-turn</emphasis> since this is what
+          it does. It backtracks onto an arc, but then turns around
+          and goes right back.
+        </para>
 
-    <para>
-      The arc token on
-      <emphasis>5</emphasis>
-      is called a
-      <emphasis>u-turn</emphasis>
-      and it marked in yellow, since this is what it does. It backtracks
-      onto an arc, but then turns around and goes right back.
-    </para>
+        <para>
+          If we complete <emphasis>C</emphasis> the process will look like:
 
-    <para>
-      If we complete
-      <emphasis>C</emphasis>
-      the process will look like:
-    </para>
+          <figure>
+            <graphic fileref="images/backtrack-process4-j3.jpg" scalefit="1" width="100%"/>
+          </figure>
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-process4-j3.jpg" />
-      </informalfigure>
-    </para>
+          If instead of completing <emphasis>C</emphasis> we backtracked
+          to <emphasis>D</emphasis> as well, the process would now look like:
 
-    <para>
-      If instead of completing
-      <emphasis>C</emphasis>
-      we backtracked to
-      <emphasis>D</emphasis>
-      as well, the process would now look like:
-    </para>
+          <figure>
+            <graphic fileref="images/backtrack-process4-j4.jpg" scalefit="1" width="100%"/>
+          </figure>
 
-    <para>
-      <informalfigure>
-        <graphic fileref="images/backtrack-process4-j4.jpg" />
-      </informalfigure>
-    </para>
+          The u-turn arc token is now marked as backtracked and a node token
+          is now active on <emphasis>D</emphasis> .
+        </para>
+      </section>
 
-    <para>
-      The u-turn arc token is now marked as backtracked and a node token
-      is now active on
-      <emphasis>D</emphasis>
-      .
-    </para>
+      <section id="using-java-api-backtracking-using">
+        <title>Using Backtracking</title>
+        <para>
+          Backtracking is very easy to use in Sarasvati.
+        </para>
 
-    <para>
-      =Java API=
-      Backtracking is very easy to use in Sarasvati.
-</para>
+        <para>
+          To backtrack, invoke the <literal>backtrack(NodeToken token)</literal>
+          method on your <literal>Engine</literal> instance.
 
-    <para>
-      To backtrack, invoke the
-      <literal>backtrack(NodeToken token)</literal>
-      method on your
-      <literal>Engine</literal>
-      instance.
-    </para>
-
-    <programlisting><![CDATA[  /**
-   * Backtracks execution to the point where the given node token was active. The token
-   * must be complete and must not have been backtracked before. If it's not complete,
-   * there isn't any point in backtracking to it. If it has already been backtracked,
-   * the execution has either returned to a point previous to that token, or there is
-   * a newer, non-backtracked token at that node now.
+          <programlisting><![CDATA[
+  /**
+   * Backtracks execution to the point where the given
+   * node token was active. The token must be complete
+   * and must not have been backtracked before. If it's
+   * not complete, there isn't any point in backtracking
+   * to it. If it has already been backtracked, the
+   * execution has either returned to a point previous
+   * to that token, or there is a newer, non-backtracked
+   * token at that node now.
    *
    * @param token The destination token to backtrack to.
    */
   void backtrack (NodeToken token);
-]]></programlisting>
+]]>
+          </programlisting>
 
-    <para>
-      Your custom node classes may override the
-      <literal>isBacktrackable</literal>
-      and
-      <literal>backtrack</literal>
-      methods on
-      <literal>Node</literal>
-      .
-    </para>
+          Your custom node classes may override the <literal>isBacktrackable</literal>
+          and <literal>backtrack</literal> methods on <literal>Node</literal> .
+        </para>
 
-    <para>
-      <literal>Node#isBacktrackable</literal>
-      will control whether a given invocation of
-      <literal>Engine#backtrack</literal>
-      will succeed. Sometimes, business logic may require that certain
-      actions not be repeated.
-    </para>
+        <para>
+          <literal>Node#isBacktrackable</literal> will control whether a given invocation of
+          <literal>Engine#backtrack</literal> will succeed. Sometimes, business logic may
+          require that certain actions not be repeated.
+        </para>
 
-    <para>
-      <literal>Node#backtrack</literal>
-      gives a place to to undo the the results of your custom node
-      logic, and/or send notifications. This method will not be invoked
-      until after
-      <literal>isBacktrackable</literal>
-      has returned true for all nodes needing to be backtracked.
-    </para>
+        <para>
+          <literal>Node#backtrack</literal> gives a place to to undo the the
+          results of your custom node logic, and/or send notifications. This
+          method will not be invoked until after <literal>isBacktrackable</literal>
+          has returned true for all nodes needing to be backtracked.
 
-    <programlisting><![CDATA[  /**
-   * Returns true if the specific execution of this Node by the given
-   * NodeToken can be backtracked.
+          <programlisting><![CDATA[
+  /**
+   * Returns true if the specific execution of
+   * this Node by the given NodeToken can be
+   * backtracked.
    *
    * @param engine The engine doing the backtracking
    * @param token The token being backtracked
@@ -2543,14 +2422,30 @@ public class DelayExecutionListener implements ExecutionListener
   boolean isBacktrackable (Engine engine, NodeToken token);
 
   /**
-   * Does whatever work is necessary to backtrack this execution. For example,
-   * a task node may send a notification that the task has been backtracked.
+   * Does whatever work is necessary to backtrack
+   * this execution. For example, a task node may
+   * send a notification that the task has been
+   * backtracked.
    *
    * @param engine The engine doing the backtracking
    * @param token The specific token being backtracked.
    */
   void backtrack (Engine engine, NodeToken token);
-]]></programlisting>
+]]>
+          </programlisting>
+
+          Here is an example of how backtracking might be invoked. This example
+          assumes we want to backtrack to an ancestor of the current token located
+          at a node named <emphasis>Check Inventory</emphasis>.
+          <programlisting>
+<![CDATA[
+  String name = "Check Inventory";
+  NodeToken ancestor =
+    FindNodeNamedVisitor.findFirstNamedParent( token, name );
+  engine.backtrack( ancestor );
+]]>
+          </programlisting>
+        </para>
       </section>
     </section>
   </section>
