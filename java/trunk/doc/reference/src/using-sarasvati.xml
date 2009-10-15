@@ -1004,8 +1004,10 @@ public class HelloNode extends HibNode
 
           <para>
             The hibernate version would also require an insert into the
-            <literal>wf_node_type</literal>
-            table, with type, description and behaviour.
+            <literal>wf_node_type</literal> table, with type, description
+            and behaviour. As of 1.0.0-rc3, Sarasvati will insert the
+            node type into the database if it's missing. However,
+            manually inserted the node type will not hurt anything.
           </para>
 
           <programlisting><![CDATA[
@@ -1055,11 +1057,10 @@ insert into wf_node_type (id, description, behaviour)
           <title>Example One: Loading and Running</title>
           <para>
             Now we can load the process into memory, or into the database.
-            This is done using a
-            <literal>GraphLoader</literal>
-            , which can be retrieved from the appropriate engine. Before
-            loading the process definition, you will need to tell the engine
-            about your custom node types.
+            This is done using a <literal>GraphLoader</literal>, which can
+            be retrieved from the appropriate engine. Before loading the
+            process definition, you will need to tell the engine about your
+            custom node types.
           </para>
 
           <para>
@@ -1276,9 +1277,9 @@ public class CustomNode extends MemNode
                 </listitem>
                 <listitem>
                   <para>
-                    Register the new mutator using the <literal>setConverterForType</literal> method (which takes
-                    a class and an <literal>AttributeConverter</literal>) on
-                    <literal>com.googlecode.sarasvati.env.AttributeConverters</literal>.
+                    Register the new mutator using the <literal>setConverterForType</literal>
+                    method (which takes a class and an <literal>AttributeConverter</literal>)
+                    on <literal>com.googlecode.sarasvati.env.AttributeConverters</literal>.
                   </para>
                 </listitem>
               </itemizedlist>
@@ -1300,8 +1301,7 @@ public class CustomNode extends MemNode
 ]]></programlisting>
 
       <para>
-        The loader would invoke
-        <literal>getTask().setName( ... )</literal>
+        The loader would invoke <literal>getTask().setName( ... )</literal>
         on the custom node.
       </para>
 
@@ -2448,7 +2448,7 @@ public class DelayExecutionListener implements ExecutionListener
         </para>
       </section>
     </section>
-    <section id="using-sarasvati-pdv">
+    <section id="using-java-api-pdv">
       <title>Process Definition Visualization</title>
 
       <para>
@@ -2567,12 +2567,13 @@ public class DelayExecutionListener implements ExecutionListener
           The resulting page would look something like:
 
         <figure>
+          <title>Process Definition Visualization Screenshot</title>
           <graphic fileref="images/graph-visualization.jpg" scalefit="1" width="100%"/>
         </figure>
 
       </para>
     </section>
-    <section id="using-sarasvati-pv">
+    <section id="using-java-api-pv">
       <title>Process Visualization</title>
       <para>
         Sarasvati offers the ability to generate an HTML image map of a process.
@@ -2658,8 +2659,15 @@ public class DelayExecutionListener implements ExecutionListener
         The resulting page would look something like:
 
         <figure>
+          <title>Process Visualization Screenshot</title>
           <graphic fileref="images/process-visualization1.jpg" scalefit="1" width="100%"/>
         </figure>
+      </para>
+    </section>
+    <section id="using-java-api-graph-validator">
+      <title>Graph Validation</title>
+      <para>
+        Sarasvati allows validating graphs as they are constructed.
       </para>
     </section>
   </section>
