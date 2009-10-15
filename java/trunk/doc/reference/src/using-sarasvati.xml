@@ -2448,5 +2448,219 @@ public class DelayExecutionListener implements ExecutionListener
         </para>
       </section>
     </section>
+    <section id="using-sarasvati-pdv">
+      <title>Process Definition Visualization</title>
+
+      <para>
+        Sarasvati offers the ability to generate an HTML image map of
+        a process definition.
+        </para>
+
+      <para>
+        The most convenient way to create process definition image maps is
+        to use the <literal>GraphImageMapCreator</literal> class. This is
+        used in conjunction with an instance of <literal>GraphToImageMap</literal>,
+        which is used to help render the image and image map.
+
+        <itemizedlist>
+          <title>GraphImageMapCreator API</title>
+          <listitem>
+            <para>
+              getMapContents() - The text which should go into a
+              <literal>map</literal> tag
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              getImage () - The graph image
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              writeImageToFile() - Convenience method to write the
+              graph image to a file
+            </para>
+          </listitem>
+        </itemizedlist>
+
+        The <literal>GraphToImageMap</literal> provides the following
+        to <literal>GraphImageMapCreator</literal>.
+
+        <itemizedlist>
+          <listitem>
+            <para>
+              The <literal>Icon</literal> used to render each node
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The link for each node and arc
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              The hover text for each node and arc
+            </para>
+          </listitem>
+          <listitem>
+            <para>
+              A preference whether or not arc labels are rendered
+            </para>
+          </listitem>
+        </itemizedlist>
+
+        <literal>GraphToImageMapAdapter</literal> is a implementation
+        of <literal>GraphToImageMap</literal> which provides default
+        implementations of each of the methods.
+      </para>
+
+      <para>
+        Its use is demonstrated here, as it could be used in a JSP
+        file.
+        <programlisting >
+<![CDATA[
+<%
+  String basePath =
+    config.getServletContext().getRealPath( "/" );
+
+  HibEngine hibEngine = new HibEngine( hibSession );
+  GraphRepository repo = hibEngine.getRepository();
+  Graph graph = repo.getLatestGraph( "embedded-task-rej" );
+
+  GraphToImageMapAdapter helper =
+    new GraphToImageMapAdapter()
+  {
+    public String hrefForNode (Node node)
+    {
+      return "javascript:alert( 'You have selected " +
+             node.getName() + "' );";
+    }
+
+    public String hoverForNode (Node node)
+    {
+      return "Name: " + node.getName() +
+             ",  Type: " + node.getType() +
+             ",  Guard: " + node.getGuard() +
+             ",  Is start: " + node.isStart() +
+             ",  Is join: " + node.isJoin();
+    }
+  };
+
+  GraphImageMapCreator imageMapCreator =
+    new GraphImageMapCreator( graph, helper );
+  String name =  basePath + "/test.gif";
+  imageMapCreator.writeImageToFile( "gif", name );
+%>
+
+  <map name="graphMap">
+    <%=imageMapCreator.getMapContents()%>
+  </map>
+
+  <div style="margin-left:10px; padding-top:10px">
+    <image style="border:2px black solid"
+           src="<%=request.getContextPath()%>/test.gif"
+           usemap="#graphMap"/>
+  </div>
+]]>
+        </programlisting>
+
+          The resulting page would look something like:
+
+        <figure>
+          <graphic fileref="images/graph-visualization.jpg" scalefit="1" width="100%"/>
+        </figure>
+
+      </para>
+    </section>
+    <section id="using-sarasvati-pv">
+      <title>Process Visualization</title>
+      <para>
+        Sarasvati offers the ability to generate an HTML image map of a process.
+      </para>
+
+      <para>
+        The API for process visualizations is almost exactly the same as
+        that for graph visualizations. The difference is that when
+        visualizing we are dealing with instances of <literal>Node</literal>
+        and <literal>Arc</literal>, whereas with processes, we have instances of
+        <literal>VisualProcessNode</literal> and <literal>VisualProcessArc</literal>.
+        A <literal>VisualProcessNode</literal> wraps a <literal>Node</literal>
+        as well as a <literal>NodeToken</literal>, which may be null, since not
+        every <literal>Node</literal> may have been executed.
+      </para>
+
+      <para>
+        When doing process visualization, one would use the
+        <literal>ProcessImageMapCreator</literal>,
+        <literal>ProcessToImageMap</literal> and
+        <literal>ProcessToImageMapAdapter</literal> classes,
+        rather than the graph analogues.
+      </para>
+
+      <para>
+        Its use is demonstrated here, as it could be used in a JSP file.
+
+        <programlisting><![CDATA[
+<%
+  String basePath =
+    config.getServletContext().getRealPath( "/" );
+
+  HibEngine hibEngine = new HibEngine( hibSession );
+  GraphRepository repo = hibEngine.getRepository();
+  GraphProcess process = repo.findProcess( 1 );
+
+  final SimpleDateFormat sdf =
+    new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+
+  ProcessToImageMapAdapter helper =
+    new ProcessToImageMapAdapter ()
+  {
+    public String hrefForNode (VisualProcessNode node)
+    {
+      return "javascript:alert( 'You have selected " +
+                                node.getNode().getName() +
+                                "' );";
+    }
+
+    public String hoverForNode (VisualProcessNode node)
+    {
+      NodeToken token = node.getToken();
+      if ( token == null )
+      {
+        return null;
+      }
+      String start = sdf.format( token.getCreateDate() );
+      String end = (token.getCompleteDate() == null ?
+                      "Not yet finished" :
+                      sdf.format( token.getCompleteDate() ) )
+      return "Started: " + start +
+             " Finished: " + end;
+      }
+    };
+
+    ProcessImageMapCreator imageMapCreator =
+      new ProcessImageMapCreator( process, helper );
+    imageMapCreator.writeImageToFile( "gif", basePath + name );
+%>
+
+  <map name="processMap">
+    <%=imageMapCreator.getMapContents()%>
+  </map>
+
+  <div style="margin-left:10px; padding-top:10px">
+    <image style="border:2px black solid"
+           src="<%=request.getContextPath()%>/test.gif"
+           usemap="#processMap"/>
+  </div>
+]]>
+        </programlisting>
+
+        The resulting page would look something like:
+
+        <figure>
+          <graphic fileref="images/process-visualization1.jpg" scalefit="1" width="100%"/>
+        </figure>
+      </para>
+    </section>
   </section>
 </chapter>
