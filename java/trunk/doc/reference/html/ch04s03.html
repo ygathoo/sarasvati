@@ -714,7 +714,7 @@ public class TaskNode extends HibNode
       </p><p>
         The Env interface supports both persistent and transient attributes.
 
-        </p><div class="table"><a name="id440083"></a><p class="title"><b>Table 4.10. Environment Attribute Types</b></p><div class="table-contents"><table summary="Environment Attribute Types" border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
+        </p><div class="table"><a name="id411658"></a><p class="title"><b>Table 4.10. Environment Attribute Types</b></p><div class="table-contents"><table summary="Environment Attribute Types" border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
                   Must be serializable to the database. All primitives and object version of the primitives, as
                   well as String and Date are supported by default. Support for other types may be added
                   by defining an <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/env/AttributeConverter.html" target="_top">AttributeConverter</a>,
@@ -1025,13 +1025,13 @@ public class DelayExecutionListener implements ExecutionListener
         </p><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-backtracking-linear"></a>Linear Backtracking</h4></div></div></div><p>
             Here is a simple, linear workflow:
 
-            </p><div class="figure"><a name="id440710"></a><p class="title"><b>Figure 4.1. Linear Process Definition</b></p><div class="figure-contents"><div><img src="images/backtrack-graph1.jpg" alt="Linear Process Definition"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412285"></a><p class="title"><b>Figure 4.1. Linear Process Definition</b></p><div class="figure-contents"><div><img src="images/backtrack-graph1.jpg" alt="Linear Process Definition"></div></div></div><p><br class="figure-break">
 
             In this case, there is only one progression that can be made. Using
             squares for node tokens and triangles for arc tokens, the resulting
             execution looks like:
 
-            </p><div class="figure"><a name="id440726"></a><p class="title"><b>Figure 4.2. </b></p><div class="figure-contents"><div><img src="images/backtrack-process1.jpg"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412300"></a><p class="title"><b>Figure 4.2. </b></p><div class="figure-contents"><div><img src="images/backtrack-process1.jpg"></div></div></div><p><br class="figure-break">
 
             What if we wish to let a user choose to send the workflow backwards,
             instead of forwards, say to fix a mistake made earlier. If we
@@ -1039,12 +1039,12 @@ public class DelayExecutionListener implements ExecutionListener
             backwards. Assuming, we want maximum flexibility, we'd end up with
             a process definition that looked like:
 
-            </p><div class="figure"><a name="id440740"></a><p class="title"><b>Figure 4.3. Manual Linear Backtracking</b></p><div class="figure-contents"><div><img src="images/backtrack-graph2.jpg" alt="Manual Linear Backtracking"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412314"></a><p class="title"><b>Figure 4.3. Manual Linear Backtracking</b></p><div class="figure-contents"><div><img src="images/backtrack-graph2.jpg" alt="Manual Linear Backtracking"></div></div></div><p><br class="figure-break">
 
             Now we could go from A to B to C, back to B to C to D, back to B to C to
             D and done. The execution would look like:
 
-            </p><div class="figure"><a name="id440756"></a><p class="title"><b>Figure 4.4. Manual Linear Backtracking: Execution</b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process2.jpg" width="100%" alt="Manual Linear Backtracking: Execution"></td></tr></table></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412330"></a><p class="title"><b>Figure 4.4. Manual Linear Backtracking: Execution</b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process2.jpg" width="100%" alt="Manual Linear Backtracking: Execution"></td></tr></table></div></div></div><p><br class="figure-break">
 
             Note that the arc tokens now display the arc name.
           </p><p>
@@ -1061,12 +1061,12 @@ public class DelayExecutionListener implements ExecutionListener
             So, lets says we've gotten up to <span class="emphasis"><em>C</em></span>. At this
             point, the process execution history looks like:
 
-            </p><div class="figure"><a name="id440795"></a><p class="title"><b>Figure 4.5. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-1.jpg"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412369"></a><p class="title"><b>Figure 4.5. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-1.jpg"></div></div></div><p><br class="figure-break">
 
             Now we wish to backtrack to <span class="emphasis"><em>B</em></span>. If we
             retrace our steps, the process history will now look like:
 
-            </p><div class="figure"><a name="id440810"></a><p class="title"><b>Figure 4.6. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-2.jpg"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412384"></a><p class="title"><b>Figure 4.6. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-2.jpg"></div></div></div><p><br class="figure-break">
 
             Note that when we traverse arc <span class="emphasis"><em>2</em></span>
             backward, it's marked in red. This is to mark that we've gone
@@ -1081,12 +1081,12 @@ public class DelayExecutionListener implements ExecutionListener
             <span class="emphasis"><em>D</em></span>, where the process execution
             history looks like:
 
-            </p><div class="figure"><a name="id440847"></a><p class="title"><b>Figure 4.7. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process3-3.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412422"></a><p class="title"><b>Figure 4.7. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process3-3.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
 
             If from here, we once again wish to return to <span class="emphasis"><em>B</em></span>, the
             execution history will look like:
 
-            </p><div class="figure"><a name="id440867"></a><p class="title"><b>Figure 4.8. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process3-4.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412442"></a><p class="title"><b>Figure 4.8. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process3-4.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
 
             Note that since we are somewhat literally retracing our steps, to
             get from <span class="emphasis"><em>D</em></span> to <span class="emphasis"><em>B</em></span>
@@ -1096,11 +1096,11 @@ public class DelayExecutionListener implements ExecutionListener
             backtracked.
           </p><p>
             From here we now finish, and go to the end.
-            </p><div class="figure"><a name="id440906"></a><p class="title"><b>Figure 4.9. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process3-5.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412481"></a><p class="title"><b>Figure 4.9. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process3-5.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
           </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-backtracking-split"></a>Backtracking Across a Split</h4></div></div></div><p>
             Let us now examine a process definition which has splits and joins.
 
-            </p><div class="figure"><a name="id440936"></a><p class="title"><b>Figure 4.10. </b></p><div class="figure-contents"><div><img src="images/backtrack-graph3.jpg"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id412511"></a><p class="title"><b>Figure 4.10. </b></p><div class="figure-contents"><div><img src="images/backtrack-graph3.jpg"></div></div></div><p><br class="figure-break">
 
             These complicate manual backtracking a great deal.
          </p><p>
@@ -1121,7 +1121,7 @@ public class DelayExecutionListener implements ExecutionListener
           Here is an example of a graph which would be roughly equivalent to the
           previous graph, but allows manual backtracking.
 
-          </p><div class="figure"><a name="id440967"></a><p class="title"><b>Figure 4.11. Manual Backtracking Split/Join</b></p><div class="figure-contents"><div><img src="images/backtrack-graph4.jpg" alt="Manual Backtracking Split/Join"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412542"></a><p class="title"><b>Figure 4.11. Manual Backtracking Split/Join</b></p><div class="figure-contents"><div><img src="images/backtrack-graph4.jpg" alt="Manual Backtracking Split/Join"></div></div></div><p><br class="figure-break">
 
           It has a great deal many more arcs, as well as a more complicated
           structure, to accommodate backtracking to the split.
@@ -1131,11 +1131,11 @@ public class DelayExecutionListener implements ExecutionListener
           to where both <span class="emphasis"><em>C</em></span> and
           <span class="emphasis"><em>D</em></span> are open.
 
-          </p><div class="figure"><a name="id441002"></a><p class="title"><b>Figure 4.12. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s1.jpg"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412577"></a><p class="title"><b>Figure 4.12. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s1.jpg"></div></div></div><p><br class="figure-break">
 
           We can now attempt to backtrack to <span class="emphasis"><em>B</em></span>.
 
-          </p><div class="figure"><a name="id441016"></a><p class="title"><b>Figure 4.13. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s2.jpg"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412591"></a><p class="title"><b>Figure 4.13. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s2.jpg"></div></div></div><p><br class="figure-break">
 
           The engine will follow all execution history which emanated from
           <span class="emphasis"><em>B</em></span> and attempt to reverse it. So we can see
@@ -1145,7 +1145,7 @@ public class DelayExecutionListener implements ExecutionListener
           If we now attempt to backtrack one more step to <span class="emphasis"><em>A</em></span>,
           the execution history will look like:
 
-          </p><div class="figure"><a name="id441052"></a><p class="title"><b>Figure 4.14. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-s3.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412626"></a><p class="title"><b>Figure 4.14. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-s3.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
 
           Though this appears to be a simple linear backtrack, it's actually
           slightly complicated. The history starting from <span class="emphasis"><em>A</em></span>
@@ -1156,7 +1156,7 @@ public class DelayExecutionListener implements ExecutionListener
           and <span class="emphasis"><em>D</em></span> were open, back to <span class="emphasis"><em>A</em></span>,
           the execution history would look as follows:
 
-          </p><div class="figure"><a name="id441089"></a><p class="title"><b>Figure 4.15. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-s4.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412663"></a><p class="title"><b>Figure 4.15. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-s4.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
 
           It looks almost the same, except that the second <span class="emphasis"><em>B</em></span>
           is marked as a backwards execution, since this time, we went
@@ -1166,7 +1166,7 @@ public class DelayExecutionListener implements ExecutionListener
           We'll use the same process definition as we used for demonstrating
           splits.
 
-          </p><div class="figure"><a name="id441124"></a><p class="title"><b>Figure 4.16. </b></p><div class="figure-contents"><div><img src="images/backtrack-graph3.jpg"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412699"></a><p class="title"><b>Figure 4.16. </b></p><div class="figure-contents"><div><img src="images/backtrack-graph3.jpg"></div></div></div><p><br class="figure-break">
 
           Going back from a join is both more and less problematic than a split. A
           join can act as a split and send tokens back all of its inputs.
@@ -1178,12 +1178,12 @@ public class DelayExecutionListener implements ExecutionListener
           To start off with, assume execution has proceeded to
           <span class="emphasis"><em>E</em></span> and the execution history looks like:
 
-          </p><div class="figure"><a name="id441146"></a><p class="title"><b>Figure 4.17. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-j1.jpg"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412721"></a><p class="title"><b>Figure 4.17. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-j1.jpg"></div></div></div><p><br class="figure-break">
 
           If we then want to go back to when <span class="emphasis"><em>C</em></span>
           was open, the process will now look like:
 
-          </p><div class="figure"><a name="id441161"></a><p class="title"><b>Figure 4.18. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-j2.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412735"></a><p class="title"><b>Figure 4.18. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-j2.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
 
           As expected, <span class="emphasis"><em>C</em></span> is now open. To do so,
           we backtracked across arc <span class="emphasis"><em>4</em></span>. However,
@@ -1205,12 +1205,12 @@ public class DelayExecutionListener implements ExecutionListener
         </p><p>
           If we complete <span class="emphasis"><em>C</em></span> the process will look like:
 
-          </p><div class="figure"><a name="id441254"></a><p class="title"><b>Figure 4.19. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-j3.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412828"></a><p class="title"><b>Figure 4.19. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-j3.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
 
           If instead of completing <span class="emphasis"><em>C</em></span> we backtracked
           to <span class="emphasis"><em>D</em></span> as well, the process would now look like:
 
-          </p><div class="figure"><a name="id441276"></a><p class="title"><b>Figure 4.20. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-j4.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id412851"></a><p class="title"><b>Figure 4.20. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-j4.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
 
           The u-turn arc token is now marked as backtracked and a node token
           is now active on <span class="emphasis"><em>D</em></span> .
@@ -1285,4 +1285,171 @@ public class DelayExecutionListener implements ExecutionListener
   engine.backtrack( ancestor );
 
           </pre><p>
-        </p></div></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top"> Sarasvati File Format </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>
+        </p></div></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-sarasvati-pdv"></a>Process Definition Visualization</h3></div></div></div><p>
+        Sarasvati offers the ability to generate an HTML image map of
+        a process definition.
+        </p><p>
+        The most convenient way to create process definition image maps is
+        to use the <code class="literal">GraphImageMapCreator</code> class. This is
+        used in conjunction with an instance of <code class="literal">GraphToImageMap</code>,
+        which is used to help render the image and image map.
+
+        </p><div class="itemizedlist"><p class="title"><b>GraphImageMapCreator API</b></p><ul type="disc"><li><p>
+              getMapContents() - The text which should go into a
+              <code class="literal">map</code> tag
+            </p></li><li><p>
+              getImage () - The graph image
+            </p></li><li><p>
+              writeImageToFile() - Convenience method to write the
+              graph image to a file
+            </p></li></ul></div><p>
+
+        The <code class="literal">GraphToImageMap</code> provides the following
+        to <code class="literal">GraphImageMapCreator</code>.
+
+        </p><div class="itemizedlist"><ul type="disc"><li><p>
+              The <code class="literal">Icon</code> used to render each node
+            </p></li><li><p>
+              The link for each node and arc
+            </p></li><li><p>
+              The hover text for each node and arc
+            </p></li><li><p>
+              A preference whether or not arc labels are rendered
+            </p></li></ul></div><p>
+
+        <code class="literal">GraphToImageMapAdapter</code> is a implementation
+        of <code class="literal">GraphToImageMap</code> which provides default
+        implementations of each of the methods.
+      </p><p>
+        Its use is demonstrated here, as it could be used in a JSP
+        file.
+        </p><pre class="programlisting">
+
+&lt;%
+  String basePath =
+    config.getServletContext().getRealPath( "/" );
+
+  HibEngine hibEngine = new HibEngine( hibSession );
+  GraphRepository repo = hibEngine.getRepository();
+  Graph graph = repo.getLatestGraph( "embedded-task-rej" );
+
+  GraphToImageMapAdapter helper =
+    new GraphToImageMapAdapter()
+  {
+    public String hrefForNode (Node node)
+    {
+      return "javascript:alert( 'You have selected " +
+             node.getName() + "' );";
+    }
+
+    public String hoverForNode (Node node)
+    {
+      return "Name: " + node.getName() +
+             ",  Type: " + node.getType() +
+             ",  Guard: " + node.getGuard() +
+             ",  Is start: " + node.isStart() +
+             ",  Is join: " + node.isJoin();
+    }
+  };
+
+  GraphImageMapCreator imageMapCreator =
+    new GraphImageMapCreator( graph, helper );
+  String name =  basePath + "/test.gif";
+  imageMapCreator.writeImageToFile( "gif", name );
+%&gt;
+
+  &lt;map name="graphMap"&gt;
+    &lt;%=imageMapCreator.getMapContents()%&gt;
+  &lt;/map&gt;
+
+  &lt;div style="margin-left:10px; padding-top:10px"&gt;
+    &lt;image style="border:2px black solid"
+           src="&lt;%=request.getContextPath()%&gt;/test.gif"
+           usemap="#graphMap"/&gt;
+  &lt;/div&gt;
+
+        </pre><p>
+
+          The resulting page would look something like:
+
+        </p><div class="figure"><a name="id413145"></a><p class="title"><b>Figure 4.21. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/graph-visualization.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+
+      </p></div><div class="section" lang="en"><div class="titlepage"><div><div><h3 class="title"><a name="using-sarasvati-pv"></a>Process Visualization</h3></div></div></div><p>
+        Sarasvati offers the ability to generate an HTML image map of a process.
+      </p><p>
+        The API for process visualizations is almost exactly the same as
+        that for graph visualizations. The difference is that when
+        visualizing we are dealing with instances of <code class="literal">Node</code>
+        and <code class="literal">Arc</code>, whereas with processes, we have instances of
+        <code class="literal">VisualProcessNode</code> and <code class="literal">VisualProcessArc</code>.
+        A <code class="literal">VisualProcessNode</code> wraps a <code class="literal">Node</code>
+        as well as a <code class="literal">NodeToken</code>, which may be null, since not
+        every <code class="literal">Node</code> may have been executed.
+      </p><p>
+        When doing process visualization, one would use the
+        <code class="literal">ProcessImageMapCreator</code>,
+        <code class="literal">ProcessToImageMap</code> and
+        <code class="literal">ProcessToImageMapAdapter</code> classes,
+        rather than the graph analogues.
+      </p><p>
+        Its use is demonstrated here, as it could be used in a JSP file.
+
+        </p><pre class="programlisting">
+&lt;%
+  String basePath =
+    config.getServletContext().getRealPath( "/" );
+
+  HibEngine hibEngine = new HibEngine( hibSession );
+  GraphRepository repo = hibEngine.getRepository();
+  GraphProcess process = repo.findProcess( 1 );
+
+  final SimpleDateFormat sdf =
+    new SimpleDateFormat( "yyyy-MM-dd HH:mm:ss" );
+
+  ProcessToImageMapAdapter helper =
+    new ProcessToImageMapAdapter ()
+  {
+    public String hrefForNode (VisualProcessNode node)
+    {
+      return "javascript:alert( 'You have selected " +
+                                node.getNode().getName() +
+                                "' );";
+    }
+
+    public String hoverForNode (VisualProcessNode node)
+    {
+      NodeToken token = node.getToken();
+      if ( token == null )
+      {
+        return null;
+      }
+      String start = sdf.format( token.getCreateDate() );
+      String end = (token.getCompleteDate() == null ?
+                      "Not yet finished" :
+                      sdf.format( token.getCompleteDate() ) )
+      return "Started: " + start +
+             " Finished: " + end;
+      }
+    };
+
+    ProcessImageMapCreator imageMapCreator =
+      new ProcessImageMapCreator( process, helper );
+    imageMapCreator.writeImageToFile( "gif", basePath + name );
+%&gt;
+
+  &lt;map name="processMap"&gt;
+    &lt;%=imageMapCreator.getMapContents()%&gt;
+  &lt;/map&gt;
+
+  &lt;div style="margin-left:10px; padding-top:10px"&gt;
+    &lt;image style="border:2px black solid"
+           src="&lt;%=request.getContextPath()%&gt;/test.gif"
+           usemap="#processMap"/&gt;
+  &lt;/div&gt;
+
+        </pre><p>
+
+        The resulting page would look something like:
+
+        </p><div class="figure"><a name="id413273"></a><p class="title"><b>Figure 4.22. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/process-visualization1.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+      </p></div></div><div class="navfooter"><hr><table width="100%" summary="Navigation footer"><tr><td width="40%" align="left"><a accesskey="p" href="ch04s02.html">Prev</a> </td><td width="20%" align="center"><a accesskey="u" href="ch04.html">Up</a></td><td width="40%" align="right"> </td></tr><tr><td width="40%" align="left" valign="top"> Sarasvati File Format </td><td width="20%" align="center"><a accesskey="h" href="index.html">Home</a></td><td width="40%" align="right" valign="top"> </td></tr></table></div></body></html>
