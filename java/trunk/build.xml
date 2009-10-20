@@ -9,6 +9,7 @@
   <property name="examples.build.dir" value="${dist.dir}/examples"/>
   <property name="tests.build.dir" value="${dist.dir}/tests"/>
   <property name="build.jarbase.dir" value="${build.dir}/jarbase"/>
+  <property name="temp.dir" value="tmp"/>
 
   <property name="dist.name" value="sarasvati-java-${version}"/>
   <property name="release.name" value="sarasvati-${version}"/>
@@ -33,8 +34,9 @@
     </fileset>
   </path>
 
-  <taskdef name="antlr3" classname="org.apache.tools.ant.antlr.ANTLR3" classpathref="classpath"/>
+  <taskdef name="antlr3"   classname="org.apache.tools.ant.antlr.ANTLR3"        classpathref="classpath"/>
   <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="hudson"/>
+  <taskdef name="izpack"   classname="com.izforge.izpack.ant.IzPackTask"        classpath="installer/standalone-compiler.jar"/>
 
   <available file="${fetch.indicator}" property="libs.notfetched"/>
   <available file="lib/rubric.jar" property="rubric.jar.exists"/>
@@ -193,6 +195,19 @@
     <zip destfile="${archive.base}.zip" basedir="${dist.dir}" compress="true" level="9">
       <include name="${dist.name}/**"/>
     </zip>
+
+    <!-- Run installer build -->
+    <echo message="Running IzPack to build the installer..."/>
+    <izpack input="installer/installer.xml"
+            output="${dist.dir}/sarasvati-editor-${version}-install.jar"
+            installerType="standard"
+            inheritAll="true"
+            basedir="."
+            compression="deflate"
+            compressionlevel="9"/>
+    <!-- Clean working directory -->
+    <echo message="Done."/>
+
     <!--
     <tar destfile="${archive.base}.tar" basedir="${dist.dir}" longfile="gnu">
       <include name="${dist.name}/**"/>
