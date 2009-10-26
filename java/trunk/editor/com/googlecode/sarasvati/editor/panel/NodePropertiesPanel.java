@@ -334,7 +334,8 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
                            SvUtil.nullIfBlank( joinParamInput.getText() ),
                            startNodeInput.isSelected(),
                            SvUtil.nullIfBlank( guardInput.getText() ),
-                           customProperties );
+                           customProperties,
+                           false );
 
           if ( !newState.equals( node.getState() ) )
           {
@@ -395,6 +396,12 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
           }
         }
       });
+
+      if ( state.isNew() )
+      {
+        nodeNameInput.requestFocusInWindow();
+        nodeNameInput.selectAll();
+      }
     }
 
     public void nodeTypeChanged (final EditorNode node)

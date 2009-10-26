@@ -89,7 +89,8 @@ public class EditorGraphFactory
                                            nodeDef.getJoinParam(),
                                            nodeDef.isStart(),
                                            nodeDef.getGuard(),
-                                           customProperties );
+                                           customProperties,
+                                           false );
       EditorNode node = new EditorNode( nodeState );
 
       if ( nodeDef.getX() != null && nodeDef.getY() != null )
@@ -107,7 +108,7 @@ public class EditorGraphFactory
       Map<String,String> customProperties = new LinkedHashMap<String,String>();
       DOMToObjectLoadHelper.loadCustomIntoMap( externalDef.getCustom(), customProperties );
 
-      ExternalState externalState = new ExternalState( externalDef.getName(), externalDef.getProcessDefinition(), customProperties );
+      ExternalState externalState = new ExternalState( externalDef.getName(), externalDef.getProcessDefinition(), customProperties, false );
       EditorExternal external = new EditorExternal( externalState );
 
       if ( externalDef.getX() != null && externalDef.getY() != null )

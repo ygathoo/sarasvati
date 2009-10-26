@@ -28,9 +28,10 @@ public class ExternalState extends GraphMemberState
 
   public ExternalState (final String name,
                         final String graphName,
-                        final Map<String,String> customProperties)
+                        final Map<String,String> customProperties,
+                        final boolean isNew)
   {
-    super( name, customProperties );
+    super( name, customProperties, isNew );
     this.graphName = graphName;
   }
 
@@ -41,7 +42,7 @@ public class ExternalState extends GraphMemberState
 
   public ExternalState copy (final Set<String> currentNames)
   {
-    return new ExternalState( getNextUniqueName( currentNames ), graphName, getCustomProperties() );
+    return new ExternalState( getNextUniqueName( currentNames ), graphName, getCustomProperties(), true );
   }
 
   @Override
