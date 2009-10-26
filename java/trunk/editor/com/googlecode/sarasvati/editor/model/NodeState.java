@@ -38,9 +38,10 @@ public class NodeState extends GraphMemberState
                     final String joinParam,
                     final boolean isStart,
                     final String guard,
-                    final Map<String, String> customProperties)
+                    final Map<String, String> customProperties,
+                    final boolean isNew)
   {
-    super( name, customProperties );
+    super( name, customProperties, isNew );
     this.type = type;
     this.joinType = joinType;
     this.joinParam = joinParam;
@@ -81,7 +82,7 @@ public class NodeState extends GraphMemberState
 
   public NodeState copy (final Set<String> currentNames)
   {
-    return new NodeState( getNextUniqueName( currentNames ), type, joinType, joinParam, isStart, guard, getCustomProperties() );
+    return new NodeState( getNextUniqueName( currentNames ), type, joinType, joinParam, isStart, guard, getCustomProperties(), true );
   }
 
   /* (non-Javadoc)

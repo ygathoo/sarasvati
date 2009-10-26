@@ -162,7 +162,8 @@ public class CommandStack
                                      null,
                                      false,
                                      null,
-                                     null );
+                                     null,
+                                     true );
     EditorNode node = new EditorNode( state );
 
     pushAndPerform( new AddNodeCommand( scene, scene.convertLocalToScene( location ), node ) );
@@ -172,7 +173,7 @@ public class CommandStack
                                   final Point location)
   {
     current.externalCounter++;
-    ExternalState state = new ExternalState( "External_" + current.externalCounter, "", null );
+    ExternalState state = new ExternalState( "External_" + current.externalCounter, "", null, true );
     EditorExternal external = new EditorExternal( state );
 
     pushAndPerform( new AddExternalCommand( scene, scene.convertLocalToScene( location ), external ) );

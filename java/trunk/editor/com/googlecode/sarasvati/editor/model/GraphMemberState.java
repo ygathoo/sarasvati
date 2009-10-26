@@ -26,12 +26,15 @@ public class GraphMemberState
 {
   private final String name;
   private final Map<String,String> customProperties;
+  private boolean isNew;
 
   public GraphMemberState (final String name,
-                           final Map<String,String> customProperties)
+                           final Map<String,String> customProperties,
+                           final boolean isNew)
   {
     this.name = name;
     this.customProperties = customProperties;
+    this.isNew = isNew;
   }
 
   public String getName ()
@@ -68,7 +71,17 @@ public class GraphMemberState
     return uniqueName;
   }
 
-  /* (non-Javadoc)
+  public boolean isNew ()
+  {
+    return isNew;
+  }
+
+  public void setNew (final boolean isNew)
+  {
+    this.isNew = isNew;
+  }
+
+  /**
    * @see java.lang.Object#hashCode()
    */
   @Override
@@ -82,7 +95,7 @@ public class GraphMemberState
     return result;
   }
 
-  /* (non-Javadoc)
+  /**
    * @see java.lang.Object#equals(java.lang.Object)
    */
   @Override

@@ -230,7 +230,8 @@ public class ExternalPropertiesPanel extends javax.swing.JPanel {
           ExternalState newState =
             new ExternalState( nameInput.getText(),
                               (String)processDefinitionInput.getSelectedItem(),
-                              customProperties );
+                              customProperties,
+                              false );
 
           if ( !newState.equals( external.getState() ) )
           {
@@ -283,5 +284,11 @@ public class ExternalPropertiesPanel extends javax.swing.JPanel {
           }
         }
       });
+
+      if ( state.isNew() )
+      {
+        nameInput.selectAll();
+        nameInput.requestFocusInWindow();
+      }
     }
 }
