@@ -21,7 +21,7 @@
   </locale>
 
   <resources>
-    <res id="InfoPanel.info"        src="README" parse="yes"/>
+    <res id="InfoPanel.info"        src="README"/>
     <res id="LicencePanel.licence"  src="common/LGPLv3.license"/>
     <res id="shortcutSpec.xml"      src="installer/shortcutSpec.xml"/>
     <res id="Unix_shortcutSpec.xml" src="installer/Unix_shortcutSpec.xml"/>
@@ -41,9 +41,9 @@
   <packs>
     <pack name="Editor" required="yes">
       <description>Process Definition Editor</description>
-      <file targetdir="$INSTALL_PATH" src="../dist/sarasvati-java-@{version}/sarasvati-@{version}.jar"/>
-      <file targetdir="$INSTALL_PATH" src="../dist/sarasvati-java-@{version}/sarasvati-visual-@{version}.jar"/>
-      <file targetdir="$INSTALL_PATH" src="../dist/sarasvati-java-@{version}/sarasvati-editor-@{version}.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dist/sarasvati-java-@{version}/sarasvati-@{version}.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dist/sarasvati-java-@{version}/sarasvati-visual-@{version}.jar"/>
+      <file targetdir="$INSTALL_PATH" src="dist/sarasvati-java-@{version}/sarasvati-editor-@{version}.jar"/>
       <file targetdir="$INSTALL_PATH" src="lib/antlr-3.1.1.jar"/>
       <file targetdir="$INSTALL_PATH" src="lib/org-netbeans-api-visual.jar"/>
       <file targetdir="$INSTALL_PATH" src="lib/org-netbeans-api-visual-src.jar"/>
