@@ -160,16 +160,19 @@ public interface GraphLoader<G extends Graph>
 
   /**
    * Loads the named process definition. The given resolver is used to find the process definition
-   * and any of its dependencies that have not yet been loaded. Dependencies are only checked
-   * to see if they are loaded, they are not checked to see if they have been updated.
+   * and any of its dependencies that have not yet been loaded. The process definition is only
+   * and its dependencies are only loaded if they are new, have changed or dependencies have changed.
    *
    * @param name The name of the process definition to load
    * @param resolver The resolver to use in finding the process definition and its dependencies.
    *
+   * @return The list of load results, which indicate which process definitions have been loaded
+   *         and the reason why they were loaded (new, updated, dependency changed).
+   *
    * @throws SarasvatiLoadException Thrown if an error occurs during the load or if the
    *                                {@link GraphValidator} throws an exception.
    */
-  void loadWithDependencies (String name, ProcessDefinitionResolver resolver) throws SarasvatiLoadException;
+  List<LoadResult> loadWithDependencies (String name, ProcessDefinitionResolver resolver) throws SarasvatiLoadException;
 
   /**
    * Loads the given XML process definition file.

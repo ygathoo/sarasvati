@@ -638,15 +638,11 @@
 
         <para>
           It looks like:
-        </para>
 
-        <para>
           <informalfigure>
             <graphic fileref="../images/concepts-externals1.jpg"/>
           </informalfigure>
-        </para>
 
-        <para>
           The graph which contains external arcs going to 'ext', is below.
         </para>
 
@@ -690,47 +686,172 @@
 
         <para>
           It looks like:
-        </para>
 
-        <para>
           <informalfigure>
             <graphic fileref="../images/concepts-externals4.jpg" scalefit="1" width="100%"/>
           </informalfigure>
-        </para>
 
-        <para>
           When the process definition is loaded into memory, it will look like:
-        </para>
 
-        <para>
           <informalfigure>
             <graphic fileref="../images/concepts-externals5.jpg" scalefit="1" width="100%"/>
           </informalfigure>
-        </para>
 
+          The process definition file format also supports custom elements and
+          attributes, but before we discuss that, the API needs to be
+          introduced.
+        </para>
       </section>
     </section>
   </section>
-
-  <section id="using-java-api">
-    <title>Java API</title>
+  <section id="using-api-engine">
+    <title>The Sarasvati Engine</title>
     <para>
-      The process definition file format also supports custom elements and
-      attributes, but before we discuss that, the API needs to be
-      introduced.
+      Almost all interaction with the Sarasvati will involve an instance of an
+      <ulink url="../../javadoc/com/googlecode/sarasvati/Engine.html">Engine</ulink>
+      in some way.
+    </para>
+    <para>
+      An engine instance does the work of executing process definintions as well as
+      providing access to other APIs, such as the loader.
+    </para>
+    <para>
+      Sarasvati supports multiple backends, and is packaged with two. Each backend
+      will provide its own <literal>Engine</literal> impementation.
+
+      <table frame="all">
+        <title>Engine Implementations</title>
+        <tgroup cols="2">
+          <thead>
+            <row>
+              <entry>Name</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>MemEngine</entry>
+              <entry>
+                This engine runs only in memory. Workflows must be loaded everytime the
+                JVM starts up. Processes will only survive as long as the JVM is running.
+                Since no database accesses are done, this implementation should provide
+                the best performance.
+              </entry>
+            </row>
+            <row>
+              <entry>HibEngine</entry>
+              <entry>
+                This engine stores process definitions and the state of processes in
+                a database. Communication with the database is handled using Hibernate.
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      Creating a new <literal>MemEngine</literal> is straightforward.
+      <programlisting><![CDATA[
+  MemEngine engine = new MemEngine();
+      ]]></programlisting>
+
+      Creating a new <literal>HibEngine</literal> is only slightly more complicated.
+      It requires a Hibernate <literal>Session</literal> in order to function.
+      <programlisting><![CDATA[
+  HibEngine engine = new HibEngine( session );
+
+  // alternately, the session can be set
+  // after construction
+  HibEngine engine = new HibEngine();
+  engine.setSession( session );
+      ]]></programlisting>
+    </para>
+  </section>
+
+  <section id="using-api-loading">
+    <title>Loading Process Definitions</title>
+    <para>
+      Before a process definition can be executed, it must be loaded into memory,
+      and potentially combined with referenced externals.
+      This is a two step process.
+      <orderedlist>
+        <listitem>
+          First the process definition is loaded in an instance of
+          <ulink url="../../javadoc/com/googlecode/sarasvati/load/ProcessDefinition.html">ProcessDefinition</ulink>.
+          This instance maps directly to the XML process definition format.
+        </listitem>
+        <listitem>
+          Next, the <literal>ProcessDefinition</literal> is transformed into an instance of
+          <ulink url="../../javadoc/com/googlecode/sarasvati/Graph.html">Graph</ulink>. If
+          the process definition has externals defined, these must already be loaded and
+          will be imported into the new <literal>Graph</literal>.
+        </listitem>
+      </orderedlist>
+
+      Loading is done by an instance of
+      <ulink url="../../javadoc/com/googlecode/sarasvati/load/GraphLoader.html">GraphLoader</ulink>.
+      Instances of <literal>GraphLoader</literal> can be acquired from an <literal>Engine</literal>
+      instance. When a process definition is loaded, it will be loaded into a
+      <ulink url="../../javadoc/com/googlecode/sarasvati/load/GraphRepository.html">GraphRepository</ulink>
+      associated with the <literal>Engine</literal>.
+    </para>
+    <para>
+      There are various ways that process definitions can be loaded. The easiest is to load a single
+      file. Let us assume that process definitions are stored in <literal>./process-definitions/</literal>,
+      and we wish to load the <literal>test</literal> process definition.
+
+      <programlisting><![CDATA[
+  MemEngine engine = new MemEngine();
+  GraphLoader<?> loader = engine.getLoader();
+  loader.load( new File( "./process-definitions/test.wf.xml" ) );
+  Graph graph = engine.getRepository().getLatestGraph( "test" );
+  GraphProcess process = engine.startProcess( graph );
+
+        /* alternately */
+  MemEngine engine = new MemEngine();
+  engine.getLoader().load( new File( "./process-definitions/test.wf.xml" ) );
+  GraphProcess process = engine.startProcess( "test" );
+      ]]></programlisting>
+
+      If <literal>test</literal> has dependencies, and those dependencies are not yet
+      loaded, this load will fail. <literal>GraphLoader</literal> also has a method
+      to allow loading a process definition along with any dependencies that haven't
+      been loaded yet, or have changed. A SHA-1 hash is used to calculate if a
+      process definition has changed. This is stored in the <literal>customId</literal>
+      property of <literal>Graph</literal>.
+
+      <programlisting><![CDATA[
+  MemEngine engine = new MemEngine();
+  XmlLoader loader = new XmlLoader();
+
+  File basePath = new File( "./process-definitions" );
+  ProcessDefinitionResolver resolver =
+    new DefaultFileXmlProcessDefinitionResolver( xmlLoader, basePath );
+
+  engine.getLoader().loadWithDependencies( "test", resolver );
+  GraphProcess process = engine.startProcess( "test" );
+      ]]></programlisting>
+
+      Finally, it's often desirable to load an entire set of process definitions,
+      or at least those that are new or require updates. This can be done as
+      follows:
+
+      <programlisting><![CDATA[
+  MemEngine engine = new MemEngine();
+  File basePath = new File( "./process-definitions" );
+  engine.getLoader().loadNewAndChanged( new File( basePath ) );
+  GraphProcess process = engine.startProcess( "test" );
+      ]]></programlisting>
+
     </para>
 
     <section id="using-java-api-interfaces">
       <title>Interfaces</title>
       <para>
-        The main interface for interacting with process definitions and
-        processes is
-        <literal>Engine</literal>
-        :
+        The main interface for interacting with process definitions and processes is
+        <ulink url="../../javadoc/com/googlecode/sarasvati/Engine.html">Engine</ulink>.
       </para>
 
       <programlisting><![CDATA[package com.googlecode.sarasvati;
-
 public interface Engine
 {
   GraphProcess startProcess (Graph graph);
@@ -778,19 +899,13 @@ public interface Graph
 ]]></programlisting>
 
       <para>
-        A
-        <literal>Graph</literal>
-        contains instances of
-        <literal>Node</literal>
-        and
-        <literal>Arc</literal>
-        .
+        A <literal>Graph</literal> contains instances of
+        <literal>Node</literal> and <literal>Arc</literal>.
       </para>
 
       <para>
-        <literal>Node</literal>
-        is where the developer can provide custom functionality, and has
-        the following API:
+        <literal>Node</literal> is where the developer can provide custom
+        functionality, and has the following API:
       </para>
 
       <programlisting><![CDATA[package com.googlecode.sarasvati;
@@ -818,69 +933,32 @@ public interface Node extends Adaptable
 
       <orderedlist>
         <listitem>
-          <para>
-            Generate a
-            <literal>NodeToken</literal>
-            pointing to that node.
-          </para>
+          Generate a <literal>NodeToken</literal> pointing to that node.
         </listitem>
         <listitem>
-          <para>
-            Execute the <literal>guard</literal>
-            function on the node. This will return a
-            <literal>GuardResponse</literal>.
-          </para>
+          Execute the <literal>guard</literal> function on the node. This will return a
+          <literal>GuardResponse</literal>.
           <itemizedlist>
             <listitem>
-              <para>
-                The
-                <literal>GuardResponse</literal>
-                contains a
-                <literal>GuardAction</literal>
-                , which is an enum having values
-                <literal>AcceptToken</literal>
-                ,
-                <literal>DiscardToken</literal>
-                and
-                <literal>SkipNode</literal>
-                .
-              </para>
+              The <literal>GuardResponse</literal> contains a <literal>GuardAction</literal>,
+              which is an enum having values <literal>AcceptToken</literal>,
+              <literal>DiscardToken</literal> and <literal>SkipNode</literal>.
             </listitem>
           </itemizedlist>
         </listitem>
         <listitem>
-          <para>
-            If the action is
-            <literal>AcceptToken</literal>
-            , the
-            <literal>execute</literal>
-            method will be called. The process will not continue until
-            the
-            <literal>Engine#completeExecution</literal>
-            method is invoked. It must be invoked with the name of the
-            arcs on which to generate
-            <literal>ArcToken</literal>
-            s.
-          </para>
+          If the action is <literal>AcceptToken</literal>, the <literal>execute</literal>
+          method will be called. The process will not continue until the
+          <literal>Engine#completeExecution</literal> method is invoked. It must be
+          invoked with the name of the arcs on which to generate <literal>ArcToken</literal>s.
         </listitem>
         <listitem>
-          <para>
-            If the action is
-            <literal>DiscardToken</literal>
-            , the token is marked complete and no further execution
-            will take place from this set of tokens.
-          </para>
+          If the action is <literal>DiscardToken</literal>, the token is marked complete
+          and no further execution will take place from this set of tokens.
         </listitem>
         <listitem>
-          <para>
-            If the action is
-            <literal>SkipNode</literal>
-            ,
-            <literal>Engine.completeExecution</literal>
-            will be called with the arc name contained in the
-            <literal>GuardResponse</literal>
-            .
-          </para>
+          If the action is <literal>SkipNode</literal>, <literal>Engine.completeExecution</literal>
+          will be called with the arc name contained in the <literal>GuardResponse</literal>.
         </listitem>
       </orderedlist>
     </section>
@@ -2465,21 +2543,13 @@ public class DelayExecutionListener implements ExecutionListener
         <itemizedlist>
           <title>GraphImageMapCreator API</title>
           <listitem>
-            <para>
-              getMapContents() - The text which should go into a
-              <literal>map</literal> tag
-            </para>
+            getMapContents() - The text which should go into a <literal>map</literal> tag
           </listitem>
           <listitem>
-            <para>
-              getImage () - The graph image
-            </para>
+            getImage () - The graph image
           </listitem>
           <listitem>
-            <para>
-              writeImageToFile() - Convenience method to write the
-              graph image to a file
-            </para>
+            writeImageToFile() - Convenience method to write the graph image to a file
           </listitem>
         </itemizedlist>
 
@@ -2488,24 +2558,16 @@ public class DelayExecutionListener implements ExecutionListener
 
         <itemizedlist>
           <listitem>
-            <para>
-              The <literal>Icon</literal> used to render each node
-            </para>
+            The <literal>Icon</literal> used to render each node
           </listitem>
           <listitem>
-            <para>
-              The link for each node and arc
-            </para>
+            The link for each node and arc
           </listitem>
           <listitem>
-            <para>
-              The hover text for each node and arc
-            </para>
+            The hover text for each node and arc
           </listitem>
           <listitem>
-            <para>
-              A preference whether or not arc labels are rendered
-            </para>
+            A preference whether or not arc labels are rendered
           </listitem>
         </itemizedlist>
 
@@ -2667,8 +2729,89 @@ public class DelayExecutionListener implements ExecutionListener
     <section id="using-java-api-graph-validator">
       <title>Graph Validation</title>
       <para>
-        Sarasvati allows validating graphs as they are constructed.
+        Sarasvati allows graphs to be validated as they are constructed.
+        The <ulink url="../../javadoc/com/googlecode/sarasvati/load/GraphValidator.html">GraphValidator</ulink>
+        interface allows validation to be performed at two points:
+
+        <itemizedlist>
+          <listitem>
+              After the process definition has been loaded into memory, but before a <literal>Graph</literal>
+              has been constructed.
+          </listitem>
+          <listitem>
+            After a <literal>Graph</literal> instance has been constructed, but before it is added to the
+            <literal>GraphRepository</literal>.
+          </listitem>
+        </itemizedlist>
+
+        Implementers of the <literal>GraphValidator</literal> may choose whether to validate nodes and arcs
+        individually, or inspect the process definition as a whole.
       </para>
+      <para>
+        Implements will usually subclass
+        <ulink url="../../javadoc/com/googlecode/sarasvati/load/GraphValidatorAdapater.html">GraphValidatorAdapter</ulink>,
+        and only override the methods they need. Here is an example validator which looks at the guards on
+        node definitions before the <literal>Graph</literal> is constructor and check the start nodes afterwards.
+        <programlisting >
+        <![CDATA[
+public class ExampleGraphValidator extends GraphValidatorAdapter
+{
+  public void validateNodeDefinition (final NodeDefinition nd)
+    throws SarasvatiLoadException
+  {
+    if ( nd.getGuard() != null && !nd.getGuard().isEmpty() )
+    {
+      if ( !GuardValidator.isGuardValid( nd.getGuard() )
+      {
+        throw new SarasvatiLoadException(
+          "The guard defined for node " + nd.getName()  +
+          " failed validation." );
+      }
+    }
+  }
+
+  public void validateGraph (final Graph graph)
+    throws SarasvatiLoadException
+  {
+    List<? extends Node> startNodes = graph.getStartNodes();
+    if ( startNodes.size() != 1 ||
+        !"validate-order".equals( startNodes.get( 0 ).getType() ) )
+    {
+      throw new SarasvatiLoadException(
+        "Process definition " + graph.getName() +
+        " does not start with validte order node. " +
+        "Policy dictates that all " +
+        "workflows must start with a " +
+        "validate order node" );
+    }
+  }
+}
+]]>
+        </programlisting>
+
+        This graph validator could now be used by passing it into the
+        <literal>getLoader</literal> method of <literal>Engine</literal>
+        as follows:
+
+        <programlisting><![CDATA[
+  MemEngine engine = new MemEngine();
+  File basePath = new File( "./process-definitions" );
+  GraphValidator val = new ExampleGraphValidator();
+  GraphLoader<?> loader = engine.getLoader( val );
+  loader.loadNewAndChanged( new File( basePath ) );
+  GraphProcess process = engine.startProcess( "test" );
+      ]]></programlisting>
+
+      </para>
+    </section>
+    <section id="using-java-api-token-sets">
+      <title>Token Sets/Templates</title>
+      <section id="using-java-api-token-sets-intro">
+        <title>Introduction</title>
+        <para>
+          It is o
+        </para>
+      </section>
     </section>
   </section>
 </chapter>
