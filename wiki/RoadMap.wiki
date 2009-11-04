@@ -18,7 +18,7 @@ Sarasvati is fairly stable at this point, and we are workings towards a 1.0 rele
    * Convert visualization docs - DONE
    * Convert backtracking doc   - DONE
    * hibernate node type handling - DONE
-   * Graph validation framework
+   * Graph validation framework - DONE
    * Token Sets documentation
    * Editor docs
 
