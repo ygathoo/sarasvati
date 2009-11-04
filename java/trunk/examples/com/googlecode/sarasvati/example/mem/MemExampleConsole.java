@@ -336,7 +336,7 @@ public class MemExampleConsole
       {
         try
         {
-          wfLoader.loadWithDependencies( name, resolver );
+          System.out.println( wfLoader.loadWithDependencies( name, resolver ) );
         }
         catch( Exception e )
         {

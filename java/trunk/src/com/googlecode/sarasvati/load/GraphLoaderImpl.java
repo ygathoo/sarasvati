@@ -22,7 +22,6 @@ package com.googlecode.sarasvati.load;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -30,6 +29,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.Stack;
 
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
@@ -61,7 +61,7 @@ public class GraphLoaderImpl<G extends Graph> extends AbstractGraphLoader<G>
   public <T> void loadDefinition (final ProcessDefinitionTranslator<T> translator, final T source)
     throws SarasvatiLoadException
   {
-    loadDefinition( translator, source, null );
+    loadDefinition( translator.translate( source ) );
   }
 
   public <T> void loadDefinition (final ProcessDefinitionTranslator<T> translator,
@@ -69,47 +69,89 @@ public class GraphLoaderImpl<G extends Graph> extends AbstractGraphLoader<G>
                                   final String customId)
     throws SarasvatiLoadException
   {
-    ProcessDefinition def = translator.translate( source );
-    loadDefinition( def, customId );
+    loadDefinition( translator.translate( source ), customId );
   }
 
   public void loadDefinition (final ProcessDefinition procDef)
     throws SarasvatiLoadException
   {
-    loadDefinition( procDef, null );
+    loadDefinition( procDef, procDef.getMessageDigest() );
   }
 
-  public void loadWithDependencies (final String name, final ProcessDefinitionResolver resolver )
+  public List<LoadResult> loadWithDependencies (final String name, final ProcessDefinitionResolver resolver)
     throws SarasvatiLoadException
   {
-    loadWithDependencies( name, resolver, new ArrayList<String>() );
-  }
-
-  private void loadWithDependencies (final String name,
-                                     final ProcessDefinitionResolver resolver,
-                                     final List<String> stack)
-    throws SarasvatiLoadException
-  {
-    stack.add( name );
     ProcessDefinition procDef = resolver.resolve( name );
+    List<LoadResult> results = loadDependenciesIfNeeded( procDef, resolver, new Stack<String>(), new HashMap<String, ProcessDefinition>() );
+    LoadResult result = loadIfNeeded( procDef, results );
+    if ( result != null )
+    {
+      results.add( result );
+    }
+    return results;
+  }
+
+  private List<LoadResult> loadDependenciesIfNeeded (final ProcessDefinition procDef,
+                                                     final ProcessDefinitionResolver resolver,
+                                                     final Stack<String> stack,
+                                                     final Map<String, ProcessDefinition> loaded)
+  {
+    List<LoadResult> results = new LinkedList<LoadResult>();
+    stack.push( procDef.getName() );
 
     for ( ExternalDefinition external : procDef.getExternals() )
     {
       String extName = external.getProcessDefinition();
       if ( stack.contains( extName ) )
       {
-        throw new SarasvatiLoadException( "Process definition '" + name + "' contains an illegal recursive reference to '" + extName + "'" );
+        throw new SarasvatiLoadException( "Process definition '" + procDef.getName() +
+                                          "' contains an illegal recursive reference to '" +
+                                          extName + "'" );
       }
 
-      if ( !isLoaded( extName ) )
+      ProcessDefinition externalDef = loaded.get( extName );
+      if ( externalDef == null )
       {
-        loadWithDependencies( extName, resolver, stack );
+        externalDef = resolver.resolve( extName );
+        loaded.put( extName, externalDef );
+      }
+
+      List<LoadResult> childResults = loadDependenciesIfNeeded( externalDef, resolver, stack, loaded );
+      results.addAll( childResults );
+      LoadResult result = loadIfNeeded( externalDef, childResults );
+      if ( result != null )
+      {
+        results.add( result );
       }
     }
 
-    stack.remove( stack.size() - 1 );
+    stack.pop();
+    return results;
+  }
 
-    loadDefinition( procDef );
+  private LoadResult loadIfNeeded (final ProcessDefinition procDef,
+                                   final List<LoadResult> childResults )
+  {
+    Graph latest = repository.getLatestGraph( procDef.getName() );
+    String digest = procDef.getMessageDigest();
+
+    if ( latest == null )
+    {
+      loadDefinition( procDef );
+      return LoadResult.newGraph( procDef.getName() );
+    }
+
+    if ( !digest.equals( latest.getCustomId() ) )
+    {
+      loadDefinition( procDef );
+      return LoadResult.updatedGraph( procDef.getName() );
+    }
+    else if ( !childResults.isEmpty() )
+    {
+      loadDefinition( procDef );
+      return LoadResult.updatedGraph( procDef.getName(), childResults.get( 0 ).getName() );
+    }
+    return null;
   }
 
   public boolean isLoaded (final String name)
