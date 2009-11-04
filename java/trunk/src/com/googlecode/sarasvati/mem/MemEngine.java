@@ -21,6 +21,8 @@ package com.googlecode.sarasvati.mem;
 
 import com.googlecode.sarasvati.impl.BaseEngine;
 import com.googlecode.sarasvati.load.GraphLoader;
+import com.googlecode.sarasvati.load.GraphLoaderImpl;
+import com.googlecode.sarasvati.load.GraphValidator;
 
 public class MemEngine extends BaseEngine
 {
@@ -64,7 +66,13 @@ public class MemEngine extends BaseEngine
   @Override
   public GraphLoader<MemGraph> getLoader()
   {
-    return new GraphLoader<MemGraph>( MemGraphFactory.INSTANCE, MemGraphRepository.INSTANCE );
+    return getLoader( null );
+  }
+
+  @Override
+  public GraphLoader<MemGraph> getLoader (final GraphValidator validator)
+  {
+    return new GraphLoaderImpl<MemGraph>( MemGraphFactory.INSTANCE, MemGraphRepository.INSTANCE, null );
   }
 
   @Override

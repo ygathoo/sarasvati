@@ -30,6 +30,7 @@ import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.GraphRepository;
+import com.googlecode.sarasvati.load.GraphValidator;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.script.ScriptEnv;
 
@@ -209,10 +210,21 @@ public interface Engine
   /**
    * Returns an appropriate {@link GraphLoader} for this {@link Engine}. Subclasses
    * may override this provide customer behavior.
+   * <p>
+   * Equivalent to getLoader( null )
+   * <p>
    *
    * @return A {@link GraphLoader} which, by default, will use the factory and repository from this engine.
    */
   GraphLoader<? extends Graph> getLoader ();
+
+  /**
+   * Returns an appropriate {@link GraphLoader} for this {@link Engine}. Subclasses
+   * may override this provide customer behavior.
+   *
+   * @return A {@link GraphLoader} which, by default, will use the factory and repository from this engine.
+   */
+  GraphLoader<? extends Graph> getLoader (GraphValidator validator);
 
   /**
    * Adds the type to the {@link GraphFactory} for this engine. Specifies

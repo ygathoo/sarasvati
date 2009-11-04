@@ -18,6 +18,26 @@
 */
 package com.googlecode.sarasvati.load;
 
+/**
+ * Class to track that a process definition was loaded and the cause
+ * of the load. A process definition may be reloaded for one of three
+ * reasons.
+ * <p>
+ *
+ * <ol>
+ *   <li>
+ *     The process definition is new.
+ *   </li>
+ *   <li>
+ *     The process definition has changed.
+ *   </li>
+ *   <li>
+ *     A dependency of the process definition has changed.
+ *   </li>
+ * </ol>
+ *
+ * @author Paul Lorenz
+ */
 public class LoadResult
 {
   private String name;
@@ -33,21 +53,38 @@ public class LoadResult
     this.dependency = dependency;
   }
 
+  /**
+   * @return The name of the process definition that was loaded
+   */
   public String getName ()
   {
     return name;
   }
 
+  /**
+   * @return True if the process definition didn't exist previously,
+   *         and this was the first load, and false if the process
+   *         definition was loaded for some other reason.
+   */
   public boolean isNew ()
   {
     return isNew;
   }
 
+  /**
+   * @return True if the process definition was reloaded because a
+   *         dependency was reloaded, and false otherwise.
+   */
   public boolean isCascade ()
   {
     return dependency != null;
   }
 
+  /**
+   * @return If the process definition was reloaded because a dependency
+   *         changed, this will list the dependency, otherwise it will
+   *         return null.
+   */
   public String getDependency ()
   {
     return dependency;
