@@ -79,7 +79,7 @@ public class TestHibLoad
       }
     };
 
-    List<LoadResult> results = wfLoader.loadNewAndChanged( baseDir, filter, null );
+    List<LoadResult> results = wfLoader.loadNewAndChanged( baseDir, filter );
 
     for ( LoadResult result : results )
     {

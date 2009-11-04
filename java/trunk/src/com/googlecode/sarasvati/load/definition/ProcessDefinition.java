@@ -35,11 +35,23 @@ import com.googlecode.sarasvati.load.ProcessDefinitionTranslator;
  */
 public interface ProcessDefinition
 {
+  /**
+   * @return The process definition name
+   */
+  String getName ();
 
-  public String getName ();
+  /**
+   * @return A message digest/hash of the process definition contents.
+   */
+  String getMessageDigest ();
 
-  public List<? extends NodeDefinition> getNodes ();
+  /**
+   * @return A list of the nodes defined in the process definition
+   */
+  List<? extends NodeDefinition> getNodes ();
 
-  public List<? extends ExternalDefinition> getExternals ();
-
+  /**
+   * @return A list of the externals defined in the process definition.
+   */
+  List<? extends ExternalDefinition> getExternals ();
 }

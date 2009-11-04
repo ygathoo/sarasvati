@@ -14,516 +14,171 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008-2009 Paul Lorenz
-                        Vincent Kirsch
+    Copyright 2009 Paul Lorenz
 */
-
 package com.googlecode.sarasvati.load;
 
 import java.io.File;
 import java.io.FilenameFilter;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
-import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.External;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.load.definition.ArcDefinition;
-import com.googlecode.sarasvati.load.definition.ExternalArcDefinition;
-import com.googlecode.sarasvati.load.definition.ExternalDefinition;
-import com.googlecode.sarasvati.load.definition.NodeDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
-import com.googlecode.sarasvati.util.FileVisitor;
-import com.googlecode.sarasvati.util.SvUtil;
-import com.googlecode.sarasvati.xml.XmlLoader;
-import com.googlecode.sarasvati.xml.XmlProcessDefinition;
 
 /**
- * Given a {@link GraphFactory} to construct the {@link Graph} parts,
- * a {@link GraphRepository} and a {@link ProcessDefinitionTranslator} to translate the
- * "raw" definition (for example an XML file) into a ProcessDefinition it can understand,
- * the GraphLoader will load process definitions into that repository.
- *
- * This class is *not* thread safe
+ * Interface for loading process definitions into a {@link GraphRepository}.
+ * Should not be considered thread-safe.
  *
  * @author Paul Lorenz
  */
-public class GraphLoader<G extends Graph>
+public interface GraphLoader<G extends Graph>
 {
-  protected Map<String,Map<String,Node>> instanceCache = null;
-  protected Map<String,Node>             nodeCache     = null;
-
-  protected GraphFactory<G> factory;
-  protected GraphRepository<G> repository;
-  protected G graph;
-
-  public GraphLoader (final GraphFactory<G> factory, final GraphRepository<G> repository)
-  {
-    this.factory = factory;
-    this.repository = repository;
-  }
-
-  protected Graph getGraph ()
-  {
-    return graph;
-  }
-
-  protected void importNodes (final ProcessDefinition procDef) throws SarasvatiLoadException
-  {
-    for ( NodeDefinition nodeDef : procDef.getNodes() )
-    {
-      String nodeName = nodeDef.getName();
-
-      if ( nodeCache.containsKey( nodeName ) )
-      {
-        throw new SarasvatiLoadException( "Node name '" + nodeName + "' is not unique in workflow: " + graph.getName() );
-      }
-
-      String type = nodeDef.getType();
-
-      List<Object> customData = nodeDef.getCustom() == null ? null : nodeDef.getCustom().getCustom();
-
-      Node newNode = factory.newNode( graph, nodeName,
-                                      type == null ? "node" : type,
-                                      nodeDef.getJoinType(),
-                                      nodeDef.getJoinParam(),
-                                      nodeDef.isStart(),
-                                      nodeDef.getGuard(),
-                                      customData );
-      nodeCache.put( nodeName, newNode );
-    }
-  }
-
-  protected void importArcs (final ProcessDefinition procDef) throws SarasvatiLoadException
-  {
-    for ( NodeDefinition nodeDef : procDef.getNodes() )
-    {
-      for ( ArcDefinition arcDef : nodeDef.getArcs() )
-      {
-        Node startNode = nodeCache.get( nodeDef.getName() );
-        Node endNode = null;
-
-        if ( !SvUtil.isBlankOrNull( arcDef.getExternal() ) )
-        {
-          endNode = getExternalNode( arcDef.getExternal(), arcDef.getTo() );
-          if ( endNode == null )
-          {
-            throw new SarasvatiLoadException( "Arc in node '" + nodeDef.getName() +
-                                              "' points to non-existent node '" + arcDef.getTo() +
-                                              "' in external '" + arcDef.getExternal() + "'" );
-          }
-        }
-        else
-        {
-          endNode = nodeCache.get( arcDef.getTo() );
-          if ( endNode == null )
-          {
-            throw new SarasvatiLoadException( "Arc in node '" + nodeDef.getName() +
-                                              "' points to non-existent node '" + arcDef.getTo() + "'" );
-          }
-        }
-
-        factory.newArc( graph, startNode, endNode, SvUtil.isBlankOrNull( arcDef.getName() ) ? Arc.DEFAULT_ARC : arcDef.getName() );
-      }
-    }
-  }
-
-  protected void importExternals (final ProcessDefinition procDef)
-  {
-    for ( ExternalDefinition externalDefinition : procDef.getExternals() )
-    {
-      Map<String,Node> instance = importInstance( externalDefinition );
-      instanceCache.put( externalDefinition.getName(), instance );
-    }
-  }
-
-  protected Node getExternalNode (final String external, final String node)
-  {
-    Map<String,Node> instance = instanceCache.get( external );
-
-    if ( instance == null )
-    {
-      throw new SarasvatiLoadException( "Referenced external '" + external + "' not defined." );
-    }
-
-    return instance.get( node );
-  }
-
-  protected void importExternalArcs (final ProcessDefinition procDef)
-  {
-    for ( ExternalDefinition externalDef : procDef.getExternals() )
-    {
-      for ( ExternalArcDefinition externalArcDef : externalDef.getExternalArcs() )
-      {
-        Node startNode = getExternalNode( externalDef.getName(), externalArcDef.getFrom() );
-        Node endNode = null;
-
-        if ( !SvUtil.isBlankOrNull( externalArcDef.getExternal() ) )
-        {
-          endNode = getExternalNode( externalArcDef.getExternal(), externalArcDef.getTo() );
-          if ( endNode == null )
-          {
-            throw new SarasvatiLoadException( "Arc in external '" + externalDef.getName() +
-                                     "' points to non-existent node '" + externalArcDef.getTo() +
-                                     "' in external '" + externalArcDef.getExternal() + "'" );
-          }
-        }
-        else
-        {
-          endNode = nodeCache.get( externalArcDef.getTo() );
-          if ( endNode == null )
-          {
-            throw new SarasvatiLoadException( "Arc in external'" + externalArcDef.getName() +
-                                     "' points to non-existent node '" + externalArcDef.getTo() + "'" );
-          }
-        }
-
-        String arcName = SvUtil.isBlankOrNull( externalArcDef.getName() ) ? Arc.DEFAULT_ARC : externalArcDef.getName();
-
-        factory.newArc( graph, startNode, endNode, arcName );
-      }
-    }
-  }
-
-  protected Map<String,Node> importInstance (final ExternalDefinition externalDefinition)
-  {
-    Map<String, Node> nodeMap = new HashMap<String, Node>();
-    Graph instanceGraph = repository.getLatestGraph( externalDefinition.getProcessDefinition() );
-
-    if ( instanceGraph == null )
-    {
-      throw new SarasvatiLoadException( "Referenced external '" + externalDefinition.getProcessDefinition() + "' not found in database" );
-    }
-
-    External external = factory.newExternal( externalDefinition.getName(),
-                                             graph,
-                                             instanceGraph,
-                                             externalDefinition.getCustom() );
-
-    Map<Node,Node> lookupMap = new HashMap<Node, Node>();
-
-    for ( Node node : instanceGraph.getNodes() )
-    {
-      Node newNode = factory.importNode( graph, node, external );
-
-      lookupMap.put( node, newNode );
-      if ( !node.isImportedFromExternal() )
-      {
-        nodeMap.put( node.getName(), newNode );
-      }
-    }
-
-    for ( Arc arc : instanceGraph.getArcs() )
-    {
-      Node startNode = lookupMap.get( arc.getStartNode() );
-      Node endNode = lookupMap.get( arc.getEndNode() );
-      factory.newArc( graph, startNode, endNode, arc.getName() );
-    }
-
-    return nodeMap;
-  }
-
-  public <T> void loadDefinition (final ProcessDefinitionTranslator<T> translator,
-                                  final T source)
-    throws SarasvatiLoadException
-  {
-    loadDefinition( translator, source, null );
-  }
-
-  public <T> void loadDefinition (final ProcessDefinitionTranslator<T> translator,
-                                  final String customId,
-                                  final T source)
-    throws SarasvatiLoadException
-  {
-    loadDefinition( translator, source, customId, null );
-  }
-
-  public <T> void loadDefinition (final ProcessDefinitionTranslator<T> translator,
-                                  final T source,
-                                  final GraphValidator validator)
-    throws SarasvatiLoadException
-  {
-    ProcessDefinition def = translator.translate( source );
-    loadDefinition( def, null, validator );
-  }
-
-  public <T> void loadDefinition (final ProcessDefinitionTranslator<T> translator,
-                                  final T source,
-                                  final String customId,
-                                  final GraphValidator validator)
-    throws SarasvatiLoadException
-  {
-    ProcessDefinition def = translator.translate( source );
-    loadDefinition( def, customId, validator );
-  }
-
-  public void loadDefinition (final ProcessDefinition procDef)
-    throws SarasvatiLoadException
-  {
-    loadDefinition( procDef, null, null );
-  }
-
-  public void loadDefinition (final ProcessDefinition procDef,
-                              final String customId)
-    throws SarasvatiLoadException
-  {
-    loadDefinition( procDef, customId, null );
-  }
-
-  public void loadDefinition (final ProcessDefinition procDef,
-                              final GraphValidator validator)
-    throws SarasvatiLoadException
-  {
-    loadDefinition( procDef, null, validator );
-  }
-
-  public void loadDefinition (final ProcessDefinition procDef,
-                              final String customId,
-                              final GraphValidator validator)
-      throws SarasvatiLoadException
-  {
-    validateXml( procDef, validator );
-
-    instanceCache = new HashMap<String, Map<String,Node>>();
-    nodeCache     = new HashMap<String, Node>();
-
-    Graph latest = repository.getLatestGraph( procDef.getName() );
-
-    int version = latest == null ? 1 : latest.getVersion() + 1;
-
-    graph = factory.newGraph( procDef.getName(), version, customId );
-
-    importExternals( procDef );
-    importNodes( procDef );
-    importArcs( procDef );
-    importExternalArcs( procDef );
-
-    validateGraph( validator );
-
-    repository.addGraph( graph );
-  }
-
-  protected void validateXml (final ProcessDefinition procDef,
-                              final GraphValidator validator)
-      throws SarasvatiLoadException
-  {
-    try
-    {
-      if ( validator == null )
-      {
-        return;
-      }
-
-      validator.validateProcessDefinition( procDef );
-      for ( NodeDefinition nodeDef : procDef.getNodes() )
-      {
-        validator.validateNodeDefinition( nodeDef );
-
-        for ( ArcDefinition arcDef : nodeDef.getArcs() )
-        {
-          validator.validateArcDefinition( arcDef );
-        }
-      }
-
-      for ( ExternalDefinition externalDef : procDef.getExternals() )
-      {
-        validator.validateExternalDefinition( externalDef );
-
-        for ( ExternalArcDefinition externalArcDef : externalDef.getExternalArcs() )
-        {
-          validator.validateExternalArcDefinition( externalArcDef );
-        }
-      }
-    }
-    catch ( RuntimeException re )
-    {
-      throw new SarasvatiLoadException( "Failure while loading process definition '" + procDef + "'", re );
-    }
-  }
-
-  protected void validateGraph (final GraphValidator validator) throws SarasvatiLoadException
-  {
-    if ( validator == null )
-    {
-      return;
-    }
-
-    validator.validateGraph( graph );
-
-    for ( Node node : graph.getNodes() )
-    {
-      validator.validateNode( node );
-    }
-
-    for ( Arc arc : graph.getArcs() )
-    {
-      validator.validateArc( arc );
-    }
-  }
-
-
-  public void loadWithDependencies (final String name,
-                                    final ProcessDefinitionResolver resolver)
-    throws SarasvatiLoadException
-  {
-    loadWithDependencies( name, resolver, null );
-  }
-
-  public void loadWithDependencies (final String name,
-                                    final ProcessDefinitionResolver resolver,
-                                    final GraphValidator validator)
-    throws SarasvatiLoadException
-  {
-    loadWithDependencies( name, resolver, validator, new ArrayList<String>() );
-  }
-
-  private void loadWithDependencies (final String name,
-                                     final ProcessDefinitionResolver resolver,
-                                     final GraphValidator validator,
-                                     final List<String> stack)
-    throws SarasvatiLoadException
-  {
-    stack.add( name );
-    ProcessDefinition procDef = resolver.resolve( name );
-
-    for ( ExternalDefinition external : procDef.getExternals() )
-    {
-      String extName = external.getProcessDefinition();
-      if ( stack.contains( extName ) )
-      {
-        throw new SarasvatiLoadException( "Process definition '" + name + "' contains an illegal recursive reference to '" + extName + "'" );
-      }
-
-      if ( !isLoaded( extName ) )
-      {
-        loadWithDependencies( extName, resolver, validator, stack );
-      }
-    }
-
-    stack.remove( stack.size() - 1 );
-
-    loadDefinition( procDef, validator );
-  }
-
-  public boolean isLoaded (final String name)
-  {
-    return null != repository.getLatestGraph( name );
-  }
-
-  public List<LoadResult> loadNewAndChanged (final File basePath,
-                                             final GraphValidator validator)
-    throws SarasvatiLoadException
-  {
-    FilenameFilter filenameFilter = new FilenameFilter()
-    {
-      @Override
-      public boolean accept (final File dir, final String name)
-      {
-        return name.endsWith( ".wf.xml" );
-      }
-    };
-
-    return loadNewAndChanged( basePath, filenameFilter, validator );
-  }
-
-  public List<LoadResult> loadNewAndChanged (final File basePath,
-                                             final FilenameFilter filenameFilter,
-                                             final GraphValidator validator)
-    throws SarasvatiLoadException
-  {
-    final XmlLoader xmlLoader = new XmlLoader();
-    final Map<String, XmlProcessDefinition> processDefs = new HashMap<String, XmlProcessDefinition>();
-
-    FileVisitor visitor = new FileVisitor()
-    {
-      @Override
-      public boolean accept (final File dir, final String name)
-      {
-        return filenameFilter.accept( dir, name );
-      }
-
-      public void accept (final File file)
-      {
-        XmlProcessDefinition pd = xmlLoader.translate( file );
-        processDefs.put( pd.getName(), pd );
-      }
-    };
-
-    Set<String> updated = new HashSet<String>();
-
-    SvUtil.visitRecursive( basePath, visitor, true );
-
-    List<LoadResult> loadResults = new LinkedList<LoadResult>();
-
-    // Find all process definitions that are new or have changed
-    for ( XmlProcessDefinition processDefinition : processDefs.values() )
-    {
-      String name   = processDefinition.getName();
-      String digest = processDefinition.getMessageDigest();
-
-      Graph latest = repository.getLatestGraph( name );
-      if ( latest == null )
-      {
-        updated.add( name );
-        loadResults.add( LoadResult.newGraph( name ) );
-      }
-      else if ( !digest.equals( latest.getCustomId() ) )
-      {
-        updated.add( name );
-        loadResults.add( LoadResult.updatedGraph( name ) );
-      }
-    }
-
-    // Collection is sorted so that externals are before all places that they are used.
-    Collection<XmlProcessDefinition> sorted = SvUtil.getSorted( processDefs );
-
-    // Find all process definition which depend on those that have been updated
-    for ( XmlProcessDefinition processDefinition : sorted )
-    {
-      String name = processDefinition.getName();
-      // If we already know it needs to updated, skip checking this one
-      if ( updated.contains( name ) )
-      {
-        continue;
-      }
-
-      for ( ExternalDefinition ext : processDefinition.getExternals() )
-      {
-        if ( updated.contains( ext.getProcessDefinition() ) )
-        {
-          updated.add( name );
-          loadResults.add( LoadResult.updatedGraph( name, ext.getProcessDefinition() ) );
-          break;
-        }
-      }
-    }
-
-    // Load all updated/new process definitions in order
-    for ( XmlProcessDefinition processDefinition : sorted )
-    {
-      if ( updated.contains( processDefinition.getName() ) )
-      {
-        loadDefinition( processDefinition, processDefinition.getMessageDigest(), validator );
-      }
-    }
-
-    return loadResults;
-  }
+  /**
+   * Loads the given process definition.
+   *
+   * <p>
+   * Equivalent to loadDefinition( procDef, null )
+   * <p>
+   *
+   * @see GraphLoader#loadDefinition(ProcessDefinition, String)
+   */
+  void loadDefinition (final ProcessDefinition procDef) throws SarasvatiLoadException;
+
+  /**
+   * Loads the given process definition, giving it the passed in custom identifier.
+   *
+   * @param procDef The process definition to load
+   * @param customId The custom identifier to give the loaded process definition
+   *
+   * @throws SarasvatiLoadException Thrown if an error occurs during load, or the loader
+   *                                has a validator which throws an exception.
+   */
+  void loadDefinition (final ProcessDefinition procDef, final String customId) throws SarasvatiLoadException;
+
+  /**
+   * Returns true if the graph has been loaded into the associated
+   * {@link GraphRepository}, false otherwise.
+   *
+   * @param name The name of the graph being searched for
+   *
+   * @return true if the graph has been loaded into the associated
+   * {@link GraphRepository}, false otherwise.
+   */
+  boolean isLoaded (String name);
+
+  /**
+   * Loads all new and changed process definitions under the given base directory. Uses
+   * the default file name filter, which matches all files with the .wf.xml extension.
+   * <p>
+   * Equivalent to loadNewAndChanged( baseDir, null, null );
+   * <p>
+   * @see GraphLoader#loadNewAndChanged(File, FilenameFilter, GraphValidator)
+   */
+  List<LoadResult> loadNewAndChanged (File baseDir) throws SarasvatiLoadException;
+
+  /**
+   * Loads all new and changed process definitions under the given base directory that match
+   * the given file name filter.
+   * <p>
+   * This method works as follows:
+   *   <ol>
+   *     <li>
+   *       It finds and parse all process definitions under the given base directory
+   *       that match the given filename filter.
+   *     </li>
+   *     <li>
+   *       A SHA-1 hash is calculated for each process definition. This hash is based
+   *       on the sorted contents of the process definition. Changes in the ordering
+   *       of the file and changes to whitespace outside of elements containing text
+   *       will not result in a hash change.
+   *     </li>
+   *     <li>
+   *       The process definitions are sorted by dependency, that for any given process
+   *       definition, its dependencies will be inspected first.
+   *     </li>
+   *     <li>
+   *       The sorted set of process definitions will be inspected.
+   *       <ul>
+   *         <li>
+   *           If a process definition is new, i.e. it does not exist in the {@link GraphRepository},
+   *           it will be marked for load
+   *         </li>
+   *         <li>
+   *           If a process definition is updated, i.e. the SHA-1 hash does not match the value in
+   *           {@link Graph#getCustomId()} for the new graph of the same name in the repository,
+   *           it will be marked for load.
+   *         </li>
+   *         <li>
+   *           If a dependency (referenced external) of a process definition is marked for load,
+   *           the process definition will also be marked for load.
+   *         </li>
+   *       </ol>
+   *       <li>
+   *         All process definitions marked for load will then be loaded, in dependency order.
+   *       </li>
+   *   </ol>
+   * <p>
+   * @param baseDir The directory under which to recursively search for process definitions
+   *
+   * @param filter The filename filter to use to find process definition files. May be null,
+   *               in which case the default filter is used. The default filter matches all
+   *               files with the .wf.xml extension.
+   *
+   * @throws SarasvatiLoadException Thrown if an error occurs during the load or if the
+   *                                {@link GraphValidator} throws an exception.
+   * @return The list of load results, which indicate which process definitions have been loaded
+   *         and the reason why they were loaded (new, updated, dependency changed).
+   */
+  List<LoadResult> loadNewAndChanged (File baseDir, FilenameFilter filter)
+    throws SarasvatiLoadException;
+
+  /**
+   * Takes a {@link ProcessDefinitionTranslator}, applies it to the given source and loads the resulting
+   * {@link ProcessDefinition}.
+   * <p>
+   * Equivalent to loadDefinition( translator, source, null )
+   * <p>
+   * @see GraphLoader#loadDefinition(ProcessDefinitionTranslator, Object, String, GraphValidator)
+   **/
+  <T> void loadDefinition (ProcessDefinitionTranslator<T> translator, T source) throws SarasvatiLoadException;
+
+  /**
+   * Takes a {@link ProcessDefinitionTranslator}, applies it to the given source and loads the resulting
+   * {@link ProcessDefinition}.
+   *
+   * @param <T> The type of input that the process definition translator takes.
+   *
+   * @param translator Class which takes an input and returns a {@link ProcessDefinition}
+   * @param source The input for the translator (usually an XML file).
+   * @param customId The custom ID to give the graph. Example usage is a SHA-1 hash of the process definition.
+   *
+   * @throws SarasvatiLoadException Thrown if an error occurs during the load or if the
+   *                                {@link GraphValidator} throws an exception.
+   */
+  <T> void loadDefinition (ProcessDefinitionTranslator<T> translator, T source, String customId)
+    throws SarasvatiLoadException;
+
+  /**
+   * Loads the named process definition. The given resolver is used to find the process definition
+   * and any of its dependencies that have not yet been loaded. Dependencies are only checked
+   * to see if they are loaded, they are not checked to see if they have been updated.
+   *
+   * @param name The name of the process definition to load
+   * @param resolver The resolver to use in finding the process definition and its dependencies.
+   *
+   * @throws SarasvatiLoadException Thrown if an error occurs during the load or if the
+   *                                {@link GraphValidator} throws an exception.
+   */
+  void loadWithDependencies (String name, ProcessDefinitionResolver resolver) throws SarasvatiLoadException;
 
   /**
    * Loads the given XML process definition file.
+   * <p>
+   * Equivalent to loadDefinition( new XmlLoader(), file );
    *
    * @param file The xml file to load
+   * @throws SarasvatiLoadException Thrown if an error occurs during the load or if the
+   *                                {@link GraphValidator} throws an exception.
    */
-  public void load (final File file)
-  {
-    loadDefinition( new XmlLoader(), file );
-  }
+  void load (final File file) throws SarasvatiLoadException;
 }

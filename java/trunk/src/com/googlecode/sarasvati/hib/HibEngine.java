@@ -32,6 +32,8 @@ import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.impl.BaseEngine;
 import com.googlecode.sarasvati.load.GraphLoader;
+import com.googlecode.sarasvati.load.GraphLoaderImpl;
+import com.googlecode.sarasvati.load.GraphValidator;
 
 public class HibEngine extends BaseEngine
 {
@@ -121,27 +123,33 @@ public class HibEngine extends BaseEngine
   }
 
   @Override
-  public HibGraphRepository getRepository()
+  public HibGraphRepository getRepository ()
   {
     return repository;
   }
 
   @Override
-  public HibGraphFactory getFactory()
+  public HibGraphFactory getFactory ()
   {
     return factory;
   }
 
   @Override
-  public GraphLoader<HibGraph> getLoader()
+  public GraphLoader<HibGraph> getLoader ()
   {
-    return new GraphLoader<HibGraph>( factory, repository );
+    return new GraphLoaderImpl<HibGraph>( factory, repository, null );
   }
 
   @Override
-  public void addExecutionListener(final GraphProcess process,
-                                   final Class<? extends ExecutionListener> listenerClass,
-                                   final ExecutionEventType... eventTypes)
+  public GraphLoader<HibGraph> getLoader (final GraphValidator validator)
+  {
+    return new GraphLoaderImpl<HibGraph>( factory, repository, validator );
+  }
+
+  @Override
+  public void addExecutionListener (final GraphProcess process,
+                                    final Class<? extends ExecutionListener> listenerClass,
+                                    final ExecutionEventType... eventTypes)
   {
     if ( eventTypes == null || eventTypes.length == 0 || listenerClass == null )
     {

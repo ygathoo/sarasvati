@@ -32,7 +32,7 @@ import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.TokenSetMember;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
-import com.googlecode.sarasvati.xml.XmlProcessDefinition;
+import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 
 public class SvUtil
 {
@@ -150,11 +150,11 @@ public class SvUtil
     }
   }
 
-  public static Collection<XmlProcessDefinition> getSorted (final Map<String, XmlProcessDefinition> processDefsByName)
+  public static Collection<ProcessDefinition> getSorted (final Map<String, ProcessDefinition> processDefsByName)
   {
-    Set<XmlProcessDefinition> processed = new LinkedHashSet<XmlProcessDefinition>( processDefsByName.size() );
+    Set<ProcessDefinition> processed = new LinkedHashSet<ProcessDefinition>( processDefsByName.size() );
 
-    for ( XmlProcessDefinition def : processDefsByName.values() )
+    for ( ProcessDefinition def : processDefsByName.values() )
     {
       if ( !processed.contains( def ) )
       {
@@ -165,13 +165,13 @@ public class SvUtil
     return processed;
   }
 
-  private static void addWithPrerequisites (final XmlProcessDefinition def,
-                                            final Set<XmlProcessDefinition> processed,
-                                            final Map<String, XmlProcessDefinition> processDefsByName)
+  private static void addWithPrerequisites (final ProcessDefinition def,
+                                            final Set<ProcessDefinition> processed,
+                                            final Map<String, ProcessDefinition> processDefsByName)
   {
     for ( ExternalDefinition external : def.getExternals() )
     {
-      XmlProcessDefinition externalPD = processDefsByName.get( external.getProcessDefinition() );
+      ProcessDefinition externalPD = processDefsByName.get( external.getProcessDefinition() );
       if ( !processed.contains( externalPD ) )
       {
         addWithPrerequisites( externalPD, processed, processDefsByName );
