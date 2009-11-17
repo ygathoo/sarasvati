@@ -294,6 +294,9 @@ public abstract class BaseEngine implements Engine
 
       case DiscardToken :
         token.markComplete();
+        process.removeActiveNodeToken( token ); // Although this token has never been explicitly added to the collection,
+                                                // a poorly timed lazy load of HibGraphProcess.activeNodeTokens can cause
+                                                // the token to be present therein
         NodeTokenEvent.fireDiscardedEvent( this, token );
         NodeTokenEvent.fireCompletedEvent( this, token, null );
         break;
