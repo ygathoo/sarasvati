@@ -1,0 +1,21 @@
+Design Notes:
+
+What are the kinds of things we'd like to be able to say?
+
+Statements:
+
+  STMT = REQUIRE
+       | REQUIRE "or" STMT
+       | REQUIRE "and" STMT
+       | "(" STMT ")"
+       | "if" EXPR "then" STMT "else" STMT
+
+  REQUIRE = "require" <arc name>
+          | "require any" <arc name>
+          | "require at least" <number>
+          | "require at least" <number> <arcname>
+          | "require node" <node name>
+          | "require tokenset" <token set name>
+
+  EXPR = <predicate>
+       | 
