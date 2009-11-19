@@ -16,9 +16,9 @@
 
     Copyright 2009 Paul Lorenz
 */
+
 package com.googlecode.sarasvati.join;
 
-import java.util.Collections;
 import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -26,49 +26,39 @@ import com.googlecode.sarasvati.JoinAction;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.NodeToken;
 
-/**
- * Represents a complete join result, encapsulating the arc tokens
- * which completed the join.
- *
- * @author Paul Lorenz
- */
-public class CompleteJoinResult implements JoinResult
+public final class MergeJoinResult implements JoinResult
 {
-  private final List<ArcToken> tokens;
+  private NodeToken mergeTarget;
 
-  public CompleteJoinResult (final ArcToken token)
+  public MergeJoinResult (final NodeToken mergeTarget)
   {
-    this.tokens = Collections.singletonList( token );
-  }
-
-  public CompleteJoinResult (final List<ArcToken> tokens)
-  {
-    this.tokens = tokens;
+    this.mergeTarget = mergeTarget;
   }
 
   /**
-   * @see JoinResult#getArcTokensCompletingJoin()
-   */
-  @Override
-  public List<ArcToken> getArcTokensCompletingJoin ()
-  {
-    return tokens;
-  }
-
-  /**
-   * Always returns {@value JoinAction#Complete}
+   * Always returns {@value JoinAction#Nothing}
    *
    * @see com.googlecode.sarasvati.JoinResult#getJoinAction()
    */
   @Override
   public JoinAction getJoinAction ()
   {
-    return JoinAction.Complete;
+    return JoinAction.Nothing;
+  }
+
+  /**
+   * Always throws an {@link IllegalStateException}
+   * @see JoinResult#getArcTokensCompletingJoin()
+   */
+  @Override
+  public List<ArcToken> getArcTokensCompletingJoin ()
+  {
+    throw new IllegalStateException( "getArcTokensCompletingJoin should never be called for a JoinResult with an action of Nothing" );
   }
 
   @Override
   public NodeToken getMergeTarget ()
   {
-    throw new IllegalStateException( "getMergeTarget should never be called for a JoinResult with an action of Complete" );
+    return mergeTarget;
   }
 }

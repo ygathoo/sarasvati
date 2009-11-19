@@ -16,24 +16,36 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.join;
+package com.googlecode.sarasvati.impl;
 
-import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.JoinResult;
-import com.googlecode.sarasvati.JoinStrategy;
+import com.googlecode.sarasvati.GuardAction;
+import com.googlecode.sarasvati.GuardResult;
 
-/**
- * Implements a join strategy where a node will complete a join
- * whenever any arc token arrives.
- *
- * @author Paul Lorenz
- */
-public class OrJoinStrategy implements JoinStrategy
+public final class AcceptTokenGuardResult implements GuardResult
 {
-  @Override
-  public JoinResult performJoin (final Engine engine, final ArcToken token)
+  public static final GuardResult INSTANCE = new AcceptTokenGuardResult();
+
+  private AcceptTokenGuardResult ()
   {
-    return new CompleteJoinResult( token );
+    /* Don't allow this class to be used other than via the INSTANCE */
+  }
+
+  @Override
+  public String getExitArcForSkip()
+  {
+    throw new UnsupportedOperationException(
+      "getExitArcsForSkip should never be called on a GuardResult with action of AcceptToken" );
+  }
+
+  @Override
+  public GuardAction getGuardAction()
+  {
+    return GuardAction.AcceptToken;
+  }
+
+  @Override
+  public String toString()
+  {
+    return "AcceptTokenResponse";
   }
 }

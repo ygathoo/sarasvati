@@ -34,7 +34,8 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.GuardResult;
+import com.googlecode.sarasvati.JoinAction;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
@@ -229,9 +230,15 @@ public abstract class BaseEngine implements Engine
       Node targetNode = token.getArc().getEndNode();
       JoinResult result = targetNode.getJoinStrategy( token.getArc() ).performJoin( this, token );
 
-      if ( result.isJoinComplete() )
+      if ( JoinAction.Complete == result.getJoinAction() )
       {
         completeExecuteArc( process, targetNode, result.getArcTokensCompletingJoin() );
+      }
+      else if ( JoinAction.Merge == result.getJoinAction() )
+      {
+        result.getMergeTarget().getParentTokens().add( token );
+        completeArcToken( process, token, result.getMergeTarget() );
+        ArcTokenEvent.fireMergedEvent( this, token );
       }
     }
   }
@@ -265,22 +272,27 @@ public abstract class BaseEngine implements Engine
 
     for ( ArcToken token : tokens )
     {
-      process.removeActiveArcToken( token );
-      if ( token.isPending() )
-      {
-        token.markProcessed();
-        ArcTokenEvent.fireProcessedEvent( this, token );
-      }
-      token.markComplete( nodeToken );
-      ArcTokenEvent.fireCompletedEvent( this, token );
+      completeArcToken( process, token, nodeToken );
     }
 
     executeNode( process, nodeToken );
   }
 
+  private void completeArcToken (final GraphProcess process, final ArcToken token, final NodeToken child)
+  {
+    process.removeActiveArcToken( token );
+    if ( token.isPending() )
+    {
+      token.markProcessed();
+      ArcTokenEvent.fireProcessedEvent( this, token );
+    }
+    token.markComplete( child );
+    ArcTokenEvent.fireCompletedEvent( this, token );
+  }
+
   protected void executeNode (final GraphProcess process, final NodeToken token)
   {
-    GuardResponse response = token.getNode().guard( this, token );
+    GuardResult response = token.getNode().guard( this, token );
     token.setGuardAction( response.getGuardAction() );
 
     switch ( response.getGuardAction() )
@@ -561,15 +573,15 @@ public abstract class BaseEngine implements Engine
   }
 
   @Override
-  public GuardResponse evaluateGuard (final NodeToken token,
+  public GuardResult evaluateGuard (final NodeToken token,
                                       final String guard)
   {
     if ( guard == null || guard.trim().length() == 0 )
     {
-      return GuardResponse.ACCEPT_TOKEN_RESPONSE;
+      return AcceptTokenGuardResult.INSTANCE;
     }
 
-    return (GuardResponse) RubricInterpreter.compile( guard ).eval( newRubricEnv( token ) );
+    return (GuardResult) RubricInterpreter.compile( guard ).eval( newRubricEnv( token ) );
   }
 
   @Override

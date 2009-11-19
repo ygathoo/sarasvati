@@ -22,7 +22,7 @@ package com.googlecode.sarasvati.mem;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.CustomNodeWrapper;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.NodeToken;
 
 public class MemCustomNodeWrapper extends MemNode implements CustomNodeWrapper
@@ -59,7 +59,7 @@ public class MemCustomNodeWrapper extends MemNode implements CustomNodeWrapper
   }
 
   @Override
-  public GuardResponse defaultGuard (final Engine engine, final NodeToken token)
+  public GuardResult defaultGuard (final Engine engine, final NodeToken token)
   {
     return super.guard( engine, token );
   }

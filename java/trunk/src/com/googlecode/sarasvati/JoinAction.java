@@ -28,25 +28,22 @@ package com.googlecode.sarasvati;
  * @author Paul Lorenz
  * @see Node#guard(Engine, NodeToken)
  */
-public enum GuardAction
+public enum JoinAction
 {
   /**
-   * Indicates that an incoming {@link NodeToken} should be accepted
-   * and that {@link Node#execute(Engine, NodeToken)} should be invoked.
+   * Indicates that that join did not complete, and no action should be taken.
    */
-  AcceptToken,
+  Nothing,
 
   /**
-   * Indicates that an incoming {@link NodeToken} should be marked as discarded.
-   * No further execution will take place with that token.
+   * Indicates that the join completed, relevant arc tokens should be completed
+   * and a new node token created.
    */
-  DiscardToken,
+  Complete,
 
   /**
-   * Indicates that in incoming {@link NodeToken} should skip execution of the
-   * current node. Execution will continue on the selected arcs.
-   *
-   * @see GuardResult#getExitArcForSkip()
+   * Indicates that the arc token should be merged as a parent of an existing
+   * node token.
    */
-  SkipNode;
+  Merge;
 }

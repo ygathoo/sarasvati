@@ -173,7 +173,7 @@ public interface Node extends Adaptable
    *    <li> {@link GuardAction#DiscardToken}: The token will be discard.
    *    <li> {@link GuardAction#SkipNode}: Skip the node.
    *         The {@link Node#execute(Engine, NodeToken)} method will not
-   *         be called. The {@link GuardResponse} will indicate which
+   *         be called. The {@link GuardResult} will indicate which
    *         arc(s) to leave on.
    *    <li> {@link GuardAction#AcceptToken}: Accept the token. The execute function of the
    *         Node will be called.
@@ -183,9 +183,9 @@ public interface Node extends Adaptable
    * @param engine The engine being used to execute the process
    * @param token  The node token which is currently entering a node
    *
-   * @return A GuardResponse
+   * @return A GuardResult
    */
-  GuardResponse guard (Engine engine, NodeToken token);
+  GuardResult guard (Engine engine, NodeToken token);
 
   /**
    * Performs Node specific logic. Either from the execute method,

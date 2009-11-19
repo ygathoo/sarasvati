@@ -28,7 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.load.definition.NodeDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.rubric.RubricInterpreter;
@@ -182,7 +182,7 @@ public class EditorGraph
         {
           RubricStmt guardStmt = RubricInterpreter.compile( guard );
 
-          if ( !ResultTypeValidator.isResultOfType( guardStmt, GuardResponse.class ) )
+          if ( !ResultTypeValidator.isResultOfType( guardStmt, GuardResult.class ) )
           {
             results.error( "The guard in node " + nodeName + " may return something other than guard response." );
           }

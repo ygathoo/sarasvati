@@ -62,6 +62,6 @@ public class AndJoinStrategy implements JoinStrategy
     }
 
     return joinArcs.size() == tokens.size() ? new CompleteJoinResult( tokens ) :
-                                              JoinResult.INCOMPLETE_JOIN_RESULT;
+                                              IncompleteJoinResult.INSTANCE;
   }
 }

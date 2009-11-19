@@ -30,12 +30,14 @@ import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 
 /**
- * Implements a join strategy where a node will complete a join
- * whenever any arc token arrives.
+ * Implements a join strategy where the first token that
+ * arrives will generate a new node token. Later arc tokens
+ * arriving will get merged in as parents of the new node
+ * token.
  *
  * @author Paul Lorenz
  */
-public class MergeJoinStrategy implements JoinStrategy
+public class FirstJoinStrategy implements JoinStrategy
 {
   protected static final Comparator<NodeToken> TOKEN_COMPARATOR =
     new Comparator<NodeToken>()
@@ -55,14 +57,14 @@ public class MergeJoinStrategy implements JoinStrategy
 
     if ( nodeTokens.isEmpty() )
     {
-      return IncompleteJoinResult.INSTANCE;
+      return new CompleteJoinResult( token );
     }
 
     NodeToken newestToken = Collections.max( nodeTokens, TOKEN_COMPARATOR );
 
     if ( newestToken.getExecutionType().isBacktracked() )
     {
-      return IncompleteJoinResult.INSTANCE;
+      return new CompleteJoinResult( token );
     }
 
     return new MergeJoinResult( newestToken );

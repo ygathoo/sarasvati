@@ -73,24 +73,6 @@ public enum JoinType
              "in the token set. An exception will be raised if a non-token set token arrives." ),
 
   /**
-   * Users may use custom join strategies. This can be done by overriding
-   * {@link Node#getJoinStrategy(Arc)}. Alternately, the node type of custom
-   * may be used, and a join strategy can be set into the CUSTOM join type.
-   */
-  CUSTOM( new JoinStrategy()
-          {
-            @Override
-            public JoinResult performJoin (final Engine engine, final ArcToken token)
-            {
-              throw new UnsupportedOperationException( "No custom join strategy has been set. " +
-                                                       "If not overriding Node#getJoinStrategy, " +
-                                                       "make sure to invoke JoinType.CUSTOM.setJoinStrategy " +
-                                                       "before using a custom join type." );
-            }
-          },
-         "A CUSTOM join will be satisfied based on the join strategy implemented by the user." ),
-
-  /**
    * Uses the {@link TokenSetOrJoinStrategy}. A token set or join will be satisfied when all
    * active arc tokens in the set are on incoming arcs to the same node and there are no
    * active node tokens in the token set. The {@link OrJoinStrategy} will be used as a fallback
@@ -114,20 +96,6 @@ public enum JoinType
   public JoinStrategy getJoinStrategy ()
   {
     return joinStrategy;
-  }
-
-  /**
-   * Allows changing the JoinStrategy for the CUSTOM NodeType only.
-   *
-   * @param joinStrategy The new join strategy to use
-   */
-  public void setJoinStrategy (final JoinStrategy joinStrategy)
-  {
-    if ( this != CUSTOM )
-    {
-      throw new IllegalArgumentException( "The join strategy may only be changed on the CUSTOM join type" );
-    }
-    this.joinStrategy = joinStrategy;
   }
 
   public String getDescription ()

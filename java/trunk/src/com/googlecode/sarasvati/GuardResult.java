@@ -18,8 +18,9 @@
 */
 package com.googlecode.sarasvati;
 
+
 /**
- * A GuardResponse is returned from {@link Node#guard(Engine, NodeToken)} to indicate
+ * A GuardResult is returned from {@link Node#guard(Engine, NodeToken)} to indicate
  * what should be done with an incoming {@link NodeToken}.
  *
  * Most of this is imparted by which {@link GuardAction} is returned. In the cases of
@@ -29,58 +30,8 @@ package com.googlecode.sarasvati;
  *
  * @author Paul Lorenz
  */
-public interface GuardResponse
+public interface GuardResult
 {
-  /**
-   * Singleton instance for indicating an accept token response.
-   */
-  static GuardResponse ACCEPT_TOKEN_RESPONSE = new GuardResponse()
-  {
-    @Override
-    public String getExitArcForSkip()
-    {
-      throw new UnsupportedOperationException(
-        "getExitArcsForSkip should never be called on a GuardResponse with action of AcceptToken" );
-    }
-
-    @Override
-    public GuardAction getGuardAction()
-    {
-      return GuardAction.AcceptToken;
-    }
-
-    @Override
-    public String toString()
-    {
-      return "AcceptTokenResponse";
-    }
-  };
-
-  /**
-   * Singleton instance for indicating an accept token response.
-   */
-  static GuardResponse DISCARD_TOKEN_RESPONSE = new GuardResponse()
-  {
-    @Override
-    public String getExitArcForSkip()
-    {
-      throw new UnsupportedOperationException(
-        "getExitArcsForSkip should never be called on a GuardResponse with action of DiscardToken" );
-    }
-
-    @Override
-    public GuardAction getGuardAction()
-    {
-      return GuardAction.DiscardToken;
-    }
-
-    @Override
-    public String toString()
-    {
-      return "DiscardTokenResponse";
-    }
-  };
-
   /**
    * Indicates which {@link GuardAction} has been selected.
    *

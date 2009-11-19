@@ -42,8 +42,10 @@ tokens {
 
 package com.googlecode.sarasvati.rubric.lang;
 
-import com.googlecode.sarasvati.GuardResponse;
-import com.googlecode.sarasvati.impl.SkipNodeGuardResponse;
+import com.googlecode.sarasvati.GuardResult;
+import com.googlecode.sarasvati.impl.AcceptTokenGuardResult;
+import com.googlecode.sarasvati.impl.DiscardTokenGuardResult;
+import com.googlecode.sarasvati.impl.SkipNodeGuardResult;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.rubric.lang.*;
 
@@ -127,12 +129,12 @@ dateSpec returns [RubricStmt value]
             { $value = new RubricStmtRelativeDate( Integer.parseInt( $NUMBER.text ), business, $unit.text, $type.text, $ID.text ); }
          ;
 
-guardResult returns [GuardResponse value]
-         :  ACCEPT       { $value = GuardResponse.ACCEPT_TOKEN_RESPONSE; }
-         |  DISCARD      { $value = GuardResponse.DISCARD_TOKEN_RESPONSE; }
-         |  SKIP^ ID     { $value = new SkipNodeGuardResponse( $ID.text ); }
-         |  SKIP^ STRING { $value = new SkipNodeGuardResponse( SvUtil.normalizeQuotedString( $STRING.text ) ); }
-         |  SKIP         { $value = SkipNodeGuardResponse.DEFAULT_ARC_SKIP_NODE_RESPONSE; }
+guardResult returns [GuardResult value]
+         :  ACCEPT       { $value = AcceptTokenGuardResult.INSTANCE; }
+         |  DISCARD      { $value = DiscardTokenGuardResult.INSTANCE; }
+         |  SKIP^ ID     { $value = new SkipNodeGuardResult( $ID.text ); }
+         |  SKIP^ STRING { $value = new SkipNodeGuardResult( SvUtil.normalizeQuotedString( $STRING.text ) ); }
+         |  SKIP         { $value = SkipNodeGuardResult.DEFAULT_ARC_SKIP_NODE_RESULT; }
          ;
 
 // ===========================================================================

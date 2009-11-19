@@ -22,7 +22,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.googlecode.sarasvati.GuardAction;
-import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtResult;
 
 /**
@@ -37,9 +37,9 @@ public class ExitArcNameCollector extends RubricVisitorAdaptor
   @Override
   public void visit (final RubricStmtResult resultStmt)
   {
-    if ( resultStmt.getResult() instanceof GuardResponse )
+    if ( resultStmt.getResult() instanceof GuardResult )
     {
-      GuardResponse response = (GuardResponse)resultStmt.getResult();
+      GuardResult response = (GuardResult)resultStmt.getResult();
       if ( response.getGuardAction() == GuardAction.SkipNode )
       {
         exitArcs.add( response.getExitArcForSkip() );

@@ -27,12 +27,11 @@ import com.googlecode.sarasvati.JoinType;
 @XmlEnum(String.class)
 public enum XmlJoinType
 {
-  @XmlEnumValue("or")   OR( JoinType.OR ),
+  @XmlEnumValue ("or")  OR( JoinType.OR ),
   @XmlEnumValue ("and") AND( JoinType.AND ),
   @XmlEnumValue ("labelAnd") LABEL_AND( JoinType.LABEL ),
   @XmlEnumValue ("tokenSetAnd") TOKEN_SET_AND( JoinType.TOKEN_SET ),
-  @XmlEnumValue ("tokenSetOr") TOKEN_SET_OR( JoinType.TOKEN_SET_OR ),
-  @XmlEnumValue ("custom") CUSTOM( JoinType.CUSTOM );
+  @XmlEnumValue ("tokenSetOr") TOKEN_SET_OR( JoinType.TOKEN_SET_OR );
 
   private final JoinType joinType;
 

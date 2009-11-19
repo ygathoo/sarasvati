@@ -180,7 +180,7 @@ public abstract class CustomNode implements Node
    *
    * @see Node#guard(Engine, NodeToken)
    */
-  @Override public GuardResponse guard (final Engine engine, final NodeToken token)
+  @Override public GuardResult guard (final Engine engine, final NodeToken token)
   {
     return nodeWrapper.defaultGuard( engine, token );
   }
