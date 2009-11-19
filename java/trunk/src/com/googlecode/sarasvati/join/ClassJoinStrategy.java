@@ -16,7 +16,7 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.impl;
+package com.googlecode.sarasvati.join;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

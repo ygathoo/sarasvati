@@ -19,13 +19,16 @@
 
 package com.googlecode.sarasvati.mem;
 
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.env.Env;
@@ -74,19 +77,19 @@ public class MemGraphProcess implements GraphProcess
   }
 
   @Override
-  public List<? extends NodeToken> getNodeTokens()
+  public List<NodeToken> getNodeTokens()
   {
     return nodeTokens;
   }
 
   @Override
-  public List<? extends ArcToken> getActiveArcTokens ()
+  public List<ArcToken> getActiveArcTokens ()
   {
     return activeArcTokens;
   }
 
   @Override
-  public List<? extends NodeToken> getActiveNodeTokens ()
+  public List<NodeToken> getActiveNodeTokens ()
   {
     return activeNodeTokens;
   }
@@ -194,5 +197,21 @@ public class MemGraphProcess implements GraphProcess
   public ExecutionEventQueue getEventQueue ()
   {
     return eventQueue;
+  }
+
+  @Override
+  public List<NodeToken> getTokensOnNode (final Node node, final Engine engine)
+  {
+    List<NodeToken> result = new ArrayList<NodeToken>();
+
+    for ( NodeToken token : getNodeTokens() )
+    {
+      if ( token.getNode().equals( node ) )
+      {
+        result.add( token );
+      }
+    }
+
+    return result;
   }
 }

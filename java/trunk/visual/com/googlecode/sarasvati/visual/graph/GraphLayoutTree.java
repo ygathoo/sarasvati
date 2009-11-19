@@ -37,24 +37,22 @@ public class GraphLayoutTree extends AbstractLayoutTree<Node>
     init();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   protected Collection<Node> getNodes ()
   {
-    return (Collection<Node>) graph.getNodes();
+    return graph.getNodes();
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   protected Collection<Node> getStartNodes ()
   {
-    return (Collection<Node>) graph.getStartNodes();
+    return graph.getStartNodes();
   }
 
   @Override
   protected Collection<Node> getOutputs (final Node node)
   {
-    List<? extends Arc> arcs = graph.getOutputArcs( node );
+    List<Arc> arcs = graph.getOutputArcs( node );
 
     List<Node> outputs = new ArrayList<Node>( arcs.size() );
 
@@ -69,7 +67,7 @@ public class GraphLayoutTree extends AbstractLayoutTree<Node>
   @Override
   protected Collection<Node> getInputs (final Node node)
   {
-    List<? extends Arc> arcs = graph.getInputArcs( node );
+    List<Arc> arcs = graph.getInputArcs( node );
 
     List<Node> inputs = new ArrayList<Node>( arcs.size() );
 

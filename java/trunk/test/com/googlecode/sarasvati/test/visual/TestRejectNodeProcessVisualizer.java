@@ -76,7 +76,7 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
 
     //Do a complete at the 3rd Node
     {
-      Collection<? extends NodeToken> activeNodeTokens = process.getActiveNodeTokens();
+      Collection<NodeToken> activeNodeTokens = process.getActiveNodeTokens();
       NodeToken activeToken = activeNodeTokens.iterator().next();
       engine.complete( activeToken, Arc.DEFAULT_ARC );
 
@@ -84,7 +84,7 @@ public class TestRejectNodeProcessVisualizer extends AbstractProcessVisualizer
 
     //Do a reject at the 5th Node
     {
-      Collection<? extends NodeToken> activeNodeTokens = process.getActiveNodeTokens();
+      Collection<NodeToken> activeNodeTokens = process.getActiveNodeTokens();
       NodeToken activeToken = activeNodeTokens.iterator().next();
       engine.complete( activeToken, "reject" );
     }

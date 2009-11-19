@@ -16,7 +16,7 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.impl;
+package com.googlecode.sarasvati.join;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +36,7 @@ import com.googlecode.sarasvati.JoinStrategy;
  */
 public class AndJoinStrategy implements JoinStrategy
 {
-  protected List<? extends Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)
+  protected List<Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)
   {
     return process.getGraph().getInputArcs( token.getArc().getEndNode() );
   }
@@ -45,7 +45,7 @@ public class AndJoinStrategy implements JoinStrategy
   public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
     GraphProcess process = token.getProcess();
-    List<? extends Arc> joinArcs = getJoiningArcs( process, token );
+    List<Arc> joinArcs = getJoiningArcs( process, token );
 
     ArrayList<ArcToken> tokens = new ArrayList<ArcToken>( joinArcs.size() );
 

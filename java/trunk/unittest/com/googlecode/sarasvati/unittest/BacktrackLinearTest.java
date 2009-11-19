@@ -35,7 +35,7 @@ public class BacktrackLinearTest extends ExecutionTest
   {
     Graph g = ensureLoaded( "backtrack-linear" );
     GraphProcess p = engine.startProcess( g );
-    Collection<? extends NodeToken> tokens = p.getActiveNodeTokens();
+    Collection<NodeToken> tokens = p.getActiveNodeTokens();
     NodeToken tokenA = tokens.iterator().next();
 
     String state = "[1 nodeA I F]";
@@ -93,7 +93,7 @@ public class BacktrackLinearTest extends ExecutionTest
   {
     Graph g = ensureLoaded( "backtrack-twice-linear" );
     GraphProcess p = engine.startProcess( g );
-    Collection<? extends NodeToken> tokens = p.getActiveNodeTokens();
+    Collection<NodeToken> tokens = p.getActiveNodeTokens();
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
