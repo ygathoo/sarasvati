@@ -51,7 +51,7 @@ public class MemExampleGraphValidator extends GraphValidatorAdapter
   public void validateGraph (final Graph graph)
     throws SarasvatiLoadException
   {
-    List<? extends Node> startNodes = graph.getStartNodes();
+    List<Node> startNodes = graph.getStartNodes();
     if ( startNodes.size() != 1 ||
         !"validate-order".equals( startNodes.get( 0 ).getType() ) )
     {

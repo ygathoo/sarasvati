@@ -18,11 +18,11 @@
 */
 package com.googlecode.sarasvati;
 
-import com.googlecode.sarasvati.impl.AndJoinStrategy;
-import com.googlecode.sarasvati.impl.LabelJoinStrategy;
-import com.googlecode.sarasvati.impl.OrJoinStrategy;
-import com.googlecode.sarasvati.impl.TokenSetJoinStrategy;
 import com.googlecode.sarasvati.impl.TokenSetOrJoinStrategy;
+import com.googlecode.sarasvati.join.AndJoinStrategy;
+import com.googlecode.sarasvati.join.LabelJoinStrategy;
+import com.googlecode.sarasvati.join.OrJoinStrategy;
+import com.googlecode.sarasvati.join.TokenSetJoinStrategy;
 
 /**
  * Enumerates the types of joins.

@@ -203,7 +203,7 @@ public interface Node extends Adaptable
    *
    * @return If the node is defined in an external, returns the external and null otherwise.
    */
-  public External getExternal ();
+  External getExternal ();
 
   /**
    * If a node is defined in an external, this will return the node as
@@ -263,7 +263,7 @@ public interface Node extends Adaptable
    *
    * @return If node is an external node, returns the node as defined in the external, otherwise returns null.
    */
-  public Node getOriginatingExternalNode ();
+  Node getOriginatingExternalNode ();
 
   /**
    * Returns a read-only environment containing all attributes defined for
@@ -273,5 +273,5 @@ public interface Node extends Adaptable
    * @return A read-only environment containing all attributes defined for
    *         associated externals.
    */
-  public ReadEnv getExternalEnv ();
+  ReadEnv getExternalEnv ();
 }

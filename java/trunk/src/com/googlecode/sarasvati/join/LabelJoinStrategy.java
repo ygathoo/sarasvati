@@ -16,7 +16,7 @@
 
     Copyright 2008 Paul Lorenz
 */
-package com.googlecode.sarasvati.impl;
+package com.googlecode.sarasvati.join;
 
 import java.util.List;
 
@@ -34,7 +34,7 @@ import com.googlecode.sarasvati.GraphProcess;
 public class LabelJoinStrategy extends AndJoinStrategy
 {
   @Override
-  protected List<? extends Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)
+  protected List<Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)
   {
     return process.getGraph().getInputArcs( token.getArc().getEndNode(), token.getArc().getName() );
   }

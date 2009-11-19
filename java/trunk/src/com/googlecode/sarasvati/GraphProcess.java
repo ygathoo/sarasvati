@@ -50,21 +50,21 @@ public interface GraphProcess extends HasEventQueue
    *
    * @return The list of all NodeTokens.
    */
-  Collection<? extends NodeToken> getNodeTokens ();
+  Collection<NodeToken> getNodeTokens ();
 
   /**
    * Returns the list of current ArcTokens.
    *
    * @return The list of current ArcTokens.
    */
-  Collection<? extends ArcToken> getActiveArcTokens ();
+  Collection<ArcToken> getActiveArcTokens ();
 
   /**
    * Returns the list of current NodeTokens.
    *
    * @return The list of current NodeTokens.
    */
-  Collection<? extends NodeToken> getActiveNodeTokens ();
+  Collection<NodeToken> getActiveNodeTokens ();
 
   /**
    * Adds a NodeToken to the list of all NodeTokens for this process.
@@ -183,4 +183,14 @@ public interface GraphProcess extends HasEventQueue
    * @return If this is a nested process, this will return the parent {@link NodeToken}, and null otherwise.
    */
   NodeToken getParentToken ();
+
+  /**
+   * Returns the collection of NodeTokens which have been created on the given Node.
+   *
+   * @param node The node whose tokens we are interested in
+   * @param engine The engine that may assist in generating the list.
+   *
+   * @return the collection of NodeTokens which have been created on the given Node.
+   */
+  Collection<NodeToken> getTokensOnNode (Node node, Engine engine);
 }

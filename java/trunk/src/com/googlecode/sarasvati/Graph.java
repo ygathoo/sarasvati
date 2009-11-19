@@ -64,7 +64,7 @@ public interface Graph extends HasEventQueue
    *
    * @return A list of arcs
    */
-  List<? extends Arc> getArcs ();
+  List<Arc> getArcs ();
 
   /**
    * Returns a list of arcs which have the given node as an end point. The
@@ -73,7 +73,7 @@ public interface Graph extends HasEventQueue
    * @param node A node belonging to this graph
    * @return A list of arcs
    */
-  List<? extends Arc> getInputArcs (Node node);
+  List<Arc> getInputArcs (Node node);
 
   /**
    * Returns a list of arcs which have the given node as an end point and
@@ -83,7 +83,7 @@ public interface Graph extends HasEventQueue
    * @param node A node belonging to this graph
    * @return A list of arcs
    */
-  List<? extends Arc> getInputArcs (Node node, String arcName);
+  List<Arc> getInputArcs (Node node, String arcName);
 
   /**
    * Returns a list of arcs which have the given node as a starting point.
@@ -92,7 +92,7 @@ public interface Graph extends HasEventQueue
    * @param node A node belonging to this graph
    * @return A list of arcs
    */
-  List<? extends Arc> getOutputArcs (Node node);
+  List<Arc> getOutputArcs (Node node);
 
   /**
    * Returns a list of arcs which have the given node as a starting point
@@ -102,7 +102,7 @@ public interface Graph extends HasEventQueue
    * @param node A node belonging to this graph
    * @return A list of arcs
    */
-  List<? extends Arc> getOutputArcs (Node node, String arcName);
+  List<Arc> getOutputArcs (Node node, String arcName);
 
   /**
    * Returns a list of the nodes at which nodes should be placed to
@@ -110,12 +110,12 @@ public interface Graph extends HasEventQueue
    *
    * @return A list of nodes
    */
-  List<? extends Node> getStartNodes ();
+  List<Node> getStartNodes ();
 
   /**
    * Returns a list of all nodes in the graph.
    *
    * @return A list of nodes
    */
-  List<? extends Node> getNodes ();
+  List<Node> getNodes ();
 }

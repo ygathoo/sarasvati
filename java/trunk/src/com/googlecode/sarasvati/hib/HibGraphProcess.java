@@ -44,6 +44,7 @@ import javax.persistence.TemporalType;
 import javax.persistence.Transient;
 import javax.persistence.Version;
 
+import org.hibernate.Query;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
@@ -51,7 +52,9 @@ import org.hibernate.annotations.Index;
 import org.hibernate.annotations.Where;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.ProcessState;
 import com.googlecode.sarasvati.env.Env;
@@ -370,6 +373,17 @@ public class HibGraphProcess implements GraphProcess
   public ExecutionEventQueue getEventQueue ()
   {
     return eventQueue;
+  }
+
+  @SuppressWarnings("unchecked")
+  @Override
+  public List<NodeToken> getTokensOnNode (final Node node, final Engine engine)
+  {
+    HibEngine hibEngine = (HibEngine)engine;
+    String hql = "from HibNodeToken where nodeRef = :nodeRef";
+    Query query = hibEngine.getSession().createQuery( hql );
+    query.setParameter( "nodeRef", node );
+    return query.list();
   }
 
   @Override

@@ -65,6 +65,9 @@ import com.googlecode.sarasvati.visitor.TokenTraversals;
 
 /**
  * Contains all the engine logic which is not backend specific.
+ * <p>
+ * Instances of BaseEngine have local state which is not thread-safe. Create
+ * a new Engine instance for each thread that needs one.
  *
  * @author Paul Lorenz
  */
@@ -345,7 +348,7 @@ public abstract class BaseEngine implements Engine
 
     completeNodeToken( process, token, arcName );
 
-    List<? extends Arc> outArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
+    List<Arc> outArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 
     if ( !outArcs.isEmpty() )
     {

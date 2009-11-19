@@ -41,6 +41,10 @@ import com.googlecode.sarasvati.script.ScriptEnv;
  * of execution. But it is an Engine which creates instances of {@link ArcToken},
  * {@link NodeToken} and {@link GraphProcess} and which invokes
  * {@link Node#guard(Engine, NodeToken)} and {@link Node#execute(Engine, NodeToken)}.
+ * <p>
+ * Unless an Engine implementation states otherwise, Engine instances should not
+ * be considered thread-safe. A new Engine instance should be created for
+ * each thread that needs one.
  *
  * @author Paul Lorenz
  */

@@ -40,6 +40,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.Cascade;
 
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.event.CachingExecutionEventQueue;
 import com.googlecode.sarasvati.event.ExecutionEventQueue;
 import com.googlecode.sarasvati.event.InitialExecutionEventQueue;
@@ -87,15 +89,15 @@ public class HibGraph extends AbstractGraph
     this.version = version;
     this.customId = customId;
     this.createDate = new Date();
-    this.nodes = new LinkedList<HibNodeRef>();
-    this.arcs = new LinkedList<HibArc>();
+    this.nodes = new LinkedList<Node>();
+    this.arcs = new LinkedList<Arc>();
   }
 
-  @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE)
-  protected List<HibNodeRef> nodes;
+  @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE, targetEntity=HibNodeRef.class)
+  protected List<Node> nodes;
 
-  @OneToMany (fetch=FetchType.LAZY, mappedBy="graph", cascade=CascadeType.REMOVE)
-  protected List<HibArc>     arcs;
+  @OneToMany (fetch=FetchType.LAZY, mappedBy="graph", cascade=CascadeType.REMOVE, targetEntity=HibArc.class)
+  protected List<Arc>     arcs;
 
   public Long getId ()
   {
@@ -150,22 +152,22 @@ public class HibGraph extends AbstractGraph
   }
 
   @Override
-  public List<HibNodeRef> getNodes ()
+  public List<Node> getNodes ()
   {
     return nodes;
   }
 
-  public void setNodes (final List<HibNodeRef> nodeRefs)
+  public void setNodes (final List<Node> nodeRefs)
   {
     this.nodes = nodeRefs;
   }
 
-  public List<HibArc> getArcs ()
+  public List<Arc> getArcs ()
   {
     return arcs;
   }
 
-  public void setArcs (final List<HibArc> arcs)
+  public void setArcs (final List<Arc> arcs)
   {
     this.arcs = arcs;
   }
@@ -181,7 +183,7 @@ public class HibGraph extends AbstractGraph
   /**
    * @param listeners the listeners to set
    */
-  public void setListeners (List<HibGraphListener> listeners)
+  public void setListeners (final List<HibGraphListener> listeners)
   {
     this.listeners = listeners;
   }

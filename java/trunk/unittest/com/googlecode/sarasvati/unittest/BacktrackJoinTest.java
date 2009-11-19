@@ -36,7 +36,7 @@ public class BacktrackJoinTest extends ExecutionTest
     Graph g = ensureLoaded( "backtrack-join" );
     GraphProcess p = engine.startProcess( g );
 
-    Iterator<? extends NodeToken> iter = p.getActiveNodeTokens().iterator();
+    Iterator<NodeToken> iter = p.getActiveNodeTokens().iterator();
     NodeToken tokenA = iter.next();
     NodeToken tokenB = iter.next();
 
@@ -103,7 +103,7 @@ public class BacktrackJoinTest extends ExecutionTest
     Graph g = ensureLoaded( "backtrack-join" );
     GraphProcess p = engine.startProcess( g );
 
-    Iterator<? extends NodeToken> iter = p.getActiveNodeTokens().iterator();
+    Iterator<NodeToken> iter = p.getActiveNodeTokens().iterator();
     NodeToken tokenA = iter.next();
     NodeToken tokenB = iter.next();
 

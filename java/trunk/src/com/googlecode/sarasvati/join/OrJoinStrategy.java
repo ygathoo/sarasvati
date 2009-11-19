@@ -14,47 +14,28 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.impl;
+package com.googlecode.sarasvati.join;
 
-import java.util.List;
+import java.util.Collections;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.JoinResult;
+import com.googlecode.sarasvati.JoinStrategy;
 
 /**
- * Represents a complete join result, encapsulating the arc tokens
- * which completed the join.
+ * Implements a join strategy where a node will complete a join
+ * whenever any arc token arrives.
  *
  * @author Paul Lorenz
  */
-public class CompleteJoinResult implements JoinResult
+public class OrJoinStrategy implements JoinStrategy
 {
-  private final List<ArcToken> tokens;
-
-  public CompleteJoinResult (final List<ArcToken> tokens)
-  {
-    this.tokens = tokens;
-  }
-
-  /**
-   * @see JoinResult#getArcTokensCompletingJoin()
-   */
   @Override
-  public List<ArcToken> getArcTokensCompletingJoin ()
+  public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
-    return tokens;
-  }
-
-  /**
-   * Always returns true.
-   *
-   * @see JoinResult#isJoinComplete()
-   */
-  @Override
-  public boolean isJoinComplete ()
-  {
-    return true;
+    return new CompleteJoinResult( Collections.singletonList( token ) );
   }
 }
