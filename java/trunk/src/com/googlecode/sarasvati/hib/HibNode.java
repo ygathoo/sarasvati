@@ -40,7 +40,7 @@ import org.hibernate.annotations.Type;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.External;
-import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
@@ -228,7 +228,7 @@ public class HibNode implements Node
   }
 
   @Override
-  public GuardResponse guard (final Engine engine, final NodeToken token)
+  public GuardResult guard (final Engine engine, final NodeToken token)
   {
     return engine.evaluateGuard( token, guard );
   }

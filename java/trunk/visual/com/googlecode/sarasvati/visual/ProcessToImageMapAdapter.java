@@ -21,7 +21,6 @@ package com.googlecode.sarasvati.visual;
 import javax.swing.Icon;
 
 import com.googlecode.sarasvati.Arc;
-import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.visual.icon.OvalNodeIcon;
 import com.googlecode.sarasvati.visual.icon.RectangularNodeIcon;
 import com.googlecode.sarasvati.visual.icon.SmallCircleNodeIcon;

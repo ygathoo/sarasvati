@@ -26,25 +26,26 @@ public enum ExecutionEventType
    *       stable. If adding a new event type, it must be assigned the next
    *       highest power of 2.
    */
-  PROCESS_CREATED ( 1 ),
-  PROCESS_STARTED ( 2 ),
-  PROCESS_PENDING_COMPLETE(4),
-  PROCESS_COMPLETED( 8 ),
-  PROCESS_PENDING_CANCEL(16),
-  PROCESS_CANCELED( 32 ),
+  PROCESS_CREATED          ( 1 << 0 ),
+  PROCESS_STARTED          ( 1 << 1 ),
+  PROCESS_PENDING_COMPLETE ( 1 << 2 ),
+  PROCESS_COMPLETED        ( 1 << 3 ),
+  PROCESS_PENDING_CANCEL   ( 1 << 4 ),
+  PROCESS_CANCELED         ( 1 << 5 ),
 
-  NODE_TOKEN_CREATED( 64 ),
-  NODE_TOKEN_ACCEPTED( 128 ),
-  NODE_TOKEN_EXECUTED( 256 ),
-  NODE_TOKEN_DISCARDED( 512 ),
-  NODE_TOKEN_SKIPPED( 1024 ),
-  NODE_TOKEN_COMPLETED( 2048 ),
-  NODE_TOKEN_BACKTRACKED( 4096 ),
+  NODE_TOKEN_CREATED       ( 1 << 6 ),
+  NODE_TOKEN_ACCEPTED      ( 1 << 7 ),
+  NODE_TOKEN_EXECUTED      ( 1 << 8 ),
+  NODE_TOKEN_DISCARDED     ( 1 << 9 ),
+  NODE_TOKEN_SKIPPED       ( 1 << 10 ),
+  NODE_TOKEN_COMPLETED     ( 1 << 11 ),
+  NODE_TOKEN_BACKTRACKED   ( 1 << 12 ),
 
-  ARC_TOKEN_CREATED( 8192 ),
-  ARC_TOKEN_PROCESSED( 16384 ),
-  ARC_TOKEN_COMPLETED( 32768 ),
-  ARC_TOKEN_BACKTRACKED( 65536 );
+  ARC_TOKEN_CREATED        ( 1 << 13 ),
+  ARC_TOKEN_PROCESSED      ( 1 << 14 ),
+  ARC_TOKEN_COMPLETED      ( 1 << 15 ),
+  ARC_TOKEN_BACKTRACKED    ( 1 << 16 ),
+  ARC_TOKEN_MERGED         ( 1 << 17 );
 
   private static final int INVERSE_MASK = 0xFFFFFFFF;
 
@@ -87,6 +88,7 @@ public enum ExecutionEventType
     return this == ARC_TOKEN_CREATED     ||
            this == ARC_TOKEN_PROCESSED   ||
            this == ARC_TOKEN_COMPLETED   ||
+           this == ARC_TOKEN_MERGED      ||
            this == ARC_TOKEN_BACKTRACKED;
   }
 
@@ -113,5 +115,13 @@ public enum ExecutionEventType
   public static int invertMask (final int mask)
   {
     return mask ^ INVERSE_MASK;
+  }
+
+  public static void main (final String[] args)
+  {
+    for ( ExecutionEventType type : values() )
+    {
+      System.out.println( type.eventType );
+    }
   }
 }

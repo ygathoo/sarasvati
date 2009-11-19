@@ -3,7 +3,7 @@ package com.googlecode.sarasvati.example;
 import java.util.Calendar;
 
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.rubric.RubricInterpreter;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricEnv;
@@ -30,7 +30,7 @@ public class IsWeekendPredicate implements RubricPredicate
     String stmt = "if isWeekend then Accept else Skip";
 
     RubricEnv env = new DefaultRubricEnv( null, null, repository );
-    GuardResponse response = (GuardResponse)RubricInterpreter.compile( stmt ).eval( env );
+    GuardResult response = (GuardResult)RubricInterpreter.compile( stmt ).eval( env );
 
     System.out.println( response );
   }

@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
-import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
@@ -141,7 +141,7 @@ public class MemNode implements Node, Cloneable
   }
 
   @Override
-  public GuardResponse guard (final Engine engine, final NodeToken token)
+  public GuardResult guard (final Engine engine, final NodeToken token)
   {
     return engine.evaluateGuard( token, guard );
   }

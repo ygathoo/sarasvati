@@ -100,7 +100,7 @@ public class TokenSetJoinStrategy implements JoinStrategy
 
     if ( !tokenSet.getActiveNodeTokens( engine ).isEmpty() )
     {
-      return JoinResult.INCOMPLETE_JOIN_RESULT;
+      return IncompleteJoinResult.INSTANCE;
     }
 
     Node targetNode = token.getArc().getEndNode();
@@ -110,7 +110,7 @@ public class TokenSetJoinStrategy implements JoinStrategy
     {
       if ( !setMember.getArc().getEndNode().equals( targetNode ) )
       {
-        return JoinResult.INCOMPLETE_JOIN_RESULT;
+        return IncompleteJoinResult.INSTANCE;
       }
     }
 

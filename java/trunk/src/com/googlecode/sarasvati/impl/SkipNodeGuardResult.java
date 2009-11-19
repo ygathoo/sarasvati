@@ -21,7 +21,7 @@ package com.googlecode.sarasvati.impl;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardAction;
-import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.util.SvUtil;
@@ -32,12 +32,12 @@ import com.googlecode.sarasvati.util.SvUtil;
  *
  * @author Paul Lorenz
  */
-public class SkipNodeGuardResponse implements GuardResponse
+public class SkipNodeGuardResult implements GuardResult
 {
   /**
    * Singleton instance to be used when skipping a node and leaving on arc(s) with the default name.
    */
-  public static final SkipNodeGuardResponse DEFAULT_ARC_SKIP_NODE_RESPONSE = new SkipNodeGuardResponse( Arc.DEFAULT_ARC );
+  public static final SkipNodeGuardResult DEFAULT_ARC_SKIP_NODE_RESULT = new SkipNodeGuardResult( Arc.DEFAULT_ARC );
 
   protected String exitArcForSkip = null;
 
@@ -47,7 +47,7 @@ public class SkipNodeGuardResponse implements GuardResponse
    *
    * @param arcName The name of the arc(s) to exit on when leaving the node
    */
-  public SkipNodeGuardResponse (final String arcName)
+  public SkipNodeGuardResult (final String arcName)
   {
     this.exitArcForSkip = arcName;
   }
@@ -55,7 +55,7 @@ public class SkipNodeGuardResponse implements GuardResponse
   /**
    * Always returns {@link GuardAction#SkipNode}.
    *
-   * @see GuardResponse#getGuardAction()
+   * @see GuardResult#getGuardAction()
    */
   @Override
   public final GuardAction getGuardAction()
@@ -64,7 +64,7 @@ public class SkipNodeGuardResponse implements GuardResponse
   }
 
   /**
-   * @see GuardResponse#getExitArcForSkip()
+   * @see GuardResult#getExitArcForSkip()
    */
   @Override
   public String getExitArcForSkip()
@@ -75,7 +75,7 @@ public class SkipNodeGuardResponse implements GuardResponse
   @Override
   public String toString()
   {
-    return SvUtil.equals( Arc.DEFAULT_ARC, exitArcForSkip ) ? "SkipNodeResponse"  : "SkipNodeResponse (" + exitArcForSkip + ")";
+    return SvUtil.equals( Arc.DEFAULT_ARC, exitArcForSkip ) ? "SkipNodeResult"  : "SkipNodeResult (" + exitArcForSkip + ")";
   }
 
   @Override
@@ -87,17 +87,14 @@ public class SkipNodeGuardResponse implements GuardResponse
   @Override
   public boolean equals (final Object obj)
   {
-    if (this == obj)
-      return true;
-    if (obj == null || !(obj instanceof SkipNodeGuardResponse) )
-      return false;
-    SkipNodeGuardResponse other = (SkipNodeGuardResponse) obj;
-    if (exitArcForSkip == null)
+    if ( this == obj ) return true;
+    if ( obj == null || !( obj instanceof SkipNodeGuardResult ) ) return false;
+    SkipNodeGuardResult other = (SkipNodeGuardResult)obj;
+    if ( exitArcForSkip == null )
     {
-      if (other.exitArcForSkip != null)
-        return false;
-    } else if (!exitArcForSkip.equals( other.exitArcForSkip ))
-      return false;
+      if ( other.exitArcForSkip != null ) return false;
+    }
+    else if ( !exitArcForSkip.equals( other.exitArcForSkip ) ) return false;
     return true;
   }
 }

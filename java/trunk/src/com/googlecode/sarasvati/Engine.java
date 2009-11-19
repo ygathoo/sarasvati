@@ -364,12 +364,12 @@ public interface Engine
    *
    * @param token The NodeToken for which the guard is being evaluated.
    * @param guard The guard statement to be evaluated. Maybe blank or null, which
-   *              by convention should cause {@link GuardResponse#ACCEPT_TOKEN_RESPONSE}
+   *              by convention should cause {@link GuardResult#ACCEPT_TOKEN_RESPONSE}
    *              to be returned.
    *
    * @return The response based on the guard.
    */
-  GuardResponse evaluateGuard (NodeToken token, String guard);
+  GuardResult evaluateGuard (NodeToken token, String guard);
 
   /**
    * Since an Engine can have state specific to the currently executing process,

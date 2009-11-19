@@ -23,16 +23,18 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.googlecode.sarasvati.GuardResponse;
-import com.googlecode.sarasvati.impl.SkipNodeGuardResponse;
+import com.googlecode.sarasvati.GuardResult;
+import com.googlecode.sarasvati.impl.AcceptTokenGuardResult;
+import com.googlecode.sarasvati.impl.DiscardTokenGuardResult;
+import com.googlecode.sarasvati.impl.SkipNodeGuardResult;
 import com.googlecode.sarasvati.rubric.RubricInterpreter;
 import com.googlecode.sarasvati.unittest.framework.TestRubricEnv;
 
-public class RubricGuardResponseTest
+public class RubricGuardResultTest
 {
   @Test public void testAccept ()
   {
-    GuardResponse expected = GuardResponse.ACCEPT_TOKEN_RESPONSE;
+    GuardResult expected = AcceptTokenGuardResult.INSTANCE;
     String script="Accept";
     System.out.println( "SCRIPT: " + script );
 
@@ -43,7 +45,7 @@ public class RubricGuardResponseTest
 
   @Test public void testDiscard ()
   {
-    GuardResponse expected = GuardResponse.DISCARD_TOKEN_RESPONSE;
+    GuardResult expected = DiscardTokenGuardResult.INSTANCE;
     String script="Discard";
     System.out.println( "SCRIPT: " + script );
 
@@ -54,7 +56,7 @@ public class RubricGuardResponseTest
 
   @Test public void testSkip ()
   {
-    GuardResponse expected = SkipNodeGuardResponse.DEFAULT_ARC_SKIP_NODE_RESPONSE;
+    GuardResult expected = SkipNodeGuardResult.DEFAULT_ARC_SKIP_NODE_RESULT;
     String script="Skip";
     System.out.println( "SCRIPT: " + script );
 
@@ -65,7 +67,7 @@ public class RubricGuardResponseTest
 
   @Test public void testSkipWithArcName ()
   {
-    GuardResponse expected = new SkipNodeGuardResponse( "testArc" );
+    GuardResult expected = new SkipNodeGuardResult( "testArc" );
     String script="Skip testArc";
     System.out.println( "SCRIPT: " + script );
 
@@ -76,7 +78,7 @@ public class RubricGuardResponseTest
 
   @Test public void testSkipWithArcNameQuoted ()
   {
-    GuardResponse expected = new SkipNodeGuardResponse( "testArc" );
+    GuardResult expected = new SkipNodeGuardResult( "testArc" );
     String script="Skip \"testArc\"";
     System.out.println( "SCRIPT: " + script );
 
@@ -87,7 +89,7 @@ public class RubricGuardResponseTest
 
   @Test public void testSkipWithArcNameQuotedAndWithSpaces ()
   {
-    GuardResponse expected = new SkipNodeGuardResponse( "test Arc" );
+    GuardResult expected = new SkipNodeGuardResult( "test Arc" );
     String script="Skip \"test Arc\"";
     System.out.println( "SCRIPT: " + script );
 
@@ -98,7 +100,7 @@ public class RubricGuardResponseTest
 
   @Test public void testSkipWithArcNameQuotedWithSpacesAndQuotes ()
   {
-    GuardResponse expected = new SkipNodeGuardResponse( "test \"Arc\"" );
+    GuardResult expected = new SkipNodeGuardResult( "test \"Arc\"" );
     String script="Skip \"test \\\"Arc\\\"\"";
     System.out.println( "SCRIPT: " + script );
 

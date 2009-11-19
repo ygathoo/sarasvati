@@ -24,7 +24,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.googlecode.sarasvati.GuardResponse;
+import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.rubric.RubricInterpreter;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.visitor.ResultTypeValidator;
@@ -72,7 +72,7 @@ public class TypeValidatorTest
     Assert.assertFalse( "Should detect date", validator.isAllResultsMatchType() );
   }
 
-  @Test public void testStringCheckOnGuardResponse ()
+  @Test public void testStringCheckOnGuardResult ()
   {
     String program = "Accept";
     RubricStmt stmt = RubricInterpreter.compile( program );
@@ -84,67 +84,67 @@ public class TypeValidatorTest
     stmt = RubricInterpreter.compile( program );
     validator = new ResultTypeValidator( String.class );
     stmt.traverse( validator );
-    Assert.assertFalse( "Should detect guard response", validator.isAllResultsMatchType() );
+    Assert.assertFalse( "Should detect guard result", validator.isAllResultsMatchType() );
   }
 
-  @Test public void testGuardResponseCheckOnGuardResponse ()
+  @Test public void testGuardResultCheckOnGuardResult ()
   {
     String program = "Accept";
     RubricStmt stmt = RubricInterpreter.compile( program );
-    ResultTypeValidator validator = new ResultTypeValidator( GuardResponse.class );
+    ResultTypeValidator validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
-    Assert.assertTrue( "All result type should be guard response", validator.isAllResultsMatchType() );
+    Assert.assertTrue( "All result type should be guard result", validator.isAllResultsMatchType() );
 
     program = "if a or b then Discard else Accept";
     stmt = RubricInterpreter.compile( program );
-    validator = new ResultTypeValidator( GuardResponse.class );
+    validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
-    Assert.assertTrue( "All result type should be guard response", validator.isAllResultsMatchType() );
+    Assert.assertTrue( "All result type should be guard result", validator.isAllResultsMatchType() );
   }
 
-  @Test public void testGuardResponseCheckOnNumber ()
+  @Test public void testGuardResultCheckOnNumber ()
   {
     String program = "1";
     RubricStmt stmt = RubricInterpreter.compile( program );
-    ResultTypeValidator validator = new ResultTypeValidator( GuardResponse.class );
+    ResultTypeValidator validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect int", validator.isAllResultsMatchType() );
 
     program = "if a or b then Accept else 2";
     stmt = RubricInterpreter.compile( program );
-    validator = new ResultTypeValidator( GuardResponse.class );
+    validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect int", validator.isAllResultsMatchType() );
   }
 
-  @Test public void testGuardResponseCheckOnDate ()
+  @Test public void testGuardResultCheckOnDate ()
   {
     String program = "(now)";
     RubricStmt stmt = RubricInterpreter.compile( program );
-    ResultTypeValidator validator = new ResultTypeValidator( GuardResponse.class );
+    ResultTypeValidator validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect date", validator.isAllResultsMatchType() );
 
     program = "if a or b then Accept else (1 day before now)";
     stmt = RubricInterpreter.compile( program );
-    validator = new ResultTypeValidator( GuardResponse.class );
+    validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect date", validator.isAllResultsMatchType() );
   }
 
-  @Test public void testGuardResponseCheckOnString ()
+  @Test public void testGuardResultCheckOnString ()
   {
     String program = "\"foo\"";
     RubricStmt stmt = RubricInterpreter.compile( program );
-    ResultTypeValidator validator = new ResultTypeValidator( GuardResponse.class );
+    ResultTypeValidator validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
-    Assert.assertFalse( "Should detect guard response", validator.isAllResultsMatchType() );
+    Assert.assertFalse( "Should detect guard result", validator.isAllResultsMatchType() );
 
     program = "if a or b then \"foo\" else Discard";
     stmt = RubricInterpreter.compile( program );
-    validator = new ResultTypeValidator( GuardResponse.class );
+    validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
-    Assert.assertFalse( "Should detect guard response", validator.isAllResultsMatchType() );
+    Assert.assertFalse( "Should detect guard result", validator.isAllResultsMatchType() );
   }
 
   @Test public void testDateCheckOnDate ()
@@ -177,7 +177,7 @@ public class TypeValidatorTest
     Assert.assertFalse( "Should detect int", validator.isAllResultsMatchType() );
   }
 
-  @Test public void testDateCheckOnGuardResponse ()
+  @Test public void testDateCheckOnGuardResult ()
   {
     String program = "Accept";
     RubricStmt stmt = RubricInterpreter.compile( program );

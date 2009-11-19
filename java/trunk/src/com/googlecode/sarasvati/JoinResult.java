@@ -30,39 +30,11 @@ import java.util.List;
 public interface JoinResult
 {
   /**
-   * Shared instance of an incomplete join result, which always returns
-   * false for isJoinComplete.
-   */
-  public static JoinResult INCOMPLETE_JOIN_RESULT = new JoinResult()
-  {
-    /**
-     * Always returns false.
-     *
-     * @see JoinResult#isJoinComplete()
-     */
-    @Override
-    public boolean isJoinComplete ()
-    {
-      return false;
-    }
-
-    /**
-     * Always throws an {@link IllegalStateException}
-     * @see JoinResult#getArcTokensCompletingJoin()
-     */
-    @Override
-    public List<ArcToken> getArcTokensCompletingJoin ()
-    {
-      throw new IllegalStateException( "getArcTokensCompletingJoin should never be called if isJoinComplete returns false." );
-    }
-  };
-
-  /**
-   * Returns true if the join is complete, false otherwise.
+   * Returns the action that the join strategy wants to take.
    *
-   * @return True if the join is complete, false otherwise.
+   * @return the action that the join strategy wants to take.
    */
-  boolean isJoinComplete ();
+  JoinAction getJoinAction ();
 
   /**
    * Returns the ArcTokens which were required to complete this join, and will be considered
@@ -72,7 +44,16 @@ public interface JoinResult
    * @return The ArcTokens which were required to complete this join, and will be considered
    *         the parents of the new {@link NodeToken}.
    *
-   * @throws IllegalStateException If this is invoked when isJoinComplete returns false.
+   * @throws IllegalStateException If this is invoked for a non-complete join action
    */
   List<ArcToken> getArcTokensCompletingJoin ();
+
+  /**
+   * If the join action is {@link JoinAction#Merge}, then the arc token in question will
+   * be made into a parent of the given NodeToken.
+   *
+   * @return The node token into whose history the arc token will be merged into.
+   * @throws IllegalStateException If this is invoked for a non-merge join action
+   */
+  NodeToken getMergeTarget ();
 }

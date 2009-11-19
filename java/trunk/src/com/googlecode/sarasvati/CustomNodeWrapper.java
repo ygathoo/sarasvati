@@ -58,7 +58,7 @@ public interface CustomNodeWrapper extends Node
    * @param engine The engine executing the current process
    * @param token The token which triggered the guard evaluation.
    *
-   * @return A GuardResponse based on the guard defined for the Node.
+   * @return A GuardResult based on the guard defined for the Node.
    */
-  GuardResponse defaultGuard (Engine engine, NodeToken token);
+  GuardResult defaultGuard (Engine engine, NodeToken token);
 }
