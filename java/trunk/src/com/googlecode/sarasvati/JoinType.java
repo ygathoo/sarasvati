@@ -20,6 +20,8 @@ package com.googlecode.sarasvati;
 
 import com.googlecode.sarasvati.impl.TokenSetOrJoinStrategy;
 import com.googlecode.sarasvati.join.AndJoinStrategy;
+import com.googlecode.sarasvati.join.ClassJoinStrategy;
+import com.googlecode.sarasvati.join.FirstJoinStrategy;
 import com.googlecode.sarasvati.join.LabelJoinStrategy;
 import com.googlecode.sarasvati.join.OrJoinStrategy;
 import com.googlecode.sarasvati.join.TokenSetJoinStrategy;
@@ -61,6 +63,17 @@ public enum JoinType
          "arc tokens waiting at all other incoming arcs to the node which " +
          "share the same name/label as the arc that the arc token is arriving on." ),
 
+   /**
+    * Uses the {@link ClassJoinStrategy}. A class join assumes that the
+    * associated join parameter specifies a class implemented the
+    * JoinStrategy interface. An instance of that class will be used
+    * to perform the join.
+    */
+   CLASS( new ClassJoinStrategy(),
+          "A CLASS join assumes that the associated join parameter " +
+          "specifies a class implementing the JoinStrategy interface. " +
+          "An instance of that class will be used to perform the join." ),
+
   /**
    * Uses the {@link TokenSetJoinStrategy}. A token set join will be satisfied when all
    * active arc tokens in the set are on incoming arcs to the same node and there are no
@@ -82,7 +95,18 @@ public enum JoinType
                 "A TOKEN_SET_OR join will be satisfied when all active arc tokens in the set " +
                 "are on incoming arcs to the same node and there are no active node tokens " +
                 "in the token set. The OR strategy will be used as a fallback if a non-token " +
-                "set token arrives." );
+                "set token arrives." ),
+
+
+  /**
+   * Uses the {@link FirstJoinStrategy}. The first arc token to
+   * arrive will satisfy the join. Subsequent arc tokens arriving
+   * will be merged.
+   */
+  FIRST( new FirstJoinStrategy(),
+         "A FIRST join will be satisfied by the first arc token that arrives." +
+         "Subsequent arc tokens will be merged." )
+  ;
 
   private JoinStrategy joinStrategy;
   private String description;

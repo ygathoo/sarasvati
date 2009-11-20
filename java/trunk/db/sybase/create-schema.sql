@@ -614,8 +614,9 @@ IF NOT EXISTS (SELECT id FROM wf_node_join_type)
     insert into wf_node_join_type values ( 1, 'And: Join is completed when there are arc tokens on all incoming arcs to a node' )
     insert into wf_node_join_type values ( 2, 'Label And: Join is completed when there are arc tokens on all incoming arcs with the same name as that of the arc that the current incoming arc token is on.' )
     insert into wf_node_join_type values ( 3, 'TokenSet And: Join is completed when all active arc tokens in the token set arrive and there are no active node tokens. Non token-set token will cause an exception to be raised.' )
-    insert into wf_node_join_type values ( 4, 'Custom: User defined join type' )
+    insert into wf_node_join_type values ( 4, 'Class: User defined join type' )
     insert into wf_node_join_type values ( 5, 'TokenSet Or: Join is completed when all active arc tokens in the token set arrive and there are no active node tokens. Non token-set tokens will fallback to the OR strategy.' )
+    insert into wf_node_join_type values ( 6, 'First: Join is completed by the first arc token to arrive. Subsequent tokens are merged.' )
   END
 ELSE
   BEGIN
