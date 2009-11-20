@@ -22,11 +22,11 @@
 	<classpathentry kind="lib" path="lib/rhino-1.6R7.jar"/>
 	<classpathentry kind="lib" path="lib/antlr3-ant.jar"/>
 	<classpathentry kind="lib" path="lib/antlr-3.1.1.jar"/>
-	<classpathentry kind="lib" path="lib/rubric.jar"/>
 	<classpathentry kind="lib" path="lib/junit-4.5.jar"/>
 	<classpathentry kind="lib" path="lib/org-netbeans-api-visual.jar" sourcepath="lib/org-netbeans-api-visual-src.jar"/>
 	<classpathentry kind="lib" path="lib/org-openide-util.jar"/>
 	<classpathentry kind="lib" path="lib/mysql.jar"/>
 	<classpathentry kind="lib" path="lib/eclipse-draw2d-3.5.0.jar"/>
+	<classpathentry kind="lib" path="lib/dsls.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

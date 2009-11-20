@@ -4,18 +4,17 @@ What are the kinds of things we'd like to be able to say?
 
 Statements:
 
-  STMT = REQUIRE 
-       | REQUIRE "or" STMT
-       | REQUIRE "and" STMT
-       | "(" STMT ")"
-       | "if" EXPR "then" STMT "else" STMT
-
-  REQUIRE = "require" node <node name>
-          | "require any" <arc name>
-          | "require at least" <number>
-          | "require at least" <number> <arcname>
-          | "require node" <node name>
+  JOINSPEC = REQUIRESET
+           | REQUIRESET 'or' REQUIRESET
+      
+  REQUIRESET = REQUIRE+
+  
+  REQUIRE = "require" "node" <node name> WHEN?
+          | "require" "label" <arc name> WHEN?
+          | "require" ">" <number> (<arc name>)?
           | "require tokenset" <token set name>
+
+  WHEN = 'when' '(' EXPR ')'
 
   EXPR = <predicate>
        | 

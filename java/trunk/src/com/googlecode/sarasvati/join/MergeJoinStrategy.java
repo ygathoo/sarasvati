@@ -20,7 +20,6 @@ package com.googlecode.sarasvati.join;
 
 import java.util.Collection;
 import java.util.Collections;
-import java.util.Comparator;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
@@ -28,24 +27,22 @@ import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.impl.NodeTokenComparator;
 
 /**
- * Implements a join strategy where a node will complete a join
- * whenever any arc token arrives.
+ * Class for JoinStrategies which wish to first attempt a merge, then
+ * fall back to another join strategy if that fails.
  *
  * @author Paul Lorenz
  */
 public class MergeJoinStrategy implements JoinStrategy
 {
-  protected static final Comparator<NodeToken> TOKEN_COMPARATOR =
-    new Comparator<NodeToken>()
-    {
-      @Override
-      public int compare (final NodeToken o1, final NodeToken o2)
-      {
-        return o2.getCreateDate().compareTo( o1.getCreateDate() );
-      }
-    };
+  private JoinStrategy fallbackJoinStrategy;
+
+  public MergeJoinStrategy (final JoinStrategy fallbackJoinStrategy)
+  {
+    this.fallbackJoinStrategy = fallbackJoinStrategy;
+  }
 
   @Override
   public JoinResult performJoin (final Engine engine, final ArcToken token)
@@ -53,18 +50,16 @@ public class MergeJoinStrategy implements JoinStrategy
     Node targetNode = token.getArc().getEndNode();
     Collection<NodeToken> nodeTokens = token.getProcess().getTokensOnNode( targetNode, engine );
 
-    if ( nodeTokens.isEmpty() )
+    if ( !nodeTokens.isEmpty() )
     {
-      return IncompleteJoinResult.INSTANCE;
+      NodeToken newestToken = Collections.max( nodeTokens, NodeTokenComparator.INSTANCE );
+
+      if ( !newestToken.getExecutionType().isBacktracked() )
+      {
+        return new MergeJoinResult( newestToken );
+      }
     }
 
-    NodeToken newestToken = Collections.max( nodeTokens, TOKEN_COMPARATOR );
-
-    if ( newestToken.getExecutionType().isBacktracked() )
-    {
-      return IncompleteJoinResult.INSTANCE;
-    }
-
-    return new MergeJoinResult( newestToken );
+    return fallbackJoinStrategy.performJoin( engine, token );
   }
 }

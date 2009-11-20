@@ -39,7 +39,7 @@
   <taskdef name="izpack"   classname="com.izforge.izpack.ant.IzPackTask"        classpath="installer/standalone-compiler.jar"/>
 
   <available file="${fetch.indicator}" property="libs.notfetched"/>
-  <available file="lib/rubric.jar" property="rubric.jar.exists"/>
+  <available file="lib/dsls.jar" property="dsls.jar.exists"/>
 
   <target name="fetchlibs" if="libs.notfetched">
     <echo message="Need to fetch libraries from SVN respository. May be slow, depending on your internet connection"/>
@@ -71,9 +71,11 @@
 
   <target name="buildLang">
     <mkdir dir="${lang.build.dir}/com/googlecode/sarasvati/rubric/lang"/>
+    <mkdir dir="${lang.build.dir}/com/googlecode/sarasvati/join/lang"/>
     <mkdir dir="${lang.build.dir}"/>
 
-    <antlr3 target="lang/Rubric.g" dir="lang" outputdirectory="${lang.build.dir}/com/googlecode/sarasvati/rubric/lang"/>
+    <antlr3 target="lang/Rubric.g"   dir="lang" outputdirectory="${lang.build.dir}/com/googlecode/sarasvati/rubric/lang"/>
+    <antlr3 target="lang/JoinLang.g" dir="lang" outputdirectory="${lang.build.dir}/com/googlecode/sarasvati/join/lang"/>
 
     <javac srcdir="${lang.build.dir}" destdir="${lang.build.dir}" source="1.5" target="1.5" debug="true">
       <include name="**/*.java" />
@@ -83,14 +85,18 @@
   </target>
 
   <target name="buildLangJar" depends="buildLang">
-    <jar basedir="${lang.build.dir}" destfile="lib/rubric.jar">
+    <jar basedir="${lang.build.dir}" destfile="lib/dsls.jar">
       <include name="**/lang/RubricParser*.class"/>
       <include name="**/lang/RubricLexer*.class"/>
       <include name="**/lang/Rubric.tokens"/>
+
+      <include name="**/lang/JoinLang*.class"/>
+      <include name="**/lang/JoinLang*.class"/>
+      <include name="**/lang/JoinLang.tokens"/>
     </jar>
   </target>
 
-  <target name="buildMissingLangJar" unless="rubric.jar.exists">
+  <target name="buildMissingLangJar" unless="dsls.jar.exists">
     <ant target="buildLangJar"/>
   </target>
 
@@ -147,6 +153,10 @@
         <include name="**/lang/RubricParser*.class"/>
         <include name="**/lang/RubricLexer*.class"/>
         <include name="**/lang/Rubric.tokens"/>
+
+        <include name="**/lang/JoinLangParser*.class"/>
+        <include name="**/lang/JoinLangLexer*.class"/>
+        <include name="**/lang/JoinLang.tokens"/>
       </fileset>
       <fileset dir="${core.build.dir}"/>
     </copy>
