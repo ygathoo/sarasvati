@@ -1,4 +1,4 @@
-grammar Rubric;
+grammar JoinLang;
 
 options {
    output=AST;
@@ -37,10 +37,10 @@ tokens {
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008-2009 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.rubric.lang;
+package com.googlecode.sarasvati.join.lang;
 
 import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.impl.AcceptTokenGuardResult;
@@ -68,74 +68,39 @@ import com.googlecode.sarasvati.rubric.lang.*;
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.rubric.lang;
+package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.rubric.lang.*;
+import com.googlecode.sarasvati.join.lang.*;
 }
 
-program returns [RubricStmt value]
-         :  stmt EOF { $value = $stmt.value; }
-         ;
+requires returns [JoinLangRequirement value]
+        : 'require' 'node' STRING { $value = new NodeRequired( $STRING.text ); } ( when { $value.setWhenExpr( $when.value ); } )?
+        ;
 
-stmt returns [RubricStmt value]
-         :  ('if'|'IF')^ e=orExpr ('then'|'THEN')! ifStmt=stmt ('else'|'ELSE')! elseStmt=stmt
-            {$value = new RubricStmtIf( $e.value, $ifStmt.value, $elseStmt.value ); }
-         |  result { $value = $result.value; }
-         ;
+when returns [RubricExpr value]
+        : 'when' '(' expr { $value=$expr.value; } ')'
+        ;
 
 orExpr returns [RubricExpr value]
-         :  left=andExpr { $value = $left.value; } ( ('or'|'OR')^ right=andExpr { $value = new RubricExprOr( $value, $right.value ); } )*
-         ;
+        :  left=andExpr { $value = $left.value; } ( ('or'|'OR')^ right=andExpr { $value = new RubricExprOr( $value, $right.value ); } )*
+        ;
 
 andExpr returns [RubricExpr value]
-         :  left=notExpr { $value = $left.value; } ( ('and'|'AND')^ right=notExpr { $value = new RubricExprAnd( $value, $right.value ); } )*
-         ;
+        :  left=notExpr { $value = $left.value; } ( ('and'|'AND')^ right=notExpr { $value = new RubricExprAnd( $value, $right.value ); } )*
+        ;
 
 notExpr returns [RubricExpr value]
-         :  ('not'|'NOT')^ expr { $value = new RubricExprNot( $expr.value ); }
-         |  expr { $value = $expr.value; }
-         ;
+        :  ('not'|'NOT')^ expr { $value = new RubricExprNot( $expr.value ); }
+        |  expr { $value = $expr.value; }
+        ;
 
 expr returns [RubricExpr value]
-         :  ID { $value = new RubricExprSymbol( $ID.text ); }
-         |  '('! orExpr ')'! { $value = $orExpr.value; }
-         ;
-
-result returns [RubricStmt value]
-         :  guardResult  { $value = new RubricStmtResult( $guardResult.value ); }
-         |  NUMBER       { $value = new RubricStmtResult( Integer.parseInt( $NUMBER.text ) ); }
-         |  STRING       { $value = new RubricStmtResult( SvUtil.normalizeQuotedString( $STRING.text ) ); }
-         |  dateResult   { $value = $dateResult.value; }
-         |  stringResult { $value = $stringResult.value; }
-         ;
-
-dateResult returns [RubricStmt value]
-         :  '('! dateSpec ')'! { $value = $dateSpec.value; }
-         ;
-
-stringResult returns [RubricStmt value]
-         : '@' ID { $value = new RubricStmtStringSymbol( $ID.text ); }
-         ;
-
-dateSpec returns [RubricStmt value]
-@init {
-  boolean business = false;
-}
-         :  ID { $value = new RubricStmtDateSymbol( $ID.text ); }
-         |  NUMBER ( BUSINESS { business = true; } )? unit=(HOUR|HOURS|DAY|DAYS|WEEK|WEEKS) type=(BEFORE|AFTER) ID
-            { $value = new RubricStmtRelativeDate( Integer.parseInt( $NUMBER.text ), business, $unit.text, $type.text, $ID.text ); }
-         ;
-
-guardResult returns [GuardResult value]
-         :  ACCEPT       { $value = AcceptTokenGuardResult.INSTANCE; }
-         |  DISCARD      { $value = DiscardTokenGuardResult.INSTANCE; }
-         |  SKIP^ ID     { $value = new SkipNodeGuardResult( $ID.text ); }
-         |  SKIP^ STRING { $value = new SkipNodeGuardResult( SvUtil.normalizeQuotedString( $STRING.text ) ); }
-         |  SKIP         { $value = SkipNodeGuardResult.DEFAULT_ARC_SKIP_NODE_RESULT; }
-         ;
+        :  ID { $value = new RubricExprSymbol( $ID.text ); }
+        |  '('! orExpr ')'! { $value = $orExpr.value; }
+        ;
 
 // ===========================================================================
 // ================   LEXER   ================================================

@@ -18,55 +18,28 @@
 */
 package com.googlecode.sarasvati.join;
 
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Comparator;
-
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.NodeToken;
 
 /**
- * Implements a join strategy where the first token that
- * arrives will generate a new node token. Later arc tokens
- * arriving will get merged in as parents of the new node
- * token.
+ * Implements a join strategy that evaluates the join parameter
+ * in the target node as a statement of JoinLang. The result
+ * of the evaluation determines if the guard is satisfied or not.
+ * <p>
  *
  * @author Paul Lorenz
  */
-public class FirstJoinStrategy implements JoinStrategy
+public class JoinLangJoinStrategy implements JoinStrategy
 {
-  protected static final Comparator<NodeToken> TOKEN_COMPARATOR =
-    new Comparator<NodeToken>()
-    {
-      @Override
-      public int compare (final NodeToken o1, final NodeToken o2)
-      {
-        return o1.getCreateDate().compareTo( o2.getCreateDate() );
-      }
-    };
-
   @Override
   public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
     Node targetNode = token.getArc().getEndNode();
-    Collection<NodeToken> nodeTokens = token.getProcess().getTokensOnNode( targetNode, engine );
+    String joinLangStmt = targetNode.getJoinParam();
 
-    if ( nodeTokens.isEmpty() )
-    {
-      return new CompleteJoinResult( token );
-    }
-
-    NodeToken newestToken = Collections.max( nodeTokens, TOKEN_COMPARATOR );
-
-    if ( newestToken.getExecutionType().isBacktracked() )
-    {
-      return new CompleteJoinResult( token );
-    }
-
-    return new MergeJoinResult( newestToken );
+    return null;
   }
 }
