@@ -380,9 +380,10 @@ public class HibGraphProcess implements GraphProcess
   public List<NodeToken> getTokensOnNode (final Node node, final Engine engine)
   {
     HibEngine hibEngine = (HibEngine)engine;
-    String hql = "from HibNodeToken where nodeRef = :nodeRef";
+    String hql = "from HibNodeToken where nodeRef = :nodeRef and process=:process";
     Query query = hibEngine.getSession().createQuery( hql );
-    query.setParameter( "nodeRef", node );
+    query.setEntity( "nodeRef", node );
+    query.setEntity( "process", this );
     return query.list();
   }
 

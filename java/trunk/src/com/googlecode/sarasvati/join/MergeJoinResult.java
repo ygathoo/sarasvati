@@ -36,14 +36,14 @@ public final class MergeJoinResult implements JoinResult
   }
 
   /**
-   * Always returns {@value JoinAction#Nothing}
+   * Always returns {@value JoinAction#Merge}
    *
    * @see com.googlecode.sarasvati.JoinResult#getJoinAction()
    */
   @Override
   public JoinAction getJoinAction ()
   {
-    return JoinAction.Nothing;
+    return JoinAction.Merge;
   }
 
   /**

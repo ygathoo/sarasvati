@@ -45,7 +45,7 @@ public class FirstJoinStrategy implements JoinStrategy
       @Override
       public int compare (final NodeToken o1, final NodeToken o2)
       {
-        return o2.getCreateDate().compareTo( o1.getCreateDate() );
+        return o1.getCreateDate().compareTo( o2.getCreateDate() );
       }
     };
 
