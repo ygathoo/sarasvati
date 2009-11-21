@@ -27,6 +27,7 @@ import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
+import com.googlecode.sarasvati.join.lang.JoinLangEnv;
 import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphLoader;
 import com.googlecode.sarasvati.load.GraphRepository;
@@ -356,6 +357,15 @@ public interface Engine
    * @return A RubricEnv for this engine and the given NodeToken.
    */
   RubricEnv newRubricEnv (NodeToken token);
+
+  /**
+   * Creates a {@link JoinLangEnv} to be used to evaluate a JoinLang statement
+   * controlling if the given {@link ArcToken} satisfies a join.
+   *
+   * @param token The token which will provide some of the state for the JoinLangEnv
+   * @return A JoinLangEnv for this engine and the given {@link ArcToken}.
+   */
+  JoinLangEnv newJoinLangEnv (ArcToken token);
 
   /**
    * Nodes, by default, will pass off guard evaluation to the Engine. This allows

@@ -19,7 +19,7 @@
 
 package com.googlecode.sarasvati.rubric.lang;
 
-import com.googlecode.sarasvati.rubric.env.RubricEnv;
+import com.googlecode.sarasvati.rubric.env.PredicateEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
 public class RubricExprAnd extends AbstractBinaryRubricExpr
@@ -30,7 +30,7 @@ public class RubricExprAnd extends AbstractBinaryRubricExpr
   }
 
   @Override
-  public boolean eval (final RubricEnv env)
+  public boolean eval (final PredicateEnv env)
   {
     return left.eval( env ) && right.eval( env );
   }
@@ -66,5 +66,11 @@ public class RubricExprAnd extends AbstractBinaryRubricExpr
     RubricExprAnd other = expr.asAnd();
     return other.getLeft().isEqualTo( left ) &&
            other.getRight().isEqualTo( right );
+  }
+
+  @Override
+  public String toString ()
+  {
+    return "(and " + left + " " + right + ")";
   }
 }

@@ -17,32 +17,27 @@
     Copyright 2008 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.rubric.lang;
+package com.googlecode.sarasvati.unittest.joinlang;
 
-import com.googlecode.sarasvati.rubric.env.PredicateEnv;
-import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
+import junit.framework.Assert;
 
-public interface RubricExpr
+import org.junit.Test;
+
+import com.googlecode.sarasvati.join.JoinLangInterpreter;
+import com.googlecode.sarasvati.join.lang.AndJoinExpr;
+import com.googlecode.sarasvati.join.lang.JoinLangExpr;
+import com.googlecode.sarasvati.join.lang.NodeRequired;
+
+public class JoinLangCompilerTest
 {
-  boolean eval (PredicateEnv env);
+  @Test public void testSimple ()
+  {
+    AndJoinExpr expr = new AndJoinExpr(  new NodeRequired( "foo" ) );
 
-  void traverse (RubricVisitor visitor);
+    String script = "require node \"foo\"";
+    System.out.println( "SCRIPT: " + script );
 
-  boolean isAnd ();
-
-  boolean isOr ();
-
-  boolean isNot ();
-
-  boolean isSymbol ();
-
-  RubricExprAnd asAnd ();
-
-  RubricExprOr asOr ();
-
-  RubricExprNot asNot ();
-
-  RubricExprSymbol asSymbol ();
-
-  boolean isEqualTo (RubricExpr expr);
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
 }

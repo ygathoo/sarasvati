@@ -14,35 +14,26 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
+package com.googlecode.sarasvati.join.lang;
 
-package com.googlecode.sarasvati.rubric.lang;
 
-import com.googlecode.sarasvati.rubric.env.PredicateEnv;
-import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
-
-public interface RubricExpr
+public interface JoinLangExpr
 {
-  boolean eval (PredicateEnv env);
+  boolean isSatisfied (JoinLangEnv joinEnv);
 
-  void traverse (RubricVisitor visitor);
+  boolean isOr();
 
-  boolean isAnd ();
+  boolean isAnd();
 
-  boolean isOr ();
+  boolean isJoinRequirement ();
 
-  boolean isNot ();
+  OrJoinExpr asOr ();
 
-  boolean isSymbol ();
+  AndJoinExpr asAnd ();
 
-  RubricExprAnd asAnd ();
+  JoinRequirement asJoinRequirement ();
 
-  RubricExprOr asOr ();
-
-  RubricExprNot asNot ();
-
-  RubricExprSymbol asSymbol ();
-
-  boolean isEqualTo (RubricExpr expr);
+  boolean isEqualTo (JoinLangExpr expr);
 }

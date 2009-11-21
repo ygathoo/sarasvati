@@ -19,7 +19,7 @@
 
 package com.googlecode.sarasvati.rubric.lang;
 
-import com.googlecode.sarasvati.rubric.env.RubricEnv;
+import com.googlecode.sarasvati.rubric.env.PredicateEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
 public class RubricExprNot extends AbstractRubricExpr
@@ -42,7 +42,7 @@ public class RubricExprNot extends AbstractRubricExpr
   }
 
   @Override
-  public boolean eval (final RubricEnv env)
+  public boolean eval (final PredicateEnv env)
   {
     return !expr.eval( env );
   }
@@ -70,5 +70,11 @@ public class RubricExprNot extends AbstractRubricExpr
   public boolean isEqualTo (final RubricExpr e)
   {
     return e.isNot() && e.asNot().getExpr().isEqualTo( expr );
+  }
+
+  @Override
+  public String toString ()
+  {
+    return "(not " + expr + ")";
   }
 }
