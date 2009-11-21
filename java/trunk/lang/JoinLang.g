@@ -42,12 +42,11 @@ tokens {
 
 package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.GuardResult;
-import com.googlecode.sarasvati.impl.AcceptTokenGuardResult;
-import com.googlecode.sarasvati.impl.DiscardTokenGuardResult;
-import com.googlecode.sarasvati.impl.SkipNodeGuardResult;
 import com.googlecode.sarasvati.util.SvUtil;
 import com.googlecode.sarasvati.rubric.lang.*;
+import com.googlecode.sarasvati.rubric.lang.*;
+import java.util.List;
+import java.util.ArrayList;
 
 }
 
@@ -76,8 +75,19 @@ package com.googlecode.sarasvati.join.lang;
 import com.googlecode.sarasvati.join.lang.*;
 }
 
-requires returns [JoinLangRequirement value]
-        : 'require' 'node' STRING { $value = new NodeRequired( $STRING.text ); } ( when { $value.setWhenExpr( $when.value ); } )?
+joinExpr returns [JoinLangExpr value]
+        : left=requireSet { $value = $left.value; }
+          ( ('or'|'OR')^ right=requireSet { $value = new OrJoinExpr( $value, $right.value ); } )*
+        ;
+
+requireSet returns [AndJoinExpr value]
+        : firstRequire=require { $value = new AndJoinExpr( $firstRequire.value ); }
+          ( moreRequire=require { $value.add( $moreRequire.value ); } )*
+        ;
+
+require returns [JoinRequirement value]
+        : 'require' 'node' STRING { $value = new NodeRequired( SvUtil.normalizeQuotedString( $STRING.text ) ); }
+          ( when { $value.setWhenExpr( $when.value ); } )?
         ;
 
 when returns [RubricExpr value]

@@ -90,8 +90,8 @@
       <include name="**/lang/RubricLexer*.class"/>
       <include name="**/lang/Rubric.tokens"/>
 
-      <include name="**/lang/JoinLang*.class"/>
-      <include name="**/lang/JoinLang*.class"/>
+      <include name="**/lang/JoinLangParser*.class"/>
+      <include name="**/lang/JoinLangLexer*.class"/>
       <include name="**/lang/JoinLang.tokens"/>
     </jar>
   </target>

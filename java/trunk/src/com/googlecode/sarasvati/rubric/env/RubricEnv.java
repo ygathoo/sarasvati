@@ -29,17 +29,8 @@ import java.util.Date;
  *
  * @author Paul Lorenz
  */
-public interface RubricEnv
+public interface RubricEnv extends PredicateEnv
 {
-  /**
-   * Evaluates the named predicate
-   *
-   * @param predicate The name of the predicate to evaluate
-   *
-   * @return The result of the predicate evaluation.
-   */
-  boolean evalPredicate (String predicate);
-
   /**
    * Evaluates the named date function
    *

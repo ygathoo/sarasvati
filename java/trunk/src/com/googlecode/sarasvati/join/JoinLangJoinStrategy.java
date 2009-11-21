@@ -23,6 +23,8 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.join.lang.JoinLangEnv;
+import com.googlecode.sarasvati.join.lang.JoinLangExpr;
 
 /**
  * Implements a join strategy that evaluates the join parameter
@@ -38,8 +40,8 @@ public class JoinLangJoinStrategy implements JoinStrategy
   public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
     Node targetNode = token.getArc().getEndNode();
-    String joinLangStmt = targetNode.getJoinParam();
-
-    return null;
+    JoinLangExpr expr = JoinLangInterpreter.compile( targetNode.getJoinParam() );
+    JoinLangEnv env = engine.newJoinLangEnv( token );
+    return expr.isSatisfied( env ) ? new CompleteJoinResult( env.getAvailableTokens() ) : IncompleteJoinResult.INSTANCE;
   }
 }

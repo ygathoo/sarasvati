@@ -56,6 +56,8 @@ import com.googlecode.sarasvati.event.GraphDefinedEventListenerInvoker;
 import com.googlecode.sarasvati.event.NodeTokenEvent;
 import com.googlecode.sarasvati.event.ProcessDefinedEventListenerInvoker;
 import com.googlecode.sarasvati.event.ProcessEvent;
+import com.googlecode.sarasvati.join.lang.JoinLangEnv;
+import com.googlecode.sarasvati.join.lang.JoinLangEnvImpl;
 import com.googlecode.sarasvati.rubric.RubricInterpreter;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricEnv;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
@@ -570,6 +572,12 @@ public abstract class BaseEngine implements Engine
   public RubricEnv newRubricEnv (final NodeToken token)
   {
     return new DefaultRubricEnv( this, token, DefaultRubricFunctionRepository.getGlobalInstance() );
+  }
+
+  @Override
+  public JoinLangEnv newJoinLangEnv (final ArcToken token)
+  {
+    return new JoinLangEnvImpl( token, newRubricEnv( token.getParentToken() ) );
   }
 
   @Override

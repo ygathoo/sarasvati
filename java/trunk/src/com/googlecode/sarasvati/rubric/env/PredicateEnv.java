@@ -14,35 +14,25 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.rubric.lang;
+package com.googlecode.sarasvati.rubric.env;
 
-import com.googlecode.sarasvati.rubric.env.PredicateEnv;
-import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
-
-public interface RubricExpr
+/**
+ * A PredicateEnv does the actual evaluation of the predicates
+ * that are used in a Rubric or JoinLang program.
+ *
+ * @author Paul Lorenz
+ */
+public interface PredicateEnv
 {
-  boolean eval (PredicateEnv env);
-
-  void traverse (RubricVisitor visitor);
-
-  boolean isAnd ();
-
-  boolean isOr ();
-
-  boolean isNot ();
-
-  boolean isSymbol ();
-
-  RubricExprAnd asAnd ();
-
-  RubricExprOr asOr ();
-
-  RubricExprNot asNot ();
-
-  RubricExprSymbol asSymbol ();
-
-  boolean isEqualTo (RubricExpr expr);
+  /**
+   * Evaluates the named predicate
+   *
+   * @param predicate The name of the predicate to evaluate
+   *
+   * @return The result of the predicate evaluation.
+   */
+  boolean evalPredicate (String predicate);
 }

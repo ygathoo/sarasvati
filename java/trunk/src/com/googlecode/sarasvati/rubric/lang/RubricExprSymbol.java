@@ -19,7 +19,7 @@
 
 package com.googlecode.sarasvati.rubric.lang;
 
-import com.googlecode.sarasvati.rubric.env.RubricEnv;
+import com.googlecode.sarasvati.rubric.env.PredicateEnv;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
 public class RubricExprSymbol extends AbstractRubricExpr
@@ -42,7 +42,7 @@ public class RubricExprSymbol extends AbstractRubricExpr
   }
 
   @Override
-  public boolean eval (final RubricEnv env)
+  public boolean eval (final PredicateEnv env)
   {
     return env.evalPredicate( symbol );
   }
@@ -69,5 +69,11 @@ public class RubricExprSymbol extends AbstractRubricExpr
   public boolean isEqualTo (final RubricExpr expr)
   {
     return expr.isSymbol() && expr.asSymbol().getSymbol().equals( symbol );
+  }
+
+  @Override
+  public String toString ()
+  {
+    return symbol;
   }
 }
