@@ -32,7 +32,7 @@ public class JoinLangCompilerTest
 {
   @Test public void testSimple ()
   {
-    AndJoinExpr expr = new AndJoinExpr(  new NodeRequired( "foo" ) );
+    AndJoinExpr expr = new AndJoinExpr( new NodeRequired( "foo" ) );
 
     String script = "require node \"foo\"";
     System.out.println( "SCRIPT: " + script );

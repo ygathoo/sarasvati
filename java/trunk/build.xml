@@ -34,9 +34,18 @@
     </fileset>
   </path>
 
-  <taskdef name="antlr3"   classname="org.apache.tools.ant.antlr.ANTLR3"        classpathref="classpath"/>
-  <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" classpathref="hudson"/>
-  <taskdef name="izpack"   classname="com.izforge.izpack.ant.IzPackTask"        classpath="installer/standalone-compiler.jar"/>
+  <taskdef name="antlr3"
+           classname="org.apache.tools.ant.antlr.ANTLR3"
+           classpathref="classpath"
+           onerror="report"/>
+  <taskdef name="findbugs"
+           classname="edu.umd.cs.findbugs.anttask.FindBugsTask"
+           classpathref="hudson"
+           onerror="report"/>
+  <taskdef name="izpack"
+           classname="com.izforge.izpack.ant.IzPackTask"
+           classpath="installer/standalone-compiler.jar"
+           onerror="report"/>
 
   <available file="${fetch.indicator}" property="libs.notfetched"/>
   <available file="lib/dsls.jar" property="dsls.jar.exists"/>
