@@ -43,7 +43,7 @@ public abstract class AbstractJoinLangExpr implements JoinLangExpr
    * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#asOr()
    */
   @Override
-  public OrJoinExpr asOr ()
+  public IfJoinExpr asIf ()
   {
     return null;
   }
@@ -70,7 +70,7 @@ public abstract class AbstractJoinLangExpr implements JoinLangExpr
    * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#isOr()
    */
   @Override
-  public boolean isOr ()
+  public boolean isIf ()
   {
     return false;
   }

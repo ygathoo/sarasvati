@@ -75,9 +75,14 @@ package com.googlecode.sarasvati.join.lang;
 import com.googlecode.sarasvati.join.lang.*;
 }
 
+program returns [JoinLangExpr value]
+         :  joinExpr EOF { $value = $joinExpr.value; }
+         ;
+
 joinExpr returns [JoinLangExpr value]
-        : left=requireSet { $value = $left.value; }
-          ( ('or'|'OR')^ right=requireSet { $value = new OrJoinExpr( $value, $right.value ); } )*
+        : 'if' expr 'then' ifExpr=joinExpr 'else' elseExpr=joinExpr
+          { $value= new IfJoinExpr( $expr.value, $ifExpr.value, $elseExpr.value); }
+        | requireSet { $value = $requireSet.value; }
         ;
 
 requireSet returns [AndJoinExpr value]

@@ -23,13 +23,13 @@ public interface JoinLangExpr
 {
   boolean isSatisfied (JoinLangEnv joinEnv);
 
-  boolean isOr();
+  boolean isIf();
 
   boolean isAnd();
 
   boolean isJoinRequirement ();
 
-  OrJoinExpr asOr ();
+  IfJoinExpr asIf ();
 
   AndJoinExpr asAnd ();
 
