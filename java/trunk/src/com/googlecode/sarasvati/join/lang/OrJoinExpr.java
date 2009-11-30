@@ -18,20 +18,16 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.rubric.lang.RubricExpr;
 
-
-public class IfJoinExpr extends AbstractJoinLangExpr
+public class OrJoinExpr extends AbstractJoinLangExpr
 {
-  protected RubricExpr expr;
-  protected JoinLangExpr ifExpr;
-  protected JoinLangExpr elseExpr;
+  protected JoinLangExpr left;
+  protected JoinLangExpr right;
 
-  public IfJoinExpr (RubricExpr expr, JoinLangExpr ifExpr, JoinLangExpr elseExpr)
+  public OrJoinExpr (final JoinLangExpr left, final JoinLangExpr right)
   {
-    this.expr = expr;
-    this.ifExpr = ifExpr;
-    this.elseExpr = elseExpr;
+    this.left = left;
+    this.right = right;
   }
 
   /**
@@ -40,24 +36,24 @@ public class IfJoinExpr extends AbstractJoinLangExpr
   @Override
   public boolean isSatisfied (JoinLangEnv joinEnv)
   {
-    JoinLangExpr joinExpr = expr.eval( joinEnv ) ? ifExpr : elseExpr;
-    return joinExpr.isSatisfied(  joinEnv );
+    return left.isSatisfied( joinEnv ) ||
+           right.isSatisfied( joinEnv );
   }
 
   /**
-   * @see com.googlecode.sarasvati.join.lang.AbstractJoinLangExpr#asOf()
+   * @see com.googlecode.sarasvati.join.lang.AbstractJoinLangExpr#asOr()
    */
   @Override
-  public IfJoinExpr asIf ()
+  public OrJoinExpr asOr ()
   {
     return this;
   }
 
   /**
-   * @see com.googlecode.sarasvati.join.lang.AbstractJoinLangExpr#isIf()
+   * @see com.googlecode.sarasvati.join.lang.AbstractJoinLangExpr#isOr()
    */
   @Override
-  public boolean isIf ()
+  public boolean isOr ()
   {
     return true;
   }
@@ -66,20 +62,20 @@ public class IfJoinExpr extends AbstractJoinLangExpr
    * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
    */
   @Override
-  public boolean isEqualTo (final JoinLangExpr joinExpr)
+  public boolean isEqualTo (final JoinLangExpr expr)
   {
-    if ( !joinExpr.isIf() )
+    if ( !expr.isOr() )
     {
       return false;
     }
 
-    IfJoinExpr other = joinExpr.asIf();
-    return expr.isEqualTo( other.expr ) && ifExpr.isEqualTo( other.ifExpr ) && elseExpr.isEqualTo( other.elseExpr );
+    OrJoinExpr other = expr.asOr();
+    return left.isEqualTo( other.left ) && right.isEqualTo( other.right );
   }
 
   @Override
   public String toString()
   {
-    return "if " + expr + " then " + ifExpr + " else " + elseExpr;
+    return left + "\n" + "or" + "\n" + right;
   }
 }

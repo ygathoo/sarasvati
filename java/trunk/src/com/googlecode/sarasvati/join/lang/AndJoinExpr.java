@@ -43,10 +43,11 @@ public class AndJoinExpr extends AbstractJoinLangExpr
   {
     for ( JoinRequirement requirement : requirements )
     {
-      if ( requirement.isApplicable( joinEnv ) && !requirement.isSatisfied( joinEnv ) )
-      {
-        return false;
-      }
+      boolean isApplicable = requirement.isApplicable( joinEnv );
+      joinEnv.setApplicable( isApplicable );
+
+      boolean isSatisfied = requirement.isSatisfied( joinEnv );
+      return !isApplicable || isSatisfied;
     }
 
     return true;

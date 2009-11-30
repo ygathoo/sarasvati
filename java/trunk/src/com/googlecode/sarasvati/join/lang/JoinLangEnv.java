@@ -27,4 +27,29 @@ public interface JoinLangEnv extends PredicateEnv
 {
   ArcToken getInitiatingToken();
   List<ArcToken> getAvailableTokens ();
+  void markArcRequired (ArcToken token);
+  void setApplicable (boolean isApplicable);
+
+  /**
+   * Returns true if the initiating token is covered
+   * by a require statements that is in effect. A require
+   * statement is in effect if it has no 'when' clause
+   * or if the 'when' clause evaluates to true.
+   *
+   * @return true if the initiating token is covered
+   * by a require statements that is in effect, and false otherwise.
+   */
+  boolean isInitiatingTokenRequired ();
+
+  /**
+   * Returns true if the initiating token is covered
+   * by a require statements that is not in effect. A require
+   * statement is in effect if it has no 'when' clause
+   * or if the 'when' clause evaluates to true.
+   *
+   * @return true if the initiating token is covered
+   * by a require statements that is not in effect,
+   * and false otherwise.
+   */
+  boolean isInitiatingTokenOptional ();
 }

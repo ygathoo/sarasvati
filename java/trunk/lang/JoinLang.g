@@ -80,9 +80,8 @@ program returns [JoinLangExpr value]
          ;
 
 joinExpr returns [JoinLangExpr value]
-        : 'if' expr 'then' ifExpr=joinExpr 'else' elseExpr=joinExpr
-          { $value= new IfJoinExpr( $expr.value, $ifExpr.value, $elseExpr.value); }
-        | requireSet { $value = $requireSet.value; }
+        : left=requireSet { $value = $left.value; }
+          ( ('or'|'OR')^ right=requireSet { $value = new OrJoinExpr( $value, $right.value ); } )*
         ;
 
 requireSet returns [AndJoinExpr value]
