@@ -31,6 +31,9 @@ public class JoinLangEnvImpl implements JoinLangEnv
   private final PredicateEnv predicateEnv;
   private final ArcToken initiatingToken;
   private List<ArcToken> availableTokens = null;
+  private boolean isApplicable;
+  private boolean isOptional;
+  private boolean isRequired;
 
   public JoinLangEnvImpl (final ArcToken initiatingToken, final PredicateEnv predicateEnv)
   {
@@ -79,5 +82,51 @@ public class JoinLangEnvImpl implements JoinLangEnv
   public boolean evalPredicate (final String predicate)
   {
     return predicateEnv.evalPredicate( predicate );
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#setApplicable(boolean)
+   */
+  @Override
+  public void setApplicable (final boolean isApplicable)
+  {
+    this.isApplicable = isApplicable;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#markArcRequired(com.googlecode.sarasvati.ArcToken)
+   */
+  @Override
+  public void markArcRequired (final ArcToken token)
+  {
+    if ( token.equals(  initiatingToken ) )
+    {
+      if ( isApplicable )
+      {
+        isRequired = true;
+      }
+      else
+      {
+        isOptional = true;
+      }
+    }
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#isInitiatingTokenOptional()
+   */
+  @Override
+  public boolean isInitiatingTokenOptional ()
+  {
+    return isOptional;
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#isInitiatingTokenRequired()
+   */
+  @Override
+  public boolean isInitiatingTokenRequired ()
+  {
+    return isRequired;
   }
 }

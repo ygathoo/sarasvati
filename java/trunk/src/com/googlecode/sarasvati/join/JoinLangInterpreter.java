@@ -32,28 +32,12 @@ import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
 /**
- * Rubric is a simple rules language. It has the following grammar:
+ * JoinLang is a simple language for defining join requirements
  *
  * <pre>
- * STMT = 'if' EXPR 'then' STMT 'else' STMT
- *      | Accept | Discard | Skip | Skip ARCNAME
- *      | digit
- *      | "quoted string"
- *      | '(' DATEFUNCTION ')'
- *      | '(' NUMBER (hour|hours|day|days|week|weeks) (before|after) DATEFUNCTION ')'
- *
- * EXPR = PREDICATE
- *      | PREDICATE 'or' EXPR
- *      | PREDICATE 'and' EXPR
- *      | 'not' EXPR
- *      | '(' EXPR ')'
- *
- * PREDICATE = ID
- * DATEFUNCTION = ID
- * ID = (letter)(letter|digit|'.')*  // letter followed by 0 to many letters, digits or dots
- *
+ *   REQUIRE = 'require' 'node' <node name> ('when' EXPR)?
  * </pre>
- *
+ * 
  * A predicate used in an expression is evaluated with the help of a
  * {@link RubricEnv}. Specifically, the method {@link RubricEnv#evalPredicate(String)}
  * is called to evaluated a predicate.
