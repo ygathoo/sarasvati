@@ -19,6 +19,10 @@
 package com.googlecode.sarasvati.editor.model;
 
 import java.awt.Color;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -98,6 +102,66 @@ public class EditorPreferences
     }
 
     reloadLibrary();
+  }
+
+  public void importPreferences (final File file)
+  {
+    FileInputStream is = null;
+
+    try
+    {
+      is = new FileInputStream( file );
+      Preferences.importPreferences( is );
+      DialogFactory.showInfo( "Preferences imported from: " + file.getAbsolutePath() );
+    }
+    catch ( Exception e )
+    {
+      if ( is != null )
+      {
+        try
+        {
+          is.close();
+        }
+        catch ( IOException ie )
+        {
+          // ignore
+        }
+      }
+
+      DialogFactory.showError( "Failed to import preferences: " + e.getMessage() );
+    }
+
+    loadPreferences();
+  }
+
+  public void exportPreferences (final File file)
+  {
+    Preferences prefs = Preferences.userNodeForPackage( getClass() );
+
+    FileOutputStream os = null;
+
+    try
+    {
+      os = new FileOutputStream( file );
+      prefs.exportSubtree( os );
+      DialogFactory.showInfo( "Preferences exported to: " + file.getAbsolutePath() );
+    }
+    catch ( Exception e )
+    {
+      if ( os != null )
+      {
+        try
+        {
+          os.close();
+        }
+        catch ( IOException ie )
+        {
+          // ignore
+        }
+      }
+
+      DialogFactory.showError( "Failed to export preferences: " + e.getMessage() );
+    }
   }
 
   public void reloadLibrary()

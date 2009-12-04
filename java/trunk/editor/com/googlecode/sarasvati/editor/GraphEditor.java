@@ -68,6 +68,8 @@ import com.googlecode.sarasvati.editor.menu.CopyAction;
 import com.googlecode.sarasvati.editor.menu.CutAction;
 import com.googlecode.sarasvati.editor.menu.DeleteAction;
 import com.googlecode.sarasvati.editor.menu.ExitAction;
+import com.googlecode.sarasvati.editor.menu.ExportPreferencesAction;
+import com.googlecode.sarasvati.editor.menu.ImportPreferencesAction;
 import com.googlecode.sarasvati.editor.menu.NewGraphAction;
 import com.googlecode.sarasvati.editor.menu.OpenAction;
 import com.googlecode.sarasvati.editor.menu.OpenFromLibraryAction;
@@ -395,6 +397,8 @@ public class GraphEditor
     JMenu toolsMenu = new JMenu( "Tools" );
     toolsMenu.setMnemonic( KeyEvent.VK_T );
 
+    toolsMenu.add( new JMenuItem( new ExportPreferencesAction() ) );
+    toolsMenu.add( new JMenuItem( new ImportPreferencesAction() ) );
     toolsMenu.add( new JMenuItem( new ConvertLibraryAction() ) );
 
     menuBar.add( fileMenu );
