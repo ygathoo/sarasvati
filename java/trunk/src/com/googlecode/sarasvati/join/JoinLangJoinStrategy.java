@@ -42,6 +42,6 @@ public class JoinLangJoinStrategy implements JoinStrategy
     Node targetNode = token.getArc().getEndNode();
     JoinLangExpr expr = JoinLangInterpreter.compile( targetNode.getJoinParam() );
     JoinLangEnv env = engine.newJoinLangEnv( token );
-    return expr.isSatisfied( env ) ? new CompleteJoinResult( env.getAvailableTokens() ) : IncompleteJoinResult.INSTANCE;
+    return expr.performJoin( env );
   }
 }

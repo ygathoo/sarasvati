@@ -18,10 +18,12 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
+import com.googlecode.sarasvati.JoinResult;
+
 
 public interface JoinLangExpr
 {
-  boolean isSatisfied (JoinLangEnv joinEnv);
+  JoinResult performJoin (JoinLangEnv joinEnv);
 
   boolean isOr();
 

@@ -21,13 +21,41 @@ package com.googlecode.sarasvati.join.lang;
 import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.rubric.env.PredicateEnv;
 
 public interface JoinLangEnv extends PredicateEnv
 {
+  /**
+   * Returns the arc token which initiated this join operation.
+   *
+   * @return the arc token which initiated this join operation.
+   */
   ArcToken getInitiatingToken();
+
+  /**
+   * Returns the arc tokens which are present at the node being joined. Other
+   * arc tokens may be involved in the join. These however are those most
+   * likely to be used, and are therefore easily accessible and should be
+   * cached for performance reasons.
+   *
+   * @return the arc tokens which are present at the node being joined.
+   */
   List<ArcToken> getAvailableTokens ();
-  void markArcRequired (ArcToken token);
+
+  /**
+   * Indicates that the given token should be included in the given join operations.
+   *
+   * @param token The token to be included.
+   */
+  void includeInJoin (ArcToken token);
+
+  /**
+   * Indicates if the requirement being evaluated is applicable (does not have
+   * a 'when' clause which evaluated to false).
+   *
+   * @param isApplicable True if the requirement being evaluated is applicable.
+   */
   void setApplicable (boolean isApplicable);
 
   /**
@@ -52,4 +80,33 @@ public interface JoinLangEnv extends PredicateEnv
    * and false otherwise.
    */
   boolean isInitiatingTokenOptional ();
+
+  /**
+   * Returns true if the initiating token was referenced in some
+   * way (is either required or optional), and false otherwise.
+   * @return true if the initiating token was referenced in some way
+   */
+  boolean isInitiatingTokenIncludedInJoin ();
+
+  /**
+   * Assuming that the all requirements were met, will return an
+   * appropriate join result.
+   *
+   * @return The join result
+   */
+  JoinResult finishJoin ();
+
+  /**
+   * Will attempt to merge the initiating token into a previous join result. If there
+   * is no valid node token to merge the arc token into, an incomplete join result
+   * will be returned.
+   *
+   * @return A JoinResult of with a merge action if possible, otherwise an incomplete join action.
+   */
+  JoinResult mergeIfPossible ();
+
+  /**
+   * Clears all fields so the environment can be reused.
+   */
+  void reset ();
 }

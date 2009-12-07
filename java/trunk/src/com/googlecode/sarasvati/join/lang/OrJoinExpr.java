@@ -18,6 +18,9 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
+import com.googlecode.sarasvati.JoinResult;
+import com.googlecode.sarasvati.join.IncompleteJoinResult;
+
 
 public class OrJoinExpr extends AbstractJoinLangExpr
 {
@@ -31,13 +34,19 @@ public class OrJoinExpr extends AbstractJoinLangExpr
   }
 
   /**
-   * @see com.googlecode.sarasvati.join.lang.JoinRequirement#isRequirementMet(com.googlecode.sarasvati.join.lang.JoinLangEnv)
+   * @see com.googlecode.sarasvati.join.lang.JoinRequirement#performJoin(com.googlecode.sarasvati.join.lang.JoinLangEnv)
    */
   @Override
-  public boolean isSatisfied (JoinLangEnv joinEnv)
+  public JoinResult performJoin (final JoinLangEnv joinEnv)
   {
-    return left.isSatisfied( joinEnv ) ||
-           right.isSatisfied( joinEnv );
+    JoinResult result = left.performJoin( joinEnv );
+    if ( result != IncompleteJoinResult.INSTANCE )
+    {
+      return result;
+    }
+
+    joinEnv.reset();
+    return right.performJoin( joinEnv );
   }
 
   /**
