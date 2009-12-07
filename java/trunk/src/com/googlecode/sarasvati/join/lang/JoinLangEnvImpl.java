@@ -200,5 +200,7 @@ public class JoinLangEnvImpl implements JoinLangEnv
   public void reset ()
   {
     this.affectedTokens = new HashSet<ArcToken> ();
+    this.isOptional = false;
+    this.isRequired = false;
   }
 }
