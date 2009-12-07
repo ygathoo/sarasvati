@@ -18,16 +18,11 @@
 */
 package com.googlecode.sarasvati.join;
 
-import java.util.Collection;
-import java.util.Collections;
-
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.impl.NodeTokenComparator;
+import com.googlecode.sarasvati.join.lang.JoinLangEnvImpl;
 
 /**
  * Class for JoinStrategies which wish to first attempt a merge, then
@@ -47,17 +42,11 @@ public class MergeJoinStrategy implements JoinStrategy
   @Override
   public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
-    Node targetNode = token.getArc().getEndNode();
-    Collection<NodeToken> nodeTokens = token.getProcess().getTokensOnNode( targetNode, engine );
-
-    if ( !nodeTokens.isEmpty() )
+    JoinLangEnvImpl langEnv = new JoinLangEnvImpl( engine, token, null );
+    JoinResult result = langEnv.mergeIfPossible();
+    if ( result != IncompleteJoinResult.INSTANCE )
     {
-      NodeToken newestToken = Collections.max( nodeTokens, NodeTokenComparator.INSTANCE );
-
-      if ( !newestToken.getExecutionType().isBacktracked() )
-      {
-        return new MergeJoinResult( newestToken );
-      }
+      return result;
     }
 
     return fallbackJoinStrategy.performJoin( engine, token );

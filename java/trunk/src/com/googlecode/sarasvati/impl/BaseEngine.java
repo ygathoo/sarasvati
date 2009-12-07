@@ -577,7 +577,7 @@ public abstract class BaseEngine implements Engine
   @Override
   public JoinLangEnv newJoinLangEnv (final ArcToken token)
   {
-    return new JoinLangEnvImpl( token, newRubricEnv( token.getParentToken() ) );
+    return new JoinLangEnvImpl( this, token, newRubricEnv( token.getParentToken() ) );
   }
 
   @Override

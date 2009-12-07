@@ -21,7 +21,7 @@ package com.googlecode.sarasvati.join.lang;
 import com.googlecode.sarasvati.rubric.env.PredicateEnv;
 import com.googlecode.sarasvati.rubric.lang.RubricExpr;
 
-public abstract class AbstractJoinRequirement extends AbstractJoinLangExpr implements JoinRequirement
+public abstract class AbstractJoinRequirement implements JoinRequirement
 {
   private RubricExpr whenExpr;
 
@@ -36,7 +36,7 @@ public abstract class AbstractJoinRequirement extends AbstractJoinLangExpr imple
   /**
    * @param whenExpr the whenExpr to set
    */
-  public void setWhenExpr (RubricExpr whenExpr)
+  public void setWhenExpr (final RubricExpr whenExpr)
   {
     this.whenExpr = whenExpr;
   }
@@ -45,47 +45,22 @@ public abstract class AbstractJoinRequirement extends AbstractJoinLangExpr imple
    * @see com.googlecode.sarasvati.join.lang.JoinRequirement#isApplicable(com.googlecode.sarasvati.rubric.env.PredicateEnv)
    */
   @Override
-  public boolean isApplicable (PredicateEnv env)
+  public boolean isApplicable (final PredicateEnv env)
   {
     return whenExpr == null || whenExpr.eval( env );
-  }
-
-  /**
-   * @see com.googlecode.sarasvati.join.lang.AbstractJoinLangExpr#asJoinRequirement()
-   */
-  @Override
-  public JoinRequirement asJoinRequirement ()
-  {
-    return this;
-  }
-
-  /**
-   * @see com.googlecode.sarasvati.join.lang.AbstractJoinLangExpr#isJoinRequirement()
-   */
-  @Override
-  public boolean isJoinRequirement ()
-  {
-    return true;
   }
 
   /**
    * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
    */
   @Override
-  public boolean isEqualTo (JoinLangExpr expr)
+  public boolean isEqualTo (final JoinRequirement expr)
   {
-    if ( !expr.isJoinRequirement() )
-    {
-      return false;
-    }
-
-    JoinRequirement other = expr.asJoinRequirement();
-
     if ( whenExpr == null )
     {
-      return other.getWhenExpr() == null;
+      return expr.getWhenExpr() == null;
     }
 
-    return whenExpr.isEqualTo( other.getWhenExpr() );
+    return whenExpr.isEqualTo( expr.getWhenExpr() );
   }
 }

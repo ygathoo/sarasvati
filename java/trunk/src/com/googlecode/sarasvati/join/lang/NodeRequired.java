@@ -36,6 +36,7 @@ public class NodeRequired extends AbstractJoinRequirement
     {
       if ( nodeName.equals( token.getArc().getStartNode().getName() ) )
       {
+        env.includeInJoin( token );
         return true;
       }
     }
@@ -47,7 +48,7 @@ public class NodeRequired extends AbstractJoinRequirement
    * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
    */
   @Override
-  public boolean isEqualTo (final JoinLangExpr expr)
+  public boolean isEqualTo (final JoinRequirement expr)
   {
     if ( !super.isEqualTo( expr ) )
     {
