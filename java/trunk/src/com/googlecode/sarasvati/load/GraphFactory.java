@@ -36,7 +36,7 @@ import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.load.definition.CustomDefinition;
 
-public interface GraphFactory<G extends Graph>
+public interface GraphFactory
 {
   /**
    * Generates a new graph instance with the given name and version.
@@ -47,7 +47,7 @@ public interface GraphFactory<G extends Graph>
    *
    * @return A new {@link Graph}
    */
-  G newGraph (String name, int version, String customId);
+  Graph newGraph (String name, int version, String customId);
 
   /**
    * Creates a new {@link Arc} with given start node, end node and node name.
@@ -60,7 +60,7 @@ public interface GraphFactory<G extends Graph>
    *
    * @throws SarasvatiLoadException If the arc can not be created, or if it is passed invalid data.
    */
-  Arc newArc (G graph, Node startNode, Node endNode, String name) throws SarasvatiLoadException;
+  Arc newArc (Graph graph, Node startNode, Node endNode, String name) throws SarasvatiLoadException;
 
   /**
    * Creates a new {@link Node}.
@@ -78,7 +78,14 @@ public interface GraphFactory<G extends Graph>
    *
    * @throws SarasvatiLoadException If an error occurs while loading, such as incorrect custom data is given.
    */
-  Node newNode (G graph, String name, String type, JoinType joinType, String joinParam, boolean isStart, String guard, List<Object> customList)
+  Node newNode (Graph graph,
+                String name,
+                String type,
+                JoinType joinType,
+                String joinParam,
+                boolean isStart,
+                String guard,
+                List<Object> customList)
     throws SarasvatiLoadException;
 
   /**
@@ -103,7 +110,7 @@ public interface GraphFactory<G extends Graph>
    *
    * @return The new, imported node
    */
-  Node importNode (G graph, Node node, External external);
+  Node importNode (Graph graph, Node node, External external);
 
   /**
    * Generates a new {@link GraphProcess} for the given {@link Graph}. Execution

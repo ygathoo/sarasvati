@@ -49,7 +49,7 @@ import com.googlecode.sarasvati.load.NodeFactory;
 import com.googlecode.sarasvati.load.definition.CustomDefinition;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
-public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
+public class HibGraphFactory extends AbstractGraphFactory
 {
   private Session session;
 
@@ -70,7 +70,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   }
 
   @Override
-  public HibArc newArc (final HibGraph graph,
+  public HibArc newArc (final Graph graph,
                         final Node startNode,
                         final Node endNode,
                         final String name)
@@ -82,7 +82,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   }
 
   @Override
-  public Node newNode (final HibGraph graph,
+  public Node newNode (final Graph graph,
                        final String name,
                        final String type,
                        final JoinType joinType,
@@ -167,7 +167,7 @@ public class HibGraphFactory extends AbstractGraphFactory<HibGraph>
   }
 
   @Override
-  public Node importNode (final HibGraph graph,
+  public Node importNode (final Graph graph,
                           final Node node,
                           final External external)
   {

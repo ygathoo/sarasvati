@@ -210,7 +210,7 @@ public interface Engine
    *
    * @return A {@link GraphFactory} which will generate the appropriate types for this {@link Engine}.
    */
-  GraphFactory<? extends Graph> getFactory ();
+  GraphFactory getFactory ();
 
   /**
    * Returns an appropriate {@link GraphLoader} for this {@link Engine}. Subclasses

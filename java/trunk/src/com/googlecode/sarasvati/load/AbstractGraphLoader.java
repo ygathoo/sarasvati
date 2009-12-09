@@ -38,12 +38,12 @@ public abstract class AbstractGraphLoader<G extends Graph> implements GraphLoade
   protected Map<String,Map<String,Node>> instanceCache = null;
   protected Map<String,Node>             nodeCache     = null;
 
-  protected GraphFactory<G> factory;
+  protected GraphFactory factory;
   protected GraphRepository<G> repository;
   protected GraphValidator validator;
-  protected G graph;
+  protected Graph graph;
 
-  public AbstractGraphLoader (final GraphFactory<G> factory,
+  public AbstractGraphLoader (final GraphFactory factory,
                               final GraphRepository<G> repository,
                               final GraphValidator validator)
   {
@@ -212,6 +212,7 @@ public abstract class AbstractGraphLoader<G extends Graph> implements GraphLoade
     return nodeMap;
   }
 
+  @SuppressWarnings("unchecked")
   public void loadDefinition (final ProcessDefinition procDef,
                               final String customId)
       throws SarasvatiLoadException
@@ -234,7 +235,7 @@ public abstract class AbstractGraphLoader<G extends Graph> implements GraphLoade
 
     validateGraph();
 
-    repository.addGraph( graph );
+    repository.addGraph( (G)graph );
   }
 
   protected void validateXml (final ProcessDefinition procDef)

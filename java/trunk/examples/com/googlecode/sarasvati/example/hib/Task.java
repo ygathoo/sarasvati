@@ -29,8 +29,9 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+import com.googlecode.sarasvati.Node;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.example.TaskState;
-import com.googlecode.sarasvati.hib.HibNodeRef;
 import com.googlecode.sarasvati.hib.HibNodeToken;
 
 @Entity
@@ -41,9 +42,9 @@ public class Task
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   protected Long      id;
 
-  @ManyToOne(fetch = FetchType.EAGER)
+  @ManyToOne(fetch = FetchType.EAGER, targetEntity=HibNodeToken.class)
   @JoinColumn(name = "node_token_id")
-  protected HibNodeToken nodeToken;
+  protected NodeToken nodeToken;
 
   protected String    name;
 
@@ -54,7 +55,7 @@ public class Task
 
   public Task() { /* Default constructor for Hibernate */ }
 
-  public Task( final HibNodeToken nodeToken, final String name, final String description, final TaskState state )
+  public Task( final NodeToken nodeToken, final String name, final String description, final TaskState state )
   {
     this.nodeToken = nodeToken;
     this.name = name;
@@ -72,7 +73,7 @@ public class Task
     this.id = id;
   }
 
-  public HibNodeToken getNodeToken()
+  public NodeToken getNodeToken()
   {
     return nodeToken;
   }
@@ -114,7 +115,7 @@ public class Task
 
   public boolean isRejectable ()
   {
-    HibNodeRef nodeRef = getNodeToken().getNode();
+    Node nodeRef = getNodeToken().getNode();
     return !nodeRef.getGraph().getOutputArcs( nodeRef, "reject" ).isEmpty();
   }
 

@@ -51,7 +51,7 @@ import com.googlecode.sarasvati.xml.XmlProcessDefinition;
  */
 public class GraphLoaderImpl<G extends Graph> extends AbstractGraphLoader<G>
 {
-  public GraphLoaderImpl (final GraphFactory<G> factory,
+  public GraphLoaderImpl (final GraphFactory factory,
                           final GraphRepository<G> repository,
                           final GraphValidator validator)
   {

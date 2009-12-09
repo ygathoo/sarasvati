@@ -24,15 +24,10 @@ import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
 
-import org.hibernate.Session;
-
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.env.Env;
-import com.googlecode.sarasvati.example.TaskState;
-import com.googlecode.sarasvati.hib.HibEngine;
+import com.googlecode.sarasvati.example.TaskUtil;
 import com.googlecode.sarasvati.hib.HibNode;
-import com.googlecode.sarasvati.hib.HibNodeToken;
 
 @Entity
 @DiscriminatorValue( "task" )
@@ -70,9 +65,7 @@ public class HibExampleTaskNode extends HibNode
   @Override
   public void backtrack (final Engine engine, final NodeToken token)
   {
-    HibEngine hibEngine = (HibEngine)engine;
-    Task task = TaskDAO.getTaskForToken( hibEngine.getSession(), token );
-    task.setState( TaskState.Cancelled );
+    TaskUtil.backtrackTask( engine, token );
   }
 
   @SuppressWarnings("unchecked")
@@ -89,17 +82,6 @@ public class HibExampleTaskNode extends HibNode
   @Override
   public void execute (final Engine engine, final NodeToken token)
   {
-    HibEngine hibEngine = (HibEngine)engine;
-
-    Session session = hibEngine.getSession();
-
-    Task newTask = new Task( (HibNodeToken)token, getTaskName(), getTaskDesc(), TaskState.Open );
-    session.save( newTask );
-
-    Env env = token.getEnv();
-    env.setAttribute( newTask.getName(), env.getAttribute( newTask.getName(), Integer.class, 0 ) + 1 );
-
-    env = token.getProcess().getEnv();
-    env.setAttribute( newTask.getName(), env.getAttribute( newTask.getName(), Integer.class, 0 ) + 1 );
+    TaskUtil.createTask( engine, token, getTaskName(), getTaskDesc() );
   }
 }
