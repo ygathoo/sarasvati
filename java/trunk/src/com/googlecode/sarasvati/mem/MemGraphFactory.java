@@ -41,7 +41,7 @@ import com.googlecode.sarasvati.load.NodeFactory;
 import com.googlecode.sarasvati.load.definition.CustomDefinition;
 import com.googlecode.sarasvati.load.properties.DOMToObjectLoadHelper;
 
-public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
+public class MemGraphFactory extends AbstractGraphFactory
 {
   public static final MemGraphFactory INSTANCE = new MemGraphFactory();
 
@@ -59,7 +59,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public Arc newArc (final MemGraph graph,
+  public Arc newArc (final Graph graph,
                      final Node startNode,
                      final Node endNode,
                      final String name)
@@ -70,7 +70,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public Node newNode (final MemGraph graph,
+  public Node newNode (final Graph graph,
                        final String name,
                        final String type,
                        final JoinType joinType,
@@ -118,7 +118,7 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   }
 
   @Override
-  public Node importNode (final MemGraph graph,
+  public Node importNode (final Graph graph,
                           final Node node,
                           final External external)
   {
@@ -217,5 +217,4 @@ public class MemGraphFactory extends AbstractGraphFactory<MemGraph>
   {
     return new MemNodeTokenSetMember( tokenSet, (MemNodeToken)token, memberIndex );
   }
-
 }

@@ -37,6 +37,7 @@ import org.hibernate.annotations.Index;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.JoinType;
@@ -61,9 +62,9 @@ public class HibNodeRef implements Node
 
   @Index(name="wf_node_ref_graph_idx")
   @ForeignKey(name="FK_ref_graph")
-  @ManyToOne (fetch=FetchType.EAGER)
+  @ManyToOne (fetch=FetchType.EAGER, targetEntity=HibGraph.class)
   @JoinColumn (name="graph_id")
-  protected HibGraph graph;
+  protected Graph graph;
 
   @ForeignKey(name="FK_ref_orig")
   @ManyToOne (fetch=FetchType.LAZY)
@@ -80,7 +81,10 @@ public class HibNodeRef implements Node
 
   protected HibNodeRef () { /* Default constructor for Hibernate */ }
 
-  protected HibNodeRef (final HibGraph graph, final HibNode node, final HibNodeRef originatingExternalNode, final HibExternal external )
+  protected HibNodeRef (final Graph graph,
+                        final HibNode node,
+                        final HibNodeRef originatingExternalNode,
+                        final HibExternal external )
   {
     this.graph    = graph;
     this.node     = node;
@@ -109,12 +113,12 @@ public class HibNodeRef implements Node
   }
 
   @Override
-  public HibGraph getGraph ()
+  public Graph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (final HibGraph graph)
+  public void setGraph (final Graph graph)
   {
     this.graph = graph;
   }

@@ -40,6 +40,7 @@ import org.hibernate.annotations.Type;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.External;
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.JoinType;
@@ -62,9 +63,9 @@ public class HibNode implements Node
   protected Long   id;
 
   @ForeignKey(name="FK_node_graph")
-  @ManyToOne (fetch=FetchType.EAGER)
+  @ManyToOne (fetch=FetchType.EAGER, targetEntity=HibGraph.class)
   @JoinColumn(name="graph_id", nullable=false)
-  protected HibGraph graph;
+  protected Graph graph;
 
   @Column( name="name", nullable=false)
   protected String name;
@@ -119,12 +120,12 @@ public class HibNode implements Node
   }
 
   @Override
-  public HibGraph getGraph ()
+  public Graph getGraph ()
   {
     return graph;
   }
 
-  public void setGraph (final HibGraph graph)
+  public void setGraph (final Graph graph)
   {
     this.graph = graph;
   }

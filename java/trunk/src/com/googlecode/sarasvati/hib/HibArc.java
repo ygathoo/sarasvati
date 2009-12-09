@@ -31,6 +31,7 @@ import org.hibernate.annotations.ForeignKey;
 import org.hibernate.annotations.Index;
 
 import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.Node;
 
 @Entity
@@ -44,9 +45,9 @@ public class HibArc implements Arc
 
   @Index(name="wf_arc_graph_idx")
   @ForeignKey( name="FK_arc_graph" )
-  @ManyToOne (fetch=FetchType.EAGER)
+  @ManyToOne (fetch=FetchType.EAGER, targetEntity=HibGraph.class)
   @JoinColumn (name="graph_id")
-  protected HibGraph graph;
+  protected Graph graph;
 
   @ForeignKey( name="FK_arc_start" )
   @ManyToOne (fetch=FetchType.EAGER, targetEntity=HibNodeRef.class)
@@ -60,7 +61,7 @@ public class HibArc implements Arc
 
   protected HibArc () { /* Default constructor for hibernate */ }
 
-  protected HibArc (final HibGraph graph, final Node startNode, final Node endNode, final String name)
+  protected HibArc (final Graph graph, final Node startNode, final Node endNode, final String name)
   {
     this.graph = graph;
     this.startNode = startNode;
@@ -89,7 +90,7 @@ public class HibArc implements Arc
     this.name = name;
   }
 
-  public HibGraph getGraph ()
+  public Graph getGraph ()
   {
     return graph;
   }

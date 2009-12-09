@@ -25,7 +25,6 @@ import java.util.Map;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.ExecutionType;
-import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
@@ -33,7 +32,7 @@ import com.googlecode.sarasvati.impl.NestedProcessNode;
 import com.googlecode.sarasvati.impl.ScriptNode;
 import com.googlecode.sarasvati.impl.WaitNode;
 
-public abstract class AbstractGraphFactory<G extends Graph> implements GraphFactory<G>
+public abstract class AbstractGraphFactory implements GraphFactory
 {
   static
   {
