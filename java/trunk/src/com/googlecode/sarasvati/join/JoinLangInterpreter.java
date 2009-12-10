@@ -37,7 +37,7 @@ import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
  * <pre>
  *   REQUIRE = 'require' 'node' <node name> ('when' EXPR)?
  * </pre>
- * 
+ *
  * A predicate used in an expression is evaluated with the help of a
  * {@link RubricEnv}. Specifically, the method {@link RubricEnv#evalPredicate(String)}
  * is called to evaluated a predicate.
@@ -85,7 +85,7 @@ public class JoinLangInterpreter
 
     try
     {
-      JoinLangExpr expr = parser.joinExpr().value;
+      JoinLangExpr expr = parser.program().value;
       JoinLangException e = parser.getError();
       if ( e != null )
       {

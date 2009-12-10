@@ -95,7 +95,7 @@ require returns [JoinRequirement value]
         ;
 
 when returns [RubricExpr value]
-        : 'when' '(' expr { $value=$expr.value; } ')'
+        : 'when' orExpr { $value=$orExpr.value; }
         ;
 
 orExpr returns [RubricExpr value]
