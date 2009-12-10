@@ -171,6 +171,17 @@
       </xs:restriction>
     </xs:simpleType>
 
+    <xs:simpleType name="JoinParam">
+        <xs:annotation>
+          <xs:documentation>
+            Contains a GuardLang statement
+          </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+        <xs:whiteSpace value="collapse"></xs:whiteSpace>
+      </xs:restriction>
+    </xs:simpleType>
+
     <xs:complexType name="Arc">
       <xs:attribute name="external" type="xs:string" use="optional" default=""/>
       <xs:attribute name="to" type="xs:string" use="required"/>
