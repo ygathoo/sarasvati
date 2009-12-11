@@ -21,6 +21,8 @@ package com.googlecode.sarasvati;
 import com.googlecode.sarasvati.impl.TokenSetOrJoinStrategy;
 import com.googlecode.sarasvati.join.AndJoinStrategy;
 import com.googlecode.sarasvati.join.ClassJoinStrategy;
+import com.googlecode.sarasvati.join.JoinLangInterpreter;
+import com.googlecode.sarasvati.join.JoinLangJoinStrategy;
 import com.googlecode.sarasvati.join.LabelJoinStrategy;
 import com.googlecode.sarasvati.join.MergeJoinStrategy;
 import com.googlecode.sarasvati.join.OrJoinStrategy;
@@ -105,7 +107,14 @@ public enum JoinType
    */
   FIRST( new MergeJoinStrategy( new OrJoinStrategy() ),
          "A FIRST join will be satisfied by the first arc token that arrives." +
-         "Subsequent arc tokens will be merged." )
+         "Subsequent arc tokens will be merged." ),
+
+  /**
+   * Uses the {@link JoinLangJoinStrategy}. Follows the rules as defined in
+   * {@link JoinLangInterpreter}.
+   */
+  JOINLANG( new JoinLangJoinStrategy(),
+         "Evaluates the join lang statement given in the join parameter." )
   ;
 
   private JoinStrategy joinStrategy;
