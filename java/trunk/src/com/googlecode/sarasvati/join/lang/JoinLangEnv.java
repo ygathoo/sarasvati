@@ -18,14 +18,24 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
+import java.util.Collection;
 import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.JoinResult;
+import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.rubric.env.PredicateEnv;
 
 public interface JoinLangEnv extends PredicateEnv
 {
+  /**
+   * Returns the engine instance performing the join
+   *
+   * @return The engine instance performing the join
+   */
+  Engine getEngine ();
+
   /**
    * Returns the arc token which initiated this join operation.
    *
@@ -49,6 +59,13 @@ public interface JoinLangEnv extends PredicateEnv
    * @param token The token to be included.
    */
   void includeInJoin (ArcToken token);
+
+  /**
+   * Indicates that the given tokens should be included in the given join operations.
+   *
+   * @param token The tokens to be included.
+   */
+  void includeInJoin (Collection<ArcToken> tokens);
 
   /**
    * Indicates if the requirement being evaluated is applicable (does not have
@@ -104,6 +121,17 @@ public interface JoinLangEnv extends PredicateEnv
    * @return A JoinResult of with a merge action if possible, otherwise an incomplete join action.
    */
   JoinResult mergeIfPossible ();
+
+  /**
+   * Looks for a token set with the given name on
+   * the tokens which are arriving at the joining node.
+   * If none is found, returns null.
+   *
+   * @param tokenSetName the token set name
+   *
+   * @return The token set, or null if no token set with that name is found.
+   */
+  TokenSet getTokenSet (String tokenSetName);
 
   /**
    * Clears all fields so the environment can be reused.

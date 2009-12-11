@@ -50,6 +50,12 @@ public abstract class AbstractJoinRequirement implements JoinRequirement
     return whenExpr == null || whenExpr.eval( env );
   }
 
+  @Override
+  public void completeJoin (final JoinLangEnv env)
+  {
+    // Does nothing by default
+  }
+
   /**
    * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
    */
