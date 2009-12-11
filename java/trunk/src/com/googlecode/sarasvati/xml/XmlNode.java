@@ -47,9 +47,6 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
   @XmlAttribute(name = "joinType", required = false)
   protected XmlJoinType          joinType;
 
-  @XmlAttribute(name="joinParam", required=false)
-  protected String joinParam;
-
   @XmlAttribute(name = "type", required = false)
   protected String               type;
 
@@ -61,6 +58,9 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
 
   @XmlAttribute(name = "y", required = false)
   protected Integer              y;
+
+  @XmlElement(name="join", required=false)
+  protected String joinParam;
 
   @XmlElement(name = "guard", required = false)
   protected String               guard;

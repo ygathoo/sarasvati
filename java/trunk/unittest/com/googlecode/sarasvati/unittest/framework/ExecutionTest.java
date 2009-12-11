@@ -26,6 +26,7 @@ import junit.framework.Assert;
 
 import org.junit.Before;
 
+import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
@@ -129,5 +130,15 @@ public class ExecutionTest
 
     Assert.assertTrue( "No node token found on node: " + nodeName, false );
     return null;
+  }
+
+  public void completeToken (final GraphProcess p, final String nodeName)
+  {
+    engine.complete( getActiveToken( p, nodeName ), Arc.DEFAULT_ARC );
+  }
+
+  public void completeToken (final GraphProcess p, final String nodeName, final String arcName)
+  {
+    engine.complete( getActiveToken( p, nodeName ), arcName );
   }
 }

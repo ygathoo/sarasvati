@@ -56,9 +56,9 @@
     <xs:complexType name="Node">
 
       <xs:sequence>
+        <xs:element name="join" type="Join" minOccurs="0" maxOccurs="1" />
         <xs:element name="guard" type="Guard" minOccurs="0" maxOccurs="1" />
         <xs:element name="arc" type="Arc" minOccurs="0" maxOccurs="unbounded" />
-
 
         <xs:element name="custom" minOccurs="0" maxOccurs="1">
           <xs:complexType>
@@ -85,7 +85,7 @@
       <xs:attribute name="joinParam" type="xs:string" use="optional">
         <xs:annotation>
           <xs:documentation>
-            Join strategies may require additional information, which can be provided in the join parameter.
+
           </xs:documentation>
         </xs:annotation>
       </xs:attribute>
@@ -171,10 +171,11 @@
       </xs:restriction>
     </xs:simpleType>
 
-    <xs:simpleType name="JoinParam">
+    <xs:simpleType name="Join">
         <xs:annotation>
           <xs:documentation>
-            Contains a GuardLang statement
+            Join strategies may require additional information, which can be provided in the join parameter.
+            This may include things like a token set name or a JoinLang program
           </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
@@ -239,6 +240,7 @@
         <xs:enumeration value="tokenSetOr"/>
         <xs:enumeration value="class"/>
         <xs:enumeration value="first"/>
+        <xs:enumeration value="joinlang"/>
       </xs:restriction>
     </xs:simpleType>
 
