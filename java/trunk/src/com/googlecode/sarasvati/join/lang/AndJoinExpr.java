@@ -71,6 +71,10 @@ public class AndJoinExpr extends AbstractJoinLangExpr
     // and the requirements are met, complete the join
     if ( allRequirementsMet )
     {
+      for ( JoinRequirement requirement : requirements )
+      {
+        requirement.completeJoin( joinEnv );
+      }
       return joinEnv.finishJoin();
     }
 

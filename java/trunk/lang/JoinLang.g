@@ -5,21 +5,6 @@ options {
    ASTLabelType=CommonTree;
 }
 
-tokens {
-  ACCEPT   =  'Accept';
-  DISCARD  =  'Discard';
-  SKIP     =  'Skip';
-  AFTER    =  'after';
-  BEFORE   =  'before';
-  DAY      =  'day';
-  DAYS     =  'days';
-  HOUR     =  'hour';
-  HOURS    =  'hours';
-  WEEK     =  'week';
-  WEEKS    =  'weeks';
-  BUSINESS =  'business';
-}
-
 @header {
 /*
     This file is part of Sarasvati.
@@ -92,6 +77,9 @@ requireSet returns [AndJoinExpr value]
 require returns [JoinRequirement value]
         : 'require' 'node' STRING { $value = new NodeRequired( SvUtil.normalizeQuotedString( $STRING.text ) ); }
           ( when { $value.setWhenExpr( $when.value ); } )?
+        | 'require' tokenset STRING { $value = new TokenSetRequired( SvUtil.normalizeQuotedString( $STRING.text ) ); }
+          ( when { $value.setWhenExpr( $when.value ); } )?
+
         ;
 
 when returns [RubricExpr value]

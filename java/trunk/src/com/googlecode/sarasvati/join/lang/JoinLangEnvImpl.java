@@ -21,8 +21,10 @@ package com.googlecode.sarasvati.join.lang;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
@@ -31,11 +33,14 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.Token;
+import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.impl.NodeTokenComparator;
 import com.googlecode.sarasvati.join.CompleteJoinResult;
 import com.googlecode.sarasvati.join.IncompleteJoinResult;
 import com.googlecode.sarasvati.join.MergeJoinResult;
 import com.googlecode.sarasvati.rubric.env.PredicateEnv;
+import com.googlecode.sarasvati.util.SvUtil;
 
 public class JoinLangEnvImpl implements JoinLangEnv
 {
@@ -44,6 +49,7 @@ public class JoinLangEnvImpl implements JoinLangEnv
   private final ArcToken initiatingToken;
   private List<ArcToken> availableTokens = null;
   private Set<ArcToken> affectedTokens = new HashSet<ArcToken>();
+  private Map<String, TokenSet> tokenSets;
 
   private boolean mergeTokenInitialized = false;
   private NodeToken mergeToken = null;
@@ -56,6 +62,16 @@ public class JoinLangEnvImpl implements JoinLangEnv
     this.engine = engine;
     this.initiatingToken = initiatingToken;
     this.predicateEnv = predicateEnv;
+  }
+
+
+  /**
+   * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#getEngine()
+   */
+  @Override
+  public Engine getEngine ()
+  {
+    return engine;
   }
 
   /**
@@ -155,6 +171,15 @@ public class JoinLangEnvImpl implements JoinLangEnv
     }
   }
 
+  @Override
+  public void includeInJoin (final Collection<ArcToken> tokens)
+  {
+    for ( ArcToken token : tokens )
+    {
+      includeInJoin( token );
+    }
+  }
+
   private void initializeMergeTokenIfNecesary ()
   {
     if ( !mergeTokenInitialized )
@@ -195,6 +220,33 @@ public class JoinLangEnvImpl implements JoinLangEnv
     }
 
     return mergeIfPossible();
+  }
+
+  @Override
+  public TokenSet getTokenSet (final String tokenSetName)
+  {
+    if ( tokenSets == null )
+    {
+      tokenSets = new HashMap<String, TokenSet>();
+    }
+
+    if ( tokenSets.containsKey( tokenSetName ) )
+    {
+      return tokenSets.get( tokenSetName );
+    }
+
+    for ( Token token : getAvailableTokens() )
+    {
+      TokenSet tokenSet = SvUtil.getTokenSet( token, tokenSetName );
+      if ( tokenSet != null )
+      {
+        tokenSets.put( tokenSetName, tokenSet );
+        return tokenSet;
+      }
+    }
+
+    tokenSets.put( tokenSetName, null );
+    return null;
   }
 
   public void reset ()

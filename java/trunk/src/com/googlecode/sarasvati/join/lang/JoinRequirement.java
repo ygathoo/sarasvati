@@ -28,6 +28,8 @@ public interface JoinRequirement
 
   boolean isSatisfied (JoinLangEnv env);
 
+  void completeJoin (JoinLangEnv env);
+
   RubricExpr getWhenExpr ();
 
   void setWhenExpr (RubricExpr whenExpr);
