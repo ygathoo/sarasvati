@@ -18,21 +18,16 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.rubric.env.PredicateEnv;
 import com.googlecode.sarasvati.rubric.lang.RubricExpr;
 
 
 public interface JoinRequirement
 {
-  boolean isApplicable (PredicateEnv env);
-
-  boolean isSatisfied (JoinLangEnv env);
-
-  void completeJoin (JoinLangEnv env);
-
   RubricExpr getWhenExpr ();
 
   void setWhenExpr (RubricExpr whenExpr);
 
   boolean isEqualTo (JoinRequirement expr);
+
+  JoinRequirementEvaluator newEvaluator (JoinLangEnv env);
 }

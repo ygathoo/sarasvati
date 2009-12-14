@@ -22,10 +22,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
@@ -36,7 +34,6 @@ import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.impl.NodeTokenComparator;
-import com.googlecode.sarasvati.join.CompleteJoinResult;
 import com.googlecode.sarasvati.join.IncompleteJoinResult;
 import com.googlecode.sarasvati.join.MergeJoinResult;
 import com.googlecode.sarasvati.rubric.env.PredicateEnv;
@@ -48,14 +45,10 @@ public class JoinLangEnvImpl implements JoinLangEnv
   private final PredicateEnv predicateEnv;
   private final ArcToken initiatingToken;
   private List<ArcToken> availableTokens = null;
-  private Set<ArcToken> affectedTokens = new HashSet<ArcToken>();
   private Map<String, TokenSet> tokenSets;
 
   private boolean mergeTokenInitialized = false;
   private NodeToken mergeToken = null;
-  private boolean isApplicable;
-  private boolean isOptional;
-  private boolean isRequired;
 
   public JoinLangEnvImpl (final Engine engine, final ArcToken initiatingToken, final PredicateEnv predicateEnv)
   {
@@ -117,69 +110,6 @@ public class JoinLangEnvImpl implements JoinLangEnv
     return predicateEnv.evalPredicate( predicate );
   }
 
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#setApplicable(boolean)
-   */
-  @Override
-  public void setApplicable (final boolean isApplicable)
-  {
-    this.isApplicable = isApplicable;
-  }
-
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#isInitiatingTokenOptional()
-   */
-  @Override
-  public boolean isInitiatingTokenOptional ()
-  {
-    return isOptional;
-  }
-
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#isInitiatingTokenRequired()
-   */
-  @Override
-  public boolean isInitiatingTokenRequired ()
-  {
-    return isRequired;
-  }
-
-  @Override
-  public boolean isInitiatingTokenIncludedInJoin ()
-  {
-    return isRequired || isOptional;
-  }
-
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#includeInJoin(com.googlecode.sarasvati.ArcToken)
-   */
-  @Override
-  public void includeInJoin (final ArcToken token)
-  {
-    affectedTokens.add( token );
-
-    if ( token == initiatingToken )
-    {
-      if ( isApplicable )
-      {
-        isRequired =true;
-      }
-      else
-      {
-        isOptional = true;
-      }
-    }
-  }
-
-  @Override
-  public void includeInJoin (final Collection<ArcToken> tokens)
-  {
-    for ( ArcToken token : tokens )
-    {
-      includeInJoin( token );
-    }
-  }
-
   private void initializeMergeTokenIfNecesary ()
   {
     if ( !mergeTokenInitialized )
@@ -199,27 +129,23 @@ public class JoinLangEnvImpl implements JoinLangEnv
     }
   }
 
+  @Override
+  public NodeToken getMergeToken ()
+  {
+    initializeMergeTokenIfNecesary();
+    return mergeToken;
+  }
+
   public JoinResult mergeIfPossible ()
   {
     initializeMergeTokenIfNecesary();
 
     if ( mergeToken != null )
     {
-      return new MergeJoinResult( mergeToken );
+      return new MergeJoinResult( initiatingToken, mergeToken );
     }
 
     return IncompleteJoinResult.INSTANCE;
-  }
-
-  @Override
-  public JoinResult finishJoin ()
-  {
-    if ( affectedTokens.contains( initiatingToken ) )
-    {
-      return new CompleteJoinResult( new ArrayList<ArcToken>( affectedTokens ) );
-    }
-
-    return mergeIfPossible();
   }
 
   @Override
@@ -247,12 +173,5 @@ public class JoinLangEnvImpl implements JoinLangEnv
 
     tokenSets.put( tokenSetName, null );
     return null;
-  }
-
-  public void reset ()
-  {
-    this.affectedTokens = new HashSet<ArcToken> ();
-    this.isOptional = false;
-    this.isRequired = false;
   }
 }

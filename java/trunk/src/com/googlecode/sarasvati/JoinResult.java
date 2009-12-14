@@ -14,7 +14,7 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
 package com.googlecode.sarasvati;
 
@@ -37,14 +37,16 @@ public interface JoinResult
   JoinAction getJoinAction ();
 
   /**
-   * Returns the ArcTokens which were required to complete this join, and will be considered
-   * the parents of the new {@link NodeToken}. If {@link JoinResult#isJoinComplete()} would
-   * return false, this method should throw an {@link IllegalStateException}.
+   * Returns the ArcTokens which were required to complete this join. In the case
+   * of a join action of {@link JoinAction#Complete} these tokens will will be
+   * the parents of the new {@link NodeToken}. In the case of a join action of
+   * {@link JoinAction#Merge}, these tokens will be added as parents to the most
+   * recent non-backtracked node token created on this node.
    *
    * @return The ArcTokens which were required to complete this join, and will be considered
    *         the parents of the new {@link NodeToken}.
    *
-   * @throws IllegalStateException If this is invoked for a non-complete join action
+   * @throws IllegalStateException If this is invoked for an action of {@link JoinAction#Nothing}.
    */
   List<ArcToken> getArcTokensCompletingJoin ();
 

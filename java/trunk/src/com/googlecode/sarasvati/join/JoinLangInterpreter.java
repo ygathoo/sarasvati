@@ -19,8 +19,6 @@
 
 package com.googlecode.sarasvati.join;
 
-import java.util.Date;
-
 import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
@@ -35,31 +33,57 @@ import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
  * JoinLang is a simple language for defining join requirements
  *
  * <pre>
- *   REQUIRE = 'require' 'node' <node name> ('when' EXPR)?
+ *   PROGRAM = (REQUIRESET) ('or' REQUIRESET)*
+ *   REQUIRESET = REQUIREMENT (REQUIREMENT)*
+ *   REQUIREMENT = 'require' 'node' <node name> WHEN?
+ *               | 'require' 'tokenset' <token set name> WHEN?
+ *
+ *   WHEN = 'when' EXPR
  * </pre>
  *
- * A predicate used in an expression is evaluated with the help of a
- * {@link RubricEnv}. Specifically, the method {@link RubricEnv#evalPredicate(String)}
- * is called to evaluated a predicate.
+ * A JoinLang program is made up of requirements, grouped in require sets.
+ * Require sets are separated by 'or's. The requirements in a require set
+ * are implicitly anded.
  *
- * <p>
+ * Rules of evaluation:
  *
- * Date functions work much the same way, except they are evaluated used the
- * {@link RubricEnv#evalDateFunction(String)} method which returns a {@link Date}.
- *
- * <p>
- *
- * A Rubric statement used in a guard might look something like
- *
- * <pre>
- * if Order.isExpedite then Accept else Skip
- * </pre>
- *
- * A Rubric statement used in generating a task due date might look like
- *
- * <pre>
- *   if Order.isExpedite then (2 days before standardInterval) else (standardInterval)
- * </pre>
+ * <ol>
+ *   <li>
+ *     Requirement sets will be evaluated from first to last. Evaluation
+ *     will stop with the first requirement set that returns either a join
+ *     completion or join merge.
+ *   </li>
+ *   <li>
+ *     Each requirement will be marked as applicable or non-applicable.
+ *     A requirement with either no <code>when</when> clause or a
+ *     <code>when</code> clause that evaluates to true will marked
+ *     as applicable, otherwise it will be marked non-applicable.
+ *   </li>
+ *   <li>
+ *     Each requirement will be evaluated to see if it is satisfied.
+ *     As part of this evaluation, which tokens are involved in
+ *     meeting the requirement will be tracked.
+ *   </li>
+ *   <li>
+ *     If all applicable requirements in the requirement set are
+ *     satisfied, then the join will be completed. All tokens which
+ *     were involved in the join (for applicable and non-applicable
+ *     requirement) will be completed in the join.
+ *   </li>
+ *   <li>
+ *     Otherwise, when all applicable requirements in the requirement set are not
+ *     satisfied a merge will be attempted. If there exist any optional tokens
+ *     (those affected by non-applicable requirements) and there exist any
+ *     non-backtracked node tokens on the joining node, the optional tokens will be
+ *     merged into the newest, non-backtracked node token.
+ *   <li>
+ *   <li>
+ *     If a merge is not possible, because there are no optional tokens, or no
+ *     valid node tokens on the join node, the next requirement set will be
+ *     evaluated. If this is the last requirement set, an incomplete join
+ *     action will be returned.
+ *   </li>
+ * </ol>
  *
  * @author Paul Lorenz
  */

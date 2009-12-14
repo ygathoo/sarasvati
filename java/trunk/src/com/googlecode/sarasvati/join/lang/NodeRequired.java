@@ -18,7 +18,6 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.ArcToken;
 
 public class NodeRequired extends AbstractJoinRequirement
 {
@@ -29,19 +28,14 @@ public class NodeRequired extends AbstractJoinRequirement
     this.nodeName = nodeName;
   }
 
-  @Override
-  public boolean isSatisfied (final JoinLangEnv env)
+  public String getNodeName ()
   {
-    for ( ArcToken token : env.getAvailableTokens() )
-    {
-      if ( nodeName.equals( token.getArc().getStartNode().getName() ) )
-      {
-        env.includeInJoin( token );
-        return true;
-      }
-    }
+    return nodeName;
+  }
 
-    return false;
+  public JoinRequirementEvaluator newEvaluator (final JoinLangEnv env)
+  {
+    return new NodeRequiredEvaluator( env, this );
   }
 
   /**

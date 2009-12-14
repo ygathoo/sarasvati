@@ -18,39 +18,15 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.rubric.lang.RubricExpr;
+import java.util.Set;
 
-public abstract class AbstractJoinRequirement implements JoinRequirement
+import com.googlecode.sarasvati.ArcToken;
+
+interface JoinRequirementEvaluator
 {
-  private RubricExpr whenExpr;
-
-  /**
-   * @return the whenExpr
-   */
-  public RubricExpr getWhenExpr ()
-  {
-    return whenExpr;
-  }
-
-  /**
-   * @param whenExpr the whenExpr to set
-   */
-  public void setWhenExpr (final RubricExpr whenExpr)
-  {
-    this.whenExpr = whenExpr;
-  }
-
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
-   */
-  @Override
-  public boolean isEqualTo (final JoinRequirement expr)
-  {
-    if ( whenExpr == null )
-    {
-      return expr.getWhenExpr() == null;
-    }
-
-    return whenExpr.isEqualTo( expr.getWhenExpr() );
-  }
+  boolean isApplicable ();
+  boolean isSatisfied ();
+  boolean isInitiatingTokenIncluded ();
+  void evaluate ();
+  void completeJoinAndContributeTokens (Set<ArcToken> tokens);
 }
