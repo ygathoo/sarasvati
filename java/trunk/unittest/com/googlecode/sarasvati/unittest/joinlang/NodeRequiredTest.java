@@ -33,13 +33,14 @@ import com.googlecode.sarasvati.unittest.rubric.UnitTestPredicates;
 
 public class NodeRequiredTest extends ExecutionTest
 {
+  private static final String TEST_GRAPH_NAME = "joinlang-node-required";
   @Test public void testJoin() throws Exception
   {
     DefaultRubricFunctionRepository rep = DefaultRubricFunctionRepository.getGlobalInstance();
     rep.registerPredicate( "B.isNeeded", UnitTestPredicates.ALWAYS_TRUE );
     rep.registerPredicate( "C.isNeeded", UnitTestPredicates.ALWAYS_FALSE );
 
-    Graph g = ensureLoaded( "joinlang-noderequired" );
+    Graph g = ensureLoaded( TEST_GRAPH_NAME );
     GraphProcess p = engine.startProcess( g );
 
     String state =
@@ -100,7 +101,7 @@ public class NodeRequiredTest extends ExecutionTest
     rep.registerPredicate( "B.isNeeded", UnitTestPredicates.ALWAYS_TRUE );
     rep.registerPredicate( "C.isNeeded", UnitTestPredicates.ALWAYS_FALSE );
 
-    Graph g = ensureLoaded( "joinlang-noderequired" );
+    Graph g = ensureLoaded( TEST_GRAPH_NAME );
     GraphProcess p = engine.startProcess( g );
 
     String state =
@@ -163,7 +164,7 @@ public class NodeRequiredTest extends ExecutionTest
     rep.registerPredicate( "B.isNeeded", UnitTestPredicates.ALWAYS_TRUE );
     rep.registerPredicate( "C.isNeeded", UnitTestPredicates.ALWAYS_FALSE );
 
-    Graph g = ensureLoaded( "joinlang-noderequired" );
+    Graph g = ensureLoaded( TEST_GRAPH_NAME );
     GraphProcess p = engine.startProcess( g );
 
     String state =

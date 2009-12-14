@@ -27,14 +27,14 @@ import java.util.Map;
 import java.util.Set;
 import java.util.Map.Entry;
 
+import junit.framework.Assert;
+
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-
-import junit.framework.Assert;
 
 /**
  *
@@ -173,7 +173,22 @@ public class TestProcess
       throw new RuntimeException( "Unreconized status marker on line number " + lineNumber + " in " + line );
     }
 
-    return new TestNodeToken( lineNumber, parts[0], getNode( parts[1] ), complete, stringToExecutionType( line, parts[3] ) );
+    String tokenSetName = null;
+    int tokenSetIndex = 0;
+
+    if ( parts.length == 6 )
+    {
+      tokenSetName = parts[4];
+      tokenSetIndex = Integer.parseInt( parts[5] );
+    }
+
+    return new TestNodeToken( lineNumber,
+                              parts[0],
+                              getNode( parts[1] ),
+                              complete,
+                              stringToExecutionType( line, parts[3] ),
+                              tokenSetName,
+                              tokenSetIndex );
   }
 
   private void parseArcToken (final String line, final TestNodeToken parent, final Map<String, List<TestArcToken>> arcTokens, final int lineNumber)
@@ -307,7 +322,7 @@ public class TestProcess
       boolean found = true;
       for ( TestNodeToken tt : startTestTokens )
       {
-        if ( tt.getNode().equals( t.getNode() ) )
+        if ( tt.matchesToken( t ) )
         {
           tt.setToken( t );
           found = true;
@@ -347,10 +362,11 @@ public class TestProcess
           NodeToken child = arcToken.getChildToken();
           for ( TestArcToken testArcToken : testNodeToken.getChildren() )
           {
-            if ( testArcToken.isComplete() && child.getNode().equals( testArcToken.getChildToken().getNode() ) )
+            if ( testArcToken.isComplete() &&
+                 testArcToken.getChildToken().matchesToken( child ) &&
+                 testArcToken.getToken() == null )
             {
               TestNodeToken testChild = testArcToken.getChildToken();
-              Assert.assertNull( "Two arc tokens corresponding to test arc token: " + testArcToken, testArcToken.getToken() );
               testArcToken.setToken( arcToken );
 
               // If this test node token already processed by some incoming arc, don't re-queue

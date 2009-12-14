@@ -28,6 +28,7 @@ import com.googlecode.sarasvati.join.lang.AndJoinExpr;
 import com.googlecode.sarasvati.join.lang.JoinLangExpr;
 import com.googlecode.sarasvati.join.lang.NodeRequired;
 import com.googlecode.sarasvati.join.lang.OrJoinExpr;
+import com.googlecode.sarasvati.join.lang.TokenSetRequired;
 import com.googlecode.sarasvati.rubric.lang.RubricExprAnd;
 import com.googlecode.sarasvati.rubric.lang.RubricExprNot;
 import com.googlecode.sarasvati.rubric.lang.RubricExprOr;
@@ -119,5 +120,16 @@ public class JoinLangCompilerTest
     System.out.println( "Expected:\n"+ orExpr );
     System.out.println( "Result:\n" + result );
     Assert.assertTrue( "Result does not match expected", orExpr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireTokenSet ()
+  {
+    AndJoinExpr expr = new AndJoinExpr( new TokenSetRequired( "foo" ) );
+
+    String script = "require tokenset \"foo\"";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
   }
 }

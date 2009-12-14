@@ -18,17 +18,17 @@
 */
 package com.googlecode.sarasvati.unittest.framework;
 
+import junit.framework.Assert;
+
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Token;
 
-import junit.framework.Assert;
-
 public class TestToken<T extends Token>
 {
-  protected int           lineNumber;
-  protected ExecutionType executionType;
-  protected T             token;
-  protected boolean       complete;
+  private final int           lineNumber;
+  private final ExecutionType executionType;
+  private T             token;
+  private final boolean       complete;
 
   protected boolean isValidated = false;
 
@@ -44,29 +44,14 @@ public class TestToken<T extends Token>
     return lineNumber;
   }
 
-  public void setLineNumber (final int lineNumber)
-  {
-    this.lineNumber = lineNumber;
-  }
-
   public boolean isComplete ()
   {
     return complete;
   }
 
-  public void setComplete (final boolean complete)
-  {
-    this.complete = complete;
-  }
-
   public ExecutionType getExecutionType ()
   {
     return executionType;
-  }
-
-  public void setExecutionType (final ExecutionType executionType)
-  {
-    this.executionType = executionType;
   }
 
   public T getToken ()

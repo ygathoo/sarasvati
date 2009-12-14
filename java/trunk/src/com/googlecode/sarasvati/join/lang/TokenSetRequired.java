@@ -36,8 +36,7 @@ public class TokenSetRequired extends AbstractJoinRequirement
   @Override
   public JoinRequirementEvaluator newEvaluator (final JoinLangEnv env)
   {
-    // TODO Auto-generated method stub
-    return null;
+    return new TokenSetRequiredEvaluator( env, this );
   }
 
   /**

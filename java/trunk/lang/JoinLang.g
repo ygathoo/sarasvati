@@ -77,7 +77,7 @@ requireSet returns [AndJoinExpr value]
 require returns [JoinRequirement value]
         : 'require' 'node' STRING { $value = new NodeRequired( SvUtil.normalizeQuotedString( $STRING.text ) ); }
           ( when { $value.setWhenExpr( $when.value ); } )?
-        | 'require' tokenset STRING { $value = new TokenSetRequired( SvUtil.normalizeQuotedString( $STRING.text ) ); }
+        | 'require' 'tokenset' STRING { $value = new TokenSetRequired( SvUtil.normalizeQuotedString( $STRING.text ) ); }
           ( when { $value.setWhenExpr( $when.value ); } )?
 
         ;

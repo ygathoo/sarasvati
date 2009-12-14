@@ -21,26 +21,36 @@ package com.googlecode.sarasvati.unittest.framework;
 import java.util.LinkedList;
 import java.util.List;
 
+import junit.framework.Assert;
+
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-
-import junit.framework.Assert;
+import com.googlecode.sarasvati.TokenSetMember;
 
 public class TestNodeToken extends TestToken<NodeToken>
 {
-  protected List<TestArcToken> parents  = new LinkedList<TestArcToken>();
-  protected List<TestArcToken> children = new LinkedList<TestArcToken>();
+  private final List<TestArcToken> parents  = new LinkedList<TestArcToken>();
+  private final List<TestArcToken> children = new LinkedList<TestArcToken>();
 
-  protected String             id;
-  protected Node               node;
+  private final String             id;
+  private final Node               node;
+  private final String             tokenSetName;
+  private final int                tokenSetIndex;
 
-  public TestNodeToken (final int lineNumber, final String id, final Node node, final boolean complete, final ExecutionType executionType)
+  public TestNodeToken (final int lineNumber,
+                        final String id,
+                        final Node node,
+                        final boolean complete,
+                        final ExecutionType executionType,
+                        final String tokenSetName,
+                        final int tokenSetIndex)
   {
     super( lineNumber, complete, executionType );
-    this.lineNumber = lineNumber;
     this.id = id;
     this.node = node;
+    this.tokenSetName = tokenSetName;
+    this.tokenSetIndex = tokenSetIndex;
   }
 
   public String getId ()
@@ -48,19 +58,19 @@ public class TestNodeToken extends TestToken<NodeToken>
     return id;
   }
 
-  public void setId (final String id)
-  {
-    this.id = id;
-  }
-
   public Node getNode ()
   {
     return node;
   }
 
-  public void setNode (final Node node)
+  public String getTokenSetName ()
   {
-    this.node = node;
+    return tokenSetName;
+  }
+
+  public int getTokenSetIndex ()
+  {
+    return tokenSetIndex;
   }
 
   public List<TestArcToken> getParents ()
@@ -68,19 +78,9 @@ public class TestNodeToken extends TestToken<NodeToken>
     return parents;
   }
 
-  public void setParents (final List<TestArcToken> parents)
-  {
-    this.parents = parents;
-  }
-
   public List<TestArcToken> getChildren ()
   {
     return children;
-  }
-
-  public void setChildren (final List<TestArcToken> children)
-  {
-    this.children = children;
   }
 
   public void addChild (final TestArcToken childToken)
@@ -93,16 +93,32 @@ public class TestNodeToken extends TestToken<NodeToken>
     parents.add( parentToken );
   }
 
+  public boolean matchesToken (final NodeToken token)
+  {
+    if ( !node.equals( token.getNode() ) )
+    {
+      return false;
+    }
+
+    if ( tokenSetName == null )
+    {
+      return true;
+    }
+
+    TokenSetMember member = token.getTokenSetMember( tokenSetName );
+    return member != null && member.getMemberIndex() == tokenSetIndex;
+  }
+
   @Override
   public void validate ()
   {
-    Assert.assertEquals( "Node does not match on " + toString(), node, token.getNode() );
+    Assert.assertEquals( "Node does not match on " + toString(), node, getToken().getNode() );
     super.validate();
   }
 
   @Override
   public String toString ()
   {
-    return "[TestNodeToken id=" + id + " line=" + lineNumber + "]";
+    return "[TestNodeToken id=" + id + " line=" + getLineNumber() + "]";
   }
 }

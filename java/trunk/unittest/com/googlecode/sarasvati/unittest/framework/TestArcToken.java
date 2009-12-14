@@ -18,21 +18,25 @@
 */
 package com.googlecode.sarasvati.unittest.framework;
 
+import junit.framework.Assert;
+
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.Node;
 
-import junit.framework.Assert;
-
 public class TestArcToken extends TestToken<ArcToken>
 {
-  protected TestNodeToken parent;
-  protected TestNodeToken childToken;
+  private final TestNodeToken parent;
+  private TestNodeToken childToken;
   protected Node          childNode;
 
-  protected boolean       pending;
+  private final boolean       pending;
 
-  public TestArcToken (final int lineNumber, final TestNodeToken parent, final boolean pending, final boolean complete, final ExecutionType executionType)
+  public TestArcToken (final int lineNumber,
+                       final TestNodeToken parent,
+                       final boolean pending,
+                       final boolean complete,
+                       final ExecutionType executionType)
   {
     super( lineNumber, complete, executionType );
     this.parent = parent;
@@ -42,11 +46,6 @@ public class TestArcToken extends TestToken<ArcToken>
   public TestNodeToken getParent ()
   {
     return parent;
-  }
-
-  public void setParent (final TestNodeToken parent)
-  {
-    this.parent = parent;
   }
 
   public TestNodeToken getChildToken ()
@@ -74,16 +73,11 @@ public class TestArcToken extends TestToken<ArcToken>
     return pending;
   }
 
-  public void setPending (final boolean pending)
-  {
-    this.pending = pending;
-  }
-
   @Override
   public void validate ()
   {
-    Assert.assertEquals( "Parent token does not match on " + toString(), parent.getToken(), token.getParentToken() );
-    Assert.assertEquals( "IsPending? does not match on " + toString(), pending, token.isPending() );
+    Assert.assertEquals( "Parent token does not match on " + toString(), parent.getToken(), getToken().getParentToken() );
+    Assert.assertEquals( "IsPending? does not match on " + toString(), pending, getToken().isPending() );
 
     if ( isComplete() )
     {
@@ -92,7 +86,7 @@ public class TestArcToken extends TestToken<ArcToken>
     else
     {
       Assert.assertNotNull( "Incomplete test arc token should have child node: " + toString(), childNode );
-      Assert.assertEquals( "Child node does not match on " + toString(), childNode, token.getArc().getEndNode() );
+      Assert.assertEquals( "Child node does not match on " + toString(), childNode, getToken().getArc().getEndNode() );
     }
 
     super.validate();
@@ -101,6 +95,6 @@ public class TestArcToken extends TestToken<ArcToken>
   @Override
   public String toString ()
   {
-    return "[TestArcToken parentId=" + getParent().getId() + " line=" + lineNumber + "]";
+    return "[TestArcToken parentId=" + getParent().getId() + " line=" + getLineNumber() + "]";
   }
 }
