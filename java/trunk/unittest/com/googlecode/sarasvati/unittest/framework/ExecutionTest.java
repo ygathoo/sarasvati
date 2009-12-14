@@ -31,6 +31,7 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
+import com.googlecode.sarasvati.TokenSetMember;
 import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
@@ -132,6 +133,27 @@ public class ExecutionTest
     return null;
   }
 
+  public NodeToken getActiveToken (final GraphProcess p,
+                                   final String nodeName,
+                                   final String tokenSetName,
+                                   final int tokenSetIdx)
+  {
+    for ( NodeToken token : p.getActiveNodeTokens() )
+    {
+      if ( nodeName.equals( token.getNode().getName() ) )
+      {
+        TokenSetMember tsMember = token.getTokenSetMember( tokenSetName );
+        if ( tsMember != null && tsMember.getMemberIndex() == tokenSetIdx )
+        {
+          return token;
+        }
+      }
+    }
+
+    Assert.assertTrue( "No node token found on node: " + nodeName, false );
+    return null;
+  }
+
   public void completeToken (final GraphProcess p, final String nodeName)
   {
     engine.complete( getActiveToken( p, nodeName ), Arc.DEFAULT_ARC );
@@ -140,5 +162,22 @@ public class ExecutionTest
   public void completeToken (final GraphProcess p, final String nodeName, final String arcName)
   {
     engine.complete( getActiveToken( p, nodeName ), arcName );
+  }
+
+  public void completeToken (final GraphProcess p,
+                             final String nodeName,
+                             final String tokenSetName,
+                             final int tokenSetIdx)
+  {
+    engine.complete( getActiveToken( p, nodeName, tokenSetName, tokenSetIdx ), Arc.DEFAULT_ARC );
+  }
+
+  public void completeToken (final GraphProcess p,
+                             final String nodeName,
+                             final String arcName,
+                             final String tokenSetName,
+                             final int tokenSetIdx)
+  {
+    engine.complete( getActiveToken( p, nodeName, tokenSetName, tokenSetIdx ), arcName );
   }
 }

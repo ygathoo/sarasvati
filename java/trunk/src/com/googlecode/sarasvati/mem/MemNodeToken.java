@@ -193,6 +193,6 @@ public class MemNodeToken implements NodeToken
   @Override
   public String toString()
   {
-    return "[MemNodeToken node=" + (node == null ? null : node.getName()) + " execType=" + executionType + " hashCode=" + hashCode() + "]";
+    return "[MemNodeToken id=" + id + " node=" + (node == null ? null : node.getName()) + " execType=" + executionType + " hashCode=" + hashCode() + "]";
   }
 }
