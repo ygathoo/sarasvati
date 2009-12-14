@@ -20,37 +20,33 @@ package com.googlecode.sarasvati.join.lang;
 
 import com.googlecode.sarasvati.rubric.lang.RubricExpr;
 
-public abstract class AbstractJoinRequirement implements JoinRequirement
+abstract class AbstractJoinRequirementEvaluator implements JoinRequirementEvaluator
 {
-  private RubricExpr whenExpr;
+  private final JoinLangEnv env;
 
-  /**
-   * @return the whenExpr
-   */
-  public RubricExpr getWhenExpr ()
+  private Boolean applicable;
+
+  public AbstractJoinRequirementEvaluator (final JoinLangEnv env)
   {
-    return whenExpr;
+    this.env = env;
   }
 
-  /**
-   * @param whenExpr the whenExpr to set
-   */
-  public void setWhenExpr (final RubricExpr whenExpr)
+  protected abstract JoinRequirement getRequirement ();
+
+  protected JoinLangEnv getEnv ()
   {
-    this.whenExpr = whenExpr;
+    return env;
   }
 
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
-   */
   @Override
-  public boolean isEqualTo (final JoinRequirement expr)
+  public boolean isApplicable ()
   {
-    if ( whenExpr == null )
+    if ( applicable == null )
     {
-      return expr.getWhenExpr() == null;
+      RubricExpr expr = getRequirement().getWhenExpr();
+      applicable = expr == null ? true : expr.eval( env );
     }
 
-    return whenExpr.isEqualTo( expr.getWhenExpr() );
+    return applicable;
   }
 }

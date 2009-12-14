@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.googlecode.sarasvati.JoinResult;
-import com.googlecode.sarasvati.join.IncompleteJoinResult;
 
 public class AndJoinExpr extends AbstractJoinLangExpr
 {
@@ -44,50 +43,8 @@ public class AndJoinExpr extends AbstractJoinLangExpr
   @Override
   public JoinResult performJoin (final JoinLangEnv joinEnv)
   {
-    boolean allRequirementsMet = true;
-
-    for ( JoinRequirement requirement : requirements )
-    {
-      boolean isApplicable = requirement.isApplicable( joinEnv );
-      joinEnv.setApplicable( isApplicable );
-
-      boolean isSatisfied  = requirement.isSatisfied( joinEnv );
-
-      if ( isApplicable && !isSatisfied )
-      {
-        allRequirementsMet = false;
-      }
-    }
-
-    // If the initiating token isn't covered by any of the require
-    // statements, the join shouldn't be satisfied, even if the
-    // requirements are otherwise met.
-    if ( !joinEnv.isInitiatingTokenIncludedInJoin() )
-    {
-      return IncompleteJoinResult.INSTANCE;
-    }
-
-    // If the initiating token is covered by the requirement block
-    // and the requirements are met, complete the join
-    if ( allRequirementsMet )
-    {
-      for ( JoinRequirement requirement : requirements )
-      {
-        requirement.completeJoin( joinEnv );
-      }
-      return joinEnv.finishJoin();
-    }
-
-    // If the initiating token is not required by any of the
-    // requirement statements, it must be referenced as optional
-    // by at least one of them. Try to merge it with a previous
-    // join result.
-    if ( !joinEnv.isInitiatingTokenRequired() )
-    {
-      return joinEnv.mergeIfPossible();
-    }
-
-    return IncompleteJoinResult.INSTANCE;
+    AndJoinExprEvaluator evaluator = new AndJoinExprEvaluator( joinEnv, requirements );
+    return evaluator.evaluate();
   }
 
   /**

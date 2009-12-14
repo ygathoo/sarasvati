@@ -45,7 +45,6 @@ public class OrJoinExpr extends AbstractJoinLangExpr
       return result;
     }
 
-    joinEnv.reset();
     return right.performJoin( joinEnv );
   }
 

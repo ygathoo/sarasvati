@@ -238,9 +238,12 @@ public abstract class BaseEngine implements Engine
       }
       else if ( JoinAction.Merge == result.getJoinAction() )
       {
-        result.getMergeTarget().getParentTokens().add( token );
-        completeArcToken( process, token, result.getMergeTarget() );
-        ArcTokenEvent.fireMergedEvent( this, token );
+        for ( ArcToken arcToken : result.getArcTokensCompletingJoin() )
+        {
+          result.getMergeTarget().getParentTokens().add( arcToken );
+          completeArcToken( process, arcToken, result.getMergeTarget() );
+          ArcTokenEvent.fireMergedEvent( this, arcToken );
+        }
       }
     }
   }

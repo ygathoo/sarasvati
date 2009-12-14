@@ -32,7 +32,7 @@ import com.googlecode.sarasvati.NodeToken;
  *
  * @author Paul Lorenz
  */
-public class CompleteJoinResult implements JoinResult
+public final class CompleteJoinResult implements JoinResult
 {
   private final List<ArcToken> tokens;
 

@@ -22,6 +22,7 @@ import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
+import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.join.lang.JoinLangEnvImpl;
 
 /**
@@ -42,11 +43,12 @@ public class MergeJoinStrategy implements JoinStrategy
   @Override
   public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
-    JoinLangEnvImpl langEnv = new JoinLangEnvImpl( engine, token, null );
-    JoinResult result = langEnv.mergeIfPossible();
-    if ( result != IncompleteJoinResult.INSTANCE )
+    JoinLangEnvImpl joinLangEnv = new JoinLangEnvImpl( engine, token, null );
+    NodeToken mergeToken = joinLangEnv.getMergeToken();
+
+    if ( mergeToken != null )
     {
-      return result;
+      return new MergeJoinResult( token, mergeToken );
     }
 
     return fallbackJoinStrategy.performJoin( engine, token );

@@ -18,12 +18,6 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
-import java.util.Collection;
-
-import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Node;
-import com.googlecode.sarasvati.TokenSet;
 
 public class TokenSetRequired extends AbstractJoinRequirement
 {
@@ -34,38 +28,16 @@ public class TokenSetRequired extends AbstractJoinRequirement
     this.tokenSetName = tokenSetName;
   }
 
-  @Override
-  public boolean isSatisfied (final JoinLangEnv env)
+  public String getTokenSetName ()
   {
-    Engine engine = env.getEngine();
-    TokenSet tokenSet = env.getTokenSet( tokenSetName );
-
-    if ( tokenSet == null || !tokenSet.getActiveNodeTokens( engine ).isEmpty() )
-    {
-      return false;
-    }
-
-    Node targetNode = env.getInitiatingToken().getArc().getEndNode();
-    Collection<ArcToken> activeMembers = tokenSet.getActiveArcTokens( engine );
-
-    for ( ArcToken setMember : activeMembers )
-    {
-      if ( !setMember.getArc().getEndNode().equals( targetNode ) )
-      {
-        return false;
-      }
-    }
-
-    // The token set should only be included if it's complete.
-    env.includeInJoin( activeMembers );
-    return true;
+    return tokenSetName;
   }
 
   @Override
-  public void completeJoin (final JoinLangEnv env)
+  public JoinRequirementEvaluator newEvaluator (final JoinLangEnv env)
   {
-    TokenSet tokenSet = env.getTokenSet( tokenSetName );
-    tokenSet.markComplete( env.getEngine() );
+    // TODO Auto-generated method stub
+    return null;
   }
 
   /**
