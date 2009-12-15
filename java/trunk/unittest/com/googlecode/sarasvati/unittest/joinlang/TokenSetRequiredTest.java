@@ -117,10 +117,11 @@ public class TokenSetRequiredTest extends ExecutionTest
       "  (C F 5)" +
       "  (C F 6)" +
       "[5 nodeD C F ts2 0]" +
-      "  (C F 7)" +
+      "  (C F 8)" +
       "[6 nodeD C F ts2 1]" +
-      "  (C F 7)" +
-      "[7 nodeE I F]";
+      "  (C F 8)" +
+      "[7 nodeE I F]" +
+      "[8 nodeE I F]";
     TestProcess.validate( p, state );
 
     Assert.assertTrue( "Process should be executing", p.isExecuting() );
@@ -139,10 +140,33 @@ public class TokenSetRequiredTest extends ExecutionTest
       "  (C F 5)" +
       "  (C F 6)" +
       "[5 nodeD C F ts2 0]" +
-      "  (C F 7)" +
+      "  (C F 8)" +
       "[6 nodeD C F ts2 1]" +
+      "  (C F 8)" +
+      "[7 nodeE C F]" +
+      "[8 nodeE I F]";
+    TestProcess.validate( p, state );
+
+    completeToken( p, "nodeE" );
+
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "[2 nodeC C F ts1 0]" +
       "  (C F 7)" +
-      "[7 nodeE C F]";
+      "[3 nodeC C F ts1 1]" +
+      "  (C F 7)" +
+      "[4 nodeB C F]" +
+      "  (C F 5)" +
+      "  (C F 6)" +
+      "[5 nodeD C F ts2 0]" +
+      "  (C F 8)" +
+      "[6 nodeD C F ts2 1]" +
+      "  (C F 8)" +
+      "[7 nodeE C F]" +
+      "[8 nodeE C F]";
     TestProcess.validate( p, state );
 
     Assert.assertTrue( "Process should be complete", p.isComplete() );

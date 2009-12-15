@@ -78,20 +78,23 @@ public class TestProcess
     {
       if ( testProcess != null )
       {
+        System.out.println( "================================================================================" );
+        ProcessPrinter.print( p );
         testProcess.dumpToStandardOut();
+        System.out.println( "================================================================================" );
       }
     }
   }
 
-  protected List<TestNodeToken> startTestTokens = new LinkedList<TestNodeToken>();
-  protected Graph graph;
+  private final List<TestNodeToken> startTestTokens = new LinkedList<TestNodeToken>();
+  private final Graph graph;
+
+  private final Map<String, TestNodeToken> nodeTokens = new HashMap<String, TestNodeToken>();
+  private final Map<String, List<TestArcToken>> arcTokens = new HashMap<String, List<TestArcToken>>();
 
   public TestProcess (final Graph graph, final String spec)
   {
     this.graph = graph;
-
-    Map<String, TestNodeToken> nodeTokens = new HashMap<String, TestNodeToken>();
-    Map<String, List<TestArcToken>> arcTokens = new HashMap<String, List<TestArcToken>>();
 
     TestNodeToken current = null;
 
@@ -123,7 +126,7 @@ public class TestProcess
           throw new IllegalArgumentException( "No closing ) found at line: " + lineNumber );
         }
         String tokenSpec = buf.substring( index + 1, endIndex );
-        parseArcToken(tokenSpec, current, arcTokens, lineNumber );
+        parseArcToken(tokenSpec, current, lineNumber );
         lineNumber++;
         index = endIndex + 1;
       }
@@ -191,7 +194,9 @@ public class TestProcess
                               tokenSetIndex );
   }
 
-  private void parseArcToken (final String line, final TestNodeToken parent, final Map<String, List<TestArcToken>> arcTokens, final int lineNumber)
+  private void parseArcToken (final String line,
+                              final TestNodeToken parent,
+                              final int lineNumber)
   {
     String[] parts = line.split( " " );
 
@@ -338,11 +343,21 @@ public class TestProcess
       Assert.assertNotNull( "No real token found for test token " + token.getId(),  token.getToken() );
     }
 
-    associateTokens();
+    associateTokens( p );
     validate();
+
+    for ( ArcToken t : p.getActiveArcTokens() )
+    {
+      Assert.assertFalse( "Active arc token should not be complete", t.isComplete() );
+    }
+
+    for ( NodeToken t : p.getActiveNodeTokens() )
+    {
+      Assert.assertFalse( "Active node token should not be complete", t.isComplete() );
+    }
   }
 
-  private void associateTokens ()
+  private void associateTokens (final GraphProcess p)
   {
     LinkedList<TestNodeToken> queue = new LinkedList<TestNodeToken>();
     queue.addAll( startTestTokens );
@@ -405,6 +420,16 @@ public class TestProcess
         Assert.assertNotNull( "No arc token found for token " + testArcToken, testArcToken.getToken() );
       }
     }
+
+    Set<NodeToken> actualNodeTokens = new HashSet<NodeToken>( p.getNodeTokens() );
+
+    for ( TestNodeToken token : nodeTokens.values() )
+    {
+      Assert.assertNotNull( "No arc token found for token " + token, token.getToken() );
+      actualNodeTokens.remove( token.getToken() );
+    }
+
+    Assert.assertTrue( "Not all node tokens covered by test tokens. Uncovered values: " + actualNodeTokens, actualNodeTokens.isEmpty() );
   }
 
   private void validate ()
