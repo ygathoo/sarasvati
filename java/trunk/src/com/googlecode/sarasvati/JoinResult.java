@@ -18,7 +18,8 @@
 */
 package com.googlecode.sarasvati;
 
-import java.util.List;
+import java.util.Collection;
+
 
 /**
  * Encapsulates the results of a join attempt. Includes whether
@@ -48,7 +49,7 @@ public interface JoinResult
    *
    * @throws IllegalStateException If this is invoked for an action of {@link JoinAction#Nothing}.
    */
-  List<ArcToken> getArcTokensCompletingJoin ();
+  Collection<ArcToken> getArcTokensCompletingJoin ();
 
   /**
    * If the join action is {@link JoinAction#Merge}, then the arc token in question will

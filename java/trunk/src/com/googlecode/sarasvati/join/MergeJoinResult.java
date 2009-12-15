@@ -19,8 +19,8 @@
 
 package com.googlecode.sarasvati.join;
 
+import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.JoinAction;
@@ -30,7 +30,7 @@ import com.googlecode.sarasvati.NodeToken;
 public final class MergeJoinResult implements JoinResult
 {
   private NodeToken mergeTarget;
-  private final List<ArcToken> tokens;
+  private final Collection<ArcToken> tokens;
 
   public MergeJoinResult (final ArcToken token, final NodeToken mergeTarget)
   {
@@ -38,7 +38,7 @@ public final class MergeJoinResult implements JoinResult
     this.mergeTarget = mergeTarget;
   }
 
-  public MergeJoinResult (final List<ArcToken> tokens, final NodeToken mergeTarget)
+  public MergeJoinResult (final Collection<ArcToken> tokens, final NodeToken mergeTarget)
   {
     this.tokens = tokens;
     this.mergeTarget = mergeTarget;
@@ -48,7 +48,7 @@ public final class MergeJoinResult implements JoinResult
    * @see com.googlecode.sarasvati.JoinResult#getArcTokensCompletingJoin()
    */
   @Override
-  public List<ArcToken> getArcTokensCompletingJoin ()
+  public Collection<ArcToken> getArcTokensCompletingJoin ()
   {
     return tokens;
   }

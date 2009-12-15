@@ -18,42 +18,37 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
+import java.util.List;
 
-public abstract class AbstractJoinLangExpr implements JoinLangExpr
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.GraphProcess;
+
+class AtLeastLabelArcsRequiredEvaluator extends AbstractArcsRequiredEvaluator
 {
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#asAnd()
-   */
-  @Override
-  public AndJoinExpr asAnd ()
+  private final AtLeastLabelArcsRequired requirement;
+
+  public AtLeastLabelArcsRequiredEvaluator (final JoinLangEnv env, final AtLeastLabelArcsRequired requirement)
   {
-    return null;
+    super( env );
+    this.requirement = requirement;
   }
 
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#asOr()
-   */
   @Override
-  public OrJoinExpr asOr ()
+  protected JoinRequirement getRequirement ()
   {
-    return null;
+    return requirement;
   }
 
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#isAnd()
-   */
   @Override
-  public boolean isAnd ()
+  protected List<Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)
   {
-    return false;
+    return process.getGraph().getInputArcs( token.getArc().getEndNode(), requirement.getLabel() );
   }
 
-  /**
-   * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#isOr()
-   */
   @Override
-  public boolean isOr ()
+  protected int getNumberOfRequiredArcs (final int numArcs)
   {
-    return false;
+    return Math.min( requirement.getArcsRequired(), numArcs );
   }
 }

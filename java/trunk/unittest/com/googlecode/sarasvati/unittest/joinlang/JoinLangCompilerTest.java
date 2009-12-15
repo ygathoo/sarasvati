@@ -24,8 +24,11 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.googlecode.sarasvati.join.JoinLangInterpreter;
+import com.googlecode.sarasvati.join.lang.AllArcsRequired;
 import com.googlecode.sarasvati.join.lang.AndJoinExpr;
 import com.googlecode.sarasvati.join.lang.JoinLangExpr;
+import com.googlecode.sarasvati.join.lang.JoinRequirement;
+import com.googlecode.sarasvati.join.lang.LabelArcsRequired;
 import com.googlecode.sarasvati.join.lang.NodeRequired;
 import com.googlecode.sarasvati.join.lang.OrJoinExpr;
 import com.googlecode.sarasvati.join.lang.TokenSetRequired;
@@ -127,6 +130,67 @@ public class JoinLangCompilerTest
     AndJoinExpr expr = new AndJoinExpr( new TokenSetRequired( "foo" ) );
 
     String script = "require tokenset \"foo\"";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireTokenSetWithWhen ()
+  {
+    JoinRequirement jr = new TokenSetRequired( "foo" );
+    jr.setWhenExpr( new RubricExprSymbol( "Order.isExpedited" ) );
+    AndJoinExpr expr = new AndJoinExpr( jr );
+
+    String script = "require tokenset \"foo\" when Order.isExpedited";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireArcs ()
+  {
+    AndJoinExpr expr = new AndJoinExpr( new AllArcsRequired() );
+
+    String script = "require all arcs";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireArcsWithWhen ()
+  {
+    JoinRequirement jr = new AllArcsRequired();
+    jr.setWhenExpr( new RubricExprSymbol( "Order.isExpedited" ) );
+    AndJoinExpr expr = new AndJoinExpr( jr );
+
+    String script = "require all arcs when Order.isExpedited";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireLabelledArcs ()
+  {
+    AndJoinExpr expr = new AndJoinExpr( new LabelArcsRequired( "foo" ) );
+
+    String script = "require all arcs labelled \"foo\"";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireLabelledArcsWithWhen ()
+  {
+    JoinRequirement jr = new LabelArcsRequired( "foo" );
+    jr.setWhenExpr( new RubricExprSymbol( "Order.isExpedited" ) );
+    AndJoinExpr expr = new AndJoinExpr( jr );
+
+    String script = "require all arcs labelled \"foo\" when Order.isExpedited";
     System.out.println( "SCRIPT: " + script );
 
     JoinLangExpr result = JoinLangInterpreter.compile( script );

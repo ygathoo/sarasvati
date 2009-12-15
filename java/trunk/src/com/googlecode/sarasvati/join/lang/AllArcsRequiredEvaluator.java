@@ -18,20 +18,31 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.JoinResult;
+import java.util.List;
 
+import com.googlecode.sarasvati.Arc;
+import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.GraphProcess;
 
-public interface JoinLangExpr
+class AllArcsRequiredEvaluator extends AbstractArcsRequiredEvaluator
 {
-  JoinResult performJoin (JoinLangEnv joinEnv);
+  private final AllArcsRequired requirement;
 
-  boolean isOr();
+  public AllArcsRequiredEvaluator (final JoinLangEnv env, final AllArcsRequired requirement)
+  {
+    super( env );
+    this.requirement = requirement;
+  }
 
-  boolean isAnd();
+  @Override
+  protected JoinRequirement getRequirement ()
+  {
+    return requirement;
+  }
 
-  OrJoinExpr asOr ();
-
-  AndJoinExpr asAnd ();
-
-  boolean isEqualTo (JoinLangExpr expr);
+  @Override
+  protected List<Arc> getJoiningArcs (final GraphProcess process, final ArcToken token)
+  {
+    return process.getGraph().getInputArcs( token.getArc().getEndNode() );
+  }
 }

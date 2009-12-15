@@ -26,10 +26,9 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.TokenSet;
 
-class TokenSetRequiredEvaluator extends AbstractJoinRequirementEvaluator
+class TokenSetRequiredEvaluator extends MultiTokenRequirementEvaluator
 {
   private final TokenSetRequired requirement;
-  private Collection<ArcToken> tokenSetMembers;
 
   public TokenSetRequiredEvaluator (final JoinLangEnv env, final TokenSetRequired requirement)
   {
@@ -66,7 +65,7 @@ class TokenSetRequiredEvaluator extends AbstractJoinRequirementEvaluator
     }
 
     // The token set should only be included if it's complete.
-    tokenSetMembers = activeMembers;
+    markSuccessful( activeMembers );
   }
 
   @Override
@@ -74,18 +73,6 @@ class TokenSetRequiredEvaluator extends AbstractJoinRequirementEvaluator
   {
     TokenSet tokenSet = getEnv().getTokenSet( requirement.getTokenSetName() );
     tokenSet.markComplete( getEnv().getEngine() );
-    tokens.addAll( tokenSetMembers );
-  }
-
-  @Override
-  public boolean isSatisfied ()
-  {
-    return tokenSetMembers != null;
-  }
-
-  @Override
-  public boolean isInitiatingTokenIncluded ()
-  {
-    return isSatisfied() && tokenSetMembers.contains( getEnv().getInitiatingToken() );
+    super.completeJoinAndContributeTokens( tokens );
   }
 }

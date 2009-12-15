@@ -18,20 +18,40 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.JoinResult;
+import java.util.Collection;
+import java.util.Set;
 
+import com.googlecode.sarasvati.ArcToken;
 
-public interface JoinLangExpr
+public abstract class MultiTokenRequirementEvaluator extends AbstractJoinRequirementEvaluator
 {
-  JoinResult performJoin (JoinLangEnv joinEnv);
+  private Collection<ArcToken> joinTokens;
 
-  boolean isOr();
+  public MultiTokenRequirementEvaluator (final JoinLangEnv env)
+  {
+    super( env );
+  }
 
-  boolean isAnd();
+  protected void markSuccessful (final Collection<ArcToken> tokens)
+  {
+    joinTokens = tokens;
+  }
 
-  OrJoinExpr asOr ();
+  @Override
+  public void completeJoinAndContributeTokens (final Set<ArcToken> tokens)
+  {
+    tokens.addAll( joinTokens );
+  }
 
-  AndJoinExpr asAnd ();
+  @Override
+  public boolean isSatisfied ()
+  {
+    return joinTokens != null;
+  }
 
-  boolean isEqualTo (JoinLangExpr expr);
+  @Override
+  public boolean isInitiatingTokenIncluded ()
+  {
+    return isSatisfied() && joinTokens.contains( getEnv().getInitiatingToken() );
+  }
 }

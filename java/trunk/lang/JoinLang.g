@@ -77,7 +77,18 @@ requireSet returns [AndJoinExpr value]
 require returns [JoinRequirement value]
         : 'require' 'node' STRING { $value = new NodeRequired( SvUtil.normalizeQuotedString( $STRING.text ) ); }
           ( when { $value.setWhenExpr( $when.value ); } )?
+
         | 'require' 'tokenset' STRING { $value = new TokenSetRequired( SvUtil.normalizeQuotedString( $STRING.text ) ); }
+          ( when { $value.setWhenExpr( $when.value ); } )?
+
+        | 'require' 'all' 'arcs' { $value = new AllArcsRequired(); }
+          ( 'labelled' ( label=STRING { $value = new LabelArcsRequired( SvUtil.normalizeQuotedString( $label.text ) ); } ) |
+                       ( 'default' { $value = new LabelArcsRequired( null ); } ) )?
+          ( when { $value.setWhenExpr( $when.value ); } )?
+
+        | 'require' 'at' 'least' NUMBER 'arcs' { $value = new AtLeastArcsRequired( Integer.parseInt( $NUMBER.text ) ); }
+          ( 'labelled' ( label=STRING { $value = new AtLeastLabelArcsRequired( SvUtil.normalizeQuotedString( $label.text ), Integer.parseInt( $NUMBER.text ) ); } ) |
+                       ( 'default' { $value = new AtLeastLabelArcsRequired( null, Integer.parseInt( $NUMBER.text ) ); } ) )?
           ( when { $value.setWhenExpr( $when.value ); } )?
 
         ;
@@ -114,7 +125,7 @@ STRING   :  '"' ( '\\\"' | ~( '"' ) )* '"'
 ID       :  LETTER ( LETTER | DIGIT | '.' | '_' )*
          ;
 
-NUMBER   :  '-'? DIGIT+
+NUMBER   : '1'..'9' ( DIGIT )*
          ;
 
 fragment LETTER

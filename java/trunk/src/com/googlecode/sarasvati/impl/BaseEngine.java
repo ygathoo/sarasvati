@@ -19,6 +19,7 @@
 package com.googlecode.sarasvati.impl;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -250,9 +251,9 @@ public abstract class BaseEngine implements Engine
 
   private void completeExecuteArc (final GraphProcess process,
                                    final Node targetNode,
-                                   final List<ArcToken> tokens)
+                                   final Collection<ArcToken> tokens)
   {
-    NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, tokens );
+    NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, new ArrayList<ArcToken>( tokens ) );
     process.addNodeToken( nodeToken );
 
     // Add new node token to add the token sets which its generating arc tokens are members of
