@@ -82,13 +82,13 @@ require returns [JoinRequirement value]
           ( when { $value.setWhenExpr( $when.value ); } )?
 
         | 'require' 'all' 'arcs' { $value = new AllArcsRequired(); }
-          ( 'labelled' ( label=STRING { $value = new LabelArcsRequired( SvUtil.normalizeQuotedString( $label.text ) ); } ) |
-                       ( 'default' { $value = new LabelArcsRequired( null ); } ) )?
+          ( 'labelled' ( ( label=STRING { $value = new LabelArcsRequired( SvUtil.normalizeQuotedString( $label.text ) ); } ) |
+                         ( 'default' { $value = new LabelArcsRequired( null ); } ) ) )?
           ( when { $value.setWhenExpr( $when.value ); } )?
 
-        | 'require' 'at' 'least' NUMBER 'arcs' { $value = new AtLeastArcsRequired( Integer.parseInt( $NUMBER.text ) ); }
-          ( 'labelled' ( label=STRING { $value = new AtLeastLabelArcsRequired( SvUtil.normalizeQuotedString( $label.text ), Integer.parseInt( $NUMBER.text ) ); } ) |
-                       ( 'default' { $value = new AtLeastLabelArcsRequired( null, Integer.parseInt( $NUMBER.text ) ); } ) )?
+        | 'require' 'at' 'least' NUMBER 'arcs' { $value = new AtLeastArcsRequired( SvUtil.parseInt( $NUMBER.text ) ); }
+          ( 'labelled' ( ( label=STRING { $value = new AtLeastLabelArcsRequired( SvUtil.normalizeQuotedString( $label.text ), SvUtil.parseInt( $NUMBER.text ) ); } ) |
+                         ( 'default' { $value = new AtLeastLabelArcsRequired( null, SvUtil.parseInt( $NUMBER.text ) ); } ) ) )?
           ( when { $value.setWhenExpr( $when.value ); } )?
 
         ;
