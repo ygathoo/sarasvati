@@ -18,20 +18,26 @@
 */
 package com.googlecode.sarasvati.join.lang;
 
-import com.googlecode.sarasvati.JoinResult;
-
-
-public interface JoinLangExpr
+public class AllArcsRequired extends AbstractJoinRequirement
 {
-  JoinResult performJoin (JoinLangEnv joinEnv);
+  public JoinRequirementEvaluator newEvaluator (final JoinLangEnv env)
+  {
+    return new AllArcsRequiredEvaluator( env, this );
+  }
 
-  boolean isOr();
+  /**
+   * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
+   */
+  @Override
+  public boolean isEqualTo (final JoinRequirement expr)
+  {
+    return expr instanceof AllArcsRequired && super.isEqualTo( expr );
+  }
 
-  boolean isAnd();
-
-  OrJoinExpr asOr ();
-
-  AndJoinExpr asAnd ();
-
-  boolean isEqualTo (JoinLangExpr expr);
+  @Override
+  public String toString ()
+  {
+    return "require all arcs" +
+           (getWhenExpr() == null ? "" : " when (" + getWhenExpr() +")" );
+  }
 }

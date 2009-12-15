@@ -98,7 +98,7 @@ class AndJoinExprEvaluator
 
       if ( completeSet.contains( env.getInitiatingToken() ) )
       {
-        return new MergeJoinResult( new ArrayList<ArcToken>( completeSet ), mergeToken );
+        return new MergeJoinResult( completeSet, mergeToken );
       }
     }
 

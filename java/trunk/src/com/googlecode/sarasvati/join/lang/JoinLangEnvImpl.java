@@ -28,14 +28,11 @@ import java.util.Map;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GraphProcess;
-import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.impl.NodeTokenComparator;
-import com.googlecode.sarasvati.join.IncompleteJoinResult;
-import com.googlecode.sarasvati.join.MergeJoinResult;
 import com.googlecode.sarasvati.rubric.env.PredicateEnv;
 import com.googlecode.sarasvati.util.SvUtil;
 
@@ -56,7 +53,6 @@ public class JoinLangEnvImpl implements JoinLangEnv
     this.initiatingToken = initiatingToken;
     this.predicateEnv = predicateEnv;
   }
-
 
   /**
    * @see com.googlecode.sarasvati.join.lang.JoinLangEnv#getEngine()
@@ -110,7 +106,6 @@ public class JoinLangEnvImpl implements JoinLangEnv
     if ( "first".equals( predicate ) )
     {
       initializeMergeTokenIfNecesary();
-      System.out.println( "First: " + (mergeToken == null ) );
       return mergeToken == null;
     }
     return predicateEnv.evalPredicate( predicate );
@@ -140,18 +135,6 @@ public class JoinLangEnvImpl implements JoinLangEnv
   {
     initializeMergeTokenIfNecesary();
     return mergeToken;
-  }
-
-  public JoinResult mergeIfPossible ()
-  {
-    initializeMergeTokenIfNecesary();
-
-    if ( mergeToken != null )
-    {
-      return new MergeJoinResult( initiatingToken, mergeToken );
-    }
-
-    return IncompleteJoinResult.INSTANCE;
   }
 
   @Override
