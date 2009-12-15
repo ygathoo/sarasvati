@@ -107,6 +107,12 @@ public class JoinLangEnvImpl implements JoinLangEnv
   @Override
   public boolean evalPredicate (final String predicate)
   {
+    if ( "first".equals( predicate ) )
+    {
+      initializeMergeTokenIfNecesary();
+      System.out.println( "First: " + (mergeToken == null ) );
+      return mergeToken == null;
+    }
     return predicateEnv.evalPredicate( predicate );
   }
 
