@@ -65,6 +65,20 @@ public class SvUtil
     return value != null && value;
   }
 
+  public static int parseInt (final String value)
+  {
+    try
+    {
+      return Integer.parseInt( value );
+    }
+    catch (NumberFormatException nfe )
+    {
+      // Ignore exception. ANLTR will be throwing an alternate exception
+    }
+
+    return 0;
+  }
+
   public static String normalizeQuotedString (final String string)
   {
     if ( string == null )

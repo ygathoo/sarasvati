@@ -23,9 +23,12 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
+import com.googlecode.sarasvati.join.JoinLangCompilationException;
 import com.googlecode.sarasvati.join.JoinLangInterpreter;
 import com.googlecode.sarasvati.join.lang.AllArcsRequired;
 import com.googlecode.sarasvati.join.lang.AndJoinExpr;
+import com.googlecode.sarasvati.join.lang.AtLeastArcsRequired;
+import com.googlecode.sarasvati.join.lang.AtLeastLabelArcsRequired;
 import com.googlecode.sarasvati.join.lang.JoinLangExpr;
 import com.googlecode.sarasvati.join.lang.JoinRequirement;
 import com.googlecode.sarasvati.join.lang.LabelArcsRequired;
@@ -196,4 +199,120 @@ public class JoinLangCompilerTest
     JoinLangExpr result = JoinLangInterpreter.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
+
+  @Test public void testRequireLabelledDefaultArcs ()
+  {
+    AndJoinExpr expr = new AndJoinExpr( new LabelArcsRequired( null ) );
+
+    String script = "require all arcs labelled default";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireLabelledDefaultArcsWithWhen ()
+  {
+    JoinRequirement jr = new LabelArcsRequired( null );
+    jr.setWhenExpr( new RubricExprSymbol( "Order.isExpedited" ) );
+    AndJoinExpr expr = new AndJoinExpr( jr );
+
+    String script = "require all arcs labelled default when Order.isExpedited";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireAtLeastArcs ()
+  {
+    AndJoinExpr expr = new AndJoinExpr( new AtLeastArcsRequired( 3 ) );
+
+    String script = "require at least 3 arcs";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test( expected=JoinLangCompilationException.class)
+  public void testRequireAtLeastArcsWithZero ()
+  {
+    String script = "require at least 0 arcs";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangInterpreter.compile( script );
+  }
+
+  @Test( expected=JoinLangCompilationException.class)
+  public void testRequireAtLeastArcsWithNegativeNumber ()
+  {
+    String script = "require at least -1 arcs";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangInterpreter.compile( script );
+  }
+
+  @Test public void testRequireAtLeastArcsWithWhen ()
+  {
+    JoinRequirement jr = new AtLeastArcsRequired( 4 );
+    jr.setWhenExpr( new RubricExprSymbol( "Order.isExpedited" ) );
+    AndJoinExpr expr = new AndJoinExpr( jr );
+
+    String script = "require at least 4 arcs when Order.isExpedited";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireAtLeastLabelledArcs ()
+  {
+    AndJoinExpr expr = new AndJoinExpr( new AtLeastLabelArcsRequired( "foo", 5 ) );
+
+    String script = "require at least 5 arcs labelled \"foo\"";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireAtLeastLabelledArcsWithWhen ()
+  {
+    JoinRequirement jr = new AtLeastLabelArcsRequired( "foo", 6 );
+    jr.setWhenExpr( new RubricExprSymbol( "Order.isExpedited" ) );
+    AndJoinExpr expr = new AndJoinExpr( jr );
+
+    String script = "require at least 6 arcs labelled \"foo\" when Order.isExpedited";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireAtLeastDefaultLabelledArcs ()
+  {
+    AndJoinExpr expr = new AndJoinExpr( new AtLeastLabelArcsRequired( null, 20 ) );
+
+    String script = "require at least 20 arcs labelled default";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+  @Test public void testRequireAtLeastDefaultLabelledArcsWithWhen ()
+  {
+    JoinRequirement jr = new AtLeastLabelArcsRequired( null, 1 );
+    jr.setWhenExpr( new RubricExprSymbol( "Order.isExpedited" ) );
+    AndJoinExpr expr = new AndJoinExpr( jr );
+
+    String script = "require at least 1 arcs labelled default when Order.isExpedited";
+    System.out.println( "SCRIPT: " + script );
+
+    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    Assert.assertTrue( expr.isEqualTo( result ) );
+  }
+
+
 }
