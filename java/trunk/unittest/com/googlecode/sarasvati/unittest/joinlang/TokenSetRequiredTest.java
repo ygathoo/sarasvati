@@ -30,11 +30,12 @@ import com.googlecode.sarasvati.unittest.framework.TestProcess;
 
 public class TokenSetRequiredTest extends ExecutionTest
 {
-  private static final String TEST_GRAPH_NAME = "joinlang-tokenset-required";
+  private static final String TEST_GRAPH1_NAME = "joinlang-tokenset-required1";
+  private static final String TEST_GRAPH2_NAME = "joinlang-tokenset-required2";
 
   @Test public void testOne() throws Exception
   {
-    Graph g = ensureLoaded( TEST_GRAPH_NAME );
+    Graph g = ensureLoaded( TEST_GRAPH1_NAME );
     GraphProcess p = engine.startProcess( g );
 
     String state =
@@ -171,4 +172,121 @@ public class TokenSetRequiredTest extends ExecutionTest
 
     Assert.assertTrue( "Process should be complete", p.isComplete() );
   }
+
+  @Test public void testTwo() throws Exception
+  {
+    Graph g = ensureLoaded( TEST_GRAPH2_NAME );
+    GraphProcess p = engine.startProcess( g );
+
+    String state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "[2 nodeC I F ts1 0]" +
+      "[3 nodeC I F ts1 1]" +
+      "[4 nodeB C F]" +
+      "  (C F 5)" +
+      "  (C F 6)" +
+      "[5 nodeD I F ts2 0]" +
+      "[6 nodeD I F ts2 1]";
+    TestProcess.validate( p, state );
+
+    completeToken( p, "nodeC", "ts1", 0 );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "[2 nodeC C F ts1 0]" +
+      "  (I F nodeE)" +
+      "[3 nodeC I F ts1 1]" +
+      "[4 nodeB C F]" +
+      "  (C F 5)" +
+      "  (C F 6)" +
+      "[5 nodeD I F ts2 0]" +
+      "[6 nodeD I F ts2 1]";
+    TestProcess.validate( p, state );
+
+    completeToken( p, "nodeC", "ts1", 1 );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "[2 nodeC C F ts1 0]" +
+      "  (C F 7)" +
+      "[3 nodeC C F ts1 1]" +
+      "  (C F 7)" +
+      "[4 nodeB C F]" +
+      "  (C F 5)" +
+      "  (C F 6)" +
+      "[5 nodeD I F ts2 0]" +
+      "[6 nodeD I F ts2 1]" +
+      "[7 nodeE I F]";
+    TestProcess.validate( p, state );
+
+    completeToken( p, "nodeD", "ts2", 0 );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "[2 nodeC C F ts1 0]" +
+      "  (C F 7)" +
+      "[3 nodeC C F ts1 1]" +
+      "  (C F 7)" +
+      "[4 nodeB C F]" +
+      "  (C F 5)" +
+      "  (C F 6)" +
+      "[5 nodeD C F ts2 0]" +
+      "  (I F nodeE)" +
+      "[6 nodeD I F ts2 1]" +
+      "[7 nodeE I F]";
+    TestProcess.validate( p, state );
+
+    completeToken( p, "nodeD", "ts2", 1 );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "[2 nodeC C F ts1 0]" +
+      "  (C F 7)" +
+      "[3 nodeC C F ts1 1]" +
+      "  (C F 7)" +
+      "[4 nodeB C F]" +
+      "  (C F 5)" +
+      "  (C F 6)" +
+      "[5 nodeD C F ts2 0]" +
+      "  (C F 7)" +
+      "[6 nodeD C F ts2 1]" +
+      "  (C F 7)" +
+      "[7 nodeE I F]";
+    TestProcess.validate( p, state );
+
+    Assert.assertTrue( "Process should be executing", p.isExecuting() );
+
+    completeToken( p, "nodeE" );
+
+    state =
+      "[1 nodeA C F]" +
+      "  (C F 2)" +
+      "  (C F 3)" +
+      "[2 nodeC C F ts1 0]" +
+      "  (C F 7)" +
+      "[3 nodeC C F ts1 1]" +
+      "  (C F 7)" +
+      "[4 nodeB C F]" +
+      "  (C F 5)" +
+      "  (C F 6)" +
+      "[5 nodeD C F ts2 0]" +
+      "  (C F 7)" +
+      "[6 nodeD C F ts2 1]" +
+      "  (C F 7)" +
+      "[7 nodeE C F]";
+    TestProcess.validate( p, state );
+
+    Assert.assertTrue( "Process should be complete", p.isComplete() );
+  }
+
 }

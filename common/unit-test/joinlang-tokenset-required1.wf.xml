@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<process-definition name="joinlang-tokenset-required"
+<process-definition name="joinlang-tokenset-required1"
                    xmlns="http://sarasvati.googlecode.com/ProcessDefinition">
 
   <node name="nodeA" type="script" isStart="true">

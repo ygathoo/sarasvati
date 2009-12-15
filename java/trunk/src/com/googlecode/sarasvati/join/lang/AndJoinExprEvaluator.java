@@ -35,6 +35,10 @@ class AndJoinExprEvaluator
   private final JoinLangEnv env;
   private final List<JoinRequirementEvaluator> evaluators;
 
+  private boolean isSatisfied               = false;
+  private boolean isInitiatingTokenRequired = false;
+  private boolean isInitiatingTokenOptional = false;
+
   public AndJoinExprEvaluator (final JoinLangEnv env, final List<JoinRequirement> requirements)
   {
     this.env = env;
@@ -53,21 +57,23 @@ class AndJoinExprEvaluator
       evaluator.evaluate();
     }
 
+    calculateInitiatingTokenCoverage();
+
     // If the initiating token isn't covered by any of the require
     // statements, the join shouldn't be satisfied, even if the
     // requirements are otherwise met.
-    if ( !isInitiatingTokenIncluded() )
+    if ( !isInitiatingTokenRequired && !isInitiatingTokenOptional )
     {
       return IncompleteJoinResult.INSTANCE;
     }
 
-    if ( isSatisfied() )
+    if ( isInitiatingTokenRequired && isSatisfied )
     {
       Set<ArcToken> completeSet = new HashSet<ArcToken>();
 
       for ( JoinRequirementEvaluator evaluator : evaluators )
       {
-        if ( evaluator.isSatisfied() )
+        if ( evaluator.isSatisfied() ) // Some optional requirements may not be satisfied
         {
           evaluator.completeJoinAndContributeTokens( completeSet );
         }
@@ -99,29 +105,28 @@ class AndJoinExprEvaluator
     return IncompleteJoinResult.INSTANCE;
   }
 
-  private boolean isSatisfied ()
+  private void calculateInitiatingTokenCoverage ()
   {
+    isSatisfied = true;
+
     for ( JoinRequirementEvaluator evaluator : evaluators )
     {
       if ( evaluator.isApplicable() && !evaluator.isSatisfied() )
       {
-        return false;
+        isSatisfied = false;
       }
-    }
 
-    return true;
-  }
-
-  private boolean isInitiatingTokenIncluded ()
-  {
-    for ( JoinRequirementEvaluator evaluator : evaluators )
-    {
       if ( evaluator.isInitiatingTokenIncluded() )
       {
-        return true;
+        if ( evaluator.isApplicable() )
+        {
+          isInitiatingTokenRequired = true;
+        }
+        else
+        {
+          isInitiatingTokenOptional = true;
+        }
       }
     }
-
-    return false;
   }
 }
