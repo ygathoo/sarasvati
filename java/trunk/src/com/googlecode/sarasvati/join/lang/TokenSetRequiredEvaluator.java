@@ -65,14 +65,17 @@ class TokenSetRequiredEvaluator extends MultiTokenRequirementEvaluator
     }
 
     // The token set should only be included if it's complete.
-    markSuccessful( activeMembers );
+    includeTokens( activeMembers );
   }
 
   @Override
   public void completeJoinAndContributeTokens (final Set<ArcToken> tokens)
   {
-    TokenSet tokenSet = getEnv().getTokenSet( requirement.getTokenSetName() );
-    tokenSet.markComplete( getEnv().getEngine() );
-    super.completeJoinAndContributeTokens( tokens );
+    if ( isSatisfied() )
+    {
+      TokenSet tokenSet = getEnv().getTokenSet( requirement.getTokenSetName() );
+      tokenSet.markComplete( getEnv().getEngine() );
+      super.completeJoinAndContributeTokens( tokens );
+    }
   }
 }

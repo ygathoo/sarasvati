@@ -73,10 +73,7 @@ class AndJoinExprEvaluator
 
       for ( JoinRequirementEvaluator evaluator : evaluators )
       {
-        if ( evaluator.isSatisfied() ) // Some optional requirements may not be satisfied
-        {
-          evaluator.completeJoinAndContributeTokens( completeSet );
-        }
+        evaluator.completeJoinAndContributeTokens( completeSet );
       }
 
       return new CompleteJoinResult( new ArrayList<ArcToken>( completeSet ) );
@@ -90,7 +87,7 @@ class AndJoinExprEvaluator
 
       for ( JoinRequirementEvaluator evaluator : evaluators )
       {
-        if ( !evaluator.isApplicable() && evaluator.isSatisfied() )
+        if ( !evaluator.isApplicable() )
         {
           evaluator.completeJoinAndContributeTokens( completeSet );
         }

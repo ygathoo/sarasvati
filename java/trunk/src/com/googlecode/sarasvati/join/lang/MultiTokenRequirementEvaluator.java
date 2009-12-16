@@ -32,7 +32,7 @@ public abstract class MultiTokenRequirementEvaluator extends AbstractJoinRequire
     super( env );
   }
 
-  protected void markSuccessful (final Collection<ArcToken> tokens)
+  protected void includeTokens (final Collection<ArcToken> tokens)
   {
     joinTokens = tokens;
   }
@@ -52,6 +52,6 @@ public abstract class MultiTokenRequirementEvaluator extends AbstractJoinRequire
   @Override
   public boolean isInitiatingTokenIncluded ()
   {
-    return isSatisfied() && joinTokens.contains( getEnv().getInitiatingToken() );
+    return joinTokens != null && joinTokens.contains( getEnv().getInitiatingToken() );
   }
 }

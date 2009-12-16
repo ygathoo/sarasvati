@@ -27,6 +27,8 @@ import com.googlecode.sarasvati.GraphProcess;
 
 abstract class AbstractArcsRequiredEvaluator extends MultiTokenRequirementEvaluator
 {
+  private boolean isSatisfied = false;
+
   public AbstractArcsRequiredEvaluator (final JoinLangEnv env)
   {
     super( env );
@@ -60,9 +62,20 @@ abstract class AbstractArcsRequiredEvaluator extends MultiTokenRequirementEvalua
       }
     }
 
+    includeTokens( tokens );
+
     if ( tokens.size() >= getNumberOfRequiredArcs( joinArcs.size() ) )
     {
-      markSuccessful( tokens );
+      isSatisfied = true;
     }
+  }
+
+  /**
+   * @see com.googlecode.sarasvati.join.lang.MultiTokenRequirementEvaluator#isSatisfied()
+   */
+  @Override
+  public boolean isSatisfied ()
+  {
+    return isSatisfied;
   }
 }
