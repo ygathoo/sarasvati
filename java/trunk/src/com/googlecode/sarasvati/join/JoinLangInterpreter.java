@@ -24,7 +24,6 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 
 import com.googlecode.sarasvati.join.lang.JoinLangExpr;
-import com.googlecode.sarasvati.join.lang.JoinLangLexer;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
@@ -102,15 +101,16 @@ public class JoinLangInterpreter
    */
   public static JoinLangExpr compile (final String joinSpecStmt) throws JoinLangException
   {
-    JoinLangLexer lexer = new JoinLangLexer( new ANTLRStringStream( joinSpecStmt ) );
-
-    CommonTokenStream stream = new CommonTokenStream( lexer );
-    ErrorReportingJoinLangParser parser = new ErrorReportingJoinLangParser( stream );
-
     try
     {
+      ErrorReporter errorReporter = new ErrorReporter();
+      ErrorReportingJoinLangLexer lexer = new ErrorReportingJoinLangLexer( new ANTLRStringStream( joinSpecStmt ), errorReporter );
+
+      CommonTokenStream stream = new CommonTokenStream( lexer );
+      ErrorReportingJoinLangParser parser = new ErrorReportingJoinLangParser( stream, errorReporter );
+
       JoinLangExpr expr = parser.program().value;
-      JoinLangException e = parser.getError();
+      JoinLangException e = errorReporter.getError();
       if ( e != null )
       {
         throw e;

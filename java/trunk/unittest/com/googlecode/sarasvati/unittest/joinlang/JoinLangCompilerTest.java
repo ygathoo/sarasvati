@@ -235,7 +235,7 @@ public class JoinLangCompilerTest
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
-  @Test( expected=JoinLangCompilationException.class)
+  @Test (expected=JoinLangCompilationException.class)
   public void testRequireAtLeastArcsWithZero ()
   {
     String script = "require at least 0 arcs";
@@ -244,7 +244,7 @@ public class JoinLangCompilerTest
     JoinLangInterpreter.compile( script );
   }
 
-  @Test( expected=JoinLangCompilationException.class)
+  @Test (expected=JoinLangCompilationException.class)
   public void testRequireAtLeastArcsWithNegativeNumber ()
   {
     String script = "require at least -1 arcs";
