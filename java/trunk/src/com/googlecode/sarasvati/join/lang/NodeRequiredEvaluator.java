@@ -47,7 +47,10 @@ class NodeRequiredEvaluator extends AbstractJoinRequirementEvaluator
   @Override
   public void completeJoinAndContributeTokens (final Set<ArcToken> tokens)
   {
-    tokens.add( targetToken );
+    if ( targetToken != null )
+    {
+      tokens.add( targetToken );
+    }
   }
 
   @Override
