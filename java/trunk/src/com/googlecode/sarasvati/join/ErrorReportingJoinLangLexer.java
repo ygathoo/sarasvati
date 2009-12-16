@@ -18,26 +18,30 @@
 */
 package com.googlecode.sarasvati.join;
 
+import org.antlr.runtime.CharStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RecognizerSharedState;
-import org.antlr.runtime.TokenStream;
 
-import com.googlecode.sarasvati.join.lang.JoinLangParser;
+import com.googlecode.sarasvati.join.lang.JoinLangLexer;
 
-public class ErrorReportingJoinLangParser extends JoinLangParser
+public class ErrorReportingJoinLangLexer extends JoinLangLexer
 {
   private ErrorReporter errorReporter;
 
-  public ErrorReportingJoinLangParser (final TokenStream input,
-                                       final RecognizerSharedState state,
-                                       final ErrorReporter errorReporter)
+  public ErrorReportingJoinLangLexer (final ErrorReporter errorReporter)
+  {
+    this.errorReporter = errorReporter;
+  }
+
+  public ErrorReportingJoinLangLexer (final CharStream input,
+                                      final RecognizerSharedState state,
+                                      final ErrorReporter errorReporter)
   {
     super( input, state );
     this.errorReporter = errorReporter;
   }
 
-  public ErrorReportingJoinLangParser (final TokenStream input,
-                                       final ErrorReporter errorReporter)
+  public ErrorReportingJoinLangLexer (final CharStream input, final ErrorReporter errorReporter)
   {
     super( input );
     this.errorReporter = errorReporter;
@@ -55,4 +59,5 @@ public class ErrorReportingJoinLangParser extends JoinLangParser
   {
     // do nothing
   }
+
 }
