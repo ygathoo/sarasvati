@@ -14,25 +14,30 @@
     You should have received a copy of the GNU Lesser General Public
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
-    Copyright 2008 Paul Lorenz
+    Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.rubric.lang;
+package com.googlecode.sarasvati.join.lang;
 
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RecognizerSharedState;
 import org.antlr.runtime.TokenStream;
 
-public class ErrorReportingRubricParser extends RubricParser
-{
-  private final ErrorReporter errorReporter;
+import com.googlecode.sarasvati.join.lang.JoinLangParser;
 
-  public ErrorReportingRubricParser (final TokenStream input, final RecognizerSharedState state, final ErrorReporter errorReporter)
+public class ErrorReportingJoinLangParser extends JoinLangParser
+{
+  private ErrorReporter errorReporter;
+
+  public ErrorReportingJoinLangParser (final TokenStream input,
+                                       final RecognizerSharedState state,
+                                       final ErrorReporter errorReporter)
   {
     super( input, state );
     this.errorReporter = errorReporter;
   }
 
-  public ErrorReportingRubricParser (final TokenStream input, final ErrorReporter errorReporter)
+  public ErrorReportingJoinLangParser (final TokenStream input,
+                                       final ErrorReporter errorReporter)
   {
     super( input );
     this.errorReporter = errorReporter;
@@ -46,7 +51,7 @@ public class ErrorReportingRubricParser extends RubricParser
   }
 
   @Override
-  public void emitErrorMessage( final String arg0 )
+  public void emitErrorMessage (final String arg0)
   {
     // do nothing
   }

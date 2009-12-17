@@ -26,27 +26,18 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.TokenSet;
 
-class TokenSetRequiredEvaluator extends MultiTokenRequirementEvaluator
+class TokenSetRequiredEvaluator extends MultiTokenRequirementEvaluator<TokenSetRequired>
 {
-  private final TokenSetRequired requirement;
-
   public TokenSetRequiredEvaluator (final JoinLangEnv env, final TokenSetRequired requirement)
   {
-    super( env );
-    this.requirement = requirement;
-  }
-
-  @Override
-  protected JoinRequirement getRequirement ()
-  {
-    return requirement;
+    super( env, requirement );
   }
 
   @Override
   public void evaluate ()
   {
     Engine engine = getEnv().getEngine();
-    TokenSet tokenSet = getEnv().getTokenSet( requirement.getTokenSetName() );
+    TokenSet tokenSet = getEnv().getTokenSet( getRequirement().getTokenSetName() );
 
     if ( tokenSet == null || !tokenSet.getActiveNodeTokens( engine ).isEmpty() )
     {
@@ -73,7 +64,7 @@ class TokenSetRequiredEvaluator extends MultiTokenRequirementEvaluator
   {
     if ( isSatisfied() )
     {
-      TokenSet tokenSet = getEnv().getTokenSet( requirement.getTokenSetName() );
+      TokenSet tokenSet = getEnv().getTokenSet( getRequirement().getTokenSetName() );
       tokenSet.markComplete( getEnv().getEngine() );
       super.completeJoinAndContributeTokens( tokens );
     }

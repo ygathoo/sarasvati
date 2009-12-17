@@ -22,7 +22,7 @@ package com.googlecode.sarasvati.test;
 import java.util.Calendar;
 import java.util.Date;
 
-import com.googlecode.sarasvati.rubric.RubricInterpreter;
+import com.googlecode.sarasvati.rubric.RubricCompiler;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.lang.RubricStmtRelativeDate;
@@ -32,7 +32,7 @@ public class RubricTest
 {
   public static void eval (final String testStmt) throws Exception
   {
-    RubricStmt stmt = RubricInterpreter.compile( testStmt );
+    RubricStmt stmt = RubricCompiler.compile( testStmt );
 
     RubricEnv env = new RubricEnv()
     {
@@ -96,7 +96,7 @@ public class RubricTest
 
   public static void main(final String[] args) throws Exception
   {
-    RubricStmt stmt = RubricInterpreter.compile( "(1 business day after now)" );
+    RubricStmt stmt = RubricCompiler.compile( "(1 business day after now)" );
     stmt.traverse( new RubricVisitorAdaptor()
     {
       @Override

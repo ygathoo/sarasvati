@@ -25,13 +25,13 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
 
-abstract class AbstractArcsRequiredEvaluator extends MultiTokenRequirementEvaluator
+abstract class AbstractArcsRequiredEvaluator<T extends JoinRequirement> extends MultiTokenRequirementEvaluator<T>
 {
   private boolean isSatisfied = false;
 
-  public AbstractArcsRequiredEvaluator (final JoinLangEnv env)
+  public AbstractArcsRequiredEvaluator (final JoinLangEnv env, final T requirement)
   {
-    super( env );
+    super( env, requirement );
   }
 
   protected abstract List<Arc> getJoiningArcs (final GraphProcess process, final ArcToken token);

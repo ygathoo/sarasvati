@@ -40,7 +40,7 @@ public class JoinLangJoinStrategy implements JoinStrategy
   public JoinResult performJoin (final Engine engine, final ArcToken token)
   {
     Node targetNode = token.getArc().getEndNode();
-    JoinLangExpr expr = JoinLangInterpreter.compile( targetNode.getJoinParam() );
+    JoinLangExpr expr = JoinLangCompiler.compile( targetNode.getJoinParam() );
     JoinLangEnv env = engine.newJoinLangEnv( token );
     return expr.performJoin( env );
   }

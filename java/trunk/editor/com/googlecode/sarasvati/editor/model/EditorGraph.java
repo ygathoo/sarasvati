@@ -31,7 +31,7 @@ import java.util.Set;
 import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.load.definition.NodeDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
-import com.googlecode.sarasvati.rubric.RubricInterpreter;
+import com.googlecode.sarasvati.rubric.RubricCompiler;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.visitor.ExitArcNameCollector;
 import com.googlecode.sarasvati.rubric.visitor.ResultTypeValidator;
@@ -180,7 +180,7 @@ public class EditorGraph
       {
         try
         {
-          RubricStmt guardStmt = RubricInterpreter.compile( guard );
+          RubricStmt guardStmt = RubricCompiler.compile( guard );
 
           if ( !ResultTypeValidator.isResultOfType( guardStmt, GuardResult.class ) )
           {

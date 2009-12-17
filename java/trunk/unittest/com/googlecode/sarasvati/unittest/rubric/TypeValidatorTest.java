@@ -25,7 +25,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.googlecode.sarasvati.GuardResult;
-import com.googlecode.sarasvati.rubric.RubricInterpreter;
+import com.googlecode.sarasvati.rubric.RubricCompiler;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.visitor.ResultTypeValidator;
 
@@ -34,24 +34,24 @@ public class TypeValidatorTest
   @Test public void testStringCheckOnString ()
   {
     String program = "\"foo\"";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     Assert.assertTrue( "All result type should be string", ResultTypeValidator.isResultOfType( stmt, String.class ) );
 
     program = "if a or b then \"foo\" else \"bar\"";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     Assert.assertTrue( "All result type should be string", ResultTypeValidator.isResultOfType( stmt, String.class ) );
   }
 
   @Test public void testStringCheckOnNumber ()
   {
     String program = "1";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( String.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect int", validator.isAllResultsMatchType() );
 
     program = "if a or b then \"foo\" else 2";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( String.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect int", validator.isAllResultsMatchType() );
@@ -60,13 +60,13 @@ public class TypeValidatorTest
   @Test public void testStringCheckOnDate ()
   {
     String program = "(now)";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( String.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect date", validator.isAllResultsMatchType() );
 
     program = "if a or b then \"foo\" else (1 day before now)";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( String.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect date", validator.isAllResultsMatchType() );
@@ -75,13 +75,13 @@ public class TypeValidatorTest
   @Test public void testStringCheckOnGuardResult ()
   {
     String program = "Accept";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( String.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect guard response", validator.isAllResultsMatchType() );
 
     program = "if a or b then \"foo\" else Discard";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( String.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect guard result", validator.isAllResultsMatchType() );
@@ -90,13 +90,13 @@ public class TypeValidatorTest
   @Test public void testGuardResultCheckOnGuardResult ()
   {
     String program = "Accept";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertTrue( "All result type should be guard result", validator.isAllResultsMatchType() );
 
     program = "if a or b then Discard else Accept";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertTrue( "All result type should be guard result", validator.isAllResultsMatchType() );
@@ -105,13 +105,13 @@ public class TypeValidatorTest
   @Test public void testGuardResultCheckOnNumber ()
   {
     String program = "1";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect int", validator.isAllResultsMatchType() );
 
     program = "if a or b then Accept else 2";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect int", validator.isAllResultsMatchType() );
@@ -120,13 +120,13 @@ public class TypeValidatorTest
   @Test public void testGuardResultCheckOnDate ()
   {
     String program = "(now)";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect date", validator.isAllResultsMatchType() );
 
     program = "if a or b then Accept else (1 day before now)";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect date", validator.isAllResultsMatchType() );
@@ -135,13 +135,13 @@ public class TypeValidatorTest
   @Test public void testGuardResultCheckOnString ()
   {
     String program = "\"foo\"";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect guard result", validator.isAllResultsMatchType() );
 
     program = "if a or b then \"foo\" else Discard";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( GuardResult.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect guard result", validator.isAllResultsMatchType() );
@@ -150,28 +150,28 @@ public class TypeValidatorTest
   @Test public void testDateCheckOnDate ()
   {
     String program = "(now)";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     Assert.assertTrue( "All result type should be date", ResultTypeValidator.isResultOfType( stmt, Date.class ) );
 
     program = "if a or b then (now) else (1 day after now)";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     Assert.assertTrue( "All result type should be date", ResultTypeValidator.isResultOfType( stmt, Date.class ) );
 
     program = "if A.b and C.d and E.f then (immediately) else if not G.h or J.k then (5 business days after immediately) else (immediately)";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     Assert.assertTrue( "All result type should be date", ResultTypeValidator.isResultOfType( stmt, Date.class ) );
   }
 
   @Test public void testDateCheckOnNumber ()
   {
     String program = "1";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( Date.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect int", validator.isAllResultsMatchType() );
 
     program = "if a or b then (now) else 2";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( Date.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect int", validator.isAllResultsMatchType() );
@@ -180,13 +180,13 @@ public class TypeValidatorTest
   @Test public void testDateCheckOnGuardResult ()
   {
     String program = "Accept";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( Date.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect date", validator.isAllResultsMatchType() );
 
     program = "if a or b then Accept else (1 day before now)";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( Date.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect date", validator.isAllResultsMatchType() );
@@ -195,13 +195,13 @@ public class TypeValidatorTest
   @Test public void testDateCheckOnString ()
   {
     String program = "\"foo\"";
-    RubricStmt stmt = RubricInterpreter.compile( program );
+    RubricStmt stmt = RubricCompiler.compile( program );
     ResultTypeValidator validator = new ResultTypeValidator( Date.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect guard response", validator.isAllResultsMatchType() );
 
     program = "if a or b then \"foo\" else (now)";
-    stmt = RubricInterpreter.compile( program );
+    stmt = RubricCompiler.compile( program );
     validator = new ResultTypeValidator( Date.class );
     stmt.traverse( validator );
     Assert.assertFalse( "Should detect guard response", validator.isAllResultsMatchType() );

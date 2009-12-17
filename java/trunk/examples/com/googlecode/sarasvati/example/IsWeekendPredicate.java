@@ -5,7 +5,7 @@ import java.util.Calendar;
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.GuardResult;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.rubric.RubricInterpreter;
+import com.googlecode.sarasvati.rubric.RubricCompiler;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricEnv;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
@@ -30,7 +30,7 @@ public class IsWeekendPredicate implements RubricPredicate
     String stmt = "if isWeekend then Accept else Skip";
 
     RubricEnv env = new DefaultRubricEnv( null, null, repository );
-    GuardResult response = (GuardResult)RubricInterpreter.compile( stmt ).eval( env );
+    GuardResult response = (GuardResult)RubricCompiler.compile( stmt ).eval( env );
 
     System.out.println( response );
   }

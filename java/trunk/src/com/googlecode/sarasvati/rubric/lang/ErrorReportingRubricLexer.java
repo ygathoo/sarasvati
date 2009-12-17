@@ -16,32 +16,30 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.join;
+package com.googlecode.sarasvati.rubric.lang;
 
 import org.antlr.runtime.CharStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RecognizerSharedState;
 
-import com.googlecode.sarasvati.join.lang.JoinLangLexer;
-
-public class ErrorReportingJoinLangLexer extends JoinLangLexer
+public class ErrorReportingRubricLexer extends RubricLexer
 {
   private ErrorReporter errorReporter;
 
-  public ErrorReportingJoinLangLexer (final ErrorReporter errorReporter)
+  public ErrorReportingRubricLexer (final ErrorReporter errorReporter)
   {
     this.errorReporter = errorReporter;
   }
 
-  public ErrorReportingJoinLangLexer (final CharStream input,
-                                      final RecognizerSharedState state,
-                                      final ErrorReporter errorReporter)
+  public ErrorReportingRubricLexer (final CharStream input,
+                                    final RecognizerSharedState state,
+                                    final ErrorReporter errorReporter)
   {
     super( input, state );
     this.errorReporter = errorReporter;
   }
 
-  public ErrorReportingJoinLangLexer (final CharStream input, final ErrorReporter errorReporter)
+  public ErrorReportingRubricLexer (final CharStream input, final ErrorReporter errorReporter)
   {
     super( input );
     this.errorReporter = errorReporter;
@@ -59,5 +57,4 @@ public class ErrorReportingJoinLangLexer extends JoinLangLexer
   {
     // do nothing
   }
-
 }
