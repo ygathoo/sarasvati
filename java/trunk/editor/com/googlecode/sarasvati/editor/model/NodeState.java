@@ -44,9 +44,9 @@ public class NodeState extends GraphMemberState
     super( name, customProperties, isNew );
     this.type = type;
     this.joinType = joinType;
-    this.joinParam = joinParam;
+    this.joinParam = joinParam == null ? null : joinParam.trim();
     this.isStart = isStart;
-    this.guard = guard;
+    this.guard = guard == null ? null : guard.trim();
   }
 
   public String getType ()

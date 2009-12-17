@@ -25,31 +25,6 @@
     <DimensionLayout dim="0">
       <Group type="103" groupAlignment="0" attributes="0">
           <Component id="jSeparator1" alignment="1" pref="684" max="32767" attributes="0"/>
-          <Group type="102" alignment="0" attributes="0">
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" attributes="0">
-                  <Component id="guardLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="joinParamLabel" alignment="1" min="-2" max="-2" attributes="0"/>
-                  <Component id="joinTypeLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="typeLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="nodeNameLabel" min="-2" max="-2" attributes="0"/>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Component id="jScrollPane2" alignment="0" pref="581" max="32767" attributes="0"/>
-                  <Component id="joinParamInput" alignment="1" pref="581" max="32767" attributes="1"/>
-                  <Component id="nodeNameInput" alignment="0" min="-2" pref="286" max="-2" attributes="1"/>
-                  <Group type="102" alignment="0" attributes="0">
-                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                          <Component id="nodeTypeInput" alignment="0" max="32767" attributes="1"/>
-                          <Component id="joinTypeInput" alignment="0" max="32767" attributes="1"/>
-                      </Group>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="joinTypeDescriptionLabel" pref="531" max="32767" attributes="0"/>
-                  </Group>
-              </Group>
-              <EmptySpace max="-2" attributes="0"/>
-          </Group>
           <Component id="jPanel1" alignment="1" pref="684" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace min="-2" pref="257" max="-2" attributes="0"/>
@@ -68,19 +43,44 @@
               <Component id="startNodeInput" min="-2" max="-2" attributes="0"/>
               <EmptySpace pref="576" max="32767" attributes="0"/>
           </Group>
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="1" attributes="0">
+                  <Component id="guardLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="joinParamLabel" alignment="1" min="-2" max="-2" attributes="0"/>
+                  <Component id="joinTypeLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="typeLabel" min="-2" max="-2" attributes="0"/>
+                  <Component id="nodeNameLabel" min="-2" max="-2" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Component id="nodeNameInput" alignment="0" min="-2" pref="286" max="-2" attributes="1"/>
+                  <Group type="102" alignment="0" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="nodeTypeInput" alignment="0" max="32767" attributes="1"/>
+                          <Component id="joinTypeInput" alignment="0" min="-2" max="-2" attributes="1"/>
+                      </Group>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="joinTypeDescriptionLabel" pref="531" max="32767" attributes="0"/>
+                  </Group>
+                  <Component id="jScrollPane2" pref="581" max="32767" attributes="0"/>
+                  <Component id="jScrollPane1" alignment="0" pref="581" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
       <Group type="103" groupAlignment="0" attributes="0">
           <Group type="102" alignment="0" attributes="0">
-              <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="nodeNameLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="nodeNameInput" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="1" attributes="0">
-                  <Group type="102" attributes="0">
+                  <Group type="102" alignment="1" attributes="0">
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="typeLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="nodeTypeInput" min="-2" max="-2" attributes="0"/>
@@ -99,14 +99,14 @@
               </Group>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="joinParamLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="joinParamInput" alignment="0" min="-2" max="-2" attributes="0"/>
+                  <Component id="jScrollPane1" min="-2" max="-2" attributes="0"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
                   <Component id="guardLabel" min="-2" max="-2" attributes="0"/>
-                  <Component id="jScrollPane2" pref="92" max="32767" attributes="0"/>
+                  <Component id="jScrollPane2" pref="84" max="32767" attributes="0"/>
               </Group>
-              <EmptySpace min="-2" pref="1" max="-2" attributes="0"/>
+              <EmptySpace max="-2" attributes="0"/>
               <Component id="startNodeInput" min="-2" max="-2" attributes="0"/>
               <EmptySpace min="-2" pref="5" max="-2" attributes="0"/>
               <Group type="103" groupAlignment="0" attributes="0">
@@ -114,11 +114,10 @@
                       <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                       <Component id="customPropertiesLabel" min="-2" max="-2" attributes="0"/>
                       <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPane3" pref="153" max="32767" attributes="1"/>
+                      <Component id="jScrollPane3" pref="146" max="32767" attributes="1"/>
                       <EmptySpace min="-2" pref="6" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="jPanel3" min="-2" max="-2" attributes="1"/>
                       <EmptySpace min="-2" pref="37" max="-2" attributes="0"/>
                   </Group>
@@ -332,13 +331,6 @@
         </Property>
       </Properties>
     </Component>
-    <Component class="javax.swing.JTextField" name="joinParamInput">
-      <Properties>
-        <Property name="text" type="java.lang.String" editor="org.netbeans.modules.i18n.form.FormI18nStringEditor">
-          <ResourceString bundle="com/googlecode/sarasvati/editor/panel/Bundle.properties" key="NodePropertiesPanel.joinParamInput.text" replaceFormat="org.openide.util.NbBundle.getMessage({sourceFileName}.class, &quot;{key}&quot;)"/>
-        </Property>
-      </Properties>
-    </Component>
     <Component class="javax.swing.JComboBox" name="nodeTypeInput">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
@@ -369,5 +361,20 @@
         </Property>
       </Properties>
     </Component>
+    <Container class="javax.swing.JScrollPane" name="jScrollPane1">
+      <AuxValues>
+        <AuxValue name="autoScrollPane" type="java.lang.Boolean" value="true"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+      <SubComponents>
+        <Component class="javax.swing.JTextArea" name="joinParamInput">
+          <Properties>
+            <Property name="columns" type="int" value="20"/>
+            <Property name="rows" type="int" value="5"/>
+          </Properties>
+        </Component>
+      </SubComponents>
+    </Container>
   </SubComponents>
 </Form>
