@@ -98,7 +98,6 @@ public enum JoinType
                 "in the token set. The OR strategy will be used as a fallback if a non-token " +
                 "set token arrives." ),
 
-
   /**
    * Uses the {@link MergeJoinStrategy} with {@link OrJoinStrategy} as a fallback.
    * The first arc token to arrive will satisfy the join. Subsequent arc tokens
