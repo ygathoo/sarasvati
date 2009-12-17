@@ -63,8 +63,8 @@ public class LabelArcsRequired extends AbstractJoinRequirement
   @Override
   public String toString ()
   {
-    return "require all arcs " +
-           ( label == null ? "" : "labelled " + label ) +
+    return "require all arcs labelled " +
+           ( label == null ? "default" : label ) +
            (getWhenExpr() == null ? "" : " when (" + getWhenExpr() +")" );
   }
 }
