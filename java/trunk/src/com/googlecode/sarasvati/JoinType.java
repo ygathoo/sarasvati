@@ -21,7 +21,6 @@ package com.googlecode.sarasvati;
 import com.googlecode.sarasvati.impl.TokenSetOrJoinStrategy;
 import com.googlecode.sarasvati.join.AndJoinStrategy;
 import com.googlecode.sarasvati.join.ClassJoinStrategy;
-import com.googlecode.sarasvati.join.JoinLangCompiler;
 import com.googlecode.sarasvati.join.JoinLangJoinStrategy;
 import com.googlecode.sarasvati.join.LabelJoinStrategy;
 import com.googlecode.sarasvati.join.MergeJoinStrategy;
