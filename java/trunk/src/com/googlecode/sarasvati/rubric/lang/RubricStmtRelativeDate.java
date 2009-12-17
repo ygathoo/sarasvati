@@ -123,7 +123,7 @@ public class RubricStmtRelativeDate extends AbstractRubricStmt
     RubricStmtRelativeDate other = stmt.asRelativeDate();
     return other.getDateSymbolExpr().isEqualTo( dateSymbolExpr ) &&
            other.getOffset() == offset &&
-           other.getUnit() == offset;
+           other.getUnit() == unit;
   }
 
   @Override

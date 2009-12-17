@@ -26,8 +26,9 @@ import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
+import com.googlecode.sarasvati.rubric.lang.ErrorReporter;
+import com.googlecode.sarasvati.rubric.lang.ErrorReportingRubricLexer;
 import com.googlecode.sarasvati.rubric.lang.ErrorReportingRubricParser;
-import com.googlecode.sarasvati.rubric.lang.RubricLexer;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
 import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
 
@@ -79,7 +80,7 @@ import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
  *
  * @author Paul Lorenz
  */
-public class RubricInterpreter
+public class RubricCompiler
 {
   /**
    * Takes a Rubric program and returns a compiled version in the form of
@@ -94,15 +95,16 @@ public class RubricInterpreter
    */
   public static RubricStmt compile (final String rubricStatement) throws RubricException
   {
-    RubricLexer lexer = new RubricLexer( new ANTLRStringStream( rubricStatement ) );
-
-    CommonTokenStream stream = new CommonTokenStream( lexer );
-    ErrorReportingRubricParser parser = new ErrorReportingRubricParser( stream );
-
     try
     {
+      ErrorReporter errorReporter = new ErrorReporter();
+      ErrorReportingRubricLexer lexer = new ErrorReportingRubricLexer( new ANTLRStringStream( rubricStatement ), errorReporter );
+
+      CommonTokenStream stream = new CommonTokenStream( lexer );
+      ErrorReportingRubricParser parser = new ErrorReportingRubricParser( stream, errorReporter );
+
       RubricStmt stmt = parser.program().value;
-      RubricException e = parser.getError();
+      RubricException e = errorReporter.getError();
       if ( e != null )
       {
         throw e;

@@ -20,18 +20,23 @@ package com.googlecode.sarasvati.join.lang;
 
 import com.googlecode.sarasvati.rubric.lang.RubricExpr;
 
-abstract class AbstractJoinRequirementEvaluator implements JoinRequirementEvaluator
+abstract class AbstractJoinRequirementEvaluator<T extends JoinRequirement> implements JoinRequirementEvaluator
 {
   private final JoinLangEnv env;
+  private final T requirement;
 
   private Boolean applicable;
 
-  public AbstractJoinRequirementEvaluator (final JoinLangEnv env)
+  public AbstractJoinRequirementEvaluator (final JoinLangEnv env, final T requirement)
   {
     this.env = env;
+    this.requirement = requirement;
   }
 
-  protected abstract JoinRequirement getRequirement ();
+  protected T getRequirement ()
+  {
+    return requirement;
+  }
 
   protected JoinLangEnv getEnv ()
   {
@@ -46,7 +51,6 @@ abstract class AbstractJoinRequirementEvaluator implements JoinRequirementEvalua
       RubricExpr expr = getRequirement().getWhenExpr();
       applicable = expr == null ? true : expr.eval( env );
     }
-
     return applicable;
   }
 }

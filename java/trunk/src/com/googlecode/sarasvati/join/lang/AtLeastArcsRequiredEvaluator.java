@@ -24,20 +24,11 @@ import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.GraphProcess;
 
-class AtLeastArcsRequiredEvaluator extends AbstractArcsRequiredEvaluator
+class AtLeastArcsRequiredEvaluator extends AbstractArcsRequiredEvaluator<AtLeastArcsRequired>
 {
-  private final AtLeastArcsRequired requirement;
-
   public AtLeastArcsRequiredEvaluator (final JoinLangEnv env, final AtLeastArcsRequired requirement)
   {
-    super( env );
-    this.requirement = requirement;
-  }
-
-  @Override
-  protected JoinRequirement getRequirement ()
-  {
-    return requirement;
+    super( env, requirement );
   }
 
   @Override
@@ -49,6 +40,6 @@ class AtLeastArcsRequiredEvaluator extends AbstractArcsRequiredEvaluator
   @Override
   protected int getNumberOfRequiredArcs (final int numArcs)
   {
-    return Math.min( requirement.getArcsRequired(), numArcs );
+    return Math.min( getRequirement().getArcsRequired(), numArcs );
   }
 }

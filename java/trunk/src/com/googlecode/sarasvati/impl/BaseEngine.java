@@ -59,7 +59,7 @@ import com.googlecode.sarasvati.event.ProcessDefinedEventListenerInvoker;
 import com.googlecode.sarasvati.event.ProcessEvent;
 import com.googlecode.sarasvati.join.lang.JoinLangEnv;
 import com.googlecode.sarasvati.join.lang.JoinLangEnvImpl;
-import com.googlecode.sarasvati.rubric.RubricInterpreter;
+import com.googlecode.sarasvati.rubric.RubricCompiler;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricEnv;
 import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
@@ -593,7 +593,7 @@ public abstract class BaseEngine implements Engine
       return AcceptTokenGuardResult.INSTANCE;
     }
 
-    return (GuardResult) RubricInterpreter.compile( guard ).eval( newRubricEnv( token ) );
+    return (GuardResult) RubricCompiler.compile( guard ).eval( newRubricEnv( token ) );
   }
 
   @Override

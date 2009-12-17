@@ -16,9 +16,12 @@
 
     Copyright 2009 Paul Lorenz
 */
-package com.googlecode.sarasvati.join;
+package com.googlecode.sarasvati.join.lang;
 
 import org.antlr.runtime.RecognitionException;
+
+import com.googlecode.sarasvati.join.JoinLangCompilationException;
+import com.googlecode.sarasvati.join.JoinLangException;
 
 public class ErrorReporter
 {

@@ -23,13 +23,13 @@ import java.util.Set;
 
 import com.googlecode.sarasvati.ArcToken;
 
-public abstract class MultiTokenRequirementEvaluator extends AbstractJoinRequirementEvaluator
+public abstract class MultiTokenRequirementEvaluator<T extends JoinRequirement> extends AbstractJoinRequirementEvaluator<T>
 {
   private Collection<ArcToken> joinTokens;
 
-  public MultiTokenRequirementEvaluator (final JoinLangEnv env)
+  public MultiTokenRequirementEvaluator (final JoinLangEnv env, final T requirement)
   {
-    super( env );
+    super( env, requirement );
   }
 
   protected void includeTokens (final Collection<ArcToken> tokens)

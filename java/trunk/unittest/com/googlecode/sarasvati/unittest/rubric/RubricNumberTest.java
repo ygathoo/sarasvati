@@ -23,7 +23,7 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.googlecode.sarasvati.rubric.RubricInterpreter;
+import com.googlecode.sarasvati.rubric.RubricCompiler;
 import com.googlecode.sarasvati.unittest.framework.TestRubricEnv;
 
 public class RubricNumberTest
@@ -34,7 +34,7 @@ public class RubricNumberTest
     String script="1";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricInterpreter.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }
@@ -45,7 +45,7 @@ public class RubricNumberTest
     String script="-10000";
     System.out.println( "SCRIPT: " + script );
 
-    Object result = RubricInterpreter.compile( script ).eval( TestRubricEnv.INSTANCE );
+    Object result = RubricCompiler.compile( script ).eval( TestRubricEnv.INSTANCE );
 
     Assert.assertEquals( expected, result );
   }

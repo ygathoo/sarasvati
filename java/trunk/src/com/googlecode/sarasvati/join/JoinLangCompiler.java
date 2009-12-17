@@ -23,6 +23,9 @@ import org.antlr.runtime.ANTLRStringStream;
 import org.antlr.runtime.CommonTokenStream;
 import org.antlr.runtime.RecognitionException;
 
+import com.googlecode.sarasvati.join.lang.ErrorReporter;
+import com.googlecode.sarasvati.join.lang.ErrorReportingJoinLangLexer;
+import com.googlecode.sarasvati.join.lang.ErrorReportingJoinLangParser;
 import com.googlecode.sarasvati.join.lang.JoinLangExpr;
 import com.googlecode.sarasvati.rubric.env.RubricEnv;
 import com.googlecode.sarasvati.rubric.lang.RubricStmt;
@@ -86,7 +89,7 @@ import com.googlecode.sarasvati.rubric.visitor.RubricVisitor;
  *
  * @author Paul Lorenz
  */
-public class JoinLangInterpreter
+public class JoinLangCompiler
 {
   /**
    * Takes a JoinLang program and returns a compiled version in the form of

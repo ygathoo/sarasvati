@@ -24,7 +24,7 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import com.googlecode.sarasvati.join.JoinLangCompilationException;
-import com.googlecode.sarasvati.join.JoinLangInterpreter;
+import com.googlecode.sarasvati.join.JoinLangCompiler;
 import com.googlecode.sarasvati.join.lang.AllArcsRequired;
 import com.googlecode.sarasvati.join.lang.AndJoinExpr;
 import com.googlecode.sarasvati.join.lang.AtLeastArcsRequired;
@@ -49,7 +49,7 @@ public class JoinLangCompilerTest
     String script = "require node \"foo\"";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -62,7 +62,7 @@ public class JoinLangCompilerTest
     String script = "require node \"foo\" when Order.isExpedited";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( "Result does not match expected", expr.isEqualTo( result ) );
   }
 
@@ -76,7 +76,7 @@ public class JoinLangCompilerTest
 
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( "Result does not match expected", expr.isEqualTo( result ) );
   }
 
@@ -97,7 +97,7 @@ public class JoinLangCompilerTest
 
     System.out.println( "SCRIPT:\n " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     System.out.println( "Expected:\n"+ expr );
     System.out.println( "Result:\n" + result );
     Assert.assertTrue( "Result does not match expected", expr.isEqualTo( result ) );
@@ -122,7 +122,7 @@ public class JoinLangCompilerTest
 
     System.out.println( "SCRIPT:\n " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     System.out.println( "Expected:\n"+ orExpr );
     System.out.println( "Result:\n" + result );
     Assert.assertTrue( "Result does not match expected", orExpr.isEqualTo( result ) );
@@ -135,7 +135,7 @@ public class JoinLangCompilerTest
     String script = "require tokenset \"foo\"";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -148,7 +148,7 @@ public class JoinLangCompilerTest
     String script = "require tokenset \"foo\" when Order.isExpedited";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -159,7 +159,7 @@ public class JoinLangCompilerTest
     String script = "require all arcs";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -172,7 +172,7 @@ public class JoinLangCompilerTest
     String script = "require all arcs when Order.isExpedited";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -183,7 +183,7 @@ public class JoinLangCompilerTest
     String script = "require all arcs labelled \"foo\"";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -196,7 +196,7 @@ public class JoinLangCompilerTest
     String script = "require all arcs labelled \"foo\" when Order.isExpedited";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -207,7 +207,7 @@ public class JoinLangCompilerTest
     String script = "require all arcs labelled default";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -220,7 +220,7 @@ public class JoinLangCompilerTest
     String script = "require all arcs labelled default when Order.isExpedited";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -231,7 +231,7 @@ public class JoinLangCompilerTest
     String script = "require at least 3 arcs";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -241,7 +241,7 @@ public class JoinLangCompilerTest
     String script = "require at least 0 arcs";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangInterpreter.compile( script );
+    JoinLangCompiler.compile( script );
   }
 
   @Test (expected=JoinLangCompilationException.class)
@@ -250,7 +250,7 @@ public class JoinLangCompilerTest
     String script = "require at least -1 arcs";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangInterpreter.compile( script );
+    JoinLangCompiler.compile( script );
   }
 
   @Test public void testRequireAtLeastArcsWithWhen ()
@@ -262,7 +262,7 @@ public class JoinLangCompilerTest
     String script = "require at least 4 arcs when Order.isExpedited";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -273,7 +273,7 @@ public class JoinLangCompilerTest
     String script = "require at least 5 arcs labelled \"foo\"";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -286,7 +286,7 @@ public class JoinLangCompilerTest
     String script = "require at least 6 arcs labelled \"foo\" when Order.isExpedited";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -297,7 +297,7 @@ public class JoinLangCompilerTest
     String script = "require at least 20 arcs labelled default";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
@@ -310,7 +310,7 @@ public class JoinLangCompilerTest
     String script = "require at least 1 arcs labelled default when Order.isExpedited";
     System.out.println( "SCRIPT: " + script );
 
-    JoinLangExpr result = JoinLangInterpreter.compile( script );
+    JoinLangExpr result = JoinLangCompiler.compile( script );
     Assert.assertTrue( expr.isEqualTo( result ) );
   }
 
