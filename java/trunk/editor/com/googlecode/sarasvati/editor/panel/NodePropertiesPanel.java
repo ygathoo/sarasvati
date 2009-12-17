@@ -81,9 +81,10 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
         joinTypeLabel = new javax.swing.JLabel();
         joinTypeInput = new javax.swing.JComboBox();
         joinParamLabel = new javax.swing.JLabel();
-        joinParamInput = new javax.swing.JTextField();
         nodeTypeInput = new javax.swing.JComboBox();
         joinTypeDescriptionLabel = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        joinParamInput = new javax.swing.JTextArea();
 
         setForeground(new java.awt.Color(53, 53, 53));
         setMinimumSize(new java.awt.Dimension(200, 100));
@@ -157,8 +158,6 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
         joinParamLabel.setText(org.openide.util.NbBundle.getMessage(NodePropertiesPanel.class, "NodePropertiesPanel.joinParamLabel.text")); // NOI18N
 
-        joinParamInput.setText(org.openide.util.NbBundle.getMessage(NodePropertiesPanel.class, "NodePropertiesPanel.joinParamInput.text")); // NOI18N
-
         nodeTypeInput.setModel(getNodeTypesModel());
 
         joinTypeDescriptionLabel.setForeground(new java.awt.Color(102, 102, 102));
@@ -166,31 +165,15 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
         joinTypeDescriptionLabel.setVerticalAlignment(javax.swing.SwingConstants.TOP);
         joinTypeDescriptionLabel.setBorder(javax.swing.BorderFactory.createCompoundBorder(javax.swing.BorderFactory.createEtchedBorder(), javax.swing.BorderFactory.createEmptyBorder(4, 4, 4, 4)));
 
+        joinParamInput.setColumns(20);
+        joinParamInput.setRows(5);
+        jScrollPane1.setViewportView(joinParamInput);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(guardLabel)
-                    .addComponent(joinParamLabel)
-                    .addComponent(joinTypeLabel)
-                    .addComponent(typeLabel)
-                    .addComponent(nodeNameLabel))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
-                    .addComponent(joinParamInput, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
-                    .addComponent(nodeNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(nodeTypeInput, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(joinTypeInput, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(joinTypeDescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE)))
-                .addContainerGap())
             .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 684, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGap(257, 257, 257)
@@ -206,11 +189,31 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
                 .addGap(18, 18, 18)
                 .addComponent(startNodeInput)
                 .addContainerGap(576, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(guardLabel)
+                    .addComponent(joinParamLabel)
+                    .addComponent(joinTypeLabel)
+                    .addComponent(typeLabel)
+                    .addComponent(nodeNameLabel))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(nodeNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(nodeTypeInput, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(joinTypeInput, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(joinTypeDescriptionLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 531, Short.MAX_VALUE))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 581, Short.MAX_VALUE))
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(23, 23, 23)
+                .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(nodeNameLabel)
                     .addComponent(nodeNameInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -230,12 +233,12 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)))
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(joinParamLabel)
-                    .addComponent(joinParamInput, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(guardLabel)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE))
-                .addGap(1, 1, 1)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 84, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(startNodeInput)
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -243,10 +246,9 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
                         .addGap(17, 17, 17)
                         .addComponent(customPropertiesLabel)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 153, Short.MAX_VALUE)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
                         .addGap(6, 6, 6))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(37, 37, 37)))
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -268,10 +270,11 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
     private javax.swing.JLabel guardLabel;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel3;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JSeparator jSeparator1;
-    private javax.swing.JTextField joinParamInput;
+    private javax.swing.JTextArea joinParamInput;
     private javax.swing.JLabel joinParamLabel;
     private javax.swing.JLabel joinTypeDescriptionLabel;
     private javax.swing.JComboBox joinTypeInput;
