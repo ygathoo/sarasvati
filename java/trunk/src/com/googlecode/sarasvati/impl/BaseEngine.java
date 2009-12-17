@@ -149,6 +149,11 @@ public abstract class BaseEngine implements Engine
   @Override
   public GraphProcess startProcess (final Graph graph)
   {
+    if ( graph == null )
+    {
+      throw new NullPointerException( "Can not start process for a null graph" );
+    }
+
     GraphProcess process = getFactory().newProcess( graph );
     ProcessEvent.fireCreatedEvent( this, process );
     startProcess( process );
