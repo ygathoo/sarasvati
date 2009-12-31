@@ -67,7 +67,7 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-3.2.6.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-annotations-3.3.1.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/hibernate-commons-annotations-3.3.1.jar"/>
-        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/jboss-j2ee.jar"/>
+        <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/jta-1.1.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/org-openide-util.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/org-netbeans-api-visual.jar"/>
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/org-netbeans-api-visual-src.jar"/>

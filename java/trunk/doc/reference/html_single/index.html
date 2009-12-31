@@ -1,5 +1,5 @@
-<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Sarasvati - Simple, Capable and Transparent Workflow</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.1"><link rel="home" href="#id372396" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="next" href="#what-is-workflow" title="Chapter 1. What is workflow"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" title="Sarasvati - Simple, Capable and Transparent Workflow"><div class="titlepage"><div><div><h1 class="title"><a name="id372396"></a>Sarasvati - Simple, Capable and Transparent Workflow</h1></div><div><h2 class="subtitle">Reference Manual</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Paul</span> <span class="surname">Lorenz</span></h3></div></div></div><div><p class="releaseinfo">1.0.0-rc3
-    </p></div><div><p class="copyright">Copyright © 2008-2009 Paul Lorenz</p></div><div><p class="pubdate">2009-06-28</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#what-is-workflow">1. What is workflow</a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-definitions">Definitions </a></span></dt><dt><span class="section"><a href="#what-is-workflow-why-workflow">Why workflow?</a></span></dt><dt><span class="section"><a href="#what-is-workflow-examples">Examples </a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-example-one">Example 1: Order Fulfillment</a></span></dt><dt><span class="section"><a href="#what-is-workflow-example-two">Example 2: Document conversion</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#why-graph-based-workflow">2. Why graph based workflow?</a></span></dt><dd><dl><dt><span class="section"><a href="#id388125">Graphs and Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#why-graph-based-alternatives">Alternatives </a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#core-concepts">3. Core Concepts</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-intro">Introduction</a></span></dt><dt><span class="section"><a href="#concepts-definitions">Definitions</a></span></dt><dt><span class="section"><a href="#concepts-execution">Sarasvati Graph Execution </a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-legend">Legend </a></span></dt><dt><span class="section"><a href="#concepts-single-node">Single Node </a></span></dt><dt><span class="section"><a href="#concepts-two-nodes">Two Nodes</a></span></dt><dt><span class="section"><a href="#concepts-split-join-with-wait-states">Split and Join with Wait States</a></span></dt><dt><span class="section"><a href="#concepts-multithreading">Multithreading</a></span></dt><dt><span class="section"><a href="#concepts-split-join-without-wait-states">Split and Join without Wait States</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-skip">Flow Control with Guards using Skip</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-discard">Flow Control with Guards using Discard</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-guards-named-arcs">Flow Control with Guards using Named Arcs</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-completion-named-arcs">Flow Control from Node Completion using Named Arcs</a></span></dt></dl></dd><dt><span class="section"><a href="#concepts-graph-composition-nested-processes">Graph Composition and Nested Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-graph-composition-example-one">Graph Composition Example One</a></span></dt><dt><span class="section"><a href="#concepts-graph-composition-example-two">Graph Composition Example Two</a></span></dt><dt><span class="section"><a href="#concepts-nested-processes-example-one">Nested Processes Example</a></span></dt></dl></dd><dt><span class="section"><a href="#concepts-execution-environment">Execution Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-process-attributes">Process Attributes</a></span></dt><dt><span class="section"><a href="#concepts-token-attributes">Token Attributes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#using-sarasvati">4. Using Sarasvati</a></span></dt><dd><dl><dt><span class="section"><a href="#using-intro">Introduction</a></span></dt><dt><span class="section"><a href="#using-file-format"> Sarasvati File Format</a></span></dt><dd><dl><dt><span class="section"><a href="#using-file-format-intro">Introduction </a></span></dt><dt><span class="section"><a href="#using-process-definition-element">Process Definition</a></span></dt><dt><span class="section"><a href="#using-node-element">Nodes</a></span></dt><dt><span class="section"><a href="#using-node-arc-element">Node Arcs</a></span></dt><dt><span class="section"><a href="#using-external-element">Externals</a></span></dt><dt><span class="section"><a href="#using-external-arc-element">External arcs</a></span></dt></dl></dd><dt><span class="section"><a href="#using-api-engine">The Sarasvati Engine</a></span></dt><dt><span class="section"><a href="#using-api-loading">Loading Process Definitions</a></span></dt><dd><dl><dt><span class="section"><a href="#using-java-api-interfaces">Interfaces</a></span></dt><dt><span class="section"><a href="#using-flow-of-execution">Flow of Execution</a></span></dt><dt><span class="section"><a href="#using-custom-logic-node-execution">Custom logic for Node Execution</a></span></dt><dt><span class="section"><a href="#using-custom-attributes">Custom Attributes</a></span></dt><dt><span class="section"><a href="#using-java-api-custom-loader">Custom Loader</a></span></dt><dt><span class="section"><a href="#using-java-api-env">Environment</a></span></dt><dt><span class="section"><a href="#using-java-api-listeners">Execution Listeners</a></span></dt><dt><span class="section"><a href="#using-java-api-backtracking">Backtracking</a></span></dt><dt><span class="section"><a href="#using-java-api-pdv">Process Definition Visualization</a></span></dt><dt><span class="section"><a href="#using-java-api-pv">Process Visualization</a></span></dt><dt><span class="section"><a href="#using-java-api-graph-validator">Graph Validation</a></span></dt><dt><span class="section"><a href="#using-java-api-token-sets">Token Sets/Templates</a></span></dt></dl></dd></dl></dd></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>4.1. <a href="#id426800">Linear Process Definition</a></dt><dt>4.2. <a href="#id426816"></a></dt><dt>4.3. <a href="#id426830">Manual Linear Backtracking</a></dt><dt>4.4. <a href="#id426846">Manual Linear Backtracking: Execution</a></dt><dt>4.5. <a href="#id426885"></a></dt><dt>4.6. <a href="#id426900"></a></dt><dt>4.7. <a href="#id426938"></a></dt><dt>4.8. <a href="#id426957"></a></dt><dt>4.9. <a href="#id426997"></a></dt><dt>4.10. <a href="#id427027"></a></dt><dt>4.11. <a href="#id427057">Manual Backtracking Split/Join</a></dt><dt>4.12. <a href="#id427092"></a></dt><dt>4.13. <a href="#id427107"></a></dt><dt>4.14. <a href="#id427142"></a></dt><dt>4.15. <a href="#id427179"></a></dt><dt>4.16. <a href="#id427215"></a></dt><dt>4.17. <a href="#id427236"></a></dt><dt>4.18. <a href="#id427251"></a></dt><dt>4.19. <a href="#id427344"></a></dt><dt>4.20. <a href="#id427367"></a></dt><dt>4.21. <a href="#id427633">Process Definition Visualization Screenshot</a></dt><dt>4.22. <a href="#id442525">Process Visualization Screenshot</a></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id392966"><code class="literal">process-definition</code> attributes</a></dt><dt>4.2. <a href="#id408170"><code class="literal">process-definition</code> nested elements</a></dt><dt>4.3. <a href="#id427807"><code class="literal">node</code> attributes</a></dt><dt>4.4. <a href="#id411139"><code class="literal">node</code> nested elements</a></dt><dt>4.5. <a href="#id430651"><code class="literal">node</code> join types</a></dt><dt>4.6. <a href="#id431002"><code class="literal">arc</code> attributes</a></dt><dt>4.7. <a href="#id431274"><code class="literal">external</code> attributes</a></dt><dt>4.8. <a href="#id431367"><code class="literal">external</code> nested elements</a></dt><dt>4.9. <a href="#id431472"><code class="literal">arc</code> attributes</a></dt><dt>4.10. <a href="#id431755">Engine Implementations</a></dt><dt>4.11. <a href="#id426173">Environment Attribute Types</a></dt></dl></div><div class="chapter" title="Chapter 1. What is workflow"><div class="titlepage"><div><div><h2 class="title"><a name="what-is-workflow"></a>Chapter 1. What is workflow</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#what-is-workflow-definitions">Definitions </a></span></dt><dt><span class="section"><a href="#what-is-workflow-why-workflow">Why workflow?</a></span></dt><dt><span class="section"><a href="#what-is-workflow-examples">Examples </a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-example-one">Example 1: Order Fulfillment</a></span></dt><dt><span class="section"><a href="#what-is-workflow-example-two">Example 2: Document conversion</a></span></dt></dl></dd></dl></div><p>
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1"><title>Sarasvati - Simple, Capable and Transparent Workflow</title><link rel="stylesheet" href="../docbook.css" type="text/css"><meta name="generator" content="DocBook XSL Stylesheets V1.75.1"><link rel="home" href="#id466331" title="Sarasvati - Simple, Capable and Transparent Workflow"><link rel="next" href="#what-is-workflow" title="Chapter 1. What is workflow"></head><body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF"><div class="book" title="Sarasvati - Simple, Capable and Transparent Workflow"><div class="titlepage"><div><div><h1 class="title"><a name="id466331"></a>Sarasvati - Simple, Capable and Transparent Workflow</h1></div><div><h2 class="subtitle">Reference Manual</h2></div><div><div class="authorgroup"><div class="author"><h3 class="author"><span class="firstname">Paul</span> <span class="surname">Lorenz</span></h3></div></div></div><div><p class="releaseinfo">1.0.0-rc3
+    </p></div><div><p class="copyright">Copyright © 2008-2009 Paul Lorenz</p></div><div><p class="pubdate">2009-06-28</p></div></div><hr></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="chapter"><a href="#what-is-workflow">1. What is workflow</a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-definitions">Definitions </a></span></dt><dt><span class="section"><a href="#what-is-workflow-why-workflow">Why workflow?</a></span></dt><dt><span class="section"><a href="#what-is-workflow-examples">Examples </a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-example-one">Example 1: Order Fulfillment</a></span></dt><dt><span class="section"><a href="#what-is-workflow-example-two">Example 2: Document conversion</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#why-graph-based-workflow">2. Why graph based workflow?</a></span></dt><dd><dl><dt><span class="section"><a href="#id480540">Graphs and Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#why-graph-based-alternatives">Alternatives </a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#core-concepts">3. Core Concepts</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-intro">Introduction</a></span></dt><dt><span class="section"><a href="#concepts-definitions">Definitions</a></span></dt><dt><span class="section"><a href="#concepts-execution">Sarasvati Graph Execution </a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-legend">Legend </a></span></dt><dt><span class="section"><a href="#concepts-single-node">Single Node </a></span></dt><dt><span class="section"><a href="#concepts-two-nodes">Two Nodes</a></span></dt><dt><span class="section"><a href="#concepts-split-join-with-wait-states">Split and Join with Wait States</a></span></dt><dt><span class="section"><a href="#concepts-multithreading">Multithreading</a></span></dt><dt><span class="section"><a href="#concepts-split-join-without-wait-states">Split and Join without Wait States</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-skip">Flow Control with Guards using Skip</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-discard">Flow Control with Guards using Discard</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-guards-named-arcs">Flow Control with Guards using Named Arcs</a></span></dt><dt><span class="section"><a href="#concepts-flow-control-completion-named-arcs">Flow Control from Node Completion using Named Arcs</a></span></dt></dl></dd><dt><span class="section"><a href="#concepts-graph-composition-nested-processes">Graph Composition and Nested Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-graph-composition-example-one">Graph Composition Example One</a></span></dt><dt><span class="section"><a href="#concepts-graph-composition-example-two">Graph Composition Example Two</a></span></dt><dt><span class="section"><a href="#concepts-nested-processes-example-one">Nested Processes Example</a></span></dt></dl></dd><dt><span class="section"><a href="#concepts-execution-environment">Execution Environment</a></span></dt><dd><dl><dt><span class="section"><a href="#concepts-process-attributes">Process Attributes</a></span></dt><dt><span class="section"><a href="#concepts-token-attributes">Token Attributes</a></span></dt></dl></dd></dl></dd><dt><span class="chapter"><a href="#using-sarasvati">4. Using Sarasvati</a></span></dt><dd><dl><dt><span class="section"><a href="#using-intro">Introduction</a></span></dt><dt><span class="section"><a href="#using-file-format"> Sarasvati File Format</a></span></dt><dd><dl><dt><span class="section"><a href="#using-file-format-intro">Introduction </a></span></dt><dt><span class="section"><a href="#using-process-definition-element">Process Definition</a></span></dt><dt><span class="section"><a href="#using-node-element">Nodes</a></span></dt><dt><span class="section"><a href="#using-node-arc-element">Node Arcs</a></span></dt><dt><span class="section"><a href="#using-external-element">Externals</a></span></dt><dt><span class="section"><a href="#using-external-arc-element">External arcs</a></span></dt></dl></dd><dt><span class="section"><a href="#using-api-engine">The Sarasvati Engine</a></span></dt><dt><span class="section"><a href="#using-api-loading">Loading Process Definitions</a></span></dt><dd><dl><dt><span class="section"><a href="#using-java-api-interfaces">Interfaces</a></span></dt><dt><span class="section"><a href="#using-flow-of-execution">Flow of Execution</a></span></dt><dt><span class="section"><a href="#using-custom-logic-node-execution">Custom logic for Node Execution</a></span></dt><dt><span class="section"><a href="#using-custom-attributes">Custom Attributes</a></span></dt><dt><span class="section"><a href="#using-java-api-custom-loader">Custom Loader</a></span></dt><dt><span class="section"><a href="#using-java-api-env">Environment</a></span></dt><dt><span class="section"><a href="#using-java-api-listeners">Execution Listeners</a></span></dt><dt><span class="section"><a href="#using-java-api-backtracking">Backtracking</a></span></dt><dt><span class="section"><a href="#using-java-api-pdv">Process Definition Visualization</a></span></dt><dt><span class="section"><a href="#using-java-api-pv">Process Visualization</a></span></dt><dt><span class="section"><a href="#using-java-api-graph-validator">Graph Validation</a></span></dt><dt><span class="section"><a href="#using-java-api-token-sets">Token Sets/Templates</a></span></dt></dl></dd></dl></dd></dl></div><div class="list-of-figures"><p><b>List of Figures</b></p><dl><dt>4.1. <a href="#id519255">Linear Process Definition</a></dt><dt>4.2. <a href="#id519270"></a></dt><dt>4.3. <a href="#id519284">Manual Linear Backtracking</a></dt><dt>4.4. <a href="#id519300">Manual Linear Backtracking: Execution</a></dt><dt>4.5. <a href="#id519335"></a></dt><dt>4.6. <a href="#id519350"></a></dt><dt>4.7. <a href="#id519387"></a></dt><dt>4.8. <a href="#id519403"></a></dt><dt>4.9. <a href="#id519437"></a></dt><dt>4.10. <a href="#id519463"></a></dt><dt>4.11. <a href="#id519493">Manual Backtracking Split/Join</a></dt><dt>4.12. <a href="#id519529"></a></dt><dt>4.13. <a href="#id519543"></a></dt><dt>4.14. <a href="#id519578"></a></dt><dt>4.15. <a href="#id519610"></a></dt><dt>4.16. <a href="#id519642"></a></dt><dt>4.17. <a href="#id519664"></a></dt><dt>4.18. <a href="#id519678"></a></dt><dt>4.19. <a href="#id519766"></a></dt><dt>4.20. <a href="#id519785"></a></dt><dt>4.21. <a href="#id520046">Process Definition Visualization Screenshot</a></dt><dt>4.22. <a href="#id536162">Process Visualization Screenshot</a></dt></dl></div><div class="list-of-tables"><p><b>List of Tables</b></p><dl><dt>4.1. <a href="#id501176"><code class="literal">process-definition</code> attributes</a></dt><dt>4.2. <a href="#id507030"><code class="literal">process-definition</code> nested elements</a></dt><dt>4.3. <a href="#id503831"><code class="literal">node</code> attributes</a></dt><dt>4.4. <a href="#id479536"><code class="literal">node</code> nested elements</a></dt><dt>4.5. <a href="#id479631"><code class="literal">node</code> join types</a></dt><dt>4.6. <a href="#id523059"><code class="literal">arc</code> attributes</a></dt><dt>4.7. <a href="#id523332"><code class="literal">external</code> attributes</a></dt><dt>4.8. <a href="#id523425"><code class="literal">external</code> nested elements</a></dt><dt>4.9. <a href="#id523530"><code class="literal">arc</code> attributes</a></dt><dt>4.10. <a href="#id523806">Engine Implementations</a></dt><dt>4.11. <a href="#id518628">Environment Attribute Types</a></dt></dl></div><div class="chapter" title="Chapter 1. What is workflow"><div class="titlepage"><div><div><h2 class="title"><a name="what-is-workflow"></a>Chapter 1. What is workflow</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#what-is-workflow-definitions">Definitions </a></span></dt><dt><span class="section"><a href="#what-is-workflow-why-workflow">Why workflow?</a></span></dt><dt><span class="section"><a href="#what-is-workflow-examples">Examples </a></span></dt><dd><dl><dt><span class="section"><a href="#what-is-workflow-example-one">Example 1: Order Fulfillment</a></span></dt><dt><span class="section"><a href="#what-is-workflow-example-two">Example 2: Document conversion</a></span></dt></dl></dd></dl></div><p>
     To help understand what workflow is, we start with definitions of
     the main components of a workflow system.
   </p><div class="section" title="Definitions"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="what-is-workflow-definitions"></a>Definitions </h2></div></div></div><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
@@ -111,7 +111,7 @@
               business.
             </p></li></ol></div><p>
           Graphically, the process could be represented as follows:
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/example1.jpg" width="100%"></td></tr></table></div></div></div></div><div class="section" title="Example 2: Document conversion"><div class="titlepage"><div><div><h3 class="title"><a name="what-is-workflow-example-two"></a>Example 2: Document conversion</h3></div></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/example1.jpg"></div></div></div></div><div class="section" title="Example 2: Document conversion"><div class="titlepage"><div><div><h3 class="title"><a name="what-is-workflow-example-two"></a>Example 2: Document conversion</h3></div></div></div><p>
         This scenario concerns a news aggregation company called NewsCO
         which takes in news from various sources and republishes it in a variety of
         formats. Here we will look at a simplified workflow which handles
@@ -160,7 +160,7 @@
                   published web article.
                 </p></li></ol></div></li></ol></div><p>
           Graphically, the process could be represented as follows:
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/example2.jpg" width="100%"></td></tr></table></div></div></div></div></div></div><div class="chapter" title="Chapter 2. Why graph based workflow?"><div class="titlepage"><div><div><h2 class="title"><a name="why-graph-based-workflow"></a>Chapter 2. Why graph based workflow?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#id388125">Graphs and Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#why-graph-based-alternatives">Alternatives </a></span></dt></dl></dd></dl></div><div class="section" title="Graphs and Processes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id388125"></a>Graphs and Processes</h2></div></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/example2.jpg"></div></div></div></div></div></div><div class="chapter" title="Chapter 2. Why graph based workflow?"><div class="titlepage"><div><div><h2 class="title"><a name="why-graph-based-workflow"></a>Chapter 2. Why graph based workflow?</h2></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#id480540">Graphs and Processes</a></span></dt><dd><dl><dt><span class="section"><a href="#why-graph-based-alternatives">Alternatives </a></span></dt></dl></dd></dl></div><div class="section" title="Graphs and Processes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="id480540"></a>Graphs and Processes</h2></div></div></div><p>
       Graphs have been used for a long time to visually represent processes. Some
       examples are:
     </p><div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem"><p>
@@ -285,7 +285,7 @@
         execution. Not all the symbols will make sense immediately, but
         they will all be explained.
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/legend.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/legend.jpg"></div></div><p>
       </p></div><div class="section" title="Single Node"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-single-node"></a>Single Node </h3></div></div></div><p>
         The simplest useful process definition would consist of a simple node.
         Here is the graphical representation:
@@ -457,7 +457,7 @@
 
         The process looks like:
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3.jpg"></div></div><p>
       </p><p>
         This a simplified system, since it does not allow approvals to be
         denied.
@@ -502,7 +502,7 @@
         completed the task, the token will be in a wait state. During
         this time the process will look like:
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-1.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-1.jpg"></div></div><p>
       </p><p>
         <span class="emphasis"><em>Question:</em></span>
         What happens once the
@@ -534,20 +534,20 @@
         outgoing arcs. First a node token will be generated on the upper
         arc (though order of arc execution is not guaranteed).
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-2.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-2.jpg"></div></div><p>
       </p><p>
         This arc leads to a node which can be executed. The arc token
         will be completed and a node token will be placed in the
         <span class="emphasis"><em>Approval 1</em></span>
         node.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-3.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-3.jpg"></div></div><p>
       </p><p>
         Here the node token will enter a wait state. Since no further execution
         can take place here, an arc token will now be generated on the
         second outgoing arc.
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-4.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-4.jpg"></div></div><p>
       </p><p>
         Again, since node
         <span class="emphasis"><em>Approval 2</em></span>
@@ -555,7 +555,7 @@
         a node token will be created. It will also enter into a wait
         state once the notification to the user has been created.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-5.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-5.jpg"></div></div><p>
       </p><p>
         At some point one of the approvals will be completed. Let's say
         that it's
@@ -563,7 +563,7 @@
         . This will mark the node token complete and generate an arc
         token on the outgoing arc.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-6.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-6.jpg"></div></div><p>
       </p><p>
         Now the engine will see if the
         <span class="emphasis"><em>Grant</em></span>
@@ -587,7 +587,7 @@
         <span class="emphasis"><em>Approval 1</em></span>
         is completed. This generates an arc token on the outgoing node.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-7.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-7.jpg"></div></div><p>
       </p><p>
         Now when the engine tries to execute
         <span class="emphasis"><em>Grant</em></span>
@@ -596,14 +596,14 @@
         <span class="emphasis"><em>Grant</em></span>
         .
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-8.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-8.jpg"></div></div><p>
       </p><p>
         Once the
         <span class="emphasis"><em>Grant</em></span>
         task is finished, its node token will also be completed and the
         process will be complete.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-9.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-9.jpg"></div></div><p>
       </p></div><div class="section" title="Multithreading"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-multithreading"></a>Multithreading</h3></div></div></div><p>
         As seen the previous example, a process may have multiple tokens
         active concurrently. Does this imply that each token executes in
@@ -628,13 +628,13 @@
         <span class="emphasis"><em>Approval 1</em></span>
         is executing.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-3.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-3.jpg"></div></div><p>
       </p><p>
         Previously, the node token went into a wait state. This time, the approval is
         done synchronously and the token will be completed. This will
         generate an arc token on the outgoing arc.
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-10.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-10.jpg"></div></div><p>
       </p><p>
         Again, the <span class="emphasis"><em>Grant</em></span>
         node is using the label-and join strategy, so it will wait for an arc token on the
@@ -643,18 +643,18 @@
         <span class="emphasis"><em>Request</em></span>
         .
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-11.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-11.jpg"></div></div><p>
       </p><p>
         Execution will continue into
         <span class="emphasis"><em>Approval 2</em></span>
         .
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-12.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-12.jpg"></div></div><p>
       </p><p>
         This execution will also finish synchronously and an arc token will be
         generated on the outgoing arc.
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-13.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-13.jpg"></div></div><p>
       </p><p>
         Execution will finish as before now that all required incoming arcs have
         tokens on them.
@@ -671,13 +671,13 @@
         Let us pick up execution after the request has been entered and an arc
         token generated on the upper arc:
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-2.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-2.jpg"></div></div><p>
       </p><p>
         Now the node token will be generated in
         <span class="emphasis"><em>Approval 1</em></span>
         .
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-3.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-3.jpg"></div></div><p>
       </p><p>
         However, remember that this does
         <span class="emphasis"><em>not</em></span>
@@ -703,7 +703,7 @@
         is not required. The node token will marked as having skipped
         the node, and execution will continue on the outgoing arc.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts3-16.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts3-16.jpg"></div></div><p>
       </p></div><div class="section" title="Flow Control with Guards using Discard"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-discard"></a>Flow Control with Guards using Discard</h3></div></div></div><p>
         Having seen Skip, let us examine how to use the Discard response from
         guards. The same basic process definition is used, only this
@@ -711,7 +711,7 @@
       </p><p>
         The graph now looks like:
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts4.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts4.jpg"></div></div><p>
       </p><p>
         Because we are using discard, only one token will reach
         <span class="emphasis"><em>Grant</em></span>. This is why the <span class="emphasis"><em>Grant</em></span>
@@ -720,7 +720,7 @@
         Execution begins as normal. We pick up execution where a node
         token has been generated in <span class="emphasis"><em>Approval 1</em></span>.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts4-3.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts4-3.jpg"></div></div><p>
       </p><p>
         In this case, the guard determines that
         <span class="emphasis"><em>Approval 1</em></span>
@@ -737,7 +737,7 @@
           </p></li></ul></div><p>
         The process now looks like:
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts4-4.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts4-4.jpg"></div></div><p>
       </p><p>
         The node token has been discarded, and execution has continued
         from the completion of
@@ -745,21 +745,21 @@
         where an arc token has been generated on the lower outgoing arc.
         Execution will now continue.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts4-5.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts4-5.jpg"></div></div><p>
       </p><p>
         <span class="emphasis"><em>Approval 2</em></span>
         will accept its node token and will continue normally.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts4-6.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts4-6.jpg"></div></div><p>
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts4-7.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts4-7.jpg"></div></div><p>
       </p><p>
         Remember, because
         <span class="emphasis"><em>Grant</em></span>
         is using the <span class="emphasis"><em>or join strategy</em></span>, it will have a node token generated on
         it as soon as any arc tokens arrived.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts4-8.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts4-8.jpg"></div></div><p>
       </p></div><div class="section" title="Flow Control with Guards using Named Arcs"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-guards-named-arcs"></a>Flow Control with Guards using Named Arcs</h3></div></div></div><p>
         This same basic process could be implemented using a guard which returns
         Skip along with an arc name.
@@ -771,13 +771,13 @@
         . This node has no functionality, it only exists to give the
         guard a place to run.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts5.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts5.jpg"></div></div><p>
       </p><p>
         Let us pick it up after process started, as
         <span class="emphasis"><em>Select</em></span>
         has a node token generated on it, and its guard is invoked.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts5-3.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts5-3.jpg"></div></div><p>
       </p><p>
         The
         <span class="emphasis"><em>Select</em></span>
@@ -794,7 +794,7 @@
         <span class="emphasis"><em>two</em></span>
         (of which is there only one in this case).
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts5-4.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts5-4.jpg"></div></div><p>
       </p><p>
         From here execution continues as normal.
 </p></div><div class="section" title="Flow Control from Node Completion using Named Arcs"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-flow-control-completion-named-arcs"></a>Flow Control from Node Completion using Named Arcs</h3></div></div></div><p>
@@ -803,7 +803,7 @@
         arcs with that name. So the previous example could also be
         implemented like this:
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts6.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts6.jpg"></div></div><p>
       </p><p>
         Instead of using the guard on the
         <span class="emphasis"><em>Select</em></span>
@@ -811,13 +811,13 @@
         <span class="emphasis"><em>Request</em></span>
         node will specify which arc to exit on.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts6-1.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts6-1.jpg"></div></div><p>
       </p><p>
         If we again specify
         <span class="emphasis"><em>two</em></span>
         , then an arc token will be generated on that arc.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts6-2.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts6-2.jpg"></div></div><p>
       </p><p>
         From there, execution will continue.
 </p></div></div><div class="section" title="Graph Composition and Nested Processes"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="concepts-graph-composition-nested-processes"></a>Graph Composition and Nested Processes</h2></div></div></div><p>
@@ -969,7 +969,7 @@
         Next is the process definition which will be using
         <span class="emphasis"><em>ext</em></span>.
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts-externals2.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts-externals2.jpg"></div></div><p>
       </p><p>
         This process definition looks very different from previous examples. It
         isn't even fully connected.
@@ -992,16 +992,16 @@
         When the graph is loaded, the composed version will look as
         follows:
       </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts-externals3.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts-externals3.jpg"></div></div><p>
       </p></div><div class="section" title="Graph Composition Example Two"><div class="titlepage"><div><div><h3 class="title"><a name="concepts-graph-composition-example-two"></a>Graph Composition Example Two</h3></div></div></div><p>
         The previous example referenced only a single instance. Here is the
         example using two instances 'ext.
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts-externals4.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts-externals4.jpg"></div></div><p>
       </p><p>
         When it is loaded, the composed graph looks like:
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts-externals5.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts-externals5.jpg"></div></div><p>
       </p><p>
         As you can see, we now have two copies of
         <span class="emphasis"><em>ext</em></span>
@@ -1016,7 +1016,7 @@
         the parent process. So, here is a similar, but simpler example
         using nested processes.
 </p><p>
-        </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts-nested1.jpg" width="100%"></td></tr></table></div></div><p>
+        </p><div class="informalfigure"><div><img src="../images/concepts-nested1.jpg"></div></div><p>
       </p><p>
         Nodes
         <code class="literal">S</code>
@@ -1141,9 +1141,9 @@
       </p></div><div class="section" title="Process Definition"><div class="titlepage"><div><div><h3 class="title"><a name="using-process-definition-element"></a>Process Definition</h3></div></div></div><p>
         This is the root element. It should indicate the XML namespace, that being:
         <code class="literal">http://sarasvati.googlecode.com/ProcessDefinition</code>
-      </p><div class="table"><a name="id392966"></a><p class="title"><b>Table 4.1. <code class="literal">process-definition</code> attributes</b></p><div class="table-contents"><table summary="process-definition attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
+      </p><div class="table"><a name="id501176"></a><p class="title"><b>Table 4.1. <code class="literal">process-definition</code> attributes</b></p><div class="table-contents"><table summary="process-definition attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
                 The unique name for this process definition.
-              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id408170"></a><p class="title"><b>Table 4.2. <code class="literal">process-definition</code> nested elements</b></p><div class="table-contents"><table summary="process-definition nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">node</code></td><td>
+              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id507030"></a><p class="title"><b>Table 4.2. <code class="literal">process-definition</code> nested elements</b></p><div class="table-contents"><table summary="process-definition nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">node</code></td><td>
                 Every <code class="literal">process-definition</code> must have a least one <code class="literal">node</code> defined.
               </td></tr><tr><td><code class="literal">external</code></td><td>
                 An external declares a process definition to be included. More than one external process definition
@@ -1152,7 +1152,7 @@
               </td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="Nodes"><div class="titlepage"><div><div><h3 class="title"><a name="using-node-element"></a>Nodes</h3></div></div></div><p>
         Nodes in a process definition are defined by the <code class="literal">node</code>
         element. Every node must have a name <span class="emphasis"><em>unique to that file</em></span>.
-      </p><div class="table"><a name="id427807"></a><p class="title"><b>Table 4.3. <code class="literal">node</code> attributes</b></p><div class="table-contents"><table summary="node attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>The name of this node. The name must be unique within this process definition.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">type</code></td><td>The node type. Determines the node behavior.</td><td>No</td><td><code class="literal">node</code></td></tr><tr><td><code class="literal">isStart</code></td><td>Specifies whether a node will be presented with a token when the process is started.</td><td>No</td><td><code class="literal">false</code></td></tr><tr><td><code class="literal">joinType</code></td><td>
+      </p><div class="table"><a name="id503831"></a><p class="title"><b>Table 4.3. <code class="literal">node</code> attributes</b></p><div class="table-contents"><table summary="node attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>The name of this node. The name must be unique within this process definition.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">type</code></td><td>The node type. Determines the node behavior.</td><td>No</td><td><code class="literal">node</code></td></tr><tr><td><code class="literal">isStart</code></td><td>Specifies whether a node will be presented with a token when the process is started.</td><td>No</td><td><code class="literal">false</code></td></tr><tr><td><code class="literal">joinType</code></td><td>
                 Determines the join strategy the node should use when a token arrives.
                 Some nodes may accept incoming tokens as soon as they arrives,
                 others may act as gates, waiting until a certain number of
@@ -1161,7 +1161,7 @@
               </td><td>No</td><td><code class="literal">or</code></td></tr><tr><td><code class="literal">joinParam</code></td><td>
                 Some join strategies, such as the token set join, may join based on this paramter.
                 Alternately, this can be used by the custom join type as the developer desires.
-              </td><td>No</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id411139"></a><p class="title"><b>Table 4.4. <code class="literal">node</code> nested elements</b></p><div class="table-contents"><table summary="node nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">guard</code></td><td>
+              </td><td>No</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id479536"></a><p class="title"><b>Table 4.4. <code class="literal">node</code> nested elements</b></p><div class="table-contents"><table summary="node nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">guard</code></td><td>
                 Each node may have a single, optional guard element. The guard is generally defined in the
                 Rubric rules language and will be evaluated when the node's join strategy determines that
                 the node is to be executed. The guard will determine if the node should be executed, skipped
@@ -1176,7 +1176,7 @@
               </td></tr></tbody></table></div></div><br class="table-break"><p>
         Every node defines a join strategy, which is invoked when tokens arrive at the node and
         determines when the node is ready to be executed.
-      </p><div class="table"><a name="id430651"></a><p class="title"><b>Table 4.5. <code class="literal">node</code> join types</b></p><div class="table-contents"><table summary="node join types" border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td><code class="literal">or</code> </td><td>
+      </p><div class="table"><a name="id479631"></a><p class="title"><b>Table 4.5. <code class="literal">node</code> join types</b></p><div class="table-contents"><table summary="node join types" border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td><code class="literal">or</code> </td><td>
                 An <code class="literal">or</code> join will be satisfied any time an arc token arrives at the node.
               </td></tr><tr><td><code class="literal">and</code> </td><td>
                 An <code class="literal">and</code> join will be satisfied when an arc token arrives and there are
@@ -1246,7 +1246,7 @@
         element declares an arc from the enclosing node to the node
         with the name specified in the <code class="literal">to</code>
         attribute. An arc is allowed no nested elements.
-      </p><div class="table"><a name="id431002"></a><p class="title"><b>Table 4.6. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
+      </p><div class="table"><a name="id523059"></a><p class="title"><b>Table 4.6. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
                 If this arc is linking to an external (see below for more information on externals),
                 the name of the external being linked to. If an <code class="literal">external</code> attribute
                 is specified then the <code class="literal">to</code> attribute will refer to a node in the
@@ -1310,13 +1310,13 @@
         </p></div></div><div class="section" title="Externals"><div class="titlepage"><div><div><h3 class="title"><a name="using-external-element"></a>Externals</h3></div></div></div><p>
         An exernal process definition must have a declaration for each time
         it is to be included.
-      </p><div class="table"><a name="id431274"></a><p class="title"><b>Table 4.7. <code class="literal">external</code> attributes</b></p><div class="table-contents"><table summary="external attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
+      </p><div class="table"><a name="id523332"></a><p class="title"><b>Table 4.7. <code class="literal">external</code> attributes</b></p><div class="table-contents"><table summary="external attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
                 The name by which this external process definition will be referred to.
                 The name must be unique within this process definition.
               </td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">processDefinition</code></td><td>
                 The name of the process definition being included. The same process definition
                 may be included more than once.
-              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id431367"></a><p class="title"><b>Table 4.8. <code class="literal">external</code> nested elements</b></p><div class="table-contents"><table summary="external nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">arc</code></td><td>
+              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id523425"></a><p class="title"><b>Table 4.8. <code class="literal">external</code> nested elements</b></p><div class="table-contents"><table summary="external nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">arc</code></td><td>
                 Externals may have zero to many arcs. The arcs originate in the extenal process definition.
                 They may end in nodes in the same process definition, in other externals or even in
                 the same external.
@@ -1328,7 +1328,7 @@
         An <code class="literal">arc</code> element in an <code class="literal">external</code> declares an arc
         from a node in the enclosing external to the node with the name specified in
         the <code class="literal">to</code> attribute. An arc is allowed no nested elements.
-      </p><div class="table"><a name="id431472"></a><p class="title"><b>Table 4.9. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">from</code> </td><td>Specifies the name of the node in the external that this arc starts from.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
+      </p><div class="table"><a name="id523530"></a><p class="title"><b>Table 4.9. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">from</code> </td><td>Specifies the name of the node in the external that this arc starts from.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
                 If this arc is linking to another external, this specifies the name of the external
                 being linked to. If an <code class="literal">external</code> attribute is specified then the
                 <code class="literal">to</code> attribute will refer to a node in the external, not a locally
@@ -1395,11 +1395,11 @@
 </pre><p>
           It looks like:
 
-          </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts-externals4.jpg" width="100%"></td></tr></table></div></div><p>
+          </p><div class="informalfigure"><div><img src="../images/concepts-externals4.jpg"></div></div><p>
 
           When the process definition is loaded into memory, it will look like:
 
-          </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts-externals5.jpg" width="100%"></td></tr></table></div></div><p>
+          </p><div class="informalfigure"><div><img src="../images/concepts-externals5.jpg"></div></div><p>
 
           The process definition file format also supports custom elements and
           attributes, but before we discuss that, the API needs to be
@@ -1415,7 +1415,7 @@
       Sarasvati supports multiple backends, and is packaged with two. Each backend
       will provide its own <code class="literal">Engine</code> impementation.
 
-      </p><div class="table"><a name="id431755"></a><p class="title"><b>Table 4.10. Engine Implementations</b></p><div class="table-contents"><table summary="Engine Implementations" border="1"><colgroup><col><col></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>MemEngine</td><td>
+      </p><div class="table"><a name="id523806"></a><p class="title"><b>Table 4.10. Engine Implementations</b></p><div class="table-contents"><table summary="Engine Implementations" border="1"><colgroup><col><col></colgroup><thead><tr><th>Name</th><th>Description</th></tr></thead><tbody><tr><td>MemEngine</td><td>
                 This engine runs only in memory. Workflows must be loaded everytime the
                 JVM starts up. Processes will only survive as long as the JVM is running.
                 Since no database accesses are done, this implementation should provide
@@ -2187,7 +2187,7 @@ public class TaskNode extends HibNode
       </p><p>
         The Env interface supports both persistent and transient attributes.
 
-        </p><div class="table"><a name="id426173"></a><p class="title"><b>Table 4.11. Environment Attribute Types</b></p><div class="table-contents"><table summary="Environment Attribute Types" border="1"><colgroup><col width="60"><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
+        </p><div class="table"><a name="id518628"></a><p class="title"><b>Table 4.11. Environment Attribute Types</b></p><div class="table-contents"><table summary="Environment Attribute Types" border="1"><colgroup><col width="60"><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td>Persistent</td><td>
                   Must be serializable to the database. All primitives and object version of the primitives, as
                   well as String and Date are supported by default. Support for other types may be added
                   by defining an <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/env/AttributeConverter.html" target="_top">AttributeConverter</a>,
@@ -2498,13 +2498,13 @@ public class DelayExecutionListener implements ExecutionListener
         </p><div class="section" title="Linear Backtracking"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-backtracking-linear"></a>Linear Backtracking</h4></div></div></div><p>
             Here is a simple, linear workflow:
 
-            </p><div class="figure"><a name="id426800"></a><p class="title"><b>Figure 4.1. Linear Process Definition</b></p><div class="figure-contents"><div><img src="images/backtrack-graph1.jpg" alt="Linear Process Definition"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519255"></a><p class="title"><b>Figure 4.1. Linear Process Definition</b></p><div class="figure-contents"><div><img src="images/backtrack-graph1.jpg" alt="Linear Process Definition"></div></div></div><p><br class="figure-break">
 
             In this case, there is only one progression that can be made. Using
             squares for node tokens and triangles for arc tokens, the resulting
             execution looks like:
 
-            </p><div class="figure"><a name="id426816"></a><p class="title"><b>Figure 4.2. </b></p><div class="figure-contents"><div><img src="images/backtrack-process1.jpg"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519270"></a><p class="title"><b>Figure 4.2. </b></p><div class="figure-contents"><div><img src="images/backtrack-process1.jpg"></div></div></div><p><br class="figure-break">
 
             What if we wish to let a user choose to send the workflow backwards,
             instead of forwards, say to fix a mistake made earlier. If we
@@ -2512,12 +2512,12 @@ public class DelayExecutionListener implements ExecutionListener
             backwards. Assuming, we want maximum flexibility, we'd end up with
             a process definition that looked like:
 
-            </p><div class="figure"><a name="id426830"></a><p class="title"><b>Figure 4.3. Manual Linear Backtracking</b></p><div class="figure-contents"><div><img src="images/backtrack-graph2.jpg" alt="Manual Linear Backtracking"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519284"></a><p class="title"><b>Figure 4.3. Manual Linear Backtracking</b></p><div class="figure-contents"><div><img src="images/backtrack-graph2.jpg" alt="Manual Linear Backtracking"></div></div></div><p><br class="figure-break">
 
             Now we could go from A to B to C, back to B to C to D, back to B to C to
             D and done. The execution would look like:
 
-            </p><div class="figure"><a name="id426846"></a><p class="title"><b>Figure 4.4. Manual Linear Backtracking: Execution</b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process2.jpg" width="100%" alt="Manual Linear Backtracking: Execution"></td></tr></table></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519300"></a><p class="title"><b>Figure 4.4. Manual Linear Backtracking: Execution</b></p><div class="figure-contents"><div><img src="images/backtrack-process2.jpg" alt="Manual Linear Backtracking: Execution"></div></div></div><p><br class="figure-break">
 
             Note that the arc tokens now display the arc name.
           </p><p>
@@ -2534,12 +2534,12 @@ public class DelayExecutionListener implements ExecutionListener
             So, lets says we've gotten up to <span class="emphasis"><em>C</em></span>. At this
             point, the process execution history looks like:
 
-            </p><div class="figure"><a name="id426885"></a><p class="title"><b>Figure 4.5. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-1.jpg"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519335"></a><p class="title"><b>Figure 4.5. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-1.jpg"></div></div></div><p><br class="figure-break">
 
             Now we wish to backtrack to <span class="emphasis"><em>B</em></span>. If we
             retrace our steps, the process history will now look like:
 
-            </p><div class="figure"><a name="id426900"></a><p class="title"><b>Figure 4.6. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-2.jpg"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519350"></a><p class="title"><b>Figure 4.6. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-2.jpg"></div></div></div><p><br class="figure-break">
 
             Note that when we traverse arc <span class="emphasis"><em>2</em></span>
             backward, it's marked in red. This is to mark that we've gone
@@ -2554,12 +2554,12 @@ public class DelayExecutionListener implements ExecutionListener
             <span class="emphasis"><em>D</em></span>, where the process execution
             history looks like:
 
-            </p><div class="figure"><a name="id426938"></a><p class="title"><b>Figure 4.7. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process3-3.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519387"></a><p class="title"><b>Figure 4.7. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-3.jpg"></div></div></div><p><br class="figure-break">
 
             If from here, we once again wish to return to <span class="emphasis"><em>B</em></span>, the
             execution history will look like:
 
-            </p><div class="figure"><a name="id426957"></a><p class="title"><b>Figure 4.8. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process3-4.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519403"></a><p class="title"><b>Figure 4.8. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-4.jpg"></div></div></div><p><br class="figure-break">
 
             Note that since we are somewhat literally retracing our steps, to
             get from <span class="emphasis"><em>D</em></span> to <span class="emphasis"><em>B</em></span>
@@ -2569,11 +2569,11 @@ public class DelayExecutionListener implements ExecutionListener
             backtracked.
           </p><p>
             From here we now finish, and go to the end.
-            </p><div class="figure"><a name="id426997"></a><p class="title"><b>Figure 4.9. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process3-5.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519437"></a><p class="title"><b>Figure 4.9. </b></p><div class="figure-contents"><div><img src="images/backtrack-process3-5.jpg"></div></div></div><p><br class="figure-break">
           </p></div><div class="section" title="Backtracking Across a Split"><div class="titlepage"><div><div><h4 class="title"><a name="using-java-api-backtracking-split"></a>Backtracking Across a Split</h4></div></div></div><p>
             Let us now examine a process definition which has splits and joins.
 
-            </p><div class="figure"><a name="id427027"></a><p class="title"><b>Figure 4.10. </b></p><div class="figure-contents"><div><img src="images/backtrack-graph3.jpg"></div></div></div><p><br class="figure-break">
+            </p><div class="figure"><a name="id519463"></a><p class="title"><b>Figure 4.10. </b></p><div class="figure-contents"><div><img src="images/backtrack-graph3.jpg"></div></div></div><p><br class="figure-break">
 
             These complicate manual backtracking a great deal.
          </p><p>
@@ -2594,7 +2594,7 @@ public class DelayExecutionListener implements ExecutionListener
           Here is an example of a graph which would be roughly equivalent to the
           previous graph, but allows manual backtracking.
 
-          </p><div class="figure"><a name="id427057"></a><p class="title"><b>Figure 4.11. Manual Backtracking Split/Join</b></p><div class="figure-contents"><div><img src="images/backtrack-graph4.jpg" alt="Manual Backtracking Split/Join"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519493"></a><p class="title"><b>Figure 4.11. Manual Backtracking Split/Join</b></p><div class="figure-contents"><div><img src="images/backtrack-graph4.jpg" alt="Manual Backtracking Split/Join"></div></div></div><p><br class="figure-break">
 
           It has a great deal many more arcs, as well as a more complicated
           structure, to accommodate backtracking to the split.
@@ -2604,11 +2604,11 @@ public class DelayExecutionListener implements ExecutionListener
           to where both <span class="emphasis"><em>C</em></span> and
           <span class="emphasis"><em>D</em></span> are open.
 
-          </p><div class="figure"><a name="id427092"></a><p class="title"><b>Figure 4.12. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s1.jpg"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519529"></a><p class="title"><b>Figure 4.12. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s1.jpg"></div></div></div><p><br class="figure-break">
 
           We can now attempt to backtrack to <span class="emphasis"><em>B</em></span>.
 
-          </p><div class="figure"><a name="id427107"></a><p class="title"><b>Figure 4.13. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s2.jpg"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519543"></a><p class="title"><b>Figure 4.13. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s2.jpg"></div></div></div><p><br class="figure-break">
 
           The engine will follow all execution history which emanated from
           <span class="emphasis"><em>B</em></span> and attempt to reverse it. So we can see
@@ -2618,7 +2618,7 @@ public class DelayExecutionListener implements ExecutionListener
           If we now attempt to backtrack one more step to <span class="emphasis"><em>A</em></span>,
           the execution history will look like:
 
-          </p><div class="figure"><a name="id427142"></a><p class="title"><b>Figure 4.14. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-s3.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519578"></a><p class="title"><b>Figure 4.14. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s3.jpg"></div></div></div><p><br class="figure-break">
 
           Though this appears to be a simple linear backtrack, it's actually
           slightly complicated. The history starting from <span class="emphasis"><em>A</em></span>
@@ -2629,7 +2629,7 @@ public class DelayExecutionListener implements ExecutionListener
           and <span class="emphasis"><em>D</em></span> were open, back to <span class="emphasis"><em>A</em></span>,
           the execution history would look as follows:
 
-          </p><div class="figure"><a name="id427179"></a><p class="title"><b>Figure 4.15. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-s4.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519610"></a><p class="title"><b>Figure 4.15. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-s4.jpg"></div></div></div><p><br class="figure-break">
 
           It looks almost the same, except that the second <span class="emphasis"><em>B</em></span>
           is marked as a backwards execution, since this time, we went
@@ -2639,7 +2639,7 @@ public class DelayExecutionListener implements ExecutionListener
           We'll use the same process definition as we used for demonstrating
           splits.
 
-          </p><div class="figure"><a name="id427215"></a><p class="title"><b>Figure 4.16. </b></p><div class="figure-contents"><div><img src="images/backtrack-graph3.jpg"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519642"></a><p class="title"><b>Figure 4.16. </b></p><div class="figure-contents"><div><img src="images/backtrack-graph3.jpg"></div></div></div><p><br class="figure-break">
 
           Going back from a join is both more and less problematic than a split. A
           join can act as a split and send tokens back all of its inputs.
@@ -2651,12 +2651,12 @@ public class DelayExecutionListener implements ExecutionListener
           To start off with, assume execution has proceeded to
           <span class="emphasis"><em>E</em></span> and the execution history looks like:
 
-          </p><div class="figure"><a name="id427236"></a><p class="title"><b>Figure 4.17. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-j1.jpg"></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519664"></a><p class="title"><b>Figure 4.17. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-j1.jpg"></div></div></div><p><br class="figure-break">
 
           If we then want to go back to when <span class="emphasis"><em>C</em></span>
           was open, the process will now look like:
 
-          </p><div class="figure"><a name="id427251"></a><p class="title"><b>Figure 4.18. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-j2.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519678"></a><p class="title"><b>Figure 4.18. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-j2.jpg"></div></div></div><p><br class="figure-break">
 
           As expected, <span class="emphasis"><em>C</em></span> is now open. To do so,
           we backtracked across arc <span class="emphasis"><em>4</em></span>. However,
@@ -2678,12 +2678,12 @@ public class DelayExecutionListener implements ExecutionListener
         </p><p>
           If we complete <span class="emphasis"><em>C</em></span> the process will look like:
 
-          </p><div class="figure"><a name="id427344"></a><p class="title"><b>Figure 4.19. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-j3.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519766"></a><p class="title"><b>Figure 4.19. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-j3.jpg"></div></div></div><p><br class="figure-break">
 
           If instead of completing <span class="emphasis"><em>C</em></span> we backtracked
           to <span class="emphasis"><em>D</em></span> as well, the process would now look like:
 
-          </p><div class="figure"><a name="id427367"></a><p class="title"><b>Figure 4.20. </b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/backtrack-process4-j4.jpg" width="100%"></td></tr></table></div></div></div><p><br class="figure-break">
+          </p><div class="figure"><a name="id519785"></a><p class="title"><b>Figure 4.20. </b></p><div class="figure-contents"><div><img src="images/backtrack-process4-j4.jpg"></div></div></div><p><br class="figure-break">
 
           The u-turn arc token is now marked as backtracked and a node token
           is now active on <span class="emphasis"><em>D</em></span> .
@@ -2843,7 +2843,7 @@ public class DelayExecutionListener implements ExecutionListener
 
           The resulting page would look something like:
 
-        </p><div class="figure"><a name="id427633"></a><p class="title"><b>Figure 4.21. Process Definition Visualization Screenshot</b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/graph-visualization.jpg" width="100%" alt="Process Definition Visualization Screenshot"></td></tr></table></div></div></div><p><br class="figure-break">
+        </p><div class="figure"><a name="id520046"></a><p class="title"><b>Figure 4.21. Process Definition Visualization Screenshot</b></p><div class="figure-contents"><div><img src="images/graph-visualization.jpg" alt="Process Definition Visualization Screenshot"></div></div></div><p><br class="figure-break">
 
       </p></div><div class="section" title="Process Visualization"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-pv"></a>Process Visualization</h3></div></div></div><p>
         Sarasvati offers the ability to generate an HTML image map of a process.
@@ -2922,7 +2922,7 @@ public class DelayExecutionListener implements ExecutionListener
 
         The resulting page would look something like:
 
-        </p><div class="figure"><a name="id442525"></a><p class="title"><b>Figure 4.22. Process Visualization Screenshot</b></p><div class="figure-contents"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="images/process-visualization1.jpg" width="100%" alt="Process Visualization Screenshot"></td></tr></table></div></div></div><p><br class="figure-break">
+        </p><div class="figure"><a name="id536162"></a><p class="title"><b>Figure 4.22. Process Visualization Screenshot</b></p><div class="figure-contents"><div><img src="images/process-visualization1.jpg" alt="Process Visualization Screenshot"></div></div></div><p><br class="figure-break">
       </p></div><div class="section" title="Graph Validation"><div class="titlepage"><div><div><h3 class="title"><a name="using-java-api-graph-validator"></a>Graph Validation</h3></div></div></div><p>
         Sarasvati allows graphs to be validated as they are constructed.
         The <a class="ulink" href="../../javadoc/com/googlecode/sarasvati/load/GraphValidator.html" target="_top">GraphValidator</a>
