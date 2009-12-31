@@ -9,9 +9,9 @@
       </p></div><div class="section" title="Process Definition"><div class="titlepage"><div><div><h3 class="title"><a name="using-process-definition-element"></a>Process Definition</h3></div></div></div><p>
         This is the root element. It should indicate the XML namespace, that being:
         <code class="literal">http://sarasvati.googlecode.com/ProcessDefinition</code>
-      </p><div class="table"><a name="id543668"></a><p class="title"><b>Table 4.1. <code class="literal">process-definition</code> attributes</b></p><div class="table-contents"><table summary="process-definition attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
+      </p><div class="table"><a name="id499379"></a><p class="title"><b>Table 4.1. <code class="literal">process-definition</code> attributes</b></p><div class="table-contents"><table summary="process-definition attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
                 The unique name for this process definition.
-              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id516427"></a><p class="title"><b>Table 4.2. <code class="literal">process-definition</code> nested elements</b></p><div class="table-contents"><table summary="process-definition nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">node</code></td><td>
+              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id492051"></a><p class="title"><b>Table 4.2. <code class="literal">process-definition</code> nested elements</b></p><div class="table-contents"><table summary="process-definition nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">node</code></td><td>
                 Every <code class="literal">process-definition</code> must have a least one <code class="literal">node</code> defined.
               </td></tr><tr><td><code class="literal">external</code></td><td>
                 An external declares a process definition to be included. More than one external process definition
@@ -20,7 +20,7 @@
               </td></tr></tbody></table></div></div><br class="table-break"></div><div class="section" title="Nodes"><div class="titlepage"><div><div><h3 class="title"><a name="using-node-element"></a>Nodes</h3></div></div></div><p>
         Nodes in a process definition are defined by the <code class="literal">node</code>
         element. Every node must have a name <span class="emphasis"><em>unique to that file</em></span>.
-      </p><div class="table"><a name="id516438"></a><p class="title"><b>Table 4.3. <code class="literal">node</code> attributes</b></p><div class="table-contents"><table summary="node attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>The name of this node. The name must be unique within this process definition.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">type</code></td><td>The node type. Determines the node behavior.</td><td>No</td><td><code class="literal">node</code></td></tr><tr><td><code class="literal">isStart</code></td><td>Specifies whether a node will be presented with a token when the process is started.</td><td>No</td><td><code class="literal">false</code></td></tr><tr><td><code class="literal">joinType</code></td><td>
+      </p><div class="table"><a name="id532282"></a><p class="title"><b>Table 4.3. <code class="literal">node</code> attributes</b></p><div class="table-contents"><table summary="node attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>The name of this node. The name must be unique within this process definition.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">type</code></td><td>The node type. Determines the node behavior.</td><td>No</td><td><code class="literal">node</code></td></tr><tr><td><code class="literal">isStart</code></td><td>Specifies whether a node will be presented with a token when the process is started.</td><td>No</td><td><code class="literal">false</code></td></tr><tr><td><code class="literal">joinType</code></td><td>
                 Determines the join strategy the node should use when a token arrives.
                 Some nodes may accept incoming tokens as soon as they arrives,
                 others may act as gates, waiting until a certain number of
@@ -29,7 +29,7 @@
               </td><td>No</td><td><code class="literal">or</code></td></tr><tr><td><code class="literal">joinParam</code></td><td>
                 Some join strategies, such as the token set join, may join based on this paramter.
                 Alternately, this can be used by the custom join type as the developer desires.
-              </td><td>No</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id563989"></a><p class="title"><b>Table 4.4. <code class="literal">node</code> nested elements</b></p><div class="table-contents"><table summary="node nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">guard</code></td><td>
+              </td><td>No</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id499681"></a><p class="title"><b>Table 4.4. <code class="literal">node</code> nested elements</b></p><div class="table-contents"><table summary="node nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">guard</code></td><td>
                 Each node may have a single, optional guard element. The guard is generally defined in the
                 Rubric rules language and will be evaluated when the node's join strategy determines that
                 the node is to be executed. The guard will determine if the node should be executed, skipped
@@ -44,7 +44,7 @@
               </td></tr></tbody></table></div></div><br class="table-break"><p>
         Every node defines a join strategy, which is invoked when tokens arrive at the node and
         determines when the node is ready to be executed.
-      </p><div class="table"><a name="id564083"></a><p class="title"><b>Table 4.5. <code class="literal">node</code> join types</b></p><div class="table-contents"><table summary="node join types" border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td><code class="literal">or</code> </td><td>
+      </p><div class="table"><a name="id499775"></a><p class="title"><b>Table 4.5. <code class="literal">node</code> join types</b></p><div class="table-contents"><table summary="node join types" border="1"><colgroup><col><col></colgroup><thead><tr><th>Type</th><th>Behavior</th></tr></thead><tbody><tr><td><code class="literal">or</code> </td><td>
                 An <code class="literal">or</code> join will be satisfied any time an arc token arrives at the node.
               </td></tr><tr><td><code class="literal">and</code> </td><td>
                 An <code class="literal">and</code> join will be satisfied when an arc token arrives and there are
@@ -114,7 +114,7 @@
         element declares an arc from the enclosing node to the node
         with the name specified in the <code class="literal">to</code>
         attribute. An arc is allowed no nested elements.
-      </p><div class="table"><a name="id564434"></a><p class="title"><b>Table 4.6. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
+      </p><div class="table"><a name="id535429"></a><p class="title"><b>Table 4.6. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
                 If this arc is linking to an external (see below for more information on externals),
                 the name of the external being linked to. If an <code class="literal">external</code> attribute
                 is specified then the <code class="literal">to</code> attribute will refer to a node in the
@@ -178,13 +178,13 @@
         </p></div></div><div class="section" title="Externals"><div class="titlepage"><div><div><h3 class="title"><a name="using-external-element"></a>Externals</h3></div></div></div><p>
         An exernal process definition must have a declaration for each time
         it is to be included.
-      </p><div class="table"><a name="id564707"></a><p class="title"><b>Table 4.7. <code class="literal">external</code> attributes</b></p><div class="table-contents"><table summary="external attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
+      </p><div class="table"><a name="id535700"></a><p class="title"><b>Table 4.7. <code class="literal">external</code> attributes</b></p><div class="table-contents"><table summary="external attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">name</code></td><td>
                 The name by which this external process definition will be referred to.
                 The name must be unique within this process definition.
               </td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">processDefinition</code></td><td>
                 The name of the process definition being included. The same process definition
                 may be included more than once.
-              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id564800"></a><p class="title"><b>Table 4.8. <code class="literal">external</code> nested elements</b></p><div class="table-contents"><table summary="external nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">arc</code></td><td>
+              </td><td>Yes</td><td>N/A</td></tr></tbody></table></div></div><br class="table-break"><div class="table"><a name="id535793"></a><p class="title"><b>Table 4.8. <code class="literal">external</code> nested elements</b></p><div class="table-contents"><table summary="external nested elements" border="1"><colgroup><col><col></colgroup><thead><tr><th>Element</th><th>Description</th></tr></thead><tbody><tr><td><code class="literal">arc</code></td><td>
                 Externals may have zero to many arcs. The arcs originate in the extenal process definition.
                 They may end in nodes in the same process definition, in other externals or even in
                 the same external.
@@ -196,7 +196,7 @@
         An <code class="literal">arc</code> element in an <code class="literal">external</code> declares an arc
         from a node in the enclosing external to the node with the name specified in
         the <code class="literal">to</code> attribute. An arc is allowed no nested elements.
-      </p><div class="table"><a name="id564906"></a><p class="title"><b>Table 4.9. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">from</code> </td><td>Specifies the name of the node in the external that this arc starts from.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
+      </p><div class="table"><a name="id535899"></a><p class="title"><b>Table 4.9. <code class="literal">arc</code> attributes</b></p><div class="table-contents"><table summary="arc attributes" border="1"><colgroup><col><col><col><col></colgroup><thead><tr><th>Attribute Name</th><th>Usage</th><th>Is Required?</th><th>Default Value</th></tr></thead><tbody><tr><td><code class="literal">from</code> </td><td>Specifies the name of the node in the external that this arc starts from.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">to</code> </td><td>Specifies the name of the node this arc goes to.</td><td>Yes</td><td>N/A</td></tr><tr><td><code class="literal">name</code> </td><td>Specifies the arc name. This name need not be unique.</td><td>No</td><td><code class="literal">null</code></td></tr><tr><td><code class="literal">external</code> </td><td>
                 If this arc is linking to another external, this specifies the name of the external
                 being linked to. If an <code class="literal">external</code> attribute is specified then the
                 <code class="literal">to</code> attribute will refer to a node in the external, not a locally
@@ -263,11 +263,11 @@
 </pre><p>
           It looks like:
 
-          </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts-externals4.jpg" width="100%"></td></tr></table></div></div><p>
+          </p><div class="informalfigure"><div><img src="../images/concepts-externals4.jpg"></div></div><p>
 
           When the process definition is loaded into memory, it will look like:
 
-          </p><div class="informalfigure"><div><table border="0" summary="manufactured viewport for HTML img" cellspacing="0" cellpadding="0" width="100%"><tr><td><img src="../images/concepts-externals5.jpg" width="100%"></td></tr></table></div></div><p>
+          </p><div class="informalfigure"><div><img src="../images/concepts-externals5.jpg"></div></div><p>
 
           The process definition file format also supports custom elements and
           attributes, but before we discuss that, the API needs to be

@@ -1,19 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="doc/reference/util/src"/>
 	<classpathentry kind="src" path="editor"/>
 	<classpathentry kind="src" path="visual"/>
 	<classpathentry kind="src" path="unittest"/>
 	<classpathentry kind="src" path="examples"/>
 	<classpathentry kind="src" path="test"/>
-	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry exported="true" kind="lib" path="lib/ejb3-persistence.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/postgresql-8.3-603.jdbc4.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/asm.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/cglib.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/commons-logging.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/dom4j.jar"/>
-	<classpathentry exported="true" kind="lib" path="lib/jboss-j2ee.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hibernate-3.2.6.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hibernate-annotations-3.3.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="lib/hibernate-commons-annotations-3.3.1.jar"/>
@@ -28,5 +27,8 @@
 	<classpathentry kind="lib" path="lib/mysql.jar"/>
 	<classpathentry kind="lib" path="lib/eclipse-draw2d-3.5.0.jar"/>
 	<classpathentry kind="lib" path="lib/dsls.jar"/>
+	<classpathentry kind="con" path="ch.epfl.lamp.sdt.launching.SCALA_CONTAINER"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
