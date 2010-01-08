@@ -125,6 +125,7 @@ insert into wf_node_join_type values ( 3, 'TokenSet And: Join is completed when 
 insert into wf_node_join_type values ( 4, 'Class: User defined join type' );
 insert into wf_node_join_type values ( 5, 'TokenSet Or: Join is completed when all active arc tokens in the token set arrive and there are no active node tokens. Non token-set tokens will fallback to the OR strategy.' );
 insert into wf_node_join_type values ( 6, 'First: Join is completed by the first arc token to arrive. Subsequent tokens are merged.' );
+insert into wf_node_join_type values ( 7, 'JoinLang: Evaluates the join lang statement given in the join parameter.' );
 
 create table wf_node
 (

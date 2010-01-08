@@ -64,17 +64,6 @@ public enum JoinType
          "arc tokens waiting at all other incoming arcs to the node which " +
          "share the same name/label as the arc that the arc token is arriving on." ),
 
-   /**
-    * Uses the {@link ClassJoinStrategy}. A class join assumes that the
-    * associated join parameter specifies a class implemented the
-    * JoinStrategy interface. An instance of that class will be used
-    * to perform the join.
-    */
-   CLASS( new ClassJoinStrategy(),
-          "A CLASS join assumes that the associated join parameter " +
-          "specifies a class implementing the JoinStrategy interface. " +
-          "An instance of that class will be used to perform the join." ),
-
   /**
    * Uses the {@link TokenSetJoinStrategy}. A token set join will be satisfied when all
    * active arc tokens in the set are on incoming arcs to the same node and there are no
@@ -85,6 +74,17 @@ public enum JoinType
              "A TOKEN_SET join will be satisfied when all active arc tokens in the set " +
              "are on incoming arcs to the same node and there are no active node tokens " +
              "in the token set. An exception will be raised if a non-token set token arrives." ),
+
+   /**
+    * Uses the {@link ClassJoinStrategy}. A class join assumes that the
+    * associated join parameter specifies a class implemented the
+    * JoinStrategy interface. An instance of that class will be used
+    * to perform the join.
+    */
+   CLASS( new ClassJoinStrategy(),
+          "A CLASS join assumes that the associated join parameter " +
+          "specifies a class implementing the JoinStrategy interface. " +
+          "An instance of that class will be used to perform the join." ),
 
   /**
    * Uses the {@link TokenSetOrJoinStrategy}. A token set or join will be satisfied when all
