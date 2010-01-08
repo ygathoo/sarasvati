@@ -24,6 +24,7 @@ import java.util.List;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -36,6 +37,12 @@ public class XmlEditorProperties
 
   @XmlElement(name = "external")
   protected List<XmlEditorExternal> externals = new ArrayList<XmlEditorExternal>();
+
+  @XmlAttribute(name="defaultNodeForIncomingArcs")
+  protected String defaultNodeForIncomingArcs;
+
+  @XmlAttribute(name="defaultNodeForOutgoingArcs")
+  protected String defaultNodeForOutgoingArcs;
 
   public List<XmlEditorNode> getNodes ()
   {
@@ -55,6 +62,26 @@ public class XmlEditorProperties
   public void setExternals (final List<XmlEditorExternal> externals)
   {
     this.externals = externals;
+  }
+
+  public String getDefaultNodeForIncomingArcs ()
+  {
+    return defaultNodeForIncomingArcs;
+  }
+
+  public void setDefaultNodeForIncomingArcs (final String defaultNodeForIncomingArcs)
+  {
+    this.defaultNodeForIncomingArcs = defaultNodeForIncomingArcs;
+  }
+
+  public String getDefaultNodeForOutgoingArcs ()
+  {
+    return defaultNodeForOutgoingArcs;
+  }
+
+  public void setDefaultNodeForOutgoingArcs (final String defaultNodeForOutgoingArcs)
+  {
+    this.defaultNodeForOutgoingArcs = defaultNodeForOutgoingArcs;
   }
 
   @Override

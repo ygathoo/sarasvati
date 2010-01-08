@@ -83,6 +83,7 @@ import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphFactory;
 import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.EditorScene;
+import com.googlecode.sarasvati.editor.model.GraphState;
 import com.googlecode.sarasvati.editor.model.Library;
 import com.googlecode.sarasvati.editor.model.ValidationResults;
 import com.googlecode.sarasvati.editor.xml.EditorXmlLoader;
@@ -412,7 +413,7 @@ public class GraphEditor
   {
     final JScrollPane scrollPane = new JScrollPane();
 
-    final EditorScene scene = new EditorScene( new EditorGraph() );
+    final EditorScene scene = new EditorScene( new EditorGraph( new GraphState() ) );
     scrollPane.setViewportView( scene.createView() );
     scrollPane.putClientProperty( "scene", scene );
     scrollPane.putClientProperty( GRAPH_NAME_KEY, "Untitled" );
@@ -605,6 +606,30 @@ public class GraphEditor
     }
   }
 
+  private File getEditorPropertiesFile (final File graphFile)
+  {
+    String name = graphFile.getName();
+    final int firstDot = name.indexOf( '.' );
+
+    if ( firstDot > 0 )
+    {
+      name = name.substring( 0, firstDot );
+    }
+
+    return new File( graphFile.getParentFile(), name + ".editor.xml" );
+  }
+
+  /**
+   * Loads the editor properties associated with the given graph definition file
+   *
+   * @param graphFile The file containing the graph definition
+   * @return The {@link XmlEditorProperties} associated with the given graph definition file
+   */
+  public XmlEditorProperties loadEditorProperties (final File graphFile)
+  {
+    return getEditorXmlLoader().loadEditorProperties( getEditorPropertiesFile( graphFile ) );
+  }
+
   public SaveResult saveProcessDefinition (final EditorGraph graph,
                                            final File outputFile,
                                            final String infoMessages)
@@ -642,7 +667,7 @@ public class GraphEditor
                                      infoMessages + "\nProcess definition successfully saved to: '" + saveFile.getPath() + "'",
                                      "Save", JOptionPane.INFORMATION_MESSAGE );
 
-      Library.getInstance().update( saveData.getXmlProcDef(), saveFile );
+      Library.getInstance().update( saveData.getXmlProcDef(), saveData.getXmlEditorProps(), saveFile );
 
       return SaveResult.SaveSucceeded;
     }

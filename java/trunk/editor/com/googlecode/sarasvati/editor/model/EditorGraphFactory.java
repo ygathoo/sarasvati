@@ -71,7 +71,19 @@ public class EditorGraphFactory
   public static EditorGraph loadFromXml (final ProcessDefinition procDef,
                                          final XmlEditorProperties editorProps)
   {
-    EditorGraph graph = new EditorGraph();
+    GraphState graphState = null;
+
+    if ( editorProps == null )
+    {
+      graphState = new GraphState();
+    }
+    else
+    {
+      graphState = new GraphState( editorProps.getDefaultNodeForIncomingArcs(),
+                                   editorProps.getDefaultNodeForOutgoingArcs() );
+    }
+
+    EditorGraph graph = new EditorGraph( graphState );
     graph.setName( procDef.getName() );
 
     Map<String, EditorNode> nodeMap = new HashMap<String, EditorNode>();
@@ -205,8 +217,11 @@ public class EditorGraphFactory
   public static XmlSaveData exportToXml (final EditorGraph graph) throws IOException
   {
     XmlProcessDefinition xmlProcDef = new XmlProcessDefinition();
-    XmlEditorProperties xmlEditorProps = new XmlEditorProperties();
     xmlProcDef.setName( graph.getName() );
+
+    XmlEditorProperties xmlEditorProps = new XmlEditorProperties();
+    xmlEditorProps.setDefaultNodeForIncomingArcs( graph.getState().getDefaultNodeForIncomingArcs() );
+    xmlEditorProps.setDefaultNodeForOutgoingArcs( graph.getState().getDefaultNodeForOutgoingArcs() );
 
     Map<EditorNode,XmlNode> nodeMap = new HashMap<EditorNode, XmlNode>();
     Map<EditorExternal,XmlExternal> externalMap = new HashMap<EditorExternal, XmlExternal>();

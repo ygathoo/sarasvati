@@ -22,6 +22,7 @@ import java.io.File;
 import java.lang.ref.SoftReference;
 
 import com.googlecode.sarasvati.editor.GraphEditor;
+import com.googlecode.sarasvati.editor.xml.XmlEditorProperties;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 import com.googlecode.sarasvati.util.SvUtil;
 
@@ -30,6 +31,7 @@ public class LibraryEntry implements Comparable<LibraryEntry>
   protected String name;
   protected File path;
   protected SoftReference<ProcessDefinition> pdRef;
+  protected SoftReference<XmlEditorProperties> editorRef;
 
   public LibraryEntry (final String name,
                        final File path )
@@ -39,11 +41,13 @@ public class LibraryEntry implements Comparable<LibraryEntry>
   }
 
   public LibraryEntry (final ProcessDefinition processDefinition,
+                       final XmlEditorProperties editorProperties,
                        final File path )
   {
     this.name = processDefinition.getName();
     this.path = path;
     this.pdRef = new SoftReference<ProcessDefinition>( processDefinition );
+    this.editorRef = new SoftReference<XmlEditorProperties>( editorProperties );
   }
 
   /**
@@ -89,6 +93,19 @@ public class LibraryEntry implements Comparable<LibraryEntry>
     }
 
     return processDefinition;
+  }
+
+  public XmlEditorProperties getEditorProperties ()
+  {
+    XmlEditorProperties editorProperties = editorRef == null ? null : editorRef.get();
+
+    if ( editorProperties == null )
+    {
+      editorProperties = GraphEditor.getInstance().loadEditorProperties( path );
+      editorRef = new SoftReference<XmlEditorProperties>( editorProperties );
+    }
+
+    return editorProperties;
   }
 
   @Override
