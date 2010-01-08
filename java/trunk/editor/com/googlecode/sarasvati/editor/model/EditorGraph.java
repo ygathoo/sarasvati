@@ -37,7 +37,7 @@ import com.googlecode.sarasvati.rubric.visitor.ExitArcNameCollector;
 import com.googlecode.sarasvati.rubric.visitor.ResultTypeValidator;
 import com.googlecode.sarasvati.util.SvUtil;
 
-public class EditorGraph
+public class EditorGraph extends AbstractStateful<GraphState>
 {
   protected File                 file;
   protected String               name;
@@ -47,6 +47,11 @@ public class EditorGraph
   protected List<EditorArc>      arcs      = new ArrayList<EditorArc>();
 
   protected Map<EditorGraphMember<?>, List<EditorArc>> outArcs = new HashMap<EditorGraphMember<?>, List<EditorArc>> ();
+
+  public EditorGraph (final GraphState initialState)
+  {
+    super( initialState );
+  }
 
   public String getName ()
   {
@@ -165,6 +170,11 @@ public class EditorGraph
 
     Set<String> ids = new HashSet<String> ();
 
+    if ( nodes.isEmpty() )
+    {
+      results.error( "A graph must contain at least one node" );
+    }
+
     for ( EditorNode node : nodes )
     {
       String nodeName = node.getState().getName();
@@ -210,6 +220,26 @@ public class EditorGraph
         {
           results.warning( "The guard in node " + nodeName + " failed to compile with following error: " + re.getMessage() );
         }
+      }
+    }
+
+    String defaultIn = getState().getDefaultNodeForIncomingArcs();
+    if ( !SvUtil.isBlankOrNull( defaultIn ) )
+    {
+      if ( !ids.contains( defaultIn ) )
+      {
+        results.error( "The node selected as the default target for incoming external arcs '" +
+                       defaultIn + "' does not exist anymore. Please fix." );
+      }
+    }
+
+    String defaultOut = getState().getDefaultNodeForOutgoingArcs();
+    if ( !SvUtil.isBlankOrNull( defaultOut ) )
+    {
+      if ( !ids.contains( defaultOut ) )
+      {
+        results.error( "The node selected as the default source for outgoing arcs '" +
+                       defaultOut + "' does not exist anymore. Please fix." );
       }
     }
 

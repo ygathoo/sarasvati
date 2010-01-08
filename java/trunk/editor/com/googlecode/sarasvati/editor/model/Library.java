@@ -113,9 +113,11 @@ public class Library
     return entry == null ? null :entry.getProcessDefinition();
   }
 
-  public void update (final ProcessDefinition processDefinition, final File path)
+  public void update (final ProcessDefinition processDefinition,
+                      final XmlEditorProperties editorProperties,
+                      final File path)
   {
-    entries.put( processDefinition.getName(), new LibraryEntry( processDefinition, path ) );
+    entries.put( processDefinition.getName(), new LibraryEntry( processDefinition, editorProperties, path ) );
   }
 
   public void saveAllEntriesInLibraryInNewestFormat () throws IOException, JAXBException
@@ -138,7 +140,7 @@ public class Library
       EditorGraphFactory.XmlSaveData saveData = EditorGraphFactory.exportToXml( graph );
       xmlLoader.saveProcessDefinition( saveData.getXmlProcDef(), saveFile );
       editorXmlLoader.saveEditorProperties( saveData.getXmlEditorProps(), new File( saveFile.getParentFile(), entry.getName() + ".editor.xml" ) );
-      update( saveData.getXmlProcDef(), saveFile );
+      update( saveData.getXmlProcDef(), saveData.getXmlEditorProps(), saveFile );
     }
   }
 }

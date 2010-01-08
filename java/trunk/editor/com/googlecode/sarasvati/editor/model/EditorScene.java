@@ -81,6 +81,7 @@ import com.googlecode.sarasvati.editor.command.MultiCommand;
 import com.googlecode.sarasvati.editor.command.MultiDeleteCommand;
 import com.googlecode.sarasvati.editor.command.PasteCommand;
 import com.googlecode.sarasvati.editor.dialog.DialogFactory;
+import com.googlecode.sarasvati.editor.xml.XmlEditorProperties;
 import com.googlecode.sarasvati.visual.common.GraphSceneImpl;
 import com.googlecode.sarasvati.visual.common.NodeDrawConfig;
 import com.googlecode.sarasvati.visual.common.PathTrackingConnectionWidget;
@@ -474,7 +475,29 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     public void createConnection (final Widget sourceWidget, final Widget targetWidget)
     {
       String arcLabel = sourceWidget == targetWidget ? EditorPreferences.getInstance().getDefalutSelfArcsLabel() : null;
-      CommandStack.addArc( EditorScene.this, new EditorArc( new ArcState( arcLabel, null, null ), source, target ) );
+
+      String startNode = null;
+      String endNode   = null;
+
+      if ( source.isExternal() )
+      {
+        XmlEditorProperties editorProps = source.asExternal().getEditorProperties();
+        if ( editorProps != null )
+        {
+          startNode = editorProps.getDefaultNodeForOutgoingArcs();
+        }
+      }
+
+      if ( target.isExternal() )
+      {
+        XmlEditorProperties editorProps = target.asExternal().getEditorProperties();
+        if ( editorProps != null )
+        {
+          endNode = editorProps.getDefaultNodeForIncomingArcs();
+        }
+      }
+
+      CommandStack.addArc( EditorScene.this, new EditorArc( new ArcState( arcLabel, startNode, endNode ), source, target ) );
     }
   }
 
@@ -719,11 +742,25 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
         }
       };
 
+      Action editPropertiesAction = new AbstractAction( "Properties" )
+      {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public void actionPerformed (final ActionEvent e)
+        {
+          JDialog dialog = DialogFactory.newGraphPropertiesDialog( graph );
+          dialog.setLocation( widget.convertLocalToScene( localLocation ) );
+          dialog.setVisible( true );
+        }
+      };
+
       pasteAction.setEnabled( Clipboard.getInstance().isClipboardPasteable() );
 
       menu.add( addNodeAction );
       menu.add( addExternalAction );
       menu.add( pasteAction );
+      menu.add( editPropertiesAction );
       return menu;
     }
   }

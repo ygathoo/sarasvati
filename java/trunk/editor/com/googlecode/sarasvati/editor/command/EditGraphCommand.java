@@ -15,38 +15,39 @@
     License along with Sarasvati.  If not, see <http://www.gnu.org/licenses/>.
 
     Copyright 2008 Paul Lorenz
-*/
-package com.googlecode.sarasvati.editor.model;
+ */
+package com.googlecode.sarasvati.editor.command;
 
-import com.googlecode.sarasvati.editor.xml.XmlEditorProperties;
+import com.googlecode.sarasvati.editor.model.EditorGraph;
+import com.googlecode.sarasvati.editor.model.GraphState;
 
-public class EditorExternal extends EditorGraphMember<ExternalState>
+public class EditGraphCommand extends AbstractCommand
 {
-  public EditorExternal (final ExternalState initialState)
+  private final EditorGraph   graph;
+  private final GraphState    newState;
+
+  public EditGraphCommand (final EditorGraph graph,
+                           final GraphState newState)
   {
-    super( initialState );
+    this.graph = graph;
+    this.newState = newState;
   }
 
   @Override
-  public boolean isExternal()
+  public void performAction ()
   {
-    return true;
+    graph.pushState( newState );
   }
 
   @Override
-  public EditorExternal asExternal ()
+  public void undoAction ()
   {
-    return this;
+    graph.popState();
   }
 
-  public XmlEditorProperties getEditorProperties ()
+  @Override
+  public String getName ()
   {
-    String graphName = getState().getGraphName();
-    LibraryEntry entry = Library.getInstance().getEntry( graphName );
-    if ( entry != null )
-    {
-      return entry.getEditorProperties();
-    }
-    return null;
+    return "Edit Graph Properties";
   }
 }

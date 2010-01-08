@@ -26,6 +26,7 @@ import com.googlecode.sarasvati.editor.GraphEditor;
 import com.googlecode.sarasvati.editor.model.ArcState;
 import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorExternal;
+import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorNodeType;
@@ -33,6 +34,7 @@ import com.googlecode.sarasvati.editor.model.EditorPreferences;
 import com.googlecode.sarasvati.editor.model.EditorScene;
 import com.googlecode.sarasvati.editor.model.ExternalState;
 import com.googlecode.sarasvati.editor.model.GraphMemberState;
+import com.googlecode.sarasvati.editor.model.GraphState;
 import com.googlecode.sarasvati.editor.model.NodeState;
 
 public class CommandStack
@@ -201,6 +203,12 @@ public class CommandStack
                               final ArcState newState)
   {
     pushAndPerform( new EditArcCommand( arc, newState ) );
+  }
+
+  public static void editGraph (final EditorGraph graph,
+                                final GraphState newState)
+  {
+    pushAndPerform( new EditGraphCommand( graph, newState ) );
   }
 
   public static void pushAndPerform (final Command command)

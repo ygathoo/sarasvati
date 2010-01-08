@@ -25,6 +25,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 
 import com.googlecode.sarasvati.editor.model.EditorArc;
+import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
 
 public class DialogFactory
@@ -47,6 +48,11 @@ public class DialogFactory
   public static JDialog newArcPropertiesDialog (final EditorArc arc)
   {
     return new ArcPropertiesDialog( frame, arc );
+  }
+
+  public static JDialog newGraphPropertiesDialog (final EditorGraph graph)
+  {
+    return new GraphPropertiesDialog( frame, graph );
   }
 
   public static JDialog newOpenLibraryDialog ()
