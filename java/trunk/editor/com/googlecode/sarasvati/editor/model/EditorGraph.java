@@ -175,8 +175,15 @@ public class EditorGraph extends AbstractStateful<GraphState>
       results.error( "A graph must contain at least one node" );
     }
 
+    boolean hasStartNode = false;
+
     for ( EditorNode node : nodes )
     {
+      if ( node.getState().isStart() )
+      {
+        hasStartNode = true;
+      }
+
       String nodeName = node.getState().getName();
       if ( ids.contains( nodeName ) )
       {
@@ -221,6 +228,11 @@ public class EditorGraph extends AbstractStateful<GraphState>
           results.warning( "The guard in node " + nodeName + " failed to compile with following error: " + re.getMessage() );
         }
       }
+    }
+
+    if ( !hasStartNode )
+    {
+      results.warning( "The process definition does not include a start node" );
     }
 
     String defaultIn = getState().getDefaultNodeForIncomingArcs();
