@@ -168,9 +168,18 @@ public abstract class BaseEngine implements Engine
 
     arcExecutionStarted = true;
 
+    List<Node> startNodes = process.getGraph().getStartNodes();
+
+    if ( startNodes.isEmpty() )
+    {
+      throw new SarasvatiException( "Cannot start a workflow which has no start nodes! " +
+                                    "Please check your process definition: '" +
+                                    process.getGraph().getName() );
+    }
+
     try
     {
-      for ( Node startNode : process.getGraph().getStartNodes() )
+      for ( Node startNode : startNodes )
       {
         NodeToken startToken = getFactory().newNodeToken( process, startNode,
                                                           new ArrayList<ArcToken>(0) );
