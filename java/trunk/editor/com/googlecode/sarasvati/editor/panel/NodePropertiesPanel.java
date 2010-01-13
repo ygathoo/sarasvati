@@ -18,8 +18,12 @@
 */
 package com.googlecode.sarasvati.editor.panel;
 
+import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -29,9 +33,11 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
+import javax.swing.text.BadLocationException;
 
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.editor.command.CommandStack;
+import com.googlecode.sarasvati.editor.dialog.DialogFactory;
 import com.googlecode.sarasvati.editor.model.EditorNode;
 import com.googlecode.sarasvati.editor.model.EditorNodeType;
 import com.googlecode.sarasvati.editor.model.EditorNodeTypeAttribute;
@@ -303,6 +309,10 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
 
     private final DefaultTableModel tableModel = new DefaultTableModel( new String[] { "Name", "Value" }, 0 );
 
+    private final ContentAssistPanel contentAssistPanel = new ContentAssistPanel();
+
+    private JDialog contentAssistDialog = null;
+
     public void setup (final JDialog dialog,
                        final EditorNode node)
     {
@@ -366,6 +376,42 @@ public class NodePropertiesPanel extends javax.swing.JPanel {
         {
           JoinType joinType = (JoinType)joinTypeInput.getSelectedItem();
           joinTypeDescriptionLabel.setText( "<html>" + joinType.getDescription() + "</html>" );
+        }
+      });
+
+      guardInput.addKeyListener( new KeyAdapter()
+      {
+        @Override
+        public synchronized void keyPressed (final KeyEvent e)
+        {
+          if ( e.getKeyChar() == ' ' && e.isControlDown() )
+          {
+            if ( contentAssistDialog == null )
+            {
+              try
+              {
+                contentAssistDialog = DialogFactory.newContentAssistDialog( contentAssistPanel );
+                System.out.println( "Caret postion: " + guardInput.getCaretPosition() );
+                Point location = guardInput.getLocationOnScreen();
+                Rectangle caretPos = guardInput.modelToView( guardInput.getCaretPosition() );
+                location.translate( caretPos.getLocation().x + caretPos.width, caretPos.getLocation().y + caretPos.height );
+                contentAssistDialog.setLocation( location );
+                contentAssistDialog.setVisible( true );
+              }
+              catch ( BadLocationException e1 )
+              {
+                e1.printStackTrace();
+                return;
+              }
+            }
+            else
+            {
+              contentAssistDialog.setVisible( false );
+              contentAssistDialog.dispose();
+              contentAssistDialog = null;
+            }
+            e.consume();
+          }
         }
       });
 
