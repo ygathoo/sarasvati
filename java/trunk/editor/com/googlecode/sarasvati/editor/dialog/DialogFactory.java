@@ -27,6 +27,7 @@ import javax.swing.JOptionPane;
 import com.googlecode.sarasvati.editor.model.EditorArc;
 import com.googlecode.sarasvati.editor.model.EditorGraph;
 import com.googlecode.sarasvati.editor.model.EditorGraphMember;
+import com.googlecode.sarasvati.editor.panel.ContentAssistPanel;
 
 public class DialogFactory
 {
@@ -58,6 +59,11 @@ public class DialogFactory
   public static JDialog newOpenLibraryDialog ()
   {
     return new OpenLibraryDialog( frame );
+  }
+
+  public static JDialog newContentAssistDialog (final ContentAssistPanel panel)
+  {
+    return new ContentAssistDialog( frame, panel );
   }
 
   public static void showError (final String error)
