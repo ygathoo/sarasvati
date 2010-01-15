@@ -234,6 +234,7 @@ public class EditorGraphFactory
       xmlNode.setType( state.getType() );
       xmlNode.setGuard( SvUtil.nullIfBlank( state.getGuard() ) );
       xmlNode.setJoinType( XmlJoinType.getXmlJoinType( state.getJoinType() ) );
+      xmlNode.setJoinParam( SvUtil.nullIfBlank( state.getJoinParam() ) );
 
       if ( state.isStart() )
       {
