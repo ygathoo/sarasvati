@@ -27,7 +27,6 @@
 	<classpathentry kind="lib" path="lib/mysql.jar"/>
 	<classpathentry kind="lib" path="lib/eclipse-draw2d-3.5.0.jar"/>
 	<classpathentry kind="lib" path="lib/dsls.jar"/>
-	<classpathentry kind="con" path="ch.epfl.lamp.sdt.launching.SCALA_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/jta-1.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
