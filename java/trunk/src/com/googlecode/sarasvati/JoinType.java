@@ -21,6 +21,7 @@ package com.googlecode.sarasvati;
 import com.googlecode.sarasvati.impl.TokenSetOrJoinStrategy;
 import com.googlecode.sarasvati.join.AndJoinStrategy;
 import com.googlecode.sarasvati.join.ClassJoinStrategy;
+import com.googlecode.sarasvati.join.JoinLangCompiler;
 import com.googlecode.sarasvati.join.JoinLangJoinStrategy;
 import com.googlecode.sarasvati.join.LabelJoinStrategy;
 import com.googlecode.sarasvati.join.MergeJoinStrategy;
@@ -109,7 +110,7 @@ public enum JoinType
 
   /**
    * Uses the {@link JoinLangJoinStrategy}. Follows the rules as defined in
-   * {@link JoinLangInterpreter}.
+   * {@link JoinLangCompiler}.
    */
   JOINLANG( new JoinLangJoinStrategy(),
          "Evaluates the join lang statement given in the join parameter." )

@@ -98,8 +98,10 @@ public class JoinLangCompiler
    * using a {@link RubricVisitor} with call to
    * {@link RubricStmt#traverse(RubricVisitor)}.
    *
-   * @param rubricStatement A String containing a Rubric program
+   * @param joinSpecStmt A String containing a Rubric program
+   *
    * @throws JoinLangException Thrown if the program is not valid.
+   *
    * @return A RubricStmt, which is the root of the compiled AST.
    */
   public static JoinLangExpr compile (final String joinSpecStmt) throws JoinLangException

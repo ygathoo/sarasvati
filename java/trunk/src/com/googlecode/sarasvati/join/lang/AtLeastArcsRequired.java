@@ -39,7 +39,7 @@ public class AtLeastArcsRequired extends AbstractJoinRequirement
   }
 
   /**
-   * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
+   * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(com.googlecode.sarasvati.join.lang.JoinRequirement)
    */
   @Override
   public boolean isEqualTo (final JoinRequirement req)

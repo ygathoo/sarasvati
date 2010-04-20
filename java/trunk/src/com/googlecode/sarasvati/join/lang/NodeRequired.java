@@ -21,7 +21,7 @@ package com.googlecode.sarasvati.join.lang;
 
 public class NodeRequired extends AbstractJoinRequirement
 {
-  private String nodeName;
+  private final String nodeName;
 
   public NodeRequired (final String nodeName)
   {
@@ -39,7 +39,7 @@ public class NodeRequired extends AbstractJoinRequirement
   }
 
   /**
-   * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
+   * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(JoinRequirement)
    */
   @Override
   public boolean isEqualTo (final JoinRequirement expr)

@@ -27,6 +27,7 @@ import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
+import com.googlecode.sarasvati.impl.AcceptTokenGuardResult;
 import com.googlecode.sarasvati.join.lang.JoinLangEnv;
 import com.googlecode.sarasvati.load.GraphFactory;
 import com.googlecode.sarasvati.load.GraphLoader;
@@ -374,7 +375,7 @@ public interface Engine
    *
    * @param token The NodeToken for which the guard is being evaluated.
    * @param guard The guard statement to be evaluated. Maybe blank or null, which
-   *              by convention should cause {@link GuardResult#ACCEPT_TOKEN_RESPONSE}
+   *              by convention should cause {@link AcceptTokenGuardResult}
    *              to be returned.
    *
    * @return The response based on the guard.

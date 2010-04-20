@@ -29,7 +29,7 @@ import com.googlecode.sarasvati.NodeToken;
 
 public final class MergeJoinResult implements JoinResult
 {
-  private NodeToken mergeTarget;
+  private final NodeToken mergeTarget;
   private final Collection<ArcToken> tokens;
 
   public MergeJoinResult (final ArcToken token, final NodeToken mergeTarget)
@@ -54,7 +54,7 @@ public final class MergeJoinResult implements JoinResult
   }
 
   /**
-   * Always returns {@value JoinAction#Merge}
+   * Always returns {@link JoinAction#Merge}
    *
    * @see com.googlecode.sarasvati.JoinResult#getJoinAction()
    */

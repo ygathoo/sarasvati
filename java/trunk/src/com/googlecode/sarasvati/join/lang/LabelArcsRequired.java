@@ -23,7 +23,7 @@ import com.googlecode.sarasvati.util.SvUtil;
 
 public class LabelArcsRequired extends AbstractJoinRequirement
 {
-  private String label;
+  private final String label;
 
   public LabelArcsRequired (final String label)
   {
@@ -41,7 +41,7 @@ public class LabelArcsRequired extends AbstractJoinRequirement
   }
 
   /**
-   * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
+   * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(JoinRequirement)
    */
   @Override
   public boolean isEqualTo (final JoinRequirement expr)

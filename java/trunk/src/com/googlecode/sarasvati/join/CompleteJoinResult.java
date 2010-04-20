@@ -56,7 +56,7 @@ public final class CompleteJoinResult implements JoinResult
   }
 
   /**
-   * Always returns {@value JoinAction#Complete}
+   * Always returns {@link JoinAction#Complete}
    *
    * @see com.googlecode.sarasvati.JoinResult#getJoinAction()
    */
