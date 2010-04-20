@@ -38,7 +38,7 @@ public class AndJoinExpr extends AbstractJoinLangExpr
   }
 
   /**
-   * @see com.googlecode.sarasvati.join.lang.JoinRequirement#performJoin(com.googlecode.sarasvati.join.lang.JoinLangEnv)
+   * @see com.googlecode.sarasvati.join.lang.JoinLangExpr#performJoin(com.googlecode.sarasvati.join.lang.JoinLangEnv)
    */
   @Override
   public JoinResult performJoin (final JoinLangEnv joinEnv)

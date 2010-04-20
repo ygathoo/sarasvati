@@ -36,7 +36,7 @@ public final class IncompleteJoinResult implements JoinResult
   }
 
   /**
-   * Always returns {@value JoinAction#Nothing}
+   * Always returns {@link JoinAction#Nothing}
    *
    * @see com.googlecode.sarasvati.JoinResult#getJoinAction()
    */

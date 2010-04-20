@@ -21,7 +21,7 @@ package com.googlecode.sarasvati.join.lang;
 
 public class TokenSetRequired extends AbstractJoinRequirement
 {
-  private String tokenSetName;
+  private final String tokenSetName;
 
   public TokenSetRequired (final String tokenSetName)
   {
@@ -40,7 +40,7 @@ public class TokenSetRequired extends AbstractJoinRequirement
   }
 
   /**
-   * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(com.googlecode.sarasvati.join.lang.JoinLangExpr)
+   * @see com.googlecode.sarasvati.join.lang.AbstractJoinRequirement#isEqualTo(JoinRequirement)
    */
   @Override
   public boolean isEqualTo (final JoinRequirement expr)

@@ -70,9 +70,9 @@ public interface GraphLoader<G extends Graph>
    * Loads all new and changed process definitions under the given base directory. Uses
    * the default file name filter, which matches all files with the .wf.xml extension.
    * <p>
-   * Equivalent to loadNewAndChanged( baseDir, null, null );
+   * Equivalent to loadNewAndChanged( baseDir, null );
    * <p>
-   * @see GraphLoader#loadNewAndChanged(File, FilenameFilter, GraphValidator)
+   * @see GraphLoader#loadNewAndChanged(File, FilenameFilter)
    */
   List<LoadResult> loadNewAndChanged (File baseDir) throws SarasvatiLoadException;
 
@@ -138,7 +138,7 @@ public interface GraphLoader<G extends Graph>
    * <p>
    * Equivalent to loadDefinition( translator, source, null )
    * <p>
-   * @see GraphLoader#loadDefinition(ProcessDefinitionTranslator, Object, String, GraphValidator)
+   * @see GraphLoader#loadDefinition(ProcessDefinitionTranslator, Object, String)
    **/
   <T> void loadDefinition (ProcessDefinitionTranslator<T> translator, T source) throws SarasvatiLoadException;
 
