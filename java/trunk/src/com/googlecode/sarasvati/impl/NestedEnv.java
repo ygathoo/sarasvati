@@ -120,7 +120,7 @@ public class NestedEnv implements Env
   @Override
   public Object getTransientAttribute (final String name)
   {
-    return outerEnv.hasAttribute( name ) ? outerEnv.getTransientAttribute( name ) : innerEnv.getTransientAttribute( name );
+    return outerEnv.hasTransientAttribute( name ) ? outerEnv.getTransientAttribute( name ) : innerEnv.getTransientAttribute( name );
   }
 
   @Override
