@@ -17,7 +17,7 @@
     Copyright 2009 Paul Lorenz
 */
 
-package com.googlecode.sarasvati.unittest.rubric;
+package com.googlecode.sarasvati.unittest.framework;
 
 import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.NodeToken;
