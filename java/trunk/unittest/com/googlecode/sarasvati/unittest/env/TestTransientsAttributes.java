@@ -38,11 +38,20 @@ public class TestTransientsAttributes extends ExecutionTest
 
     NodeToken t = getActiveToken( p, "nodeA");
 
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+
     String expected = "bar";
     t.getEnv().setTransientAttribute( "foo", expected );
     String actual = (String)t.getEnv().getTransientAttribute( "foo" );
-
     Assert.assertEquals( expected, actual );
+
+    Assert.assertTrue( t.getEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertTrue( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+
+    t.getEnv().removeTransientAttribute( "foo" );
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
   }
 
   @Test
@@ -54,10 +63,18 @@ public class TestTransientsAttributes extends ExecutionTest
     NodeToken t = getActiveToken( p, "nodeA");
 
     String expected = "bar";
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
     t.getFullEnv().setTransientAttribute( "foo", expected );
+    Assert.assertTrue( t.getEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertTrue( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
     String actual = (String)t.getFullEnv().getTransientAttribute( "foo" );
 
     Assert.assertEquals( expected, actual );
+
+    t.getEnv().removeTransientAttribute( "foo" );
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
   }
 
   @Test
@@ -66,11 +83,23 @@ public class TestTransientsAttributes extends ExecutionTest
     Graph graph = ensureLoaded( "two-node" );
     GraphProcess p = engine.startProcess( graph );
 
+    NodeToken t = getActiveToken( p, "nodeA");
+
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+
     String expected = "bar";
     p.getEnv().setTransientAttribute( "foo", expected );
     String actual = (String)p.getEnv().getTransientAttribute( "foo" );
-
     Assert.assertEquals( expected, actual );
+
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertTrue( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+
+    p.getEnv().removeTransientAttribute( "foo" );
+
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
   }
 
   @Test

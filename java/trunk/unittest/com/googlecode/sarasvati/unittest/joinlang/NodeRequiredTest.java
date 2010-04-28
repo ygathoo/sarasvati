@@ -29,7 +29,7 @@ import com.googlecode.sarasvati.rubric.env.DefaultRubricFunctionRepository;
 import com.googlecode.sarasvati.unittest.framework.ExecutionTest;
 import com.googlecode.sarasvati.unittest.framework.ProcessPrinter;
 import com.googlecode.sarasvati.unittest.framework.TestProcess;
-import com.googlecode.sarasvati.unittest.rubric.UnitTestPredicates;
+import com.googlecode.sarasvati.unittest.framework.UnitTestPredicates;
 
 public class NodeRequiredTest extends ExecutionTest
 {
