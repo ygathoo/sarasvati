@@ -92,9 +92,9 @@ Sarasvati uses ant to build. To rebuild the library .jar file, run
 
  The .jar file will be generated in dist/sarasvati-<version>/.
 
- NOTE: The 3rd party libraries used by sarasvati are not distributed with it, to save space. When a
-       dist build is done, they will be fetched from the SVN repository. If you wish to fetch them
-       without doing a full build, run
+ NOTE: If you downloaded the "slim" version of sarasvati, the 3rd party libraries used by sarasvati
+       won't be distributed with it, to save space. When a dist build is done, they will be fetched
+       from the SVN repository. If you wish to fetch them without doing a full build, run
 
 > ant fetchlibs
 
