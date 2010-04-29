@@ -75,7 +75,7 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/rhino-1.6R7.jar"/>
       </resources>
     </copy>
-    <copy todir="lib" flatten="true">
+    <copy todir="installer" flatten="true">
       <resources>
       	<url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/installer/standalone-compiler.jar"/>
       </resources>
