@@ -316,4 +316,27 @@
 
   <target name="hudson" depends="findbugs, junit"/>
 
+  <target name="javadoc" depends="compile">
+    <javadoc access="public"
+             author="true"
+             classpathref="classpath"
+             destdir="doc/javadoc"
+             nodeprecated="false" 
+             nodeprecatedlist="false" 
+             noindex="false" 
+             nonavbar="false" 
+             notree="false"
+             source="1.6"
+             splitindex="true"
+             version="true"
+             use="true"
+             windowtitle="Sarasvati ${version} API">
+      <fileset dir=".">
+        <include name="src/**/*.java"/>
+        <include name="visual/**/*.java"/>
+      </fileset>
+      <link href="http://java.sun.com/javase/6/docs/api/"/>
+    </javadoc>
+  </target>
+
 </project>
