@@ -75,7 +75,12 @@
         <url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/lib/rhino-1.6R7.jar"/>
       </resources>
     </copy>
-    <delete file="${fetch.indicator}"/>
+    <copy todir="lib" flatten="true">
+      <resources>
+      	<url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/installer/standalone-compiler.jar"/>
+      </resources>
+    </copy>
+  	<delete file="${fetch.indicator}"/>
   </target>
 
   <target name="buildLang">
@@ -193,12 +198,14 @@
         <include name="README"/>
         <include name="script/run**"/>
         <exclude name="**/.svn/**"/>
+      	<include name="installer/**"/>
+        <exclude name="installer/*.jar"/>
       </fileset>
     </copy>
 
     <copy todir="${archive.base}">
       <fileset dir=".">
-        <include name="common/db/**"/>
+        <include name="db/**"/>
         <include name="common/*.license"/>
         <include name="common/*.xsd"/>
         <include name="common/test-wf/embedded-task-rej.wf.xml"/>
@@ -214,7 +221,7 @@
 
   	<mkdir dir="${archive.base}/hudson/lib"/>
 
-    <zip destfile="${archive.base}.zip" basedir="${dist.dir}" compress="true" level="9">
+    <zip destfile="${archive.base}-slim.zip" basedir="${dist.dir}" compress="true" level="9">
       <include name="${dist.name}/**"/>
     </zip>
 
@@ -224,10 +231,11 @@
       <fileset dir=".">
       	<include name="lib/*.jar"/>
       	<exclude name="lib/dsls.jar"/>
+      	<include name="installer/*.jar"/>
       </fileset>
     </copy>
 
-    <zip destfile="${archive.base}-alllibs.zip" basedir="${dist.dir}" compress="true" level="9">
+    <zip destfile="${archive.base}.zip" basedir="${dist.dir}" compress="true" level="9">
       <include name="${dist.name}/**"/>
     </zip>
 
