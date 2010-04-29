@@ -1,7 +1,8 @@
 #summary Using Sarasvati
-#labels Featured
 
 [EngineConcepts <-- Prev: Core Concepts]
+
+*NOTE: This is for version 1.0.0-rc2 (and previous)*
 
 <wiki:toc/>
 
