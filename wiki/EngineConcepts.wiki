@@ -1,5 +1,4 @@
 #summary Core Sarasvati engine concepts.
-#labels Featured
 
 [GraphBasedWorkflow <-- Prev: Why graph based workflow?] ... [UsingSarasvati Next: Using Sarasvati -->]
 
