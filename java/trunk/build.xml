@@ -1,6 +1,6 @@
 <project name="sarasvati" default="compile">
 
-  <property name="version" value="1.0.0"/>
+  <property name="version" value="1.0.2"/>
 
   <property name="dist.dir" value="dist"/>
   <property name="build.dir" value="${dist.dir}/build"/>
