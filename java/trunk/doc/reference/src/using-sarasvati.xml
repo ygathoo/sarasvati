@@ -2175,7 +2175,7 @@ public class DelayExecutionListener implements ExecutionListener
 
             <figure>
               <title>Linear Process Definition</title>
-              <graphic fileref="images/backtrack-graph1.jpg" />
+              <graphic fileref="../images/backtrack-graph1.jpg" />
             </figure>
 
             In this case, there is only one progression that can be made. Using
@@ -2183,7 +2183,7 @@ public class DelayExecutionListener implements ExecutionListener
             execution looks like:
 
             <figure>
-              <graphic fileref="images/backtrack-process1.jpg" />
+              <graphic fileref="../images/backtrack-process1.jpg" />
             </figure>
 
             What if we wish to let a user choose to send the workflow backwards,
@@ -2194,7 +2194,7 @@ public class DelayExecutionListener implements ExecutionListener
 
             <figure>
               <title>Manual Linear Backtracking</title>
-              <graphic fileref="images/backtrack-graph2.jpg" />
+              <graphic fileref="../images/backtrack-graph2.jpg" />
             </figure>
 
             Now we could go from A to B to C, back to B to C to D, back to B to C to
@@ -2202,7 +2202,7 @@ public class DelayExecutionListener implements ExecutionListener
 
             <figure>
               <title>Manual Linear Backtracking: Execution</title>
-              <graphic fileref="images/backtrack-process2.jpg" scalefit="1" width="100%"/>
+              <graphic fileref="../images/backtrack-process2.jpg" scalefit="1" width="100%"/>
             </figure>
 
             Note that the arc tokens now display the arc name.
@@ -2224,14 +2224,14 @@ public class DelayExecutionListener implements ExecutionListener
             point, the process execution history looks like:
 
             <figure>
-              <graphic fileref="images/backtrack-process3-1.jpg" />
+              <graphic fileref="../images/backtrack-process3-1.jpg" />
             </figure>
 
             Now we wish to backtrack to <emphasis>B</emphasis>. If we
             retrace our steps, the process history will now look like:
 
             <figure>
-              <graphic fileref="images/backtrack-process3-2.jpg" />
+              <graphic fileref="../images/backtrack-process3-2.jpg" />
             </figure>
 
             Note that when we traverse arc <emphasis>2</emphasis>
@@ -2250,14 +2250,14 @@ public class DelayExecutionListener implements ExecutionListener
             history looks like:
 
             <figure>
-              <graphic fileref="images/backtrack-process3-3.jpg" scalefit="1" width="100%"/>
+              <graphic fileref="../images/backtrack-process3-3.jpg" scalefit="1" width="100%"/>
             </figure>
 
             If from here, we once again wish to return to <emphasis>B</emphasis>, the
             execution history will look like:
 
             <figure>
-              <graphic fileref="images/backtrack-process3-4.jpg" scalefit="1" width="100%"/>
+              <graphic fileref="../images/backtrack-process3-4.jpg" scalefit="1" width="100%"/>
             </figure>
 
             Note that since we are somewhat literally retracing our steps, to
@@ -2271,7 +2271,7 @@ public class DelayExecutionListener implements ExecutionListener
           <para>
             From here we now finish, and go to the end.
             <figure>
-              <graphic fileref="images/backtrack-process3-5.jpg" scalefit="1" width="100%"/>
+              <graphic fileref="../images/backtrack-process3-5.jpg" scalefit="1" width="100%"/>
             </figure>
           </para>
         </section>
@@ -2283,7 +2283,7 @@ public class DelayExecutionListener implements ExecutionListener
             Let us now examine a process definition which has splits and joins.
 
             <figure>
-              <graphic fileref="images/backtrack-graph3.jpg" />
+              <graphic fileref="../images/backtrack-graph3.jpg" />
             </figure>
 
             These complicate manual backtracking a great deal.
@@ -2313,7 +2313,7 @@ public class DelayExecutionListener implements ExecutionListener
 
           <figure>
             <title>Manual Backtracking Split/Join</title>
-            <graphic fileref="images/backtrack-graph4.jpg" />
+            <graphic fileref="../images/backtrack-graph4.jpg" />
           </figure>
 
           It has a great deal many more arcs, as well as a more complicated
@@ -2327,13 +2327,13 @@ public class DelayExecutionListener implements ExecutionListener
           <emphasis>D</emphasis> are open.
 
           <figure>
-            <graphic fileref="images/backtrack-process4-s1.jpg" />
+            <graphic fileref="../images/backtrack-process4-s1.jpg" />
           </figure>
 
           We can now attempt to backtrack to <emphasis>B</emphasis>.
 
           <figure>
-            <graphic fileref="images/backtrack-process4-s2.jpg" />
+            <graphic fileref="../images/backtrack-process4-s2.jpg" />
           </figure>
 
           The engine will follow all execution history which emanated from
@@ -2347,7 +2347,7 @@ public class DelayExecutionListener implements ExecutionListener
           the execution history will look like:
 
           <figure>
-            <graphic fileref="images/backtrack-process4-s3.jpg" scalefit="1" width="100%"/>
+            <graphic fileref="../images/backtrack-process4-s3.jpg" scalefit="1" width="100%"/>
           </figure>
 
           Though this appears to be a simple linear backtrack, it's actually
@@ -2362,7 +2362,7 @@ public class DelayExecutionListener implements ExecutionListener
           the execution history would look as follows:
 
           <figure>
-            <graphic fileref="images/backtrack-process4-s4.jpg" scalefit="1" width="100%"/>
+            <graphic fileref="../images/backtrack-process4-s4.jpg" scalefit="1" width="100%"/>
           </figure>
 
           It looks almost the same, except that the second <emphasis>B</emphasis>
@@ -2378,7 +2378,7 @@ public class DelayExecutionListener implements ExecutionListener
           splits.
 
           <figure>
-            <graphic fileref="images/backtrack-graph3.jpg" />
+            <graphic fileref="../images/backtrack-graph3.jpg" />
           </figure>
 
           Going back from a join is both more and less problematic than a split. A
@@ -2394,14 +2394,14 @@ public class DelayExecutionListener implements ExecutionListener
           <emphasis>E</emphasis> and the execution history looks like:
 
           <figure>
-            <graphic fileref="images/backtrack-process4-j1.jpg" />
+            <graphic fileref="../images/backtrack-process4-j1.jpg" />
           </figure>
 
           If we then want to go back to when <emphasis>C</emphasis>
           was open, the process will now look like:
 
           <figure>
-           <graphic fileref="images/backtrack-process4-j2.jpg" scalefit="1" width="100%"/>
+           <graphic fileref="../images/backtrack-process4-j2.jpg" scalefit="1" width="100%"/>
           </figure>
 
           As expected, <emphasis>C</emphasis> is now open. To do so,
@@ -2429,14 +2429,14 @@ public class DelayExecutionListener implements ExecutionListener
           If we complete <emphasis>C</emphasis> the process will look like:
 
           <figure>
-            <graphic fileref="images/backtrack-process4-j3.jpg" scalefit="1" width="100%"/>
+            <graphic fileref="../images/backtrack-process4-j3.jpg" scalefit="1" width="100%"/>
           </figure>
 
           If instead of completing <emphasis>C</emphasis> we backtracked
           to <emphasis>D</emphasis> as well, the process would now look like:
 
           <figure>
-            <graphic fileref="images/backtrack-process4-j4.jpg" scalefit="1" width="100%"/>
+            <graphic fileref="../images/backtrack-process4-j4.jpg" scalefit="1" width="100%"/>
           </figure>
 
           The u-turn arc token is now marked as backtracked and a node token
@@ -2630,7 +2630,7 @@ public class DelayExecutionListener implements ExecutionListener
 
         <figure>
           <title>Process Definition Visualization Screenshot</title>
-          <graphic fileref="images/graph-visualization.jpg" scalefit="1" width="100%"/>
+          <graphic fileref="../images/graph-visualization.jpg" scalefit="1" width="100%"/>
         </figure>
 
       </para>
@@ -2722,7 +2722,7 @@ public class DelayExecutionListener implements ExecutionListener
 
         <figure>
           <title>Process Visualization Screenshot</title>
-          <graphic fileref="images/process-visualization1.jpg" scalefit="1" width="100%"/>
+          <graphic fileref="../images/process-visualization1.jpg" scalefit="1" width="100%"/>
         </figure>
       </para>
     </section>
@@ -2804,6 +2804,7 @@ public class ExampleGraphValidator extends GraphValidatorAdapter
 
       </para>
     </section>
+    <!--
     <section id="using-java-api-token-sets">
       <title>Token Sets/Templates</title>
       <section id="using-java-api-token-sets-intro">
@@ -2813,5 +2814,6 @@ public class ExampleGraphValidator extends GraphValidatorAdapter
         </para>
       </section>
     </section>
+     -->
   </section>
 </chapter>
