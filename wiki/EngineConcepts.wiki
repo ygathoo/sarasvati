@@ -2,6 +2,7 @@
 
 [GraphBasedWorkflow <-- Prev: Why graph based workflow?] ... [UsingSarasvati Next: Using Sarasvati -->]
 
+* NOTE: This is for version 1.0.0-rc2 (and previous)*
 
 = Core Concepts =
 
