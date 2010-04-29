@@ -1,4 +1,4 @@
-<project name="sarasvati">
+<project name="sarasvati" default="compile">
 
   <property name="version" value="1.0.0"/>
 
@@ -154,7 +154,7 @@
     </javac>
   </target>
 
-  <target name="dist" depends="compile, buildLang">
+  <target name="dist" depends="clean, compile, buildLang">
     <mkdir dir="${archive.base}"/>
 
     <copy todir="${build.jarbase.dir}">
@@ -184,7 +184,8 @@
         <include name="build.xml"/>
         <include name="src/**"/>
         <include name="visual/**"/>
-        <include name="doc/javadoc/**"/>
+        <include name="editor/**"/>
+      	<include name="doc/javadoc/**"/>
         <include name="examples/**"/>
         <include name="lang/**"/>
         <include name="lib/*.txt"/>
@@ -211,12 +212,29 @@
 
     <touch file="${archive.base}/${fetch.indicator}"/>
 
+  	<mkdir dir="${archive.base}/hudson/lib"/>
+
     <zip destfile="${archive.base}.zip" basedir="${dist.dir}" compress="true" level="9">
       <include name="${dist.name}/**"/>
     </zip>
 
+    <delete file="${archive.base}/${fetch.indicator}"/>
+
+    <copy todir="${archive.base}">
+      <fileset dir=".">
+      	<include name="lib/*.jar"/>
+      	<exclude name="lib/dsls.jar"/>
+      </fileset>
+    </copy>
+
+    <zip destfile="${archive.base}-alllibs.zip" basedir="${dist.dir}" compress="true" level="9">
+      <include name="${dist.name}/**"/>
+    </zip>
+
+
     <!-- Run installer build -->
     <echo message="Running IzPack to build the installer..."/>
+
     <izpack input="installer/installer.xml"
             output="${dist.dir}/sarasvati-editor-${version}-install.jar"
             installerType="standard"
