@@ -51,6 +51,7 @@
       <file targetdir="$INSTALL_PATH" src="lib/eclipse-draw2d-3.5.0.jar" />
       <file targetdir="$INSTALL_PATH" src="installer/run-editor.sh" />
       <file targetdir="$INSTALL_PATH" src="installer/run-editor.bat" />
+      <file targetdir="$INSTALL_PATH" src="installer/addpath.bat" />
 
       <parsable   targetfile="$INSTALL_PATH/run-editor.bat"/>
       <parsable   targetfile="$INSTALL_PATH/run-editor.sh" type="shell"/>
