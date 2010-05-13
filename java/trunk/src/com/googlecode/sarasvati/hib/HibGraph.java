@@ -66,7 +66,7 @@ public class HibGraph extends AbstractGraph
 
   @OneToMany (mappedBy="graph", fetch=FetchType.LAZY)
   @Cascade( { org.hibernate.annotations.CascadeType.LOCK, org.hibernate.annotations.CascadeType.DELETE } )
-  protected List<HibGraphListener>  listeners;
+  protected List<HibGraphListener> listeners;
 
   @Transient
   protected ExecutionEventQueue eventQueue = new InitialExecutionEventQueue()
@@ -91,6 +91,7 @@ public class HibGraph extends AbstractGraph
     this.createDate = new Date();
     this.nodes = new LinkedList<Node>();
     this.arcs = new LinkedList<Arc>();
+    this.listeners = new LinkedList<HibGraphListener>();
   }
 
   @OneToMany (fetch=FetchType.EAGER, mappedBy="graph", cascade=CascadeType.REMOVE, targetEntity=HibNodeRef.class)

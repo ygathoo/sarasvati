@@ -59,9 +59,12 @@ public class CachingExecutionEventQueue extends DefaultExecutionEventQueue
 
   public void initFromPersisted (List<? extends PersistedExecutionListener> listeners)
   {
-    for ( PersistedExecutionListener listener : listeners )
+    if ( listeners != null )
     {
-      addListener( listenerCache.getListener( listener.getType() ), listener.getEventTypeMask() );
+      for ( PersistedExecutionListener listener : listeners )
+      {
+        addListener( listenerCache.getListener( listener.getType() ), listener.getEventTypeMask() );
+      }
     }
   }
 }
