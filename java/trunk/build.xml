@@ -19,6 +19,8 @@
   <property name="archive.base" value="${dist.dir}/${dist.name}"/>
   <property name="fetch.indicator" value="lib/.fetchlibs"/>
 
+  <property file="build.properties"/>
+
   <path id="classpath">
     <fileset dir="lib/">
       <include name="*.jar"/>
@@ -46,6 +48,9 @@
            classname="com.izforge.izpack.ant.IzPackTask"
            classpath="installer/standalone-compiler.jar"
            onerror="report"/>
+  <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask"
+  	       classpathref="classpath"
+  	       name="gcupload"/>
 
   <available file="${fetch.indicator}" property="libs.notfetched"/>
   <available file="lib/dsls.jar" property="dsls.jar.exists"/>
@@ -244,7 +249,7 @@
     <echo message="Running IzPack to build the installer..."/>
 
     <izpack input="installer/installer.xml"
-            output="${dist.dir}/sarasvati-editor-${version}-install.jar"
+            output="${dist.dir}/sarasvati-editor-${version}-installer.jar"
             installerType="standard"
             inheritAll="true"
             basedir="."
@@ -261,6 +266,36 @@
     <delete file="${archive.base}.tar"/>
     -->
   </target>
+
+  <target name="release-core" depends="dist">
+  	<gcupload username="${gcusername}"
+  	          password="${gcpassword}"
+  	          projectname="sarasvati"
+  	          filename="${archive.base}.zip"
+  	          targetfilename="${dist.name}.zip"
+  	          summary="Sarasvati v${version} for Java. Includes binary, sources, javadocs, examples and all 3rd party libraries."
+  	          labels="Featured, Type-Archive, Language-Java, Status-GA, OpSys-All"/>
+
+  	<gcupload username="${gcusername}"
+  	          password="${gcpassword}"
+  	          projectname="sarasvati"
+  	          filename="${archive.base}-slim.zip"
+  	          targetfilename="${dist.name}-slim.zip"
+  	          summary="Sarasvati v${version} for Java. Includes binary, sources, javadocs and examples. Slim download doesn't include all support libraries."
+  	          labels="Type-Archive, Language-Java, Status-GA, OpSys-All"/>
+  </target>
+
+  <target name="release-editor" depends="dist">
+  	<gcupload username="${gcusername}"
+  	          password="${gcpassword}"
+  	          projectname="sarasvati"
+  	          filename="${dist.dir}/sarasvati-editor-${version}-installer.jar"
+  	          targetfilename="sarasvati-editor-${version}-installer.jar"
+  	          summary="Sarasvati Workflow Editor Installer v${version}. Executable jar built using Izpack"
+  	          labels="Featured, Type-Installer, Language-Java, Status-GA, OpSys-All"/>
+  </target>
+
+  <target name="release-all" depends="release-core, release-editor"/>
 
   <target name="clean">
     <delete dir="${dist.dir}"/>
@@ -321,10 +356,10 @@
              author="true"
              classpathref="classpath"
              destdir="doc/javadoc"
-             nodeprecated="false" 
-             nodeprecatedlist="false" 
-             noindex="false" 
-             nonavbar="false" 
+             nodeprecated="false"
+             nodeprecatedlist="false"
+             noindex="false"
+             nonavbar="false"
              notree="false"
              source="1.6"
              splitindex="true"
@@ -340,3 +375,4 @@
   </target>
 
 </project>
+
