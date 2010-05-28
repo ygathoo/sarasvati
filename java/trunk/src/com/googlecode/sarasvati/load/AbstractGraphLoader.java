@@ -153,8 +153,8 @@ public abstract class AbstractGraphLoader<G extends Graph> implements GraphLoade
           if ( endNode == null )
           {
             throw new SarasvatiLoadException( "Arc in external '" + externalDef.getName() +
-                                     "' points to non-existent node '" + externalArcDef.getTo() +
-                                     "' in external '" + externalArcDef.getExternal() + "'" );
+                                              "' points to non-existent node '" + externalArcDef.getTo() +
+                                              "' in external '" + externalArcDef.getExternal() + "'" );
           }
         }
         else
@@ -163,7 +163,7 @@ public abstract class AbstractGraphLoader<G extends Graph> implements GraphLoade
           if ( endNode == null )
           {
             throw new SarasvatiLoadException( "Arc in external'" + externalArcDef.getName() +
-                                     "' points to non-existent node '" + externalArcDef.getTo() + "'" );
+                                              "' points to non-existent node '" + externalArcDef.getTo() + "'" );
           }
         }
 

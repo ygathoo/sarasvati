@@ -31,6 +31,7 @@ import java.util.Set;
 import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.TokenSetMember;
+import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
 
@@ -186,6 +187,14 @@ public class SvUtil
     for ( ExternalDefinition external : def.getExternals() )
     {
       ProcessDefinition externalPD = processDefsByName.get( external.getProcessDefinition() );
+
+      if ( externalPD == null )
+      {
+        throw new SarasvatiLoadException( "While loading process definition \"" + def.getName() +
+                                          "\", could not find referenced external with name=\"" + external.getName() +
+                                          "\" and process-definition=\"" + external.getProcessDefinition() + "\". " );
+      }
+
       if ( !processed.contains( externalPD ) )
       {
         addWithPrerequisites( externalPD, processed, processDefsByName );
