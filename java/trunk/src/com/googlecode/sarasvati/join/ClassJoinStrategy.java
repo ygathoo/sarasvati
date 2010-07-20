@@ -26,6 +26,7 @@ import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.JoinResult;
 import com.googlecode.sarasvati.JoinStrategy;
 import com.googlecode.sarasvati.SarasvatiException;
+import com.googlecode.sarasvati.util.SvUtil;
 
 /**
  * Implements a join strategy that assumes the join param
@@ -46,7 +47,7 @@ public class ClassJoinStrategy implements JoinStrategy
     {
       try
       {
-        joinStrategy = (JoinStrategy)Class.forName( className ).newInstance();
+        joinStrategy = (JoinStrategy) SvUtil.newInstanceOf( className, "JoinStrategy" );
         instanceMap.put( className, joinStrategy );
       }
       catch (Exception e)

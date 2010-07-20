@@ -28,9 +28,11 @@ import java.util.Map;
 import java.util.Queue;
 import java.util.Set;
 
+import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.TokenSetMember;
+import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
@@ -180,6 +182,67 @@ public class SvUtil
     return processed;
   }
 
+  public static Object newInstanceOf(final String className, final String baseType)
+  {
+    Class<?> clazz = null;
+    try
+    {
+      clazz = Class.forName(className);
+    }
+    catch ( final Exception e )
+    {
+      // If this fails, try using the thread's class loader
+    }
+
+    if ( clazz == null )
+    {
+      try
+      {
+        clazz = Thread.currentThread().getContextClassLoader().loadClass(className);
+      }
+      catch( final Exception e )
+      {
+        // If this fails, try using the classloader for SvUtil
+      }
+    }
+    
+    if ( clazz == null )
+    {
+      try
+      {
+        clazz = SvUtil.class.getClassLoader().loadClass(className);
+      }
+      catch( final Exception e )
+      {
+        throw new SarasvatiException( "Failed to load " + baseType + " class: " + className, e );
+      }
+    }
+    
+    return newInstanceOf( clazz, baseType );
+  }
+  
+  public static <T> T newInstanceOf(final Class<T> clazz, final String baseType)
+  {
+    try
+    {
+      return clazz.newInstance();
+    }
+    catch ( final InstantiationException e )
+    {
+      throw new SarasvatiException( baseType + "s must have a default public constructor. " +
+                                    "They may not be non-static inner classes. " +
+                                    "In other words, you must be able create new ones using " + 
+                                    clazz.getName() + ".class.newInstance()", e );
+    }
+    catch ( final IllegalAccessException e )
+    {
+      throw new SarasvatiException( baseType + "s must have a default public constructor. " +
+                                    "They may not be non-static inner classes. " +
+                                    "In other words, you must be able create new ones using " +
+                                    clazz.getName() + ".class.newInstance()", e );
+    } 
+  }
+  
   private static void addWithPrerequisites (final ProcessDefinition def,
                                             final Set<ProcessDefinition> processed,
                                             final Map<String, ProcessDefinition> processDefsByName)

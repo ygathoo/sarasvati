@@ -20,48 +20,20 @@ package com.googlecode.sarasvati.event;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import com.googlecode.sarasvati.SarasvatiException;
+import com.googlecode.sarasvati.util.SvUtil;
 
 public class ListenerCache
 {
   protected ConcurrentHashMap<String, ExecutionListener> listenerCache = new ConcurrentHashMap<String, ExecutionListener>();
 
-  @SuppressWarnings("unchecked")
   public ExecutionListener getListener (final String type)
   {
     ExecutionListener listener = listenerCache.get( type );
 
     if ( listener == null )
     {
-      Class<? extends ExecutionListener> listenerClass = null;
-
-      try
-      {
-        listenerClass = (Class< ? extends ExecutionListener>)Class.forName( type );
-      }
-      catch (Exception e)
-      {
-        throw new SarasvatiException( "Failed to load ExecutionListener class: " + type, e );
-      }
-
-      try
-      {
-        listener = listenerClass.newInstance();
-      }
-      catch ( InstantiationException e )
-      {
-        throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
-                                      "They may not be non-static inner classes. " +
-                                      "In other words, you must be able create new ones using listenerClass.newInstance()",
-                                      e );
-      }
-      catch ( IllegalAccessException e )
-      {
-        throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
-                                      "They may not be non-static inner classes. " +
-                                      "In other words, you must be able create new ones using listenerClass.newInstance()",
-                                      e );
-      }
+      listener = (ExecutionListener)SvUtil.newInstanceOf( type, "ExecutionListener" );
+      listenerCache.put( type, listener );
     }
 
     return listener;
@@ -73,24 +45,8 @@ public class ListenerCache
 
     if ( listener == null )
     {
-      try
-      {
-        listener = listenerClass.newInstance();
-      }
-      catch ( InstantiationException e )
-      {
-        throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
-                                      "They may not be non-static inner classes. " +
-                                      "In other words, you must be able create new ones using listenerClass.newInstance()",
-                                      e );
-      }
-      catch ( IllegalAccessException e )
-      {
-        throw new SarasvatiException( "ExecutionListeners must have a default public constructor. " +
-                                      "They may not be non-static inner classes. " +
-                                      "In other words, you must be able create new ones using listenerClass.newInstance()",
-                                      e );
-      }
+      listener = SvUtil.newInstanceOf( listenerClass, "ExecutionListener" );
+      listenerCache.put( listenerClass.getName(), listener );
     }
 
     return listener;
