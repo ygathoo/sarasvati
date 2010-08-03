@@ -31,7 +31,6 @@ import org.hibernate.Session;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
-import com.googlecode.sarasvati.ArcTokenSetMember;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.ExecutionType;
 import com.googlecode.sarasvati.External;
@@ -40,7 +39,7 @@ import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.JoinType;
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
-import com.googlecode.sarasvati.NodeTokenSetMember;
+import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.annotations.NodeType;
 import com.googlecode.sarasvati.env.Env;
@@ -75,6 +74,18 @@ public class HibGraphFactory extends AbstractGraphFactory
                         final Node endNode,
                         final String name)
   {
+    if ( !(startNode instanceof HibNodeRef) )
+    {
+      throw new SarasvatiException( "The start node of an arc must be an instance of HibNodeRef. " +
+      		                          "Instances of HibNodeRef are returned from HibNodeFactory#newNode");
+    }
+
+    if ( !(endNode instanceof HibNodeRef) )
+    {
+      throw new SarasvatiException( "The end node of an arc must be an instance of HibNodeRef. " +
+                                    "Instances of HibNodeRef are returned from HibNodeFactory#newNode");
+    }
+
     HibArc arc = new HibArc( graph, startNode, endNode, name );
     session.save( arc );
     graph.getArcs().add( arc );
@@ -82,14 +93,14 @@ public class HibGraphFactory extends AbstractGraphFactory
   }
 
   @Override
-  public Node newNode (final Graph graph,
-                       final String name,
-                       final String type,
-                       final JoinType joinType,
-                       final String joinParam,
-                       final boolean isStart,
-                       final String guard,
-                       final List<Object> customList)
+  public HibNodeRef newNode (final Graph graph,
+                             final String name,
+                             final String type,
+                             final JoinType joinType,
+                             final String joinParam,
+                             final boolean isStart,
+                             final String guard,
+                             final List<Object> customList)
   {
     NodeFactory nodeFactory = getNodeFactory( type );
     Node newNode = nodeFactory.newNode( type );
@@ -167,9 +178,9 @@ public class HibGraphFactory extends AbstractGraphFactory
   }
 
   @Override
-  public Node importNode (final Graph graph,
-                          final Node node,
-                          final External external)
+  public HibNodeRef importNode (final Graph graph,
+                                final Node node,
+                                final External external)
   {
     HibNodeRef nodeRef = (HibNodeRef)node;
 
@@ -252,8 +263,8 @@ public class HibGraphFactory extends AbstractGraphFactory
   }
 
   @Override
-  public GraphProcess newNestedProcess (final Graph graph,
-                                        final NodeToken parentToken)
+  public HibGraphProcess newNestedProcess (final Graph graph,
+                                           final NodeToken parentToken)
   {
     HibGraphProcess process = new HibGraphProcess( (HibGraph)graph);
     process.setParentToken( parentToken );
@@ -272,9 +283,9 @@ public class HibGraphFactory extends AbstractGraphFactory
   }
 
   @Override
-  public ArcTokenSetMember newArcTokenSetMember (final TokenSet tokenSet,
-                                                 final ArcToken token,
-                                                 final int memberIndex)
+  public HibArcTokenSetMember newArcTokenSetMember (final TokenSet tokenSet,
+                                                    final ArcToken token,
+                                                    final int memberIndex)
   {
     HibArcTokenSetMember setMember =
       new HibArcTokenSetMember( (HibTokenSet)tokenSet, (HibArcToken)token, memberIndex );
@@ -284,9 +295,9 @@ public class HibGraphFactory extends AbstractGraphFactory
   }
 
   @Override
-  public NodeTokenSetMember newNodeTokenSetMember (final TokenSet tokenSet,
-                                                   final NodeToken token,
-                                                   final int memberIndex)
+  public HibNodeTokenSetMember newNodeTokenSetMember (final TokenSet tokenSet,
+                                                      final NodeToken token,
+                                                      final int memberIndex)
   {
     HibNodeTokenSetMember setMember =
       new HibNodeTokenSetMember( (HibTokenSet)tokenSet, (HibNodeToken)token, memberIndex );
