@@ -32,7 +32,6 @@ import com.googlecode.sarasvati.SarasvatiException;
 import com.googlecode.sarasvati.Token;
 import com.googlecode.sarasvati.TokenSet;
 import com.googlecode.sarasvati.TokenSetMember;
-import com.googlecode.sarasvati.event.ExecutionListener;
 import com.googlecode.sarasvati.load.SarasvatiLoadException;
 import com.googlecode.sarasvati.load.definition.ExternalDefinition;
 import com.googlecode.sarasvati.load.definition.ProcessDefinition;
