@@ -26,14 +26,49 @@ import com.googlecode.sarasvati.load.GraphValidator;
 
 public class MemEngine extends BaseEngine
 {
+  protected MemGraphRepository repository;
+
+  /**
+   * Creates a new MemEngine with the default application context.
+   * Each application context can have it's own set of global
+   * listeners. MemEngine instances constructed via this constructor
+   * will use the global graph cache.
+   */
+  public MemEngine ()
+  {
+    this( DEFAULT_APPLICATION_CONTEXT );
+  }
+
   /**
    * Creates a new MemEngine with the default application context.
    * Each application context can have it's own set of global
    * listeners.
+   *
+   * @param useGlobalGraphCache Specifies whether this engine should
+   *                            use the global graph cache, or a
+   *                            cache specific to this instance.
    */
-  public MemEngine ()
+  public MemEngine (final boolean useGlobalGraphCache)
   {
-    super( DEFAULT_APPLICATION_CONTEXT );
+    this( DEFAULT_APPLICATION_CONTEXT, useGlobalGraphCache );
+  }
+
+  /**
+   * Creates a new MemEngine with the given application context.
+   * Each application context has it's own set of global listeners.
+   *
+   * This allows different applications running the same JVM to
+   * have different sets of listeners without having to add
+   * them at the process level.
+   *
+   * MemEngine instances constructed via this constructor
+   * will use the global graph cache.
+   *
+   * @param applicationContext The application context
+   */
+  public MemEngine (final String applicationContext)
+  {
+    this( applicationContext, true );
   }
 
   /**
@@ -45,10 +80,14 @@ public class MemEngine extends BaseEngine
    * them at the process level.
    *
    * @param applicationContext The application context
+   * @param useGlobalGraphCache Specifies whether this engine should
+   *                            use the global graph cache, or a
+   *                            cache specific to this instance.
    */
-  public MemEngine (final String applicationContext)
+  public MemEngine (final String applicationContext, final boolean useGlobalGraphCache)
   {
     super( applicationContext );
+    this.repository = useGlobalGraphCache ? MemGraphRepository.INSTANCE : new MemGraphRepository(false);
   }
 
   @Override
@@ -60,7 +99,7 @@ public class MemEngine extends BaseEngine
   @Override
   public MemGraphRepository getRepository ()
   {
-    return MemGraphRepository.INSTANCE;
+    return repository;
   }
 
   @Override
@@ -72,7 +111,7 @@ public class MemEngine extends BaseEngine
   @Override
   public GraphLoader<MemGraph> getLoader (final GraphValidator validator)
   {
-    return new GraphLoaderImpl<MemGraph>( MemGraphFactory.INSTANCE, MemGraphRepository.INSTANCE, null );
+    return new GraphLoaderImpl<MemGraph>( getFactory(), getRepository(), validator );
   }
 
   @Override

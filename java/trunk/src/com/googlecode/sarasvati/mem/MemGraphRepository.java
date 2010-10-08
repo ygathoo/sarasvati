@@ -27,11 +27,27 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.googlecode.sarasvati.load.GraphRepository;
 
+/**
+ * A Graph Repository which can either store graphs in a global/static or local/per-repository cache.
+ *
+ * @author Paul Lorenz
+ */
 public class MemGraphRepository implements GraphRepository<MemGraph>
 {
+  private static final Map<String,MemGraph> globalCache = new ConcurrentHashMap<String, MemGraph>();
   public static final MemGraphRepository INSTANCE = new MemGraphRepository();
 
-  private static Map<String,MemGraph> cache = new ConcurrentHashMap<String, MemGraph>();
+  private final Map<String,MemGraph> cache;
+
+  public MemGraphRepository()
+  {
+    this(true);
+  }
+
+  public MemGraphRepository(final boolean useGlobalCache)
+  {
+    this.cache = useGlobalCache ? globalCache : new ConcurrentHashMap<String, MemGraph>();
+  }
 
   @Override
   public void addGraph (final MemGraph graph)
@@ -42,7 +58,7 @@ public class MemGraphRepository implements GraphRepository<MemGraph>
   @Override
   public List<MemGraph> getGraphs(final String name)
   {
-    MemGraph graph = cache.get( name );
+    final MemGraph graph = cache.get( name );
     if (  graph == null )
     {
       return Collections.emptyList();
@@ -53,7 +69,7 @@ public class MemGraphRepository implements GraphRepository<MemGraph>
   @Override
   public List<MemGraph> getGraphs()
   {
-    ArrayList<MemGraph> graphs = new ArrayList<MemGraph>( cache.size() );
+    final ArrayList<MemGraph> graphs = new ArrayList<MemGraph>( cache.size() );
     graphs.addAll( cache.values() );
     return graphs;
   }
