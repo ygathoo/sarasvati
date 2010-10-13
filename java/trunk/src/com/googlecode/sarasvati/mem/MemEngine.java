@@ -90,6 +90,23 @@ public class MemEngine extends BaseEngine
     this.repository = useGlobalGraphCache ? MemGraphRepository.INSTANCE : new MemGraphRepository(false);
   }
 
+  /**
+   * Creates a new MemEngine with the given application context.
+   * Each application context has it's own set of global listeners.
+   *
+   * This allows different applications running the same JVM to
+   * have different sets of listeners without having to add
+   * them at the process level.
+   *
+   * @param applicationContext The application context
+   * @param repository The repository to use for loading graphs and as a graph source
+   */
+  public MemEngine (final String applicationContext, final MemGraphRepository repository)
+  {
+    super( applicationContext );
+    this.repository = repository;
+  }
+
   @Override
   public MemGraphFactory getFactory ()
   {
@@ -117,6 +134,6 @@ public class MemEngine extends BaseEngine
   @Override
   public MemEngine newEngine ()
   {
-    return new MemEngine ();
+    return new MemEngine(applicationContext, repository);
   }
 }

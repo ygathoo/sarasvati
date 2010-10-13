@@ -303,7 +303,7 @@ public class GraphEditor
 
     toolBar.add( addExternalsButton );
 
-    JButton autoLayoutButton = new JButton( "Auto-Layout" );
+    final JButton autoLayoutButton = new JButton( "Auto-Layout" );
     autoLayoutButton.addActionListener( new ActionListener()
     {
       @Override
@@ -341,7 +341,7 @@ public class GraphEditor
     tabSelectionChanged();
     setMode( EditorMode.Move );
 
-    EditorPreferences prefs = EditorPreferences.getInstance();
+    final EditorPreferences prefs = EditorPreferences.getInstance();
     prefs.loadPreferences();
 
     if ( prefs.isFirstRun() )
@@ -349,16 +349,16 @@ public class GraphEditor
       DialogFactory.showInfo( "This is the first time the Sarasvati editor has been run. \n" +
                               "You may wish to configure a process definition library and custom node types" );
 
-      JDialog dialog = DialogFactory.newPreferencesDialog();
+      final JDialog dialog = DialogFactory.newPreferencesDialog();
       dialog.setVisible( true );
     }
   }
 
   protected JMenuBar createMenu ()
   {
-    JMenuBar menuBar = new JMenuBar();
+    final JMenuBar menuBar = new JMenuBar();
 
-    JMenu fileMenu = new JMenu( "File" );
+    final JMenu fileMenu = new JMenu( "File" );
     fileMenu.setMnemonic( KeyEvent.VK_F );
 
     saveAction = new SaveAction( false );
@@ -375,7 +375,7 @@ public class GraphEditor
     fileMenu.addSeparator();
     fileMenu.add( new JMenuItem( new ExitAction() ) );
 
-    JMenu editMenu = new JMenu( "Edit" );
+    final JMenu editMenu = new JMenu( "Edit" );
     editMenu.setMnemonic( KeyEvent.VK_E );
 
     deleteAction = new DeleteAction();
@@ -395,7 +395,7 @@ public class GraphEditor
     editMenu.addSeparator();
     editMenu.add( new JMenuItem( new PreferencesAction() ) );
 
-    JMenu toolsMenu = new JMenu( "Tools" );
+    final JMenu toolsMenu = new JMenu( "Tools" );
     toolsMenu.setMnemonic( KeyEvent.VK_T );
 
     toolsMenu.add( new JMenuItem( new ExportPreferencesAction() ) );
@@ -429,10 +429,10 @@ public class GraphEditor
 
   public void giveFocusOrOpen (final String name, final File path)
   {
-    for ( Component child : tabPane.getComponents() )
+    for ( final Component child : tabPane.getComponents() )
     {
-      JComponent pane = (JComponent)child;
-      String title = (String)pane.getClientProperty( GRAPH_NAME_KEY );
+      final JComponent pane = (JComponent)child;
+      final String title = (String)pane.getClientProperty( GRAPH_NAME_KEY );
       if ( SvUtil.equals( title, name ) )
       {
         tabPane.setSelectedComponent( pane );
@@ -454,19 +454,19 @@ public class GraphEditor
 
     try
     {
-      ProcessDefinition xmlProcDef = xmlLoader.translate( processDefinitionFile );
+      final ProcessDefinition xmlProcDef = xmlLoader.translate( processDefinitionFile );
 
-      File editorPropsFile = new File( processDefinitionFile.getParentFile(), xmlProcDef.getName() + ".editor.xml" );
+      final File editorPropsFile = new File( processDefinitionFile.getParentFile(), xmlProcDef.getName() + ".editor.xml" );
       XmlEditorProperties xmlEditorProps = null;
       if ( editorPropsFile.exists() && editorPropsFile.canRead() )
       {
         xmlEditorProps = editorXmlLoader.loadEditorProperties( editorPropsFile );
       }
-      EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef, xmlEditorProps );
+      final EditorGraph graph = EditorGraphFactory.loadFromXml( xmlProcDef, xmlEditorProps );
       graph.setFile( processDefinitionFile );
-      EditorScene scene = new EditorScene( graph );
+      final EditorScene scene = new EditorScene( graph );
 
-      JScrollPane scrollPane = new JScrollPane();
+      final JScrollPane scrollPane = new JScrollPane();
       scrollPane.setViewportView( scene.createView() );
       addTab( graph.getName(), scrollPane );
 
@@ -474,7 +474,7 @@ public class GraphEditor
       scrollPane.putClientProperty( GRAPH_NAME_KEY, graph.getName() );
       tabSelectionChanged();
     }
-    catch (Exception e)
+    catch (final Exception e)
     {
       e.printStackTrace();
       JOptionPane.showMessageDialog( mainWindow, e.getMessage(), "Load Error", JOptionPane.ERROR_MESSAGE );
@@ -490,7 +490,7 @@ public class GraphEditor
       @Override
       public boolean dispatchKeyEvent (final KeyEvent event)
       {
-        Window window = keyboardFocusManager.getActiveWindow();
+        final Window window = keyboardFocusManager.getActiveWindow();
 
         if ( window == mainWindow )
         {
@@ -510,29 +510,29 @@ public class GraphEditor
 
   public SaveResult saveRequested (final boolean isSaveAs)
   {
-    EditorScene scene = getCurrentScene();
+    final EditorScene scene = getCurrentScene();
 
     if ( scene == null )
     {
       return null;
     }
 
-    EditorGraph graph = scene.getGraph();
+    final EditorGraph graph = scene.getGraph();
 
-    ValidationResults results = graph.validateGraph();
+    final ValidationResults results = graph.validateGraph();
 
     StringBuilder buf = new StringBuilder ();
-    for ( String msg : results.getErrors() )
+    for ( final String msg : results.getErrors() )
     {
       buf.append( "ERROR: " + msg );
       buf.append( "\n" );
     }
-    for ( String msg : results.getWarnings() )
+    for ( final String msg : results.getWarnings() )
     {
       buf.append( "WARNING: " + msg );
       buf.append( "\n" );
     }
-    for ( String msg : results.getInfos() )
+    for ( final String msg : results.getInfos() )
     {
       buf.append( "WARNING: " + msg );
       buf.append( "\n" );
@@ -571,7 +571,7 @@ public class GraphEditor
         basePath = getLastFile();
       }
 
-      JFileChooser fileChooser = new JFileChooser();
+      final JFileChooser fileChooser = new JFileChooser();
       fileChooser.setCurrentDirectory( basePath );
       fileChooser.setFileFilter( new FileFilter()
       {
@@ -588,22 +588,18 @@ public class GraphEditor
         }
       });
 
-      int retVal = fileChooser.showSaveDialog( mainWindow );
+      final int retVal = fileChooser.showSaveDialog( mainWindow );
 
       if ( retVal == JFileChooser.APPROVE_OPTION )
       {
         setLastFile( fileChooser.getSelectedFile() );
         return saveProcessDefinition( graph, fileChooser.getSelectedFile(), buf.toString() );
       }
-      else
-      {
-        return SaveResult.SaveCanceled;
-      }
+
+      return SaveResult.SaveCanceled;
     }
-    else
-    {
-      return saveProcessDefinition( graph, graph.getFile(), buf.toString() );
-    }
+
+    return saveProcessDefinition( graph, graph.getFile(), buf.toString() );
   }
 
   private File getEditorPropertiesFile (final File graphFile)
@@ -638,7 +634,7 @@ public class GraphEditor
 
     String name = outputFile.getName();
 
-    int firstDot = name.indexOf( '.' );
+    final int firstDot = name.indexOf( '.' );
 
     if ( firstDot > 0 )
     {
@@ -651,13 +647,13 @@ public class GraphEditor
     }
 
     graph.setName( name );
-    JComponent c = (JComponent)tabPane.getSelectedComponent();
+    final JComponent c = (JComponent)tabPane.getSelectedComponent();
     c.putClientProperty( GRAPH_NAME_KEY, name );
     updateTabTitle( tabPane.getSelectedIndex(), name );
 
     try
     {
-      EditorGraphFactory.XmlSaveData saveData = EditorGraphFactory.exportToXml( graph );
+      final EditorGraphFactory.XmlSaveData saveData = EditorGraphFactory.exportToXml( graph );
       xmlLoader.saveProcessDefinition( saveData.getXmlProcDef(), saveFile );
       editorXmlLoader.saveEditorProperties( saveData.getXmlEditorProps(), new File( saveFile.getParentFile(), name + ".editor.xml" ) );
       graph.setFile( saveFile );
@@ -671,7 +667,7 @@ public class GraphEditor
 
       return SaveResult.SaveSucceeded;
     }
-    catch ( Exception e )
+    catch ( final Exception e )
     {
       e.printStackTrace();
       JOptionPane.showMessageDialog( mainWindow, e.getMessage(), "Save Error", JOptionPane.ERROR_MESSAGE );
@@ -681,20 +677,20 @@ public class GraphEditor
 
   public EditorScene getCurrentScene ()
   {
-    JComponent c = (JComponent)tabPane.getSelectedComponent();
+    final JComponent c = (JComponent)tabPane.getSelectedComponent();
     return c != null ? (EditorScene)c.getClientProperty( "scene" ) : null;
   }
 
   public void tabSelectionChanged ()
   {
-    EditorScene current = getCurrentScene();
+    final EditorScene current = getCurrentScene();
     CommandStack.setCurrent( current == null ? null : current.getCommandStack() );
     updateMenu();
   }
 
   public void updateMenu ()
   {
-    CommandStack currentCommandStack = CommandStack.getCurrent();
+    final CommandStack currentCommandStack = CommandStack.getCurrent();
 
     if ( currentCommandStack != null )
     {
@@ -731,12 +727,12 @@ public class GraphEditor
 
     if ( currentCommandStack != null )
     {
-      boolean isUnSaved = !currentCommandStack.isSaved();
+      final boolean isUnSaved = !currentCommandStack.isSaved();
       saveAction.setEnabled( isUnSaved );
       saveAsAction.setEnabled( true );
 
-      JComponent c = (JComponent)tabPane.getSelectedComponent();
-      String title = (String)c.getClientProperty( GRAPH_NAME_KEY );
+      final JComponent c = (JComponent)tabPane.getSelectedComponent();
+      final String title = (String)c.getClientProperty( GRAPH_NAME_KEY );
       if ( isUnSaved )
       {
         updateTabTitle( tabPane.getSelectedIndex(), "*" + title );
@@ -752,7 +748,7 @@ public class GraphEditor
 
   public void updateCutCopyPaste ()
   {
-    EditorScene scene = getCurrentScene();
+    final EditorScene scene = getCurrentScene();
     if (scene == null )
     {
       deleteAction.setEnabled( false );
@@ -768,7 +764,7 @@ public class GraphEditor
 
   public void updateCutCopyPaste (final EditorScene scene)
   {
-    boolean hasSelection = !scene.getSelectedObjects().isEmpty();
+    final boolean hasSelection = !scene.getSelectedObjects().isEmpty();
     deleteAction.setEnabled( hasSelection );
     cutAction.setEnabled( hasSelection );
     copyAction.setEnabled( hasSelection );
@@ -778,7 +774,7 @@ public class GraphEditor
   private void updateTabTitle (final int index, final String label)
   {
     tabPane.setTitleAt( index, label );
-    TabComponent tabComp = (TabComponent) tabPane.getTabComponentAt( tabPane.getSelectedIndex() );
+    final TabComponent tabComp = (TabComponent) tabPane.getTabComponentAt( tabPane.getSelectedIndex() );
     if ( tabComp != null )
     {
       tabComp.setLabelText( label );
@@ -810,15 +806,15 @@ public class GraphEditor
 
   public void closeTab (final int index)
   {
-    Component previous = tabPane.getSelectedComponent();
-    boolean returnToPrev = tabPane.getSelectedIndex() != index;
+    final Component previous = tabPane.getSelectedComponent();
+    final boolean returnToPrev = tabPane.getSelectedIndex() != index;
 
     if ( returnToPrev )
     {
       tabPane.setSelectedIndex( index );
     }
 
-    SaveResult result = closeCurrentTab();
+    final SaveResult result = closeCurrentTab();
 
     if ( returnToPrev && !result.isAbortExit() )
     {
@@ -830,14 +826,14 @@ public class GraphEditor
   {
     if ( !CommandStack.getCurrent().isSaved() )
     {
-      JComponent c = (JComponent)tabPane.getSelectedComponent();
-      String title = (String)c.getClientProperty( GRAPH_NAME_KEY );
-      int result =
+      final JComponent c = (JComponent)tabPane.getSelectedComponent();
+      final String title = (String)c.getClientProperty( GRAPH_NAME_KEY );
+      final int result =
         JOptionPane.showConfirmDialog( mainWindow, "Process definition '" + title + "' has unsaved changes. " +
                                                     "Do you wish to save your work before exiting?" );
       if ( JOptionPane.YES_OPTION == result )
       {
-        SaveResult saveResult = saveRequested( false );
+        final SaveResult saveResult = saveRequested( false );
         if ( saveResult == SaveResult.SaveSucceeded )
         {
           tabPane.remove( tabPane.getSelectedIndex() );
@@ -870,10 +866,10 @@ public class GraphEditor
 
   public void editPaste ()
   {
-    EditorScene scene = getCurrentScene();
+    final EditorScene scene = getCurrentScene();
     if ( scene != null )
     {
-      Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
+      final Point mouseLocation = MouseInfo.getPointerInfo().getLocation();
       SwingUtilities.convertPointFromScreen( mouseLocation, scene.getView() );
       scene.editPaste( mouseLocation );
     }
@@ -881,7 +877,7 @@ public class GraphEditor
 
   public void editCopy ()
   {
-    EditorScene scene = getCurrentScene();
+    final EditorScene scene = getCurrentScene();
     if ( scene != null )
     {
       scene.editCopy();
@@ -890,7 +886,7 @@ public class GraphEditor
 
   public void editCut ()
   {
-    EditorScene scene = getCurrentScene();
+    final EditorScene scene = getCurrentScene();
     if ( scene != null )
     {
       scene.editCut();
@@ -899,7 +895,7 @@ public class GraphEditor
 
   public void editDelete ()
   {
-    EditorScene scene = getCurrentScene();
+    final EditorScene scene = getCurrentScene();
     if ( scene != null )
     {
       scene.editDelete();
@@ -908,12 +904,12 @@ public class GraphEditor
 
   public void nodeTypesChanged ()
   {
-    for ( Component component : tabPane.getComponents() )
+    for ( final Component component : tabPane.getComponents() )
     {
       if ( component instanceof JComponent )
       {
-        JComponent jComponent = (JComponent)component;
-        EditorScene scene = (EditorScene)jComponent.getClientProperty( "scene" );
+        final JComponent jComponent = (JComponent)component;
+        final EditorScene scene = (EditorScene)jComponent.getClientProperty( "scene" );
         if ( scene != null )
         {
           scene.nodeTypesUpdated();

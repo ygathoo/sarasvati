@@ -26,6 +26,7 @@ public class GraphState
 
   public GraphState ()
   {
+    // Constructor for new, empty, graph state
   }
 
   public GraphState (final String defaultNodeForIncomingArcs,
@@ -63,7 +64,7 @@ public class GraphState
     if ( this == obj ) return true;
     if ( obj == null ) return false;
     if ( !( obj instanceof GraphState ) ) return false;
-    GraphState other = (GraphState)obj;
+    final GraphState other = (GraphState)obj;
     if ( defaultNodeForIncomingArcs == null )
     {
       if ( other.defaultNodeForIncomingArcs != null ) return false;

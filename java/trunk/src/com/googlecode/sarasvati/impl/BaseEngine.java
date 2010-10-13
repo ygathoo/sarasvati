@@ -81,10 +81,12 @@ public abstract class BaseEngine implements Engine
   protected static final Map<String, DefaultExecutionEventQueue> globalQueueMap = new ConcurrentHashMap<String, DefaultExecutionEventQueue>();
 
   protected boolean arcExecutionStarted = false;
-  protected List<ArcToken> asyncQueue = new LinkedList<ArcToken>();
+  protected final List<ArcToken> asyncQueue = new LinkedList<ArcToken>();
 
   protected final DefaultExecutionEventQueue globalEventQueue;
+  protected final String applicationContext;
   protected BaseEngine parentEngine;
+
 
   /**
    * Creates a new Engine with the given application context.
@@ -98,6 +100,7 @@ public abstract class BaseEngine implements Engine
    */
   public BaseEngine (final String applicationContext)
   {
+    this.applicationContext = applicationContext;
     globalEventQueue = getGlobalQueueForContext( applicationContext );
   }
 
@@ -137,7 +140,7 @@ public abstract class BaseEngine implements Engine
   @Override
   public GraphProcess startProcess (final String graphName)
   {
-    Graph graph = getRepository().getLatestGraph( graphName );
+    final Graph graph = getRepository().getLatestGraph( graphName );
     if ( graph == null )
     {
       throw new SarasvatiException( "No graph found with name '" + graphName + "'" );
@@ -154,7 +157,7 @@ public abstract class BaseEngine implements Engine
       throw new NullPointerException( "Can not start process for a null graph" );
     }
 
-    GraphProcess process = getFactory().newProcess( graph );
+    final GraphProcess process = getFactory().newProcess( graph );
     ProcessEvent.fireCreatedEvent( this, process );
     startProcess( process );
     return process;
@@ -168,7 +171,7 @@ public abstract class BaseEngine implements Engine
 
     arcExecutionStarted = true;
 
-    List<Node> startNodes = process.getGraph().getStartNodes();
+    final List<Node> startNodes = process.getGraph().getStartNodes();
 
     if ( startNodes.isEmpty() )
     {
@@ -179,9 +182,9 @@ public abstract class BaseEngine implements Engine
 
     try
     {
-      for ( Node startNode : startNodes )
+      for ( final Node startNode : startNodes )
       {
-        NodeToken startToken = getFactory().newNodeToken( process, startNode,
+        final NodeToken startToken = getFactory().newNodeToken( process, startNode,
                                                           new ArrayList<ArcToken>(0) );
         NodeTokenEvent.fireCreatedEvent(this, startToken);
         process.addNodeToken( startToken );
@@ -205,7 +208,7 @@ public abstract class BaseEngine implements Engine
   public void cancelProcess (final GraphProcess process)
   {
     process.setState( ProcessState.PendingCancel );
-    EventActions actions = ProcessEvent.firePendingCancelEvent( this, process );
+    final EventActions actions = ProcessEvent.firePendingCancelEvent( this, process );
 
     if ( !actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_CANCEL ) )
     {
@@ -219,10 +222,10 @@ public abstract class BaseEngine implements Engine
     process.setState( ProcessState.Completed );
     ProcessEvent.fireCompletedEvent( this, process );
 
-    NodeToken parentToken = process.getParentToken();
+    final NodeToken parentToken = process.getParentToken();
     if ( parentToken != null )
     {
-      Engine engine = getParentEngine() == null ? newEngine( false ) : getParentEngine();
+      final Engine engine = getParentEngine() == null ? newEngine( false ) : getParentEngine();
       engine.complete( parentToken, Arc.DEFAULT_ARC );
     }
   }
@@ -244,8 +247,8 @@ public abstract class BaseEngine implements Engine
 
       process.addActiveArcToken( token );
 
-      Node targetNode = token.getArc().getEndNode();
-      JoinResult result = targetNode.getJoinStrategy( token.getArc() ).performJoin( this, token );
+      final Node targetNode = token.getArc().getEndNode();
+      final JoinResult result = targetNode.getJoinStrategy( token.getArc() ).performJoin( this, token );
 
       if ( JoinAction.Complete == result.getJoinAction() )
       {
@@ -253,7 +256,7 @@ public abstract class BaseEngine implements Engine
       }
       else if ( JoinAction.Merge == result.getJoinAction() )
       {
-        for ( ArcToken arcToken : result.getArcTokensCompletingJoin() )
+        for ( final ArcToken arcToken : result.getArcTokensCompletingJoin() )
         {
           result.getMergeTarget().getParentTokens().add( arcToken );
           completeArcToken( process, arcToken, result.getMergeTarget() );
@@ -267,21 +270,21 @@ public abstract class BaseEngine implements Engine
                                    final Node targetNode,
                                    final Collection<ArcToken> tokens)
   {
-    NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, new ArrayList<ArcToken>( tokens ) );
+    final NodeToken nodeToken = getFactory().newNodeToken( process, targetNode, new ArrayList<ArcToken>( tokens ) );
     process.addNodeToken( nodeToken );
 
     // Add new node token to add the token sets which its generating arc tokens are members of
-    Set<TokenSet> tokenSets = new HashSet<TokenSet>();
+    final Set<TokenSet> tokenSets = new HashSet<TokenSet>();
 
-    for ( ArcToken token : tokens )
+    for ( final ArcToken token : tokens )
     {
-      for ( ArcTokenSetMember setMember : token.getTokenSetMemberships() )
+      for ( final ArcTokenSetMember setMember : token.getTokenSetMemberships() )
       {
-        TokenSet tokenSet = setMember.getTokenSet();
+        final TokenSet tokenSet = setMember.getTokenSet();
         if ( !tokenSet.isComplete() && !tokenSets.contains( tokenSet ) )
         {
           tokenSets.add( tokenSet );
-          NodeTokenSetMember newSetMember = getFactory().newNodeTokenSetMember( tokenSet, nodeToken, setMember.getMemberIndex() );
+          final NodeTokenSetMember newSetMember = getFactory().newNodeTokenSetMember( tokenSet, nodeToken, setMember.getMemberIndex() );
           tokenSet.getActiveNodeTokens( this ).add( nodeToken );
           nodeToken.getTokenSetMemberships().add( newSetMember );
         }
@@ -290,7 +293,7 @@ public abstract class BaseEngine implements Engine
 
     NodeTokenEvent.fireCreatedEvent( this, nodeToken );
 
-    for ( ArcToken token : tokens )
+    for ( final ArcToken token : tokens )
     {
       completeArcToken( process, token, nodeToken );
     }
@@ -312,14 +315,14 @@ public abstract class BaseEngine implements Engine
 
   protected void executeNode (final GraphProcess process, final NodeToken token)
   {
-    GuardResult response = token.getNode().guard( this, token );
+    final GuardResult response = token.getNode().guard( this, token );
     token.setGuardAction( response.getGuardAction() );
 
     switch ( response.getGuardAction() )
     {
       case AcceptToken :
         process.addActiveNodeToken( token );
-        EventActions actions = NodeTokenEvent.fireAcceptedEvent( this, token );
+        final EventActions actions = NodeTokenEvent.fireAcceptedEvent( this, token );
         if ( !actions.isEventTypeIncluded( EventActionType.DELAY_NODE_EXECUTION ) )
         {
           token.getNode().execute( this, token );
@@ -347,7 +350,7 @@ public abstract class BaseEngine implements Engine
   @Override
   public void complete (final NodeToken token, final String arcName)
   {
-    GraphProcess process = token.getProcess();
+    final GraphProcess process = token.getProcess();
 
     completeNodeExecution( token, arcName, false );
 
@@ -371,7 +374,7 @@ public abstract class BaseEngine implements Engine
                                        final Env       initialEnv,
                                        final Map<String,List<?>> initialMemberEnv)
   {
-    GraphProcess process = token.getProcess();
+    final GraphProcess process = token.getProcess();
 
     if ( !process.isExecuting() || token.isComplete() )
     {
@@ -380,11 +383,11 @@ public abstract class BaseEngine implements Engine
 
     completeNodeToken( process, token, arcName );
 
-    List<Arc> outArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
+    final List<Arc> outArcs = process.getGraph().getOutputArcs( token.getNode(), arcName );
 
     if ( !outArcs.isEmpty() )
     {
-      TokenSet tokenSet = getFactory().newTokenSet( process, tokenSetName, numberOfTokens );
+      final TokenSet tokenSet = getFactory().newTokenSet( process, tokenSetName, numberOfTokens );
 
       if ( initialEnv != null )
       {
@@ -393,8 +396,8 @@ public abstract class BaseEngine implements Engine
 
       if ( initialMemberEnv != null )
       {
-        TokenSetMemberEnv memberEnv = tokenSet.getMemberEnv();
-        for ( Map.Entry<String, List<?>> entry : initialMemberEnv.entrySet() )
+        final TokenSetMemberEnv memberEnv = tokenSet.getMemberEnv();
+        for ( final Map.Entry<String, List<?>> entry : initialMemberEnv.entrySet() )
         {
           memberEnv.setAttribute( entry.getKey(), entry.getValue() );
         }
@@ -402,11 +405,11 @@ public abstract class BaseEngine implements Engine
 
       for ( int memberIndex = 0; memberIndex < numberOfTokens; memberIndex++ )
       {
-        for ( Arc arc : outArcs )
+        for ( final Arc arc : outArcs )
         {
-          ArcToken arcToken = generateArcToken( process, arc, token );
+          final ArcToken arcToken = generateArcToken( process, arc, token );
 
-          ArcTokenSetMember setMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, memberIndex );
+          final ArcTokenSetMember setMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, memberIndex );
           tokenSet.getActiveArcTokens( this ).add( arcToken );
           arcToken.getTokenSetMemberships().add( setMember );
 
@@ -420,7 +423,7 @@ public abstract class BaseEngine implements Engine
                                         final String arcName,
                                         final boolean asynchronous)
   {
-    GraphProcess process = token.getProcess();
+    final GraphProcess process = token.getProcess();
 
     if ( !process.isExecuting() || token.isComplete() )
     {
@@ -429,9 +432,9 @@ public abstract class BaseEngine implements Engine
 
     completeNodeToken( process, token, arcName );
 
-    for ( Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
+    for ( final Arc arc : process.getGraph().getOutputArcs( token.getNode(), arcName ) )
     {
-      ArcToken arcToken = generateArcToken( process, arc, token );
+      final ArcToken arcToken = generateArcToken( process, arc, token );
       finishNewArcTokenProcessing( process, arcToken, asynchronous );
     }
   }
@@ -449,15 +452,15 @@ public abstract class BaseEngine implements Engine
                                      final Arc arc,
                                      final NodeToken token)
   {
-    ArcToken arcToken = getFactory().newArcToken( process, arc, ExecutionType.Forward, token );
+    final ArcToken arcToken = getFactory().newArcToken( process, arc, ExecutionType.Forward, token );
     token.getChildTokens().add( arcToken );
 
-    for ( NodeTokenSetMember setMember : token.getTokenSetMemberships() )
+    for ( final NodeTokenSetMember setMember : token.getTokenSetMemberships() )
     {
-      TokenSet tokenSet = setMember.getTokenSet();
+      final TokenSet tokenSet = setMember.getTokenSet();
       if ( !tokenSet.isComplete() )
       {
-        ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
+        final ArcTokenSetMember newSetMember = getFactory().newArcTokenSetMember( tokenSet, arcToken, setMember.getMemberIndex() );
         tokenSet.getActiveArcTokens( this ).add( arcToken );
         arcToken.getTokenSetMemberships().add( newSetMember );
       }
@@ -518,7 +521,7 @@ public abstract class BaseEngine implements Engine
          asyncQueue.isEmpty() )
     {
       process.setState( ProcessState.PendingCompletion );
-      EventActions actions = ProcessEvent.firePendingCompleteEvent( this, process );
+      final EventActions actions = ProcessEvent.firePendingCompleteEvent( this, process );
       if ( !actions.isEventTypeIncluded( EventActionType.DELAY_PROCESS_FINALIZE_COMPLETE ) )
       {
         finalizeComplete( process );
@@ -566,7 +569,7 @@ public abstract class BaseEngine implements Engine
     }
 
     NodeToken resultToken = null;
-    BacktrackTokenVisitor visitor = new BacktrackTokenVisitor( this, token );
+    final BacktrackTokenVisitor visitor = new BacktrackTokenVisitor( this, token );
 
     if ( token.getChildTokens().isEmpty() )
     {
@@ -613,7 +616,7 @@ public abstract class BaseEngine implements Engine
   @Override
   public BaseEngine newEngine (final boolean forNested)
   {
-    BaseEngine engine = newEngine();
+    final BaseEngine engine = newEngine();
 
     if ( forNested )
     {

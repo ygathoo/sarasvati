@@ -52,32 +52,32 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
 
   public Rectangle getSourceBounds ()
   {
-    Widget widget = getSourceAnchor().getRelatedWidget();
+    final Widget widget = getSourceAnchor().getRelatedWidget();
     return widget == null ? null : SvGraphicsUtil.getBounds( widget );
   }
 
   public Rectangle getTargetBounds ()
   {
-    Widget widget = getTargetAnchor().getRelatedWidget();
+    final Widget widget = getTargetAnchor().getRelatedWidget();
     return widget == null ? null : SvGraphicsUtil.getBounds( widget );
   }
 
   public boolean ensurePathCurrent ()
   {
-    Anchor sourceAnchor = getSourceAnchor();
-    Anchor targetAnchor = getTargetAnchor();
+    final Anchor sourceAnchor = getSourceAnchor();
+    final Anchor targetAnchor = getTargetAnchor();
 
     if ( sourceAnchor != null && targetAnchor != null )
     {
       Point newStart = null;
       Point newEnd = null;
 
-      boolean isSelfArc = sourceAnchor.getRelatedWidget() != null &&
+      final boolean isSelfArc = sourceAnchor.getRelatedWidget() != null &&
                           SvUtil.equals( sourceAnchor.getRelatedWidget(), targetAnchor.getRelatedWidget() );
       if ( isSelfArc )
       {
-        Point origin = sourceAnchor.getRelatedWidget().getLocation();
-        Rectangle bounds = sourceAnchor.getRelatedWidget().getBounds();
+        final Point origin = sourceAnchor.getRelatedWidget().getLocation();
+        final Rectangle bounds = sourceAnchor.getRelatedWidget().getBounds();
         newStart = new Point( origin.x + (bounds.width >> 1 ), origin.y + bounds.height + 1 );
         newEnd = new Point( origin.x - 1, origin.y + (bounds.height >> 1 ) );
       }
@@ -89,7 +89,7 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
         SvGraphicsUtil.movePointOutOfBounds( newEnd, getTargetBounds() );
       }
 
-      boolean pathChange = path == null || !start.equals( newStart ) || !end.equals( newEnd );
+      final boolean pathChange = path == null || !start.equals( newStart ) || !end.equals( newEnd );
       if ( pathChange )
       {
         if ( path != null )
@@ -105,13 +105,11 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
       }
       return pathChange;
     }
-    else
-    {
-      router.removePath( path );
-      start = null;
-      end   = null;
-      path  = null;
-    }
+
+    router.removePath( path );
+    start = null;
+    end   = null;
+    path  = null;
 
     return true;
   }
@@ -128,13 +126,13 @@ public class PathTrackingConnectionWidget extends ConnectionWidget
 
   public void updateRoute ()
   {
-    PointList pointList = path.getPoints();
+    final PointList pointList = path.getPoints();
 
     route = new ArrayList<Point>( pointList.size() );
 
     for ( int i = 0; i < pointList.size(); i++ )
     {
-      Point point = ConvertUtil.swtToAwt( pointList.getPoint( i ) );
+      final Point point = ConvertUtil.swtToAwt( pointList.getPoint( i ) );
       route.add( point );
     }
   }
