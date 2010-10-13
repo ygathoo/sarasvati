@@ -137,13 +137,13 @@ public class HibEngine extends BaseEngine
   @Override
   public GraphLoader<HibGraph> getLoader ()
   {
-    return new GraphLoaderImpl<HibGraph>( factory, repository, null );
+    return getLoader( null );
   }
 
   @Override
   public GraphLoader<HibGraph> getLoader (final GraphValidator validator)
   {
-    return new GraphLoaderImpl<HibGraph>( factory, repository, validator );
+    return new GraphLoaderImpl<HibGraph>( getFactory(), getRepository(), validator );
   }
 
   @Override
@@ -158,7 +158,7 @@ public class HibEngine extends BaseEngine
 
     int eventTypeMask = 0;
 
-    for ( ExecutionEventType eventType : eventTypes )
+    for ( final ExecutionEventType eventType : eventTypes )
     {
       if ( eventType != null )
       {
@@ -168,9 +168,9 @@ public class HibEngine extends BaseEngine
 
     if ( eventTypeMask != 0 )
     {
-      String type = listenerClass.getName();
+      final String type = listenerClass.getName();
       boolean updated = false;
-      for ( HibProcessListener hibListener : ((HibGraphProcess)process).getListeners() )
+      for ( final HibProcessListener hibListener : ((HibGraphProcess)process).getListeners() )
       {
         if ( type.equals( hibListener.getType() ) )
         {
@@ -182,7 +182,7 @@ public class HibEngine extends BaseEngine
 
       if ( !updated )
       {
-        HibProcessListener hibListener = new HibProcessListener( type, eventTypeMask, process );
+        final HibProcessListener hibListener = new HibProcessListener( type, eventTypeMask, process );
         session.save( hibListener );
       }
     }
@@ -200,9 +200,9 @@ public class HibEngine extends BaseEngine
       return;
     }
 
-    int removeMask = ExecutionEventType.invertMask( ExecutionEventType.toMask( eventTypes ) );
+    final int removeMask = ExecutionEventType.invertMask( ExecutionEventType.toMask( eventTypes ) );
 
-    for ( HibProcessListener hibListener : ((HibGraphProcess)process).getListeners() )
+    for ( final HibProcessListener hibListener : ((HibGraphProcess)process).getListeners() )
     {
       if ( listenerClass.getName().equals( hibListener.getType() ) )
       {
@@ -212,7 +212,7 @@ public class HibEngine extends BaseEngine
         }
         else
         {
-          int newMask = hibListener.getEventTypeMask() & removeMask;
+          final int newMask = hibListener.getEventTypeMask() & removeMask;
           if ( newMask == 0 )
           {
             session.delete( hibListener );
@@ -231,7 +231,7 @@ public class HibEngine extends BaseEngine
   @Override
   public HibEngine newEngine ()
   {
-    HibEngine engine = new HibEngine();
+    final HibEngine engine = new HibEngine( applicationContext );
 
     engine.session = session;
     engine.factory = factory;
@@ -243,18 +243,18 @@ public class HibEngine extends BaseEngine
   @SuppressWarnings("unchecked")
   public List<ArcToken> getActiveArcTokens (final HibTokenSet tokenSet)
   {
-    String hql = "select token from HibArcToken token inner join token.tokenSetMemberships as setMember " +
-                 "where token.completeDate is null and setMember.tokenSet = :tokenSet";
-    Query query = session.createQuery( hql ).setEntity( "tokenSet", tokenSet );
+    final String hql = "select token from HibArcToken token inner join token.tokenSetMemberships as setMember " +
+                       "where token.completeDate is null and setMember.tokenSet = :tokenSet";
+    final Query query = session.createQuery( hql ).setEntity( "tokenSet", tokenSet );
     return query.list();
   }
 
   @SuppressWarnings("unchecked")
   public List<NodeToken> getActiveNodeTokens (final HibTokenSet tokenSet)
   {
-    String hql = "select token from HibNodeToken token inner join token.tokenSetMemberships as setMember " +
-                 "where token.completeDate is null and setMember.tokenSet = :tokenSet";
-    Query query = session.createQuery( hql ).setEntity( "tokenSet", tokenSet );
+    final String hql = "select token from HibNodeToken token inner join token.tokenSetMemberships as setMember " +
+                       "where token.completeDate is null and setMember.tokenSet = :tokenSet";
+    final Query query = session.createQuery( hql ).setEntity( "tokenSet", tokenSet );
     return query.list();
   }
 

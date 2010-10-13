@@ -63,11 +63,9 @@ public class DefaultNodeFactory implements NodeFactory
     {
       return DOMToObjectLoadHelper.setBeanValues( node, (Element)custom );
     }
-    else
-    {
-      throw new SarasvatiLoadException( "Expected DOM Element, but got instance of " + custom.getClass().getName() +
-                                        " while loading node of type " + node.getType() );
-    }
+
+    throw new SarasvatiLoadException( "Expected DOM Element, but got instance of " + custom.getClass().getName() +
+                                      " while loading node of type " + node.getType() );
   }
 
   @Override
@@ -89,11 +87,11 @@ public class DefaultNodeFactory implements NodeFactory
     {
       return clazz.newInstance();
     }
-    catch ( InstantiationException e )
+    catch ( final InstantiationException e )
     {
       throw new SarasvatiLoadException( "Unable to create new instance for type '" + type + "'", e );
     }
-    catch ( IllegalAccessException e )
+    catch ( final IllegalAccessException e )
     {
       throw new SarasvatiLoadException( "Unable to create new instance for type '" + type + "'", e );
     }
