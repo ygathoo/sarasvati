@@ -46,7 +46,7 @@
            onerror="report"/>
   <taskdef name="izpack"
            classname="com.izforge.izpack.ant.IzPackTask"
-           classpath="installer/standalone-compiler.jar"
+           classpath="installer/standalone-compiler-4.3.3.jar"
            onerror="report"/>
   <taskdef classname="net.bluecow.googlecode.ant.GoogleCodeUploadTask"
   	       classpathref="classpath"
@@ -82,7 +82,7 @@
     </copy>
     <copy todir="installer" flatten="true">
       <resources>
-      	<url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/installer/standalone-compiler.jar"/>
+      	<url url="http://sarasvati.googlecode.com/svn/java/tags/v${version}/installer/standalone-compiler-4.3.3.jar"/>
       </resources>
     </copy>
   	<delete file="${fetch.indicator}"/>
