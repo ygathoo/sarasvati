@@ -35,6 +35,18 @@ CREATE OR REPLACE PROCEDURE sarasvatiDropSequence(seqName VARCHAR2)
 END;
 /
 
+CREATE OR REPLACE PROCEDURE sarasvatiCreateInsertTrigger(tableName VARCHAR2) AS
+    BEGIN
+      EXECUTE IMMEDIATE ('CREATE OR REPLACE TRIGGER ' || tableName || '_ins ' || 
+                         'BEFORE INSERT ON ' || tableName ||
+                         ' REFERENCING NEW AS NEW' ||
+                         ' FOR EACH ROW ' ||
+                         ' BEGIN ' ||
+                         '  SELECT ' || tableName || '_seq.nextval INTO :NEW.ID FROM dual; ' ||
+                         ' END;');
+END;
+/
+
 execute sarasvatiDropConstraint( 'wf_process', 'FK_process_parent');
 
 execute sarasvatiDropTable( 'wf_task' );
@@ -87,10 +99,6 @@ execute sarasvatiDropSequence( 'wf_token_set_arcmem_seq' );
 execute sarasvatiDropSequence( 'wf_token_set_nodemem_seq' );
 execute sarasvatiDropSequence( 'wf_token_set_member_attr_seq' );
 
-drop procedure sarasvatiDropTable;
-drop procedure sarasvatiDropConstraint;
-drop procedure sarasvatiDropSequence;
-
 -- -----------------------------------------------------------------------------
 -- CREATE NEW TABLES
 -- -----------------------------------------------------------------------------
@@ -116,7 +124,7 @@ create table wf_graph
   name            VARCHAR2(255) NOT NULL,
   version         int           NOT NULL,
   custom_id       VARCHAR2(255) NULL,
-  create_date     timestamp DEFAULT current_timestamp  NOT NULL 
+  create_date     timestamp     DEFAULT current_timestamp  NOT NULL 
 );
 
 ALTER TABLE wf_graph
@@ -126,7 +134,7 @@ ALTER TABLE wf_graph
 create table wf_graph_listener
 (
   id              NUMBER(20)     NOT NULL PRIMARY KEY,
-  type            varchar2(255)   NOT NULL,
+  type            varchar2(255)  NOT NULL,
   event_type_mask int            NOT NULL,
   graph_id        NUMBER(20)     NOT NULL REFERENCES wf_graph
 );
@@ -405,3 +413,23 @@ create table wf_token_set_member_attr
 );
 
 create index wf_token_set_member_attr_idx on wf_token_set_member_attr(token_set_id);
+
+execute sarasvatiCreateInsertTrigger( 'wf_graph' );
+execute sarasvatiCreateInsertTrigger( 'wf_graph_listener' );
+execute sarasvatiCreateInsertTrigger( 'wf_process' );
+execute sarasvatiCreateInsertTrigger( 'wf_process_listener' );
+execute sarasvatiCreateInsertTrigger( 'wf_node' );
+execute sarasvatiCreateInsertTrigger( 'wf_external' );
+execute sarasvatiCreateInsertTrigger( 'wf_node_ref' );
+execute sarasvatiCreateInsertTrigger( 'wf_arc' );
+execute sarasvatiCreateInsertTrigger( 'wf_node_token' );
+execute sarasvatiCreateInsertTrigger( 'wf_arc_token' );
+execute sarasvatiCreateInsertTrigger( 'wf_token_set' );
+execute sarasvatiCreateInsertTrigger( 'wf_token_set_arcmem' );
+execute sarasvatiCreateInsertTrigger( 'wf_token_set_nodemem' );
+execute sarasvatiCreateInsertTrigger( 'wf_token_set_member_attr' );
+
+drop procedure sarasvatiDropTable;
+drop procedure sarasvatiDropConstraint;
+drop procedure sarasvatiDropSequence;
+drop procedure sarasvatiCreateInsertTrigger;
