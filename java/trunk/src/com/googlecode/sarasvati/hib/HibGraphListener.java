@@ -22,13 +22,15 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.id.SequenceGenerator;
 
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.event.PersistedExecutionListener;
@@ -38,7 +40,10 @@ import com.googlecode.sarasvati.event.PersistedExecutionListener;
 public class HibGraphListener implements PersistedExecutionListener
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GenericGenerator(name="sarasvatiGenerator",
+                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_graph_listener_seq")},
+                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
+  @GeneratedValue(generator="sarasvatiGenerator")
   protected Long id;
 
   protected String type;

@@ -25,7 +25,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -35,6 +34,9 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.id.SequenceGenerator;
 
 import com.googlecode.sarasvati.External;
 import com.googlecode.sarasvati.env.ReadEnv;
@@ -45,7 +47,10 @@ import com.googlecode.sarasvati.impl.MapEnv;
 public class HibExternal implements External
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GenericGenerator(name="sarasvatiGenerator",
+                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_external_seq")},
+                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
+  @GeneratedValue(generator="sarasvatiGenerator")
   protected Long   id;
 
   protected String name;

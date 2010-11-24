@@ -1,28 +1,4 @@
 -- DROP EXISTING TABLES
-CREATE OR REPLACE PROCEDURE sarasvatiDropTable(tableName VARCHAR2)
-    AS
-        tableCount INTEGER;
-    BEGIN
-        SELECT COUNT(*) INTO tableCount FROM user_tables WHERE LOWER(table_name) = LOWER(tableName);
-
-    IF tableCount > 0 THEN
-      EXECUTE IMMEDIATE ('drop table ' || tableName);
-    END IF;
-END;
-/
-
-CREATE OR REPLACE PROCEDURE sarasvatiDropConstraint(tableName VARCHAR2, constraintName varchar2)
-    AS
-        tableCount INTEGER;
-    BEGIN
-        SELECT COUNT(*) INTO tableCount FROM user_tables WHERE LOWER(table_name) = LOWER(tableName);
-
-    IF tableCount > 0 THEN
-      EXECUTE IMMEDIATE ('alter table ' || tableName || ' drop constraint ' || constraintName);
-    END IF;
-END;
-/
-
 CREATE OR REPLACE PROCEDURE sarasvatiDropSequence(seqName VARCHAR2)
     AS
         seqCount INTEGER;
@@ -35,23 +11,39 @@ CREATE OR REPLACE PROCEDURE sarasvatiDropSequence(seqName VARCHAR2)
 END;
 /
 
-CREATE OR REPLACE PROCEDURE sarasvatiCreateInsertTrigger(tableName VARCHAR2) AS
+CREATE OR REPLACE PROCEDURE sarasvatiDropTable(tableName VARCHAR2)
+    AS
+        tableCount INTEGER;
     BEGIN
-      EXECUTE IMMEDIATE ('CREATE OR REPLACE TRIGGER ' || tableName || '_ins ' || 
-                         'BEFORE INSERT ON ' || tableName ||
-                         ' REFERENCING NEW AS NEW' ||
-                         ' FOR EACH ROW ' ||
-                         ' BEGIN ' ||
-                         '  SELECT ' || tableName || '_seq.nextval INTO :NEW.ID FROM dual; ' ||
-                         ' END;');
+        SELECT COUNT(*) INTO tableCount FROM user_tables WHERE LOWER(table_name) = LOWER(tableName);
+
+    IF tableCount > 0 THEN
+      EXECUTE IMMEDIATE ('drop table ' || tableName);
+      sarasvatiDropSequence( tableName || '_seq' );
+    END IF;
+END;
+/
+
+CREATE OR REPLACE PROCEDURE sarasvatiDropConstraint(tableName VARCHAR2, constraintName varchar2)
+    AS
+        tableCount INTEGER;
+    BEGIN
+        SELECT COUNT(*) INTO tableCount FROM user_tables WHERE LOWER(table_name) = LOWER(tableName);
+
+    IF tableCount > 0 THEN      
+      EXECUTE IMMEDIATE ('alter table ' || tableName || ' drop constraint ' || constraintName);
+    END IF;
 END;
 /
 
 execute sarasvatiDropConstraint( 'wf_process', 'FK_process_parent');
 
-execute sarasvatiDropTable( 'wf_task' );
+-- -------------------------------------
+-- Start DROPs for example projects
+-- -------------------------------------
+execute sarasvatiDropTable( 'wf_task' );       
 execute sarasvatiDropTable( 'wf_task_state' );
-execute sarasvatiDropTable( 'wf_node_task' );
+execute sarasvatiDropTable( 'wf_node_task' ); 
 
 execute sarasvatiDropTable( 'wf_token_set_attr' );
 execute sarasvatiDropTable( 'wf_token_set_member_attr' );
@@ -83,21 +75,6 @@ execute sarasvatiDropTable( 'wf_external' );
 
 execute sarasvatiDropTable( 'wf_graph_listener' );
 execute sarasvatiDropTable( 'wf_graph' );
-
-execute sarasvatiDropSequence( 'wf_graph_seq' );
-execute sarasvatiDropSequence( 'wf_graph_listener_seq' );
-execute sarasvatiDropSequence( 'wf_process_seq' );
-execute sarasvatiDropSequence( 'wf_process_listener_seq' );
-execute sarasvatiDropSequence( 'wf_node_seq' );
-execute sarasvatiDropSequence( 'wf_external_seq' );
-execute sarasvatiDropSequence( 'wf_node_ref_seq' );
-execute sarasvatiDropSequence( 'wf_arc_seq' );
-execute sarasvatiDropSequence( 'wf_node_token_seq' );
-execute sarasvatiDropSequence( 'wf_arc_token_seq' );
-execute sarasvatiDropSequence( 'wf_token_set_seq' );
-execute sarasvatiDropSequence( 'wf_token_set_arcmem_seq' );
-execute sarasvatiDropSequence( 'wf_token_set_nodemem_seq' );
-execute sarasvatiDropSequence( 'wf_token_set_member_attr_seq' );
 
 -- -----------------------------------------------------------------------------
 -- CREATE NEW TABLES
@@ -414,22 +391,6 @@ create table wf_token_set_member_attr
 
 create index wf_token_set_member_attr_idx on wf_token_set_member_attr(token_set_id);
 
-execute sarasvatiCreateInsertTrigger( 'wf_graph' );
-execute sarasvatiCreateInsertTrigger( 'wf_graph_listener' );
-execute sarasvatiCreateInsertTrigger( 'wf_process' );
-execute sarasvatiCreateInsertTrigger( 'wf_process_listener' );
-execute sarasvatiCreateInsertTrigger( 'wf_node' );
-execute sarasvatiCreateInsertTrigger( 'wf_external' );
-execute sarasvatiCreateInsertTrigger( 'wf_node_ref' );
-execute sarasvatiCreateInsertTrigger( 'wf_arc' );
-execute sarasvatiCreateInsertTrigger( 'wf_node_token' );
-execute sarasvatiCreateInsertTrigger( 'wf_arc_token' );
-execute sarasvatiCreateInsertTrigger( 'wf_token_set' );
-execute sarasvatiCreateInsertTrigger( 'wf_token_set_arcmem' );
-execute sarasvatiCreateInsertTrigger( 'wf_token_set_nodemem' );
-execute sarasvatiCreateInsertTrigger( 'wf_token_set_member_attr' );
-
 drop procedure sarasvatiDropTable;
 drop procedure sarasvatiDropConstraint;
 drop procedure sarasvatiDropSequence;
-drop procedure sarasvatiCreateInsertTrigger;
