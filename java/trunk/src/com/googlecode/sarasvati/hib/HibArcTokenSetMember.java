@@ -24,11 +24,14 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.id.SequenceGenerator;
 
 import com.googlecode.sarasvati.ArcTokenSetMember;
 
@@ -37,7 +40,10 @@ import com.googlecode.sarasvati.ArcTokenSetMember;
 public class HibArcTokenSetMember implements ArcTokenSetMember
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GenericGenerator(name="sarasvatiGenerator",
+                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_token_set_arcmem_seq")},
+                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
+  @GeneratedValue(generator="sarasvatiGenerator")
   protected Long    id;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)

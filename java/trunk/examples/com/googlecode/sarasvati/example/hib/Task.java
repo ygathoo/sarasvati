@@ -23,11 +23,14 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.id.SequenceGenerator;
 
 import com.googlecode.sarasvati.Node;
 import com.googlecode.sarasvati.NodeToken;
@@ -39,7 +42,10 @@ import com.googlecode.sarasvati.hib.HibNodeToken;
 public class Task
 {
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @GenericGenerator(name="sarasvatiGenerator",
+                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_task_seq")},
+                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
+  @GeneratedValue(generator="sarasvatiGenerator")
   protected Long      id;
 
   @ManyToOne(fetch = FetchType.EAGER, targetEntity=HibNodeToken.class)

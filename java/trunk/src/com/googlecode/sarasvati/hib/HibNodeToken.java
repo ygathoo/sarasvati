@@ -32,7 +32,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -46,6 +45,9 @@ import javax.persistence.Transient;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CollectionOfElements;
 import org.hibernate.annotations.ForeignKey;
+import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Parameter;
+import org.hibernate.id.SequenceGenerator;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ExecutionType;
@@ -64,7 +66,10 @@ import com.googlecode.sarasvati.visitor.TokenVisitor;
 public class HibNodeToken implements NodeToken
 {
   @Id
-  @GeneratedValue(strategy=GenerationType.IDENTITY)
+  @GenericGenerator(name="sarasvatiGenerator",
+                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_node_token_seq")},
+                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
+  @GeneratedValue(generator="sarasvatiGenerator")
   protected Long    id;
 
   @ForeignKey(name="FK_nodetok_process")
