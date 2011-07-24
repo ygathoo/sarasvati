@@ -25,6 +25,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -32,10 +33,7 @@ import javax.persistence.Table;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Index;
-import org.hibernate.annotations.Parameter;
-import org.hibernate.id.SequenceGenerator;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
@@ -54,10 +52,7 @@ import com.googlecode.sarasvati.impl.NestedReadEnv;
 public class HibNodeRef implements Node
 {
   @Id
-  @GenericGenerator(name="sarasvatiGenerator",
-                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_node_ref_seq")},
-                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
-  @GeneratedValue(generator="sarasvatiGenerator")
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long   id;
 
   @ForeignKey(name="FK_ref_node")

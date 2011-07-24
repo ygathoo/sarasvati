@@ -24,15 +24,12 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Transient;
-
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-import org.hibernate.id.SequenceGenerator;
 
 import com.googlecode.sarasvati.NodeTokenSetMember;
 import com.googlecode.sarasvati.env.Env;
@@ -43,10 +40,7 @@ import com.googlecode.sarasvati.impl.TokenSetMemberEnvAdapter;
 public class HibNodeTokenSetMember implements NodeTokenSetMember
 {
   @Id
-  @GenericGenerator(name="sarasvatiGenerator",
-                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_token_set_nodemem_seq")},
-                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
-  @GeneratedValue(generator="sarasvatiGenerator")
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long    id;
 
   @ManyToOne(fetch = FetchType.LAZY, cascade=CascadeType.REMOVE)

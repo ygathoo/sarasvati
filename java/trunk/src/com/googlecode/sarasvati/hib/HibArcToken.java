@@ -32,6 +32,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -43,11 +44,8 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Index;
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
-import org.hibernate.id.SequenceGenerator;
 
 import com.googlecode.sarasvati.ArcToken;
 import com.googlecode.sarasvati.ArcTokenSetMember;
@@ -61,10 +59,7 @@ import com.googlecode.sarasvati.visitor.TokenVisitor;
 public class HibArcToken implements ArcToken
 {
   @Id
-  @GenericGenerator(name="sarasvatiGenerator",
-                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_arc_token_seq")},
-                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
-  @GeneratedValue(generator="sarasvatiGenerator")
+  @GeneratedValue (strategy=GenerationType.IDENTITY)
   protected Long    id;
 
   @ForeignKey( name="FK_arctok_process" )

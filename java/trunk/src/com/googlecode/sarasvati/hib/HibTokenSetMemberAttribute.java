@@ -22,25 +22,20 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
-import org.hibernate.id.SequenceGenerator;
 
 @Entity
 @Table (name="wf_token_set_member_attr")
 public class HibTokenSetMemberAttribute
 {
   @Id
-  @GenericGenerator(name="sarasvatiGenerator",
-                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_token_set_member_attr_seq")},
-                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
-  @GeneratedValue(generator="sarasvatiGenerator")
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   protected Long id;
 
   @ForeignKey( name="FK_token_set_mbr_attr" )
