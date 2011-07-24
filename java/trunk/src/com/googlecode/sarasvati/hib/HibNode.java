@@ -24,6 +24,7 @@ import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -34,10 +35,7 @@ import javax.persistence.Table;
 import org.hibernate.Session;
 import org.hibernate.annotations.DiscriminatorFormula;
 import org.hibernate.annotations.ForeignKey;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Parameter;
 import org.hibernate.annotations.Type;
-import org.hibernate.id.SequenceGenerator;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Engine;
@@ -60,10 +58,7 @@ import com.googlecode.sarasvati.impl.MapEnv;
 public class HibNode implements Node
 {
   @Id
-  @GenericGenerator(name="sarasvatiGenerator",
-                    parameters={@Parameter(name=SequenceGenerator.SEQUENCE, value="wf_node_seq")},
-                    strategy="com.googlecode.sarasvati.hib.SarasvatiIdentifierGenerator")
-  @GeneratedValue(generator="sarasvatiGenerator")
+  @GeneratedValue(strategy=GenerationType.IDENTITY)
   @Column( name="id", nullable=false)
   protected Long   id;
 
