@@ -20,6 +20,7 @@ package com.googlecode.sarasvati.join.lang;
 
 public class AllArcsRequired extends AbstractJoinRequirement
 {
+  @Override
   public JoinRequirementEvaluator newEvaluator (final JoinLangEnv env)
   {
     return new AllArcsRequiredEvaluator( env, this );

@@ -47,6 +47,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
   /**
    * @see ExecutionEventQueue#addListener(Engine, Class, ExecutionEventType...)
    */
+  @Override
   public synchronized void addListener (final Engine engine,
                                         final Class<? extends ExecutionListener> listenerClass,
                                         final ExecutionEventType...eventTypes)
@@ -155,6 +156,7 @@ public class DefaultExecutionEventQueue implements ExecutionEventQueue
   /**
    * @see com.googlecode.sarasvati.event.ExecutionEventQueue#fireEvent(com.googlecode.sarasvati.event.ExecutionEvent)
    */
+  @Override
   public EventActions fireEvent (final ExecutionEvent event)
   {
     EventActions eventActions = new EventActions();

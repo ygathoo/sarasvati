@@ -30,5 +30,6 @@ public interface ArcTokenSetMember extends TokenSetMember
   /**
    * @see com.googlecode.sarasvati.TokenSetMember#getToken()
    */
+  @Override
   ArcToken getToken ();
 }

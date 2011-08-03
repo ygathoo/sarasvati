@@ -147,6 +147,7 @@ public class HibNodeToken implements NodeToken
     this.tokenSetMemberships = new HashSet<NodeTokenSetMember>();
   }
 
+  @Override
   public Long getId ()
   {
     return id;
@@ -157,6 +158,7 @@ public class HibNodeToken implements NodeToken
     this.id = id;
   }
 
+  @Override
   public HibGraphProcess getProcess ()
   {
     return process;

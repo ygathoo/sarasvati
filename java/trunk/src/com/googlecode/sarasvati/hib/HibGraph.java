@@ -121,6 +121,7 @@ public class HibGraph extends AbstractGraph
     this.name = name;
   }
 
+  @Override
   public int getVersion ()
   {
     return version;
@@ -163,6 +164,7 @@ public class HibGraph extends AbstractGraph
     this.nodes = nodeRefs;
   }
 
+  @Override
   public List<Arc> getArcs ()
   {
     return arcs;

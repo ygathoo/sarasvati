@@ -32,6 +32,7 @@ public interface NodeTokenSetMember extends TokenSetMember
   /**
    * @see com.googlecode.sarasvati.TokenSetMember#getToken()
    */
+  @Override
   NodeToken getToken ();
 
   /**

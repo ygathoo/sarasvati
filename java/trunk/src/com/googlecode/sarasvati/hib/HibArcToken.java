@@ -126,6 +126,7 @@ public class HibArcToken implements ArcToken
     this.id = id;
   }
 
+  @Override
   public HibGraphProcess getProcess ()
   {
     return process;
@@ -147,6 +148,7 @@ public class HibArcToken implements ArcToken
     this.arc = arc;
   }
 
+  @Override
   public NodeToken getParentToken ()
   {
     return parentToken;
@@ -157,6 +159,7 @@ public class HibArcToken implements ArcToken
     this.parentToken = parentToken;
   }
 
+  @Override
   public NodeToken getChildToken()
   {
     return childToken;

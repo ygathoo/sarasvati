@@ -42,6 +42,7 @@ public class AtLeastLabelArcsRequired extends AbstractJoinRequirement
     return label;
   }
 
+  @Override
   public JoinRequirementEvaluator newEvaluator (final JoinLangEnv env)
   {
     return new AtLeastLabelArcsRequiredEvaluator( env, this );

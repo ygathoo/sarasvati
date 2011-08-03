@@ -22,7 +22,6 @@ import java.util.Collection;
 
 import org.junit.Test;
 
-import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
@@ -34,14 +33,14 @@ public class BacktrackLinearTest extends ExecutionTest
   @Test public void testLinear () throws Exception
   {
     Graph g = ensureLoaded( "backtrack-linear" );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
     Collection<NodeToken> tokens = p.getActiveNodeTokens();
     NodeToken tokenA = tokens.iterator().next();
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    engine.complete( tokenA, Arc.DEFAULT_ARC );
+    completeToken(tokenA);
 
     tokens = p.getActiveNodeTokens();
 
@@ -50,7 +49,7 @@ public class BacktrackLinearTest extends ExecutionTest
             "[2 nodeB I F]";
     TestProcess.validate( p, state );
 
-    engine.backtrack( tokenA );
+    backtrackToken(tokenA);
 
     state = "[1 nodeA C FB]" +
             "  (C FB 2)" +
@@ -62,7 +61,7 @@ public class BacktrackLinearTest extends ExecutionTest
     tokens = p.getActiveNodeTokens();
     tokenA = tokens.iterator().next();
 
-    engine.complete( tokenA, Arc.DEFAULT_ARC );
+    completeToken(tokenA);
 
     state = "[1 nodeA C FB]" +
             "  (C FB 2)" +
@@ -74,7 +73,7 @@ public class BacktrackLinearTest extends ExecutionTest
             ;
 
     TestProcess.validate( p, state );
-    engine.backtrack( tokenA );
+    backtrackToken( tokenA );
 
     state = "[1 nodeA C FB]" +
             "  (C FB 2)" +
@@ -92,14 +91,14 @@ public class BacktrackLinearTest extends ExecutionTest
   @Test public void testLinearTwice () throws Exception
   {
     Graph g = ensureLoaded( "backtrack-twice-linear" );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
     Collection<NodeToken> tokens = p.getActiveNodeTokens();
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
     NodeToken tokenA = tokens.iterator().next();
-    engine.complete( tokenA, Arc.DEFAULT_ARC );
+    completeToken( tokenA);
 
     tokens = p.getActiveNodeTokens();
 
@@ -111,7 +110,7 @@ public class BacktrackLinearTest extends ExecutionTest
     tokens = p.getActiveNodeTokens();
     NodeToken tokenB = tokens.iterator().next();
 
-    engine.complete( tokenB, Arc.DEFAULT_ARC );
+    completeToken(tokenB);
 
     state = "[1 nodeA C F]\n" +
             "  (C F 2)\n" +
@@ -120,7 +119,7 @@ public class BacktrackLinearTest extends ExecutionTest
             "[3 nodeC I F]";
     TestProcess.validate( p, state );
 
-    engine.backtrack( tokenB );
+    backtrackToken(tokenB);
 
     state = "[1 nodeA C F]\n" +
             "  (C F 2)\n" +
@@ -131,7 +130,7 @@ public class BacktrackLinearTest extends ExecutionTest
             "[4 nodeB I F]\n";
 
     TestProcess.validate( p, state );
-    engine.backtrack( tokenA );
+    backtrackToken( tokenA );
 
     state = "[1 nodeA C FB]\n" +
             "  (C FB 2)\n" +

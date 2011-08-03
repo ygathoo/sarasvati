@@ -101,17 +101,17 @@ public abstract class BaseEngine implements Engine
   public BaseEngine (final String applicationContext)
   {
     this.applicationContext = applicationContext;
-    globalEventQueue = getGlobalQueueForContext( applicationContext );
+    this.globalEventQueue = getGlobalQueueForContext(applicationContext);
   }
 
-  private DefaultExecutionEventQueue getGlobalQueueForContext (final String applicationContext)
+  private DefaultExecutionEventQueue getGlobalQueueForContext (final String context)
   {
-    DefaultExecutionEventQueue queue = globalQueueMap.get( applicationContext );
+    DefaultExecutionEventQueue queue = globalQueueMap.get(context);
     if ( queue == null )
     {
       queue = DefaultExecutionEventQueue.newCopyOnWriteListInstance();
       contributeGlobalListeners( queue );
-      globalQueueMap.put( applicationContext, queue );
+      globalQueueMap.put(context, queue );
     }
 
     return queue;
@@ -366,6 +366,7 @@ public abstract class BaseEngine implements Engine
     completeNodeExecution( token, arcName, true );
   }
 
+  @Override
   public void completeWithNewTokenSet (final NodeToken token,
                                        final String    arcName,
                                        final String    tokenSetName,
@@ -674,6 +675,7 @@ public abstract class BaseEngine implements Engine
     process.getEventQueue().removeListener( this, listenerClass, eventTypes );
   }
 
+  @Override
   public EventActions fireEvent (final ExecutionEvent event)
   {
     return globalEventQueue.fireEvent( event );

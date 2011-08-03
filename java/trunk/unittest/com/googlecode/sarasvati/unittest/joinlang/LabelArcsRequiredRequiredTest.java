@@ -41,7 +41,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
     rep.registerPredicate( "FooRequired", UnitTestPredicates.ALWAYS_FALSE );
 
     Graph g = ensureLoaded( TEST_GRAPH_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 nodeA I F]" +
@@ -123,7 +123,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
     rep.registerPredicate( "FooRequired", UnitTestPredicates.ALWAYS_TRUE );
 
     Graph g = ensureLoaded( TEST_GRAPH_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 nodeA I F]" +
@@ -203,7 +203,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
     rep.registerPredicate( "FooRequired", UnitTestPredicates.ALWAYS_FALSE );
 
     Graph g = ensureLoaded( TEST_GRAPH_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 nodeA I F]" +
@@ -283,7 +283,7 @@ public class LabelArcsRequiredRequiredTest extends ExecutionTest
     rep.registerPredicate( "FooRequired", UnitTestPredicates.ALWAYS_FALSE );
 
     Graph g = ensureLoaded( TEST_GRAPH_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 nodeA I F]" +

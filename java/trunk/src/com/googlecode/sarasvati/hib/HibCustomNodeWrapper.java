@@ -48,6 +48,7 @@ public class HibCustomNodeWrapper extends HibPropertyNode implements CustomNodeW
     customNode.setNodeWrapper( this );
   }
 
+  @Override
   public CustomNode getCustomNode (final Engine engine)
   {
     if ( customNode == null )

@@ -51,6 +51,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#getAttribute(int, java.lang.String, java.lang.Class)
    */
+  @Override
   public <T> T getAttribute (final int memberIndex,
                              final String name,
                              final Class<T> type)
@@ -62,6 +63,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#setAttribute(int, java.lang.String, java.lang.Object)
    */
+  @Override
   public void setAttribute (final int memberIndex,
                             final String name,
                             final Object value)
@@ -72,6 +74,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#setAttribute(java.lang.String, java.util.List)
    */
+  @Override
   public void setAttribute (final String name,
                             final List<?> values)
   {
@@ -87,6 +90,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#removeAttribute(java.lang.String)
    */
+  @Override
   public void removeAttribute (final String name)
   {
     for ( int index = 0; index < maxMemberIndex; index++ )
@@ -98,6 +102,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#getTransientAttribute(int, java.lang.String)
    */
+  @Override
   public Object getTransientAttribute (final int memberIndex,
                                        final String name)
   {
@@ -112,6 +117,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#getTransientAttributeNames(int)
    */
+  @Override
   public Iterable<String> getTransientAttributeNames (final int memberIndex)
   {
     if ( memberIndex < 0 || memberIndex >= transientAttrs.length )
@@ -126,6 +132,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#hasTransientAttribute(int, java.lang.String)
    */
+  @Override
   public boolean hasTransientAttribute (final int memberIndex,
                                         final String name)
   {
@@ -140,6 +147,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#removeTransientAttribute(int, java.lang.String)
    */
+  @Override
   public void removeTransientAttribute (final int memberIndex,
                                         final String name)
   {
@@ -154,6 +162,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#removeAttribute(java.lang.String)
    */
+  @Override
   public void removeTransientAttribute (final String name)
   {
     for ( int index = 0; index < maxMemberIndex; index++ )
@@ -165,6 +174,7 @@ public abstract class AbstractTokenSetMemberEnv implements TokenSetMemberEnv
   /**
    * @see com.googlecode.sarasvati.env.TokenSetMemberEnv#setTransientAttribute(int, java.lang.String, java.lang.Object)
    */
+  @Override
   public void setTransientAttribute (final int memberIndex,
                                      final String name,
                                      final Object value)

@@ -444,6 +444,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     private EditorGraphMember<?> source = null;
     private EditorGraphMember<?> target = null;
 
+    @Override
     public boolean isSourceWidget (final Widget sourceWidget)
     {
       Object object = findObject (sourceWidget);
@@ -451,6 +452,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return source != null;
     }
 
+    @Override
     public ConnectorState isTargetWidget (final Widget sourceWidget, final Widget targetWidget)
     {
       Object object = findObject (targetWidget);
@@ -462,16 +464,19 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return object != null ? ConnectorState.REJECT_AND_STOP : ConnectorState.REJECT;
     }
 
+    @Override
     public boolean hasCustomTargetWidgetResolver (final Scene scene)
     {
       return false;
     }
 
+    @Override
     public Widget resolveTargetWidget (final Scene scene, final Point sceneLocation)
     {
       return null;
     }
 
+    @Override
     public void createConnection (final Widget sourceWidget, final Widget targetWidget)
     {
       String arcLabel = sourceWidget == targetWidget ? EditorPreferences.getInstance().getDefalutSelfArcsLabel() : null;
@@ -507,18 +512,21 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     private EditorGraphMember<?> originalNode;
     private EditorGraphMember<?> replacementNode;
 
+    @Override
     public void reconnectingStarted (final ConnectionWidget connectionWidget,
                                      final boolean reconnectingSource)
     {
       // does nothing
     }
 
+    @Override
     public void reconnectingFinished (final ConnectionWidget connectionWidget,
                                       final boolean reconnectingSource)
     {
       // does nothing
     }
 
+    @Override
     public boolean isSourceReconnectable (final ConnectionWidget connectionWidget)
     {
       Object object = findObject (connectionWidget);
@@ -527,6 +535,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return originalNode != null;
     }
 
+    @Override
     public boolean isTargetReconnectable (final ConnectionWidget connectionWidget)
     {
       Object object = findObject (connectionWidget);
@@ -535,6 +544,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return originalNode != null;
     }
 
+    @Override
     public ConnectorState isReplacementWidget (final ConnectionWidget connectionWidget,
                                                final Widget replacementWidget,
                                                final boolean reconnectingSource)
@@ -548,16 +558,19 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       return object != null ? ConnectorState.REJECT_AND_STOP : ConnectorState.REJECT;
     }
 
+    @Override
     public boolean hasCustomReplacementWidgetResolver (final Scene scene)
     {
         return false;
     }
 
+    @Override
     public Widget resolveReplacementWidget (final Scene scene, final Point sceneLocation)
     {
         return null;
     }
 
+    @Override
     public void reconnect (final ConnectionWidget connectionWidget,
                            final Widget replacementWidget,
                            final boolean reconnectingSource)
@@ -639,6 +652,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
     private Map<Widget, Point> originals = new HashMap<Widget, Point>();
     private Point              original;
 
+    @Override
     public void movementStarted (final Widget widget)
     {
       Object object = findObject( widget );
@@ -659,6 +673,7 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       }
     }
 
+    @Override
     public void movementFinished (final Widget widget)
     {
       List<Command> commands = new ArrayList<Command>( originals.size() );
@@ -678,12 +693,14 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
       original = null;
     }
 
+    @Override
     public Point getOriginalLocation (final Widget widget)
     {
       original = widget.getPreferredLocation();
       return original;
     }
 
+    @Override
     public void setNewLocation (final Widget widget, final Point location)
     {
       int dx = location.x - original.x;

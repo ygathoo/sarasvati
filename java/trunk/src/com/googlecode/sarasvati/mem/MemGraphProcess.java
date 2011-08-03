@@ -112,6 +112,7 @@ public class MemGraphProcess implements GraphProcess
     return graph;
   }
 
+  @Override
   public NodeToken getParentToken ()
   {
     return parentToken;

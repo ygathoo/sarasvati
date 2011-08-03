@@ -201,6 +201,7 @@ public class HibGraphProcess implements GraphProcess
     this.activeArcTokens = activeArcTokens;
   }
 
+  @Override
   public Set<NodeToken> getActiveNodeTokens ()
   {
     return activeNodeTokens;
@@ -295,6 +296,7 @@ public class HibGraphProcess implements GraphProcess
     this.attrMap = attrMap;
   }
 
+  @Override
   public Env getEnv ()
   {
     if (env == null)
@@ -340,6 +342,7 @@ public class HibGraphProcess implements GraphProcess
     return state;
   }
 
+  @Override
   public void setState (final ProcessState state)
   {
     this.state = state;

@@ -68,6 +68,7 @@ public class DefaultRubricFunctionRepository implements RubricFunctionRepository
   /**
    * @see com.googlecode.sarasvati.rubric.env.RubricFunctionRepository#getPredicate(java.lang.String)
    */
+  @Override
   public RubricPredicate getPredicate (final String predicate)
   {
     return predicateMap.get( predicate );
@@ -76,6 +77,7 @@ public class DefaultRubricFunctionRepository implements RubricFunctionRepository
   /**
    * @see com.googlecode.sarasvati.rubric.env.RubricFunctionRepository#getDateFunction(java.lang.String)
    */
+  @Override
   public RubricDateFunction getDateFunction (final String dateFunction)
   {
     return dateFunctionMap.get( dateFunction );

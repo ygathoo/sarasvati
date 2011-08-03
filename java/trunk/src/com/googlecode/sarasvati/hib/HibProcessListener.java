@@ -70,6 +70,7 @@ public class HibProcessListener implements PersistedExecutionListener
     this.id = id;
   }
 
+  @Override
   public String getType ()
   {
     return type;
@@ -80,6 +81,7 @@ public class HibProcessListener implements PersistedExecutionListener
     this.type = type;
   }
 
+  @Override
   public int getEventTypeMask ()
   {
     return eventTypeMask;

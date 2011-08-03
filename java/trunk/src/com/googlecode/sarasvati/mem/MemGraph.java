@@ -45,11 +45,13 @@ public class MemGraph extends AbstractGraph
     this.arcs     = new LinkedList<Arc>();
   }
 
+  @Override
   public List<Node> getNodes ()
   {
     return nodes;
   }
 
+  @Override
   public List<Arc> getArcs ()
   {
     return arcs;

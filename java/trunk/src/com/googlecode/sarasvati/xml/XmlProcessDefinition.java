@@ -88,6 +88,7 @@ public class XmlProcessDefinition implements ProcessDefinition
     this.externals = externals;
   }
 
+  @Override
   public String getMessageDigest () throws SarasvatiLoadException
   {
     if ( messageDigest == null )

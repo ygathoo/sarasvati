@@ -33,6 +33,7 @@ public class AtLeastArcsRequired extends AbstractJoinRequirement
     return arcsRequired;
   }
 
+  @Override
   public JoinRequirementEvaluator newEvaluator (final JoinLangEnv env)
   {
     return new AtLeastArcsRequiredEvaluator( env, this );

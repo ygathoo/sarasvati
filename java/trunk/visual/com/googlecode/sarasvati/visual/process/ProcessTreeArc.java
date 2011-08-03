@@ -42,11 +42,13 @@ public class ProcessTreeArc implements VisualProcessArc
     this.child  = child;
   }
 
+  @Override
   public ArcToken getToken()
   {
     return token;
   }
 
+  @Override
   public Arc getArc ()
   {
     return token == null ? arc : token.getArc();

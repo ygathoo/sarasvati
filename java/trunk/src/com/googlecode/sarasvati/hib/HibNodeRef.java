@@ -92,6 +92,7 @@ public class HibNodeRef implements Node
     this.external = external;
   }
 
+  @Override
   public Long getId ()
   {
     return id;
@@ -123,6 +124,7 @@ public class HibNodeRef implements Node
     this.graph = graph;
   }
 
+  @Override
   public String getGuard ()
   {
     return node.getGuard();
@@ -173,11 +175,13 @@ public class HibNodeRef implements Node
     return externalEnv;
   }
 
+  @Override
   public String getName ()
   {
     return node.getName();
   }
 
+  @Override
   public String getType ()
   {
     return node.getType();

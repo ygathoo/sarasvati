@@ -204,7 +204,7 @@ public class SvUtil
         // If this fails, try using the classloader for SvUtil
       }
     }
-    
+
     if ( clazz == null )
     {
       try
@@ -216,10 +216,10 @@ public class SvUtil
         throw new SarasvatiException( "Failed to load " + baseType + " class: " + className, e );
       }
     }
-    
+
     return newInstanceOf( clazz, baseType );
   }
-  
+
   public static <T> T newInstanceOf(final Class<T> clazz, final String baseType)
   {
     try
@@ -230,7 +230,7 @@ public class SvUtil
     {
       throw new SarasvatiException( baseType + "s must have a default public constructor. " +
                                     "They may not be non-static inner classes. " +
-                                    "In other words, you must be able create new ones using " + 
+                                    "In other words, you must be able create new ones using " +
                                     clazz.getName() + ".class.newInstance()", e );
     }
     catch ( final IllegalAccessException e )
@@ -239,9 +239,9 @@ public class SvUtil
                                     "They may not be non-static inner classes. " +
                                     "In other words, you must be able create new ones using " +
                                     clazz.getName() + ".class.newInstance()", e );
-    } 
+    }
   }
-  
+
   private static void addWithPrerequisites (final ProcessDefinition def,
                                             final Set<ProcessDefinition> processed,
                                             final Map<String, ProcessDefinition> processDefsByName)

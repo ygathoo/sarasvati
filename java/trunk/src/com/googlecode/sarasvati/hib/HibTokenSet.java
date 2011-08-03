@@ -166,6 +166,7 @@ public class HibTokenSet implements TokenSet
     this.process = process;
   }
 
+  @Override
   public int getMaxMemberIndex ()
   {
     return maxMemberIndex;

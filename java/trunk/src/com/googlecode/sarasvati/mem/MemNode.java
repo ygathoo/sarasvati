@@ -59,6 +59,7 @@ public class MemNode implements Node, Cloneable
     /* Default constructor */
   }
 
+  @Override
   public Long getId ()
   {
     return id;
@@ -146,6 +147,7 @@ public class MemNode implements Node, Cloneable
     return engine.evaluateGuard( token, guard );
   }
 
+  @Override
   public JoinType getJoinType ()
   {
     return joinType;
@@ -184,6 +186,7 @@ public class MemNode implements Node, Cloneable
     this.isStart = isStart;
   }
 
+  @Override
   public boolean isImportedFromExternal ()
   {
     return external != null;
@@ -212,6 +215,7 @@ public class MemNode implements Node, Cloneable
     return true;
   }
 
+  @Override
   public MemExternal getExternal ()
   {
     return external;
@@ -222,6 +226,7 @@ public class MemNode implements Node, Cloneable
     this.external = external;
   }
 
+  @Override
   public MemNode getOriginatingExternalNode ()
   {
     return originatingExternalNode;

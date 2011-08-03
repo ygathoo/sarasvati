@@ -328,7 +328,7 @@
        <formatter type="xml"/>
        <batchtest fork="yes" todir="hudson/testresults">
           <fileset dir="${tests.build.dir}">
-              <include name="**/*.class"/>
+              <include name="com/googlecode/sarasvati/unittest/**/*.class"/>
               <exclude name="**/framework/*"/>
             <exclude name="**/*$*.*"/>
           </fileset>

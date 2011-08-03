@@ -33,6 +33,7 @@ public class NodeRequired extends AbstractJoinRequirement
     return nodeName;
   }
 
+  @Override
   public JoinRequirementEvaluator newEvaluator (final JoinLangEnv env)
   {
     return new NodeRequiredEvaluator( env, this );

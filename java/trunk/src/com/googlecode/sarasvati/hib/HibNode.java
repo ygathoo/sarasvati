@@ -87,6 +87,7 @@ public class HibNode implements Node
 
   public HibNode () { /* Default constructor for Hibernate */ }
 
+  @Override
   public Long getId ()
   {
     return id;
@@ -130,6 +131,7 @@ public class HibNode implements Node
     this.graph = graph;
   }
 
+  @Override
   public JoinType getJoinType ()
   {
     return joinType;
@@ -168,6 +170,7 @@ public class HibNode implements Node
     this.start = start;
   }
 
+  @Override
   public String getGuard()
   {
     return guard;
