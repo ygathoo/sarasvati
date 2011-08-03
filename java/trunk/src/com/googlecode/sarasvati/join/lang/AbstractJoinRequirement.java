@@ -27,6 +27,7 @@ public abstract class AbstractJoinRequirement implements JoinRequirement
   /**
    * @return the whenExpr
    */
+  @Override
   public RubricExpr getWhenExpr ()
   {
     return whenExpr;
@@ -35,6 +36,7 @@ public abstract class AbstractJoinRequirement implements JoinRequirement
   /**
    * @param whenExpr the whenExpr to set
    */
+  @Override
   public void setWhenExpr (final RubricExpr whenExpr)
   {
     this.whenExpr = whenExpr;

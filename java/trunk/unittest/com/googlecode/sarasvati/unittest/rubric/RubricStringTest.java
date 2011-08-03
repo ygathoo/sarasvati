@@ -23,8 +23,8 @@ import junit.framework.Assert;
 
 import org.junit.Test;
 
-import com.googlecode.sarasvati.rubric.RubricException;
 import com.googlecode.sarasvati.rubric.RubricCompiler;
+import com.googlecode.sarasvati.rubric.RubricException;
 import com.googlecode.sarasvati.unittest.framework.TestRubricEnv;
 
 public class RubricStringTest

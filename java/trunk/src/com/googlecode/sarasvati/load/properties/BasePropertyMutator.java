@@ -58,6 +58,7 @@ public class BasePropertyMutator implements PropertyMutator
     throw new UnsupportedOperationException( "Writes are not supported to the property " + propertyDescriptor.getName() + " on class " + target.getClass().getName() );
   }
 
+  @Override
   public void setValue (final Object value)
   {
     try

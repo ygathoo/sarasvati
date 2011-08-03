@@ -42,6 +42,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     this.action = action;
   }
 
+  @Override
   public State dragEnter (final Widget widget, final WidgetDropTargetDragEvent event)
   {
     if ( !isEnabled() )
@@ -52,6 +53,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.dragEnter( widget, event );
   }
 
+  @Override
   public State dragExit (final Widget widget, final WidgetDropTargetEvent event)
   {
     if ( !isEnabled() )
@@ -62,6 +64,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.dragExit( widget, event );
   }
 
+  @Override
   public State dragOver (final Widget widget, final WidgetDropTargetDragEvent event)
   {
     if ( !isEnabled() )
@@ -72,6 +75,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.dragOver( widget, event );
   }
 
+  @Override
   public State drop (final Widget widget, final WidgetDropTargetDropEvent event)
   {
     if ( !isEnabled() )
@@ -82,6 +86,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.drop( widget, event );
   }
 
+  @Override
   public State dropActionChanged (final Widget widget,
                                   final WidgetDropTargetDragEvent event)
   {
@@ -93,6 +98,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.dropActionChanged( widget, event );
   }
 
+  @Override
   public State focusGained (final Widget widget,
                             final WidgetFocusEvent event)
   {
@@ -104,6 +110,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.focusGained( widget, event );
   }
 
+  @Override
   public State focusLost (final Widget widget,
                           final WidgetFocusEvent event)
   {
@@ -115,6 +122,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.focusLost( widget, event );
   }
 
+  @Override
   public State keyPressed (final Widget widget,
                            final WidgetKeyEvent event)
   {
@@ -126,6 +134,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.keyPressed( widget, event );
   }
 
+  @Override
   public State keyReleased (final Widget widget,
                             final WidgetKeyEvent event)
   {
@@ -137,6 +146,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.keyReleased( widget, event );
   }
 
+  @Override
   public State keyTyped (final Widget widget,
                          final WidgetKeyEvent event)
   {
@@ -148,6 +158,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.keyTyped( widget, event );
   }
 
+  @Override
   public State mouseClicked (final Widget widget,
                              final WidgetMouseEvent event)
   {
@@ -159,6 +170,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.mouseClicked( widget, event );
   }
 
+  @Override
   public State mouseDragged (final Widget widget,
                              final WidgetMouseEvent event)
   {
@@ -170,6 +182,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.mouseDragged( widget, event );
   }
 
+  @Override
   public State mouseEntered (final Widget widget,
                              final WidgetMouseEvent event)
   {
@@ -181,6 +194,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.mouseEntered( widget, event );
   }
 
+  @Override
   public State mouseExited (final Widget widget,
                             final WidgetMouseEvent event)
   {
@@ -192,6 +206,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.mouseExited( widget, event );
   }
 
+  @Override
   public State mouseMoved (final Widget widget,
                            final WidgetMouseEvent event)
   {
@@ -203,6 +218,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.mouseMoved( widget, event );
   }
 
+  @Override
   public State mousePressed (final Widget widget,
                              final WidgetMouseEvent event)
   {
@@ -214,6 +230,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.mousePressed( widget, event );
   }
 
+  @Override
   public State mouseReleased (final Widget widget,
                               final WidgetMouseEvent event)
   {
@@ -225,6 +242,7 @@ public abstract class ToggledWidgetActionDecorator implements WidgetAction
     return action.mouseReleased( widget, event );
   }
 
+  @Override
   public State mouseWheelMoved (final Widget widget,
                                 final WidgetMouseWheelEvent event)
   {

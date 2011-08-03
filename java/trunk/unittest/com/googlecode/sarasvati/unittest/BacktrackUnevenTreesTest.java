@@ -20,7 +20,6 @@ package com.googlecode.sarasvati.unittest;
 
 import org.junit.Test;
 
-import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
@@ -33,14 +32,14 @@ public class BacktrackUnevenTreesTest extends ExecutionTest
   @Test public void testReject() throws Exception
   {
     Graph g = ensureLoaded( "backtrack-uneven-trees" );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken( p, "nodeA" );
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    engine.complete( tokenA, Arc.DEFAULT_ARC );
+    completeToken(tokenA);
 
     state =
       "[1 nodeA C F]" +
@@ -52,7 +51,7 @@ public class BacktrackUnevenTreesTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     NodeToken tokenB = getActiveToken( p, "nodeB" );
-    engine.complete( tokenB, "reject" );
+    completeToken( tokenB, "reject" );
 
     state =
       "[1 nodeA C F]" +
@@ -68,7 +67,7 @@ public class BacktrackUnevenTreesTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     tokenB = getActiveToken( p, "nodeB" );
-    engine.complete( tokenB, "reject" );
+    completeToken( tokenB, "reject" );
 
     state =
       "[1 nodeA C F]" +
@@ -82,7 +81,7 @@ public class BacktrackUnevenTreesTest extends ExecutionTest
       "[5 nodeB I F]"
       ;
 
-    engine.backtrack( tokenA );
+    backtrackToken( tokenA );
 
     state =
       "[1 nodeA C FB]" +

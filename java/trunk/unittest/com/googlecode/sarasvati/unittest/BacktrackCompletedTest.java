@@ -23,7 +23,6 @@ import org.junit.Test;
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.CustomNode;
 import com.googlecode.sarasvati.Engine;
-import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
 import com.googlecode.sarasvati.unittest.framework.ExecutionTest;
@@ -45,16 +44,14 @@ public class BacktrackCompletedTest extends ExecutionTest
 
   @Test public void testCompleted () throws Exception
   {
-    engine.addGlobalCustomNodeType( "backtrackCompletedTestNode", BacktrackCompletedTestNode.class );
+    addGlobalCustomNodeType( "backtrackCompletedTestNode", BacktrackCompletedTestNode.class );
 
-    Graph g = ensureLoaded( "backtrack-completed" );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( "backtrack-completed" );
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    NodeToken tokenA = getActiveToken( p, "nodeA" );
-    engine.complete( tokenA, Arc.DEFAULT_ARC );
+    p = completeToken( p, "nodeA" );
 
     state = "[1 nodeA C F]" +
             "  (C F 2)" +
@@ -63,8 +60,7 @@ public class BacktrackCompletedTest extends ExecutionTest
             "[3 nodeC I F]";
     TestProcess.validate( p, state );
 
-    NodeToken tokenC = getActiveToken( p, "nodeC" );
-    engine.complete( tokenC, Arc.DEFAULT_ARC );
+    p = completeToken( p, "nodeC" );
 
     state = "[1 nodeA C F]" +
             "  (C F 2)" +
@@ -76,8 +72,7 @@ public class BacktrackCompletedTest extends ExecutionTest
 
     TestProcess.validate( p, state );
 
-    NodeToken tokenD = getActiveToken( p, "nodeD" );
-    engine.complete( tokenD, "test" );
+    p = completeToken( p, "nodeD", "test" );
 
     state = "[1 nodeA C F]" +
             "  (C F 2)" +

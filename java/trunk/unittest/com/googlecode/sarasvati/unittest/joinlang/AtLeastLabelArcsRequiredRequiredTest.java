@@ -35,7 +35,7 @@ public class AtLeastLabelArcsRequiredRequiredTest extends ExecutionTest
   @Test public void testOne() throws Exception
   {
     Graph g = ensureLoaded( TEST_GRAPH_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 nodeA I F]" +
@@ -135,7 +135,7 @@ public class AtLeastLabelArcsRequiredRequiredTest extends ExecutionTest
   @Test public void testTwo() throws Exception
   {
     Graph g = ensureLoaded( TEST_GRAPH_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 nodeA I F]" +

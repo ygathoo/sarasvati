@@ -112,6 +112,7 @@ public class HibTokenSetMemberEnv extends AbstractTokenSetMemberEnv
     }
   }
 
+  @Override
   public void removeAttribute (final int memberIndex,
                                final String name)
   {

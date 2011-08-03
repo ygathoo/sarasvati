@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -104,6 +104,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     this.joinParam = joinParam;
   }
 
+  @Override
   public String getType ()
   {
     return type;
@@ -114,6 +115,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     this.type = type;
   }
 
+  @Override
   public boolean isStart ()
   {
     return start == null ? false : start;
@@ -124,6 +126,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     this.start = start;
   }
 
+  @Override
   public Integer getX ()
   {
     return x;
@@ -134,6 +137,7 @@ public class XmlNode implements NodeDefinition, Comparable<XmlNode>
     this.x = x;
   }
 
+  @Override
   public Integer getY ()
   {
     return y;

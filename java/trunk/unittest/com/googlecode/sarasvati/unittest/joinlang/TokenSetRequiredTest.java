@@ -36,7 +36,7 @@ public class TokenSetRequiredTest extends ExecutionTest
   @Test public void testOne() throws Exception
   {
     Graph g = ensureLoaded( TEST_GRAPH1_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 nodeA C F]" +
@@ -176,7 +176,7 @@ public class TokenSetRequiredTest extends ExecutionTest
   @Test public void testTwo() throws Exception
   {
     Graph g = ensureLoaded( TEST_GRAPH2_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 nodeA C F]" +

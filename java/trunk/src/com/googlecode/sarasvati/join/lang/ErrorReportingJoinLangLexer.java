@@ -22,8 +22,6 @@ import org.antlr.runtime.CharStream;
 import org.antlr.runtime.RecognitionException;
 import org.antlr.runtime.RecognizerSharedState;
 
-import com.googlecode.sarasvati.join.lang.JoinLangLexer;
-
 public class ErrorReportingJoinLangLexer extends JoinLangLexer
 {
   private ErrorReporter errorReporter;

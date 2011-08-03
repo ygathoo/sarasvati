@@ -28,6 +28,8 @@ import org.junit.Before;
 
 import com.googlecode.sarasvati.Arc;
 import com.googlecode.sarasvati.ArcToken;
+import com.googlecode.sarasvati.CustomNode;
+import com.googlecode.sarasvati.Engine;
 import com.googlecode.sarasvati.Graph;
 import com.googlecode.sarasvati.GraphProcess;
 import com.googlecode.sarasvati.NodeToken;
@@ -36,9 +38,8 @@ import com.googlecode.sarasvati.event.EventActions;
 import com.googlecode.sarasvati.event.ExecutionEvent;
 import com.googlecode.sarasvati.event.ExecutionEventType;
 import com.googlecode.sarasvati.event.ExecutionListener;
+import com.googlecode.sarasvati.integtest.TestEnv;
 import com.googlecode.sarasvati.load.GraphLoader;
-import com.googlecode.sarasvati.mem.MemEngine;
-import com.googlecode.sarasvati.mem.MemGraph;
 import com.googlecode.sarasvati.xml.XmlLoader;
 
 public class ExecutionTest
@@ -95,27 +96,26 @@ public class ExecutionTest
     }
   }
 
-  protected MemEngine engine;
+  private Engine engine;
 
   @Before
   public void setup ()
   {
-    engine = new MemEngine();
+    engine = TestEnv.getEngine();
     engine.addExecutionListener( DuplicateEventDetector.class, ExecutionEventType.values());
   }
 
   protected Graph ensureLoaded (final String name) throws Exception
   {
-    File basePath = new File( "common/unit-test/" );
+    final File basePath = new File( "common/unit-test/" );
     assert basePath.exists();
-    GraphLoader<MemGraph> loader = engine.getLoader();
+    final GraphLoader<? extends Graph> loader = engine.getLoader();
 
     if ( !loader.isLoaded( name ) )
     {
       loader.loadDefinition( new XmlLoader(), new File( basePath, name + ".wf.xml" ) );
-      // OR:
-      //loader.loadDefinition( new XmlLoader().translate( new File( basePath, name + ".wf.xml" ) ) );
     }
+    engine = TestEnv.commitSession();
     return engine.getRepository().getLatestGraph( name );
   }
 
@@ -154,14 +154,31 @@ public class ExecutionTest
     return null;
   }
 
-  public void completeToken (final GraphProcess p, final String nodeName)
+  public GraphProcess completeToken (final GraphProcess p, final String nodeName)
   {
-    engine.complete( getActiveToken( p, nodeName ), Arc.DEFAULT_ARC );
+    completeToken(getActiveToken( p, nodeName ));
+    return p;
   }
 
-  public void completeToken (final GraphProcess p, final String nodeName, final String arcName)
+  public void completeToken (final NodeToken token)
+  {
+    engine.complete(token, Arc.DEFAULT_ARC);
+  }
+
+  public void completeToken (final NodeToken token, final String arcName)
+  {
+    engine.complete(token, arcName );
+  }
+
+  public GraphProcess completeToken (final GraphProcess p, final String nodeName, final String arcName)
   {
     engine.complete( getActiveToken( p, nodeName ), arcName );
+    return p;
+  }
+
+  public void backtrackToken(final NodeToken token)
+  {
+    engine.backtrack(token);
   }
 
   public void completeToken (final GraphProcess p,
@@ -179,5 +196,23 @@ public class ExecutionTest
                              final int tokenSetIdx)
   {
     engine.complete( getActiveToken( p, nodeName, tokenSetName, tokenSetIdx ), arcName );
+  }
+
+  public GraphProcess startProcess(final String graphName) throws Exception
+  {
+    ensureLoaded(graphName);
+    final Graph graph = engine.getRepository().getLatestGraph( graphName );
+    return startProcess(graph);
+  }
+
+  public GraphProcess startProcess(final Graph graph)
+  {
+    final GraphProcess p = engine.startProcess(graph);
+    return p;
+  }
+
+  public void addGlobalCustomNodeType(final String typeName, final Class<? extends CustomNode> nodeClass)
+  {
+    engine.addGlobalCustomNodeType( typeName, nodeClass );
   }
 }

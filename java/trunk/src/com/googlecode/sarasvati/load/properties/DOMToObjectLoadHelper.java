@@ -28,8 +28,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -204,7 +204,10 @@ public class DOMToObjectLoadHelper
         mutator = getMutatorForProperty( target, prop );
         target = mutator.getCurrentValue();
       }
-      mutator.setFromText( entry.getValue() );
+      if (mutator != null)
+      {
+        mutator.setFromText( entry.getValue() );
+      }
     }
   }
 

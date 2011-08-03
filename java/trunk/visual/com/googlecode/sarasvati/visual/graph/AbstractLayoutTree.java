@@ -47,7 +47,6 @@ public abstract class AbstractLayoutTree<N>
 //    }
 //  };
 
-  @SuppressWarnings("unchecked")
   public void init ()
   {
     List<GraphLayoutNode<N>> nextLayer = new LinkedList<GraphLayoutNode<N>>();
@@ -116,7 +115,7 @@ public abstract class AbstractLayoutTree<N>
 
             if ( allAncestorsTraversed )
             {
-              targetTreeNode = new GraphLayoutNode( depth, target );
+              targetTreeNode = new GraphLayoutNode<N>( depth, target );
               nodeMap.put( target, targetTreeNode );
               nextLayer.add( targetTreeNode );
               layerNodes.add( target );

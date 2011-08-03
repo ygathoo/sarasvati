@@ -41,7 +41,7 @@ public class NodeRequiredTest extends ExecutionTest
     rep.registerPredicate( "C.isNeeded", UnitTestPredicates.ALWAYS_FALSE );
 
     Graph g = ensureLoaded( TEST_GRAPH_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 A I F]" +
@@ -102,7 +102,7 @@ public class NodeRequiredTest extends ExecutionTest
     rep.registerPredicate( "C.isNeeded", UnitTestPredicates.ALWAYS_FALSE );
 
     Graph g = ensureLoaded( TEST_GRAPH_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 A I F]" +
@@ -165,7 +165,7 @@ public class NodeRequiredTest extends ExecutionTest
     rep.registerPredicate( "C.isNeeded", UnitTestPredicates.ALWAYS_FALSE );
 
     Graph g = ensureLoaded( TEST_GRAPH_NAME );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     String state =
       "[1 A I F]" +

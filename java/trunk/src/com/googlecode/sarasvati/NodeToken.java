@@ -165,5 +165,6 @@ public interface NodeToken extends Token
    * Returns the set members for each token set that this
    * token is tied to.
    */
+  @Override
   Set<NodeTokenSetMember> getTokenSetMemberships ();
 }

@@ -33,87 +33,87 @@ public class TestTransientsAttributes extends ExecutionTest
   @Test
   public void testSetGetTokenEnv () throws Exception
   {
-    Graph graph = ensureLoaded( "two-node" );
-    GraphProcess p = engine.startProcess( graph );
+    ensureLoaded( "two-node" );
+    GraphProcess p = startProcess(  "two-node" );
 
     NodeToken t = getActiveToken( p, "nodeA");
 
-    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
-    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) );
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) );
 
     String expected = "bar";
     t.getEnv().setTransientAttribute( "foo", expected );
     String actual = (String)t.getEnv().getTransientAttribute( "foo" );
     Assert.assertEquals( expected, actual );
 
-    Assert.assertTrue( t.getEnv().hasTransientAttribute( "foo" ) ); 
-    Assert.assertTrue( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertTrue( t.getEnv().hasTransientAttribute( "foo" ) );
+    Assert.assertTrue( t.getFullEnv().hasTransientAttribute( "foo" ) );
 
     t.getEnv().removeTransientAttribute( "foo" );
-    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
-    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) );
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) );
   }
 
   @Test
   public void testSetGetTokenFullEnv () throws Exception
   {
     Graph graph = ensureLoaded( "two-node" );
-    GraphProcess p = engine.startProcess( graph );
+    GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
 
     String expected = "bar";
-    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
-    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) );
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) );
     t.getFullEnv().setTransientAttribute( "foo", expected );
-    Assert.assertTrue( t.getEnv().hasTransientAttribute( "foo" ) ); 
-    Assert.assertTrue( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertTrue( t.getEnv().hasTransientAttribute( "foo" ) );
+    Assert.assertTrue( t.getFullEnv().hasTransientAttribute( "foo" ) );
     String actual = (String)t.getFullEnv().getTransientAttribute( "foo" );
 
     Assert.assertEquals( expected, actual );
 
     t.getEnv().removeTransientAttribute( "foo" );
-    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
-    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) );
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) );
   }
 
   @Test
   public void testSetGetProcessEnv () throws Exception
   {
     Graph graph = ensureLoaded( "two-node" );
-    GraphProcess p = engine.startProcess( graph );
+    GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
 
-    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
-    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) );
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) );
 
     String expected = "bar";
     p.getEnv().setTransientAttribute( "foo", expected );
     String actual = (String)p.getEnv().getTransientAttribute( "foo" );
     Assert.assertEquals( expected, actual );
 
-    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
-    Assert.assertTrue( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) );
+    Assert.assertTrue( t.getFullEnv().hasTransientAttribute( "foo" ) );
 
     p.getEnv().removeTransientAttribute( "foo" );
 
-    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) ); 
-    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) ); 
+    Assert.assertFalse( t.getEnv().hasTransientAttribute( "foo" ) );
+    Assert.assertFalse( t.getFullEnv().hasTransientAttribute( "foo" ) );
   }
 
   @Test
   public void testSetGetTokenEnvBetweenTokens () throws Exception
   {
     Graph graph = ensureLoaded( "two-node" );
-    GraphProcess p = engine.startProcess( graph );
+    GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
 
     String expected = "bar";
     t.getEnv().setTransientAttribute( "foo", expected );
 
-    engine.complete( t, Arc.DEFAULT_ARC );
+    completeToken( t, Arc.DEFAULT_ARC );
 
     t = getActiveToken( p, "nodeB");
     String actual = (String)t.getEnv().getTransientAttribute( "foo" );
@@ -125,14 +125,14 @@ public class TestTransientsAttributes extends ExecutionTest
   public void testSetGetTokenFullEnvBetweenTokens () throws Exception
   {
     Graph graph = ensureLoaded( "two-node" );
-    GraphProcess p = engine.startProcess( graph );
+    GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
 
     String expected = "bar";
     t.getFullEnv().setTransientAttribute( "foo", expected );
 
-    engine.complete( t, Arc.DEFAULT_ARC );
+    completeToken( t, Arc.DEFAULT_ARC );
 
     t = getActiveToken( p, "nodeB");
     String actual = (String)t.getFullEnv().getTransientAttribute( "foo" );
@@ -144,14 +144,14 @@ public class TestTransientsAttributes extends ExecutionTest
   public void testSetGetProcessEnvBetweenTokens () throws Exception
   {
     Graph graph = ensureLoaded( "two-node" );
-    GraphProcess p = engine.startProcess( graph );
+    GraphProcess p = startProcess( graph );
 
     NodeToken t = getActiveToken( p, "nodeA");
 
     String expected = "bar";
     p.getEnv().setTransientAttribute( "foo", expected );
 
-    engine.complete( t, Arc.DEFAULT_ARC );
+    completeToken( t, Arc.DEFAULT_ARC );
 
     t = getActiveToken( p, "nodeB");
     String actual = (String)p.getEnv().getTransientAttribute( "foo" );

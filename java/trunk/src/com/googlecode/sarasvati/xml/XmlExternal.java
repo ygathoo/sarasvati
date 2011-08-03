@@ -24,8 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 import java.util.Map.Entry;
+import java.util.TreeMap;
 
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
@@ -80,6 +80,7 @@ public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
     this.name = name;
   }
 
+  @Override
   public Integer getX ()
   {
     return x;
@@ -90,6 +91,7 @@ public class XmlExternal implements ExternalDefinition, Comparable<XmlExternal>
     this.x = x;
   }
 
+  @Override
   public Integer getY ()
   {
     return y;

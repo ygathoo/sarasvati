@@ -85,11 +85,13 @@ public class ProcessTreeNode implements VisualProcessNode
     return token;
   }
 
+  @Override
   public Node getNode ()
   {
     return token == null ? node : token.getNode();
   }
 
+  @Override
   public NodeToken getToken ()
   {
     return token;

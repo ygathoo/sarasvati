@@ -58,12 +58,14 @@ public class GraphLoaderImpl<G extends Graph> extends AbstractGraphLoader<G>
     super( factory, repository, validator );
   }
 
+  @Override
   public <T> void loadDefinition (final ProcessDefinitionTranslator<T> translator, final T source)
     throws SarasvatiLoadException
   {
     loadDefinition( translator.translate( source ) );
   }
 
+  @Override
   public <T> void loadDefinition (final ProcessDefinitionTranslator<T> translator,
                                   final T source,
                                   final String customId)
@@ -72,12 +74,14 @@ public class GraphLoaderImpl<G extends Graph> extends AbstractGraphLoader<G>
     loadDefinition( translator.translate( source ), customId );
   }
 
+  @Override
   public void loadDefinition (final ProcessDefinition procDef)
     throws SarasvatiLoadException
   {
     loadDefinition( procDef, procDef.getMessageDigest() );
   }
 
+  @Override
   public List<LoadResult> loadWithDependencies (final String name, final ProcessDefinitionResolver resolver)
     throws SarasvatiLoadException
   {
@@ -154,17 +158,20 @@ public class GraphLoaderImpl<G extends Graph> extends AbstractGraphLoader<G>
     return null;
   }
 
+  @Override
   public boolean isLoaded (final String name)
   {
     return null != repository.getLatestGraph( name );
   }
 
+  @Override
   public List<LoadResult> loadNewAndChanged (final File basePath)
     throws SarasvatiLoadException
   {
     return loadNewAndChanged( basePath, null );
   }
 
+  @Override
   public List<LoadResult> loadNewAndChanged (final File basePath,
                                              final FilenameFilter filenameFilter)
     throws SarasvatiLoadException
@@ -192,6 +199,7 @@ public class GraphLoaderImpl<G extends Graph> extends AbstractGraphLoader<G>
         return filter.accept( dir, name );
       }
 
+      @Override
       public void accept (final File file)
       {
         XmlProcessDefinition pd = xmlLoader.translate( file );
@@ -265,6 +273,7 @@ public class GraphLoaderImpl<G extends Graph> extends AbstractGraphLoader<G>
    *
    * @param file The xml file to load
    */
+  @Override
   public void load (final File file)
   {
     loadDefinition( new XmlLoader(), file );

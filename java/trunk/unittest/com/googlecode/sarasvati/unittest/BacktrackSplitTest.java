@@ -32,14 +32,14 @@ public class BacktrackSplitTest extends ExecutionTest
   @Test public void testSplit() throws Exception
   {
     Graph g = ensureLoaded( "backtrack-split" );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken( p, "nodeA" );
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    engine.complete( tokenA, Arc.DEFAULT_ARC );
+    completeToken( tokenA, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -52,7 +52,7 @@ public class BacktrackSplitTest extends ExecutionTest
       ;
     TestProcess.validate( p, state );
 
-    engine.backtrack( tokenA );
+    backtrackToken( tokenA );
 
     state =
       "[1 nodeA C FB]" +
@@ -71,7 +71,7 @@ public class BacktrackSplitTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     tokenA = p.getActiveNodeTokens().iterator().next();
-    engine.complete( tokenA, Arc.DEFAULT_ARC );
+    completeToken( tokenA, Arc.DEFAULT_ARC );
     state =
       "[1 nodeA C FB]" +
       "  (C FB 2)" +
@@ -94,7 +94,7 @@ public class BacktrackSplitTest extends ExecutionTest
 
     TestProcess.validate( p, state );
 
-    engine.backtrack( tokenA );
+    backtrackToken( tokenA );
 
     state =
       "[1 nodeA C FB]" +
@@ -126,14 +126,14 @@ public class BacktrackSplitTest extends ExecutionTest
   @Test public void testSplitDeadEnd() throws Exception
   {
     Graph g = ensureLoaded( "backtrack-split" );
-    GraphProcess p = engine.startProcess( g );
+    GraphProcess p = startProcess( g );
 
     NodeToken tokenA = getActiveToken( p, "nodeA" );
 
     String state = "[1 nodeA I F]";
     TestProcess.validate( p, state );
 
-    engine.complete( tokenA, Arc.DEFAULT_ARC );
+    completeToken( tokenA, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -146,7 +146,7 @@ public class BacktrackSplitTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     NodeToken tokenB = getActiveToken( p,"nodeB" );
-    engine.complete( tokenB, Arc.DEFAULT_ARC );
+    completeToken( tokenB, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -159,7 +159,7 @@ public class BacktrackSplitTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     NodeToken tokenC = getActiveToken( p,"nodeC" );
-    engine.complete( tokenC, Arc.DEFAULT_ARC );
+    completeToken( tokenC, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -171,7 +171,7 @@ public class BacktrackSplitTest extends ExecutionTest
       "[4 nodeD I F]";
     TestProcess.validate( p, state );
 
-    engine.backtrack( tokenB );
+    backtrackToken( tokenB );
 
     state =
       "[1 nodeA C F]" +
@@ -187,7 +187,7 @@ public class BacktrackSplitTest extends ExecutionTest
     TestProcess.validate( p, state );
 
     tokenB = getActiveToken( p,"nodeB" );
-    engine.complete( tokenB, Arc.DEFAULT_ARC );
+    completeToken( tokenB, Arc.DEFAULT_ARC );
 
     state =
       "[1 nodeA C F]" +
@@ -202,7 +202,7 @@ public class BacktrackSplitTest extends ExecutionTest
 
     TestProcess.validate( p, state );
 
-    engine.backtrack( tokenB );
+    backtrackToken( tokenB );
 
     state =
       "[1 nodeA C F]" +
@@ -219,7 +219,7 @@ public class BacktrackSplitTest extends ExecutionTest
 
     TestProcess.validate( p, state );
 
-    engine.backtrack( tokenA );
+    backtrackToken( tokenA );
 
     state =
       "[1 nodeA C FB]" +

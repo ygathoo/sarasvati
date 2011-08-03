@@ -63,7 +63,7 @@ public class HibGraphFactory extends AbstractGraphFactory
                             final int version,
                             final String customId)
   {
-    HibGraph newGraph = new HibGraph( name, version, customId );
+    final HibGraph newGraph = new HibGraph( name, version, customId );
     session.save( newGraph );
     return newGraph;
   }
@@ -86,7 +86,7 @@ public class HibGraphFactory extends AbstractGraphFactory
                                     "Instances of HibNodeRef are returned from HibNodeFactory#newNode");
     }
 
-    HibArc arc = new HibArc( graph, startNode, endNode, name );
+    final HibArc arc = new HibArc( graph, startNode, endNode, name );
     session.save( arc );
     graph.getArcs().add( arc );
     return arc;
