@@ -63,7 +63,7 @@
   <node name="denied" type="message">
     <arc to="backtrack-test"/>
     <custom>
-      <message>Your request has been approved</message>
+      <message>Your request has been denied</message>
     </custom>
   </node>
 
