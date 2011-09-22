@@ -97,6 +97,8 @@ public class EditorScene extends GraphSceneImpl<EditorGraphMember<?>, EditorArc>
   protected final EditorGraph graph;
 
   private final WidgetAction singleMoveAction = new MoveTrackAction( ActionFactory.createAlignWithMoveAction( mainLayer, intrLayer, null ) );
+
+  @SuppressWarnings("synthetic-access")
   private final WidgetAction multiMoveAction = ActionFactory.createMoveAction( null, new MultiMoveProvider() );
 
   private final GraphMemberMoveAction moveAction = new GraphMemberMoveAction( singleMoveAction );
