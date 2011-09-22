@@ -473,6 +473,8 @@ public class GraphEditor
       scrollPane.putClientProperty( "scene", scene );
       scrollPane.putClientProperty( GRAPH_NAME_KEY, graph.getName() );
       tabSelectionChanged();
+
+      Library.getInstance().updateIfNotExists(xmlProcDef, xmlEditorProps, processDefinitionFile);
     }
     catch (final Exception e)
     {
@@ -707,7 +709,7 @@ public class GraphEditor
       closeAction.setEnabled( false );
     }
 
-    if ( undoAction.isEnabled() )
+    if ( undoAction.isEnabled() && currentCommandStack != null )
     {
       undoAction.setName( "Undo: " + currentCommandStack.getUndoName() );
     }
@@ -716,7 +718,7 @@ public class GraphEditor
       undoAction.setName( "Undo" );
     }
 
-    if ( redoAction.isEnabled() )
+    if ( redoAction.isEnabled() && currentCommandStack != null )
     {
       redoAction.setName( "Redo: " + currentCommandStack.getRedoName() );
     }

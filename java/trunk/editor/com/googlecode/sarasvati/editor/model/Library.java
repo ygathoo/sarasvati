@@ -66,6 +66,7 @@ public class Library
         return name.endsWith( ".wf.xml" );
       }
 
+      @SuppressWarnings("synthetic-access")
       @Override
       public void accept (final File file)
       {
@@ -111,6 +112,16 @@ public class Library
   {
     LibraryEntry entry = getEntry( name );
     return entry == null ? null :entry.getProcessDefinition();
+  }
+
+  public void updateIfNotExists(final ProcessDefinition processDefinition,
+                                final XmlEditorProperties editorProperties,
+                                final File path)
+  {
+    if (!entries.containsKey(processDefinition.getName()))
+    {
+      update(processDefinition, editorProperties, path);
+    }
   }
 
   public void update (final ProcessDefinition processDefinition,
